@@ -4,7 +4,7 @@ import type {
   RefObject,
   SetStateAction,
 } from 'react';
-import type { CanvasColorKey, CanvasTool } from '../core/index.ts';
+import type { CanvasColorKey, CanvasShapeType, CanvasTool } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import {
@@ -29,6 +29,7 @@ interface PointerInteractionOptions {
   shapes: CanvasShape[];
   selected: Set<string>;
   isSpaceDown: boolean;
+  textualTypes: readonly CanvasShapeType[];
   setCamera: Dispatch<SetStateAction<Camera>>;
   setShapes: Dispatch<SetStateAction<CanvasShape[]>>;
   setEditingId: Dispatch<SetStateAction<string | null>>;
@@ -64,6 +65,7 @@ export function useCanvasPointerInteractions({
   shapes,
   selected,
   isSpaceDown,
+  textualTypes,
   setCamera,
   setShapes,
   setEditingId,
@@ -92,6 +94,7 @@ export function useCanvasPointerInteractions({
     shapes,
     selected,
     isSpaceDown,
+    textualTypes,
     setShapes,
     setEditingId,
     applyInteraction,

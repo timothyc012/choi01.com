@@ -27,8 +27,8 @@ upstream first (see its README integration policy).
 ## Vendored chois-canvas
 
 `packages/canvas` is a snapshot of the private `timothyc012/chois-canvas`
-repository, pinned at upstream commit `d5a7c1b` (2026-08-03, "fix(build): use
-automatic JSX runtime for the library build").
+repository, pinned at upstream commit `455d0db` (2026-08-03, "fix(canvas):
+enter edit mode from two quick clicks, not just native dblclick").
 
 Per the upstream integration policy:
 

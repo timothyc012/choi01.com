@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type {
   Dispatch,
   PointerEvent as ReactPointerEvent,
@@ -6,7 +6,7 @@ import type {
   SetStateAction,
 } from 'react';
 import { SHAPE_TOOLS } from '../core/index.ts';
-import type { CanvasColorKey, CanvasTool } from '../core/index.ts';
+import type { CanvasColorKey, CanvasShapeType, CanvasTool } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
 import {
   bounds,
@@ -20,6 +20,13 @@ import {
   type PointerPosition,
 } from './canvasPointerTypes';
 
+/**
+ * Window for the app-level double-click fallback below — deliberately wider
+ * than a native browser dblclick, which also demands near-pixel-perfect
+ * repeat position and silently drops the gesture on real mice/trackpads.
+ */
+const REPEAT_CLICK_WINDOW_MS = 400;
+
 interface PointerDownOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   editorRef: RefObject<HTMLDivElement | null>;
@@ -32,6 +39,7 @@ interface PointerDownOptions {
   shapes: CanvasShape[];
   selected: Set<string>;
   isSpaceDown: boolean;
+  textualTypes: readonly CanvasShapeType[];
   setShapes: Dispatch<SetStateAction<CanvasShape[]>>;
   setEditingId: Dispatch<SetStateAction<string | null>>;
   applyInteraction: (next: Interaction) => void;
@@ -64,6 +72,7 @@ export function useCanvasPointerDown({
   shapes,
   selected,
   isSpaceDown,
+  textualTypes,
   setShapes,
   setEditingId,
   applyInteraction,
@@ -76,6 +85,7 @@ export function useCanvasPointerDown({
   createId,
 }: PointerDownOptions): PointerDownHandlers {
   const uid = createId;
+  const lastClickRef = useRef<{ id: string; time: number } | null>(null);
   const placeTextualShape = (clientX: number, clientY: number) => {
     const activeTool = containerRef.current?.dataset.canvasActiveTool === 'text'
       ? 'text'
@@ -171,7 +181,28 @@ export function useCanvasPointerDown({
     const byId = new Map(shapes.map(s => [s.id, s]));
     const hit = [...shapes].reverse().find(s => hitTest(s, p.x, p.y, camera.z, byId, shapes));
 
-    if (hit) {
+    if (!hit) {
+      lastClickRef.current = null;
+    } else {
+      const now = Date.now();
+      const isRepeatClick = !e.shiftKey
+        && textualTypes.includes(hit.type)
+        && lastClickRef.current?.id === hit.id
+        && now - lastClickRef.current.time < REPEAT_CLICK_WINDOW_MS;
+      lastClickRef.current = { id: hit.id, time: now };
+
+      if (isRepeatClick) {
+        // A quick second click on the same shape opens it for editing —
+        // handled here instead of leaning on the browser's native dblclick,
+        // which requires the two clicks to land at nearly the same pixel and
+        // silently does nothing when a real mouse/trackpad drifts a few
+        // pixels between clicks.
+        selectNow(new Set([hit.id]));
+        setEditingId(hit.id);
+        lastClickRef.current = null;
+        return;
+      }
+
       const base = e.shiftKey ? new Set(selected).add(hit.id) : (selected.has(hit.id) ? selected : new Set([hit.id]));
       const nextSelected = expandToGroups(base);
       selectNow(nextSelected);

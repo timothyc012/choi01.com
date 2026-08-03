@@ -1,5 +1,5 @@
 import type { Dispatch, PointerEvent as ReactPointerEvent, RefObject, SetStateAction } from 'react';
-import type { CanvasColorKey, CanvasTool } from '../core/index.js';
+import type { CanvasColorKey, CanvasShapeType, CanvasTool } from '../core/index.js';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import { type PointerDownHandlers } from './useCanvasPointerDown';
@@ -18,6 +18,7 @@ interface PointerInteractionOptions {
     shapes: CanvasShape[];
     selected: Set<string>;
     isSpaceDown: boolean;
+    textualTypes: readonly CanvasShapeType[];
     setCamera: Dispatch<SetStateAction<Camera>>;
     setShapes: Dispatch<SetStateAction<CanvasShape[]>>;
     setEditingId: Dispatch<SetStateAction<string | null>>;
@@ -44,5 +45,5 @@ export interface PointerInteractionHandlers extends PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
 }
 /** Composes pointer-start and global drag lifecycle handlers. */
-export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, toolRef, activeColorRef, camera, shapes, selected, isSpaceDown, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerInteractionOptions): PointerInteractionHandlers;
+export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, toolRef, activeColorRef, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerInteractionOptions): PointerInteractionHandlers;
 //# sourceMappingURL=useCanvasPointerInteractions.d.ts.map
