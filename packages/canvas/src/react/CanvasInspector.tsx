@@ -1,0 +1,118 @@
+import React, { useLayoutEffect, useRef, useState } from 'react';
+import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Italic, List, ListOrdered, Minus, Palette, Plus, Underline } from 'lucide-react';
+import { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS } from '../core/index.ts';
+import type { CanvasColorKey } from '../core/index.ts';
+import type { CanvasShape } from './InfiniteCanvas';
+import { bounds, effectiveFill, effectiveText } from './canvasGeometry';
+import { CANVAS_FONT_KEYS, canvasFontFromValue, fontSizeForShape, textAlignForShape } from './canvasText';
+import { CANVAS_UI_COLORS } from './theme';
+
+interface Camera { x: number; y: number; z: number }
+interface CanvasInspectorProps {
+  shape: CanvasShape;
+  shapes: CanvasShape[];
+  camera: Camera;
+  canvasSize: { width: number; height: number };
+  isDarkMode: boolean;
+  editing: boolean;
+  showPalette: boolean;
+  installedFontFamilies: readonly string[];
+  setShowPalette: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveColor: (color: CanvasColorKey) => void;
+  patchSelected: (patch: Partial<CanvasShape>) => void;
+  applyFormat: (command: 'bold' | 'italic' | 'underline') => void;
+  applyList: (kind: 'bullet' | 'dash' | 'number') => void;
+  applyCustomFontFamily: (value: string) => void;
+}
+
+/** Selection inspector kept separate from the canvas scene for package reuse. */
+export function CanvasInspector({
+  shape: s, shapes, camera, canvasSize, isDarkMode, editing, showPalette,
+  installedFontFamilies, setShowPalette, setActiveColor, patchSelected,
+  applyFormat, applyList, applyCustomFontFamily,
+}: CanvasInspectorProps) {
+  const btn = isDarkMode ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100';
+  // The inspector wraps on narrow canvases and when the list/arrow controls
+  // are visible. Measure the rendered panel instead of using a desktop-only
+  // height estimate; stale geometry was allowing the panel to overlap the
+  // selected object after a mobile resize.
+  const inspectorRef = useRef<HTMLDivElement>(null);
+  const [inspectorSize, setInspectorSize] = useState({ width: 380, height: 260 });
+  useLayoutEffect(() => {
+    const panel = inspectorRef.current;
+    if (!panel) return;
+    const update = () => {
+      const width = Math.max(1, Math.ceil(panel.getBoundingClientRect().width));
+      const height = Math.max(1, Math.ceil(panel.getBoundingClientRect().height));
+      setInspectorSize(previous => previous.width === width && previous.height === height
+        ? previous
+        : { width, height });
+    };
+    update();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(update);
+    observer.observe(panel);
+    return () => observer.disconnect();
+  }, [editing, installedFontFamilies.length, isDarkMode, s, showPalette]);
+  const toolbarWidth = inspectorSize.width;
+  const toolbarHeight = inspectorSize.height;
+  const selected = bounds(s);
+  const left = (selected.minX - camera.x) * camera.z;
+  const top = (selected.minY - camera.y) * camera.z;
+  const right = (selected.maxX - camera.x) * camera.z;
+  const bottom = (selected.maxY - camera.y) * camera.z;
+  const maxLeft = Math.max(8, canvasSize.width - toolbarWidth - 8);
+  const maxTop = Math.max(8, canvasSize.height - toolbarHeight - 8);
+  const fit = (x: number, y: number) => ({ left: Math.min(Math.max(8, x), maxLeft), top: Math.min(Math.max(8, y), maxTop) });
+  const candidates = [
+    fit((left + right) / 2 - toolbarWidth / 2, top - toolbarHeight - 12),
+    fit((left + right) / 2 - toolbarWidth / 2, bottom + 12),
+    fit((canvasSize.width - toolbarWidth) / 2, 12),
+    fit(left - toolbarWidth - 12, top + (bottom - top - toolbarHeight) / 2),
+    fit(right + 12, top + (bottom - top - toolbarHeight) / 2),
+  ];
+  const occupied = shapes.map(candidate => {
+    const box = bounds(candidate);
+    return { left: (box.minX - camera.x) * camera.z, top: (box.minY - camera.y) * camera.z, right: (box.maxX - camera.x) * camera.z, bottom: (box.maxY - camera.y) * camera.z };
+  });
+  const preferred = candidates[0];
+  const overlapArea = (candidate: typeof preferred, box: (typeof occupied)[number]) => {
+    const width = Math.max(0, Math.min(candidate.left + toolbarWidth, box.right) - Math.max(candidate.left, box.left));
+    const height = Math.max(0, Math.min(candidate.top + toolbarHeight, box.bottom) - Math.max(candidate.top, box.top));
+    return width * height;
+  };
+  const position = candidates
+    .map(candidate => ({
+      candidate,
+      overlap: occupied.reduce((total, box) => total + overlapArea(candidate, box), 0),
+      distance: Math.hypot(candidate.left - preferred.left, candidate.top - preferred.top),
+    }))
+    .sort((a, b) => a.overlap - b.overlap || a.distance - b.distance)[0]?.candidate ?? preferred;
+  const size = fontSizeForShape(s);
+  const segment = (label: string, active: boolean, onClick: () => void, title: string) => <button type="button" title={title} onClick={onClick} className={`h-7 px-2 rounded text-[11px] font-bold ${active ? 'bg-blue-600 text-white' : btn}`}>{label}</button>;
+
+  return (
+    <div ref={inspectorRef} data-canvas-inspector="text" className={`absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-200 text-slate-700'}`} style={{ left: position.left, top: position.top }} onPointerDown={event => { event.stopPropagation(); const target = event.target instanceof Element ? event.target : null; if (!target?.closest('input, select, textarea')) event.preventDefault(); }} onClick={event => event.stopPropagation()}>
+      <div className="relative flex items-center gap-1.5 pointer-events-none">
+        <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">색상</span>
+        <button type="button" title="색상 팔레트" aria-label="도형 색상" onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}><Palette className="w-4 h-4" style={{ color: effectiveText(s) }} /></button>
+        {showPalette && <div className={`pointer-events-auto absolute left-0 top-10 z-50 flex items-center gap-1.5 p-2 rounded-xl border shadow-xl ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
+          {CANVAS_COLOR_KEYS.map(key => <button key={key} type="button" title={CANVAS_COLORS[key].label} aria-label={`색 ${CANVAS_COLORS[key].label}`} onClick={() => { setActiveColor(key); patchSelected({ color: key, fillColor: undefined }); setShowPalette(false); }} className="w-5 h-5 rounded-full border" style={{ background: CANVAS_COLORS[key].bg, borderColor: CANVAS_COLORS[key].border, outline: s.color === key && !s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }} />)}
+          <label title="배경 색 (자유 선택)" className="w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center" style={{ background: s.fillColor ?? effectiveFill(s), outline: s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }}><input type="color" value={s.fillColor ?? effectiveFill(s)} onChange={event => { patchSelected({ fillColor: event.target.value }); setShowPalette(false); }} className="absolute inset-0 opacity-0 cursor-pointer" /></label>
+        </div>}
+      </div>
+      <div className="flex flex-wrap items-center gap-2 pointer-events-none">
+        <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">텍스트</span>
+        <label title="글씨 색" className="pointer-events-auto w-8 h-8 rounded-lg border relative overflow-hidden cursor-pointer flex items-center justify-center text-[11px] font-bold shadow-sm" style={{ background: effectiveText(s), color: CANVAS_UI_COLORS.white, mixBlendMode: 'normal' }}><span aria-hidden="true">A</span><input data-canvas-control="text-color" type="color" value={s.textColor ?? effectiveText(s)} onChange={event => patchSelected({ textColor: event.target.value })} className="absolute inset-0 opacity-0 cursor-pointer" /></label>
+        <div className={`pointer-events-none flex items-center gap-0.5 px-1 rounded-lg border ${isDarkMode ? 'border-slate-700 bg-slate-950/60' : 'border-slate-200 bg-slate-50'}`}><span className="px-1 text-[10px] font-medium opacity-60">크기</span><button type="button" title="글씨 작게" aria-label="글씨 작게" onClick={() => patchSelected({ fontSize: Math.max(8, size - 2) })} className={`pointer-events-auto w-7 h-7 rounded-md flex items-center justify-center ${btn}`}><Minus className="w-3.5 h-3.5" /></button><span className="pointer-events-none w-8 text-center text-xs font-semibold tabular-nums">{size}</span><button type="button" title="글씨 크게" aria-label="글씨 크게" onClick={() => patchSelected({ fontSize: Math.min(96, size + 2) })} className={`pointer-events-auto w-7 h-7 rounded-md flex items-center justify-center ${btn}`}><Plus className="w-3.5 h-3.5" /></button></div>
+        <label className={`pointer-events-auto relative flex items-center h-8 rounded-lg border ${isDarkMode ? 'bg-slate-950 border-slate-700' : 'bg-white border-slate-200'}`}><select title="글꼴" aria-label="글꼴" value={s.fontFamily ?? 'sans'} onChange={event => { const value = canvasFontFromValue(event.target.value); patchSelected(value === 'custom' ? { fontFamily: 'custom', customFontFamily: s.customFontFamily } : { fontFamily: value, customFontFamily: undefined }); }} className={`h-full min-w-20 appearance-none bg-transparent rounded-lg text-xs font-medium pl-2 pr-7 outline-none ${isDarkMode ? 'text-slate-200' : 'text-slate-700'}`}>{CANVAS_FONT_KEYS.map(key => <option key={key} value={key} className={isDarkMode ? 'bg-slate-900 text-slate-200' : 'bg-white text-slate-800'}>{CANVAS_FONTS[key].label}</option>)}</select><ChevronDown className="pointer-events-none absolute right-1.5 w-3.5 h-3.5 opacity-60" /></label>
+        {s.fontFamily === 'custom' && <><input type="text" list={`canvas-font-families-${s.id}`} title="폰트 직접입력" aria-label="폰트 직접입력" defaultValue={s.customFontFamily ?? ''} onBlur={event => applyCustomFontFamily(event.target.value)} onChange={event => event.currentTarget.value && applyCustomFontFamily(event.currentTarget.value)} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); applyCustomFontFamily(event.currentTarget.value); } }} onDoubleClick={event => event.stopPropagation()} onPointerDown={event => event.stopPropagation()} placeholder="Noto Sans KR" className={`pointer-events-auto h-8 w-44 rounded-lg border px-2 text-xs ${isDarkMode ? 'bg-slate-950 border-slate-700' : 'bg-white border-slate-200'}`} /><datalist id={`canvas-font-families-${s.id}`}>{installedFontFamilies.map(font => <option key={font} value={font} />)}</datalist></>}
+      </div>
+      <div className={`flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-none ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}><span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">문단</span><div className={`pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${isDarkMode ? 'bg-slate-950/70' : 'bg-slate-50'}`}>{([['left', AlignLeft, '왼쪽 정렬'], ['center', AlignCenter, '가운데 정렬'], ['right', AlignRight, '오른쪽 정렬']] as const).map(([alignment, Icon, label]) => <button key={alignment} type="button" aria-label={label} title={label} onClick={() => patchSelected({ textAlign: alignment })} className={`pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${textAlignForShape(s) === alignment ? 'bg-blue-600 text-white shadow-sm' : btn}`}><Icon className="w-4 h-4" /></button>)}</div>{editing && <><span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">목록</span><div className={`pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${isDarkMode ? 'bg-slate-950/70' : 'bg-slate-50'}`}>{([['bullet', List, '글머리표 목록'], ['dash', null, '대시 목록'], ['number', ListOrdered, '번호 목록']] as const).map(([kind, Icon, label]) => <button key={kind} type="button" onClick={() => applyList(kind)} aria-label={label} title={label} className={`pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${btn}`}>{Icon ? <Icon className="w-4 h-4" /> : <span className="text-base leading-none">–</span>}</button>)}</div><div className={`pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${isDarkMode ? 'bg-slate-950/70' : 'bg-slate-50'}`}>{([{ cmd: 'bold' as const, Icon: Bold, label: '굵게' }, { cmd: 'italic' as const, Icon: Italic, label: '기울임' }, { cmd: 'underline' as const, Icon: Underline, label: '밑줄' }]).map(({ cmd, Icon, label }) => <button key={cmd} type="button" onClick={() => applyFormat(cmd)} aria-label={label} title={label} className={`pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${btn}`}><Icon className="w-4 h-4" /></button>)}</div></>}</div>
+      {(s.type === 'card' || s.type === 'arrow') && <div className={`flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-auto ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
+        {s.type === 'card' && <><div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} /><input type="text" title="카드 Type" aria-label="카드 Type" value={s.category ?? ''} placeholder="TYPE" onPointerDown={event => event.stopPropagation()} onChange={event => patchSelected({ category: event.target.value.toUpperCase() })} className={`h-7 w-24 rounded text-[11px] px-1.5 border uppercase ${isDarkMode ? 'bg-slate-950 border-slate-700 text-slate-200' : 'bg-white border-slate-200 text-slate-700'}`} /></>}
+        {s.type === 'arrow' && <><div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />{segment('직선', (s.routing ?? 'straight') === 'straight', () => patchSelected({ routing: 'straight', bend: 0 }), '직선')}{segment('ㄱ', (s.routing ?? '') === 'orthogonal', () => patchSelected({ routing: 'orthogonal', bend: 0 }), '그리드 라우팅 (ㄱ/ㄹ)')}{segment('곡선', (s.routing ?? '') === 'curved', () => patchSelected({ routing: 'curved', bend: s.bend || 60 }), '곡선')}<div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />{segment('—', (s.strokeStyle ?? 'solid') === 'solid', () => patchSelected({ strokeStyle: 'solid' }), '실선')}{segment('- -', s.strokeStyle === 'dashed', () => patchSelected({ strokeStyle: 'dashed' }), '점선(dash)')}{segment('···', s.strokeStyle === 'dotted', () => patchSelected({ strokeStyle: 'dotted' }), '점선(dot)')}<div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />{segment((s.arrowStart ?? 'none') === 'none' ? '○' : s.arrowStart === 'dot' ? '●' : '◀', true, () => patchSelected({ arrowStart: (s.arrowStart ?? 'none') === 'none' ? 'arrow' : s.arrowStart === 'arrow' ? 'dot' : 'none' }), '시작점 표식')}{segment((s.arrowEnd ?? 'arrow') === 'none' ? '○' : s.arrowEnd === 'dot' ? '●' : '▶', true, () => patchSelected({ arrowEnd: (s.arrowEnd ?? 'arrow') === 'arrow' ? 'dot' : s.arrowEnd === 'dot' ? 'none' : 'arrow' }), '끝점 표식')}</>}
+      </div>}
+    </div>
+  );
+}

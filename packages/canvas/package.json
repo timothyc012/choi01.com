@@ -1,0 +1,62 @@
+{
+  "name": "chois-canvas",
+  "version": "0.1.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "description": "Reusable canvas document core, adapter contracts, and React editor.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timothyc012/chois-canvas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/timothyc012/chois-canvas/issues"
+  },
+  "homepage": "https://github.com/timothyc012/chois-canvas#readme",
+  "keywords": ["canvas", "diagram", "whiteboard", "react", "typescript"],
+  "type": "module",
+  "sideEffects": ["./dist/canvas-react.css", "./src/react/styles.css"],
+  "exports": {
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/canvas-core.js"
+    },
+    "./core": {
+      "types": "./dist/core/index.d.ts",
+      "import": "./dist/canvas-core.js"
+    },
+    "./adapters": {
+      "types": "./dist/adapters/contracts.d.ts",
+      "import": "./dist/canvas-core.js"
+    },
+    "./style.css": "./dist/canvas-react.css",
+    "./react": {
+      "types": "./dist/react/InfiniteCanvas.d.ts",
+      "import": "./dist/canvas-react.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20",
+    "lucide-react": ">=0.562 <1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@types/node": "^22.10.2",
+    "lucide-react": "^0.562.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test tests/*.test.mjs tests/*.test.ts",
+    "prepare": "npm run build",
+    "prepack": "npm run build",
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "vite build --config vite.config.ts",
+    "build:types": "tsc -p tsconfig.types.json --types node,react,react-dom && node scripts/rewrite-canvas-declarations.mjs"
+  }
+}

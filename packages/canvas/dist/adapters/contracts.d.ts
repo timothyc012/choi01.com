@@ -1,0 +1,86 @@
+import { type CanvasAssetUrl, type Brand, type CanvasSnapshot } from '../core/model.js';
+export type CanvasBoardId = Brand<string, 'CanvasBoardId'>;
+export type CanvasUserId = Brand<string, 'CanvasUserId'>;
+export type CanvasAssetId = Brand<string, 'CanvasAssetId'>;
+export declare function createCanvasAssetUrl(value: string): CanvasAssetUrl;
+export declare function createCanvasBoardId(value: string): CanvasBoardId;
+export declare function createCanvasUserId(value: string): CanvasUserId;
+export declare function createCanvasAssetId(value: string): CanvasAssetId;
+export type CanvasStorageLoadResult = {
+    readonly kind: 'found';
+    readonly boardId: CanvasBoardId;
+    readonly snapshot: CanvasSnapshot;
+    readonly revision: string;
+} | {
+    readonly kind: 'notFound';
+    readonly boardId: CanvasBoardId;
+};
+export type CanvasStorageSaveInput = {
+    readonly boardId: CanvasBoardId;
+    readonly snapshot: CanvasSnapshot;
+    readonly expectedRevision?: string;
+};
+export type CanvasStorageSaveResult = {
+    readonly boardId: CanvasBoardId;
+    readonly revision: string;
+    readonly savedAt: string;
+};
+export interface CanvasStorageAdapter {
+    readonly load: (boardId: CanvasBoardId) => Promise<CanvasStorageLoadResult>;
+    readonly save: (input: CanvasStorageSaveInput) => Promise<CanvasStorageSaveResult>;
+    readonly remove: (boardId: CanvasBoardId) => Promise<void>;
+}
+export type CanvasCollaborationStatus = 'disconnected' | 'connecting' | 'connected' | 'reconnecting' | 'offline' | 'error';
+export interface CanvasPresence {
+    readonly userId: CanvasUserId;
+    readonly displayName: string;
+    readonly cursor?: {
+        readonly x: number;
+        readonly y: number;
+    };
+    readonly selectedShapeIds: readonly string[];
+}
+export interface CanvasCollaborationSession {
+    readonly status: CanvasCollaborationStatus;
+    readonly sendUpdate: (update: Uint8Array) => Promise<void>;
+    readonly sendPresence: (presence: CanvasPresence) => Promise<void>;
+    readonly subscribeUpdate: (listener: (update: Uint8Array) => void) => () => void;
+    readonly subscribePresence: (listener: (presence: CanvasPresence) => void) => () => void;
+    readonly subscribeStatus: (listener: (status: CanvasCollaborationStatus) => void) => () => void;
+    readonly close: () => Promise<void>;
+}
+export interface CanvasCollaborationAdapter {
+    readonly connect: (input: {
+        readonly boardId: CanvasBoardId;
+        readonly userId: CanvasUserId;
+        readonly displayName: string;
+    }) => Promise<CanvasCollaborationSession>;
+}
+export interface CanvasAssetAdapter {
+    readonly upload: (input: {
+        readonly boardId: CanvasBoardId;
+        readonly file: Blob;
+        readonly fileName: string;
+        readonly mimeType: string;
+    }) => Promise<{
+        readonly assetId: CanvasAssetId;
+        readonly fileName: string;
+        readonly mimeType: string;
+    }>;
+    readonly resolve: (assetId: CanvasAssetId) => Promise<CanvasAssetUrl>;
+    readonly remove: (assetId: CanvasAssetId) => Promise<void>;
+}
+export interface CanvasCapabilities {
+    readonly canView: boolean;
+    readonly canEdit: boolean;
+    readonly canComment: boolean;
+    readonly canShare: boolean;
+    readonly canUpload: boolean;
+}
+export declare class CanvasRevisionConflictError extends Error {
+    readonly code: "CANVAS_REVISION_CONFLICT";
+    readonly boardId: CanvasBoardId;
+    readonly currentRevision: string;
+    constructor(boardId: CanvasBoardId, currentRevision: string);
+}
+//# sourceMappingURL=contracts.d.ts.map
