@@ -5,23 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Choi01 Lab is a project hub for ontology-native systems, MCP tools, and domain intelligence packs."
+      content="Choi01 — a small personal corner of the internet, mostly an infinite canvas to scribble on."
     />
-    <title>Choi01 Lab</title>
+    <title>Choi01</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="#top" aria-label="Choi01 Lab home">
+        <a class="brand" href="#top" aria-label="Choi01 home">
           <span class="brand-mark" aria-hidden="true">01</span>
-          <span>Choi01 Lab</span>
+          <span>Choi01</span>
         </a>
         <div class="nav-links">
-          <a href="#projects">Projects</a>
-          <a href="#usage">MCP usage</a>
-          <a href="#deploy">Deploy</a>
           <a href="/canvas/">Canvas</a>
         </div>
         <a class="nav-action" href="https://github.com/timothyc012" rel="noreferrer">GitHub</a>
@@ -31,238 +28,35 @@
     <main id="main">
       <section id="top" class="hero-section">
         <div class="hero-copy">
-          <p class="eyebrow">Ontology-native systems for real work</p>
-          <h1>Choi01 Lab</h1>
+          <p class="eyebrow">A small personal corner</p>
+          <h1>Choi01</h1>
           <p class="hero-lede">
-            A public project hub for the systems I am building around ontology, agents, and domain MCPs.
-            It starts with 01ontology and OntoCanvas, then points people to MCP-first tools for legal,
-            recipe, and accounting workflows.
+            No mission statement here — just a place to try things out. Right now that's mostly a
+            canvas: an infinite whiteboard you can open and scribble on straight away. Nothing is
+            saved on a server, so it stays yours — download it as a file when you want to keep it,
+            and load it back in later.
           </p>
           <div class="hero-actions" aria-label="Primary links">
-            <a class="button button-primary" href="#projects">View the map</a>
-            <a class="button button-secondary" href="#usage">How to use MCPs</a>
+            <a class="button button-primary" href="/canvas/">Open the canvas</a>
+            <a class="button button-secondary" href="https://github.com/timothyc012" rel="noreferrer">GitHub</a>
           </div>
         </div>
 
-        <div class="artifact-rail" aria-label="01ontology interface previews">
+        <div class="artifact-rail artifact-rail-single" aria-label="Canvas preview">
           <figure class="artifact-frame artifact-wide">
-            <img src="./assets/object-search-detail-evidence.svg" alt="Object search detail surface with evidence panel" />
-            <figcaption>Object search with evidence</figcaption>
-          </figure>
-          <figure class="artifact-frame">
-            <img src="./assets/visual-authoring.svg" alt="Visual authoring surface for ontology edits" />
-            <figcaption>Visual authoring</figcaption>
-          </figure>
-          <figure class="artifact-frame">
-            <img src="./assets/lineage.svg" alt="Lineage trace showing source to fact flow" />
-            <figcaption>Lineage trace</figcaption>
-          </figure>
-          <figure class="artifact-frame">
-            <img src="./assets/workflow-timeline.svg" alt="Workflow timeline interface" />
-            <figcaption>Workflow timeline</figcaption>
+            <img src="./assets/canvas-hero.png" alt="A few sticky notes and a text label on the guest canvas" />
+            <figcaption>The guest canvas — open it, write something, close the tab</figcaption>
           </figure>
         </div>
-      </section>
-
-      <section id="projects" class="section">
-        <div class="section-heading">
-          <p class="eyebrow">Project structure</p>
-          <h2>Four public-facing doors, one underlying ontology idea.</h2>
-          <p>
-            The first door is a product surface. The other three are best described as MCP-first tools,
-            because they are used through Claude, Codex, or another agent client.
-          </p>
-        </div>
-
-        <div class="project-grid">
-          <article class="project-card project-card-featured">
-            <div class="card-kicker">Flagship</div>
-            <h3>01ontology & OntoCanvas</h3>
-            <p>
-              A semantic operating kernel for agents, paired with a visual canvas for packs, object types,
-              relations, evidence, lineage, and workflows.
-            </p>
-            <ul class="evidence-list">
-              <li>Kernel: object/action/workflow/lineage/citation/ReBAC.</li>
-              <li>Canvas: explorer and operator views for ontology work.</li>
-              <li>Best public entry: product story, docs, screenshots, GitHub.</li>
-            </ul>
-            <div class="link-row">
-              <a href="https://github.com/timothyc012" rel="noreferrer">GitHub profile</a>
-              <a href="#usage">MCP route</a>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="card-kicker mcp">MCP tool</div>
-            <h3>Theo Legal Intelligence</h3>
-            <p>
-              German law, tax, and contract intelligence exposed as MCP tools and local specialist workspaces.
-            </p>
-            <ul class="evidence-list">
-              <li>Combines german-law-mcp, Theo Legal Suite, and Theo Legal/Tax Pack.</li>
-              <li>No hosted legal UI required for the first release.</li>
-              <li>Can later support a BYOK web client.</li>
-            </ul>
-            <div class="link-row">
-              <a href="#usage">Usage pattern</a>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="card-kicker mcp">MCP tool</div>
-            <h3>Recipe Intelligence</h3>
-            <p>
-              A recipe and meal-planning knowledge graph based on 01ontology domain packs and crawl artifacts.
-            </p>
-            <ul class="evidence-list">
-              <li>Recipe corpus, ingredients, cooking steps, tools, tags, and provenance.</li>
-              <li>Agent asks questions; MCP answers with grounded pack data.</li>
-              <li>BYOK UI can be added without hosting an LLM key.</li>
-            </ul>
-            <div class="link-row">
-              <a href="#usage">MCP examples</a>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <div class="card-kicker pack">Ontology pack</div>
-            <h3>DATEV-FIBU & Church Finance</h3>
-            <p>
-              Accounting packs for DATEV month-close workflows, Kontoblatt evidence, and church finance reports.
-            </p>
-            <ul class="evidence-list">
-              <li>Implemented as `accounting` and `church-finance` packs.</li>
-              <li>DATEV/FIBU objects live under the accounting ontology.</li>
-              <li>Church finance covers dues, support expenses, confirmations, and reports.</li>
-            </ul>
-            <div class="link-row">
-              <a href="#usage">Pack usage</a>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section id="usage" class="section section-quiet">
-        <div class="section-heading compact">
-          <p class="eyebrow">How people use it</p>
-          <h2>MCP first, optional UI later.</h2>
-          <p>
-            Theo, Recipe, and DATEV-FIBU do not need to pretend they are hosted apps. The honest interface is:
-            connect an agent client, bring your own LLM key when needed, and ask grounded domain questions.
-          </p>
-        </div>
-
-        <div class="tabs" data-tabs>
-          <div class="tab-list" role="tablist" aria-label="Usage modes">
-            <button class="tab-button is-active" id="tab-mcp" role="tab" aria-selected="true" aria-controls="panel-mcp" data-tab="mcp">
-              MCP usage
-            </button>
-            <button class="tab-button" id="tab-byok" role="tab" aria-selected="false" aria-controls="panel-byok" data-tab="byok">
-              BYOK UI
-            </button>
-            <button class="tab-button" id="tab-local" role="tab" aria-selected="false" aria-controls="panel-local" data-tab="local">
-              Local boundary
-            </button>
-          </div>
-
-          <div class="tab-panel is-active" id="panel-mcp" role="tabpanel" aria-labelledby="tab-mcp" data-panel="mcp">
-            <h3>Use it from Claude, Codex, or another MCP client.</h3>
-            <p>
-              The website can show setup steps, example questions, and pack names. The actual work happens through
-              MCP tools, so each answer can keep citations, evidence, and domain boundaries visible.
-            </p>
-            <div class="example-block">
-              <span>Example questions</span>
-              <code>DATEV 월마감 절차를 BWA, OPOS, UStVA 기준으로 정리해줘.</code>
-              <code>이번 주 저녁 식단을 예산과 영양 기준으로 추천해줘.</code>
-              <code>이 계약 조항은 독일법 기준으로 어떤 리스크가 있어?</code>
-            </div>
-          </div>
-
-          <div class="tab-panel" id="panel-byok" role="tabpanel" aria-labelledby="tab-byok" data-panel="byok" hidden>
-            <h3>A browser UI is possible when users bring their own LLM key.</h3>
-            <p>
-              The safe design is a client that stores no hosted key by default. Users can paste an API key for the
-              session, choose a project pack, and ask questions through a controlled bridge.
-            </p>
-            <div class="callout-grid">
-              <div><strong>No hosted key</strong><span>The hub does not pay for user LLM calls.</span></div>
-              <div><strong>Session scoped</strong><span>Key storage can be temporary or browser-local.</span></div>
-              <div><strong>Bridge required</strong><span>Browser UI needs an HTTP bridge for stdio MCPs.</span></div>
-            </div>
-          </div>
-
-          <div class="tab-panel" id="panel-local" role="tabpanel" aria-labelledby="tab-local" data-panel="local" hidden>
-            <h3>Keep private data out of the public site.</h3>
-            <p>
-              The public site explains the system. Sensitive legal, recipe, or accounting data should stay local
-              unless a separate deployment is explicitly designed for it.
-            </p>
-            <div class="example-block">
-              <span>Good public content</span>
-              <code>Project architecture, pack names, example prompts, screenshots, GitHub links.</code>
-              <span>Keep local</span>
-              <code>API keys, church ledger data, private documents, client-specific evidence.</code>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="deploy" class="section">
-        <div class="section-heading compact">
-          <p class="eyebrow">Cloudflare fit</p>
-          <h2>The first version is static, so Cloudflare Pages is enough.</h2>
-          <p>
-            `choi01.com` can be a fast static hub. Dynamic LLM or MCP interaction can later move to a subdomain.
-          </p>
-        </div>
-
-        <table class="route-grid">
-          <caption>
-            Suggested domain routes for choi01.com
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Route</th>
-              <th scope="col">Purpose</th>
-              <th scope="col">Hosting shape</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">choi01.com</th>
-              <td data-label="Purpose">Public project hub</td>
-              <td data-label="Hosting shape">Cloudflare Pages static site</td>
-            </tr>
-            <tr>
-              <th scope="row">ontology.choi01.com</th>
-              <td data-label="Purpose">01ontology and OntoCanvas docs</td>
-              <td data-label="Hosting shape">Static docs or demo links</td>
-            </tr>
-            <tr>
-              <th scope="row">mcp.choi01.com</th>
-              <td data-label="Purpose">MCP setup and examples</td>
-              <td data-label="Hosting shape">Static guide first</td>
-            </tr>
-            <tr>
-              <th scope="row">ask.choi01.com</th>
-              <td data-label="Purpose">Optional BYOK client</td>
-              <td data-label="Hosting shape">Workers or Vercel later</td>
-            </tr>
-          </tbody>
-        </table>
       </section>
     </main>
 
     <footer class="site-footer">
       <div>
-        <strong>Choi01 Lab</strong>
-        <span>Project hub draft for choi01.com</span>
+        <strong>Choi01</strong>
+        <span>A personal sandbox, not a product.</span>
       </div>
       <a href="#top">Back to top</a>
     </footer>
-
-    <script type="module" src="./script.js"></script>
   </body>
 </html>

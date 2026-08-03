@@ -232,6 +232,15 @@ code {
   gap: var(--space-4);
 }
 
+.artifact-rail-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.artifact-rail-single .artifact-frame img {
+  height: auto;
+  max-height: 420px;
+}
+
 .artifact-frame {
   min-width: 0;
   margin: 0;
