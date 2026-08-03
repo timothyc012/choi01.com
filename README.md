@@ -27,13 +27,8 @@ upstream first (see its README integration policy).
 ## Vendored chois-canvas
 
 `packages/canvas` is a snapshot of the private `timothyc012/chois-canvas`
-repository, pinned at upstream commit `8fa7ea2` (2026-08-03) **plus one local
-fix** not yet pushed upstream:
-[`upstream-patches/chois-canvas-0001-jsx-runtime.patch`](upstream-patches/chois-canvas-0001-jsx-runtime.patch)
-— the library build used the classic JSX runtime, so `CanvasShapeRenderer.tsx`
-(no explicit React import) emitted global `React.createElement` calls and any
-consumer without `window.React` crashed on first shape render. Apply the patch
-to the upstream repo with `git am`, then future re-vendors stay clean.
+repository, pinned at upstream commit `d5a7c1b` (2026-08-03, "fix(build): use
+automatic JSX runtime for the library build").
 
 Per the upstream integration policy:
 
