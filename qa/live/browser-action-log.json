@@ -1,0 +1,50 @@
+{
+  "surface": "browser UI",
+  "invocations": [
+    "browser.tabs.new(); tab.goto('http://127.0.0.1:4173/'); viewport.set({width:1440,height:900}); tab.reload(); tab.screenshot({fullPage:false})",
+    "viewport.set({width:395,height:844}); tab.reload(); tab.screenshot({fullPage:false})",
+    "tab.goto('http://127.0.0.1:4173/#usage'); tab.reload(); getByRole('tab',{name:'BYOK UI',exact:true}).count() => 1; click(); getByRole('tab',{name:'Local boundary',exact:true}).count() => 1; click()"
+  ],
+  "results": {
+    "liveDesktop": {
+      "url": "http://127.0.0.1:4173/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "artifact": "qa/live/live-desktop-viewport.jpg"
+    },
+    "liveMobile": {
+      "viewport": {
+        "width": 395,
+        "height": 844
+      },
+      "artifact": "qa/live/live-mobile-viewport.jpg",
+      "geometry": {
+        "bodyScrollWidth": 395,
+        "heroRight": 364,
+        "innerWidth": 395,
+        "scrollWidth": 380
+      }
+    },
+    "tabs": {
+      "initial": {
+        "selected": "tab-mcp",
+        "panel": "panel-mcp",
+        "artifact": "qa/live/tab-mcp-usage.jpg"
+      },
+      "byok": {
+        "count": 1,
+        "selected": "tab-byok",
+        "panel": "panel-byok",
+        "artifact": "qa/live/tab-byok-usage.jpg"
+      },
+      "local": {
+        "count": 1,
+        "selected": "tab-local",
+        "panel": "panel-local",
+        "artifact": "qa/live/tab-local-usage.jpg"
+      }
+    }
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "offers": {
+    "postcode": "44369",
+    "store_id": "netto_35134",
+    "offer_count": 5,
+    "offers": [
+      {
+        "store_id": "netto_35134",
+        "store_name": "Netto Marken-Discount (Filiale 35134)",
+        "ingredient_id": "pork_neck",
+        "product_label": "Schweinenacken-Steak",
+        "price_per_100g": 0.89,
+        "valid_from": "2026-06-08",
+        "valid_to": "2026-06-13",
+        "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+      },
+      {
+        "store_id": "netto_35134",
+        "store_name": "Netto Marken-Discount (Filiale 35134)",
+        "ingredient_id": "pork_schnitzel",
+        "product_label": "Schweineschnitzel in Scheiben",
+        "price_per_100g": 0.69,
+        "valid_from": "2026-06-08",
+        "valid_to": "2026-06-13",
+        "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+      },
+      {
+        "store_id": "netto_35134",
+        "store_name": "Netto Marken-Discount (Filiale 35134)",
+        "ingredient_id": "chicken",
+        "product_label": "Hähnchenbrustfilet",
+        "price_per_100g": 0.75,
+        "valid_from": "2026-06-08",
+        "valid_to": "2026-06-13",
+        "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+      },
+      {
+        "store_id": "netto_35134",
+        "store_name": "Netto Marken-Discount (Filiale 35134)",
+        "ingredient_id": "tomato",
+        "product_label": "Rispentomaten",
+        "price_per_100g": 0.3,
+        "valid_from": "2026-06-08",
+        "valid_to": "2026-06-13",
+        "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+      },
+      {
+        "store_id": "netto_35134",
+        "store_name": "Netto Marken-Discount (Filiale 35134)",
+        "ingredient_id": "zucchini",
+        "product_label": "Zucchini",
+        "price_per_100g": 0.35,
+        "valid_from": "2026-06-08",
+        "valid_to": "2026-06-13",
+        "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+      }
+    ],
+    "stores": [
+      {
+        "store_id": "netto_35134",
+        "name": "Netto Marken-Discount (Filiale 35134)",
+        "postcode": "44369",
+        "city": "Dortmund"
+      }
+    ],
+    "note": "No public flyer API exists, so offers are refreshed by a weekly crawl and served from cache. When the cache is missing or stale this returns the bundled sample week (KW24, 2026-06-08..2026-06-13); verify final prices in store."
+  },
+  "plan": {
+    "postcode": "44369",
+    "nutrition_goal": "balanced",
+    "budget_priority": "balanced",
+    "days": 1,
+    "servings": 1,
+    "total_cost_eur": 1.94,
+    "currency": "EUR",
+    "meal_plan": [
+      {
+        "recipe_id": "pork_schnitzel_veg_potato",
+        "title_ko": "돼지 슈니첼(굽기) + 애호박·토마토 + 감자",
+        "title_de": "Schweineschnitzel mit Zucchini-Gemüse und Kartoffeln",
+        "servings": 1,
+        "prep_minutes": 30,
+        "tags": [
+          "balanced"
+        ],
+        "ingredients": [
+          {
+            "ingredient_id": "pork_schnitzel",
+            "label_ko": "돼지 슈니첼용",
+            "grams": 150,
+            "display_ko": "돼지 슈니첼용 150g"
+          },
+          {
+            "ingredient_id": "zucchini",
+            "label_ko": "애호박",
+            "grams": 100,
+            "display_ko": "애호박 ½개"
+          },
+          {
+            "ingredient_id": "tomato",
+            "label_ko": "토마토",
+            "grams": 100,
+            "display_ko": "토마토 1개"
+          },
+          {
+            "ingredient_id": "potato",
+            "label_ko": "감자",
+            "grams": 200,
+            "display_ko": "감자 2개"
+          },
+          {
+            "ingredient_id": "garlic",
+            "label_ko": "마늘",
+            "grams": 5,
+            "display_ko": "마늘 1쪽"
+          },
+          {
+            "ingredient_id": "olive_oil",
+            "label_ko": "올리브유",
+            "grams": 10,
+            "display_ko": "올리브유 1큰술"
+          }
+        ],
+        "steps": [
+          "감자는 한입 크기로 썰어 소금물에 12~15분 삶거나 오븐 200°C 25분.",
+          "고기에 소금·후추·파프리카가루로 간하고 달군 팬에 양면 2~3분씩 노릇하게 굽는다(튀기지 않음).",
+          "같은 팬에 마늘·애호박·토마토를 5분 소테하고 소금 간한 뒤 고기·감자와 담는다."
+        ],
+        "nutrition_per_serving": {
+          "kcal": 502,
+          "protein_g": 37.9,
+          "fat_g": 19.7,
+          "carbs_g": 42.6
+        },
+        "day_label": "월",
+        "day_index": 0,
+        "cost_eur": 1.94,
+        "store_ids": [
+          "netto_35134"
+        ]
+      }
+    ],
+    "shopping_list_by_store": [
+      {
+        "store_id": "netto_35134",
+        "store_name": "Netto Marken-Discount (Filiale 35134)",
+        "subtotal_eur": 1.68,
+        "items": [
+          {
+            "ingredient_id": "pork_schnitzel",
+            "label_ko": "돼지 슈니첼용",
+            "grams": 150.0,
+            "price_per_100g": 0.69,
+            "cost_eur": 1.03,
+            "on_offer": true,
+            "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+          },
+          {
+            "ingredient_id": "tomato",
+            "label_ko": "토마토",
+            "grams": 100.0,
+            "price_per_100g": 0.3,
+            "cost_eur": 0.3,
+            "on_offer": true,
+            "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+          },
+          {
+            "ingredient_id": "zucchini",
+            "label_ko": "애호박",
+            "grams": 100.0,
+            "price_per_100g": 0.35,
+            "cost_eur": 0.35,
+            "on_offer": true,
+            "source_uri": "https://www.netto-online.de/filialangebote/1/35134"
+          }
+        ]
+      }
+    ],
+    "shopping_list_no_offer": [
+      {
+        "ingredient_id": "potato",
+        "label_ko": "감자",
+        "grams": 200.0,
+        "price_per_100g": 0.13,
+        "cost_eur": 0.26,
+        "on_offer": false,
+        "source_uri": null
+      }
+    ],
+    "pantry_items": [
+      "마늘",
+      "올리브유"
+    ],
+    "grounding_sources": [
+      "https://www.netto-online.de/filialangebote/1/35134"
+    ],
+    "note": "No public flyer API exists, so offers are refreshed by a weekly crawl and served from cache. When the cache is missing or stale this returns the bundled sample week (KW24, 2026-06-08..2026-06-13); verify final prices in store."
+  },
+  "detail": {
+    "recipe_id": "pork_schnitzel_veg_potato",
+    "title_ko": "돼지 슈니첼(굽기) + 애호박·토마토 + 감자",
+    "title_de": "Schweineschnitzel mit Zucchini-Gemüse und Kartoffeln",
+    "servings": 1,
+    "prep_minutes": 30,
+    "tags": [
+      "balanced"
+    ],
+    "ingredients": [
+      {
+        "ingredient_id": "pork_schnitzel",
+        "label_ko": "돼지 슈니첼용",
+        "grams": 150,
+        "display_ko": "돼지 슈니첼용 150g"
+      },
+      {
+        "ingredient_id": "zucchini",
+        "label_ko": "애호박",
+        "grams": 100,
+        "display_ko": "애호박 ½개"
+      },
+      {
+        "ingredient_id": "tomato",
+        "label_ko": "토마토",
+        "grams": 100,
+        "display_ko": "토마토 1개"
+      },
+      {
+        "ingredient_id": "potato",
+        "label_ko": "감자",
+        "grams": 200,
+        "display_ko": "감자 2개"
+      },
+      {
+        "ingredient_id": "garlic",
+        "label_ko": "마늘",
+        "grams": 5,
+        "display_ko": "마늘 1쪽"
+      },
+      {
+        "ingredient_id": "olive_oil",
+        "label_ko": "올리브유",
+        "grams": 10,
+        "display_ko": "올리브유 1큰술"
+      }
+    ],
+    "steps": [
+      "감자는 한입 크기로 썰어 소금물에 12~15분 삶거나 오븐 200°C 25분.",
+      "고기에 소금·후추·파프리카가루로 간하고 달군 팬에 양면 2~3분씩 노릇하게 굽는다(튀기지 않음).",
+      "같은 팬에 마늘·애호박·토마토를 5분 소테하고 소금 간한 뒤 고기·감자와 담는다."
+    ],
+    "nutrition_per_serving": {
+      "kcal": 502,
+      "protein_g": 37.9,
+      "fat_g": 19.7,
+      "carbs_g": 42.6
+    }
+  }
+}

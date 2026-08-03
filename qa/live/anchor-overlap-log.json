@@ -1,0 +1,62 @@
+{
+  "mobile View the map": {
+    "count": 1,
+    "geometry": {
+      "headerBottom": 68.80000305175781,
+      "headingBottom": 323.0000114440918,
+      "headingText": "Four public-facing doors, one underlying ontology idea.",
+      "headingTop": 63.79999923706055,
+      "scrollY": 2073.60009765625,
+      "targetTop": -0.20000000298023224
+    },
+    "artifact": "qa/live/anchor-view-the-map-mobile.jpg"
+  },
+  "mobile How to use MCPs": {
+    "count": 1,
+    "geometry": {
+      "headerBottom": 68.80000305175781,
+      "headingBottom": 344.3875045776367,
+      "headingText": "MCP first, optional UI later.",
+      "headingTop": 64.6624984741211,
+      "scrollY": 4360,
+      "targetTop": -0.13750000298023224
+    },
+    "artifact": "qa/live/anchor-how-to-use-mcps-mobile.jpg"
+  },
+  "desktop Projects": {
+    "count": 1,
+    "geometry": {
+      "headerBottom": 68.80000305175781,
+      "headingBottom": 268.40000915527344,
+      "headingText": "Four public-facing doors, one underlying ontology idea.",
+      "headingTop": 64.25,
+      "scrollY": 1064.800048828125,
+      "targetTop": 0.25
+    },
+    "artifact": "qa/live/anchor-projects-desktop.jpg"
+  },
+  "desktop MCP usage": {
+    "count": 1,
+    "geometry": {
+      "headerBottom": 68.80000305175781,
+      "headingBottom": 217.38750457763672,
+      "headingText": "MCP first, optional UI later.",
+      "headingTop": 65.07500457763672,
+      "scrollY": 2316,
+      "targetTop": 0.2750000059604645
+    },
+    "artifact": "qa/live/anchor-mcp-usage-desktop.jpg"
+  },
+  "desktop Deploy": {
+    "count": 1,
+    "geometry": {
+      "headerBottom": 68.80000305175781,
+      "headingBottom": 405.3625183105469,
+      "headingText": "The first version is static, so Cloudflare Pages is enough.",
+      "headingTop": 201.21250915527344,
+      "scrollY": 2959.199951171875,
+      "targetTop": 137.21250915527344
+    },
+    "artifact": "qa/live/anchor-deploy-desktop.jpg"
+  }
+}

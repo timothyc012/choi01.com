@@ -1,0 +1,60 @@
+{
+  "invocation": "viewport.set({width:395,height:844}); tab.goto('http://127.0.0.1:4173/#usage'); tab.reload(); getByRole('tab').press('ArrowRight'/'End'/'Home')",
+  "counts": {
+    "mcp": 1,
+    "byok": 1,
+    "local": 1
+  },
+  "afterRight": [
+    {
+      "id": "tab-mcp",
+      "selected": "false",
+      "tabIndex": -1
+    },
+    {
+      "id": "tab-byok",
+      "selected": "true",
+      "tabIndex": 0
+    },
+    {
+      "id": "tab-local",
+      "selected": "false",
+      "tabIndex": -1
+    }
+  ],
+  "afterEnd": [
+    {
+      "id": "tab-mcp",
+      "selected": "false",
+      "tabIndex": -1
+    },
+    {
+      "id": "tab-byok",
+      "selected": "false",
+      "tabIndex": -1
+    },
+    {
+      "id": "tab-local",
+      "selected": "true",
+      "tabIndex": 0
+    }
+  ],
+  "afterHome": [
+    {
+      "id": "tab-mcp",
+      "selected": "true",
+      "tabIndex": 0
+    },
+    {
+      "id": "tab-byok",
+      "selected": "false",
+      "tabIndex": -1
+    },
+    {
+      "id": "tab-local",
+      "selected": "false",
+      "tabIndex": -1
+    }
+  ],
+  "artifact": "qa/live/browser-action-log.json"
+}

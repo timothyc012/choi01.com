@@ -1,0 +1,88 @@
+{
+  "checks": [
+    {
+      "name": "desktop",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "overflow": 0,
+      "missingAlt": 0,
+      "visibleTab": "panel-mcp",
+      "linkTargets": [
+        "#main",
+        "#top",
+        "#projects",
+        "#usage",
+        "#deploy",
+        "https://github.com/timothyc012",
+        "#projects",
+        "#usage",
+        "https://github.com/timothyc012",
+        "#usage",
+        "#usage",
+        "#usage",
+        "#usage",
+        "#top"
+      ],
+      "accent": "#087c55",
+      "faint": "#5f6d66",
+      "muted": "#4f5a55"
+    },
+    {
+      "name": "mobile",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "overflow": 0,
+      "missingAlt": 0,
+      "visibleTab": "panel-mcp",
+      "linkTargets": [
+        "#main",
+        "#top",
+        "#projects",
+        "#usage",
+        "#deploy",
+        "https://github.com/timothyc012",
+        "#projects",
+        "#usage",
+        "https://github.com/timothyc012",
+        "#usage",
+        "#usage",
+        "#usage",
+        "#usage",
+        "#top"
+      ],
+      "accent": "#087c55",
+      "faint": "#5f6d66",
+      "muted": "#4f5a55"
+    }
+  ],
+  "clickTabCheck": {
+    "selected": "tab-byok",
+    "activePanel": "panel-byok",
+    "mcpHidden": true,
+    "byokHidden": false
+  },
+  "keyboardTabCheck": {
+    "focused": "tab-local",
+    "selected": "tab-local",
+    "activePanel": "panel-local",
+    "tabIndexes": [
+      [
+        "tab-mcp",
+        -1
+      ],
+      [
+        "tab-byok",
+        -1
+      ],
+      [
+        "tab-local",
+        0
+      ]
+    ]
+  },
+  "contrast": {
+    "accent": "5.22",
+    "faint": "5.43",
+    "muted": "7.18"
+  }
+}

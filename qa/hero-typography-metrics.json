@@ -1,0 +1,24 @@
+[
+  {
+    "viewport": "desktop",
+    "overflow": 0,
+    "headerBottom": 69,
+    "eyebrowTop": 149,
+    "eyebrowClearance": 80,
+    "h1Font": "56px",
+    "h1Height": 58,
+    "missingAlt": 0,
+    "screenshot": "C:\\Users\\01\\Desktop\\01ontology\\choi01-hub\\qa\\desktop-hero-typography.png"
+  },
+  {
+    "viewport": "mobile",
+    "overflow": 0,
+    "headerBottom": 69,
+    "eyebrowTop": 117,
+    "eyebrowClearance": 48,
+    "h1Font": "35.1px",
+    "h1Height": 36,
+    "missingAlt": 0,
+    "screenshot": "C:\\Users\\01\\Desktop\\01ontology\\choi01-hub\\qa\\mobile-hero-typography.png"
+  }
+]

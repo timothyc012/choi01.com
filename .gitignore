@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.env.*
+*.log
+*.pid
+
+# omo agent workspace — local only
+.omo/
