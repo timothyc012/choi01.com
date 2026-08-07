@@ -1,0 +1,68 @@
+/* Meridian design tokens - the only source of visual values. */
+
+:root {
+  /* type */
+  --font-sans: "Geist", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* neutral ramp (zinc-tinted, never pure black) */
+  --bg-0: #0b0d10;        /* app background */
+  --bg-1: #101318;        /* panel */
+  --bg-2: #161a21;        /* raised panel / hover */
+  --bg-3: #1d222b;        /* active surface */
+  --line: #232833;        /* borders */
+  --line-soft: #1a1f27;   /* faint separators */
+
+  /* text */
+  --tx-0: #f2f4f7;        /* primary */
+  --tx-1: #a8b0bd;        /* secondary */
+  --tx-2: #6b7382;        /* tertiary / labels */
+  --tx-3: #4a4f5c;        /* disabled */
+
+  /* single brand accent: signal emerald */
+  --accent: #2fbf8f;
+  --accent-strong: #3fd9a4;
+  --accent-dim: #17352b;
+  --accent-ink: #07120d;
+
+  /* status vocabulary - one meaning everywhere */
+  --st-working: #34d399;
+  --st-idle: #8b93a3;
+  --st-paused: #6ea8fe;
+  --st-blocked: #f26d6d;
+  --st-offline: #4a4f5c;
+  --st-awaiting: #eab308;
+  --st-review: #c084fc;
+
+  /* priority */
+  --p0: #f26d6d;
+  --p1: #eab308;
+  --p2: #6ea8fe;
+  --p3: #6b7382;
+
+  /* avatar hues */
+  --av-teal: #2dd4bf; --av-amber: #f5b254; --av-blue: #6ea8fe;
+  --av-violet: #a78bfa; --av-green: #4ade80; --av-orange: #fb923c;
+  --av-pink: #f472b6; --av-lime: #a3e635; --av-cyan: #22d3ee;
+  --av-stone: #a8a29e; --av-indigo: #818cf8; --av-yellow: #facc15;
+  --av-sky: #7dd3fc; --av-rose: #fb7185;
+
+  /* radius */
+  --r-sm: 5px;
+  --r-md: 8px;
+
+  /* spacing rhythm */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+
+  /* elevation: one quiet shadow, tinted to bg */
+  --shadow-1: 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  --shadow-2: 0 18px 48px -16px rgba(0, 0, 0, 0.7);
+
+  /* motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fast: 140ms;
+  --med: 260ms;
+
+  color-scheme: dark;
+}
