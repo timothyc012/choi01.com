@@ -1,0 +1,40 @@
+:root {
+  --font-sans: "Geist", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --bg-0: #0b0d10;
+  --bg-1: #101318;
+  --bg-2: #161a21;
+  --bg-3: #1d222b;
+  --line: #232833;
+  --line-soft: #1a1f27;
+
+  --tx-0: #f2f4f7;
+  --tx-1: #a8b0bd;
+  --tx-2: #6b7382;
+  --tx-3: #4a4f5c;
+
+  --accent: #2fbf8f;
+  --accent-strong: #3fd9a4;
+  --accent-dim: #17352b;
+  --accent-ink: #07120d;
+
+  --st-working: #34d399;
+  --st-idle: #8b93a3;
+  --st-paused: #6ea8fe;
+  --st-blocked: #f26d6d;
+  --st-offline: #4a4f5c;
+  --st-awaiting: #eab308;
+  --st-review: #c084fc;
+
+  --r-sm: 5px;
+  --r-md: 8px;
+
+  --shadow-1: 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fast: 140ms;
+  --med: 260ms;
+
+  color-scheme: dark;
+}

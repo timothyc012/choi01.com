@@ -5,5 +5,8 @@ node_modules/
 *.log
 *.pid
 
-# omo agent workspace — local only
+# agent workspace — local only
 .omo/
+.gjc/
+.sisyphus/
+

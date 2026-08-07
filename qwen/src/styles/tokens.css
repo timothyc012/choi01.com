@@ -1,0 +1,60 @@
+/* Meridian OS design tokens — the only source of visual values.
+   Semantic accents (DESIGN rule):
+   green  = interactive / working / income
+   blue   = planning / calendar
+   amber  = accounting / DATEV-FIBU
+   red    = caution / destructive / expense              */
+
+:root {
+  --font-sans: "Geist", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* surfaces */
+  --desk: #06080b;      /* desktop behind the window */
+  --bg-0: #0b0e12;      /* window background */
+  --bg-1: #0f1319;      /* panel */
+  --bg-2: #141a22;      /* raised / hover */
+  --bg-3: #1b232e;      /* active surface / tracks */
+  --line: #212b37;      /* borders */
+  --line-soft: #18202a; /* faint separators */
+
+  /* text ramp */
+  --tx-0: #edf1f6;
+  --tx-1: #9aa5b4;
+  --tx-2: #5f6b7c;
+  --tx-3: #3e4856;
+
+  /* semantic accents */
+  --green: #3ecf8e;
+  --green-strong: #5fe3a7;
+  --green-dim: rgba(62, 207, 142, 0.12);
+  --green-line: rgba(62, 207, 142, 0.32);
+  --green-ink: #06130c;
+
+  --blue: #6aa9f5;
+  --blue-dim: rgba(106, 169, 245, 0.12);
+  --blue-line: rgba(106, 169, 245, 0.32);
+
+  --amber: #e3aa4a;
+  --amber-strong: #f0be66;
+  --amber-dim: rgba(227, 170, 74, 0.12);
+  --amber-line: rgba(227, 170, 74, 0.32);
+
+  --red: #ef6b6b;
+  --red-dim: rgba(239, 107, 107, 0.12);
+  --red-line: rgba(239, 107, 107, 0.35);
+
+  /* shape + motion */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fast: 140ms;
+  --med: 260ms;
+
+  --shadow-window:
+    0 40px 90px -30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+
+  color-scheme: dark;
+}
