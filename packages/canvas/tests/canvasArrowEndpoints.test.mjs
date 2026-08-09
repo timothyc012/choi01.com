@@ -43,6 +43,7 @@ describe('arrow endpoints can be adjusted after creation', () => {
     assert.ok(cv.canvasEl.querySelector('[data-canvas-arrow-label] [role="textbox"]'), 'double-clicking the empty relation area opens the editor');
     assert.ok(endpointHandle('start'), 'a selected arrow shows a start-endpoint handle');
     assert.ok(endpointHandle('end'), 'a selected arrow shows an end-endpoint handle');
+    assert.ok(endpointHandle('end').className.split(/\s+/).includes('z-50'), 'endpoint handles stay above the Inspector');
 
     await dragEndpointTo(endpointHandle('end'), { x: arrow.x + arrow.w + 70, y: arrow.y + 60 });
 

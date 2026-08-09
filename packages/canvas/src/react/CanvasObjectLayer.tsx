@@ -74,27 +74,6 @@ export function CanvasObjectLayer({
                   {isEditing ? renderEditor('text-center whitespace-nowrap') : <span key="canvas-view" dangerouslySetInnerHTML={{ __html: displayLabel }} />}
                 </div>}
               </div>
-              {isSelected && selected.size === 1 && geometry.routing === 'orthogonal' && geometry.pathPoints && geometry.pathPoints.length > 2
-                ? geometry.pathPoints.slice(0, -1).map((point, index) => {
-                  const next = geometry.pathPoints?.[index + 1];
-                  if (!next) return null;
-                  const midpoint = { x: (point.x + next.x) / 2, y: (point.y + next.y) / 2 };
-                  return <div key={`segment-${index}`} data-canvas-arrow-segment-handle={index} onPointerDown={event => onOrthogonalSegmentHandleDown(event, s, index)} title="드래그해서 직각선 구간 이동" className="absolute z-20 rounded-sm bg-white border-2 border-blue-600" style={{ width: 12 / camera.z, height: 12 / camera.z, left: midpoint.x - 6 / camera.z, top: midpoint.y - 6 / camera.z, cursor: point.x === next.x ? 'ew-resize' : 'ns-resize' }} />;
-                })
-                : isSelected && selected.size === 1 && geometry.routing === 'curved' && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선 휘기" className="absolute z-20 rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
-              {isSelected && selected.size === 1 && (['start', 'end'] as const).map(endpoint => {
-                const point = endpoint === 'start' ? geometry.start : geometry.end;
-                return (
-                  <div
-                    key={endpoint}
-                    data-canvas-arrow-endpoint={endpoint}
-                    onPointerDown={event => onArrowEndpointDown(event, s, endpoint)}
-                    title="드래그해서 끝점 이동 (노드 위에 놓으면 연결)"
-                    className="absolute z-20 bg-white border-2 border-blue-600 rounded-full"
-                    style={{ width: 12 / camera.z, height: 12 / camera.z, left: point.x - 6 / camera.z, top: point.y - 6 / camera.z, cursor: 'grab' }}
-                  />
-                );
-              })}
               </React.Fragment>
             );
           }
@@ -134,6 +113,29 @@ export function CanvasObjectLayer({
           );
         })}
       </div>
+      {selected.size === 1 && allShapes.filter(shape => shape.type === 'arrow' && selected.has(shape.id)).map(shape => {
+        const geometry = arrowGeometry(shape, shapeById, allShapes);
+        const screenPoint = (point: { x: number; y: number }, size: number) => ({
+          left: (point.x - camera.x) * camera.z - size / 2,
+          top: (point.y - camera.y) * camera.z - size / 2,
+        });
+        return (
+          <React.Fragment key={`arrow-handles-${shape.id}`}>
+            {geometry.routing === 'orthogonal' && geometry.pathPoints && geometry.pathPoints.length > 2
+              ? geometry.pathPoints.slice(0, -1).map((point, index) => {
+                const next = geometry.pathPoints?.[index + 1];
+                if (!next) return null;
+                const midpoint = { x: (point.x + next.x) / 2, y: (point.y + next.y) / 2 };
+                return <div key={`segment-${index}`} data-canvas-arrow-segment-handle={index} onPointerDown={event => onOrthogonalSegmentHandleDown(event, shape, index)} title="드래그해서 직각선 구간 이동" className="absolute z-50 pointer-events-auto rounded-sm bg-white border-2 border-blue-600" style={{ width: 12, height: 12, ...screenPoint(midpoint, 12), cursor: point.x === next.x ? 'ew-resize' : 'ns-resize' }} />;
+              })
+              : geometry.routing === 'curved' && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, shape)} title="드래그해서 곡선 휘기" className="absolute z-50 pointer-events-auto rounded-full bg-white border-2 border-blue-600" style={{ width: 10, height: 10, left: (geometry.start.x + geometry.end.x) / 2 * camera.z - camera.x * camera.z - 5, top: (geometry.start.y + geometry.end.y) / 2 * camera.z - camera.y * camera.z - 10, cursor: 'grab' }} />}
+            {(['start', 'end'] as const).map(endpoint => {
+              const point = endpoint === 'start' ? geometry.start : geometry.end;
+              return <div key={endpoint} data-canvas-arrow-endpoint={endpoint} onPointerDown={event => onArrowEndpointDown(event, shape, endpoint)} title="드래그해서 끝점 이동 (노드 위에 놓으면 연결)" className="absolute z-50 pointer-events-auto bg-white border-2 border-blue-600 rounded-full" style={{ width: 12, height: 12, ...screenPoint(point, 12), cursor: 'grab' }} />;
+            })}
+          </React.Fragment>
+        );
+      })}
       {allShapes.filter(shape => shape.type === 'arrow' && selected.has(shape.id)).map(shape => {
         const box = bounds(shape);
         return <div key={`sel-${shape.id}`} className="absolute pointer-events-none border-2 border-blue-600/60 rounded" style={{ left: (box.minX - camera.x) * camera.z - 4, top: (box.minY - camera.y) * camera.z - 4, width: (box.maxX - box.minX) * camera.z + 8, height: (box.maxY - box.minY) * camera.z + 8 }} />;
