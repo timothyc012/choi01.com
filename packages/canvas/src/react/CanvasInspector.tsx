@@ -3,7 +3,8 @@ import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Italic, List, Li
 import { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS } from '../core/index.ts';
 import type { CanvasColorKey } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
-import { bounds, effectiveFill, effectiveText } from './canvasGeometry';
+import { arrowGeometry, bounds, effectiveFill, effectiveText } from './canvasGeometry';
+import { pathMidpoint } from './canvasRouting';
 import { CANVAS_FONT_KEYS, canvasFontFromValue, fontSizeForShape, textAlignForShape } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
 
@@ -79,6 +80,20 @@ export function CanvasInspector({
     const box = bounds(candidate);
     return { left: (box.minX - camera.x) * camera.z, top: (box.minY - camera.y) * camera.z, right: (box.maxX - camera.x) * camera.z, bottom: (box.maxY - camera.y) * camera.z };
   });
+  if (s.type === 'arrow') {
+    const geometry = arrowGeometry(s, new Map(shapes.map(candidate => [candidate.id, candidate])), shapes);
+    const labelPoint = geometry.routing === 'orthogonal' && geometry.pathPoints
+      ? pathMidpoint(geometry.pathPoints)
+      : { x: (geometry.start.x + geometry.end.x) / 2, y: (geometry.start.y + geometry.end.y) / 2 };
+    const labelWidth = 180 * camera.z;
+    const labelHeight = 36 * camera.z;
+    occupied.push({
+      left: (labelPoint.x - camera.x) * camera.z - labelWidth / 2,
+      top: (labelPoint.y - camera.y) * camera.z - labelHeight / 2,
+      right: (labelPoint.x - camera.x) * camera.z + labelWidth / 2,
+      bottom: (labelPoint.y - camera.y) * camera.z + labelHeight / 2,
+    });
+  }
   const preferred = candidates[0];
   const overlapArea = (candidate: typeof preferred, box: (typeof occupied)[number]) => {
     const width = Math.max(0, Math.min(candidate.left + toolbarWidth, box.right) - Math.max(candidate.left, box.left));
