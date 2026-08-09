@@ -36,15 +36,15 @@ function Nt(t, n, e) {
   return (n.y - t.y) * (e.x - n.x) - (n.x - t.x) * (e.y - n.y);
 }
 function It(t, n, e, o) {
-  const u = Nt(t, n, e), d = Nt(t, n, o), v = Nt(e, o, t), b = Nt(e, o, n);
-  return Math.abs(u) < 1e-6 && Ct(t, e, n) || Math.abs(d) < 1e-6 && Ct(t, o, n) || Math.abs(v) < 1e-6 && Ct(e, t, o) || Math.abs(b) < 1e-6 && Ct(e, n, o) ? !0 : u > 0 != d > 0 && v > 0 != b > 0;
+  const u = Nt(t, n, e), d = Nt(t, n, o), m = Nt(e, o, t), b = Nt(e, o, n);
+  return Math.abs(u) < 1e-6 && Ct(t, e, n) || Math.abs(d) < 1e-6 && Ct(t, o, n) || Math.abs(m) < 1e-6 && Ct(e, t, o) || Math.abs(b) < 1e-6 && Ct(e, n, o) ? !0 : u > 0 != d > 0 && m > 0 != b > 0;
 }
 function dn(t, n, e) {
   const o = Math.min(t.x, n.x), a = Math.max(t.x, n.x), u = Math.min(t.y, n.y), d = Math.max(t.y, n.y);
   if (a < e.minX || o > e.maxX || d < e.minY || u > e.maxY) return !1;
   if (t.x >= e.minX && t.x <= e.maxX && t.y >= e.minY && t.y <= e.maxY || n.x >= e.minX && n.x <= e.maxX && n.y >= e.minY && n.y <= e.maxY) return !0;
-  const v = { x: e.minX, y: e.minY }, b = { x: e.maxX, y: e.minY }, h = { x: e.maxX, y: e.maxY }, c = { x: e.minX, y: e.maxY };
-  return It(t, n, v, b) || It(t, n, b, h) || It(t, n, h, c) || It(t, n, c, v);
+  const m = { x: e.minX, y: e.minY }, b = { x: e.maxX, y: e.minY }, h = { x: e.maxX, y: e.maxY }, c = { x: e.minX, y: e.maxY };
+  return It(t, n, m, b) || It(t, n, b, h) || It(t, n, h, c) || It(t, n, c, m);
 }
 function un(t, n) {
   for (let e = 1; e < t.length; e++)
@@ -67,8 +67,8 @@ function he(t) {
   for (let u = 1; u < t.length; u++) {
     const d = Math.hypot(t[u].x - t[u - 1].x, t[u].y - t[u - 1].y);
     if (o + d >= e) {
-      const v = (e - o) / d;
-      return { x: t[u - 1].x + (t[u].x - t[u - 1].x) * v, y: t[u - 1].y + (t[u].y - t[u - 1].y) * v };
+      const m = (e - o) / d;
+      return { x: t[u - 1].x + (t[u].x - t[u - 1].x) * m, y: t[u - 1].y + (t[u].y - t[u - 1].y) * m };
     }
     o += d;
   }
@@ -79,9 +79,9 @@ function Vt(t, n) {
   return Math.atan2(n.y - t.y, n.x - t.x);
 }
 function se(t, n, e, o) {
-  const a = /* @__PURE__ */ new Set([t, n]), u = Math.min(t, n), d = Math.max(t, n), v = ln * 1.2;
+  const a = /* @__PURE__ */ new Set([t, n]), u = Math.min(t, n), d = Math.max(t, n), m = ln * 1.2;
   for (const b of e) {
-    const h = (o === "x" ? b.minX : b.minY) - v, c = (o === "x" ? b.maxX : b.maxY) + v, r = (l) => l >= u - v * 4 && l <= d + v * 4;
+    const h = (o === "x" ? b.minX : b.minY) - m, c = (o === "x" ? b.maxX : b.maxY) + m, r = (l) => l >= u - m * 4 && l <= d + m * 4;
     r(h) && a.add(h), r(c) && a.add(c);
   }
   return [...a].sort((b, h) => Math.abs(b - t) - Math.abs(h - t));
@@ -104,23 +104,23 @@ function xn(t, n) {
   return a.length === 0 ? [] : a.reduce((u, d) => Gt(d) < Gt(u) ? d : u);
 }
 function me(t, n, e = []) {
-  const o = t.side ?? (Math.abs(n.x - t.x) >= Math.abs(n.y - t.y) ? "e" : "s"), a = n.side ?? (o === "e" || o === "w" ? "w" : "n"), u = o === "e" || o === "w", d = a === "e" || a === "w", v = se(t.x, n.x, e, "x"), b = se(t.y, n.y, e, "y"), h = [];
+  const o = t.side ?? (Math.abs(n.x - t.x) >= Math.abs(n.y - t.y) ? "e" : "s"), a = n.side ?? (o === "e" || o === "w" ? "w" : "n"), u = o === "e" || o === "w", d = a === "e" || a === "w", m = se(t.x, n.x, e, "x"), b = se(t.y, n.y, e, "y"), h = [];
   if (u && d) {
-    for (const c of v) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
+    for (const c of m) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
     for (const c of b) h.push([t, { x: t.x, y: c }, { x: n.x, y: c }, n]);
   } else if (!u && !d) {
     for (const c of b) h.push([t, { x: t.x, y: c }, { x: n.x, y: c }, n]);
-    for (const c of v) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
+    for (const c of m) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
   } else if (u) {
     h.push([t, { x: n.x, y: t.y }, n]);
     for (const c of b)
       h.push([t, { x: t.x, y: c }, { x: n.x, y: c }, n]), h.push([t, { x: t.x, y: c }, n]);
-    for (const c of v) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
+    for (const c of m) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
   } else {
     h.push([t, { x: t.x, y: n.y }, n]);
     for (const c of b)
       h.push([t, { x: t.x, y: c }, n]), h.push([t, { x: t.x, y: c }, { x: n.x, y: c }, n]);
-    for (const c of v) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
+    for (const c of m) h.push([t, { x: c, y: t.y }, { x: c, y: n.y }, n]);
   }
   return xn(h, e);
 }
@@ -157,12 +157,12 @@ function vn(t, n, e) {
       return `${o},0 ${n - o},0 ${n},${e / 2} ${n - o},${e} ${o},${e} 0,${e / 2}`;
     }
     case "star": {
-      const o = n / 2, a = e / 2, u = Math.min(n, e) / 2, d = u * 0.4, v = [];
+      const o = n / 2, a = e / 2, u = Math.min(n, e) / 2, d = u * 0.4, m = [];
       for (let b = 0; b < 10; b++) {
         const h = Math.PI / 5 * b - Math.PI / 2, c = b % 2 === 0 ? u : d;
-        v.push(`${o + c * Math.cos(h)},${a + c * Math.sin(h)}`);
+        m.push(`${o + c * Math.cos(h)},${a + c * Math.sin(h)}`);
       }
-      return v.join(" ");
+      return m.join(" ");
     }
     default:
       return "";
@@ -173,8 +173,8 @@ function pe(t) {
   if (t.length === 1) return `M ${t[0][0]} ${t[0][1]} L ${t[0][0] + 0.1} ${t[0][1]}`;
   let n = `M ${t[0][0]} ${t[0][1]}`;
   for (let o = 1; o < t.length - 1; o++) {
-    const [a, u] = t[o], [d, v] = t[o + 1];
-    n += ` Q ${a} ${u} ${(a + d) / 2} ${(u + v) / 2}`;
+    const [a, u] = t[o], [d, m] = t[o + 1];
+    n += ` Q ${a} ${u} ${(a + d) / 2} ${(u + m) / 2}`;
   }
   const e = t[t.length - 1];
   return `${n} L ${e[0]} ${e[1]}`;
@@ -193,13 +193,13 @@ function ye(t) {
         return;
       }
       if (d.nodeType !== Node.ELEMENT_NODE) return;
-      const v = d;
-      if (v.tagName === "BR") {
+      const m = d;
+      if (m.tagName === "BR") {
         e.push([]);
         return;
       }
-      const b = { bold: u.bold || v.tagName === "B" || v.tagName === "STRONG", italic: u.italic || v.tagName === "I" || v.tagName === "EM", underline: u.underline || v.tagName === "U" }, h = v.tagName === "DIV" || v.tagName === "P" || v.tagName === "LI";
-      h && e[e.length - 1].length > 0 && e.push([]), o(v, b), h && e.push([]);
+      const b = { bold: u.bold || m.tagName === "B" || m.tagName === "STRONG", italic: u.italic || m.tagName === "I" || m.tagName === "EM", underline: u.underline || m.tagName === "U" }, h = m.tagName === "DIV" || m.tagName === "P" || m.tagName === "LI";
+      h && e[e.length - 1].length > 0 && e.push([]), o(m, b), h && e.push([]);
     });
   };
   return o(n.content, { bold: !1, italic: !1, underline: !1 }), e.filter((a) => a.length > 0);
@@ -249,18 +249,18 @@ function q(t) {
   ].map(([h, c]) => {
     const r = h - o.x, l = c - o.y;
     return [o.x + r * a - l * u, o.y + r * u + l * a];
-  }), v = d.map((h) => h[0]), b = d.map((h) => h[1]);
-  return { minX: Math.min(...v), minY: Math.min(...b), maxX: Math.max(...v), maxY: Math.max(...b) };
+  }), m = d.map((h) => h[0]), b = d.map((h) => h[1]);
+  return { minX: Math.min(...m), minY: Math.min(...b), maxX: Math.max(...m), maxY: Math.max(...b) };
 }
 function ge(t, n, e) {
   const o = t.rotation ?? 0;
   if (!o) return { x: n, y: e };
-  const a = at(t), u = Math.cos(-o), d = Math.sin(-o), v = n - a.x, b = e - a.y;
-  return { x: a.x + v * u - b * d, y: a.y + v * d + b * u };
+  const a = at(t), u = Math.cos(-o), d = Math.sin(-o), m = n - a.x, b = e - a.y;
+  return { x: a.x + m * u - b * d, y: a.y + m * d + b * u };
 }
 function Lt(t, n, e, o, a, u) {
-  const d = a - e, v = u - o, b = d * d + v * v, h = b === 0 ? 0 : Math.max(0, Math.min(1, ((t - e) * d + (n - o) * v) / b));
-  return Math.hypot(t - (e + h * d), n - (o + h * v));
+  const d = a - e, m = u - o, b = d * d + m * m, h = b === 0 ? 0 : Math.max(0, Math.min(1, ((t - e) * d + (n - o) * m) / b));
+  return Math.hypot(t - (e + h * d), n - (o + h * m));
 }
 function Pt(t, n, e, o, a, u) {
   const d = 8 / o;
@@ -289,18 +289,18 @@ function Pt(t, n, e, o, a, u) {
     }
     return !1;
   }
-  const v = ge(t, n, e), b = mt(t);
+  const m = ge(t, n, e), b = mt(t);
   if (t.type === "frame") {
-    const h = v.x >= b.minX - d && v.x <= b.maxX + d && v.y >= b.minY - d && v.y <= b.maxY + d && (v.x <= b.minX + d || v.x >= b.maxX - d || v.y <= b.minY + d || v.y >= b.maxY - d), c = v.x >= b.minX - d && v.x <= b.maxX + d && v.y >= b.minY - 28 / o && v.y <= b.minY;
+    const h = m.x >= b.minX - d && m.x <= b.maxX + d && m.y >= b.minY - d && m.y <= b.maxY + d && (m.x <= b.minX + d || m.x >= b.maxX - d || m.y <= b.minY + d || m.y >= b.maxY - d), c = m.x >= b.minX - d && m.x <= b.maxX + d && m.y >= b.minY - 28 / o && m.y <= b.minY;
     return h || c;
   }
-  return v.x >= b.minX - d && v.x <= b.maxX + d && v.y >= b.minY - d && v.y <= b.maxY + d;
+  return m.x >= b.minX - d && m.x <= b.maxX + d && m.y >= b.minY - d && m.y <= b.maxY + d;
 }
 function bt(t, n, e) {
-  const o = mt(t), a = (o.minX + o.maxX) / 2, u = (o.minY + o.maxY) / 2, d = n - a, v = e - u;
-  if (d === 0 && v === 0) return { x: a, y: u, side: "e" };
-  const b = (o.maxX - o.minX) / 2, h = (o.maxY - o.minY) / 2, c = b === 0 ? 1 / 0 : Math.abs(b / d), r = h === 0 ? 1 / 0 : Math.abs(h / v);
-  return c <= r ? { x: a + d * c, y: u + v * c, side: d >= 0 ? "e" : "w" } : { x: a + d * r, y: u + v * r, side: v >= 0 ? "s" : "n" };
+  const o = mt(t), a = (o.minX + o.maxX) / 2, u = (o.minY + o.maxY) / 2, d = n - a, m = e - u;
+  if (d === 0 && m === 0) return { x: a, y: u, side: "e" };
+  const b = (o.maxX - o.minX) / 2, h = (o.maxY - o.minY) / 2, c = b === 0 ? 1 / 0 : Math.abs(b / d), r = h === 0 ? 1 / 0 : Math.abs(h / m);
+  return c <= r ? { x: a + d * c, y: u + m * c, side: d >= 0 ? "e" : "w" } : { x: a + d * r, y: u + m * r, side: m >= 0 ? "s" : "n" };
 }
 function be(t, n, e, o) {
   const a = /* @__PURE__ */ new Set([n.id, e, o]);
@@ -316,11 +316,11 @@ function $t(t, n, e = []) {
     const x = at(o), s = at(a);
     u = bt(o, s.x, s.y), d = bt(a, x.x, x.y);
   } else o ? u = bt(o, d.x, d.y) : a && (d = bt(a, u.x, u.y));
-  const v = (u.x + d.x) / 2, b = (u.y + d.y) / 2, h = t.bend ?? 0;
-  let c = { x: v, y: b };
+  const m = (u.x + d.x) / 2, b = (u.y + d.y) / 2, h = t.bend ?? 0;
+  let c = { x: m, y: b };
   if (h !== 0) {
     const x = d.x - u.x, s = d.y - u.y, f = Math.hypot(x, s) || 1;
-    c = { x: v + -s / f * h, y: b + x / f * h };
+    c = { x: m + -s / f * h, y: b + x / f * h };
   }
   const r = !!(o || a), l = t.routing ?? (r ? "orthogonal" : h !== 0 ? "curved" : "straight");
   if (l !== "orthogonal") return { start: u, end: d, control: c, bend: h, routing: l };
@@ -334,29 +334,29 @@ function Xt(t, n, e, o) {
 function we(t, n, e, o, a) {
   const u = [];
   let d = 0;
-  for (const v of t) {
-    if (v.type !== "draw" || !v.points) {
-      if (Pt(v, n, e, a)) continue;
-      u.push(v);
+  for (const m of t) {
+    if (m.type !== "draw" || !m.points) {
+      if (Pt(m, n, e, a)) continue;
+      u.push(m);
       continue;
     }
     const b = [];
     let h = [];
-    for (const [r, l] of v.points)
+    for (const [r, l] of m.points)
       Math.hypot(r - n, l - e) <= o / a ? (h.length > 1 && b.push(h), h = []) : h.push([r, l]);
     if (h.length > 1 && b.push(h), b.length === 0) continue;
-    const c = mt(v);
-    b.forEach((r) => u.push({ ...v, id: `${v.id}-e${d++}`, points: r, x: c.minX, y: c.minY, w: c.maxX - c.minX, h: c.maxY - c.minY }));
+    const c = mt(m);
+    b.forEach((r) => u.push({ ...m, id: `${m.id}-e${d++}`, points: r, x: c.minX, y: c.minY, w: c.maxX - c.minX, h: c.maxY - c.minY }));
   }
   return u;
 }
 function mn(t, n, e) {
   const o = 6 / e;
   let a = null, u = null;
-  const d = [], v = [t.minX, (t.minX + t.maxX) / 2, t.maxX], b = [t.minY, (t.minY + t.maxY) / 2, t.maxY];
+  const d = [], m = [t.minX, (t.minX + t.maxX) / 2, t.maxX], b = [t.minY, (t.minY + t.maxY) / 2, t.maxY];
   for (const h of n) {
     const c = q(h), r = [c.minX, (c.minX + c.maxX) / 2, c.maxX], l = [c.minY, (c.minY + c.maxY) / 2, c.maxY];
-    for (const i of v) for (const x of r) {
+    for (const i of m) for (const x of r) {
       const s = x - i;
       Math.abs(s) <= o && (!a || Math.abs(s) < Math.abs(a.delta)) && (a = { delta: s, at: x });
     }
@@ -376,7 +376,7 @@ function yn({
   camera: a,
   interaction: u,
   eraserPos: d,
-  guides: v,
+  guides: m,
   marquee: b,
   strokeColorOf: h
 }) {
@@ -399,26 +399,26 @@ function yn({
         );
       if (c.type !== "arrow") return null;
       const r = n.has(c.id) ? O.blue : h(c), l = $t(c, e, o), i = 14 / a.z, x = 5 / a.z, s = l.routing === "orthogonal" && l.pathPoints ? l.pathPoints : null, f = s && s.length > 1;
-      let M, g;
+      let k, g;
       if (f)
-        M = Ut(s), g = fn(s);
+        k = Ut(s), g = fn(s);
       else if (l.routing === "curved") {
-        M = `M ${l.start.x} ${l.start.y} Q ${l.control.x} ${l.control.y} ${l.end.x} ${l.end.y}`;
-        const k = Xt(0.94, l.start, l.control, l.end);
-        g = Math.atan2(l.end.y - k.y, l.end.x - k.x);
+        k = `M ${l.start.x} ${l.start.y} Q ${l.control.x} ${l.control.y} ${l.end.x} ${l.end.y}`;
+        const M = Xt(0.94, l.start, l.control, l.end);
+        g = Math.atan2(l.end.y - M.y, l.end.x - M.x);
       } else
-        M = `M ${l.start.x} ${l.start.y} L ${l.end.x} ${l.end.y}`, g = Math.atan2(l.end.y - l.start.y, l.end.x - l.start.x);
-      const m = f && s.length >= 2 ? Vt(s[0], s[1]) : l.routing === "orthogonal" && l.start.side ? l.start.side === "e" ? 0 : l.start.side === "w" ? Math.PI : l.start.side === "s" ? Math.PI / 2 : -Math.PI / 2 : Vt(l.start, l.end), w = c.strokeStyle === "dashed" ? `${8 / a.z} ${5 / a.z}` : c.strokeStyle === "dotted" ? `${1.5 / a.z} ${4 / a.z}` : void 0, p = (k, S, $, y) => k === "dot" ? /* @__PURE__ */ N("circle", { cx: S, cy: $, r: x, fill: r }) : k === "none" ? null : /* @__PURE__ */ N(
+        k = `M ${l.start.x} ${l.start.y} L ${l.end.x} ${l.end.y}`, g = Math.atan2(l.end.y - l.start.y, l.end.x - l.start.x);
+      const p = f && s.length >= 2 ? Vt(s[0], s[1]) : l.routing === "orthogonal" && l.start.side ? l.start.side === "e" ? 0 : l.start.side === "w" ? Math.PI : l.start.side === "s" ? Math.PI / 2 : -Math.PI / 2 : Vt(l.start, l.end), w = c.strokeStyle === "dashed" ? `${8 / a.z} ${5 / a.z}` : c.strokeStyle === "dotted" ? `${1.5 / a.z} ${4 / a.z}` : void 0, y = (M, S, $, v) => M === "dot" ? /* @__PURE__ */ N("circle", { cx: S, cy: $, r: x, fill: r }) : M === "none" ? null : /* @__PURE__ */ N(
         "polygon",
         {
-          points: `${S},${$} ${S - i * Math.cos(y - 0.4)},${$ - i * Math.sin(y - 0.4)} ${S - i * Math.cos(y + 0.4)},${$ - i * Math.sin(y + 0.4)}`,
+          points: `${S},${$} ${S - i * Math.cos(v - 0.4)},${$ - i * Math.sin(v - 0.4)} ${S - i * Math.cos(v + 0.4)},${$ - i * Math.sin(v + 0.4)}`,
           fill: r
         }
       );
       return /* @__PURE__ */ j("g", { "data-canvas-vector-shape-id": c.id, "data-canvas-vector-shape-type": "arrow", "data-canvas-routing": l.routing, children: [
-        /* @__PURE__ */ N("path", { d: M, fill: "none", stroke: r, strokeWidth: 2.5 / a.z, strokeLinecap: "round", strokeLinejoin: "round", strokeDasharray: w }),
-        p(c.arrowEnd ?? "arrow", l.end.x, l.end.y, g),
-        p(c.arrowStart ?? "none", l.start.x, l.start.y, m + Math.PI)
+        /* @__PURE__ */ N("path", { d: k, fill: "none", stroke: r, strokeWidth: 2.5 / a.z, strokeLinecap: "round", strokeLinejoin: "round", strokeDasharray: w }),
+        y(c.arrowEnd ?? "arrow", l.end.x, l.end.y, g),
+        y(c.arrowStart ?? "none", l.start.x, l.start.y, p + Math.PI)
       ] }, c.id);
     }),
     u.kind === "connect" && u.fromId !== void 0 && u.toX !== void 0 && u.toY !== void 0 && (() => {
@@ -431,7 +431,7 @@ function yn({
       ] });
     })(),
     d && /* @__PURE__ */ N("circle", { cx: d.x, cy: d.y, r: pn / a.z, fill: O.roseSoft, stroke: O.rose, strokeWidth: 1 / a.z }),
-    v.map((c, r) => /* @__PURE__ */ N("line", { x1: c.x1, y1: c.y1, x2: c.x2, y2: c.y2, stroke: O.pink, strokeWidth: 1 / a.z, strokeDasharray: `${4 / a.z} ${4 / a.z}` }, `guide-${r}`)),
+    m.map((c, r) => /* @__PURE__ */ N("line", { x1: c.x1, y1: c.y1, x2: c.x2, y2: c.y2, stroke: O.pink, strokeWidth: 1 / a.z, strokeDasharray: `${4 / a.z} ${4 / a.z}` }, `guide-${r}`)),
     b && /* @__PURE__ */ N("rect", { x: Math.min(b.startX, b.curX), y: Math.min(b.startY, b.curY), width: Math.abs(b.curX - b.startX), height: Math.abs(b.curY - b.startY), fill: O.marqueeFill, stroke: O.blue, strokeWidth: 1 / a.z })
   ] }) });
 }
@@ -601,7 +601,7 @@ function Ln({
   shapeById: a,
   allShapes: u,
   peerCursors: d,
-  isDarkMode: v,
+  isDarkMode: m,
   renderEditor: b,
   renderShapeBody: h,
   setEditingId: c,
@@ -615,55 +615,54 @@ function Ln({
     /* @__PURE__ */ N("div", { className: "absolute top-0 left-0 origin-top-left", style: { transform: `scale(${o.z}) translate(${-o.x}px, ${-o.y}px)` }, children: t.map((f) => {
       if (f.type === "draw") return null;
       if (f.type === "arrow") {
-        const m = $t(f, a, u), w = m.routing === "orthogonal" && m.pathPoints ? he(m.pathPoints) : m.routing === "curved" ? Xt(0.5, m.start, m.control, m.end) : { x: (m.start.x + m.end.x) / 2, y: (m.start.y + m.end.y) / 2 }, p = e === f.id, k = Tt(f), S = n.has(f.id), $ = S && !p && !k, y = At(f).trim();
-        return !k && !p && !S ? null : /* @__PURE__ */ j(_e.Fragment, { children: [
-          /* @__PURE__ */ j("div", { className: "absolute flex items-center justify-center", style: { left: w.x - 90, top: w.y - 18, width: 180, height: 36 }, onDoubleClick: (X) => {
-            X.stopPropagation(), c(f.id);
+        const p = $t(f, a, u), w = p.routing === "orthogonal" && p.pathPoints ? he(p.pathPoints) : p.routing === "curved" ? Xt(0.5, p.start, p.control, p.end) : { x: (p.start.x + p.end.x) / 2, y: (p.start.y + p.end.y) / 2 }, y = e === f.id, M = Tt(f), S = n.has(f.id), $ = At(f).trim();
+        return !M && !y && !S ? null : /* @__PURE__ */ j(_e.Fragment, { children: [
+          /* @__PURE__ */ j("div", { "data-canvas-arrow-label-hit-area": !0, className: "absolute flex items-center justify-center", style: { left: w.x - 90, top: w.y - 18, width: 180, height: 36 }, onDoubleClick: (v) => {
+            v.stopPropagation(), c(f.id);
           }, children: [
-            (k || p || $) && /* @__PURE__ */ N(
+            (M || y) && /* @__PURE__ */ N(
               "div",
               {
                 "data-canvas-arrow-label": "true",
-                "data-canvas-arrow-label-placeholder": $ ? "true" : void 0,
-                "aria-label": y ? `관계 설명: ${y}` : "관계 설명 입력",
-                title: p ? void 0 : y ? "더블클릭하여 관계 설명 편집" : "더블클릭하여 관계 설명 입력",
-                className: `px-3 py-1 rounded-full border-2 shadow-sm ${$ ? "border-dashed" : ""} ${v ? `bg-slate-900 border-slate-600 ${$ ? "text-slate-400" : "text-slate-100"}` : `bg-white border-slate-300 ${$ ? "text-slate-500" : "text-slate-800"}`}`,
+                "aria-label": $ ? `관계 설명: ${$}` : "관계 설명 입력",
+                title: y ? void 0 : $ ? "더블클릭하여 관계 설명 편집" : "더블클릭하여 관계 설명 입력",
+                className: `px-3 py-1 rounded-full border-2 shadow-sm ${m ? "bg-slate-900 border-slate-600 text-slate-100" : "bg-white border-slate-300 text-slate-800"}`,
                 style: {
                   fontSize: tt(f),
                   fontFamily: et(f),
                   maxWidth: "100%",
-                  minWidth: p ? 120 / o.z : void 0,
-                  minHeight: p ? 28 / o.z : void 0,
-                  color: $ ? void 0 : f.textColor
+                  minWidth: y ? 120 / o.z : void 0,
+                  minHeight: y ? 28 / o.z : void 0,
+                  color: f.textColor
                 },
-                children: p ? b("text-center whitespace-nowrap") : k ? /* @__PURE__ */ N("span", { dangerouslySetInnerHTML: { __html: k } }, "canvas-view") : /* @__PURE__ */ N("span", { className: "whitespace-nowrap", children: "관계 입력" })
+                children: y ? b("text-center whitespace-nowrap") : /* @__PURE__ */ N("span", { dangerouslySetInnerHTML: { __html: M } }, "canvas-view")
               }
             ),
-            S && n.size === 1 && /* @__PURE__ */ N("div", { "data-canvas-arrow-bend-handle": !0, onPointerDown: (X) => r(X, f), title: "드래그해서 곡선으로 (Curve)", className: "absolute rounded-full bg-white border-2 border-blue-600", style: { width: 10 / o.z, height: 10 / o.z, left: `calc(50% - ${5 / o.z}px)`, top: -10 / o.z, cursor: "grab" } })
+            S && n.size === 1 && /* @__PURE__ */ N("div", { "data-canvas-arrow-bend-handle": !0, onPointerDown: (v) => r(v, f), title: "드래그해서 곡선으로 (Curve)", className: "absolute rounded-full bg-white border-2 border-blue-600", style: { width: 10 / o.z, height: 10 / o.z, left: `calc(50% - ${5 / o.z}px)`, top: -10 / o.z, cursor: "grab" } })
           ] }),
-          S && n.size === 1 && ["start", "end"].map((X) => {
-            const Y = X === "start" ? m.start : m.end;
+          S && n.size === 1 && ["start", "end"].map((v) => {
+            const X = v === "start" ? p.start : p.end;
             return /* @__PURE__ */ N(
               "div",
               {
-                "data-canvas-arrow-endpoint": X,
-                onPointerDown: (I) => s(I, f, X),
+                "data-canvas-arrow-endpoint": v,
+                onPointerDown: (Y) => s(Y, f, v),
                 title: "드래그해서 끝점 이동 (노드 위에 놓으면 연결)",
                 className: "absolute bg-white border-2 border-blue-600 rounded-full",
-                style: { width: 12 / o.z, height: 12 / o.z, left: Y.x - 6 / o.z, top: Y.y - 6 / o.z, cursor: "grab" }
+                style: { width: 12 / o.z, height: 12 / o.z, left: X.x - 6 / o.z, top: X.y - 6 / o.z, cursor: "grab" }
               },
-              X
+              v
             );
           })
         ] }, f.id);
       }
-      const M = n.has(f.id), g = mt(f);
+      const k = n.has(f.id), g = mt(f);
       return /* @__PURE__ */ j(
         "div",
         {
           "data-canvas-shape-id": f.id,
           "data-canvas-shape-type": f.type,
-          "data-canvas-selected": M ? "true" : void 0,
+          "data-canvas-selected": k ? "true" : void 0,
           "data-canvas-text-align": ot(f),
           "data-canvas-text-color": f.textColor,
           "data-canvas-font-size": tt(f),
@@ -677,17 +676,17 @@ function Ln({
           "data-canvas-height": f.h,
           className: "absolute",
           style: { left: g.minX, top: g.minY, width: g.maxX - g.minX, height: g.maxY - g.minY, transform: f.rotation ? `rotate(${f.rotation}rad)` : void 0, transformOrigin: "center" },
-          onDoubleClick: (m) => {
-            m.stopPropagation(), In.has(f.type) && c(f.id);
+          onDoubleClick: (p) => {
+            p.stopPropagation(), In.has(f.type) && c(f.id);
           },
           children: [
             h(f),
-            M && /* @__PURE__ */ j(pt, { children: [
+            k && /* @__PURE__ */ j(pt, { children: [
               /* @__PURE__ */ N("div", { className: "absolute -inset-0.5 pointer-events-none", style: { outline: `${2 / o.z}px solid ${O.blue}` } }),
               n.size === 1 && /* @__PURE__ */ j(pt, { children: [
-                ["nw", "ne", "sw", "se"].map((m) => /* @__PURE__ */ N("div", { "data-canvas-resize-handle": m, onPointerDown: (w) => l(w, f, m), className: "absolute bg-white border-2 border-blue-600 rounded-sm", style: { width: 10 / o.z, height: 10 / o.z, cursor: `${m}-resize`, left: m.includes("w") ? -5 / o.z : void 0, right: m.includes("e") ? -5 / o.z : void 0, top: m.includes("n") ? -5 / o.z : void 0, bottom: m.includes("s") ? -5 / o.z : void 0 } }, m)),
-                /* @__PURE__ */ N("div", { onPointerDown: (m) => i(m, f), title: "회전 (Shift로 15도 단위)", className: "absolute bg-blue-600 rounded-full", style: { width: 12 / o.z, height: 12 / o.z, left: "50%", marginLeft: -6 / o.z, top: -28 / o.z, cursor: "grab" } }),
-                En.has(f.type) && ["n", "s", "w", "e"].map((m) => /* @__PURE__ */ N("div", { onPointerDown: (w) => x(w, f), title: "드래그해서 연결 (관계 생성)", className: "absolute flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500", style: { ...m === "n" ? { left: "50%", top: -30 / o.z, marginLeft: -9 / o.z } : m === "s" ? { left: "50%", bottom: -30 / o.z, marginLeft: -9 / o.z } : m === "w" ? { top: "50%", left: -30 / o.z, marginTop: -9 / o.z } : { top: "50%", right: -30 / o.z, marginTop: -9 / o.z }, width: 18 / o.z, height: 18 / o.z, fontSize: 13 / o.z, lineHeight: 1, cursor: "crosshair" }, children: "+" }, `plus-${m}`))
+                ["nw", "ne", "sw", "se"].map((p) => /* @__PURE__ */ N("div", { "data-canvas-resize-handle": p, onPointerDown: (w) => l(w, f, p), className: "absolute bg-white border-2 border-blue-600 rounded-sm", style: { width: 10 / o.z, height: 10 / o.z, cursor: `${p}-resize`, left: p.includes("w") ? -5 / o.z : void 0, right: p.includes("e") ? -5 / o.z : void 0, top: p.includes("n") ? -5 / o.z : void 0, bottom: p.includes("s") ? -5 / o.z : void 0 } }, p)),
+                /* @__PURE__ */ N("div", { onPointerDown: (p) => i(p, f), title: "회전 (Shift로 15도 단위)", className: "absolute bg-blue-600 rounded-full", style: { width: 12 / o.z, height: 12 / o.z, left: "50%", marginLeft: -6 / o.z, top: -28 / o.z, cursor: "grab" } }),
+                En.has(f.type) && ["n", "s", "w", "e"].map((p) => /* @__PURE__ */ N("div", { onPointerDown: (w) => x(w, f), title: "드래그해서 연결 (관계 생성)", className: "absolute flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500", style: { ...p === "n" ? { left: "50%", top: -30 / o.z, marginLeft: -9 / o.z } : p === "s" ? { left: "50%", bottom: -30 / o.z, marginLeft: -9 / o.z } : p === "w" ? { top: "50%", left: -30 / o.z, marginTop: -9 / o.z } : { top: "50%", right: -30 / o.z, marginTop: -9 / o.z }, width: 18 / o.z, height: 18 / o.z, fontSize: 13 / o.z, lineHeight: 1, cursor: "crosshair" }, children: "+" }, `plus-${p}`))
               ] })
             ] })
           ]
@@ -696,8 +695,8 @@ function Ln({
       );
     }) }),
     u.filter((f) => (f.type === "draw" || f.type === "arrow") && n.has(f.id)).map((f) => {
-      const M = q(f);
-      return /* @__PURE__ */ N("div", { className: "absolute pointer-events-none border-2 border-blue-600/60 rounded", style: { left: (M.minX - o.x) * o.z - 4, top: (M.minY - o.y) * o.z - 4, width: (M.maxX - M.minX) * o.z + 8, height: (M.maxY - M.minY) * o.z + 8 } }, `sel-${f.id}`);
+      const k = q(f);
+      return /* @__PURE__ */ N("div", { className: "absolute pointer-events-none border-2 border-blue-600/60 rounded", style: { left: (k.minX - o.x) * o.z - 4, top: (k.minY - o.y) * o.z - 4, width: (k.maxX - k.minX) * o.z + 8, height: (k.maxY - k.minY) * o.z + 8 } }, `sel-${f.id}`);
     }),
     d == null ? void 0 : d.map((f) => /* @__PURE__ */ j("div", { className: "absolute pointer-events-none z-40", style: { left: (f.x - o.x) * o.z, top: (f.y - o.y) * o.z, transform: "translate(-2px, -2px)" }, children: [
       /* @__PURE__ */ N("svg", { width: "20", height: "24", viewBox: "0 0 20 24", children: /* @__PURE__ */ N("path", { d: "M 1 1 L 1 18 L 6 13 L 9 20 L 12 19 L 9 12 L 15 12 Z", fill: f.color, stroke: O.white, strokeWidth: "1.5", strokeLinejoin: "round" }) }),
@@ -713,7 +712,7 @@ function Fn({
   isDarkMode: a,
   editing: u,
   showPalette: d,
-  installedFontFamilies: v,
+  installedFontFamilies: m,
   setShowPalette: b,
   setActiveColor: h,
   patchSelected: c,
@@ -722,29 +721,29 @@ function Fn({
   applyCustomFontFamily: i
 }) {
   var K;
-  const x = a ? "text-slate-200 hover:bg-slate-800" : "text-slate-700 hover:bg-slate-100", s = V(null), [f, M] = J({ width: 380, height: 260 });
+  const x = a ? "text-slate-200 hover:bg-slate-800" : "text-slate-700 hover:bg-slate-100", s = V(null), [f, k] = J({ width: 380, height: 260 });
   Rt(() => {
     const z = s.current;
     if (!z) return;
     const L = () => {
       const D = Math.max(1, Math.ceil(z.getBoundingClientRect().width)), R = Math.max(1, Math.ceil(z.getBoundingClientRect().height));
-      M((U) => U.width === D && U.height === R ? U : { width: D, height: R });
+      k((U) => U.width === D && U.height === R ? U : { width: D, height: R });
     };
     if (L(), typeof ResizeObserver > "u") return;
     const B = new ResizeObserver(L);
     return B.observe(z), () => B.disconnect();
-  }, [u, v.length, a, t, d]);
-  const g = f.width, m = f.height, w = q(t), p = (w.minX - e.x) * e.z, k = (w.minY - e.y) * e.z, S = (w.maxX - e.x) * e.z, $ = (w.maxY - e.y) * e.z, y = Math.max(8, o.width - g - 8), X = Math.max(8, o.height - m - 8), Y = (z, L) => ({ left: Math.min(Math.max(8, z), y), top: Math.min(Math.max(8, L), X) }), I = [
-    Y((p + S) / 2 - g / 2, k - m - 12),
-    Y((p + S) / 2 - g / 2, $ + 12),
+  }, [u, m.length, a, t, d]);
+  const g = f.width, p = f.height, w = q(t), y = (w.minX - e.x) * e.z, M = (w.minY - e.y) * e.z, S = (w.maxX - e.x) * e.z, $ = (w.maxY - e.y) * e.z, v = Math.max(8, o.width - g - 8), X = Math.max(8, o.height - p - 8), Y = (z, L) => ({ left: Math.min(Math.max(8, z), v), top: Math.min(Math.max(8, L), X) }), I = [
+    Y((y + S) / 2 - g / 2, M - p - 12),
+    Y((y + S) / 2 - g / 2, $ + 12),
     Y((o.width - g) / 2, 12),
-    Y(p - g - 12, k + ($ - k - m) / 2),
-    Y(S + 12, k + ($ - k - m) / 2)
+    Y(y - g - 12, M + ($ - M - p) / 2),
+    Y(S + 12, M + ($ - M - p) / 2)
   ], E = n.map((z) => {
     const L = q(z);
     return { left: (L.minX - e.x) * e.z, top: (L.minY - e.y) * e.z, right: (L.maxX - e.x) * e.z, bottom: (L.maxY - e.y) * e.z };
   }), F = I[0], C = (z, L) => {
-    const B = Math.max(0, Math.min(z.left + g, L.right) - Math.max(z.left, L.left)), D = Math.max(0, Math.min(z.top + m, L.bottom) - Math.max(z.top, L.top));
+    const B = Math.max(0, Math.min(z.left + g, L.right) - Math.max(z.left, L.left)), D = Math.max(0, Math.min(z.top + p, L.bottom) - Math.max(z.top, L.top));
     return B * D;
   }, P = ((K = I.map((z) => ({
     candidate: z,
@@ -791,7 +790,7 @@ function Fn({
         /* @__PURE__ */ N("input", { type: "text", list: `canvas-font-families-${t.id}`, title: "폰트 직접입력", "aria-label": "폰트 직접입력", defaultValue: t.customFontFamily ?? "", onBlur: (z) => i(z.target.value), onChange: (z) => z.currentTarget.value && i(z.currentTarget.value), onKeyDown: (z) => {
           z.key === "Enter" && (z.preventDefault(), i(z.currentTarget.value));
         }, onDoubleClick: (z) => z.stopPropagation(), onPointerDown: (z) => z.stopPropagation(), placeholder: "Noto Sans KR", className: `pointer-events-auto h-8 w-44 rounded-lg border px-2 text-xs ${a ? "bg-slate-950 border-slate-700" : "bg-white border-slate-200"}` }),
-        /* @__PURE__ */ N("datalist", { id: `canvas-font-families-${t.id}`, children: v.map((z) => /* @__PURE__ */ N("option", { value: z }, z)) })
+        /* @__PURE__ */ N("datalist", { id: `canvas-font-families-${t.id}`, children: m.map((z) => /* @__PURE__ */ N("option", { value: z }, z)) })
       ] })
     ] }),
     /* @__PURE__ */ j("div", { className: `flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-none ${a ? "border-slate-700" : "border-slate-100"}`, children: [
@@ -832,7 +831,7 @@ function Pn({
   commitEditorHtml: a,
   onEditorKeyDown: u,
   setShapes: d,
-  onDirty: v
+  onDirty: m
 }) {
   const b = "canvas-rich-text w-full h-full outline-none whitespace-pre-wrap break-words overflow-hidden", h = (r, l) => /* @__PURE__ */ N(
     "div",
@@ -905,14 +904,14 @@ function Pn({
                 className: "text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 outline-none",
                 contentEditable: !0,
                 suppressContentEditableWarning: !0,
-                onPointerDown: (p) => p.stopPropagation(),
-                onDoubleClick: (p) => p.stopPropagation(),
-                onBlur: (p) => {
-                  const S = (p.currentTarget.textContent || "").replace(/^\[\s*|\s*\]$/g, "").trim().toUpperCase() || "ENTITY";
-                  d(($) => $.map((y) => y.id === r.id ? { ...y, category: S } : y)), v();
+                onPointerDown: (y) => y.stopPropagation(),
+                onDoubleClick: (y) => y.stopPropagation(),
+                onBlur: (y) => {
+                  const S = (y.currentTarget.textContent || "").replace(/^\[\s*|\s*\]$/g, "").trim().toUpperCase() || "ENTITY";
+                  d(($) => $.map((v) => v.id === r.id ? { ...v, category: S } : v)), m();
                 },
-                onKeyDown: (p) => {
-                  p.key === "Enter" && (p.preventDefault(), p.currentTarget.blur());
+                onKeyDown: (y) => {
+                  y.key === "Enter" && (y.preventDefault(), y.currentTarget.blur());
                 },
                 children: [
                   "[ ",
@@ -931,19 +930,19 @@ function Pn({
       );
     }
     if (r.type === "text") {
-      const w = e ? "text-slate-100" : "text-slate-900", p = {
+      const w = e ? "text-slate-100" : "text-slate-900", y = {
         className: `canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words ${w}`,
         style: { color: r.textColor, fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }
       };
-      return i ? h(`font-medium ${w}`, p.style) : x ? /* @__PURE__ */ N(
+      return i ? h(`font-medium ${w}`, y.style) : x ? /* @__PURE__ */ N(
         "div",
         {
           "data-canvas-text-view": !0,
-          ...p,
+          ...y,
           dangerouslySetInnerHTML: { __html: x }
         },
         "canvas-view"
-      ) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, ...p, children: /* @__PURE__ */ N("span", { className: "opacity-40", children: "텍스트 입력..." }) }, "canvas-view");
+      ) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, ...y, children: /* @__PURE__ */ N("span", { className: "opacity-40", children: "텍스트 입력..." }) }, "canvas-view");
     }
     if (r.type === "image") {
       const w = Qt(r.src);
@@ -957,24 +956,24 @@ function Pn({
         }
       ) : null;
     }
-    const s = qt(r), f = hn(r), M = gt(r);
+    const s = qt(r), f = hn(r), k = gt(r);
     if (r.type === "triangle" || r.type === "diamond" || r.type === "hexagon" || r.type === "star")
       return /* @__PURE__ */ j("div", { className: "relative w-full h-full", children: [
         /* @__PURE__ */ N("svg", { className: "absolute inset-0 w-full h-full pointer-events-none", viewBox: `0 0 ${r.w} ${r.h}`, preserveAspectRatio: "none", children: /* @__PURE__ */ N("polygon", { points: vn(r.type, r.w, r.h), fill: s, stroke: f, strokeWidth: 2, strokeLinejoin: "round" }) }),
-        /* @__PURE__ */ N("div", { className: "absolute inset-0 flex items-center justify-center p-3", style: { color: M }, children: i ? h("font-medium", { color: M, fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }, dangerouslySetInnerHTML: { __html: x } }, "canvas-view") })
+        /* @__PURE__ */ N("div", { className: "absolute inset-0 flex items-center justify-center p-3", style: { color: k }, children: i ? h("font-medium", { color: k, fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }, dangerouslySetInnerHTML: { __html: x } }, "canvas-view") })
       ] });
-    const m = Qt(r.src);
+    const p = Qt(r.src);
     return /* @__PURE__ */ N(
       "div",
       {
         className: `w-full h-full flex items-center justify-center p-3 ${r.type === "ellipse" ? "rounded-full" : "rounded-xl"}`,
-        style: { background: s, border: `2px solid ${f}`, color: M },
-        children: i ? h("font-medium", { color: M, fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }) : /* @__PURE__ */ j("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }, children: [
+        style: { background: s, border: `2px solid ${f}`, color: k },
+        children: i ? h("font-medium", { color: k, fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }) : /* @__PURE__ */ j("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: tt(r), fontFamily: et(r), textAlign: ot(r) }, children: [
           /* @__PURE__ */ N("div", { dangerouslySetInnerHTML: { __html: x } }),
-          m && /* @__PURE__ */ N(
+          p && /* @__PURE__ */ N(
             "a",
             {
-              href: m,
+              href: p,
               target: "_blank",
               rel: "noreferrer",
               onPointerDown: (w) => w.stopPropagation(),
@@ -996,43 +995,43 @@ function Tn({
   editingId: u,
   boardIdentity: d
 }) {
-  const [v, b] = J({ width: 0, height: 0 });
+  const [m, b] = J({ width: 0, height: 0 });
   dt(() => {
     const x = t.current;
     if (!x) return;
     let s = -1, f = -1;
-    const M = (m = x.clientWidth, w = x.clientHeight) => {
-      m === s && w === f || (s = m, f = w, b({ width: m, height: w }));
+    const k = (p = x.clientWidth, w = x.clientHeight) => {
+      p === s && w === f || (s = p, f = w, b({ width: p, height: w }));
     };
-    if (M(), typeof ResizeObserver < "u") {
-      const m = new ResizeObserver((w) => {
-        var k;
-        const p = (k = w[0]) == null ? void 0 : k.contentRect;
-        M((p == null ? void 0 : p.width) ?? x.clientWidth, (p == null ? void 0 : p.height) ?? x.clientHeight);
+    if (k(), typeof ResizeObserver < "u") {
+      const p = new ResizeObserver((w) => {
+        var M;
+        const y = (M = w[0]) == null ? void 0 : M.contentRect;
+        k((y == null ? void 0 : y.width) ?? x.clientWidth, (y == null ? void 0 : y.height) ?? x.clientHeight);
       });
-      return m.observe(x), () => m.disconnect();
+      return p.observe(x), () => p.disconnect();
     }
-    const g = () => M();
+    const g = () => k();
     return window.addEventListener("resize", g), () => window.removeEventListener("resize", g);
   }, [d, t]);
   const h = yt(() => new Map(e.map((x) => [x.id, x])), [e]), c = yt(
     () => [...e].sort((x, s) => (x.type === "frame" ? -1 : 0) - (s.type === "frame" ? -1 : 0)),
     [e]
   ), r = yt(() => {
-    if (!t.current || v.width <= 0 || v.height <= 0) return null;
+    if (!t.current || m.width <= 0 || m.height <= 0) return null;
     const x = 200 / o.z;
     return {
       minX: o.x - x,
       minY: o.y - x,
-      maxX: o.x + v.width / o.z + x,
-      maxY: o.y + v.height / o.z + x
+      maxX: o.x + m.width / o.z + x,
+      maxY: o.y + m.height / o.z + x
     };
-  }, [o, t, v]), l = Q((x) => {
+  }, [o, t, m]), l = Q((x) => {
     if (!r) return !1;
     if (x.id === u || a.has(x.id)) return !0;
     if (x.type === "arrow") {
-      const f = $t(x, h, n.current), g = (f.routing === "orthogonal" ? f.pathPoints : null) ?? [f.start, f.end], m = Math.min(...g.map((S) => S.x)), w = Math.max(...g.map((S) => S.x)), p = Math.min(...g.map((S) => S.y)), k = Math.max(...g.map((S) => S.y));
-      return w >= r.minX && m <= r.maxX && k >= r.minY && p <= r.maxY;
+      const f = $t(x, h, n.current), g = (f.routing === "orthogonal" ? f.pathPoints : null) ?? [f.start, f.end], p = Math.min(...g.map((S) => S.x)), w = Math.max(...g.map((S) => S.x)), y = Math.min(...g.map((S) => S.y)), M = Math.max(...g.map((S) => S.y));
+      return w >= r.minX && p <= r.maxX && M >= r.minY && y <= r.maxY;
     }
     const s = q(x);
     return s.maxX >= r.minX && s.minX <= r.maxX && s.maxY >= r.minY && s.minY <= r.maxY;
@@ -1061,19 +1060,19 @@ function An({
       return;
     }
     const s = i.scrollHeight;
-    e((f) => f.map((M) => {
-      if (M.id !== n) return M;
-      const g = { ...M, html: x, text: void 0 };
-      if (M.type === "text")
-        return M.manualSize ? g : { ...g, ...Nn(i, M) };
-      if (M.type === "arrow") return g;
-      const m = M.type === "note" ? 32 : M.type === "card" ? 96 : (
+    e((f) => f.map((k) => {
+      if (k.id !== n) return k;
+      const g = { ...k, html: x, text: void 0 };
+      if (k.type === "text")
+        return k.manualSize ? g : { ...g, ...Nn(i, k) };
+      if (k.type === "arrow") return g;
+      const p = k.type === "note" ? 32 : k.type === "card" ? 96 : (
         // category header + type footer
-        (M.type === "frame", 24)
-      ), w = Math.max(M.h, s + m);
+        (k.type === "frame", 24)
+      ), w = Math.max(k.h, s + p);
       return { ...g, h: w };
     })), a();
-  }, [n, a]), v = (i) => {
+  }, [n, a]), m = (i) => {
     var x;
     (x = t.current) == null || x.focus(), document.execCommand("styleWithCSS", !1, "false"), document.execCommand(i), d();
   }, b = () => {
@@ -1109,7 +1108,7 @@ function An({
     }
     d();
   };
-  return { commitEditorHtml: d, applyFormat: v, applyList: c, onEditorKeyDown: (i) => {
+  return { commitEditorHtml: d, applyFormat: m, applyList: c, onEditorKeyDown: (i) => {
     if (i.key === "Tab") {
       i.preventDefault(), document.execCommand(i.shiftKey ? "outdent" : "indent"), d();
       return;
@@ -1117,18 +1116,18 @@ function An({
     if (i.key === " ") {
       const x = window.getSelection();
       if (x && x.isCollapsed && x.anchorNode) {
-        const s = x.anchorNode, f = s.textContent || "", M = x.anchorOffset, g = f.slice(0, M).trim();
+        const s = x.anchorNode, f = s.textContent || "", k = x.anchorOffset, g = f.slice(0, k).trim();
         if (!b()) {
           if (g === "-" || g === "–") {
-            i.preventDefault(), s.textContent = f.slice(M), c("dash");
+            i.preventDefault(), s.textContent = f.slice(k), c("dash");
             return;
           }
           if (g === "*") {
-            i.preventDefault(), s.textContent = f.slice(M), c("bullet");
+            i.preventDefault(), s.textContent = f.slice(k), c("bullet");
             return;
           }
           if (g === "1.") {
-            i.preventDefault(), s.textContent = f.slice(M), c("number");
+            i.preventDefault(), s.textContent = f.slice(k), c("number");
             return;
           }
         }
@@ -1156,13 +1155,13 @@ function On({
   onShapesChange: o,
   onDirty: a
 }) {
-  const u = V(null), d = V(null), [v, b] = J([]), h = e !== void 0 && o !== void 0, c = V(/* @__PURE__ */ new WeakMap()), r = yt(() => {
+  const u = V(null), d = V(null), [m, b] = J([]), h = e !== void 0 && o !== void 0, c = V(/* @__PURE__ */ new WeakMap()), r = yt(() => {
     const A = c.current;
-    return (h ? e ?? [] : v).map((H) => {
+    return (h ? e ?? [] : m).map((H) => {
       let _ = A.get(H);
       return _ === void 0 && (_ = Jt(H), A.set(H, _)), _;
     }).filter((H) => H !== null);
-  }, [h, e, v]), l = V(o);
+  }, [h, e, m]), l = V(o);
   l.current = o;
   const i = Q((A) => {
     const H = l.current;
@@ -1171,19 +1170,19 @@ function On({
       return;
     }
     H(typeof A == "function" ? A : () => A);
-  }, []), [x, s] = J({ x: -400, y: -300, z: 1 }), [f, M] = J(/* @__PURE__ */ new Set()), [g, m] = J(null), [w, p] = J({ kind: "none" }), [k, S] = J(!1), [$, y] = J([]), [X, Y] = J(""), [I, E] = J(!1), [F, C] = J(null), [P, T] = J("blue"), [W, K] = J(Ft), z = V(P);
+  }, []), [x, s] = J({ x: -400, y: -300, z: 1 }), [f, k] = J(/* @__PURE__ */ new Set()), [g, p] = J(null), [w, y] = J({ kind: "none" }), [M, S] = J(!1), [$, v] = J([]), [X, Y] = J(""), [I, E] = J(!1), [F, C] = J(null), [P, T] = J("blue"), [W, K] = J(Ft), z = V(P);
   z.current = P;
   const L = V([]), B = V([]), D = V(null), R = V(/* @__PURE__ */ new Map()), U = V(r), ut = V(x), xt = V(n), it = V(f), Z = V(g);
   U.current = r, ut.current = x, xt.current = n, it.current = f, Z.current = g;
   const lt = V({ kind: "none" }), nt = Q((A) => {
-    lt.current = A, p(A);
+    lt.current = A, y(A);
   }, []), ct = Q((A) => {
-    it.current = A, M(A);
+    it.current = A, k(A);
   }, []);
   Rt(() => {
     var H;
     const A = /* @__PURE__ */ new Set();
-    it.current = A, Z.current = null, R.current.clear(), L.current = [], B.current = [], D.current = null, nt({ kind: "none" }), M(A), m(null), S(!1), y([]), C(null), Y(""), (H = u.current) == null || H.focus();
+    it.current = A, Z.current = null, R.current.clear(), L.current = [], B.current = [], D.current = null, nt({ kind: "none" }), k(A), p(null), S(!1), v([]), C(null), Y(""), (H = u.current) == null || H.focus();
   }, [nt, t]), dt(() => {
     let A = !1;
     const H = () => {
@@ -1240,7 +1239,7 @@ function On({
   return {
     containerRef: u,
     editorRef: d,
-    localShapes: v,
+    localShapes: m,
     setLocalShapes: b,
     controlled: h,
     shapes: r,
@@ -1249,18 +1248,18 @@ function On({
     setCamera: s,
     cameraRef: ut,
     selected: f,
-    setSelected: M,
+    setSelected: k,
     selectedRef: it,
     editingId: g,
-    setEditingId: m,
+    setEditingId: p,
     editingIdRef: Z,
     interaction: w,
     interactionRef: lt,
     applyInteraction: nt,
-    isSpaceDown: k,
+    isSpaceDown: M,
     setIsSpaceDown: S,
     guides: $,
-    setGuides: y,
+    setGuides: v,
     announcement: X,
     setAnnouncement: Y,
     showInspectorPalette: I,
@@ -1294,7 +1293,7 @@ function Dn({
   maxZoom: a,
   shapes: u,
   selected: d,
-  editingId: v,
+  editingId: m,
   textualTypes: b,
   onZoomChange: h,
   onSelectionChange: c,
@@ -1306,24 +1305,24 @@ function Dn({
   }, [n.z, h]), dt(() => {
     const g = t.current;
     if (!g) return;
-    const m = (w) => {
+    const p = (w) => {
       if (w.preventDefault(), w.ctrlKey || w.metaKey) {
-        const p = g.getBoundingClientRect();
-        e((k) => {
-          const S = Math.min(a, Math.max(o, k.z * Math.exp(-w.deltaY * 0.01))), $ = w.clientX - p.left, y = w.clientY - p.top;
-          return { x: k.x + $ / k.z - $ / S, y: k.y + y / k.z - y / S, z: S };
+        const y = g.getBoundingClientRect();
+        e((M) => {
+          const S = Math.min(a, Math.max(o, M.z * Math.exp(-w.deltaY * 0.01))), $ = w.clientX - y.left, v = w.clientY - y.top;
+          return { x: M.x + $ / M.z - $ / S, y: M.y + v / M.z - v / S, z: S };
         });
       } else
-        e((p) => ({ ...p, x: p.x + w.deltaX / p.z, y: p.y + w.deltaY / p.z }));
+        e((y) => ({ ...y, x: y.x + w.deltaX / y.z, y: y.y + w.deltaY / y.z }));
     };
-    return g.addEventListener("wheel", m, { passive: !1 }), () => g.removeEventListener("wheel", m);
+    return g.addEventListener("wheel", p, { passive: !1 }), () => g.removeEventListener("wheel", p);
   }, [t, a, o, e]);
   const i = yt(() => {
-    const g = u.filter((m) => d.has(m.id));
+    const g = u.filter((p) => d.has(p.id));
     return {
       count: g.length,
       canGroup: g.length > 1,
-      canUngroup: g.some((m) => !!m.groupId),
+      canUngroup: g.some((p) => !!p.groupId),
       isTextual: g.length === 1 && b.includes(g[0].type)
     };
   }, [d, u, b]);
@@ -1331,14 +1330,14 @@ function Dn({
     c == null || c(i);
   }, [c, i]);
   const x = yt(() => {
-    if (v) return u.find((m) => m.id === v) ?? null;
+    if (m) return u.find((p) => p.id === m) ?? null;
     if (d.size !== 1) return null;
-    const g = u.find((m) => d.has(m.id));
+    const g = u.find((p) => d.has(p.id));
     return g && g.type !== "image" ? g : null;
-  }, [v, d, u]), s = V(0);
+  }, [m, d, u]), s = V(0);
   return { selectionInfo: i, inspectorShape: x, onContainerPointerMove: r ? (g) => {
-    const m = performance.now();
-    m - s.current < 60 || (s.current = m, r(l(g.clientX, g.clientY)));
+    const p = performance.now();
+    p - s.current < 60 || (s.current = p, r(l(g.clientX, g.clientY)));
   } : void 0, onContainerPointerLeave: r ? () => r(null) : void 0 };
 }
 function _n(t, n) {
@@ -1348,27 +1347,27 @@ function _n(t, n) {
     const l = q(r);
     e = Math.min(e, l.minX), o = Math.min(o, l.minY), a = Math.max(a, l.maxX), u = Math.max(u, l.maxY);
   }
-  const d = 40, v = a - e + d * 2, b = u - o + d * 2;
-  if (!Number.isFinite(v) || !Number.isFinite(b) || v > wt.maxExportDimension || b > wt.maxExportDimension || v * b > wt.maxExportPixels) return null;
+  const d = 40, m = a - e + d * 2, b = u - o + d * 2;
+  if (!Number.isFinite(m) || !Number.isFinite(b) || m > wt.maxExportDimension || b > wt.maxExportDimension || m * b > wt.maxExportPixels) return null;
   const h = (r, l, i, x, s) => {
-    const f = r.fontSize ?? i, M = et(r), g = ye(Tt(r));
+    const f = r.fontSize ?? i, k = et(r), g = ye(Tt(r));
     if (g.length === 0) return "";
-    const m = mt(r), w = r.textAlign === "right" ? "end" : r.textAlign === "center" ? "middle" : r.textAlign === "left" ? "start" : s, p = w === "end" ? m.maxX - 12 : w === "middle" ? (m.minX + m.maxX) / 2 : m.minX + 12, k = m.minY + f + 12;
+    const p = mt(r), w = r.textAlign === "right" ? "end" : r.textAlign === "center" ? "middle" : r.textAlign === "left" ? "start" : s, y = w === "end" ? p.maxX - 12 : w === "middle" ? (p.minX + p.maxX) / 2 : p.minX + 12, M = p.minY + f + 12;
     return g.map((S, $) => {
-      const y = S.map((X) => `<tspan style="${[
+      const v = S.map((X) => `<tspan style="${[
         X.bold ? "font-weight:700" : `font-weight:${x}`,
         X.italic ? "font-style:italic" : "",
         X.underline ? "text-decoration:underline" : ""
       ].filter(Boolean).join(";")}">${vt(X.text)}</tspan>`).join("");
-      return `<text x="${p}" y="${k + $ * f * 1.4}" font-family="${vt(M)}" font-size="${f}" fill="${l}" text-anchor="${w}">${y}</text>`;
+      return `<text x="${y}" y="${M + $ * f * 1.4}" font-family="${vt(k)}" font-size="${f}" fill="${l}" text-anchor="${w}">${v}</text>`;
     }).join("");
   }, c = t.map((r) => {
     const l = rt[r.color ?? "blue"], i = mt(r), x = at(r), s = r.rotation ? ` transform="rotate(${r.rotation * 180 / Math.PI} ${x.x} ${x.y})"` : "", f = r.color ? rt[r.color].border : O.ink;
     if (r.type === "draw" && r.points)
       return `<path d="${pe(r.points)}" fill="none" stroke="${f}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
     if (r.type === "arrow") {
-      const g = $t(r, new Map(t.map((E) => [E.id, E])), t), m = g.routing === "orthogonal" && g.pathPoints && g.pathPoints.length > 1 ? g.pathPoints[g.pathPoints.length - 2] : null, w = g.routing === "orthogonal" && m ? m : Xt(0.94, g.start, g.control, g.end), p = Math.atan2(g.end.y - w.y, g.end.x - w.x), k = 14, S = `${g.end.x - k * Math.cos(p - 0.4)},${g.end.y - k * Math.sin(p - 0.4)}`, $ = `${g.end.x - k * Math.cos(p + 0.4)},${g.end.y - k * Math.sin(p + 0.4)}`, y = g.routing === "orthogonal" && g.pathPoints ? Ut(g.pathPoints) : g.bend === 0 ? `M ${g.start.x} ${g.start.y} L ${g.end.x} ${g.end.y}` : `M ${g.start.x} ${g.start.y} Q ${g.control.x} ${g.control.y} ${g.end.x} ${g.end.y}`, X = g.routing === "orthogonal" && g.pathPoints ? he(g.pathPoints) : g.bend === 0 ? { x: (g.start.x + g.end.x) / 2, y: (g.start.y + g.end.y) / 2 } : Xt(0.5, g.start, g.control, g.end), Y = At(r), I = Y ? `<text x="${X.x}" y="${X.y - 6}" text-anchor="middle" font-family="${vt(et(r))}" font-size="${r.fontSize ?? 12}" fill="${f}">${vt(Y)}</text>` : "";
-      return `<path d="${y}" fill="none" stroke="${f}" stroke-width="2.5" stroke-linecap="round"/><polygon points="${g.end.x},${g.end.y} ${S} ${$}" fill="${f}"/>` + I;
+      const g = $t(r, new Map(t.map((E) => [E.id, E])), t), p = g.routing === "orthogonal" && g.pathPoints && g.pathPoints.length > 1 ? g.pathPoints[g.pathPoints.length - 2] : null, w = g.routing === "orthogonal" && p ? p : Xt(0.94, g.start, g.control, g.end), y = Math.atan2(g.end.y - w.y, g.end.x - w.x), M = 14, S = `${g.end.x - M * Math.cos(y - 0.4)},${g.end.y - M * Math.sin(y - 0.4)}`, $ = `${g.end.x - M * Math.cos(y + 0.4)},${g.end.y - M * Math.sin(y + 0.4)}`, v = g.routing === "orthogonal" && g.pathPoints ? Ut(g.pathPoints) : g.bend === 0 ? `M ${g.start.x} ${g.start.y} L ${g.end.x} ${g.end.y}` : `M ${g.start.x} ${g.start.y} Q ${g.control.x} ${g.control.y} ${g.end.x} ${g.end.y}`, X = g.routing === "orthogonal" && g.pathPoints ? he(g.pathPoints) : g.bend === 0 ? { x: (g.start.x + g.end.x) / 2, y: (g.start.y + g.end.y) / 2 } : Xt(0.5, g.start, g.control, g.end), Y = At(r), I = Y ? `<text x="${X.x}" y="${X.y - 6}" text-anchor="middle" font-family="${vt(et(r))}" font-size="${r.fontSize ?? 12}" fill="${f}">${vt(Y)}</text>` : "";
+      return `<path d="${v}" fill="none" stroke="${f}" stroke-width="2.5" stroke-linecap="round"/><polygon points="${g.end.x},${g.end.y} ${S} ${$}" fill="${f}"/>` + I;
     }
     if (r.type === "image" && r.src) {
       const g = Qt(r.src);
@@ -1382,11 +1381,11 @@ function _n(t, n) {
       const g = r.cardStyle === "glass";
       return `<g${s}><rect x="${i.minX}" y="${i.minY}" width="${i.maxX - i.minX}" height="${i.maxY - i.minY}" rx="16" fill="${g ? O.glassFill : O.slateCard}"/><text x="${i.minX + 16}" y="${i.minY + 24}" font-family="Inter, system-ui, sans-serif" font-size="10" fill="${O.slate400}">[ ${vt(r.category ?? "ENTITY")} ]</text>` + h(r, O.white, 16, "700", "start") + "</g>";
     }
-    const M = r.type === "ellipse" ? `<ellipse cx="${(i.minX + i.maxX) / 2}" cy="${(i.minY + i.maxY) / 2}" rx="${(i.maxX - i.minX) / 2}" ry="${(i.maxY - i.minY) / 2}" fill="${l.bg}" stroke="${l.border}" stroke-width="2"/>` : `<rect x="${i.minX}" y="${i.minY}" width="${i.maxX - i.minX}" height="${i.maxY - i.minY}" rx="12" fill="${l.bg}" stroke="${l.border}" stroke-width="2"/>`;
-    return `<g${s}>${M}${h(r, l.text, 14, "700", "middle")}</g>`;
+    const k = r.type === "ellipse" ? `<ellipse cx="${(i.minX + i.maxX) / 2}" cy="${(i.minY + i.maxY) / 2}" rx="${(i.maxX - i.minX) / 2}" ry="${(i.maxY - i.minY) / 2}" fill="${l.bg}" stroke="${l.border}" stroke-width="2"/>` : `<rect x="${i.minX}" y="${i.minY}" width="${i.maxX - i.minX}" height="${i.maxY - i.minY}" rx="12" fill="${l.bg}" stroke="${l.border}" stroke-width="2"/>`;
+    return `<g${s}>${k}${h(r, l.text, 14, "700", "middle")}</g>`;
   }).join(`
 `);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${v}" height="${b}" viewBox="${e - d} ${o - d} ${v} ${b}"><rect x="${e - d}" y="${o - d}" width="${v}" height="${b}" fill="${n ? O.canvasDark : O.canvasLight}"/>` + c + "</svg>";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${m}" height="${b}" viewBox="${e - d} ${o - d} ${m} ${b}"><rect x="${e - d}" y="${o - d}" width="${m}" height="${b}" fill="${n ? O.canvasDark : O.canvasLight}"/>` + c + "</svg>";
 }
 async function Bn(t) {
   const n = t();
@@ -1400,12 +1399,12 @@ async function Bn(t) {
   } catch {
     return null;
   }
-  const v = 2, b = o * v, h = a * v;
+  const m = 2, b = o * m, h = a * m;
   if (!Number.isSafeInteger(b) || !Number.isSafeInteger(h) || b > wt.maxExportDimension || h > wt.maxExportDimension || b * h > wt.maxExportPixels) return null;
   const c = document.createElement("canvas");
   c.width = b, c.height = h;
   const r = c.getContext("2d");
-  return r ? (r.scale(v, v), r.drawImage(d, 0, 0), new Promise((l) => {
+  return r ? (r.scale(m, m), r.drawImage(d, 0, 0), new Promise((l) => {
     try {
       c.toBlob((i) => l(i), "image/png");
     } catch {
@@ -1443,7 +1442,7 @@ function Hn(t, n, e) {
     const i = l.fromId ? u.get(l.fromId) : null, x = l.toId ? u.get(l.toId) : null;
     i && x && d.push([i, x]);
   }
-  const v = 220, b = v * v, h = 80;
+  const m = 220, b = m * m, h = 80;
   let c = 400;
   const r = c / h;
   for (let l = 0; l < h; l++) {
@@ -1451,12 +1450,12 @@ function Hn(t, n, e) {
       a[i].vx = 0, a[i].vy = 0;
     for (let i = 0; i < a.length; i++)
       for (let x = i + 1; x < a.length; x++) {
-        const s = a[i], f = a[x], M = s.x - f.x, g = s.y - f.y, m = Math.hypot(M, g) || 0.01, w = b / m, p = M / m * w, k = g / m * w;
-        s.vx += p, s.vy += k, f.vx -= p, f.vy -= k;
+        const s = a[i], f = a[x], k = s.x - f.x, g = s.y - f.y, p = Math.hypot(k, g) || 0.01, w = b / p, y = k / p * w, M = g / p * w;
+        s.vx += y, s.vy += M, f.vx -= y, f.vy -= M;
       }
     for (const [i, x] of d) {
-      const s = i.x - x.x, f = i.y - x.y, M = Math.hypot(s, f) || 0.01, g = M * M / v, m = s / M * g, w = f / M * g;
-      i.vx -= m, i.vy -= w, x.vx += m, x.vy += w;
+      const s = i.x - x.x, f = i.y - x.y, k = Math.hypot(s, f) || 0.01, g = k * k / m, p = s / k * g, w = f / k * g;
+      i.vx -= p, i.vy -= w, x.vx += p, x.vy += w;
     }
     for (const i of a) {
       const x = Math.hypot(i.vx, i.vy) || 0.01, s = Math.min(x, c);
@@ -1476,7 +1475,7 @@ function jn(t, {
   setLocalShapes: a,
   setCamera: u,
   selectNow: d,
-  setEditingId: v
+  setEditingId: m
 }) {
   const b = t;
   if (!b || b.version !== "canvas-v1") return;
@@ -1486,7 +1485,7 @@ function jn(t, {
   } catch {
     return;
   }
-  !n && Array.isArray(b.shapes) && b.shapes.length <= wt.maxShapes && (e.current = [], o.current = [], a(b.shapes.map(Jt).filter((c) => c !== null))), u(h), d(/* @__PURE__ */ new Set()), v(null);
+  !n && Array.isArray(b.shapes) && b.shapes.length <= wt.maxShapes && (e.current = [], o.current = [], a(b.shapes.map(Jt).filter((c) => c !== null))), u(h), d(/* @__PURE__ */ new Set()), m(null);
 }
 function Kn({
   ref: t,
@@ -1496,7 +1495,7 @@ function Kn({
   selectedRef: a,
   past: u,
   future: d,
-  controlled: v,
+  controlled: m,
   isDarkMode: b,
   minZoom: h,
   maxZoom: c,
@@ -1506,130 +1505,130 @@ function Kn({
   deleteSelection: x,
   selectNow: s,
   viewportCentre: f,
-  setShapes: M,
+  setShapes: k,
   setLocalShapes: g,
-  setCamera: m,
+  setCamera: p,
   setEditingId: w,
-  setAnnouncement: p,
-  createId: k
+  setAnnouncement: y,
+  createId: M
 }) {
-  const S = Q((y) => {
+  const S = Q((v) => {
     const X = f(), Y = Jt({
-      id: k(),
-      x: y.x ?? X.x - y.w / 2,
-      y: y.y ?? X.y - y.h / 2,
-      ...y
+      id: M(),
+      x: v.x ?? X.x - v.w / 2,
+      y: v.y ?? X.y - v.h / 2,
+      ...v
     });
     if (!Y) throw new Error("Canvas could not create a valid shape.");
-    return i((I) => [...I, Y]), s(/* @__PURE__ */ new Set([Y.id])), r("select"), p(`${Y.type} 추가됨`), Y;
-  }, [i, k, r, s, p, f]), $ = Q(() => _n(e.current, b), [b, e]);
+    return i((I) => [...I, Y]), s(/* @__PURE__ */ new Set([Y.id])), r("select"), y(`${Y.type} 추가됨`), Y;
+  }, [i, M, r, s, y, f]), $ = Q(() => _n(e.current, b), [b, e]);
   Be(t, () => ({
-    addNote: (y) => {
-      const X = S({ type: "note", w: 180, h: 180, color: y, text: "" });
+    addNote: (v) => {
+      const X = S({ type: "note", w: 180, h: 180, color: v, text: "" });
       w(X.id);
     },
-    addCard: (y, X, Y, I) => {
-      S({ type: "card", w: 260, h: 150, text: y, category: X, cardStyle: Y, color: I });
+    addCard: (v, X, Y, I) => {
+      S({ type: "card", w: 260, h: 150, text: v, category: X, cardStyle: Y, color: I });
     },
     addText: () => {
-      const y = S({ type: "text", w: 220, h: 44, text: "" });
-      w(y.id);
+      const v = S({ type: "text", w: 220, h: 44, text: "" });
+      w(v.id);
     },
-    addShape: (y, X, Y) => {
+    addShape: (v, X, Y) => {
       S({
-        type: y,
-        w: y === "ellipse" ? 220 : 200,
-        h: y === "ellipse" ? 110 : 140,
+        type: v,
+        w: v === "ellipse" ? 220 : 200,
+        h: v === "ellipse" ? 110 : 140,
         color: X,
         text: Y ?? ""
       });
     },
     addArrow: () => {
-      const y = f(), X = { id: k(), type: "arrow", x: y.x - 140, y: y.y, w: 280, h: 0 };
+      const v = f(), X = { id: M(), type: "arrow", x: v.x - 140, y: v.y, w: 280, h: 0 };
       i((Y) => [...Y, X]), s(/* @__PURE__ */ new Set([X.id])), r("select");
     },
-    addImage: (y, X, Y, I) => {
-      S({ type: "image", w: Y, h: I, src: y, fileName: X });
+    addImage: (v, X, Y, I) => {
+      S({ type: "image", w: Y, h: I, src: v, fileName: X });
     },
-    addFileCard: (y, X, Y) => {
-      S({ type: "rect", w: 260, h: 120, color: "purple", text: Y, src: X, fileName: y });
+    addFileCard: (v, X, Y) => {
+      S({ type: "rect", w: 260, h: 120, color: "purple", text: Y, src: X, fileName: v });
     },
     setTool: r,
     undo: () => {
-      const y = u.current.pop();
-      y && (d.current.push(e.current), M(y), s(/* @__PURE__ */ new Set()), w(null), l(), p("실행 취소"));
+      const v = u.current.pop();
+      v && (d.current.push(e.current), k(v), s(/* @__PURE__ */ new Set()), w(null), l(), y("실행 취소"));
     },
     redo: () => {
-      const y = d.current.pop();
-      y && (u.current.push(e.current), M(y), s(/* @__PURE__ */ new Set()), w(null), l(), p("다시 실행"));
+      const v = d.current.pop();
+      v && (u.current.push(e.current), k(v), s(/* @__PURE__ */ new Set()), w(null), l(), y("다시 실행"));
     },
     deleteSelected: () => {
       x(a.current);
     },
     duplicateSelected: () => {
       var I;
-      const y = a.current;
-      if (y.size === 0) return;
+      const v = a.current;
+      if (v.size === 0) return;
       const X = [], Y = /* @__PURE__ */ new Map();
       for (const E of e.current) {
-        if (!y.has(E.id)) continue;
+        if (!v.has(E.id)) continue;
         let F = E.groupId;
-        F && (Y.has(F) || Y.set(F, k("g")), F = Y.get(F)), X.push({
+        F && (Y.has(F) || Y.set(F, M("g")), F = Y.get(F)), X.push({
           ...E,
-          id: k(),
+          id: M(),
           x: E.x + 24,
           y: E.y + 24,
           groupId: F,
           points: (I = E.points) == null ? void 0 : I.map(([C, P]) => [C + 24, P + 24])
         });
       }
-      i((E) => [...E, ...X]), s(new Set(X.map((E) => E.id))), p(`${X.length}개 복제됨`);
+      i((E) => [...E, ...X]), s(new Set(X.map((E) => E.id))), y(`${X.length}개 복제됨`);
     },
     group: () => {
       var Y;
-      const y = a.current;
-      if (y.size < 2) return;
-      const X = k("g");
-      i((I) => I.map((E) => y.has(E.id) ? { ...E, groupId: X } : E)), p(`${y.size}개 그룹화됨`), (Y = n.current) == null || Y.focus();
+      const v = a.current;
+      if (v.size < 2) return;
+      const X = M("g");
+      i((I) => I.map((E) => v.has(E.id) ? { ...E, groupId: X } : E)), y(`${v.size}개 그룹화됨`), (Y = n.current) == null || Y.focus();
     },
     ungroup: () => {
       var X;
-      const y = a.current;
-      y.size !== 0 && (i((Y) => Y.map((I) => y.has(I.id) ? { ...I, groupId: void 0 } : I)), p("그룹 해제됨"), (X = n.current) == null || X.focus());
+      const v = a.current;
+      v.size !== 0 && (i((Y) => Y.map((I) => v.has(I.id) ? { ...I, groupId: void 0 } : I)), y("그룹 해제됨"), (X = n.current) == null || X.focus());
     },
-    zoomBy: (y) => {
-      m((X) => {
+    zoomBy: (v) => {
+      p((X) => {
         var C;
-        const Y = (C = n.current) == null ? void 0 : C.getBoundingClientRect(), I = Math.min(c, Math.max(h, X.z * y));
+        const Y = (C = n.current) == null ? void 0 : C.getBoundingClientRect(), I = Math.min(c, Math.max(h, X.z * v));
         if (!Y) return { ...X, z: I };
         const E = X.x + Y.width / 2 / X.z, F = X.y + Y.height / 2 / X.z;
         return { x: E - Y.width / 2 / I, y: F - Y.height / 2 / I, z: I };
       });
     },
-    zoomTo: (y) => {
-      m((X) => {
+    zoomTo: (v) => {
+      p((X) => {
         var C;
-        const Y = (C = n.current) == null ? void 0 : C.getBoundingClientRect(), I = Math.min(c, Math.max(h, y));
+        const Y = (C = n.current) == null ? void 0 : C.getBoundingClientRect(), I = Math.min(c, Math.max(h, v));
         if (!Y) return { ...X, z: I };
         const E = X.x + Y.width / 2 / X.z, F = X.y + Y.height / 2 / X.z;
         return { x: E - Y.width / 2 / I, y: F - Y.height / 2 / I, z: I };
       });
     },
     resetZoom: () => {
-      m((y) => {
+      p((v) => {
         var E;
         const X = (E = n.current) == null ? void 0 : E.getBoundingClientRect();
-        if (!X) return { ...y, z: 1 };
-        const Y = y.x + X.width / 2 / y.z, I = y.y + X.height / 2 / y.z;
+        if (!X) return { ...v, z: 1 };
+        const Y = v.x + X.width / 2 / v.z, I = v.y + X.height / 2 / v.z;
         return { x: Y - X.width / 2, y: I - X.height / 2, z: 1 };
       });
     },
     zoomToFit: () => {
       var T;
-      const y = e.current, X = (T = n.current) == null ? void 0 : T.getBoundingClientRect();
-      if (y.length === 0 || !X) return;
+      const v = e.current, X = (T = n.current) == null ? void 0 : T.getBoundingClientRect();
+      if (v.length === 0 || !X) return;
       let Y = 1 / 0, I = 1 / 0, E = -1 / 0, F = -1 / 0;
-      for (const W of y) {
+      for (const W of v) {
         const K = q(W);
         Y = Math.min(Y, K.minX), I = Math.min(I, K.minY), E = Math.max(E, K.maxX), F = Math.max(F, K.maxY);
       }
@@ -1637,22 +1636,22 @@ function Kn({
         h,
         Math.min(X.width / (E - Y + C * 2), X.height / (F - I + C * 2))
       ));
-      m({
+      p({
         x: (Y + E) / 2 - X.width / 2 / P,
         y: (I + F) / 2 - X.height / 2 / P,
         z: P
       });
     },
-    autoLayout: () => Hn(e.current, i, () => p("자동 배치 완료")),
+    autoLayout: () => Hn(e.current, i, () => y("자동 배치 완료")),
     exportSvg: $,
     exportPng: () => Bn($),
     getSnapshot: () => ({ version: "canvas-v1", shapes: e.current, camera: o.current }),
-    loadSnapshot: (y) => jn(y, {
-      controlled: v,
+    loadSnapshot: (v) => jn(v, {
+      controlled: m,
       past: u,
       future: d,
       setLocalShapes: g,
-      setCamera: m,
+      setCamera: p,
       selectNow: s,
       setEditingId: w
     })
@@ -1660,7 +1659,7 @@ function Kn({
     S,
     $,
     i,
-    k,
+    M,
     x,
     b,
     c,
@@ -1668,13 +1667,13 @@ function Kn({
     l,
     r,
     s,
-    m,
+    p,
     w,
     g,
-    M,
-    p,
+    k,
+    y,
     f,
-    v
+    m
   ]);
 }
 function Wn(t) {
@@ -1700,7 +1699,7 @@ function Rn({
   editingIdRef: a,
   toolRef: u,
   past: d,
-  future: v,
+  future: m,
   textualTypes: b,
   setIsSpaceDown: h,
   setEditingId: c,
@@ -1710,29 +1709,29 @@ function Rn({
   deleteSelection: x,
   selectNow: s,
   onDirty: f,
-  onToolChange: M,
+  onToolChange: k,
   createId: g
 }) {
-  const m = Q((w, p) => {
-    const k = o.current;
-    k.size !== 0 && i((S) => S.map(($) => {
-      var y;
-      return k.has($.id) ? {
+  const p = Q((w, y) => {
+    const M = o.current;
+    M.size !== 0 && i((S) => S.map(($) => {
+      var v;
+      return M.has($.id) ? {
         ...$,
         x: $.x + w,
-        y: $.y + p,
-        points: (y = $.points) == null ? void 0 : y.map(([X, Y]) => [X + w, Y + p])
+        y: $.y + y,
+        points: (v = $.points) == null ? void 0 : v.map(([X, Y]) => [X + w, Y + y])
       } : $;
     }));
   }, [i, o]);
   dt(() => {
     const w = ($) => {
-      const y = $;
-      return !!y && (y.tagName === "INPUT" || y.tagName === "TEXTAREA" || y.isContentEditable);
-    }, p = ($) => $ instanceof Element && !!$.closest("input, select, button, textarea, option, label, [data-canvas-control]"), k = ($) => {
+      const v = $;
+      return !!v && (v.tagName === "INPUT" || v.tagName === "TEXTAREA" || v.isContentEditable);
+    }, y = ($) => $ instanceof Element && !!$.closest("input, select, button, textarea, option, label, [data-canvas-control]"), M = ($) => {
       var P, T, W, K;
-      const y = t.current, X = document.activeElement, Y = $.target instanceof Node && !!(y != null && y.contains($.target)), I = !!y && (X === y || y.contains(X));
-      if (!Y && !I || p($.target)) return;
+      const v = t.current, X = document.activeElement, Y = $.target instanceof Node && !!(v != null && v.contains($.target)), I = !!v && (X === v || v.contains(X));
+      if (!Y && !I || y($.target)) return;
       if ($.code === "Space" && !w($.target)) {
         h(!0), $.preventDefault();
         return;
@@ -1749,11 +1748,11 @@ function Rn({
       const E = $.metaKey || $.ctrlKey, F = o.current;
       if (E && $.key.toLowerCase() === "z") {
         if ($.preventDefault(), $.shiftKey) {
-          const z = v.current.pop();
+          const z = m.current.pop();
           z && (d.current.push(e.current), r(z), f());
         } else {
           const z = d.current.pop();
-          z && (v.current.push(e.current), r(z), f());
+          z && (m.current.push(e.current), r(z), f());
         }
         s(/* @__PURE__ */ new Set());
         return;
@@ -1778,7 +1777,7 @@ function Rn({
       if ($.key.startsWith("Arrow")) {
         $.preventDefault();
         const z = $.shiftKey ? 10 : 1;
-        $.key === "ArrowLeft" && m(-z, 0), $.key === "ArrowRight" && m(z, 0), $.key === "ArrowUp" && m(0, -z), $.key === "ArrowDown" && m(0, z);
+        $.key === "ArrowLeft" && p(-z, 0), $.key === "ArrowRight" && p(z, 0), $.key === "ArrowUp" && p(0, -z), $.key === "ArrowDown" && p(0, z);
         return;
       }
       if ($.key === "Tab" && e.current.length > 0) {
@@ -1794,20 +1793,20 @@ function Rn({
       }
       if ($.key === "Escape") {
         if (a.current) {
-          $.preventDefault(), c(null), (W = n.current) == null || W.blur(), (K = t.current) == null || K.focus(), M("select");
+          $.preventDefault(), c(null), (W = n.current) == null || W.blur(), (K = t.current) == null || K.focus(), k("select");
           return;
         }
-        s(/* @__PURE__ */ new Set()), M("select");
+        s(/* @__PURE__ */ new Set()), k("select");
         return;
       }
       const C = Wn($);
-      C && ($.preventDefault(), u.current = C, M(C));
+      C && ($.preventDefault(), u.current = C, k(C));
     }, S = ($) => {
-      const y = t.current;
-      !y || !(document.activeElement === y || y.contains(document.activeElement)) || $.code === "Space" && h(!1);
+      const v = t.current;
+      !v || !(document.activeElement === v || v.contains(document.activeElement)) || $.code === "Space" && h(!1);
     };
-    return window.addEventListener("keydown", k), window.addEventListener("keyup", S), () => {
-      window.removeEventListener("keydown", k), window.removeEventListener("keyup", S);
+    return window.addEventListener("keydown", M), window.addEventListener("keyup", S), () => {
+      window.removeEventListener("keydown", M), window.removeEventListener("keyup", S);
     };
   }, [
     i,
@@ -1816,10 +1815,10 @@ function Rn({
     x,
     a,
     n,
-    v,
     m,
+    p,
     f,
-    M,
+    k,
     d,
     s,
     o,
@@ -1841,7 +1840,7 @@ function Gn({
   shapesRef: a,
   toolRef: u,
   activeColorRef: d,
-  camera: v,
+  camera: m,
   shapes: b,
   selected: h,
   isSpaceDown: c,
@@ -1851,18 +1850,18 @@ function Gn({
   applyInteraction: x,
   selectNow: s,
   beginHistory: f,
-  commit: M,
+  commit: k,
   onToolChange: g,
-  expandToGroups: m,
+  expandToGroups: p,
   toPage: w,
-  createId: p
+  createId: y
 }) {
-  const k = p, S = V(null), $ = (C, P) => {
+  const M = y, S = V(null), $ = (C, P) => {
     var z;
     const T = ((z = t.current) == null ? void 0 : z.dataset.canvasActiveTool) === "text" ? "text" : u.current;
     if (T !== "note" && T !== "text") return;
-    const W = w(C, P), K = T === "note" ? { id: k(), type: "note", x: W.x - 90, y: W.y - 90, w: 180, h: 180, color: "yellow", text: "" } : { id: k(), type: "text", x: W.x, y: W.y - 22, w: 220, h: 44, text: "" };
-    M((L) => [...L, K]), s(/* @__PURE__ */ new Set([K.id])), i(K.id), g("select");
+    const W = w(C, P), K = T === "note" ? { id: M(), type: "note", x: W.x - 90, y: W.y - 90, w: 180, h: 180, color: "yellow", text: "" } : { id: M(), type: "text", x: W.x, y: W.y - 22, w: 220, h: 44, text: "" };
+    k((L) => [...L, K]), s(/* @__PURE__ */ new Set([K.id])), i(K.id), g("select");
   };
   return dt(() => {
     const C = (P) => {
@@ -1888,33 +1887,33 @@ function Gn({
     }
     if (e.current.size > 2) return;
     if (C.button === 1 || c || P === "hand" || C.button === 0 && P === "select" && C.altKey) {
-      x({ kind: "pan", startX: C.clientX, startY: C.clientY, camX: v.x, camY: v.y });
+      x({ kind: "pan", startX: C.clientX, startY: C.clientY, camX: m.x, camY: m.y });
       return;
     }
     if (C.button !== 0) return;
     const T = w(C.clientX, C.clientY);
     if (i(null), (z = n.current) == null || z.blur(), (L = t.current) == null || L.focus(), P === "draw") {
-      const D = { id: k(), type: "draw", x: T.x, y: T.y, w: 0, h: 0, points: [[T.x, T.y]], color: d.current };
+      const D = { id: M(), type: "draw", x: T.x, y: T.y, w: 0, h: 0, points: [[T.x, T.y]], color: d.current };
       f(), l((R) => [...R, D]), x({ kind: "drawing", id: D.id });
       return;
     }
     if (P === "arrow" || P === "frame" || Ge.includes(P)) {
-      const D = P, R = P === "arrow" ? { id: k(), type: "arrow", x: T.x, y: T.y, w: 0, h: 0, color: d.current } : P === "frame" ? { id: k(), type: "frame", x: T.x, y: T.y, w: 0, h: 0, text: "프레임" } : { id: k(), type: D, x: T.x, y: T.y, w: 0, h: 0, color: d.current, text: "" };
+      const D = P, R = P === "arrow" ? { id: M(), type: "arrow", x: T.x, y: T.y, w: 0, h: 0, color: d.current } : P === "frame" ? { id: M(), type: "frame", x: T.x, y: T.y, w: 0, h: 0, text: "프레임" } : { id: M(), type: D, x: T.x, y: T.y, w: 0, h: 0, color: d.current, text: "" };
       f(), l((U) => [...U, R]), x({ kind: "creating", id: R.id, startX: T.x, startY: T.y });
       return;
     }
     if (P === "note" || P === "text") return;
     if (P === "eraser") {
-      f(), l((D) => we(D, T.x, T.y, 14 / v.z, v.z)), x({ kind: "erasing" });
+      f(), l((D) => we(D, T.x, T.y, 14 / m.z, m.z)), x({ kind: "erasing" });
       return;
     }
-    const W = new Map(b.map((D) => [D.id, D])), K = [...b].reverse().find((D) => Pt(D, T.x, T.y, v.z, W, b));
+    const W = new Map(b.map((D) => [D.id, D])), K = [...b].reverse().find((D) => Pt(D, T.x, T.y, m.z, W, b));
     if (!K)
       S.current = null;
     else {
       const D = Date.now(), R = !C.shiftKey && r.includes(K.type) && ((B = S.current) == null ? void 0 : B.id) === K.id && D - S.current.time < Un, U = R ? K.id : void 0;
       S.current = R ? null : { id: K.id, time: D };
-      const ut = C.shiftKey ? new Set(h).add(K.id) : h.has(K.id) ? h : /* @__PURE__ */ new Set([K.id]), xt = m(ut);
+      const ut = C.shiftKey ? new Set(h).add(K.id) : h.has(K.id) ? h : /* @__PURE__ */ new Set([K.id]), xt = p(ut);
       s(xt);
       const it = /* @__PURE__ */ new Map();
       for (const Z of b) xt.has(Z.id) && it.set(Z.id, Z);
@@ -1969,7 +1968,7 @@ function Jn({
   shapesRef: a,
   setShapes: u,
   setEditingId: d,
-  setEraserPos: v,
+  setEraserPos: m,
   setGuides: b,
   setAnnouncement: h,
   applyInteraction: c,
@@ -1981,31 +1980,31 @@ function Jn({
 }) {
   const f = s;
   dt(() => {
-    const M = (g) => {
+    const k = (g) => {
       t.current.delete(g.pointerId);
-      const m = n.current;
-      if (m.kind !== "none") {
-        if (m.kind === "pinch") {
+      const p = n.current;
+      if (p.kind !== "none") {
+        if (p.kind === "pinch") {
           t.current.size < 2 && c({ kind: "none" });
           return;
         }
-        if (b([]), m.kind === "erasing") {
-          v(null), l(), c({ kind: "none" });
+        if (b([]), p.kind === "erasing") {
+          m(null), l(), c({ kind: "none" });
           return;
         }
-        if (m.kind === "connect") {
-          const p = a.current.find((Y) => Y.id === m.fromId);
-          if (c({ kind: "none" }), !p) return;
-          const k = { x: m.toX, y: m.toY }, S = at(p);
-          if (!m.hoverId && Math.hypot(k.x - S.x, k.y - S.y) < 30) return;
+        if (p.kind === "connect") {
+          const y = a.current.find((Y) => Y.id === p.fromId);
+          if (c({ kind: "none" }), !y) return;
+          const M = { x: p.toX, y: p.toY }, S = at(y);
+          if (!p.hoverId && Math.hypot(M.x - S.x, M.y - S.y) < 30) return;
           const $ = [];
-          let y = m.hoverId;
-          if (!y) {
-            const Y = p.type === "note" ? 180 : 200, I = p.type === "note" ? 180 : 120, E = {
-              ...p,
+          let v = p.hoverId;
+          if (!v) {
+            const Y = y.type === "note" ? 180 : 200, I = y.type === "note" ? 180 : 120, E = {
+              ...y,
               id: f(),
-              x: k.x - Y / 2,
-              y: k.y - I / 2,
+              x: M.x - Y / 2,
+              y: M.y - I / 2,
               w: Y,
               h: I,
               html: void 0,
@@ -2017,7 +2016,7 @@ function Jn({
               toId: void 0,
               bend: void 0
             };
-            $.push(E), y = E.id;
+            $.push(E), v = E.id;
           }
           const X = {
             id: f(),
@@ -2026,48 +2025,48 @@ function Jn({
             y: 0,
             w: 0,
             h: 0,
-            fromId: p.id,
-            toId: y,
+            fromId: y.id,
+            toId: v,
             text: ""
           };
           $.push(X), i((Y) => [...Y, ...$]), r(/* @__PURE__ */ new Set([X.id])), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => d(X.id)) : d(X.id), h("연결 생성됨");
           return;
         }
-        if (m.kind === "bend") {
+        if (p.kind === "bend") {
           l(), c({ kind: "none" });
           return;
         }
-        if (m.kind === "drawing") {
-          u((w) => w.map((p) => {
-            if (p.id !== m.id || !p.points) return p;
-            const k = p.points.map((X) => X[0]), S = p.points.map((X) => X[1]), $ = Math.min(...k), y = Math.min(...S);
-            return { ...p, x: $, y, w: Math.max(...k) - $, h: Math.max(...S) - y };
+        if (p.kind === "drawing") {
+          u((w) => w.map((y) => {
+            if (y.id !== p.id || !y.points) return y;
+            const M = y.points.map((X) => X[0]), S = y.points.map((X) => X[1]), $ = Math.min(...M), v = Math.min(...S);
+            return { ...y, x: $, y: v, w: Math.max(...M) - $, h: Math.max(...S) - v };
           })), l(), c({ kind: "none" });
           return;
         }
-        if (m.kind === "creating") {
-          u((w) => w.map((p) => {
-            if (p.id !== m.id) return p;
-            const k = Math.abs(p.w) < 4 && Math.abs(p.h) < 4 ? {
-              ...p,
-              w: p.type === "arrow" ? 200 : p.type === "frame" ? 480 : 180,
-              h: p.type === "arrow" ? 0 : p.type === "frame" ? 320 : 120
-            } : p;
-            if (k.type === "arrow") return k;
-            const S = mt(k);
-            return { ...k, x: S.minX, y: S.minY, w: S.maxX - S.minX, h: S.maxY - S.minY };
-          })), l(), r(/* @__PURE__ */ new Set([m.id])), x("select"), c({ kind: "none" });
+        if (p.kind === "creating") {
+          u((w) => w.map((y) => {
+            if (y.id !== p.id) return y;
+            const M = Math.abs(y.w) < 4 && Math.abs(y.h) < 4 ? {
+              ...y,
+              w: y.type === "arrow" ? 200 : y.type === "frame" ? 480 : 180,
+              h: y.type === "arrow" ? 0 : y.type === "frame" ? 320 : 120
+            } : y;
+            if (M.type === "arrow") return M;
+            const S = mt(M);
+            return { ...M, x: S.minX, y: S.minY, w: S.maxX - S.minX, h: S.maxY - S.minY };
+          })), l(), r(/* @__PURE__ */ new Set([p.id])), x("select"), c({ kind: "none" });
           return;
         }
-        if ((m.kind === "move" || m.kind === "resize" || m.kind === "rotate" || m.kind === "arrow-endpoint") && l(), m.kind === "move" && m.editOnReleaseId && g.type === "pointerup") {
+        if ((p.kind === "move" || p.kind === "resize" || p.kind === "rotate" || p.kind === "arrow-endpoint") && l(), p.kind === "move" && p.editOnReleaseId && g.type === "pointerup") {
           const w = o(g.clientX, g.clientY);
-          Math.hypot(w.x - m.startX, w.y - m.startY) * e.current.z <= Zn && d(m.editOnReleaseId);
+          Math.hypot(w.x - p.startX, w.y - p.startY) * e.current.z <= Zn && d(p.editOnReleaseId);
         }
         c({ kind: "none" });
       }
     };
-    return window.addEventListener("pointerup", M), window.addEventListener("pointercancel", M), () => {
-      window.removeEventListener("pointerup", M), window.removeEventListener("pointercancel", M);
+    return window.addEventListener("pointerup", k), window.addEventListener("pointercancel", k), () => {
+      window.removeEventListener("pointerup", k), window.removeEventListener("pointercancel", k);
     };
   }, [c, e, s, l, n, x, t, r, h, d, u, a, o]);
 }
@@ -2079,7 +2078,7 @@ function to({
   shapesRef: a,
   setCamera: u,
   setShapes: d,
-  setEraserPos: v,
+  setEraserPos: m,
   setGuides: b,
   applyInteraction: h,
   selectNow: c,
@@ -2088,17 +2087,17 @@ function to({
 }) {
   dt(() => {
     const i = (x) => {
-      var g, m;
+      var g, p;
       n.current.has(x.pointerId) && n.current.set(x.pointerId, { x: x.clientX, y: x.clientY });
       const s = e.current;
       if (s.kind === "none") return;
       const f = o.current;
       if (s.kind === "pinch") {
         if (n.current.size < 2) return;
-        const [w, p] = [...n.current.values()], k = Math.hypot(p.x - w.x, p.y - w.y) || 1, S = (w.x + p.x) / 2, $ = (w.y + p.y) / 2, y = (g = t.current) == null ? void 0 : g.getBoundingClientRect();
-        if (!y) return;
-        const X = Math.min(qn, Math.max(Vn, s.startZoom * (k / s.startDist))), Y = s.camX + (s.startMidX - y.left) / s.startZoom, I = s.camY + (s.startMidY - y.top) / s.startZoom;
-        u({ x: Y - (S - y.left) / X, y: I - ($ - y.top) / X, z: X });
+        const [w, y] = [...n.current.values()], M = Math.hypot(y.x - w.x, y.y - w.y) || 1, S = (w.x + y.x) / 2, $ = (w.y + y.y) / 2, v = (g = t.current) == null ? void 0 : g.getBoundingClientRect();
+        if (!v) return;
+        const X = Math.min(qn, Math.max(Vn, s.startZoom * (M / s.startDist))), Y = s.camX + (s.startMidX - v.left) / s.startZoom, I = s.camY + (s.startMidY - v.top) / s.startZoom;
+        u({ x: Y - (S - v.left) / X, y: I - ($ - v.top) / X, z: X });
         return;
       }
       if (s.kind === "pan") {
@@ -2109,29 +2108,29 @@ function to({
         });
         return;
       }
-      const M = l(x.clientX, x.clientY);
+      const k = l(x.clientX, x.clientY);
       if (s.kind === "erasing") {
-        d((w) => we(w, M.x, M.y, Qn / f.z, f.z)), v({ x: M.x, y: M.y });
+        d((w) => we(w, k.x, k.y, Qn / f.z, f.z)), m({ x: k.x, y: k.y });
         return;
       }
       if (s.kind === "connect") {
-        const w = a.current, p = new Map(w.map((S) => [S.id, S])), k = [...w].reverse().find((S) => S.id !== s.fromId && le.includes(S.type) && Pt(S, M.x, M.y, f.z, p, w));
-        h({ ...s, toX: M.x, toY: M.y, hoverId: (k == null ? void 0 : k.id) ?? null });
+        const w = a.current, y = new Map(w.map((S) => [S.id, S])), M = [...w].reverse().find((S) => S.id !== s.fromId && le.includes(S.type) && Pt(S, k.x, k.y, f.z, y, w));
+        h({ ...s, toX: k.x, toY: k.y, hoverId: (M == null ? void 0 : M.id) ?? null });
         return;
       }
       if (s.kind === "bend") {
-        const w = a.current, p = w.find((E) => E.id === s.id);
-        if (!p) return;
-        const k = $t(p, new Map(w.map((E) => [E.id, E])), w), S = k.end.x - k.start.x, $ = k.end.y - k.start.y, y = Math.hypot(S, $) || 1, X = (k.start.x + k.end.x) / 2, Y = (k.start.y + k.end.y) / 2, I = (M.x - X) * (-$ / y) + (M.y - Y) * (S / y);
+        const w = a.current, y = w.find((E) => E.id === s.id);
+        if (!y) return;
+        const M = $t(y, new Map(w.map((E) => [E.id, E])), w), S = M.end.x - M.start.x, $ = M.end.y - M.start.y, v = Math.hypot(S, $) || 1, X = (M.start.x + M.end.x) / 2, Y = (M.start.y + M.end.y) / 2, I = (k.x - X) * (-$ / v) + (k.y - Y) * (S / v);
         d((E) => E.map((F) => F.id === s.id ? { ...F, bend: I } : F));
         return;
       }
       if (s.kind === "arrow-endpoint") {
-        const w = a.current, p = w.find((Y) => Y.id === s.id);
-        if (!p) return;
-        const k = new Map(w.map((Y) => [Y.id, Y])), S = $t(p, k, w), $ = s.endpoint === "start" ? S.end : S.start, y = [...w].reverse().find((Y) => Y.id !== p.id && le.includes(Y.type) && Pt(Y, M.x, M.y, f.z, k, w)), X = y ? bt(y, $.x, $.y) : { x: M.x, y: M.y };
-        h({ ...s, hoverId: (y == null ? void 0 : y.id) ?? null }), d((Y) => Y.map((I) => {
-          if (I.id !== p.id) return I;
+        const w = a.current, y = w.find((Y) => Y.id === s.id);
+        if (!y) return;
+        const M = new Map(w.map((Y) => [Y.id, Y])), S = $t(y, M, w), $ = s.endpoint === "start" ? S.end : S.start, v = [...w].reverse().find((Y) => Y.id !== y.id && le.includes(Y.type) && Pt(Y, k.x, k.y, f.z, M, w)), X = v ? bt(v, $.x, $.y) : { x: k.x, y: k.y };
+        h({ ...s, hoverId: (v == null ? void 0 : v.id) ?? null }), d((Y) => Y.map((I) => {
+          if (I.id !== y.id) return I;
           const E = s.endpoint === "start" ? X : $, F = s.endpoint === "end" ? X : $;
           return {
             ...I,
@@ -2139,84 +2138,84 @@ function to({
             y: E.y,
             w: F.x - E.x,
             h: F.y - E.y,
-            fromId: s.endpoint === "start" ? y == null ? void 0 : y.id : I.fromId,
-            toId: s.endpoint === "end" ? y == null ? void 0 : y.id : I.toId
+            fromId: s.endpoint === "start" ? v == null ? void 0 : v.id : I.fromId,
+            toId: s.endpoint === "end" ? v == null ? void 0 : v.id : I.toId
           };
         }));
         return;
       }
       if (s.kind === "marquee") {
-        h({ ...s, curX: M.x, curY: M.y });
-        const w = Math.min(s.startX, M.x), p = Math.max(s.startX, M.x), k = Math.min(s.startY, M.y), S = Math.max(s.startY, M.y), $ = Math.min(s.screenStartX, x.clientX), y = Math.max(s.screenStartX, x.clientX), X = Math.min(s.screenStartY, x.clientY), Y = Math.max(s.screenStartY, x.clientY), I = /* @__PURE__ */ new Map();
-        (m = t.current) == null || m.querySelectorAll("[data-canvas-shape-id]").forEach((F) => {
+        h({ ...s, curX: k.x, curY: k.y });
+        const w = Math.min(s.startX, k.x), y = Math.max(s.startX, k.x), M = Math.min(s.startY, k.y), S = Math.max(s.startY, k.y), $ = Math.min(s.screenStartX, x.clientX), v = Math.max(s.screenStartX, x.clientX), X = Math.min(s.screenStartY, x.clientY), Y = Math.max(s.screenStartY, x.clientY), I = /* @__PURE__ */ new Map();
+        (p = t.current) == null || p.querySelectorAll("[data-canvas-shape-id]").forEach((F) => {
           const C = F.dataset.canvasShapeId;
           C && I.set(C, F.getBoundingClientRect());
         });
         const E = a.current.filter((F) => {
           const C = I.get(F.id);
           if (C)
-            return C.right >= $ && C.left <= y && C.bottom >= X && C.top <= Y;
+            return C.right >= $ && C.left <= v && C.bottom >= X && C.top <= Y;
           const P = q(F);
-          return P.maxX >= w && P.minX <= p && P.maxY >= k && P.minY <= S;
+          return P.maxX >= w && P.minX <= y && P.maxY >= M && P.minY <= S;
         }).map((F) => F.id);
         c(r(new Set(E)));
         return;
       }
       if (s.kind === "move") {
-        let w = M.x - s.startX, p = M.y - s.startY;
-        const k = s.origin, S = (() => {
+        let w = k.x - s.startX, y = k.y - s.startY;
+        const M = s.origin, S = (() => {
           let X = 1 / 0, Y = 1 / 0, I = -1 / 0, E = -1 / 0;
-          return k.forEach((F) => {
-            const C = q({ ...F, x: F.x + w, y: F.y + p });
+          return M.forEach((F) => {
+            const C = q({ ...F, x: F.x + w, y: F.y + y });
             X = Math.min(X, C.minX), Y = Math.min(Y, C.minY), I = Math.max(I, C.maxX), E = Math.max(E, C.maxY);
           }), { minX: X, minY: Y, maxX: I, maxY: E };
-        })(), $ = a.current.filter((X) => !k.has(X.id)), y = mn(S, $, f.z);
-        w += y.dx, p += y.dy, b(y.guides), d((X) => X.map((Y) => {
+        })(), $ = a.current.filter((X) => !M.has(X.id)), v = mn(S, $, f.z);
+        w += v.dx, y += v.dy, b(v.guides), d((X) => X.map((Y) => {
           var E;
-          const I = k.get(Y.id);
+          const I = M.get(Y.id);
           return I ? {
             ...Y,
             x: I.x + w,
-            y: I.y + p,
-            points: (E = I.points) == null ? void 0 : E.map(([F, C]) => [F + w, C + p])
+            y: I.y + y,
+            points: (E = I.points) == null ? void 0 : E.map(([F, C]) => [F + w, C + y])
           } : Y;
         }));
         return;
       }
       if (s.kind === "drawing") {
-        d((w) => w.map((p) => {
-          if (p.id !== s.id || !p.points) return p;
-          const k = p.points[p.points.length - 1];
-          return Math.hypot(M.x - k[0], M.y - k[1]) < 2 / f.z ? p : { ...p, points: [...p.points, [M.x, M.y]] };
+        d((w) => w.map((y) => {
+          if (y.id !== s.id || !y.points) return y;
+          const M = y.points[y.points.length - 1];
+          return Math.hypot(k.x - M[0], k.y - M[1]) < 2 / f.z ? y : { ...y, points: [...y.points, [k.x, k.y]] };
         }));
         return;
       }
       if (s.kind === "creating") {
-        d((w) => w.map((p) => p.id === s.id ? { ...p, w: M.x - s.startX, h: M.y - s.startY } : p));
+        d((w) => w.map((y) => y.id === s.id ? { ...y, w: k.x - s.startX, h: k.y - s.startY } : y));
         return;
       }
       if (s.kind === "rotate") {
         const w = a.current.find(($) => $.id === s.id);
         if (!w) return;
-        const p = at(w), k = Math.atan2(M.y - p.y, M.x - p.x);
-        let S = s.startRotation + (k - s.startAngle);
-        x.shiftKey && (S = Math.round(S / (Math.PI / 12)) * (Math.PI / 12)), d(($) => $.map((y) => y.id === s.id ? { ...y, rotation: S } : y));
+        const y = at(w), M = Math.atan2(k.y - y.y, k.x - y.x);
+        let S = s.startRotation + (M - s.startAngle);
+        x.shiftKey && (S = Math.round(S / (Math.PI / 12)) * (Math.PI / 12)), d(($) => $.map((v) => v.id === s.id ? { ...v, rotation: S } : v));
         return;
       }
       if (s.kind === "resize") {
-        const { start: w, handle: p } = s, k = ge(w, M.x, M.y);
+        const { start: w, handle: y } = s, M = ge(w, k.x, k.y);
         d((S) => S.map(($) => {
           if ($.id !== w.id) return $;
-          let { x: y, y: X, w: Y, h: I } = w;
-          if (p.includes("e") && (Y = Math.max(20, k.x - w.x)), p.includes("s") && (I = Math.max(20, k.y - w.y)), p.includes("w")) {
+          let { x: v, y: X, w: Y, h: I } = w;
+          if (y.includes("e") && (Y = Math.max(20, M.x - w.x)), y.includes("s") && (I = Math.max(20, M.y - w.y)), y.includes("w")) {
             const E = w.x + w.w;
-            y = Math.min(k.x, E - 20), Y = E - y;
+            v = Math.min(M.x, E - 20), Y = E - v;
           }
-          if (p.includes("n")) {
+          if (y.includes("n")) {
             const E = w.y + w.h;
-            X = Math.min(k.y, E - 20), I = E - X;
+            X = Math.min(M.y, E - 20), I = E - X;
           }
-          return { ...$, x: y, y: X, w: Y, h: I, manualSize: $.type === "text" ? !0 : $.manualSize };
+          return { ...$, x: v, y: X, w: Y, h: I, manualSize: $.type === "text" ? !0 : $.manualSize };
         }));
       }
     };
@@ -2234,7 +2233,7 @@ function no({
   cameraRef: a,
   shapesRef: u,
   toolRef: d,
-  activeColorRef: v,
+  activeColorRef: m,
   camera: b,
   shapes: h,
   selected: c,
@@ -2244,15 +2243,15 @@ function no({
   setShapes: x,
   setEditingId: s,
   setEraserPos: f,
-  setGuides: M,
+  setGuides: k,
   setAnnouncement: g,
-  applyInteraction: m,
+  applyInteraction: p,
   selectNow: w,
-  beginHistory: p,
-  endHistory: k,
+  beginHistory: y,
+  endHistory: M,
   commit: S,
   onToolChange: $,
-  expandToGroups: y,
+  expandToGroups: v,
   toPage: X,
   createId: Y
 }) {
@@ -2263,7 +2262,7 @@ function no({
     cameraRef: a,
     shapesRef: u,
     toolRef: d,
-    activeColorRef: v,
+    activeColorRef: m,
     camera: b,
     shapes: h,
     selected: c,
@@ -2271,12 +2270,12 @@ function no({
     textualTypes: l,
     setShapes: x,
     setEditingId: s,
-    applyInteraction: m,
+    applyInteraction: p,
     selectNow: w,
-    beginHistory: p,
+    beginHistory: y,
     commit: S,
     onToolChange: $,
-    expandToGroups: y,
+    expandToGroups: v,
     toPage: X,
     createId: Y
   });
@@ -2290,14 +2289,14 @@ function no({
     setShapes: x,
     setEditingId: s,
     setEraserPos: f,
-    setGuides: M,
+    setGuides: k,
     setAnnouncement: g,
-    applyInteraction: m,
+    applyInteraction: p,
     selectNow: w,
-    endHistory: k,
+    endHistory: M,
     commit: S,
     onToolChange: $,
-    expandToGroups: y,
+    expandToGroups: v,
     toPage: X,
     createId: Y
   }), I;
@@ -2312,8 +2311,8 @@ function ro({
   interaction: o,
   zoom: a
 }) {
-  const u = e || o.kind === "pan" ? "grabbing" : n === "hand" ? "grab" : n === "draw" ? "crosshair" : n === "eraser" ? "cell" : n === "select" ? "default" : "crosshair", d = t ? O.gridDark : O.gridLight, v = 40 * a;
-  return { cursor: u, gridColor: d, gridSize: v, strokeColorOf: (h) => h.color ? rt[h.color].border : t ? "var(--canvas-slate-200)" : O.ink };
+  const u = e || o.kind === "pan" ? "grabbing" : n === "hand" ? "grab" : n === "draw" ? "crosshair" : n === "eraser" ? "cell" : n === "select" ? "default" : "crosshair", d = t ? O.gridDark : O.gridLight, m = 40 * a;
+  return { cursor: u, gridColor: d, gridSize: m, strokeColorOf: (h) => h.color ? rt[h.color].border : t ? "var(--canvas-slate-200)" : O.ink };
 }
 if (typeof document < "u" && !document.querySelector("style[data-invoicex-canvas]")) {
   const t = document.createElement("style");
@@ -2330,7 +2329,7 @@ const uo = He(function({
   onToolChange: a,
   onDirty: u,
   onZoomChange: d,
-  onSelectionChange: v,
+  onSelectionChange: m,
   shapes: b,
   onShapesChange: h,
   peerCursors: c,
@@ -2342,15 +2341,15 @@ const uo = He(function({
     editorRef: x,
     setLocalShapes: s,
     controlled: f,
-    shapes: M,
+    shapes: k,
     setShapes: g,
-    camera: m,
+    camera: p,
     setCamera: w,
-    cameraRef: p,
-    selected: k,
+    cameraRef: y,
+    selected: M,
     selectedRef: S,
     editingId: $,
-    setEditingId: y,
+    setEditingId: v,
     editingIdRef: X,
     interaction: Y,
     interactionRef: I,
@@ -2387,16 +2386,16 @@ const uo = He(function({
     onContainerPointerLeave: A
   } = Dn({
     containerRef: i,
-    camera: m,
+    camera: p,
     setCamera: w,
     minZoom: de,
     maxZoom: ue,
-    shapes: M,
-    selected: k,
+    shapes: k,
+    selected: M,
     editingId: $,
     textualTypes: xe,
     onZoomChange: d,
-    onSelectionChange: v,
+    onSelectionChange: m,
     onLocalCursor: r,
     toPage: zt
   }), {
@@ -2412,17 +2411,17 @@ const uo = He(function({
     editorRef: x,
     pointers: xt,
     interactionRef: I,
-    cameraRef: p,
+    cameraRef: y,
     shapesRef: kt,
     toolRef: Bt,
     activeColorRef: U,
-    camera: m,
-    shapes: M,
-    selected: k,
+    camera: p,
+    shapes: k,
+    selected: M,
     isSpaceDown: F,
     setCamera: w,
     setShapes: g,
-    setEditingId: y,
+    setEditingId: v,
     setEraserPos: D,
     setGuides: T,
     setAnnouncement: K,
@@ -2454,7 +2453,7 @@ const uo = He(function({
     tool: o,
     isSpaceDown: F,
     interaction: Y,
-    zoom: m.z
+    zoom: p.z
   }), ne = (Ae) => {
     const Oe = S.current, ce = X.current, Kt = new Set(Oe);
     ce && Kt.add(ce), Kt.size !== 0 && nt((De) => De.map((Wt) => Kt.has(Wt.id) ? { ...Wt, ...Ae } : Wt));
@@ -2472,7 +2471,7 @@ const uo = He(function({
     onDirty: u,
     patchSelected: ne
   }), { renderEditor: Fe, renderShapeBody: Pe } = Pn({
-    camera: m,
+    camera: p,
     editingId: $,
     isDarkMode: e,
     editorRef: x,
@@ -2483,9 +2482,9 @@ const uo = He(function({
   }), Te = Y.kind === "marquee" ? Y : null, { shapeById: oe, visiblePaintOrder: re } = Tn({
     containerRef: i,
     shapesRef: kt,
-    shapes: M,
-    camera: m,
-    selected: k,
+    shapes: k,
+    camera: p,
+    selected: M,
     editingId: $,
     boardIdentity: n
   });
@@ -2499,9 +2498,9 @@ const uo = He(function({
       role: "application",
       "data-canvas-board-id": n,
       "data-canvas-active-tool": o,
-      "data-canvas-camera-x": m.x,
-      "data-canvas-camera-y": m.y,
-      "data-canvas-camera-z": m.z,
+      "data-canvas-camera-x": p.x,
+      "data-canvas-camera-y": p.y,
+      "data-canvas-camera-z": p.z,
       "aria-label": "무한 캔버스. Tab으로 개체 이동, Enter로 편집, 방향키로 위치 조정.",
       tabIndex: 0,
       className: "invoicex-canvas absolute inset-0 overflow-hidden touch-none select-none focus:outline-none",
@@ -2510,7 +2509,7 @@ const uo = He(function({
         background: e ? O.canvasDark : O.canvasLight,
         backgroundImage: `radial-gradient(${Ye} 1px, transparent 1px)`,
         backgroundSize: `${ee}px ${ee}px`,
-        backgroundPosition: `${-m.x * m.z}px ${-m.y * m.z}px`
+        backgroundPosition: `${-p.x * p.z}px ${-p.y * p.z}px`
       },
       children: [
         /* @__PURE__ */ N("style", { children: '.invoicex-canvas .canvas-rich-text ul,.invoicex-canvas .canvas-rich-text ol{margin:0;padding-left:0;list-style:none}.invoicex-canvas .canvas-rich-text ul>li::before{content:"• "}.invoicex-canvas .canvas-rich-text ul[data-list-style="dash"]>li::before{content:"– "}.invoicex-canvas .canvas-rich-text ol{counter-reset:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li{counter-increment:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li::before{content:counter(canvas-list-item) ". "}' }),
@@ -2528,10 +2527,10 @@ const uo = He(function({
           yn,
           {
             visiblePaintOrder: re,
-            selected: k,
+            selected: M,
             shapeById: oe,
             allShapes: kt.current,
-            camera: m,
+            camera: p,
             interaction: Y,
             eraserPos: B,
             guides: P,
@@ -2543,16 +2542,16 @@ const uo = He(function({
           Ln,
           {
             visiblePaintOrder: re,
-            selected: k,
+            selected: M,
             editingId: $,
-            camera: m,
+            camera: p,
             shapeById: oe,
             allShapes: kt.current,
             peerCursors: c,
             isDarkMode: e,
             renderEditor: Fe,
             renderShapeBody: Pe,
-            setEditingId: y,
+            setEditingId: v,
             onBendHandleDown: ht,
             onResizeHandleDown: _,
             onRotateHandleDown: G,
@@ -2564,8 +2563,8 @@ const uo = He(function({
           Fn,
           {
             shape: St,
-            shapes: M,
-            camera: m,
+            shapes: k,
+            camera: p,
             canvasSize: { width: ((ie = i.current) == null ? void 0 : ie.clientWidth) ?? 380, height: ((ae = i.current) == null ? void 0 : ae.clientHeight) ?? 190 },
             isDarkMode: e,
             editing: !!$,

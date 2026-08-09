@@ -50,32 +50,26 @@ export function CanvasObjectLayer({
             const isEditing = editingId === s.id;
             const label = shapeHtml(s);
             const isSelected = selected.has(s.id);
-            const showRelationPlaceholder = isSelected && !isEditing && !label;
             const relationLabelText = shapePlainText(s).trim();
             if (!label && !isEditing && !isSelected) return null;
             return (
               <React.Fragment key={s.id}>
-              <div className="absolute flex items-center justify-center" style={{ left: mid.x - 90, top: mid.y - 18, width: 180, height: 36 }} onDoubleClick={event => { event.stopPropagation(); setEditingId(s.id); }}>
-                {(label || isEditing || showRelationPlaceholder) && <div
+              <div data-canvas-arrow-label-hit-area className="absolute flex items-center justify-center" style={{ left: mid.x - 90, top: mid.y - 18, width: 180, height: 36 }} onDoubleClick={event => { event.stopPropagation(); setEditingId(s.id); }}>
+                {(label || isEditing) && <div
                   data-canvas-arrow-label="true"
-                  data-canvas-arrow-label-placeholder={showRelationPlaceholder ? 'true' : undefined}
                   aria-label={relationLabelText ? `관계 설명: ${relationLabelText}` : '관계 설명 입력'}
                   title={isEditing ? undefined : relationLabelText ? '더블클릭하여 관계 설명 편집' : '더블클릭하여 관계 설명 입력'}
-                  className={`px-3 py-1 rounded-full border-2 shadow-sm ${showRelationPlaceholder ? 'border-dashed' : ''} ${isDarkMode
-                    ? `bg-slate-900 border-slate-600 ${showRelationPlaceholder ? 'text-slate-400' : 'text-slate-100'}`
-                    : `bg-white border-slate-300 ${showRelationPlaceholder ? 'text-slate-500' : 'text-slate-800'}`}`}
+                  className={`px-3 py-1 rounded-full border-2 shadow-sm ${isDarkMode ? 'bg-slate-900 border-slate-600 text-slate-100' : 'bg-white border-slate-300 text-slate-800'}`}
                   style={{
                     fontSize: fontSizeForShape(s),
                     fontFamily: fontStackForShape(s),
                     maxWidth: '100%',
                     minWidth: isEditing ? 120 / camera.z : undefined,
                     minHeight: isEditing ? 28 / camera.z : undefined,
-                    color: showRelationPlaceholder ? undefined : s.textColor,
+                    color: s.textColor,
                   }}
                 >
-                  {isEditing ? renderEditor('text-center whitespace-nowrap') : label
-                    ? <span key="canvas-view" dangerouslySetInnerHTML={{ __html: label }} />
-                    : <span className="whitespace-nowrap">관계 입력</span>}
+                  {isEditing ? renderEditor('text-center whitespace-nowrap') : <span key="canvas-view" dangerouslySetInnerHTML={{ __html: label }} />}
                 </div>}
                 {isSelected && selected.size === 1 && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
               </div>
