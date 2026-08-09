@@ -639,7 +639,7 @@ function Ln({
                 children: p ? b("text-center whitespace-nowrap") : k ? /* @__PURE__ */ N("span", { dangerouslySetInnerHTML: { __html: k } }, "canvas-view") : /* @__PURE__ */ N("span", { className: "whitespace-nowrap", children: "관계 입력" })
               }
             ),
-            S && n.size === 1 && /* @__PURE__ */ N("div", { onPointerDown: (X) => r(X, f), title: "드래그해서 곡선으로 (Curve)", className: "absolute rounded-full bg-white border-2 border-blue-600", style: { width: 10 / o.z, height: 10 / o.z, left: `calc(50% - ${5 / o.z}px)`, top: `calc(50% - ${5 / o.z}px)`, cursor: "grab" } })
+            S && n.size === 1 && /* @__PURE__ */ N("div", { "data-canvas-arrow-bend-handle": !0, onPointerDown: (X) => r(X, f), title: "드래그해서 곡선으로 (Curve)", className: "absolute rounded-full bg-white border-2 border-blue-600", style: { width: 10 / o.z, height: 10 / o.z, left: `calc(50% - ${5 / o.z}px)`, top: -10 / o.z, cursor: "grab" } })
           ] }),
           S && n.size === 1 && ["start", "end"].map((X) => {
             const Y = X === "start" ? m.start : m.end;

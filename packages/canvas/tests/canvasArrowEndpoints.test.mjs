@@ -32,6 +32,9 @@ describe('arrow endpoints can be adjusted after creation', () => {
     await cv.act(async () => { cv.hostApi.canvasRef.current.addArrow(); });
     const arrow = cv.shapes().find(s => s.type === 'arrow');
     assert.ok(arrow, 'addArrow creates an arrow');
+    const bend = cv.canvasEl.querySelector('[data-canvas-arrow-bend-handle]');
+    assert.ok(bend, 'a selected arrow shows a bend handle');
+    assert.match(bend.style.top, /^-/, 'the bend handle sits above the relation input');
     assert.ok(endpointHandle('start'), 'a selected arrow shows a start-endpoint handle');
     assert.ok(endpointHandle('end'), 'a selected arrow shows an end-endpoint handle');
 

@@ -77,7 +77,7 @@ export function CanvasObjectLayer({
                     ? <span key="canvas-view" dangerouslySetInnerHTML={{ __html: label }} />
                     : <span className="whitespace-nowrap">관계 입력</span>}
                 </div>}
-                {isSelected && selected.size === 1 && <div onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: `calc(50% - ${5 / camera.z}px)`, cursor: 'grab' }} />}
+                {isSelected && selected.size === 1 && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
               </div>
               {isSelected && selected.size === 1 && (['start', 'end'] as const).map(endpoint => {
                 const point = endpoint === 'start' ? geometry.start : geometry.end;
