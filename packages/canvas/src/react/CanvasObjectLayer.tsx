@@ -1,5 +1,5 @@
 import React from 'react';
-import { bounds, bezierAt, arrowGeometry, effectiveFill, effectiveText, rawBounds, shapeHtml, shapePlainText } from './canvasGeometry';
+import { bezierAt, arrowGeometry, effectiveFill, effectiveText, rawBounds, shapeHtml, shapePlainText } from './canvasGeometry';
 import { pathMidpoint } from './canvasRouting';
 import { CANVAS_COLORS } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
@@ -135,10 +135,6 @@ export function CanvasObjectLayer({
             })}
           </React.Fragment>
         );
-      })}
-      {allShapes.filter(shape => shape.type === 'arrow' && selected.has(shape.id)).map(shape => {
-        const box = bounds(shape);
-        return <div key={`sel-${shape.id}`} className="absolute pointer-events-none border-2 border-blue-600/60 rounded" style={{ left: (box.minX - camera.x) * camera.z - 4, top: (box.minY - camera.y) * camera.z - 4, width: (box.maxX - box.minX) * camera.z + 8, height: (box.maxY - box.minY) * camera.z + 8 }} />;
       })}
       {peerCursors?.map(peer => <div key={peer.id} className="absolute pointer-events-none z-40" style={{ left: (peer.x - camera.x) * camera.z, top: (peer.y - camera.y) * camera.z, transform: 'translate(-2px, -2px)' }}>
         <svg width="20" height="24" viewBox="0 0 20 24"><path d="M 1 1 L 1 18 L 6 13 L 9 20 L 12 19 L 9 12 L 15 12 Z" fill={peer.color} stroke={CANVAS_UI_COLORS.white} strokeWidth="1.5" strokeLinejoin="round" /></svg>
