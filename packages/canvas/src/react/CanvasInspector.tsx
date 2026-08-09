@@ -32,6 +32,10 @@ export function CanvasInspector({
   applyFormat, applyList, applyCustomFontFamily,
 }: CanvasInspectorProps) {
   const btn = isDarkMode ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100';
+  const isDraw = s.type === 'draw';
+  const swatchColor = isDraw
+    ? (s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink)
+    : effectiveText(s);
   // The inspector wraps on narrow canvases and when the list/arrow controls
   // are visible. Measure the rendered panel instead of using a desktop-only
   // height estimate; stale geometry was allowing the panel to overlap the
@@ -92,15 +96,16 @@ export function CanvasInspector({
   const segment = (label: string, active: boolean, onClick: () => void, title: string) => <button type="button" title={title} onClick={onClick} className={`h-7 px-2 rounded text-[11px] font-bold ${active ? 'bg-blue-600 text-white' : btn}`}>{label}</button>;
 
   return (
-    <div ref={inspectorRef} data-canvas-inspector="text" className={`absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-200 text-slate-700'}`} style={{ left: position.left, top: position.top }} onPointerDown={event => { event.stopPropagation(); const target = event.target instanceof Element ? event.target : null; if (!target?.closest('input, select, textarea')) event.preventDefault(); }} onClick={event => event.stopPropagation()}>
+    <div ref={inspectorRef} data-canvas-inspector={isDraw ? 'draw' : 'text'} className={`absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-200 text-slate-700'}`} style={{ left: position.left, top: position.top }} onPointerDown={event => { event.stopPropagation(); const target = event.target instanceof Element ? event.target : null; if (!target?.closest('input, select, textarea')) event.preventDefault(); }} onClick={event => event.stopPropagation()}>
       <div className="relative flex items-center gap-1.5 pointer-events-none">
-        <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">색상</span>
-        <button type="button" title="색상 팔레트" aria-label="도형 색상" onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}><Palette className="w-4 h-4" style={{ color: effectiveText(s) }} /></button>
+        <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">{isDraw ? '그리기' : '색상'}</span>
+        <button type="button" title={isDraw ? '그리기 색상 팔레트' : '색상 팔레트'} aria-label={isDraw ? '그리기 색상' : '도형 색상'} onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}><Palette className="w-4 h-4" style={{ color: swatchColor }} /></button>
         {showPalette && <div className={`pointer-events-auto absolute left-0 top-10 z-50 flex items-center gap-1.5 p-2 rounded-xl border shadow-xl ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
           {CANVAS_COLOR_KEYS.map(key => <button key={key} type="button" title={CANVAS_COLORS[key].label} aria-label={`색 ${CANVAS_COLORS[key].label}`} onClick={() => { setActiveColor(key); patchSelected({ color: key, fillColor: undefined }); setShowPalette(false); }} className="w-5 h-5 rounded-full border" style={{ background: CANVAS_COLORS[key].bg, borderColor: CANVAS_COLORS[key].border, outline: s.color === key && !s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }} />)}
-          <label title="배경 색 (자유 선택)" className="w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center" style={{ background: s.fillColor ?? effectiveFill(s), outline: s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }}><input type="color" value={s.fillColor ?? effectiveFill(s)} onChange={event => { patchSelected({ fillColor: event.target.value }); setShowPalette(false); }} className="absolute inset-0 opacity-0 cursor-pointer" /></label>
+          {!isDraw && <label title="배경 색 (자유 선택)" className="w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center" style={{ background: s.fillColor ?? effectiveFill(s), outline: s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }}><input type="color" value={s.fillColor ?? effectiveFill(s)} onChange={event => { patchSelected({ fillColor: event.target.value }); setShowPalette(false); }} className="absolute inset-0 opacity-0 cursor-pointer" /></label>}
         </div>}
       </div>
+      {!isDraw && <>
       <div className="flex flex-wrap items-center gap-2 pointer-events-none">
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">텍스트</span>
         <label title="글씨 색" className="pointer-events-auto w-8 h-8 rounded-lg border relative overflow-hidden cursor-pointer flex items-center justify-center text-[11px] font-bold shadow-sm" style={{ background: effectiveText(s), color: CANVAS_UI_COLORS.white, mixBlendMode: 'normal' }}><span aria-hidden="true">A</span><input data-canvas-control="text-color" type="color" value={s.textColor ?? effectiveText(s)} onChange={event => patchSelected({ textColor: event.target.value })} className="absolute inset-0 opacity-0 cursor-pointer" /></label>
@@ -113,6 +118,7 @@ export function CanvasInspector({
         {s.type === 'card' && <><div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} /><input type="text" title="카드 Type" aria-label="카드 Type" value={s.category ?? ''} placeholder="TYPE" onPointerDown={event => event.stopPropagation()} onChange={event => patchSelected({ category: event.target.value.toUpperCase() })} className={`h-7 w-24 rounded text-[11px] px-1.5 border uppercase ${isDarkMode ? 'bg-slate-950 border-slate-700 text-slate-200' : 'bg-white border-slate-200 text-slate-700'}`} /></>}
         {s.type === 'arrow' && <><div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />{segment('직선', (s.routing ?? 'straight') === 'straight', () => patchSelected({ routing: 'straight', bend: 0 }), '직선')}{segment('ㄱ', (s.routing ?? '') === 'orthogonal', () => patchSelected({ routing: 'orthogonal', bend: 0 }), '그리드 라우팅 (ㄱ/ㄹ)')}{segment('곡선', (s.routing ?? '') === 'curved', () => patchSelected({ routing: 'curved', bend: s.bend || 60 }), '곡선')}<div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />{segment('—', (s.strokeStyle ?? 'solid') === 'solid', () => patchSelected({ strokeStyle: 'solid' }), '실선')}{segment('- -', s.strokeStyle === 'dashed', () => patchSelected({ strokeStyle: 'dashed' }), '점선(dash)')}{segment('···', s.strokeStyle === 'dotted', () => patchSelected({ strokeStyle: 'dotted' }), '점선(dot)')}<div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} />{segment((s.arrowStart ?? 'none') === 'none' ? '○' : s.arrowStart === 'dot' ? '●' : '◀', true, () => patchSelected({ arrowStart: (s.arrowStart ?? 'none') === 'none' ? 'arrow' : s.arrowStart === 'arrow' ? 'dot' : 'none' }), '시작점 표식')}{segment((s.arrowEnd ?? 'arrow') === 'none' ? '○' : s.arrowEnd === 'dot' ? '●' : '▶', true, () => patchSelected({ arrowEnd: (s.arrowEnd ?? 'arrow') === 'arrow' ? 'dot' : s.arrowEnd === 'dot' ? 'none' : 'arrow' }), '끝점 표식')}</>}
       </div>}
+      </>}
     </div>
   );
 }

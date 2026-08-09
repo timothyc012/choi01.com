@@ -88,9 +88,11 @@ export function useCanvasViewInteractions({
       const editing = shapes.find(s => s.id === editingId);
       return editing && editing.type !== 'image' && editing.type !== 'draw' ? editing : null;
     }
-    if (selected.size !== 1) return null;
-    const only = shapes.find(s => selected.has(s.id));
-    return only && only.type !== 'image' && only.type !== 'draw' ? only : null;
+    const picked = shapes.filter(s => selected.has(s.id));
+    if (picked.length > 1 && picked.every(s => s.type === 'draw')) return picked[0] ?? null;
+    if (picked.length !== 1) return null;
+    const only = picked[0];
+    return only && only.type !== 'image' ? only : null;
   }, [editingId, selected, shapes]);
 
   const cursorReportTimer = useRef<number>(0);

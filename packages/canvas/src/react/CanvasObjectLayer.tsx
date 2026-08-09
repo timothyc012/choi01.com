@@ -71,7 +71,7 @@ export function CanvasObjectLayer({
                 >
                   {isEditing ? renderEditor('text-center whitespace-nowrap') : <span key="canvas-view" dangerouslySetInnerHTML={{ __html: label }} />}
                 </div>}
-                {isSelected && selected.size === 1 && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
+                {isSelected && selected.size === 1 && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute z-20 rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
               </div>
               {isSelected && selected.size === 1 && (['start', 'end'] as const).map(endpoint => {
                 const point = endpoint === 'start' ? geometry.start : geometry.end;
@@ -81,7 +81,7 @@ export function CanvasObjectLayer({
                     data-canvas-arrow-endpoint={endpoint}
                     onPointerDown={event => onArrowEndpointDown(event, s, endpoint)}
                     title="드래그해서 끝점 이동 (노드 위에 놓으면 연결)"
-                    className="absolute bg-white border-2 border-blue-600 rounded-full"
+                    className="absolute z-20 bg-white border-2 border-blue-600 rounded-full"
                     style={{ width: 12 / camera.z, height: 12 / camera.z, left: point.x - 6 / camera.z, top: point.y - 6 / camera.z, cursor: 'grab' }}
                   />
                 );
@@ -116,9 +116,9 @@ export function CanvasObjectLayer({
               {isSelected && <>
                 <div className="absolute -inset-0.5 pointer-events-none" style={{ outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
                 {selected.size === 1 && <>
-                  {(['nw', 'ne', 'sw', 'se'] as const).map(handle => <div key={handle} data-canvas-resize-handle={handle} onPointerDown={event => onResizeHandleDown(event, s, handle)} className="absolute bg-white border-2 border-blue-600 rounded-sm" style={{ width: 10 / camera.z, height: 10 / camera.z, cursor: `${handle}-resize`, left: handle.includes('w') ? -5 / camera.z : undefined, right: handle.includes('e') ? -5 / camera.z : undefined, top: handle.includes('n') ? -5 / camera.z : undefined, bottom: handle.includes('s') ? -5 / camera.z : undefined }} />)}
-                  <div onPointerDown={event => onRotateHandleDown(event, s)} title="회전 (Shift로 15도 단위)" className="absolute bg-blue-600 rounded-full" style={{ width: 12 / camera.z, height: 12 / camera.z, left: '50%', marginLeft: -6 / camera.z, top: -28 / camera.z, cursor: 'grab' }} />
-                  {CONNECTABLE.has(s.type) && (['n', 's', 'w', 'e'] as const).map(key => <div key={`plus-${key}`} onPointerDown={event => onConnectHandleDown(event, s)} title="드래그해서 연결 (관계 생성)" className="absolute flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500" style={{ ...(key === 'n' ? { left: '50%', top: -30 / camera.z, marginLeft: -9 / camera.z } : key === 's' ? { left: '50%', bottom: -30 / camera.z, marginLeft: -9 / camera.z } : key === 'w' ? { top: '50%', left: -30 / camera.z, marginTop: -9 / camera.z } : { top: '50%', right: -30 / camera.z, marginTop: -9 / camera.z }), width: 18 / camera.z, height: 18 / camera.z, fontSize: 13 / camera.z, lineHeight: 1, cursor: 'crosshair' }}>+</div>)}
+                  {(['nw', 'ne', 'sw', 'se'] as const).map(handle => <div key={handle} data-canvas-resize-handle={handle} onPointerDown={event => onResizeHandleDown(event, s, handle)} className="absolute z-20 bg-white border-2 border-blue-600 rounded-sm" style={{ width: 10 / camera.z, height: 10 / camera.z, cursor: `${handle}-resize`, left: handle.includes('w') ? -5 / camera.z : undefined, right: handle.includes('e') ? -5 / camera.z : undefined, top: handle.includes('n') ? -5 / camera.z : undefined, bottom: handle.includes('s') ? -5 / camera.z : undefined }} />)}
+                  <div onPointerDown={event => onRotateHandleDown(event, s)} title="회전 (Shift로 15도 단위)" className="absolute z-20 bg-blue-600 rounded-full" style={{ width: 12 / camera.z, height: 12 / camera.z, left: '50%', marginLeft: -6 / camera.z, top: -28 / camera.z, cursor: 'grab' }} />
+                  {CONNECTABLE.has(s.type) && (['n', 's', 'w', 'e'] as const).map(key => <div key={`plus-${key}`} onPointerDown={event => onConnectHandleDown(event, s)} title="드래그해서 연결 (관계 생성)" className="absolute z-20 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500" style={{ ...(key === 'n' ? { left: '50%', top: -30 / camera.z, marginLeft: -9 / camera.z } : key === 's' ? { left: '50%', bottom: -30 / camera.z, marginLeft: -9 / camera.z } : key === 'w' ? { top: '50%', left: -30 / camera.z, marginTop: -9 / camera.z } : { top: '50%', right: -30 / camera.z, marginTop: -9 / camera.z }), width: 18 / camera.z, height: 18 / camera.z, fontSize: 13 / camera.z, lineHeight: 1, cursor: 'crosshair' }}>+</div>)}
                 </>}
               </>}
             </div>
