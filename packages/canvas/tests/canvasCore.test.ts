@@ -103,6 +103,24 @@ test('orthogonal connector routing detours around a blocking shape', () => {
   }
 });
 
+test('orthogonal connector variants expose distinct elbow, reverse, U, and zigzag paths', () => {
+  const start = { x: 0, y: 50, side: 'e' as const };
+  const end = { x: 200, y: 150, side: 'w' as const };
+  const elbow = orthogonalPathPoints(start, end, [], 'elbow');
+  const reverse = orthogonalPathPoints(start, end, [], 'reverse');
+  const u = orthogonalPathPoints(start, end, [], 'u');
+  const zigzag = orthogonalPathPoints(start, end, [], 'zigzag');
+
+  assert.notDeepEqual(reverse, elbow, 'reverse routing should choose the alternate elbow direction');
+  assert.ok(u.length >= 4, 'U routing should have at least two bends');
+  assert.ok(zigzag.length >= 5, 'zigzag routing should have at least three bends');
+  for (const path of [elbow, reverse, u, zigzag]) {
+    for (let i = 1; i < path.length; i++) {
+      assert.ok(path[i - 1].x === path[i].x || path[i - 1].y === path[i].y, 'variant segments must stay axis-aligned');
+    }
+  }
+});
+
 test('rejects snapshots that do not match the public canvas contract', () => {
   assert.throws(
     () => parseCanvasSnapshot({ version: 'canvas-v0', shapes: [], camera: { x: 0, y: 0, z: 1 } }),
@@ -127,6 +145,7 @@ test('parses connector and freehand variants without dropping their typed fields
         w: 100,
         h: 50,
         routing: 'orthogonal',
+        orthogonalVariant: 'zigzag',
         fromId: 'shape-1',
       },
       {
@@ -143,6 +162,7 @@ test('parses connector and freehand variants without dropping their typed fields
   });
 
   assert.equal(snapshot.shapes[0]?.type, 'arrow');
+  assert.equal(snapshot.shapes[0]?.type === 'arrow' ? snapshot.shapes[0].orthogonalVariant : undefined, 'zigzag');
   assert.equal(snapshot.shapes[1]?.type, 'draw');
   assert.deepEqual(snapshot.shapes[1]?.type === 'draw' ? snapshot.shapes[1].points : [], [[0, 0], [20, 20]]);
 });

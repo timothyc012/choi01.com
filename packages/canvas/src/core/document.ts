@@ -3,6 +3,7 @@ import {
   CANVAS_LIMITS,
   createCanvasShapeId,
   type CanvasCamera,
+  type CanvasArrowShape,
   type CanvasColorKey,
   type CanvasDocument,
   type CanvasShapeBase,
@@ -153,6 +154,7 @@ function parseShape(input: unknown): CanvasShape {
       toId: readOptionalShapeId(input, 'toId'),
       bend: readOptionalBoundedNumber(input, 'bend', CANVAS_LIMITS.coordinate),
       routing: readOptionalRouting(input, 'routing'),
+      orthogonalVariant: readOptionalOrthogonalVariant(input, 'orthogonalVariant'),
       arrowStart: readOptionalArrowCap(input, 'arrowStart'),
       arrowEnd: readOptionalArrowCap(input, 'arrowEnd'),
     };
@@ -335,10 +337,19 @@ function readOptionalStrokeStyle(input: Record<string, unknown>, key: string): C
   return value;
 }
 
-function readOptionalRouting(input: Record<string, unknown>, key: string): 'straight' | 'curved' | 'orthogonal' | undefined {
+function readOptionalRouting(input: Record<string, unknown>, key: string): CanvasArrowShape['routing'] {
   const value = input[key];
   if (value === undefined) return undefined;
   if (value !== 'straight' && value !== 'curved' && value !== 'orthogonal') {
+    throw new CanvasValidationError(`Canvas shape ${key} is invalid.`);
+  }
+  return value;
+}
+
+function readOptionalOrthogonalVariant(input: Record<string, unknown>, key: string): CanvasArrowShape['orthogonalVariant'] {
+  const value = input[key];
+  if (value === undefined) return undefined;
+  if (value !== 'elbow' && value !== 'reverse' && value !== 'u' && value !== 'zigzag') {
     throw new CanvasValidationError(`Canvas shape ${key} is invalid.`);
   }
   return value;

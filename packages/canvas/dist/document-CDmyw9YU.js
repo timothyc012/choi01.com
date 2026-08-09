@@ -1,4 +1,4 @@
-const s = {
+const r = {
   coordinate: 1e9,
   cameraZoomMin: 0.05,
   cameraZoomMax: 16,
@@ -12,14 +12,14 @@ const s = {
   maxHtmlDepth: 256,
   maxTextLength: 1e5,
   maxShortStringLength: 512
-}, rt = [
+}, it = [
   "rect",
   "ellipse",
   "triangle",
   "diamond",
   "hexagon",
   "star"
-], it = {
+], lt = {
   sans: { label: "고딕", stack: '"Inter", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, sans-serif' },
   serif: { label: "명조", stack: '"Noto Serif KR", "Noto Serif", "Malgun Gothic", Batang, "Times New Roman", serif' },
   mono: { label: "모노", stack: '"JetBrains Mono", "D2Coding", "Consolas", "Courier New", ui-monospace, monospace' },
@@ -28,7 +28,7 @@ const s = {
   chosunmyjo: { label: "조선일보명조", stack: '"조선일보명조", "Noto Serif KR", "Noto Serif", "NanumMyeongjo", serif' },
   hdhyundai: { label: "HD현대체", stack: '"HD현대체", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif' },
   custom: { label: "직접입력", stack: "sans-serif" }
-}, O = {
+}, L = {
   yellow: { bg: "#fef08a", border: "#facc15", text: "#854d0e", label: "노랑" },
   pink: { bg: "#fbcfe8", border: "#f472b6", text: "#9d174d", label: "분홍" },
   purple: { bg: "#e9d5ff", border: "#c084fc", text: "#6b21a8", label: "보라" },
@@ -39,7 +39,7 @@ const s = {
   brand: { bg: "#e6f0ff", border: "#003087", text: "#003087", label: "브랜드" },
   red: { bg: "#fecaca", border: "#ef4444", text: "#991b1b", label: "빨강" },
   ink: { bg: "#1e293b", border: "#0f172a", text: "#f8fafc", label: "먹" }
-}, ct = Object.keys(O);
+}, ct = Object.keys(L);
 function x(t) {
   var e, n;
   const a = t ?? ((n = (e = globalThis.crypto) == null ? void 0 : e.randomUUID) == null ? void 0 : n.call(e));
@@ -54,12 +54,12 @@ class o extends Error {
     super(a), this.code = "CANVAS_VALIDATION_ERROR", this.name = "CanvasValidationError";
   }
 }
-const y = /* @__PURE__ */ new Set(["b", "strong", "i", "em", "u", "br", "div", "p", "ul", "ol", "li"]), D = /* @__PURE__ */ new Set(["http:", "https:", "blob:"]), E = /^(?:#[0-9a-f]{3,8}|(?:rgb|hsl)a?\([0-9.%\s,/+\-]+\)|[a-z][a-z0-9-]{0,31})$/i, $ = 8;
+const y = /* @__PURE__ */ new Set(["b", "strong", "i", "em", "u", "br", "div", "p", "ul", "ol", "li"]), D = /* @__PURE__ */ new Set(["http:", "https:", "blob:"]), $ = /^(?:#[0-9a-f]{3,8}|(?:rgb|hsl)a?\([0-9.%\s,/+\-]+\)|[a-z][a-z0-9-]{0,31})$/i, E = 8;
 function T(t) {
   if (!t) return "";
-  if (t.length > s.maxHtmlLength)
+  if (t.length > r.maxHtmlLength)
     throw new o("Canvas rich text is too long.");
-  return typeof document < "u" ? z(t) : U(t);
+  return typeof document < "u" ? _(t) : U(t);
 }
 function R(t) {
   const a = t.trim();
@@ -81,7 +81,7 @@ function R(t) {
 }
 function I(t) {
   let a = t;
-  for (let e = 0; e < $; e += 1) {
+  for (let e = 0; e < E; e += 1) {
     let n;
     try {
       n = decodeURIComponent(a);
@@ -105,13 +105,13 @@ function M(t) {
     }
   return `/${e.join("/")}`.toLowerCase();
 }
-function P(t) {
+function z(t) {
   const a = t.trim();
-  if (!a || a.length > 64 || !E.test(a))
+  if (!a || a.length > 64 || !$.test(a))
     throw new o("Canvas colors must be simple CSS color values.");
   return a;
 }
-function _(t) {
+function P(t) {
   if (/[{};<>\\]/.test(t))
     throw new o("Canvas font families must contain font names only.");
   const a = t.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 120);
@@ -119,41 +119,41 @@ function _(t) {
     throw new o("Canvas font families must contain font names only.");
   return a;
 }
-function z(t) {
+function _(t) {
   const a = document.createElement("template");
   return a.innerHTML = t, p(a.content, void 0, 0);
 }
 function p(t, a, e = 0) {
-  if (e > s.maxHtmlDepth)
+  if (e > r.maxHtmlDepth)
     throw new o("Canvas rich text nesting is too deep.");
   let n = "";
-  return t.childNodes.forEach((r) => {
-    if (r.nodeType === Node.TEXT_NODE) {
-      n += N(r.textContent ?? "");
+  return t.childNodes.forEach((s) => {
+    if (s.nodeType === Node.TEXT_NODE) {
+      n += N(s.textContent ?? "");
       return;
     }
-    if (r.nodeType !== Node.ELEMENT_NODE) return;
-    const c = r;
-    if (!y.has(c.tagName.toLowerCase())) {
-      n += p(c, void 0, e + 1);
+    if (s.nodeType !== Node.ELEMENT_NODE) return;
+    const l = s;
+    if (!y.has(l.tagName.toLowerCase())) {
+      n += p(l, void 0, e + 1);
       return;
     }
-    const i = c.tagName.toLowerCase();
+    const i = l.tagName.toLowerCase();
     if (i === "br") {
       n += "<br>";
       return;
     }
-    const l = (a === "ul" || a === "ol") && (i === "ul" || i === "ol");
-    l && (n += "<li>");
-    const h = i === "ul" && c.dataset.listStyle === "dash" ? ' data-list-style="dash"' : "";
-    n += `<${i}${h}>${p(c, i, e + 1)}</${i}>`, l && (n += "</li>");
+    const c = (a === "ul" || a === "ol") && (i === "ul" || i === "ol");
+    c && (n += "<li>");
+    const h = i === "ul" && l.dataset.listStyle === "dash" ? ' data-list-style="dash"' : "";
+    n += `<${i}${h}>${p(l, i, e + 1)}</${i}>`, c && (n += "</li>");
   }), n;
 }
 function U(t) {
-  var c;
+  var l;
   const a = /<!--[\s\S]*?-->|<\/?[a-z][^>]*>|[^<]+/gi;
   let e = "", n;
-  const r = [];
+  const s = [];
   for (; (n = a.exec(t)) !== null; ) {
     const i = n[0];
     if (i.startsWith("<!--")) continue;
@@ -161,9 +161,9 @@ function U(t) {
       e += N(i);
       continue;
     }
-    const l = /^<\/?\s*([a-z0-9]+)[^>]*>$/i.exec(i);
-    if (!l) continue;
-    const h = l[1].toLowerCase();
+    const c = /^<\/?\s*([a-z0-9]+)[^>]*>$/i.exec(i);
+    if (!c) continue;
+    const h = c[1].toLowerCase();
     if (!y.has(h)) continue;
     if (h === "br") {
       i.startsWith("</") || (e += "<br>");
@@ -171,31 +171,31 @@ function U(t) {
     }
     if (i.startsWith("</")) {
       e += `</${h}>`;
-      const m = r.pop();
+      const m = s.pop();
       m != null && m.wrapsNestedList && (e += "</li>");
       continue;
     }
-    const v = (c = r.at(-1)) == null ? void 0 : c.tag;
-    if (r.length >= s.maxHtmlDepth)
+    const v = (l = s.at(-1)) == null ? void 0 : l.tag;
+    if (s.length >= r.maxHtmlDepth)
       throw new o("Canvas rich text nesting is too deep.");
     const b = (v === "ul" || v === "ol") && (h === "ul" || h === "ol");
     b && (e += "<li>");
-    const L = h === "ul" && /data-list-style\s*=\s*["']dash["']/i.test(i) ? ' data-list-style="dash"' : "";
-    e += `<${h}${L}>`, r.push({ tag: h, wrapsNestedList: b });
+    const O = h === "ul" && /data-list-style\s*=\s*["']dash["']/i.test(i) ? ' data-list-style="dash"' : "";
+    e += `<${h}${O}>`, s.push({ tag: h, wrapsNestedList: b });
   }
   return e;
 }
 function N(t) {
   return t.replace(/[&<>\"]/g, (a) => a === "&" ? "&amp;" : a === "<" ? "&lt;" : a === ">" ? "&gt;" : "&quot;");
 }
-function lt(t = {}) {
+function ht(t = {}) {
   return {
     id: t.id ?? "local-document",
     version: 1,
     shapes: [...t.shapes ?? []]
   };
 }
-function ht(t, a) {
+function dt(t, a) {
   switch (a.type) {
     case "createShapes":
       return { ...t, shapes: [...t.shapes, ...a.shapes] };
@@ -219,26 +219,26 @@ function ht(t, a) {
       return st(a);
   }
 }
-function dt(t, a) {
+function ft(t, a) {
   return {
     version: "canvas-v1",
     shapes: [...t.shapes],
     camera: { ...a }
   };
 }
-function ft(t) {
+function ut(t) {
   if (!u(t)) throw new o("Canvas shape must be an object.");
   return A(t);
 }
-function ut(t) {
+function mt(t) {
   if (!u(t))
     throw new o("Canvas snapshot must be an object.");
   if (t.version !== "canvas-v1")
     throw new o(`Unsupported canvas snapshot version: ${String(t.version)}.`);
   if (!Array.isArray(t.shapes))
     throw new o("Canvas snapshot shapes must be an array.");
-  if (t.shapes.length > s.maxShapes)
-    throw new o(`Canvas snapshots cannot contain more than ${s.maxShapes} shapes.`);
+  if (t.shapes.length > r.maxShapes)
+    throw new o(`Canvas snapshots cannot contain more than ${r.maxShapes} shapes.`);
   if (!u(t.camera))
     throw new o("Canvas snapshot camera must be an object.");
   const a = F(t.camera);
@@ -249,8 +249,8 @@ function ut(t) {
   };
 }
 function F(t) {
-  const a = f(t, "x", "camera", s.coordinate), e = f(t, "y", "camera", s.coordinate), n = f(t, "z", "camera", s.cameraZoomMax);
-  if (n < s.cameraZoomMin)
+  const a = f(t, "x", "camera", r.coordinate), e = f(t, "y", "camera", r.coordinate), n = f(t, "z", "camera", r.cameraZoomMax);
+  if (n < r.cameraZoomMin)
     throw new o("Canvas camera zoom is below the supported minimum.");
   return { x: a, y: e, z: n };
 }
@@ -259,39 +259,40 @@ function A(t) {
   const a = t.id, e = t.type;
   if (typeof a != "string" || a.trim().length === 0)
     throw new o("Canvas shape ID must be a non-empty string.");
-  if (a.length > s.maxShortStringLength)
+  if (a.length > r.maxShortStringLength)
     throw new o("Canvas shape ID is too long.");
-  if (typeof e != "string" || !tt.has(e))
+  if (typeof e != "string" || !et.has(e))
     throw new o(`Unsupported canvas shape type: ${String(e)}.`);
-  const n = f(t, "x", "shape", s.coordinate), r = f(t, "y", "shape", s.coordinate), c = f(t, "w", "shape", s.coordinate), i = f(t, "h", "shape", s.coordinate), l = H(t, a, n, r, c, i);
+  const n = f(t, "x", "shape", r.coordinate), s = f(t, "y", "shape", r.coordinate), l = f(t, "w", "shape", r.coordinate), i = f(t, "h", "shape", r.coordinate), c = H(t, a, n, s, l, i);
   if (e === "draw") {
     if (!Array.isArray(t.points)) throw new o("Draw shapes require points.");
-    return { ...l, type: "draw", points: j(t.points) };
+    return { ...c, type: "draw", points: j(t.points) };
   }
   if (e === "arrow")
     return {
-      ...l,
+      ...c,
       type: "arrow",
       fromId: S(t, "fromId"),
       toId: S(t, "toId"),
-      bend: w(t, "bend", s.coordinate),
+      bend: w(t, "bend", r.coordinate),
       routing: Q(t, "routing"),
+      orthogonalVariant: tt(t, "orthogonalVariant"),
       arrowStart: C(t, "arrowStart"),
       arrowEnd: C(t, "arrowEnd")
     };
-  if (e === "image") return { ...l, type: "image" };
-  if (!nt(e))
+  if (e === "image") return { ...c, type: "image" };
+  if (!ot(e))
     throw new o(`Unsupported canvas shape type: ${e}.`);
-  return { ...l, type: e };
+  return { ...c, type: e };
 }
-function H(t, a, e, n, r, c) {
+function H(t, a, e, n, s, l) {
   return {
     id: x(a),
     x: e,
     y: n,
-    w: r,
-    h: c,
-    rotation: k(t, "rotation"),
+    w: s,
+    h: l,
+    rotation: V(t, "rotation"),
     groupId: d(t, "groupId"),
     html: W(t, "html"),
     text: d(t, "text"),
@@ -302,7 +303,7 @@ function H(t, a, e, n, r, c) {
     cardStyle: X(t, "cardStyle"),
     fontSize: K(t, "fontSize"),
     fontFamily: q(t, "fontFamily"),
-    customFontFamily: V(t, "customFontFamily"),
+    customFontFamily: k(t, "customFontFamily"),
     textAlign: Y(t, "textAlign"),
     manualSize: B(t, "manualSize"),
     fillColor: g(t, "fillColor"),
@@ -319,25 +320,25 @@ function W(t, a) {
   return e === void 0 ? void 0 : T(e);
 }
 function j(t) {
-  if (t.length > s.maxDrawPoints)
-    throw new o(`Draw shapes cannot contain more than ${s.maxDrawPoints} points.`);
+  if (t.length > r.maxDrawPoints)
+    throw new o(`Draw shapes cannot contain more than ${r.maxDrawPoints} points.`);
   return t.map((a) => {
     if (!Array.isArray(a) || a.length !== 2)
       throw new o("Draw points must contain two coordinates.");
     const [e, n] = a;
-    if (typeof e != "number" || !Number.isFinite(e) || Math.abs(e) > s.coordinate || typeof n != "number" || !Number.isFinite(n) || Math.abs(n) > s.coordinate)
+    if (typeof e != "number" || !Number.isFinite(e) || Math.abs(e) > r.coordinate || typeof n != "number" || !Number.isFinite(n) || Math.abs(n) > r.coordinate)
       throw new o("Draw point coordinates must be finite numbers.");
     return [e, n];
   });
 }
 function f(t, a, e, n) {
-  const r = t[a];
-  if (typeof r != "number" || !Number.isFinite(r) || Math.abs(r) > n)
+  const s = t[a];
+  if (typeof s != "number" || !Number.isFinite(s) || Math.abs(s) > n)
     throw new o(`Canvas ${e} ${a} must be a finite number within supported limits.`);
-  return r;
+  return s;
 }
-function k(t, a) {
-  return w(t, a, s.coordinate);
+function V(t, a) {
+  return w(t, a, r.coordinate);
 }
 function w(t, a, e) {
   const n = t[a];
@@ -351,23 +352,23 @@ function d(t, a) {
   const e = t[a];
   if (e === void 0) return;
   if (typeof e != "string") throw new o(`Canvas shape ${a} must be a string.`);
-  const n = a === "html" ? s.maxHtmlLength : a === "text" || a === "category" ? s.maxTextLength : s.maxShortStringLength;
+  const n = a === "html" ? r.maxHtmlLength : a === "text" || a === "category" ? r.maxTextLength : r.maxShortStringLength;
   if (e.length > n) throw new o(`Canvas shape ${a} is too long.`);
   return e;
 }
 function K(t, a) {
-  const e = w(t, a, s.fontSizeMax);
-  if (e !== void 0 && e < s.fontSizeMin)
+  const e = w(t, a, r.fontSizeMax);
+  if (e !== void 0 && e < r.fontSizeMin)
     throw new o(`Canvas shape ${a} is below the supported minimum.`);
   return e;
 }
 function g(t, a) {
   const e = d(t, a);
-  return e === void 0 ? void 0 : P(e);
+  return e === void 0 ? void 0 : z(e);
 }
-function V(t, a) {
+function k(t, a) {
   const e = d(t, a);
-  return e === void 0 ? void 0 : _(e);
+  return e === void 0 ? void 0 : P(e);
 }
 function B(t, a) {
   const e = t[a];
@@ -383,7 +384,7 @@ function S(t, a) {
 function Z(t, a) {
   const e = t[a];
   if (e !== void 0) {
-    if (typeof e != "string" || !ot(e))
+    if (typeof e != "string" || !rt(e))
       throw new o(`Canvas shape ${a} is not a supported color.`);
     return e;
   }
@@ -427,6 +428,14 @@ function Q(t, a) {
     return e;
   }
 }
+function tt(t, a) {
+  const e = t[a];
+  if (e !== void 0) {
+    if (e !== "elbow" && e !== "reverse" && e !== "u" && e !== "zigzag")
+      throw new o(`Canvas shape ${a} is invalid.`);
+    return e;
+  }
+}
 function C(t, a) {
   const e = t[a];
   if (e !== void 0) {
@@ -438,7 +447,7 @@ function C(t, a) {
 function u(t) {
   return typeof t == "object" && t !== null;
 }
-const tt = /* @__PURE__ */ new Set([
+const et = /* @__PURE__ */ new Set([
   "note",
   "card",
   "text",
@@ -452,7 +461,7 @@ const tt = /* @__PURE__ */ new Set([
   "diamond",
   "hexagon",
   "star"
-]), et = /* @__PURE__ */ new Set([
+]), at = /* @__PURE__ */ new Set([
   "note",
   "card",
   "text",
@@ -463,31 +472,31 @@ const tt = /* @__PURE__ */ new Set([
   "diamond",
   "hexagon",
   "star"
-]), at = /* @__PURE__ */ new Set(["yellow", "pink", "purple", "blue", "green", "peach", "grey", "brand", "ink", "red"]);
-function nt(t) {
-  return et.has(t);
-}
+]), nt = /* @__PURE__ */ new Set(["yellow", "pink", "purple", "blue", "green", "peach", "grey", "brand", "ink", "red"]);
 function ot(t) {
   return at.has(t);
+}
+function rt(t) {
+  return nt.has(t);
 }
 function st(t) {
   throw new o(`Unhandled canvas command: ${String(t)}.`);
 }
 export {
   o as C,
-  rt as S,
-  O as a,
+  it as S,
+  L as a,
   ct as b,
-  it as c,
-  s as d,
-  ht as e,
-  lt as f,
+  lt as c,
+  r as d,
+  dt as e,
+  ht as f,
   x as g,
-  ut as h,
+  mt as h,
   T as i,
-  dt as j,
-  P as k,
-  ft as p,
-  _ as s,
+  ft as j,
+  z as k,
+  ut as p,
+  P as s,
   R as v
 };

@@ -27,6 +27,7 @@ export type {
   CanvasSnapshot,
   CanvasTextAlign,
   CanvasTool,
+  OrthogonalVariant,
 } from './model.ts';
 export {
   applyCanvasCommand,

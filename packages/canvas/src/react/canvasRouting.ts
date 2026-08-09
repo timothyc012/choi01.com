@@ -1,3 +1,5 @@
+import type { OrthogonalVariant } from '../core/model.ts';
+
 export type EdgeSide = 'n' | 's' | 'e' | 'w';
 export type OrthogonalPoint = { x: number; y: number; side?: EdgeSide };
 export type BoundingBox = { minX: number; minY: number; maxX: number; maxY: number };
@@ -123,7 +125,59 @@ function selectShortestPath(paths: OrthogonalPoint[][], obstacles: BoundingBox[]
   return options.reduce((best, cur) => (pathLength(cur) < pathLength(best) ? cur : best));
 }
 
-export function orthogonalPathPoints(start: OrthogonalPoint, end: OrthogonalPoint, obstacles: BoundingBox[] = []) {
+function firstAxis(path: OrthogonalPoint[]): 'x' | 'y' | undefined {
+  for (let i = 1; i < path.length; i++) {
+    if (path[i - 1].x !== path[i].x) return 'x';
+    if (path[i - 1].y !== path[i].y) return 'y';
+  }
+  return undefined;
+}
+
+function outsideCoordinate(start: number, end: number, side: EdgeSide | undefined, axis: 'x' | 'y') {
+  const min = Math.min(start, end);
+  const max = Math.max(start, end);
+  const distance = Math.max(48, Math.abs(end - start) * 0.35, ORTHOGONAL_PADDING * 4);
+  if (axis === 'x') {
+    if (side === 'e') return max + distance;
+    if (side === 'w') return min - distance;
+  } else {
+    if (side === 's') return max + distance;
+    if (side === 'n') return min - distance;
+  }
+  return start <= end ? min - distance : max + distance;
+}
+
+function variantPath(start: OrthogonalPoint, end: OrthogonalPoint, variant: OrthogonalVariant, horizontalFirst: boolean, horizontalLast: boolean) {
+  const midX = (start.x + end.x) / 2;
+  const midY = (start.y + end.y) / 2;
+  if (variant === 'u') {
+    if (horizontalFirst) {
+      const detourX = outsideCoordinate(start.x, end.x, start.side, 'x');
+      return [start, { x: detourX, y: start.y }, { x: detourX, y: end.y }, end];
+    }
+    const detourY = outsideCoordinate(start.y, end.y, start.side, 'y');
+    return [start, { x: start.x, y: detourY }, { x: end.x, y: detourY }, end];
+  }
+  if (variant === 'zigzag') {
+    if (horizontalFirst) {
+      const detourX = outsideCoordinate(start.x, end.x, start.side, 'x');
+      const detourY = outsideCoordinate(start.y, end.y, start.side, 'y');
+      if (horizontalLast) {
+        return [start, { x: detourX, y: start.y }, { x: detourX, y: detourY }, { x: midX, y: detourY }, { x: midX, y: end.y }, end];
+      }
+      return [start, { x: detourX, y: start.y }, { x: detourX, y: detourY }, { x: end.x, y: detourY }, end];
+    }
+    const detourY = outsideCoordinate(start.y, end.y, start.side, 'y');
+    const detourX = outsideCoordinate(start.x, end.x, start.side, 'x');
+    if (!horizontalLast) {
+      return [start, { x: start.x, y: detourY }, { x: detourX, y: detourY }, { x: detourX, y: midY }, { x: end.x, y: midY }, end];
+    }
+    return [start, { x: start.x, y: detourY }, { x: detourX, y: detourY }, { x: detourX, y: end.y }, end];
+  }
+  return [];
+}
+
+export function orthogonalPathPoints(start: OrthogonalPoint, end: OrthogonalPoint, obstacles: BoundingBox[] = [], variant: OrthogonalVariant = 'elbow') {
   const sideAt = start.side ?? (Math.abs(end.x - start.x) >= Math.abs(end.y - start.y) ? 'e' : 's');
   const endSide = end.side ?? (sideAt === 'e' || sideAt === 'w' ? 'w' : 'n');
   const horizFirst = sideAt === 'e' || sideAt === 'w';
@@ -152,7 +206,16 @@ export function orthogonalPathPoints(start: OrthogonalPoint, end: OrthogonalPoin
     }
     for (const x of candidateXs) paths.push([start, { x, y: start.y }, { x, y: end.y }, end]);
   }
-  return selectShortestPath(paths, obstacles);
+  const elbow = selectShortestPath(paths, obstacles);
+  if (variant === 'elbow') return elbow;
+  if (variant === 'reverse') {
+    const preferredAxis = firstAxis(elbow);
+    const alternate = selectShortestPath(paths.filter(path => firstAxis(path) !== preferredAxis), obstacles);
+    return alternate.length > 1 ? alternate : elbow;
+  }
+  const shaped = variantPath(start, end, variant, horizFirst, horizLast);
+  const selected = selectShortestPath([shaped], obstacles);
+  return selected.length > 1 ? selected : elbow;
 }
 
 export function orthogonalEndAngle(pathPoints: OrthogonalPoint[]) {

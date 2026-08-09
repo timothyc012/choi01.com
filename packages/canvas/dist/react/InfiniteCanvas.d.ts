@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasTool } from '../core/index.js';
+import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasTool, OrthogonalVariant } from '../core/index.js';
 /**
  * Self-contained infinite canvas engine.
  *
@@ -10,14 +10,15 @@ import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasTool } f
  * project's custom Tailwind tokens so the file can be lifted out on its own.
  */
 export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../core/index.js';
-export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, CanvasTool } from '../core/index.js';
-type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'arrowStart' | 'arrowEnd'> & {
+export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, CanvasTool, OrthogonalVariant } from '../core/index.js';
+type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'arrowStart' | 'arrowEnd'> & {
     id: string;
     points?: [number, number][];
     fromId?: string;
     toId?: string;
     bend?: number;
     routing?: 'straight' | 'curved' | 'orthogonal';
+    orthogonalVariant?: OrthogonalVariant;
     arrowStart?: 'none' | 'arrow' | 'dot';
     arrowEnd?: 'none' | 'arrow' | 'dot';
 } : never;

@@ -167,7 +167,7 @@ export function arrowGeometry(arrow: CanvasShape, byId: Map<string, CanvasShape>
   const routing: 'straight' | 'curved' | 'orthogonal' = arrow.routing ?? (bound ? 'orthogonal' : bend !== 0 ? 'curved' : 'straight');
   if (routing !== 'orthogonal') return { start, end, control, bend, routing };
   const obstacles = collectObstaclesForArrow(allShapes, arrow, from?.id, to?.id);
-  return { start, end, control, bend, routing, pathPoints: compactPath(orthogonalPathPoints(start, end, obstacles)) };
+  return { start, end, control, bend, routing, pathPoints: compactPath(orthogonalPathPoints(start, end, obstacles, arrow.orthogonalVariant)) };
 }
 
 export function bezierAt(t: number, s: { x: number; y: number }, c: { x: number; y: number }, e: { x: number; y: number }) {

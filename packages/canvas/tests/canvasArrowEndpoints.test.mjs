@@ -35,7 +35,9 @@ describe('arrow endpoints can be adjusted after creation', () => {
     const bend = cv.canvasEl.querySelector('[data-canvas-arrow-bend-handle]');
     assert.ok(bend, 'a selected arrow shows a bend handle');
     assert.match(bend.style.top, /^-/, 'the bend handle sits above the relation input');
-    assert.equal(cv.canvasEl.querySelector('[data-canvas-arrow-label]'), null, 'an empty selected arrow has no visible relation label');
+    const relationLabel = cv.canvasEl.querySelector('[data-canvas-arrow-label]');
+    assert.ok(relationLabel, 'a selected arrow shows an empty relation label pill');
+    assert.equal(relationLabel.textContent, '관계 입력', 'the empty relation label pill explains its purpose');
     const labelHitArea = cv.canvasEl.querySelector('[data-canvas-arrow-label-hit-area]');
     assert.ok(labelHitArea, 'an empty arrow keeps a transparent relation label hit area');
     await cv.dispatch(labelHitArea, new window.MouseEvent('dblclick', { bubbles: true, cancelable: true }));

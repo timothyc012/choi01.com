@@ -29,6 +29,8 @@ export type CanvasFontKey =
 
 export type CanvasTextAlign = 'left' | 'center' | 'right';
 
+export type OrthogonalVariant = 'elbow' | 'reverse' | 'u' | 'zigzag';
+
 export type CanvasShapeType =
   | 'note'
   | 'card'
@@ -138,6 +140,7 @@ export interface CanvasArrowShape extends CanvasShapeBase {
   readonly toId?: CanvasShapeId;
   readonly bend?: number;
   readonly routing?: 'straight' | 'curved' | 'orthogonal';
+  readonly orthogonalVariant?: OrthogonalVariant;
   readonly arrowStart?: 'none' | 'arrow' | 'dot';
   readonly arrowEnd?: 'none' | 'arrow' | 'dot';
 }
