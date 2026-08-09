@@ -10,6 +10,7 @@ import {
   hitTest,
   toLocal,
 } from './canvasGeometry';
+import { moveOrthogonalSegment } from './canvasRouting';
 import {
   CONNECTABLE,
   ERASER_RADIUS,
@@ -120,6 +121,24 @@ export function useCanvasPointerMove({
         return;
       }
 
+      if (interaction.kind === 'orthogonal-segment') {
+        const all = shapesRef.current;
+        const arrow = all.find(s => s.id === interaction.id);
+        if (!arrow) return;
+        const geometry = arrowGeometry(arrow, new Map(all.map(s => [s.id, s])), all);
+        const pathPoints = geometry.routing === 'orthogonal' ? geometry.pathPoints : undefined;
+        if (!pathPoints || pathPoints.length < 2) return;
+        const segmentStart = pathPoints[interaction.segmentIndex];
+        const segmentEnd = pathPoints[interaction.segmentIndex + 1];
+        if (!segmentStart || !segmentEnd) return;
+        const coordinate = segmentStart.x === segmentEnd.x ? p.x : p.y;
+        const moved = moveOrthogonalSegment(pathPoints, interaction.segmentIndex, coordinate);
+        setShapes(prev => prev.map(s => s.id === interaction.id
+          ? { ...s, routing: 'orthogonal', orthogonalVariant: undefined, orthogonalWaypoints: moved.slice(1, -1).map(point => ({ x: point.x, y: point.y })) }
+          : s));
+        return;
+      }
+
       if (interaction.kind === 'arrow-endpoint') {
         const all = shapesRef.current;
         const arrow = all.find(s => s.id === interaction.id);
@@ -213,6 +232,9 @@ export function useCanvasPointerMove({
             x: origin.x + dx,
             y: origin.y + dy,
             points: origin.points?.map(([px, py]) => [px + dx, py + dy] as [number, number]),
+            ...(origin.type === 'arrow' && origin.orthogonalWaypoints
+              ? { orthogonalWaypoints: origin.orthogonalWaypoints.map(point => ({ x: point.x + dx, y: point.y + dy })) }
+              : {}),
           };
         }));
         return;

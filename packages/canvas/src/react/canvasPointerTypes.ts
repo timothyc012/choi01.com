@@ -22,6 +22,7 @@ export type Interaction =
   | { kind: 'drawing'; id: string }
   | { kind: 'connect'; fromId: string; toX: number; toY: number; hoverId: string | null }
   | { kind: 'bend'; id: string }
+  | { kind: 'orthogonal-segment'; id: string; segmentIndex: number }
   | { kind: 'arrow-endpoint'; id: string; endpoint: 'start' | 'end'; hoverId: string | null }
   | { kind: 'erasing' };
 

@@ -157,6 +157,9 @@ export function useCanvasImperativeHandle({
           y: s.y + 24,
           groupId,
           points: s.points?.map(([px, py]) => [px + 24, py + 24] as [number, number]),
+          orthogonalWaypoints: s.type === 'arrow' && s.orthogonalWaypoints
+            ? s.orthogonalWaypoints.map(point => ({ x: point.x + 24, y: point.y + 24 }))
+            : undefined,
         });
       }
       commit(prev => [...prev, ...copies]);

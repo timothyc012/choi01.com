@@ -23,6 +23,7 @@ interface CanvasObjectLayerProps {
   renderShapeBody: (shape: CanvasShape) => React.ReactNode;
   setEditingId: (id: string | null) => void;
   onBendHandleDown: (event: React.PointerEvent, shape: CanvasShape) => void;
+  onOrthogonalSegmentHandleDown: (event: React.PointerEvent, shape: CanvasShape, segmentIndex: number) => void;
   onArrowEndpointDown: (event: React.PointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
   onResizeHandleDown: (event: React.PointerEvent, shape: CanvasShape, handle: 'nw' | 'ne' | 'sw' | 'se') => void;
   onRotateHandleDown: (event: React.PointerEvent, shape: CanvasShape) => void;
@@ -32,7 +33,7 @@ interface CanvasObjectLayerProps {
 /** DOM layer for editable shapes and remote cursors; vectors stay in SVG. */
 export function CanvasObjectLayer({
   visiblePaintOrder, selected, editingId, camera, shapeById, allShapes, peerCursors,
-  isDarkMode, renderEditor, renderShapeBody, setEditingId, onBendHandleDown,
+  isDarkMode, renderEditor, renderShapeBody, setEditingId, onBendHandleDown, onOrthogonalSegmentHandleDown,
   onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onArrowEndpointDown,
 }: CanvasObjectLayerProps) {
   return (
@@ -72,8 +73,15 @@ export function CanvasObjectLayer({
                 >
                   {isEditing ? renderEditor('text-center whitespace-nowrap') : <span key="canvas-view" dangerouslySetInnerHTML={{ __html: displayLabel }} />}
                 </div>}
-                {isSelected && selected.size === 1 && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute z-20 rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
               </div>
+              {isSelected && selected.size === 1 && geometry.routing === 'orthogonal' && geometry.pathPoints && geometry.pathPoints.length > 2
+                ? geometry.pathPoints.slice(0, -1).map((point, index) => {
+                  const next = geometry.pathPoints?.[index + 1];
+                  if (!next) return null;
+                  const midpoint = { x: (point.x + next.x) / 2, y: (point.y + next.y) / 2 };
+                  return <div key={`segment-${index}`} data-canvas-arrow-segment-handle={index} onPointerDown={event => onOrthogonalSegmentHandleDown(event, s, index)} title="드래그해서 직각선 구간 이동" className="absolute z-20 rounded-sm bg-white border-2 border-blue-600" style={{ width: 12 / camera.z, height: 12 / camera.z, left: midpoint.x - 6 / camera.z, top: midpoint.y - 6 / camera.z, cursor: point.x === next.x ? 'ew-resize' : 'ns-resize' }} />;
+                })
+                : isSelected && selected.size === 1 && geometry.routing === 'curved' && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선 휘기" className="absolute z-20 rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: -10 / camera.z, cursor: 'grab' }} />}
               {isSelected && selected.size === 1 && (['start', 'end'] as const).map(endpoint => {
                 const point = endpoint === 'start' ? geometry.start : geometry.end;
                 return (

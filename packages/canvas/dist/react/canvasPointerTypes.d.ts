@@ -68,6 +68,10 @@ export type Interaction = {
     kind: 'bend';
     id: string;
 } | {
+    kind: 'orthogonal-segment';
+    id: string;
+    segmentIndex: number;
+} | {
     kind: 'arrow-endpoint';
     id: string;
     endpoint: 'start' | 'end';

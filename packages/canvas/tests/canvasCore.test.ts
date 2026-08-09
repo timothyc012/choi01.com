@@ -12,7 +12,7 @@ import {
   validateCanvasAssetUrl,
   type CanvasShape,
 } from '../src/core/index.ts';
-import { orthogonalPathPoints } from '../src/react/canvasRouting.ts';
+import { moveOrthogonalSegment, orthogonalPathPoints } from '../src/react/canvasRouting.ts';
 
 const rectangle = (id: string): CanvasShape => ({
   id: createCanvasShapeId(id),
@@ -121,6 +121,20 @@ test('orthogonal connector variants expose distinct elbow, reverse, U, and zigza
   }
 });
 
+test('manual orthogonal waypoints preserve a user-shaped path and segment dragging stays axis-aligned', () => {
+  const start = { x: 0, y: 50, side: 'e' as const };
+  const end = { x: 200, y: 150, side: 'w' as const };
+  const waypoints = [{ x: 120, y: 50 }, { x: 120, y: 150 }];
+  const manual = orthogonalPathPoints(start, end, [], 'elbow', waypoints);
+  assert.deepEqual(manual, [start, ...waypoints, end]);
+
+  const moved = moveOrthogonalSegment(manual, 1, 160);
+  assert.deepEqual(moved, [start, { x: 160, y: 50 }, { x: 160, y: 150 }, end]);
+  for (let i = 1; i < moved.length; i++) {
+    assert.ok(moved[i - 1].x === moved[i].x || moved[i - 1].y === moved[i].y, 'manual segments stay axis-aligned');
+  }
+});
+
 test('rejects snapshots that do not match the public canvas contract', () => {
   assert.throws(
     () => parseCanvasSnapshot({ version: 'canvas-v0', shapes: [], camera: { x: 0, y: 0, z: 1 } }),
@@ -146,6 +160,7 @@ test('parses connector and freehand variants without dropping their typed fields
         h: 50,
         routing: 'orthogonal',
         orthogonalVariant: 'zigzag',
+        orthogonalWaypoints: [{ x: 40, y: 0 }, { x: 40, y: 60 }],
         fromId: 'shape-1',
       },
       {
@@ -163,8 +178,16 @@ test('parses connector and freehand variants without dropping their typed fields
 
   assert.equal(snapshot.shapes[0]?.type, 'arrow');
   assert.equal(snapshot.shapes[0]?.type === 'arrow' ? snapshot.shapes[0].orthogonalVariant : undefined, 'zigzag');
+  assert.deepEqual(snapshot.shapes[0]?.type === 'arrow' ? snapshot.shapes[0].orthogonalWaypoints : [], [{ x: 40, y: 0 }, { x: 40, y: 60 }]);
   assert.equal(snapshot.shapes[1]?.type, 'draw');
   assert.deepEqual(snapshot.shapes[1]?.type === 'draw' ? snapshot.shapes[1].points : [], [[0, 0], [20, 20]]);
+});
+
+test('rejects malformed orthogonal waypoints at the snapshot boundary', () => {
+  assert.throws(
+    () => parseCanvasShape({ id: 'arrow-invalid-waypoint', type: 'arrow', x: 0, y: 0, w: 100, h: 40, orthogonalWaypoints: [{ x: 10, y: Number.NaN }] }),
+    /orthogonalWaypoints/,
+  );
 });
 
 test('sanitizes rich text and rejects active asset URL schemes at the snapshot boundary', () => {

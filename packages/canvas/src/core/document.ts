@@ -155,6 +155,7 @@ function parseShape(input: unknown): CanvasShape {
       bend: readOptionalBoundedNumber(input, 'bend', CANVAS_LIMITS.coordinate),
       routing: readOptionalRouting(input, 'routing'),
       orthogonalVariant: readOptionalOrthogonalVariant(input, 'orthogonalVariant'),
+      orthogonalWaypoints: readOptionalOrthogonalWaypoints(input, 'orthogonalWaypoints'),
       arrowStart: readOptionalArrowCap(input, 'arrowStart'),
       arrowEnd: readOptionalArrowCap(input, 'arrowEnd'),
     };
@@ -353,6 +354,20 @@ function readOptionalOrthogonalVariant(input: Record<string, unknown>, key: stri
     throw new CanvasValidationError(`Canvas shape ${key} is invalid.`);
   }
   return value;
+}
+
+function readOptionalOrthogonalWaypoints(input: Record<string, unknown>, key: string): CanvasArrowShape['orthogonalWaypoints'] {
+  const value = input[key];
+  if (value === undefined) return undefined;
+  if (!Array.isArray(value) || value.length > 100) {
+    throw new CanvasValidationError(`Canvas shape ${key} must be an array of at most 100 points.`);
+  }
+  return value.map(point => {
+    if (!isRecord(point)) throw new CanvasValidationError(`Canvas shape ${key} points must be objects.`);
+    const x = readBoundedNumber(point, 'x', key, CANVAS_LIMITS.coordinate);
+    const y = readBoundedNumber(point, 'y', key, CANVAS_LIMITS.coordinate);
+    return { x, y };
+  });
 }
 
 function readOptionalArrowCap(input: Record<string, unknown>, key: string): 'none' | 'arrow' | 'dot' | undefined {

@@ -33,8 +33,7 @@ describe('arrow endpoints can be adjusted after creation', () => {
     const arrow = cv.shapes().find(s => s.type === 'arrow');
     assert.ok(arrow, 'addArrow creates an arrow');
     const bend = cv.canvasEl.querySelector('[data-canvas-arrow-bend-handle]');
-    assert.ok(bend, 'a selected arrow shows a bend handle');
-    assert.match(bend.style.top, /^-/, 'the bend handle sits above the relation input');
+    assert.equal(bend, null, 'a straight arrow does not show a curved bend handle');
     const relationLabel = cv.canvasEl.querySelector('[data-canvas-arrow-label]');
     assert.ok(relationLabel, 'a selected arrow shows an empty relation label pill');
     assert.equal(relationLabel.textContent, '관계 입력', 'the empty relation label pill explains its purpose');
@@ -53,6 +52,48 @@ describe('arrow endpoints can be adjusted after creation', () => {
       { x: Math.round(arrow.x), y: Math.round(arrow.y), w: Math.round(arrow.w + 70), h: 60 },
       'dragging the end handle moves the end point and keeps the start point',
     );
+
+    const routeButtons = ['직선', '곡선'].map(title => cv.canvasEl.querySelector(`button[title="${title}"]`));
+    assert.ok(routeButtons.every(Boolean), 'the Inspector keeps straight and curved route controls');
+    const orthogonalButton = cv.canvasEl.querySelector('button[title^="직각:"]');
+    assert.ok(orthogonalButton, 'the Inspector exposes a labelled orthogonal route control');
+    assert.equal(cv.canvasEl.querySelector('button[title="ㄱ"]'), null, 'legacy route glyphs are removed');
+    assert.equal(cv.canvasEl.querySelector('button[title="ㄴ"]'), null, 'legacy route glyphs are removed');
+    assert.equal(cv.canvasEl.querySelector('button[title="ㄷ"]'), null, 'legacy route glyphs are removed');
+    assert.equal(cv.canvasEl.querySelector('button[title="ㄹ"]'), null, 'legacy route glyphs are removed');
+    assert.ok(cv.canvasEl.querySelector('[data-canvas-inspector]')?.textContent?.includes('경로'), 'route controls are grouped');
+    assert.ok(cv.canvasEl.querySelector('[data-canvas-inspector]')?.textContent?.includes('시작'), 'start marker controls are grouped');
+    assert.ok(cv.canvasEl.querySelector('[data-canvas-inspector]')?.textContent?.includes('끝'), 'end marker controls are grouped');
+
+    const startMarker = cv.canvasEl.querySelector('button[title="시작점 표식"]');
+    const endMarker = cv.canvasEl.querySelector('button[title="끝점 표식"]');
+    assert.ok(startMarker && endMarker, 'start and end marker controls have semantic titles');
+    const hasActiveClass = button => button.className.split(/\s+/).includes('bg-blue-600');
+    assert.equal(hasActiveClass(startMarker), false, 'the default start marker is not falsely active');
+    assert.equal(hasActiveClass(endMarker), true, 'the default end arrow marker is active');
+
+    await cv.act(async () => { orthogonalButton.click(); });
+    assert.equal(cv.canvasEl.querySelector('[data-canvas-arrow-bend-handle]'), null, 'orthogonal mode does not show a curved bend handle');
+    const segmentHandle = cv.canvasEl.querySelector('[data-canvas-arrow-segment-handle]');
+    assert.ok(segmentHandle, 'orthogonal mode shows draggable internal segment handles');
+    const vectorPath = () => cv.canvasEl.querySelector(`g[data-canvas-vector-shape-id="${arrow.id}"] path`)?.getAttribute('d');
+    const beforeManualDrag = vectorPath();
+    const cursor = segmentHandle.style.cursor;
+    const handlePage = cursor === 'ew-resize' ? { x: 640, y: 430 } : { x: 640, y: 450 };
+    const movedPage = cursor === 'ew-resize' ? { x: 690, y: 430 } : { x: 640, y: 500 };
+    const handleClient = cv.pageToClient(handlePage.x, handlePage.y);
+    const movedClient = cv.pageToClient(movedPage.x, movedPage.y);
+    await cv.dispatch(segmentHandle, cv.pointer('pointerdown', handleClient.clientX, handleClient.clientY));
+    await cv.dispatch(window, cv.pointer('pointermove', movedClient.clientX, movedClient.clientY));
+    await cv.dispatch(window, cv.pointer('pointerup', movedClient.clientX, movedClient.clientY));
+    const manuallyRouted = cv.shapes().find(s => s.id === arrow.id);
+    assert.ok(manuallyRouted?.orthogonalWaypoints?.length, 'dragging an internal segment persists manual waypoints');
+    assert.notEqual(vectorPath(), beforeManualDrag, 'dragging an internal segment changes the rendered path');
+    const automaticButton = cv.canvasEl.querySelector('button[title="직각 경로를 자동으로 다시 계산"]');
+    assert.ok(automaticButton, 'manual routing exposes an automatic reset control');
+    await cv.act(async () => { automaticButton.click(); });
+    const autoRouted = cv.shapes().find(s => s.id === arrow.id);
+    assert.equal(autoRouted?.orthogonalWaypoints, undefined, 'automatic reset clears manual waypoints');
   });
 
   it('detaches a connected arrow endpoint onto empty space and reattaches it to a node', async () => {

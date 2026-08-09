@@ -65,6 +65,10 @@ export interface CanvasArrowShape extends CanvasShapeBase {
     readonly bend?: number;
     readonly routing?: 'straight' | 'curved' | 'orthogonal';
     readonly orthogonalVariant?: OrthogonalVariant;
+    readonly orthogonalWaypoints?: readonly {
+        readonly x: number;
+        readonly y: number;
+    }[];
     readonly arrowStart?: 'none' | 'arrow' | 'dot';
     readonly arrowEnd?: 'none' | 'arrow' | 'dot';
 }

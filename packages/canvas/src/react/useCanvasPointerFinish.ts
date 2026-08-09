@@ -170,7 +170,7 @@ export function useCanvasPointerFinish({
         return;
       }
 
-      if (interaction.kind === 'move' || interaction.kind === 'resize' || interaction.kind === 'rotate' || interaction.kind === 'arrow-endpoint') {
+      if (interaction.kind === 'move' || interaction.kind === 'resize' || interaction.kind === 'rotate' || interaction.kind === 'orthogonal-segment' || interaction.kind === 'arrow-endpoint') {
         endHistory();
       }
       // Deferred double-click decision: the second press of a quick pair

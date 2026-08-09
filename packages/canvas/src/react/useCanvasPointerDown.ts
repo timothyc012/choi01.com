@@ -58,6 +58,7 @@ export interface PointerDownHandlers {
   onRotateHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
   onConnectHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
   onBendHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
+  onOrthogonalSegmentHandleDown: (event: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => void;
   onArrowEndpointDown: (event: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
 }
 
@@ -273,6 +274,13 @@ export function useCanvasPointerDown({
     applyInteraction({ kind: 'bend', id: shape.id });
   };
 
+  const onOrthogonalSegmentHandleDown = (e: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => {
+    e.stopPropagation();
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    beginHistory();
+    applyInteraction({ kind: 'orthogonal-segment', id: shape.id, segmentIndex });
+  };
+
   /** Drag an arrow endpoint to move it, or drop it on a node to (re)attach. */
   const onArrowEndpointDown = (e: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => {
     e.stopPropagation();
@@ -281,5 +289,5 @@ export function useCanvasPointerDown({
     applyInteraction({ kind: 'arrow-endpoint', id: shape.id, endpoint, hoverId: null });
   };
 
-  return { onPointerDown, onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onBendHandleDown, onArrowEndpointDown };
+  return { onPointerDown, onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onBendHandleDown, onOrthogonalSegmentHandleDown, onArrowEndpointDown };
 }

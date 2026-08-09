@@ -35,6 +35,7 @@ export interface PointerDownHandlers {
     onRotateHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
     onConnectHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
     onBendHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
+    onOrthogonalSegmentHandleDown: (event: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => void;
     onArrowEndpointDown: (event: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
 }
 export declare function useCanvasPointerDown({ containerRef, editorRef, pointers, cameraRef, shapesRef, toolRef, activeColorRef, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerDownOptions): PointerDownHandlers;

@@ -11,7 +11,7 @@ import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasTool, Or
  */
 export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../core/index.js';
 export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, CanvasTool, OrthogonalVariant } from '../core/index.js';
-type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'arrowStart' | 'arrowEnd'> & {
+type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'orthogonalWaypoints' | 'arrowStart' | 'arrowEnd'> & {
     id: string;
     points?: [number, number][];
     fromId?: string;
@@ -19,6 +19,10 @@ type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape
     bend?: number;
     routing?: 'straight' | 'curved' | 'orthogonal';
     orthogonalVariant?: OrthogonalVariant;
+    orthogonalWaypoints?: {
+        x: number;
+        y: number;
+    }[];
     arrowStart?: 'none' | 'arrow' | 'dot';
     arrowEnd?: 'none' | 'arrow' | 'dot';
 } : never;

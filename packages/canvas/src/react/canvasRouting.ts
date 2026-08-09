@@ -111,6 +111,54 @@ export function compactPath(points: OrthogonalPoint[]) {
   return out;
 }
 
+function compactOrthogonalPath(points: OrthogonalPoint[]) {
+  const out: OrthogonalPoint[] = [];
+  for (const point of points) {
+    const previous = out[out.length - 1];
+    if (previous && previous.x === point.x && previous.y === point.y) continue;
+    const beforePrevious = out[out.length - 2];
+    if (beforePrevious && previous
+      && ((beforePrevious.x === previous.x && previous.x === point.x)
+        || (beforePrevious.y === previous.y && previous.y === point.y))) {
+      out[out.length - 1] = point;
+      continue;
+    }
+    out.push(point);
+  }
+  return out;
+}
+
+function pathThroughWaypoints(start: OrthogonalPoint, end: OrthogonalPoint, waypoints: readonly OrthogonalPoint[]) {
+  const route: OrthogonalPoint[] = [start];
+  for (const point of [...waypoints, end]) {
+    const previous = route[route.length - 1];
+    if (!previous) {
+      route.push(point);
+      continue;
+    }
+    if (previous.x === point.x || previous.y === point.y) {
+      route.push(point);
+      continue;
+    }
+    route.push({ x: point.x, y: previous.y }, point);
+  }
+  return compactOrthogonalPath(route);
+}
+
+export function moveOrthogonalSegment(points: readonly OrthogonalPoint[], segmentIndex: number, coordinate: number) {
+  const start = points[segmentIndex];
+  const end = points[segmentIndex + 1];
+  if (!start || !end || !Number.isFinite(coordinate) || (start.x !== end.x && start.y !== end.y)) return [...points];
+  const replacement = start.x === end.x
+    ? [start, { x: coordinate, y: start.y }, { x: coordinate, y: end.y }, end]
+    : [start, { x: start.x, y: coordinate }, { x: end.x, y: coordinate }, end];
+  return compactOrthogonalPath([
+    ...points.slice(0, segmentIndex),
+    ...replacement,
+    ...points.slice(segmentIndex + 2),
+  ]);
+}
+
 function selectShortestPath(paths: OrthogonalPoint[][], obstacles: BoundingBox[]) {
   const safe: OrthogonalPoint[][] = [];
   const blocked: OrthogonalPoint[][] = [];
@@ -177,7 +225,14 @@ function variantPath(start: OrthogonalPoint, end: OrthogonalPoint, variant: Orth
   return [];
 }
 
-export function orthogonalPathPoints(start: OrthogonalPoint, end: OrthogonalPoint, obstacles: BoundingBox[] = [], variant: OrthogonalVariant = 'elbow') {
+export function orthogonalPathPoints(
+  start: OrthogonalPoint,
+  end: OrthogonalPoint,
+  obstacles: BoundingBox[] = [],
+  variant: OrthogonalVariant = 'elbow',
+  waypoints: readonly OrthogonalPoint[] = [],
+) {
+  if (waypoints.length > 0) return pathThroughWaypoints(start, end, waypoints);
   const sideAt = start.side ?? (Math.abs(end.x - start.x) >= Math.abs(end.y - start.y) ? 'e' : 's');
   const endSide = end.side ?? (sideAt === 'e' || sideAt === 'w' ? 'w' : 'n');
   const horizFirst = sideAt === 'e' || sideAt === 'w';

@@ -65,7 +65,7 @@ export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../
 export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, CanvasTool, OrthogonalVariant } from '../core/index.ts';
 
 type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape
-  ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'arrowStart' | 'arrowEnd'> & {
+  ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'orthogonalWaypoints' | 'arrowStart' | 'arrowEnd'> & {
       id: string;
       points?: [number, number][];
       fromId?: string;
@@ -73,6 +73,7 @@ type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape
       bend?: number;
       routing?: 'straight' | 'curved' | 'orthogonal';
       orthogonalVariant?: OrthogonalVariant;
+      orthogonalWaypoints?: { x: number; y: number }[];
       arrowStart?: 'none' | 'arrow' | 'dot';
       arrowEnd?: 'none' | 'arrow' | 'dot';
     }
@@ -236,6 +237,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     onRotateHandleDown,
     onConnectHandleDown,
     onBendHandleDown,
+    onOrthogonalSegmentHandleDown,
     onArrowEndpointDown,
   } = useCanvasRuntimeInteractions({
     ref,
@@ -396,6 +398,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         renderShapeBody={renderShapeBody}
         setEditingId={setEditingId}
         onBendHandleDown={onBendHandleDown}
+        onOrthogonalSegmentHandleDown={onOrthogonalSegmentHandleDown}
         onResizeHandleDown={onResizeHandleDown}
         onRotateHandleDown={onRotateHandleDown}
         onConnectHandleDown={onConnectHandleDown}
