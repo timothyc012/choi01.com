@@ -12,9 +12,18 @@
     "url": "https://github.com/timothyc012/chois-canvas/issues"
   },
   "homepage": "https://github.com/timothyc012/chois-canvas#readme",
-  "keywords": ["canvas", "diagram", "whiteboard", "react", "typescript"],
+  "keywords": [
+    "canvas",
+    "diagram",
+    "whiteboard",
+    "react",
+    "typescript"
+  ],
   "type": "module",
-  "sideEffects": ["./dist/canvas-react.css", "./src/react/styles.css"],
+  "sideEffects": [
+    "./dist/canvas-react.css",
+    "./src/react/styles.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/core/index.d.ts",
@@ -34,19 +43,24 @@
       "import": "./dist/canvas-react.js"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=18"
   },
   "peerDependencies": {
+    "lucide-react": ">=0.562 <1",
     "react": ">=18 <20",
-    "react-dom": ">=18 <20",
-    "lucide-react": ">=0.562 <1"
+    "react-dom": ">=18 <20"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
-    "@types/node": "^22.10.2",
+    "happy-dom": "^20.11.1",
     "lucide-react": "^0.562.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"

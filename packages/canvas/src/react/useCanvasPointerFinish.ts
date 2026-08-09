@@ -2,10 +2,13 @@ import { useEffect } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
 import { centreOf, rawBounds } from './canvasGeometry';
+import { DOUBLE_CLICK_DRIFT_PX } from './canvasPointerTypes';
 
 type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'pointers'
   | 'interactionRef'
+  | 'cameraRef'
+  | 'toPage'
   | 'shapesRef'
   | 'setShapes'
   | 'setEditingId'
@@ -24,6 +27,8 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
 export function useCanvasPointerFinish({
   pointers,
   interactionRef,
+  cameraRef,
+  toPage,
   shapesRef,
   setShapes,
   setEditingId,
@@ -165,8 +170,17 @@ export function useCanvasPointerFinish({
         return;
       }
 
-      if (interaction.kind === 'move' || interaction.kind === 'resize' || interaction.kind === 'rotate') {
+      if (interaction.kind === 'move' || interaction.kind === 'resize' || interaction.kind === 'rotate' || interaction.kind === 'arrow-endpoint') {
         endHistory();
+      }
+      // Deferred double-click decision: the second press of a quick pair
+      // started a normal move gesture so grab-and-drag keeps repositioning
+      // the node; opening the editor happens only when that press released
+      // where it started.
+      if (interaction.kind === 'move' && interaction.editOnReleaseId && e.type === 'pointerup') {
+        const release = toPage(e.clientX, e.clientY);
+        const driftPx = Math.hypot(release.x - interaction.startX, release.y - interaction.startY) * cameraRef.current.z;
+        if (driftPx <= DOUBLE_CLICK_DRIFT_PX) setEditingId(interaction.editOnReleaseId);
       }
       applyInteraction({ kind: 'none' });
     };
@@ -177,5 +191,5 @@ export function useCanvasPointerFinish({
       window.removeEventListener('pointerup', finish);
       window.removeEventListener('pointercancel', finish);
     };
-  }, [applyInteraction, createId, endHistory, interactionRef, onToolChange, pointers, selectNow, setAnnouncement, setEditingId, setShapes, shapesRef]);
+  }, [applyInteraction, cameraRef, createId, endHistory, interactionRef, onToolChange, pointers, selectNow, setAnnouncement, setEditingId, setShapes, shapesRef, toPage]);
 }

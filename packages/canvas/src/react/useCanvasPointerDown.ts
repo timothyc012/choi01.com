@@ -58,6 +58,7 @@ export interface PointerDownHandlers {
   onRotateHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
   onConnectHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
   onBendHandleDown: (event: ReactPointerEvent, shape: CanvasShape) => void;
+  onArrowEndpointDown: (event: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
 }
 
 export function useCanvasPointerDown({
@@ -189,19 +190,16 @@ export function useCanvasPointerDown({
         && textualTypes.includes(hit.type)
         && lastClickRef.current?.id === hit.id
         && now - lastClickRef.current.time < REPEAT_CLICK_WINDOW_MS;
-      lastClickRef.current = { id: hit.id, time: now };
-
-      if (isRepeatClick) {
-        // A quick second click on the same shape opens it for editing —
-        // handled here instead of leaning on the browser's native dblclick,
-        // which requires the two clicks to land at nearly the same pixel and
-        // silently does nothing when a real mouse/trackpad drifts a few
-        // pixels between clicks.
-        selectNow(new Set([hit.id]));
-        setEditingId(hit.id);
-        lastClickRef.current = null;
-        return;
-      }
+      // A quick second press on the same shape *might* be a double-click —
+      // "open the editor", handled here instead of leaning on the browser's
+      // native dblclick, which requires the two clicks to land at nearly the
+      // same pixel and silently does nothing when a real mouse/trackpad
+      // drifts a few pixels between clicks. At pointer-down we cannot tell a
+      // double-click apart from a grab-and-drag, so always start the move
+      // gesture and tag it with the shape; the pointer-up handler opens the
+      // editor only when the press released where it started.
+      const editOnReleaseId = isRepeatClick ? hit.id : undefined;
+      lastClickRef.current = isRepeatClick ? null : { id: hit.id, time: now };
 
       const base = e.shiftKey ? new Set(selected).add(hit.id) : (selected.has(hit.id) ? selected : new Set([hit.id]));
       const nextSelected = expandToGroups(base);
@@ -223,7 +221,7 @@ export function useCanvasPointerDown({
       }
 
       beginHistory();
-      applyInteraction({ kind: 'move', startX: p.x, startY: p.y, origin });
+      applyInteraction({ kind: 'move', startX: p.x, startY: p.y, origin, editOnReleaseId });
       return;
     }
 
@@ -275,5 +273,13 @@ export function useCanvasPointerDown({
     applyInteraction({ kind: 'bend', id: shape.id });
   };
 
-  return { onPointerDown, onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onBendHandleDown };
+  /** Drag an arrow endpoint to move it, or drop it on a node to (re)attach. */
+  const onArrowEndpointDown = (e: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => {
+    e.stopPropagation();
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    beginHistory();
+    applyInteraction({ kind: 'arrow-endpoint', id: shape.id, endpoint, hoverId: null });
+  };
+
+  return { onPointerDown, onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onBendHandleDown, onArrowEndpointDown };
 }

@@ -234,6 +234,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     onRotateHandleDown,
     onConnectHandleDown,
     onBendHandleDown,
+    onArrowEndpointDown,
   } = useCanvasRuntimeInteractions({
     ref,
     containerRef,
@@ -396,6 +397,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         onResizeHandleDown={onResizeHandleDown}
         onRotateHandleDown={onRotateHandleDown}
         onConnectHandleDown={onConnectHandleDown}
+        onArrowEndpointDown={onArrowEndpointDown}
       />
 
       {inspectorShape && (

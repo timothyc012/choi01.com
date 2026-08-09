@@ -39,6 +39,7 @@ export type Interaction = {
     startX: number;
     startY: number;
     origin: Map<string, CanvasShape>;
+    editOnReleaseId?: string;
 } | {
     kind: 'resize';
     id: string;
@@ -67,11 +68,18 @@ export type Interaction = {
     kind: 'bend';
     id: string;
 } | {
+    kind: 'arrow-endpoint';
+    id: string;
+    endpoint: 'start' | 'end';
+    hoverId: string | null;
+} | {
     kind: 'erasing';
 };
 export declare const MIN_ZOOM = 0.1;
 export declare const MAX_ZOOM = 4;
 export declare const ERASER_RADIUS = 14;
+/** Screen-space drift tolerated between the two presses of a double-click. */
+export declare const DOUBLE_CLICK_DRIFT_PX = 4;
 export declare const CONNECTABLE: CanvasShapeType[];
 export type InteractionRef = RefObject<Interaction>;
 //# sourceMappingURL=canvasPointerTypes.d.ts.map

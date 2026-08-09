@@ -23,6 +23,7 @@ interface CanvasObjectLayerProps {
   renderShapeBody: (shape: CanvasShape) => React.ReactNode;
   setEditingId: (id: string | null) => void;
   onBendHandleDown: (event: React.PointerEvent, shape: CanvasShape) => void;
+  onArrowEndpointDown: (event: React.PointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
   onResizeHandleDown: (event: React.PointerEvent, shape: CanvasShape, handle: 'nw' | 'ne' | 'sw' | 'se') => void;
   onRotateHandleDown: (event: React.PointerEvent, shape: CanvasShape) => void;
   onConnectHandleDown: (event: React.PointerEvent, shape: CanvasShape) => void;
@@ -32,7 +33,7 @@ interface CanvasObjectLayerProps {
 export function CanvasObjectLayer({
   visiblePaintOrder, selected, editingId, camera, shapeById, allShapes, peerCursors,
   isDarkMode, renderEditor, renderShapeBody, setEditingId, onBendHandleDown,
-  onResizeHandleDown, onRotateHandleDown, onConnectHandleDown,
+  onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onArrowEndpointDown,
 }: CanvasObjectLayerProps) {
   return (
     <>
@@ -53,7 +54,8 @@ export function CanvasObjectLayer({
             const relationLabelText = shapePlainText(s).trim();
             if (!label && !isEditing && !isSelected) return null;
             return (
-              <div key={s.id} className="absolute flex items-center justify-center" style={{ left: mid.x - 90, top: mid.y - 18, width: 180, height: 36 }} onDoubleClick={event => { event.stopPropagation(); setEditingId(s.id); }}>
+              <React.Fragment key={s.id}>
+              <div className="absolute flex items-center justify-center" style={{ left: mid.x - 90, top: mid.y - 18, width: 180, height: 36 }} onDoubleClick={event => { event.stopPropagation(); setEditingId(s.id); }}>
                 {(label || isEditing || showRelationPlaceholder) && <div
                   data-canvas-arrow-label="true"
                   data-canvas-arrow-label-placeholder={showRelationPlaceholder ? 'true' : undefined}
@@ -77,6 +79,20 @@ export function CanvasObjectLayer({
                 </div>}
                 {isSelected && selected.size === 1 && <div onPointerDown={event => onBendHandleDown(event, s)} title="드래그해서 곡선으로 (Curve)" className="absolute rounded-full bg-white border-2 border-blue-600" style={{ width: 10 / camera.z, height: 10 / camera.z, left: `calc(50% - ${5 / camera.z}px)`, top: `calc(50% - ${5 / camera.z}px)`, cursor: 'grab' }} />}
               </div>
+              {isSelected && selected.size === 1 && (['start', 'end'] as const).map(endpoint => {
+                const point = endpoint === 'start' ? geometry.start : geometry.end;
+                return (
+                  <div
+                    key={endpoint}
+                    data-canvas-arrow-endpoint={endpoint}
+                    onPointerDown={event => onArrowEndpointDown(event, s, endpoint)}
+                    title="드래그해서 끝점 이동 (노드 위에 놓으면 연결)"
+                    className="absolute bg-white border-2 border-blue-600 rounded-full"
+                    style={{ width: 12 / camera.z, height: 12 / camera.z, left: point.x - 6 / camera.z, top: point.y - 6 / camera.z, cursor: 'grab' }}
+                  />
+                );
+              })}
+              </React.Fragment>
             );
           }
           const isSelected = selected.has(s.id);

@@ -80,12 +80,25 @@ export function useCanvasEditorState({
   const editorRef = useRef<HTMLDivElement | null>(null);
   const [localShapes, setLocalShapes] = useState<CanvasShape[]>([]);
   const controlled = controlledShapes !== undefined && onShapesChange !== undefined;
-  const shapes = useMemo(
-    () => (controlled ? controlledShapes ?? [] : localShapes)
-      .map(sanitizeShapeForCanvas)
-      .filter((shape): shape is CanvasShape => shape !== null),
-    [controlled, controlledShapes, localShapes],
-  );
+  // Sanitizing every shape on each render makes long gestures (drawing,
+  // dragging) stall on dense boards: the full parse/HTML boundary only needs
+  // to run for shape objects that actually changed. Cache the result per
+  // shape reference — immutable updates mint new objects, so a cache miss is
+  // exactly the new/untrusted data that must pass through the boundary.
+  const sanitizeCache = useRef(new WeakMap<CanvasShape, CanvasShape | null>());
+  const shapes = useMemo(() => {
+    const cache = sanitizeCache.current;
+    return (controlled ? controlledShapes ?? [] : localShapes)
+      .map(shape => {
+        let sanitized = cache.get(shape);
+        if (sanitized === undefined) {
+          sanitized = sanitizeShapeForCanvas(shape);
+          cache.set(shape, sanitized);
+        }
+        return sanitized;
+      })
+      .filter((shape): shape is CanvasShape => shape !== null);
+  }, [controlled, controlledShapes, localShapes]);
   const onShapesChangeRef = useRef(onShapesChange);
   onShapesChangeRef.current = onShapesChange;
   const setShapes = useCallback((updater: SetStateAction<CanvasShape[]>) => {

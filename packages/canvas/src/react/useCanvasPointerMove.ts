@@ -5,6 +5,7 @@ import {
   bounds,
   centreOf,
   computeSnap,
+  edgePoint,
   eraseAt,
   hitTest,
   toLocal,
@@ -116,6 +117,40 @@ export function useCanvasPointerMove({
         // Project the drag onto the chord normal; that distance *is* the bend.
         const bend = ((p.x - midX) * (-dy / len) + (p.y - midY) * (dx / len));
         setShapes(prev => prev.map(s => (s.id === interaction.id ? { ...s, bend } : s)));
+        return;
+      }
+
+      if (interaction.kind === 'arrow-endpoint') {
+        const all = shapesRef.current;
+        const arrow = all.find(s => s.id === interaction.id);
+        if (!arrow) return;
+        const byId = new Map(all.map(s => [s.id, s]));
+        const geometry = arrowGeometry(arrow, byId, all);
+        // The endpoint that isn't being dragged stays anchored where it is.
+        const fixed = interaction.endpoint === 'start' ? geometry.end : geometry.start;
+        // Dropping onto a connectable shape (re)attaches the endpoint to it,
+        // mirroring the "+" connect-handle behaviour.
+        const target = [...all].reverse().find(s => (
+          s.id !== arrow.id &&
+          CONNECTABLE.includes(s.type) &&
+          hitTest(s, p.x, p.y, cam.z, byId, all)
+        ));
+        const tip = target ? edgePoint(target, fixed.x, fixed.y) : { x: p.x, y: p.y };
+        applyInteraction({ ...interaction, hoverId: target?.id ?? null });
+        setShapes(prev => prev.map(s => {
+          if (s.id !== arrow.id) return s;
+          const start = interaction.endpoint === 'start' ? tip : fixed;
+          const end = interaction.endpoint === 'end' ? tip : fixed;
+          return {
+            ...s,
+            x: start.x,
+            y: start.y,
+            w: end.x - start.x,
+            h: end.y - start.y,
+            fromId: interaction.endpoint === 'start' ? target?.id : s.fromId,
+            toId: interaction.endpoint === 'end' ? target?.id : s.toId,
+          };
+        }));
         return;
       }
 
