@@ -125,7 +125,7 @@ export function CanvasObjectLayer({
           );
         })}
       </div>
-      {allShapes.filter(shape => (shape.type === 'draw' || shape.type === 'arrow') && selected.has(shape.id)).map(shape => {
+      {allShapes.filter(shape => shape.type === 'arrow' && selected.has(shape.id)).map(shape => {
         const box = bounds(shape);
         return <div key={`sel-${shape.id}`} className="absolute pointer-events-none border-2 border-blue-600/60 rounded" style={{ left: (box.minX - camera.x) * camera.z - 4, top: (box.minY - camera.y) * camera.z - 4, width: (box.maxX - box.minX) * camera.z + 8, height: (box.maxY - box.minY) * camera.z + 8 }} />;
       })}

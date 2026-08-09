@@ -84,10 +84,13 @@ export function useCanvasViewInteractions({
   useEffect(() => { onSelectionChange?.(selectionInfo); }, [onSelectionChange, selectionInfo]);
 
   const inspectorShape = useMemo(() => {
-    if (editingId) return shapes.find(s => s.id === editingId) ?? null;
+    if (editingId) {
+      const editing = shapes.find(s => s.id === editingId);
+      return editing && editing.type !== 'image' && editing.type !== 'draw' ? editing : null;
+    }
     if (selected.size !== 1) return null;
     const only = shapes.find(s => selected.has(s.id));
-    return only && only.type !== 'image' ? only : null;
+    return only && only.type !== 'image' && only.type !== 'draw' ? only : null;
   }, [editingId, selected, shapes]);
 
   const cursorReportTimer = useRef<number>(0);
