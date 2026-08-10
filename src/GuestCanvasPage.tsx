@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   MousePointer, Hand, StickyNote, RectangleHorizontal, Circle, Triangle, Diamond, Hexagon, Star,
   Frame, Type, GitCommit, PenTool, Eraser,
+  Highlighter, Minus,
   Undo2, Redo2, Copy, Trash2, Group, Ungroup,
   ZoomIn, ZoomOut, Maximize2, Locate, Sparkles,
   Sun, Moon, Download, FolderOpen, ArrowLeft, Image as ImageIcon, FileCode,
@@ -12,8 +13,25 @@ import {
 } from 'chois-canvas/react';
 import { parseCanvasSnapshot } from 'chois-canvas/core';
 
+type CanvasStrokeWidth = 2 | 4 | 6 | 8;
+type GuestCanvasTool = CanvasTool | 'highlighter';
+type StrokeCanvasProps = Omit<React.ComponentProps<typeof InfiniteCanvas>, 'tool' | 'onToolChange'> & {
+  readonly tool: GuestCanvasTool;
+  readonly drawStrokeWidth: CanvasStrokeWidth;
+  readonly onToolChange: (tool: GuestCanvasTool) => void;
+};
+
+function withStrokeStyleProps(Component: React.ElementType) {
+  return React.forwardRef<InfiniteCanvasHandle, StrokeCanvasProps>((props, ref) => (
+    React.createElement(Component, { ...props, ref })
+  ));
+}
+
+const StrokeCanvas = withStrokeStyleProps(InfiniteCanvas);
+
 const STICKY_COLORS: CanvasColorKey[] = ['yellow', 'pink', 'purple', 'blue', 'green', 'peach'];
 const ZOOM_PRESETS = [25, 50, 75, 100, 150, 200, 400];
+const DRAW_STROKE_WIDTHS = [2, 4, 6, 8] as const satisfies readonly CanvasStrokeWidth[];
 
 const SHAPE_MENU_TOOLS = ['rect', 'ellipse', 'triangle', 'diamond', 'hexagon', 'star'] as const;
 const SHAPE_ICON: Record<(typeof SHAPE_MENU_TOOLS)[number], typeof RectangleHorizontal> = {
@@ -62,7 +80,8 @@ export const GuestCanvasPage: React.FC = () => {
   const canvasRef = useRef<InfiniteCanvasHandle>(null);
   const importInputRef = useRef<HTMLInputElement>(null);
 
-  const [activeTool, setActiveTool] = useState<CanvasTool>('select');
+  const [activeTool, setActiveTool] = useState<GuestCanvasTool>('select');
+  const [drawStrokeWidth, setDrawStrokeWidth] = useState<CanvasStrokeWidth>(4);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [selection, setSelection] = useState<CanvasSelectionInfo>({
@@ -72,6 +91,7 @@ export const GuestCanvasPage: React.FC = () => {
   const [showNotice, setShowNotice] = useState(true);
   const [showStickyPalette, setShowStickyPalette] = useState(false);
   const [showShapesMenu, setShowShapesMenu] = useState(false);
+  const [showStrokeWidths, setShowStrokeWidths] = useState(false);
 
   const markDirty = useCallback(() => setHasUnsavedChanges(true), []);
 
@@ -161,7 +181,7 @@ export const GuestCanvasPage: React.FC = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [hasUnsavedChanges]);
 
-  const toolButtonClass = (tool: CanvasTool, danger = false) =>
+  const toolButtonClass = (tool: GuestCanvasTool, danger = false) =>
     `gc-tool${activeTool === tool ? (danger ? ' is-active-danger' : ' is-active') : ''}`;
 
   return (
@@ -217,11 +237,12 @@ export const GuestCanvasPage: React.FC = () => {
       </header>
 
       <div className="gc-stage">
-        <InfiniteCanvas
+        <StrokeCanvas
           ref={canvasRef}
           boardIdentity="guest"
           isDarkMode={isDarkMode}
           tool={activeTool}
+          drawStrokeWidth={drawStrokeWidth}
           onToolChange={setActiveTool}
           onDirty={markDirty}
           onZoomChange={setZoom}
@@ -230,7 +251,7 @@ export const GuestCanvasPage: React.FC = () => {
 
         {/* Floating toolbar */}
         <div className="gc-toolbar">
-          <button type="button" onClick={() => setActiveTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동">
+          <button type="button" onClick={() => setActiveTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동" aria-label="선택 / 이동">
             <MousePointer className="gc-icon" />
           </button>
           <button type="button" onClick={() => setActiveTool('hand')} className={toolButtonClass('hand')} title="손 도구 / 화면 이동 (H)">
@@ -240,7 +261,7 @@ export const GuestCanvasPage: React.FC = () => {
           <div className="gc-popover-anchor">
             <button
               type="button"
-              onClick={() => { setShowStickyPalette(prev => !prev); setShowShapesMenu(false); }}
+              onClick={() => { setShowStickyPalette(prev => !prev); setShowShapesMenu(false); setShowStrokeWidths(false); }}
               className={`gc-tool gc-tool-sticky${showStickyPalette || activeTool === 'note' ? ' is-active-sticky' : ''}`}
               title="스티커 메모지 추가"
             >
@@ -270,13 +291,13 @@ export const GuestCanvasPage: React.FC = () => {
           <div className="gc-popover-anchor">
             <button
               type="button"
-              onClick={() => { setShowShapesMenu(prev => !prev); setShowStickyPalette(false); }}
-              className={toolButtonClass((SHAPE_MENU_TOOLS as readonly CanvasTool[]).includes(activeTool) ? activeTool : 'rect')}
+              onClick={() => { setShowShapesMenu(prev => !prev); setShowStickyPalette(false); setShowStrokeWidths(false); }}
+              className={toolButtonClass((SHAPE_MENU_TOOLS as readonly GuestCanvasTool[]).includes(activeTool) ? activeTool : 'rect')}
               title="도형 (사각형·원·삼각형·마름모·육각형·별)"
             >
               {(() => {
                 const Icon = SHAPE_ICON[
-                  (SHAPE_MENU_TOOLS as readonly CanvasTool[]).includes(activeTool)
+                  (SHAPE_MENU_TOOLS as readonly GuestCanvasTool[]).includes(activeTool)
                     ? (activeTool as (typeof SHAPE_MENU_TOOLS)[number])
                     : 'rect'
                 ];
@@ -312,9 +333,42 @@ export const GuestCanvasPage: React.FC = () => {
           <button type="button" onClick={() => setActiveTool('arrow')} className={toolButtonClass('arrow')} title="연결선 / 화살표 (드래그해서 그리기)">
             <GitCommit className="gc-icon" />
           </button>
-          <button type="button" onClick={() => setActiveTool('draw')} className={toolButtonClass('draw')} title="자유 드로잉 (P)">
+          <button type="button" onClick={() => setActiveTool('draw')} className={toolButtonClass('draw')} title="펜 (P)" aria-label="펜">
             <PenTool className="gc-icon" />
           </button>
+          <button type="button" onClick={() => setActiveTool('highlighter')} className={toolButtonClass('highlighter')} title="하이라이터" aria-label="하이라이터">
+            <Highlighter className="gc-icon" />
+          </button>
+          <div className="gc-popover-anchor">
+            <button
+              type="button"
+              onClick={() => { setShowStrokeWidths(prev => !prev); setShowStickyPalette(false); setShowShapesMenu(false); }}
+              className="gc-tool"
+              title="선 굵기"
+              aria-label="선 굵기"
+            >
+              <Minus className="gc-icon" />
+            </button>
+            {showStrokeWidths && (
+              <div className="gc-popover gc-shapes-menu">
+                {DRAW_STROKE_WIDTHS.map(width => (
+                  <button
+                    key={width}
+                    type="button"
+                    onClick={() => {
+                      setDrawStrokeWidth(width);
+                      setShowStrokeWidths(true);
+                    }}
+                    className={`gc-tool${drawStrokeWidth === width ? ' is-active' : ''}`}
+                    title={`굵기 ${width}`}
+                    aria-label={`굵기 ${width}`}
+                  >
+                    {width}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <button type="button" onClick={() => setActiveTool('eraser')} className={toolButtonClass('eraser', true)} title="지우개 — 클릭한 개체 삭제">
             <Eraser className="gc-icon" />
           </button>
