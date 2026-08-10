@@ -1,6 +1,6 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react';
-import type { CanvasColorKey, CanvasTool } from '../core/index.js';
-import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasColorKey } from '../core/index.js';
+import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes';
 interface EditorStateOptions {

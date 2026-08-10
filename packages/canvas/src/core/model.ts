@@ -29,6 +29,10 @@ export type CanvasFontKey =
 
 export type CanvasTextAlign = 'left' | 'center' | 'right';
 
+export type CanvasStrokeWidth = 2 | 4 | 6 | 8;
+
+export type CanvasDrawMode = 'pen' | 'highlighter';
+
 export type OrthogonalVariant = 'elbow' | 'reverse' | 'u' | 'zigzag';
 
 export type CanvasShapeType =
@@ -57,6 +61,17 @@ export type CanvasSimpleShapeType =
   | 'diamond'
   | 'hexagon'
   | 'star';
+
+export type CanvasOutlinedShapeType =
+  | 'frame'
+  | 'rect'
+  | 'ellipse'
+  | 'triangle'
+  | 'diamond'
+  | 'hexagon'
+  | 'star';
+
+export type CanvasUnoutlinedShapeType = 'note' | 'card' | 'text';
 
 export type CanvasTool =
   | 'select'
@@ -130,12 +145,20 @@ export interface CanvasShapeBase {
   readonly strokeStyle?: 'solid' | 'dashed' | 'dotted';
 }
 
-export interface CanvasRectShape extends CanvasShapeBase {
-  readonly type: CanvasSimpleShapeType;
+export interface CanvasOutlinedShape extends CanvasShapeBase {
+  readonly type: CanvasOutlinedShapeType;
+  readonly strokeWidth?: CanvasStrokeWidth;
 }
+
+export interface CanvasUnoutlinedShape extends CanvasShapeBase {
+  readonly type: CanvasUnoutlinedShapeType;
+}
+
+export type CanvasRectShape = CanvasOutlinedShape | CanvasUnoutlinedShape;
 
 export interface CanvasArrowShape extends CanvasShapeBase {
   readonly type: 'arrow';
+  readonly strokeWidth?: CanvasStrokeWidth;
   readonly fromId?: CanvasShapeId;
   readonly toId?: CanvasShapeId;
   readonly bend?: number;
@@ -149,6 +172,8 @@ export interface CanvasArrowShape extends CanvasShapeBase {
 export interface CanvasDrawShape extends CanvasShapeBase {
   readonly type: 'draw';
   readonly points: readonly (readonly [number, number])[];
+  readonly strokeWidth?: CanvasStrokeWidth;
+  readonly drawMode?: CanvasDrawMode;
 }
 
 export interface CanvasImageShape extends CanvasShapeBase {

@@ -82,10 +82,12 @@ export function createCanvasShapeRenderer({
     const html = shapeHtml(s);
 
     if (s.type === 'frame') {
+      const strokeWidth = s.strokeWidth ?? 2;
       return (
         <div
+          data-canvas-stroke-width={strokeWidth}
           className="w-full h-full rounded"
-          style={{ border: `${2 / camera.z}px solid ${isDarkMode ? CANVAS_UI_COLORS.slate600 : CANVAS_UI_COLORS.slate400}` }}
+          style={{ border: `${strokeWidth / camera.z}px solid ${isDarkMode ? CANVAS_UI_COLORS.slate600 : CANVAS_UI_COLORS.slate400}` }}
         >
           <div
             className="absolute font-semibold"
@@ -210,10 +212,11 @@ export function createCanvasShapeRenderer({
     const isPolygon = s.type === 'triangle' || s.type === 'diamond' || s.type === 'hexagon' || s.type === 'star';
 
     if (isPolygon) {
+      const strokeWidth = s.strokeWidth ?? 2;
       return (
         <div className="relative w-full h-full">
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox={`0 0 ${s.w} ${s.h}`} preserveAspectRatio="none">
-            <polygon points={polygonPoints(s.type, s.w, s.h)} fill={fill} stroke={border} strokeWidth={2} strokeLinejoin="round" />
+            <polygon data-canvas-stroke-width={strokeWidth} points={polygonPoints(s.type, s.w, s.h)} fill={fill} stroke={border} strokeWidth={strokeWidth / camera.z} strokeLinejoin="round" />
           </svg>
           <div className="absolute inset-0 flex items-center justify-center p-3" style={{ color: textCol }}>
             {isEditing
@@ -226,10 +229,12 @@ export function createCanvasShapeRenderer({
 
     // rect / ellipse — also used for the file-attachment card.
     const assetUrl = safeAssetUrl(s.src);
+    const strokeWidth = s.type === 'rect' || s.type === 'ellipse' ? s.strokeWidth ?? 2 : 2;
     return (
       <div
+        data-canvas-stroke-width={strokeWidth}
         className={`w-full h-full flex items-center justify-center p-3 ${s.type === 'ellipse' ? 'rounded-full' : 'rounded-xl'}`}
-        style={{ background: fill, border: `2px solid ${border}`, color: textCol }}
+        style={{ background: fill, border: `${strokeWidth / camera.z}px solid ${border}`, color: textCol }}
       >
         {isEditing ? renderEditor('font-medium', { color: textCol, fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }) : (
           <div data-canvas-text-view key="canvas-view" className="canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }}>

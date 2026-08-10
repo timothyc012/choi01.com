@@ -8,15 +8,18 @@ import {
   bezierAt,
   bounds,
   centreOf,
+  effectiveBorder,
+  effectiveFill,
   escapeHtml,
   htmlToLines,
+  polygonPoints,
   rawBounds,
   safeAssetUrl,
   shapeHtml,
   shapePlainText,
   strokePath,
 } from './canvasGeometry';
-import { pathMidpoint, toPath } from './canvasRouting';
+import { orthogonalEndAngle, pathMidpoint, segmentAngle, toPath } from './canvasRouting';
 import { fontStackForShape } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
 
@@ -69,25 +72,44 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
 
     const ink = s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink;
     if (s.type === 'draw' && s.points) {
-      return `<path d="${strokePath(s.points)}" fill="none" stroke="${ink}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+      const opacity = (s.drawMode ?? 'pen') === 'highlighter' ? ' stroke-opacity="0.35"' : '';
+      return `<path d="${strokePath(s.points)}" fill="none" stroke="${ink}" stroke-width="${s.strokeWidth ?? 3}"${opacity} stroke-linecap="round" stroke-linejoin="round"/>`;
     }
     if (s.type === 'arrow') {
       const g = arrowGeometry(s, new Map(all.map(x => [x.id, x])), all);
-      const orthPoint = g.routing === 'orthogonal' && g.pathPoints && g.pathPoints.length > 1
-        ? g.pathPoints[g.pathPoints.length - 2]
-        : null;
-      const near = g.routing === 'orthogonal' && orthPoint
-        ? orthPoint
-        : bezierAt(0.94, g.start, g.control, g.end);
-      const angle = Math.atan2(g.end.y - near.y, g.end.x - near.x);
-      const head = 14;
-      const p1 = `${g.end.x - head * Math.cos(angle - 0.4)},${g.end.y - head * Math.sin(angle - 0.4)}`;
-      const p2 = `${g.end.x - head * Math.cos(angle + 0.4)},${g.end.y - head * Math.sin(angle + 0.4)}`;
-      const d = g.routing === 'orthogonal' && g.pathPoints
-        ? toPath(g.pathPoints)
-        : (g.bend === 0
-          ? `M ${g.start.x} ${g.start.y} L ${g.end.x} ${g.end.y}`
-          : `M ${g.start.x} ${g.start.y} Q ${g.control.x} ${g.control.y} ${g.end.x} ${g.end.y}`);
+      const documentStrokeWidth = s.strokeWidth ?? 2.5;
+      const arrowheadSize = Math.max(10, 8 + documentStrokeWidth * 2);
+      const dotRadius = Math.max(4, 2 + documentStrokeWidth);
+      const pathPoints = g.routing === 'orthogonal' && g.pathPoints ? g.pathPoints : null;
+      const orthLine = pathPoints && pathPoints.length > 1;
+      const d = orthLine
+        ? toPath(pathPoints)
+        : g.routing === 'curved'
+          ? `M ${g.start.x} ${g.start.y} Q ${g.control.x} ${g.control.y} ${g.end.x} ${g.end.y}`
+          : `M ${g.start.x} ${g.start.y} L ${g.end.x} ${g.end.y}`;
+      const angle = orthLine
+        ? orthogonalEndAngle(pathPoints)
+        : g.routing === 'curved'
+          ? (() => {
+            const near = bezierAt(0.94, g.start, g.control, g.end);
+            return Math.atan2(g.end.y - near.y, g.end.x - near.x);
+          })()
+          : Math.atan2(g.end.y - g.start.y, g.end.x - g.start.x);
+      const startAngle = orthLine
+        ? segmentAngle(pathPoints[0], pathPoints[1])
+        : g.routing === 'orthogonal' && g.start.side
+          ? (g.start.side === 'e' ? 0 : g.start.side === 'w' ? Math.PI
+            : g.start.side === 's' ? Math.PI / 2 : -Math.PI / 2)
+          : segmentAngle(g.start, g.end);
+      const strokeDash = s.strokeStyle === 'dashed' ? ' stroke-dasharray="8 5"'
+        : s.strokeStyle === 'dotted' ? ' stroke-dasharray="1.5 4"' : '';
+      const capAt = (cap: 'none' | 'arrow' | 'dot' | undefined, tipX: number, tipY: number, dirAngle: number) => {
+        if (cap === 'dot') return `<circle cx="${tipX}" cy="${tipY}" r="${dotRadius}" fill="${ink}"/>`;
+        if (cap === 'none') return '';
+        const p1 = `${tipX - arrowheadSize * Math.cos(dirAngle - 0.4)},${tipY - arrowheadSize * Math.sin(dirAngle - 0.4)}`;
+        const p2 = `${tipX - arrowheadSize * Math.cos(dirAngle + 0.4)},${tipY - arrowheadSize * Math.sin(dirAngle + 0.4)}`;
+        return `<polygon points="${tipX},${tipY} ${p1} ${p2}" fill="${ink}"/>`;
+      };
       const mid = g.routing === 'orthogonal' && g.pathPoints
         ? pathMidpoint(g.pathPoints)
         : (g.bend === 0
@@ -97,8 +119,10 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
       const label = labelText
         ? `<text x="${mid.x}" y="${mid.y - 6}" text-anchor="middle" font-family="${escapeHtml(fontStackForShape(s))}" font-size="${s.fontSize ?? 12}" fill="${ink}">${escapeHtml(labelText)}</text>`
         : '';
-      return `<path d="${d}" fill="none" stroke="${ink}" stroke-width="2.5" stroke-linecap="round"/>`
-        + `<polygon points="${g.end.x},${g.end.y} ${p1} ${p2}" fill="${ink}"/>` + label;
+      return `<path d="${d}" fill="none" stroke="${ink}" stroke-width="${documentStrokeWidth}" stroke-linecap="round" stroke-linejoin="round"${strokeDash}/>`
+        + capAt(s.arrowEnd ?? 'arrow', g.end.x, g.end.y, angle)
+        + capAt(s.arrowStart ?? 'none', g.start.x, g.start.y, startAngle + Math.PI)
+        + label;
     }
     if (s.type === 'image' && s.src) {
       const src = safeAssetUrl(s.src);
@@ -106,7 +130,7 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
       return `<image href="${escapeHtml(src)}" x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}"${rot}/>`;
     }
     if (s.type === 'frame') {
-      return `<g${rot}><rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}" fill="none" stroke="${CANVAS_UI_COLORS.slate400}" stroke-width="2" rx="4"/>`
+      return `<g${rot}><rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}" fill="none" stroke="${CANVAS_UI_COLORS.slate400}" stroke-width="${s.strokeWidth ?? 2}" rx="4"/>`
         + `<text x="${b.minX}" y="${b.minY - 8}" font-family="Inter, system-ui, sans-serif" font-size="13" fill="${CANVAS_UI_COLORS.muted}">${escapeHtml(s.text ?? '프레임')}</text></g>`;
     }
     if (s.type === 'note') {
@@ -120,9 +144,26 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
         + `<text x="${b.minX + 16}" y="${b.minY + 24}" font-family="Inter, system-ui, sans-serif" font-size="10" fill="${CANVAS_UI_COLORS.slate400}">[ ${escapeHtml(s.category ?? 'ENTITY')} ]</text>`
         + textBlock(s, CANVAS_UI_COLORS.white, 16, '700', 'start') + `</g>`;
     }
+    const strokeWidth = s.type === 'rect' || s.type === 'ellipse' || s.type === 'triangle'
+      || s.type === 'diamond' || s.type === 'hexagon' || s.type === 'star'
+      ? s.strokeWidth ?? 2 : 2;
+    const fill = effectiveFill(s);
+    const border = effectiveBorder(s);
+    const polygon = s.type === 'triangle' || s.type === 'diamond' || s.type === 'hexagon' || s.type === 'star';
+    const localPolygonPoints = polygon
+      ? polygonPoints(s.type, b.maxX - b.minX, b.maxY - b.minY)
+        .split(' ')
+        .map(point => {
+          const [x, y] = point.split(',').map(Number);
+          return `${x + b.minX},${y + b.minY}`;
+        })
+        .join(' ')
+      : '';
     const shapeEl = s.type === 'ellipse'
-      ? `<ellipse cx="${(b.minX + b.maxX) / 2}" cy="${(b.minY + b.maxY) / 2}" rx="${(b.maxX - b.minX) / 2}" ry="${(b.maxY - b.minY) / 2}" fill="${palette.bg}" stroke="${palette.border}" stroke-width="2"/>`
-      : `<rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}" rx="12" fill="${palette.bg}" stroke="${palette.border}" stroke-width="2"/>`;
+      ? `<ellipse cx="${(b.minX + b.maxX) / 2}" cy="${(b.minY + b.maxY) / 2}" rx="${(b.maxX - b.minX) / 2}" ry="${(b.maxY - b.minY) / 2}" fill="${fill}" stroke="${border}" stroke-width="${strokeWidth}"/>`
+      : polygon
+        ? `<polygon points="${localPolygonPoints}" fill="${fill}" stroke="${border}" stroke-width="${strokeWidth}" stroke-linejoin="round"/>`
+        : `<rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}" rx="12" fill="${fill}" stroke="${border}" stroke-width="${strokeWidth}"/>`;
     return `<g${rot}>${shapeEl}${textBlock(s, palette.text, 14, '700', 'middle')}</g>`;
   }).join('\n');
 

@@ -4,8 +4,8 @@ import type {
   RefObject,
   SetStateAction,
 } from 'react';
-import type { CanvasColorKey, CanvasShapeType, CanvasTool } from '../core/index.ts';
-import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
+import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import {
   useCanvasPointerDown,
@@ -25,6 +25,7 @@ interface PointerInteractionOptions {
   shapesRef: RefObject<CanvasShape[]>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
+  drawStrokeWidth: CanvasStrokeWidth;
   camera: Camera;
   shapes: CanvasShape[];
   selected: Set<string>;
@@ -61,6 +62,7 @@ export function useCanvasPointerInteractions({
   shapesRef,
   toolRef,
   activeColorRef,
+  drawStrokeWidth,
   camera,
   shapes,
   selected,
@@ -90,6 +92,7 @@ export function useCanvasPointerInteractions({
     shapesRef,
     toolRef,
     activeColorRef,
+    drawStrokeWidth,
     camera,
     shapes,
     selected,

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Italic, List, ListOrdered, Minus, Palette, Plus, Underline } from 'lucide-react';
 import { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS } from '../core/index.ts';
-import type { CanvasColorKey } from '../core/index.ts';
+import type { CanvasColorKey, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
 import { arrowGeometry, bounds, effectiveFill, effectiveText } from './canvasGeometry';
 import { pathMidpoint } from './canvasRouting';
@@ -24,6 +24,56 @@ interface CanvasInspectorProps {
   applyFormat: (command: 'bold' | 'italic' | 'underline') => void;
   applyList: (kind: 'bullet' | 'dash' | 'number') => void;
   applyCustomFontFamily: (value: string) => void;
+}
+
+const STROKE_WIDTHS = [2, 4, 6, 8] as const satisfies readonly CanvasStrokeWidth[];
+
+function supportsStrokeWidth(shape: CanvasShape): boolean {
+  switch (shape.type) {
+    case 'arrow':
+    case 'frame':
+    case 'rect':
+    case 'ellipse':
+    case 'triangle':
+    case 'diamond':
+    case 'hexagon':
+    case 'star':
+    case 'draw':
+      return true;
+    case 'note':
+    case 'card':
+    case 'text':
+    case 'image':
+      return false;
+    default:
+      return assertNeverShape(shape);
+  }
+}
+
+function inspectorStrokeWidth(shape: CanvasShape): CanvasStrokeWidth | undefined {
+  switch (shape.type) {
+    case 'arrow':
+    case 'frame':
+    case 'rect':
+    case 'ellipse':
+    case 'triangle':
+    case 'diamond':
+    case 'hexagon':
+    case 'star':
+    case 'draw':
+      return shape.strokeWidth;
+    case 'note':
+    case 'card':
+    case 'text':
+    case 'image':
+      return undefined;
+    default:
+      return assertNeverShape(shape);
+  }
+}
+
+function assertNeverShape(shape: never): never {
+  throw new Error(`Unhandled canvas shape: ${String(shape)}.`);
 }
 
 /** Selection inspector kept separate from the canvas scene for package reuse. */
@@ -108,6 +158,8 @@ export function CanvasInspector({
     }))
     .sort((a, b) => a.overlap - b.overlap || a.distance - b.distance)[0]?.candidate ?? preferred;
   const size = fontSizeForShape(s);
+  const strokeWidth = inspectorStrokeWidth(s);
+  const hasStrokeWidthControl = supportsStrokeWidth(s);
   const manualOrthogonal = s.type === 'arrow' && Boolean(s.orthogonalWaypoints?.length);
   const startCap = s.type === 'arrow' ? (s.arrowStart ?? 'none') : 'none';
   const endCap = s.type === 'arrow' ? (s.arrowEnd ?? 'arrow') : 'arrow';
@@ -143,6 +195,10 @@ export function CanvasInspector({
         </div>}
       </div>}
       </>}
+      {hasStrokeWidthControl && <div className={`flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-none ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
+        {groupLabel('굵기')}
+        {STROKE_WIDTHS.map(width => <React.Fragment key={width}>{segment(String(width), strokeWidth === width, () => patchSelected({ strokeWidth: width }), `굵기 ${width}`)}</React.Fragment>)}
+      </div>}
     </div>
   );
 }

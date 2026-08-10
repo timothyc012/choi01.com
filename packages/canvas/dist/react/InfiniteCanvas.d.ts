@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasTool, OrthogonalVariant } from '../core/index.js';
+import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasStrokeWidth, CanvasTool as CoreCanvasTool, OrthogonalVariant } from '../core/index.js';
 /**
  * Self-contained infinite canvas engine.
  *
@@ -10,7 +10,8 @@ import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasTool, Or
  * project's custom Tailwind tokens so the file can be lifted out on its own.
  */
 export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../core/index.js';
-export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, CanvasTool, OrthogonalVariant } from '../core/index.js';
+export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, OrthogonalVariant } from '../core/index.js';
+export type CanvasTool = CoreCanvasTool | 'highlighter';
 type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'orthogonalWaypoints' | 'arrowStart' | 'arrowEnd'> & {
     id: string;
     points?: [number, number][];
@@ -44,6 +45,12 @@ export interface CanvasSelectionInfo {
     canUngroup: boolean;
     isTextual: boolean;
 }
+export declare function applySelectedStrokeWidth(shapes: CanvasShape[], targetIds: Set<string>, strokeWidth: CanvasStrokeWidth): CanvasShape[];
+interface SelectedDrawStyle {
+    readonly color?: CanvasColorKey;
+    readonly strokeWidth?: CanvasStrokeWidth;
+}
+export declare function applySelectedDrawStyle(shapes: CanvasShape[], targetIds: Set<string>, style: SelectedDrawStyle): CanvasShape[];
 export interface InfiniteCanvasHandle {
     addNote: (color: CanvasColorKey) => void;
     addCard: (label: string, category: string, cardStyle: 'solid' | 'glass', color: CanvasColorKey) => void;
@@ -52,7 +59,7 @@ export interface InfiniteCanvasHandle {
     addArrow: () => void;
     addImage: (src: string, fileName: string, w: number, h: number) => void;
     addFileCard: (fileName: string, src: string, label: string) => void;
-    setTool: (tool: CanvasTool) => void;
+    setTool: (tool: CoreCanvasTool) => void;
     undo: () => void;
     redo: () => void;
     deleteSelected: () => void;
@@ -74,6 +81,7 @@ interface InfiniteCanvasProps {
     boardIdentity?: string;
     isDarkMode: boolean;
     tool: CanvasTool;
+    drawStrokeWidth?: CanvasStrokeWidth;
     onToolChange: (tool: CanvasTool) => void;
     onDirty: () => void;
     onZoomChange?: (zoom: number) => void;

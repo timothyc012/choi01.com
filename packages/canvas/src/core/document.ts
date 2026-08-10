@@ -5,12 +5,14 @@ import {
   type CanvasCamera,
   type CanvasArrowShape,
   type CanvasColorKey,
+  type CanvasDrawMode,
   type CanvasDocument,
   type CanvasShapeBase,
   type CanvasShape,
   type CanvasShapeId,
   type CanvasSimpleShapeType,
   type CanvasSnapshot,
+  type CanvasStrokeWidth,
   type CanvasTextAlign,
 } from './model.ts';
 import {
@@ -144,12 +146,22 @@ function parseShape(input: unknown): CanvasShape {
   const common = parseCommonShape(input, id, x, y, w, h);
   if (type === 'draw') {
     if (!Array.isArray(input.points)) throw new CanvasValidationError('Draw shapes require points.');
-    return { ...common, type: 'draw', points: parsePoints(input.points) };
+    rejectRawPressure(input);
+    return {
+      ...common,
+      type: 'draw',
+      points: parsePoints(input.points),
+      strokeWidth: readOptionalStrokeWidth(input),
+      drawMode: readOptionalDrawMode(input),
+    };
   }
   if (type === 'arrow') {
+    rejectUnexpectedStyleField(input, 'drawMode', type);
+    rejectRawPressure(input);
     return {
       ...common,
       type: 'arrow',
+      strokeWidth: readOptionalStrokeWidth(input),
       fromId: readOptionalShapeId(input, 'fromId'),
       toId: readOptionalShapeId(input, 'toId'),
       bend: readOptionalBoundedNumber(input, 'bend', CANVAS_LIMITS.coordinate),
@@ -160,10 +172,21 @@ function parseShape(input: unknown): CanvasShape {
       arrowEnd: readOptionalArrowCap(input, 'arrowEnd'),
     };
   }
-  if (type === 'image') return { ...common, type: 'image' };
+  if (type === 'image') {
+    rejectUnexpectedStyleField(input, 'strokeWidth', type);
+    rejectUnexpectedStyleField(input, 'drawMode', type);
+    rejectRawPressure(input);
+    return { ...common, type: 'image' };
+  }
   if (!isSimpleShapeType(type)) {
     throw new CanvasValidationError(`Unsupported canvas shape type: ${type}.`);
   }
+  rejectUnexpectedStyleField(input, 'drawMode', type);
+  rejectRawPressure(input);
+  if (isOutlinedShapeType(type)) {
+    return { ...common, type, strokeWidth: readOptionalStrokeWidth(input) };
+  }
+  rejectUnexpectedStyleField(input, 'strokeWidth', type);
   return { ...common, type };
 }
 
@@ -338,6 +361,36 @@ function readOptionalStrokeStyle(input: Record<string, unknown>, key: string): C
   return value;
 }
 
+function readOptionalStrokeWidth(input: Record<string, unknown>): CanvasStrokeWidth | undefined {
+  const value = input.strokeWidth;
+  if (value === undefined) return undefined;
+  if (value !== 2 && value !== 4 && value !== 6 && value !== 8) {
+    throw new CanvasValidationError('Canvas shape strokeWidth must be one of 2, 4, 6, or 8.');
+  }
+  return value;
+}
+
+function readOptionalDrawMode(input: Record<string, unknown>): CanvasDrawMode | undefined {
+  const value = input.drawMode;
+  if (value === undefined) return undefined;
+  if (value !== 'pen' && value !== 'highlighter') {
+    throw new CanvasValidationError('Canvas drawMode must be pen or highlighter.');
+  }
+  return value;
+}
+
+function rejectUnexpectedStyleField(input: Record<string, unknown>, key: 'strokeWidth' | 'drawMode', type: string): void {
+  if (Object.prototype.hasOwnProperty.call(input, key)) {
+    throw new CanvasValidationError(`Canvas shape ${key} is not supported on ${type}.`);
+  }
+}
+
+function rejectRawPressure(input: Record<string, unknown>): void {
+  if (Object.prototype.hasOwnProperty.call(input, 'pressure')) {
+    throw new CanvasValidationError('Canvas shapes do not support pressure data.');
+  }
+}
+
 function readOptionalRouting(input: Record<string, unknown>, key: string): CanvasArrowShape['routing'] {
   const value = input[key];
   if (value === undefined) return undefined;
@@ -412,10 +465,24 @@ const SIMPLE_SHAPE_TYPES = new Set([
   'star',
 ]);
 
+const OUTLINED_SHAPE_TYPES = new Set([
+  'frame',
+  'rect',
+  'ellipse',
+  'triangle',
+  'diamond',
+  'hexagon',
+  'star',
+]);
+
 const COLORS = new Set(['yellow', 'pink', 'purple', 'blue', 'green', 'peach', 'grey', 'brand', 'ink', 'red']);
 
 function isSimpleShapeType(value: string): value is CanvasSimpleShapeType {
   return SIMPLE_SHAPE_TYPES.has(value);
+}
+
+function isOutlinedShapeType(value: CanvasSimpleShapeType): value is Extract<CanvasSimpleShapeType, 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star'> {
+  return OUTLINED_SHAPE_TYPES.has(value);
 }
 
 function isCanvasColorKey(value: string): value is CanvasColorKey {

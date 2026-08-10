@@ -6,9 +6,13 @@ export type CanvasAssetUrl = Brand<string, 'CanvasAssetUrl'>;
 export type CanvasColorKey = 'yellow' | 'pink' | 'purple' | 'blue' | 'green' | 'peach' | 'grey' | 'brand' | 'ink' | 'red';
 export type CanvasFontKey = 'sans' | 'serif' | 'mono' | 'gothic' | 'korean' | 'chosunmyjo' | 'hdhyundai' | 'custom';
 export type CanvasTextAlign = 'left' | 'center' | 'right';
+export type CanvasStrokeWidth = 2 | 4 | 6 | 8;
+export type CanvasDrawMode = 'pen' | 'highlighter';
 export type OrthogonalVariant = 'elbow' | 'reverse' | 'u' | 'zigzag';
 export type CanvasShapeType = 'note' | 'card' | 'text' | 'arrow' | 'draw' | 'image' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
 export type CanvasSimpleShapeType = 'note' | 'card' | 'text' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
+export type CanvasOutlinedShapeType = 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
+export type CanvasUnoutlinedShapeType = 'note' | 'card' | 'text';
 export type CanvasTool = 'select' | 'hand' | 'note' | 'card' | 'text' | 'arrow' | 'draw' | 'eraser' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
 /**
  * Resource limits applied at every untrusted snapshot/collaboration boundary.
@@ -55,11 +59,17 @@ export interface CanvasShapeBase {
     readonly textColor?: string;
     readonly strokeStyle?: 'solid' | 'dashed' | 'dotted';
 }
-export interface CanvasRectShape extends CanvasShapeBase {
-    readonly type: CanvasSimpleShapeType;
+export interface CanvasOutlinedShape extends CanvasShapeBase {
+    readonly type: CanvasOutlinedShapeType;
+    readonly strokeWidth?: CanvasStrokeWidth;
 }
+export interface CanvasUnoutlinedShape extends CanvasShapeBase {
+    readonly type: CanvasUnoutlinedShapeType;
+}
+export type CanvasRectShape = CanvasOutlinedShape | CanvasUnoutlinedShape;
 export interface CanvasArrowShape extends CanvasShapeBase {
     readonly type: 'arrow';
+    readonly strokeWidth?: CanvasStrokeWidth;
     readonly fromId?: CanvasShapeId;
     readonly toId?: CanvasShapeId;
     readonly bend?: number;
@@ -75,6 +85,8 @@ export interface CanvasArrowShape extends CanvasShapeBase {
 export interface CanvasDrawShape extends CanvasShapeBase {
     readonly type: 'draw';
     readonly points: readonly (readonly [number, number])[];
+    readonly strokeWidth?: CanvasStrokeWidth;
+    readonly drawMode?: CanvasDrawMode;
 }
 export interface CanvasImageShape extends CanvasShapeBase {
     readonly type: 'image';

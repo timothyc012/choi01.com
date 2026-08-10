@@ -85,29 +85,31 @@ export function hitTest(
 ): boolean {
   const slop = 8 / zoom;
   if (s.type === 'arrow') {
+    const edgeThreshold = (s.strokeWidth ?? 2.5) / zoom / 2 + slop;
     const g = arrowGeometry(s, byId ?? new Map(), allShapes);
     if (g.routing === 'orthogonal' && g.pathPoints && g.pathPoints.length > 1) {
       for (let i = 1; i < g.pathPoints.length; i++) {
         const p0 = g.pathPoints[i - 1];
         const p1 = g.pathPoints[i];
-        if (distanceToSegment(px, py, p0.x, p0.y, p1.x, p1.y) <= slop) return true;
+        if (distanceToSegment(px, py, p0.x, p0.y, p1.x, p1.y) <= edgeThreshold) return true;
       }
       return false;
     }
-    if (g.bend === 0) return distanceToSegment(px, py, g.start.x, g.start.y, g.end.x, g.end.y) <= slop;
+    if (g.bend === 0) return distanceToSegment(px, py, g.start.x, g.start.y, g.end.x, g.end.y) <= edgeThreshold;
     let prev = g.start;
     for (let i = 1; i <= 16; i++) {
       const pt = bezierAt(i / 16, g.start, g.control, g.end);
-      if (distanceToSegment(px, py, prev.x, prev.y, pt.x, pt.y) <= slop) return true;
+      if (distanceToSegment(px, py, prev.x, prev.y, pt.x, pt.y) <= edgeThreshold) return true;
       prev = pt;
     }
     return false;
   }
   if (s.type === 'draw' && s.points) {
+    const edgeThreshold = (s.strokeWidth ?? 3) / zoom / 2 + slop;
     for (let i = 1; i < s.points.length; i++) {
       const [ax, ay] = s.points[i - 1];
       const [bx, by] = s.points[i];
-      if (distanceToSegment(px, py, ax, ay, bx, by) <= slop) return true;
+      if (distanceToSegment(px, py, ax, ay, bx, by) <= edgeThreshold) return true;
     }
     return false;
   }

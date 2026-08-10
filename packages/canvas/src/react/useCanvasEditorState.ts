@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
-import type { CanvasColorKey, CanvasTool } from '../core/index.ts';
-import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasColorKey } from '../core/index.ts';
+import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import { sanitizeShapeForCanvas } from './canvasShapeStyle';
 import type { SnapResult } from './canvasGeometry';
 import {

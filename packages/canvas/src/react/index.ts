@@ -5,6 +5,7 @@ export {
   CANVAS_FONTS,
   SHAPE_TOOLS,
 } from './InfiniteCanvas';
+export type { CanvasStrokeWidth } from '../core/index.ts';
 export type {
   CanvasColorKey,
   CanvasFontKey,

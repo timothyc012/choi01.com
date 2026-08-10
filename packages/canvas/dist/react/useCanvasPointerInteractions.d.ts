@@ -1,6 +1,6 @@
 import type { Dispatch, PointerEvent as ReactPointerEvent, RefObject, SetStateAction } from 'react';
-import type { CanvasColorKey, CanvasShapeType, CanvasTool } from '../core/index.js';
-import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.js';
+import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import { type PointerDownHandlers } from './useCanvasPointerDown';
 import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes';
@@ -14,6 +14,7 @@ interface PointerInteractionOptions {
     shapesRef: RefObject<CanvasShape[]>;
     toolRef: RefObject<CanvasTool>;
     activeColorRef: RefObject<CanvasColorKey>;
+    drawStrokeWidth: CanvasStrokeWidth;
     camera: Camera;
     shapes: CanvasShape[];
     selected: Set<string>;
@@ -45,5 +46,5 @@ export interface PointerInteractionHandlers extends PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
 }
 /** Composes pointer-start and global drag lifecycle handlers. */
-export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, toolRef, activeColorRef, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerInteractionOptions): PointerInteractionHandlers;
+export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, toolRef, activeColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerInteractionOptions): PointerInteractionHandlers;
 //# sourceMappingURL=useCanvasPointerInteractions.d.ts.map

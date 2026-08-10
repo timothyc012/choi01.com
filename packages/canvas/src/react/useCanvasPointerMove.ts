@@ -243,6 +243,10 @@ export function useCanvasPointerMove({
       if (interaction.kind === 'drawing') {
         setShapes(prev => prev.map(s => {
           if (s.id !== interaction.id || !s.points) return s;
+          if (e.shiftKey) {
+            const first = s.points[0];
+            return first ? { ...s, points: [first, [p.x, p.y]] } : s;
+          }
           const last = s.points[s.points.length - 1];
           // Skip sub-pixel moves so the point list stays manageable.
           if (Math.hypot(p.x - last[0], p.y - last[1]) < 2 / cam.z) return s;

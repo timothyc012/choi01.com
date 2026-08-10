@@ -1,8 +1,8 @@
-import { jsx as C, jsxs as j, Fragment as gt } from "react/jsx-runtime";
-import xn, { useRef as tt, useState as it, useLayoutEffect as Gt, useEffect as ft, useMemo as bt, useCallback as rt, useImperativeHandle as Un, forwardRef as Gn } from "react";
-import { p as qn, i as nn, k as gn, a as st, v as Qn, c as ut, s as Zn, b as Jn, d as zt, h as te, S as ne } from "./document-CyKLUB7f.js";
-import { Palette as ee, Minus as oe, Plus as re, ChevronDown as ie, AlignLeft as ae, AlignCenter as ce, AlignRight as se, List as le, ListOrdered as de, Bold as ue, Italic as xe, Underline as fe } from "lucide-react";
-const he = '.invoicex-canvas{position:relative;width:100%;height:100%;min-height:240px;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;outline:none;--canvas-slate-50: #f8fafc;--canvas-slate-100: #f1f5f9;--canvas-slate-200: #e2e8f0;--canvas-slate-300: #cbd5e1;--canvas-slate-400: #94a3b8;--canvas-slate-500: #64748b;--canvas-slate-600: #475569;--canvas-slate-700: #334155;--canvas-slate-800: #1e293b;--canvas-slate-900: #0f172a;--canvas-slate-950: #020617;--canvas-blue-50: #eff6ff;--canvas-blue-500: #3b82f6;--canvas-blue-600: #2563eb;--canvas-white: #fff;--canvas-slate-900-95: rgba(15,23,42,.95);--canvas-slate-950-60: rgba(2,6,23,.6);--canvas-slate-950-70: rgba(2,6,23,.7);--canvas-white-95: rgba(255,255,255,.95);--canvas-white-10: rgba(255,255,255,.1);--canvas-blue-600-60: rgba(37,99,235,.6);--canvas-grid-dark: rgba(148,163,184,.16);--canvas-grid-light: rgba(100,116,139,.18);--canvas-shadow-sm: 0 1px 2px rgba(15,23,42,.12);--canvas-shadow-md: 0 4px 6px -1px rgba(15,23,42,.15);--canvas-shadow-lg: 0 10px 15px -3px rgba(15,23,42,.2);--canvas-shadow-xl: 0 20px 25px -5px rgba(15,23,42,.2), 0 8px 10px -6px rgba(15,23,42,.1)}.invoicex-canvas,.invoicex-canvas *,.invoicex-canvas *:before,.invoicex-canvas *:after{box-sizing:border-box}.invoicex-canvas .absolute{position:absolute}.invoicex-canvas .relative{position:relative}.invoicex-canvas .inset-0{top:0;right:0;bottom:0;left:0}.invoicex-canvas .top-0{top:0}.invoicex-canvas .left-0{left:0}.invoicex-canvas .right-0{right:0}.invoicex-canvas .bottom-0{bottom:0}.invoicex-canvas .w-full{width:100%}.invoicex-canvas .h-full{height:100%}.invoicex-canvas .w-px{width:1px}.invoicex-canvas .h-px{height:1px}.invoicex-canvas .w-5{width:1.25rem}.invoicex-canvas .h-5{height:1.25rem}.invoicex-canvas .w-6{width:1.5rem}.invoicex-canvas .w-7{width:1.75rem}.invoicex-canvas .w-24{width:6rem}.invoicex-canvas .flex{display:flex}.invoicex-canvas .flex-1{flex:1 1 0%}.invoicex-canvas .flex-col{flex-direction:column}.invoicex-canvas .flex-wrap{flex-wrap:wrap}.invoicex-canvas .items-center{align-items:center}.invoicex-canvas .justify-center{justify-content:center}.invoicex-canvas .gap-0\\.5{gap:.125rem}.invoicex-canvas .gap-1{gap:.25rem}.invoicex-canvas .gap-1\\.5{gap:.375rem}.invoicex-canvas .gap-2{gap:.5rem}.invoicex-canvas .block{display:block}.invoicex-canvas .hidden{display:none}.invoicex-canvas .p-1{padding:.25rem}.invoicex-canvas .p-0\\.5{padding:.125rem}.invoicex-canvas .p-2{padding:.5rem}.invoicex-canvas .p-3{padding:.75rem}.invoicex-canvas .p-4{padding:1rem}.invoicex-canvas .px-1{padding-left:.25rem;padding-right:.25rem}.invoicex-canvas .px-1\\.5{padding-left:.375rem;padding-right:.375rem}.invoicex-canvas .px-2{padding-left:.5rem;padding-right:.5rem}.invoicex-canvas .px-3{padding-left:.75rem;padding-right:.75rem}.invoicex-canvas .py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.invoicex-canvas .py-1{padding-top:.25rem;padding-bottom:.25rem}.invoicex-canvas .pt-1\\.5{padding-top:.375rem}.invoicex-canvas .pt-2{padding-top:.5rem}.invoicex-canvas .pl-2{padding-left:.5rem}.invoicex-canvas .pr-7{padding-right:1.75rem}.invoicex-canvas .mt-1{margin-top:.25rem}.invoicex-canvas .mb-2{margin-bottom:.5rem}.invoicex-canvas .right-1\\.5{right:.375rem}.invoicex-canvas .top-10{top:2.5rem}.invoicex-canvas .overflow-hidden{overflow:hidden}.invoicex-canvas .overflow-visible{overflow:visible}.invoicex-canvas .overflow-x-auto{overflow-x:auto}.invoicex-canvas .whitespace-nowrap{white-space:nowrap}.invoicex-canvas .whitespace-pre-wrap{white-space:pre-wrap}.invoicex-canvas .break-words{overflow-wrap:break-word}.invoicex-canvas .touch-none{touch-action:none}.invoicex-canvas .select-none{-webkit-user-select:none;user-select:none}.invoicex-canvas .pointer-events-none{pointer-events:none}.invoicex-canvas .cursor-pointer{cursor:pointer}.invoicex-canvas .origin-top-left{transform-origin:top left}.invoicex-canvas .object-contain{object-fit:contain}.invoicex-canvas .outline-none{outline:none}.invoicex-canvas .opacity-0{opacity:0}.invoicex-canvas .opacity-40{opacity:.4}.invoicex-canvas .opacity-70{opacity:.7}.invoicex-canvas .opacity-60{opacity:.6}.invoicex-canvas .font-medium{font-weight:500}.invoicex-canvas .font-semibold{font-weight:600}.invoicex-canvas .font-bold{font-weight:700}.invoicex-canvas .uppercase{text-transform:uppercase}.invoicex-canvas .tracking-widest{letter-spacing:.1em}.invoicex-canvas .tracking-wide{letter-spacing:.025em}.invoicex-canvas .text-center{text-align:center}.invoicex-canvas .tabular-nums{font-variant-numeric:tabular-nums}.invoicex-canvas .underline{text-decoration:underline}.invoicex-canvas .italic{font-style:italic}.invoicex-canvas .text-white{color:var(--canvas-white)}.invoicex-canvas .text-slate-100{color:var(--canvas-slate-100)}.invoicex-canvas .text-slate-200{color:var(--canvas-slate-200)}.invoicex-canvas .text-slate-300{color:var(--canvas-slate-300)}.invoicex-canvas .text-slate-400{color:var(--canvas-slate-400)}.invoicex-canvas .text-slate-500{color:var(--canvas-slate-500)}.invoicex-canvas .text-slate-700{color:var(--canvas-slate-700)}.invoicex-canvas .text-slate-800{color:var(--canvas-slate-800)}.invoicex-canvas .text-slate-900{color:var(--canvas-slate-900)}.invoicex-canvas .text-xs{font-size:.75rem;line-height:1rem}.invoicex-canvas .text-base{font-size:1rem;line-height:1.5rem}.invoicex-canvas .text-\\[10px\\]{font-size:10px;line-height:1.1}.invoicex-canvas .text-\\[11px\\]{font-size:11px;line-height:1.25rem}.invoicex-canvas .bg-white{background-color:var(--canvas-white)}.invoicex-canvas .bg-transparent{background-color:transparent}.invoicex-canvas .bg-blue-600{background-color:var(--canvas-blue-600)}.invoicex-canvas .bg-blue-500{background-color:var(--canvas-blue-500)}.invoicex-canvas .bg-blue-50{background-color:var(--canvas-blue-50)}.invoicex-canvas .bg-slate-50{background-color:var(--canvas-slate-50)}.invoicex-canvas .bg-slate-900\\/95{background-color:var(--canvas-slate-900-95)}.invoicex-canvas .bg-slate-950\\/60{background-color:var(--canvas-slate-950-60)}.invoicex-canvas .bg-slate-950\\/70{background-color:var(--canvas-slate-950-70)}.invoicex-canvas .bg-white\\/95{background-color:var(--canvas-white-95)}.invoicex-canvas .bg-slate-200{background-color:var(--canvas-slate-200)}.invoicex-canvas .bg-slate-700{background-color:var(--canvas-slate-700)}.invoicex-canvas .bg-slate-800{background-color:var(--canvas-slate-800)}.invoicex-canvas .bg-slate-900{background-color:var(--canvas-slate-900)}.invoicex-canvas .bg-slate-950{background-color:var(--canvas-slate-950)}.invoicex-canvas .border{border-width:1px;border-style:solid}.invoicex-canvas .border-2{border-width:2px;border-style:solid}.invoicex-canvas .border-t{border-top-width:1px;border-top-style:solid}.invoicex-canvas .border-white\\/10{border-color:var(--canvas-white-10)}.invoicex-canvas .border-slate-200{border-color:var(--canvas-slate-200)}.invoicex-canvas .border-slate-100{border-color:var(--canvas-slate-100)}.invoicex-canvas .border-slate-300{border-color:var(--canvas-slate-300)}.invoicex-canvas .border-slate-600{border-color:var(--canvas-slate-600)}.invoicex-canvas .border-slate-700{border-color:var(--canvas-slate-700)}.invoicex-canvas .border-blue-600{border-color:var(--canvas-blue-600)}.invoicex-canvas .border-blue-600\\/60{border-color:var(--canvas-blue-600-60)}.invoicex-canvas .rounded{border-radius:.25rem}.invoicex-canvas .rounded-sm{border-radius:.125rem}.invoicex-canvas .rounded-md{border-radius:.375rem}.invoicex-canvas .rounded-lg{border-radius:.5rem}.invoicex-canvas .rounded-xl{border-radius:.75rem}.invoicex-canvas .rounded-2xl{border-radius:1rem}.invoicex-canvas .rounded-full{border-radius:9999px}.invoicex-canvas .shadow-sm{box-shadow:var(--canvas-shadow-sm)}.invoicex-canvas .shadow-md{box-shadow:var(--canvas-shadow-md)}.invoicex-canvas .shadow-lg{box-shadow:var(--canvas-shadow-lg)}.invoicex-canvas .shadow-xl{box-shadow:var(--canvas-shadow-xl)}.invoicex-canvas .z-40{z-index:40}.invoicex-canvas .z-50{z-index:50}.invoicex-canvas .h-7{height:1.75rem}.invoicex-canvas .h-6{height:1.5rem}.invoicex-canvas .text-decoration-underline{text-decoration:underline}.invoicex-canvas .hover\\:bg-blue-500:hover{background-color:var(--canvas-blue-500)}.invoicex-canvas .hover\\:bg-blue-50:hover{background-color:var(--canvas-blue-50)}.invoicex-canvas .hover\\:bg-slate-800:hover{background-color:var(--canvas-slate-800)}.invoicex-canvas .hover\\:bg-slate-100:hover{background-color:var(--canvas-slate-100)}.invoicex-canvas .hover\\:bg-slate-50:hover{background-color:var(--canvas-slate-50)}.invoicex-canvas .focus\\:outline-none:focus{outline:none}.invoicex-canvas .-inset-0\\.5{top:-.125rem;right:-.125rem;bottom:-.125rem;left:-.125rem}.invoicex-canvas .w-3\\.5{width:.875rem}.invoicex-canvas .h-3\\.5{height:.875rem}.invoicex-canvas .w-4{width:1rem}.invoicex-canvas .h-4{height:1rem}.invoicex-canvas .w-8{width:2rem}.invoicex-canvas .h-8{height:2rem}.invoicex-canvas .w-44{width:11rem}.invoicex-canvas .min-w-20{min-width:5rem}.invoicex-canvas .max-w-\\[calc\\(100vw-2rem\\)\\]{max-width:calc(100vw - 2rem)}.invoicex-canvas .leading-none{line-height:1}.invoicex-canvas .appearance-none{-webkit-appearance:none;-moz-appearance:none;appearance:none}.invoicex-canvas .pointer-events-auto{pointer-events:auto}.invoicex-canvas .backdrop-blur-sm{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.invoicex-canvas .transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-duration:.15s}.invoicex-canvas .canvas-rich-text ul,.invoicex-canvas .canvas-rich-text ol{margin:0;padding-left:0;list-style:none}.invoicex-canvas [data-canvas-text-view] ul,.invoicex-canvas [data-canvas-text-view] ol,.invoicex-canvas [data-canvas-text-view] li{pointer-events:none}.invoicex-canvas [data-canvas-text-view] li a{pointer-events:auto}.invoicex-canvas .canvas-rich-text ul>li:before{content:"• "}.invoicex-canvas .canvas-rich-text ul[data-list-style=dash]>li:before{content:"– "}.invoicex-canvas .canvas-rich-text ol{counter-reset:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li{counter-increment:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li:before{content:counter(canvas-list-item) ". "}@media(prefers-reduced-motion:reduce){.invoicex-canvas,.invoicex-canvas *,.invoicex-canvas *:before,.invoicex-canvas *:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}', _ = Object.freeze({
+import { jsx as N, jsxs as K, Fragment as Mt } from "react/jsx-runtime";
+import Jt, { useRef as tt, useState as it, useLayoutEffect as te, useEffect as yt, useMemo as kt, useCallback as rt, useImperativeHandle as nn, forwardRef as on } from "react";
+import { p as rn, i as re, k as we, a as dt, v as an, c as vt, s as cn, b as sn, d as Nt, h as ln, C as dn, S as un } from "./document-C_I4ZYDp.js";
+import { Palette as xn, Minus as hn, Plus as fn, ChevronDown as mn, AlignLeft as vn, AlignCenter as pn, AlignRight as yn, List as gn, ListOrdered as wn, Bold as bn, Italic as kn, Underline as $n } from "lucide-react";
+const zn = '.invoicex-canvas{position:relative;width:100%;height:100%;min-height:240px;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;outline:none;--canvas-slate-50: #f8fafc;--canvas-slate-100: #f1f5f9;--canvas-slate-200: #e2e8f0;--canvas-slate-300: #cbd5e1;--canvas-slate-400: #94a3b8;--canvas-slate-500: #64748b;--canvas-slate-600: #475569;--canvas-slate-700: #334155;--canvas-slate-800: #1e293b;--canvas-slate-900: #0f172a;--canvas-slate-950: #020617;--canvas-blue-50: #eff6ff;--canvas-blue-500: #3b82f6;--canvas-blue-600: #2563eb;--canvas-white: #fff;--canvas-slate-900-95: rgba(15,23,42,.95);--canvas-slate-950-60: rgba(2,6,23,.6);--canvas-slate-950-70: rgba(2,6,23,.7);--canvas-white-95: rgba(255,255,255,.95);--canvas-white-10: rgba(255,255,255,.1);--canvas-blue-600-60: rgba(37,99,235,.6);--canvas-grid-dark: rgba(148,163,184,.16);--canvas-grid-light: rgba(100,116,139,.18);--canvas-shadow-sm: 0 1px 2px rgba(15,23,42,.12);--canvas-shadow-md: 0 4px 6px -1px rgba(15,23,42,.15);--canvas-shadow-lg: 0 10px 15px -3px rgba(15,23,42,.2);--canvas-shadow-xl: 0 20px 25px -5px rgba(15,23,42,.2), 0 8px 10px -6px rgba(15,23,42,.1)}.invoicex-canvas,.invoicex-canvas *,.invoicex-canvas *:before,.invoicex-canvas *:after{box-sizing:border-box}.invoicex-canvas .absolute{position:absolute}.invoicex-canvas .relative{position:relative}.invoicex-canvas .inset-0{top:0;right:0;bottom:0;left:0}.invoicex-canvas .top-0{top:0}.invoicex-canvas .left-0{left:0}.invoicex-canvas .right-0{right:0}.invoicex-canvas .bottom-0{bottom:0}.invoicex-canvas .w-full{width:100%}.invoicex-canvas .h-full{height:100%}.invoicex-canvas .w-px{width:1px}.invoicex-canvas .h-px{height:1px}.invoicex-canvas .w-5{width:1.25rem}.invoicex-canvas .h-5{height:1.25rem}.invoicex-canvas .w-6{width:1.5rem}.invoicex-canvas .w-7{width:1.75rem}.invoicex-canvas .w-24{width:6rem}.invoicex-canvas .flex{display:flex}.invoicex-canvas .flex-1{flex:1 1 0%}.invoicex-canvas .flex-col{flex-direction:column}.invoicex-canvas .flex-wrap{flex-wrap:wrap}.invoicex-canvas .items-center{align-items:center}.invoicex-canvas .justify-center{justify-content:center}.invoicex-canvas .gap-0\\.5{gap:.125rem}.invoicex-canvas .gap-1{gap:.25rem}.invoicex-canvas .gap-1\\.5{gap:.375rem}.invoicex-canvas .gap-2{gap:.5rem}.invoicex-canvas .block{display:block}.invoicex-canvas .hidden{display:none}.invoicex-canvas .p-1{padding:.25rem}.invoicex-canvas .p-0\\.5{padding:.125rem}.invoicex-canvas .p-2{padding:.5rem}.invoicex-canvas .p-3{padding:.75rem}.invoicex-canvas .p-4{padding:1rem}.invoicex-canvas .px-1{padding-left:.25rem;padding-right:.25rem}.invoicex-canvas .px-1\\.5{padding-left:.375rem;padding-right:.375rem}.invoicex-canvas .px-2{padding-left:.5rem;padding-right:.5rem}.invoicex-canvas .px-3{padding-left:.75rem;padding-right:.75rem}.invoicex-canvas .py-0\\.5{padding-top:.125rem;padding-bottom:.125rem}.invoicex-canvas .py-1{padding-top:.25rem;padding-bottom:.25rem}.invoicex-canvas .pt-1\\.5{padding-top:.375rem}.invoicex-canvas .pt-2{padding-top:.5rem}.invoicex-canvas .pl-2{padding-left:.5rem}.invoicex-canvas .pr-7{padding-right:1.75rem}.invoicex-canvas .mt-1{margin-top:.25rem}.invoicex-canvas .mb-2{margin-bottom:.5rem}.invoicex-canvas .right-1\\.5{right:.375rem}.invoicex-canvas .top-10{top:2.5rem}.invoicex-canvas .overflow-hidden{overflow:hidden}.invoicex-canvas .overflow-visible{overflow:visible}.invoicex-canvas .overflow-x-auto{overflow-x:auto}.invoicex-canvas .whitespace-nowrap{white-space:nowrap}.invoicex-canvas .whitespace-pre-wrap{white-space:pre-wrap}.invoicex-canvas .break-words{overflow-wrap:break-word}.invoicex-canvas .touch-none{touch-action:none}.invoicex-canvas .select-none{-webkit-user-select:none;user-select:none}.invoicex-canvas .pointer-events-none{pointer-events:none}.invoicex-canvas .cursor-pointer{cursor:pointer}.invoicex-canvas .origin-top-left{transform-origin:top left}.invoicex-canvas .object-contain{object-fit:contain}.invoicex-canvas .outline-none{outline:none}.invoicex-canvas .opacity-0{opacity:0}.invoicex-canvas .opacity-40{opacity:.4}.invoicex-canvas .opacity-70{opacity:.7}.invoicex-canvas .opacity-60{opacity:.6}.invoicex-canvas .font-medium{font-weight:500}.invoicex-canvas .font-semibold{font-weight:600}.invoicex-canvas .font-bold{font-weight:700}.invoicex-canvas .uppercase{text-transform:uppercase}.invoicex-canvas .tracking-widest{letter-spacing:.1em}.invoicex-canvas .tracking-wide{letter-spacing:.025em}.invoicex-canvas .text-center{text-align:center}.invoicex-canvas .tabular-nums{font-variant-numeric:tabular-nums}.invoicex-canvas .underline{text-decoration:underline}.invoicex-canvas .italic{font-style:italic}.invoicex-canvas .text-white{color:var(--canvas-white)}.invoicex-canvas .text-slate-100{color:var(--canvas-slate-100)}.invoicex-canvas .text-slate-200{color:var(--canvas-slate-200)}.invoicex-canvas .text-slate-300{color:var(--canvas-slate-300)}.invoicex-canvas .text-slate-400{color:var(--canvas-slate-400)}.invoicex-canvas .text-slate-500{color:var(--canvas-slate-500)}.invoicex-canvas .text-slate-700{color:var(--canvas-slate-700)}.invoicex-canvas .text-slate-800{color:var(--canvas-slate-800)}.invoicex-canvas .text-slate-900{color:var(--canvas-slate-900)}.invoicex-canvas .text-xs{font-size:.75rem;line-height:1rem}.invoicex-canvas .text-base{font-size:1rem;line-height:1.5rem}.invoicex-canvas .text-\\[10px\\]{font-size:10px;line-height:1.1}.invoicex-canvas .text-\\[11px\\]{font-size:11px;line-height:1.25rem}.invoicex-canvas .bg-white{background-color:var(--canvas-white)}.invoicex-canvas .bg-transparent{background-color:transparent}.invoicex-canvas .bg-blue-600{background-color:var(--canvas-blue-600)}.invoicex-canvas .bg-blue-500{background-color:var(--canvas-blue-500)}.invoicex-canvas .bg-blue-50{background-color:var(--canvas-blue-50)}.invoicex-canvas .bg-slate-50{background-color:var(--canvas-slate-50)}.invoicex-canvas .bg-slate-900\\/95{background-color:var(--canvas-slate-900-95)}.invoicex-canvas .bg-slate-950\\/60{background-color:var(--canvas-slate-950-60)}.invoicex-canvas .bg-slate-950\\/70{background-color:var(--canvas-slate-950-70)}.invoicex-canvas .bg-white\\/95{background-color:var(--canvas-white-95)}.invoicex-canvas .bg-slate-200{background-color:var(--canvas-slate-200)}.invoicex-canvas .bg-slate-700{background-color:var(--canvas-slate-700)}.invoicex-canvas .bg-slate-800{background-color:var(--canvas-slate-800)}.invoicex-canvas .bg-slate-900{background-color:var(--canvas-slate-900)}.invoicex-canvas .bg-slate-950{background-color:var(--canvas-slate-950)}.invoicex-canvas .border{border-width:1px;border-style:solid}.invoicex-canvas .border-2{border-width:2px;border-style:solid}.invoicex-canvas .border-t{border-top-width:1px;border-top-style:solid}.invoicex-canvas .border-white\\/10{border-color:var(--canvas-white-10)}.invoicex-canvas .border-slate-200{border-color:var(--canvas-slate-200)}.invoicex-canvas .border-slate-100{border-color:var(--canvas-slate-100)}.invoicex-canvas .border-slate-300{border-color:var(--canvas-slate-300)}.invoicex-canvas .border-slate-600{border-color:var(--canvas-slate-600)}.invoicex-canvas .border-slate-700{border-color:var(--canvas-slate-700)}.invoicex-canvas .border-blue-600{border-color:var(--canvas-blue-600)}.invoicex-canvas .border-blue-600\\/60{border-color:var(--canvas-blue-600-60)}.invoicex-canvas .rounded{border-radius:.25rem}.invoicex-canvas .rounded-sm{border-radius:.125rem}.invoicex-canvas .rounded-md{border-radius:.375rem}.invoicex-canvas .rounded-lg{border-radius:.5rem}.invoicex-canvas .rounded-xl{border-radius:.75rem}.invoicex-canvas .rounded-2xl{border-radius:1rem}.invoicex-canvas .rounded-full{border-radius:9999px}.invoicex-canvas .shadow-sm{box-shadow:var(--canvas-shadow-sm)}.invoicex-canvas .shadow-md{box-shadow:var(--canvas-shadow-md)}.invoicex-canvas .shadow-lg{box-shadow:var(--canvas-shadow-lg)}.invoicex-canvas .shadow-xl{box-shadow:var(--canvas-shadow-xl)}.invoicex-canvas .z-40{z-index:40}.invoicex-canvas .z-50{z-index:50}.invoicex-canvas .h-7{height:1.75rem}.invoicex-canvas .h-6{height:1.5rem}.invoicex-canvas .text-decoration-underline{text-decoration:underline}.invoicex-canvas .hover\\:bg-blue-500:hover{background-color:var(--canvas-blue-500)}.invoicex-canvas .hover\\:bg-blue-50:hover{background-color:var(--canvas-blue-50)}.invoicex-canvas .hover\\:bg-slate-800:hover{background-color:var(--canvas-slate-800)}.invoicex-canvas .hover\\:bg-slate-100:hover{background-color:var(--canvas-slate-100)}.invoicex-canvas .hover\\:bg-slate-50:hover{background-color:var(--canvas-slate-50)}.invoicex-canvas .focus\\:outline-none:focus{outline:none}.invoicex-canvas .-inset-0\\.5{top:-.125rem;right:-.125rem;bottom:-.125rem;left:-.125rem}.invoicex-canvas .w-3\\.5{width:.875rem}.invoicex-canvas .h-3\\.5{height:.875rem}.invoicex-canvas .w-4{width:1rem}.invoicex-canvas .h-4{height:1rem}.invoicex-canvas .w-8{width:2rem}.invoicex-canvas .h-8{height:2rem}.invoicex-canvas .w-44{width:11rem}.invoicex-canvas .min-w-20{min-width:5rem}.invoicex-canvas .max-w-\\[calc\\(100vw-2rem\\)\\]{max-width:calc(100vw - 2rem)}.invoicex-canvas .leading-none{line-height:1}.invoicex-canvas .appearance-none{-webkit-appearance:none;-moz-appearance:none;appearance:none}.invoicex-canvas .pointer-events-auto{pointer-events:auto}.invoicex-canvas .backdrop-blur-sm{-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}.invoicex-canvas .transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-duration:.15s}.invoicex-canvas .canvas-rich-text ul,.invoicex-canvas .canvas-rich-text ol{margin:0;padding-left:0;list-style:none}.invoicex-canvas [data-canvas-text-view] ul,.invoicex-canvas [data-canvas-text-view] ol,.invoicex-canvas [data-canvas-text-view] li{pointer-events:none}.invoicex-canvas [data-canvas-text-view] li a{pointer-events:auto}.invoicex-canvas .canvas-rich-text ul>li:before{content:"• "}.invoicex-canvas .canvas-rich-text ul[data-list-style=dash]>li:before{content:"– "}.invoicex-canvas .canvas-rich-text ol{counter-reset:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li{counter-increment:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li:before{content:counter(canvas-list-item) ". "}@media(prefers-reduced-motion:reduce){.invoicex-canvas,.invoicex-canvas *,.invoicex-canvas *:before,.invoicex-canvas *:after{scroll-behavior:auto!important;transition-duration:.01ms!important}}', H = Object.freeze({
   canvasLight: "#f8fafc",
   canvasDark: "#020617",
   ink: "#0f172a",
@@ -25,294 +25,294 @@ const he = '.invoicex-canvas{position:relative;width:100%;height:100%;min-height
   marqueeFill: "rgba(37,99,235,0.08)",
   gridDark: "rgba(148,163,184,0.16)",
   gridLight: "rgba(100,116,139,0.18)"
-}), bn = 12;
-function qt(t) {
-  return t.map((e, n) => `${n === 0 ? "M" : "L"} ${e.x} ${e.y}`).join(" ");
+}), be = 12;
+function ee(t) {
+  return t.map((n, e) => `${e === 0 ? "M" : "L"} ${n.x} ${n.y}`).join(" ");
 }
-function Pt(t, e, n) {
-  return !(Math.min(t.x, n.x) > e.x || e.x > Math.max(t.x, n.x) || Math.min(t.y, n.y) > e.y || e.y > Math.max(t.y, n.y));
+function At(t, n, e) {
+  return !(Math.min(t.x, e.x) > n.x || n.x > Math.max(t.x, e.x) || Math.min(t.y, e.y) > n.y || n.y > Math.max(t.y, e.y));
 }
-function It(t, e, n) {
-  return (e.y - t.y) * (n.x - e.x) - (e.x - t.x) * (n.y - e.y);
+function Wt(t, n, e) {
+  return (n.y - t.y) * (e.x - n.x) - (n.x - t.x) * (e.y - n.y);
 }
-function Et(t, e, n, o) {
-  const l = It(t, e, n), d = It(t, e, o), m = It(n, o, t), b = It(n, o, e);
-  return Math.abs(l) < 1e-6 && Pt(t, n, e) || Math.abs(d) < 1e-6 && Pt(t, o, e) || Math.abs(m) < 1e-6 && Pt(n, t, o) || Math.abs(b) < 1e-6 && Pt(n, e, o) ? !0 : l > 0 != d > 0 && m > 0 != b > 0;
+function Ot(t, n, e, o) {
+  const u = Wt(t, n, e), d = Wt(t, n, o), y = Wt(e, o, t), g = Wt(e, o, n);
+  return Math.abs(u) < 1e-6 && At(t, e, n) || Math.abs(d) < 1e-6 && At(t, o, n) || Math.abs(y) < 1e-6 && At(e, t, o) || Math.abs(g) < 1e-6 && At(e, n, o) ? !0 : u > 0 != d > 0 && y > 0 != g > 0;
 }
-function ve(t, e, n) {
-  const o = Math.min(t.x, e.x), r = Math.max(t.x, e.x), l = Math.min(t.y, e.y), d = Math.max(t.y, e.y);
-  if (r < n.minX || o > n.maxX || d < n.minY || l > n.maxY) return !1;
-  if (t.x >= n.minX && t.x <= n.maxX && t.y >= n.minY && t.y <= n.maxY || e.x >= n.minX && e.x <= n.maxX && e.y >= n.minY && e.y <= n.maxY) return !0;
-  const m = { x: n.minX, y: n.minY }, b = { x: n.maxX, y: n.minY }, g = { x: n.maxX, y: n.maxY }, h = { x: n.minX, y: n.maxY };
-  return Et(t, e, m, b) || Et(t, e, b, g) || Et(t, e, g, h) || Et(t, e, h, m);
+function Mn(t, n, e) {
+  const o = Math.min(t.x, n.x), i = Math.max(t.x, n.x), u = Math.min(t.y, n.y), d = Math.max(t.y, n.y);
+  if (i < e.minX || o > e.maxX || d < e.minY || u > e.maxY) return !1;
+  if (t.x >= e.minX && t.x <= e.maxX && t.y >= e.minY && t.y <= e.maxY || n.x >= e.minX && n.x <= e.maxX && n.y >= e.minY && n.y <= e.maxY) return !0;
+  const y = { x: e.minX, y: e.minY }, g = { x: e.maxX, y: e.minY }, w = { x: e.maxX, y: e.maxY }, l = { x: e.minX, y: e.maxY };
+  return Ot(t, n, y, g) || Ot(t, n, g, w) || Ot(t, n, w, l) || Ot(t, n, l, y);
 }
-function me(t, e) {
-  for (let n = 1; n < t.length; n++)
-    for (const o of e)
-      if (ve(t[n - 1], t[n], o)) return !0;
+function Xn(t, n) {
+  for (let e = 1; e < t.length; e++)
+    for (const o of n)
+      if (Mn(t[e - 1], t[e], o)) return !0;
   return !1;
 }
-function Qt(t) {
-  let e = 0;
-  for (let n = 1; n < t.length; n++) e += Math.hypot(t[n].x - t[n - 1].x, t[n].y - t[n - 1].y);
-  return e;
+function ne(t) {
+  let n = 0;
+  for (let e = 1; e < t.length; e++) n += Math.hypot(t[e].x - t[e - 1].x, t[e].y - t[e - 1].y);
+  return n;
 }
-function en(t) {
+function ie(t) {
   if (t.length === 0) return { x: 0, y: 0 };
   if (t.length === 1) return { x: t[0].x, y: t[0].y };
-  const e = Qt(t);
-  if (e === 0) return t[0];
-  const n = e / 2;
+  const n = ne(t);
+  if (n === 0) return t[0];
+  const e = n / 2;
   let o = 0;
-  for (let l = 1; l < t.length; l++) {
-    const d = Math.hypot(t[l].x - t[l - 1].x, t[l].y - t[l - 1].y);
-    if (o + d >= n) {
-      const m = (n - o) / d;
-      return { x: t[l - 1].x + (t[l].x - t[l - 1].x) * m, y: t[l - 1].y + (t[l].y - t[l - 1].y) * m };
+  for (let u = 1; u < t.length; u++) {
+    const d = Math.hypot(t[u].x - t[u - 1].x, t[u].y - t[u - 1].y);
+    if (o + d >= e) {
+      const y = (e - o) / d;
+      return { x: t[u - 1].x + (t[u].x - t[u - 1].x) * y, y: t[u - 1].y + (t[u].y - t[u - 1].y) * y };
     }
     o += d;
   }
-  const r = t[t.length - 1];
-  return { x: r.x, y: r.y };
+  const i = t[t.length - 1];
+  return { x: i.x, y: i.y };
 }
-function Zt(t, e) {
-  return Math.atan2(e.y - t.y, e.x - t.x);
+function Lt(t, n) {
+  return Math.atan2(n.y - t.y, n.x - t.x);
 }
-function fn(t, e, n, o) {
-  const r = /* @__PURE__ */ new Set([t, e]), l = Math.min(t, e), d = Math.max(t, e), m = bn * 1.2;
-  for (const b of n) {
-    const g = (o === "x" ? b.minX : b.minY) - m, h = (o === "x" ? b.maxX : b.maxY) + m, i = (u) => u >= l - m * 4 && u <= d + m * 4;
-    i(g) && r.add(g), i(h) && r.add(h);
+function fe(t, n, e, o) {
+  const i = /* @__PURE__ */ new Set([t, n]), u = Math.min(t, n), d = Math.max(t, n), y = be * 1.2;
+  for (const g of e) {
+    const w = (o === "x" ? g.minX : g.minY) - y, l = (o === "x" ? g.maxX : g.maxY) + y, r = (f) => f >= u - y * 4 && f <= d + y * 4;
+    r(w) && i.add(w), r(l) && i.add(l);
   }
-  return [...r].sort((b, g) => Math.abs(b - t) - Math.abs(g - t));
+  return [...i].sort((g, w) => Math.abs(g - t) - Math.abs(w - t));
 }
-function wn(t) {
-  const e = [];
-  for (const n of t) {
-    const o = e[e.length - 1];
-    (!o || o.x !== n.x || o.y !== n.y) && e.push(n);
+function ke(t) {
+  const n = [];
+  for (const e of t) {
+    const o = n[n.length - 1];
+    (!o || o.x !== e.x || o.y !== e.y) && n.push(e);
   }
-  return e;
+  return n;
 }
-function $n(t) {
-  const e = [];
-  for (const n of t) {
-    const o = e[e.length - 1];
-    if (o && o.x === n.x && o.y === n.y) continue;
-    const r = e[e.length - 2];
-    if (r && o && (r.x === o.x && o.x === n.x || r.y === o.y && o.y === n.y)) {
-      e[e.length - 1] = n;
+function $e(t) {
+  const n = [];
+  for (const e of t) {
+    const o = n[n.length - 1];
+    if (o && o.x === e.x && o.y === e.y) continue;
+    const i = n[n.length - 2];
+    if (i && o && (i.x === o.x && o.x === e.x || i.y === o.y && o.y === e.y)) {
+      n[n.length - 1] = e;
       continue;
     }
-    e.push(n);
+    n.push(e);
   }
-  return e;
+  return n;
 }
-function pe(t, e, n) {
+function Yn(t, n, e) {
   const o = [t];
-  for (const r of [...n, e]) {
-    const l = o[o.length - 1];
-    if (!l) {
-      o.push(r);
+  for (const i of [...e, n]) {
+    const u = o[o.length - 1];
+    if (!u) {
+      o.push(i);
       continue;
     }
-    if (l.x === r.x || l.y === r.y) {
-      o.push(r);
+    if (u.x === i.x || u.y === i.y) {
+      o.push(i);
       continue;
     }
-    o.push({ x: r.x, y: l.y }, r);
+    o.push({ x: i.x, y: u.y }, i);
   }
-  return $n(o);
+  return $e(o);
 }
-function ye(t, e, n) {
-  const o = t[e], r = t[e + 1];
-  if (!o || !r || !Number.isFinite(n) || o.x !== r.x && o.y !== r.y) return [...t];
-  const l = o.x === r.x ? [o, { x: n, y: o.y }, { x: n, y: r.y }, r] : [o, { x: o.x, y: n }, { x: r.x, y: n }, r];
-  return $n([
-    ...t.slice(0, e),
-    ...l,
-    ...t.slice(e + 2)
+function Sn(t, n, e) {
+  const o = t[n], i = t[n + 1];
+  if (!o || !i || !Number.isFinite(e) || o.x !== i.x && o.y !== i.y) return [...t];
+  const u = o.x === i.x ? [o, { x: e, y: o.y }, { x: e, y: i.y }, i] : [o, { x: o.x, y: e }, { x: i.x, y: e }, i];
+  return $e([
+    ...t.slice(0, n),
+    ...u,
+    ...t.slice(n + 2)
   ]);
 }
-function Ut(t, e) {
-  const n = [], o = [];
-  for (const l of t) {
-    const d = wn(l);
-    d.length < 2 || (me(d, e) ? o.push(d) : n.push(d));
+function Zt(t, n) {
+  const e = [], o = [];
+  for (const u of t) {
+    const d = ke(u);
+    d.length < 2 || (Xn(d, n) ? o.push(d) : e.push(d));
   }
-  const r = n.length > 0 ? n : o;
-  return r.length === 0 ? [] : r.reduce((l, d) => Qt(d) < Qt(l) ? d : l);
+  const i = e.length > 0 ? e : o;
+  return i.length === 0 ? [] : i.reduce((u, d) => ne(d) < ne(u) ? d : u);
 }
-function hn(t) {
-  for (let e = 1; e < t.length; e++) {
-    if (t[e - 1].x !== t[e].x) return "x";
-    if (t[e - 1].y !== t[e].y) return "y";
+function me(t) {
+  for (let n = 1; n < t.length; n++) {
+    if (t[n - 1].x !== t[n].x) return "x";
+    if (t[n - 1].y !== t[n].y) return "y";
   }
 }
-function Xt(t, e, n, o) {
-  const r = Math.min(t, e), l = Math.max(t, e), d = Math.max(48, Math.abs(e - t) * 0.35, bn * 4);
+function Ct(t, n, e, o) {
+  const i = Math.min(t, n), u = Math.max(t, n), d = Math.max(48, Math.abs(n - t) * 0.35, be * 4);
   if (o === "x") {
-    if (n === "e") return l + d;
-    if (n === "w") return r - d;
+    if (e === "e") return u + d;
+    if (e === "w") return i - d;
   } else {
-    if (n === "s") return l + d;
-    if (n === "n") return r - d;
+    if (e === "s") return u + d;
+    if (e === "n") return i - d;
   }
-  return t <= e ? r - d : l + d;
+  return t <= n ? i - d : u + d;
 }
-function ge(t, e, n, o, r) {
-  const l = (t.x + e.x) / 2, d = (t.y + e.y) / 2;
-  if (n === "u") {
+function Cn(t, n, e, o, i) {
+  const u = (t.x + n.x) / 2, d = (t.y + n.y) / 2;
+  if (e === "u") {
     if (o) {
-      const b = Xt(t.x, e.x, t.side, "x");
-      return [t, { x: b, y: t.y }, { x: b, y: e.y }, e];
+      const g = Ct(t.x, n.x, t.side, "x");
+      return [t, { x: g, y: t.y }, { x: g, y: n.y }, n];
     }
-    const m = Xt(t.y, e.y, t.side, "y");
-    return [t, { x: t.x, y: m }, { x: e.x, y: m }, e];
+    const y = Ct(t.y, n.y, t.side, "y");
+    return [t, { x: t.x, y }, { x: n.x, y }, n];
   }
-  if (n === "zigzag") {
+  if (e === "zigzag") {
     if (o) {
-      const g = Xt(t.x, e.x, t.side, "x"), h = Xt(t.y, e.y, t.side, "y");
-      return r ? [t, { x: g, y: t.y }, { x: g, y: h }, { x: l, y: h }, { x: l, y: e.y }, e] : [t, { x: g, y: t.y }, { x: g, y: h }, { x: e.x, y: h }, e];
+      const w = Ct(t.x, n.x, t.side, "x"), l = Ct(t.y, n.y, t.side, "y");
+      return i ? [t, { x: w, y: t.y }, { x: w, y: l }, { x: u, y: l }, { x: u, y: n.y }, n] : [t, { x: w, y: t.y }, { x: w, y: l }, { x: n.x, y: l }, n];
     }
-    const m = Xt(t.y, e.y, t.side, "y"), b = Xt(t.x, e.x, t.side, "x");
-    return r ? [t, { x: t.x, y: m }, { x: b, y: m }, { x: b, y: e.y }, e] : [t, { x: t.x, y: m }, { x: b, y: m }, { x: b, y: d }, { x: e.x, y: d }, e];
+    const y = Ct(t.y, n.y, t.side, "y"), g = Ct(t.x, n.x, t.side, "x");
+    return i ? [t, { x: t.x, y }, { x: g, y }, { x: g, y: n.y }, n] : [t, { x: t.x, y }, { x: g, y }, { x: g, y: d }, { x: n.x, y: d }, n];
   }
   return [];
 }
-function zn(t, e, n = [], o = "elbow", r = []) {
-  if (r.length > 0) return pe(t, e, r);
-  const l = t.side ?? (Math.abs(e.x - t.x) >= Math.abs(e.y - t.y) ? "e" : "s"), d = e.side ?? (l === "e" || l === "w" ? "w" : "n"), m = l === "e" || l === "w", b = d === "e" || d === "w", g = fn(t.x, e.x, n, "x"), h = fn(t.y, e.y, n, "y"), i = [];
-  if (m && b) {
-    for (const a of g) i.push([t, { x: a, y: t.y }, { x: a, y: e.y }, e]);
-    for (const a of h) i.push([t, { x: t.x, y: a }, { x: e.x, y: a }, e]);
-  } else if (!m && !b) {
-    for (const a of h) i.push([t, { x: t.x, y: a }, { x: e.x, y: a }, e]);
-    for (const a of g) i.push([t, { x: a, y: t.y }, { x: a, y: e.y }, e]);
-  } else if (m) {
-    i.push([t, { x: e.x, y: t.y }, e]);
-    for (const a of h)
-      i.push([t, { x: t.x, y: a }, { x: e.x, y: a }, e]), i.push([t, { x: t.x, y: a }, e]);
-    for (const a of g) i.push([t, { x: a, y: t.y }, { x: a, y: e.y }, e]);
+function ze(t, n, e = [], o = "elbow", i = []) {
+  if (i.length > 0) return Yn(t, n, i);
+  const u = t.side ?? (Math.abs(n.x - t.x) >= Math.abs(n.y - t.y) ? "e" : "s"), d = n.side ?? (u === "e" || u === "w" ? "w" : "n"), y = u === "e" || u === "w", g = d === "e" || d === "w", w = fe(t.x, n.x, e, "x"), l = fe(t.y, n.y, e, "y"), r = [];
+  if (y && g) {
+    for (const a of w) r.push([t, { x: a, y: t.y }, { x: a, y: n.y }, n]);
+    for (const a of l) r.push([t, { x: t.x, y: a }, { x: n.x, y: a }, n]);
+  } else if (!y && !g) {
+    for (const a of l) r.push([t, { x: t.x, y: a }, { x: n.x, y: a }, n]);
+    for (const a of w) r.push([t, { x: a, y: t.y }, { x: a, y: n.y }, n]);
+  } else if (y) {
+    r.push([t, { x: n.x, y: t.y }, n]);
+    for (const a of l)
+      r.push([t, { x: t.x, y: a }, { x: n.x, y: a }, n]), r.push([t, { x: t.x, y: a }, n]);
+    for (const a of w) r.push([t, { x: a, y: t.y }, { x: a, y: n.y }, n]);
   } else {
-    i.push([t, { x: t.x, y: e.y }, e]);
-    for (const a of h)
-      i.push([t, { x: t.x, y: a }, e]), i.push([t, { x: t.x, y: a }, { x: e.x, y: a }, e]);
-    for (const a of g) i.push([t, { x: a, y: t.y }, { x: a, y: e.y }, e]);
+    r.push([t, { x: t.x, y: n.y }, n]);
+    for (const a of l)
+      r.push([t, { x: t.x, y: a }, n]), r.push([t, { x: t.x, y: a }, { x: n.x, y: a }, n]);
+    for (const a of w) r.push([t, { x: a, y: t.y }, { x: a, y: n.y }, n]);
   }
-  const u = Ut(i, n);
-  if (o === "elbow") return u;
+  const f = Zt(r, e);
+  if (o === "elbow") return f;
   if (o === "reverse") {
-    const a = hn(u), X = Ut(i.filter((x) => hn(x) !== a), n);
-    return X.length > 1 ? X : u;
+    const a = me(f), S = Zt(r.filter((h) => me(h) !== a), e);
+    return S.length > 1 ? S : f;
   }
-  const c = ge(t, e, o, m, b), v = Ut([c], n);
-  return v.length > 1 ? v : u;
+  const c = Cn(t, n, o, y, g), v = Zt([c], e);
+  return v.length > 1 ? v : f;
 }
-function be(t) {
-  return t.length < 2 ? 0 : Zt(t[t.length - 2], t[t.length - 1]);
+function Me(t) {
+  return t.length < 2 ? 0 : Lt(t[t.length - 2], t[t.length - 1]);
 }
-function Jt(t) {
+function Bt(t) {
   if (t.fillColor)
     try {
-      return gn(t.fillColor);
+      return we(t.fillColor);
     } catch {
     }
-  return t.color ? st[t.color].bg : st.blue.bg;
+  return t.color ? dt[t.color].bg : dt.blue.bg;
 }
-function we(t) {
-  return t.color ? st[t.color].border : "#2563eb";
+function Xe(t) {
+  return t.color ? dt[t.color].border : "#2563eb";
 }
-function wt(t) {
+function Xt(t) {
   if (t.textColor)
     try {
-      return gn(t.textColor);
+      return we(t.textColor);
     } catch {
     }
-  return t.color ? st[t.color].text : "#0f172a";
+  return t.color ? dt[t.color].text : "#0f172a";
 }
-function $e(t, e, n) {
+function Ye(t, n, e) {
   switch (t) {
     case "triangle":
-      return `${e / 2},0 ${e},${n} 0,${n}`;
+      return `${n / 2},0 ${n},${e} 0,${e}`;
     case "diamond":
-      return `${e / 2},0 ${e},${n / 2} ${e / 2},${n} 0,${n / 2}`;
+      return `${n / 2},0 ${n},${e / 2} ${n / 2},${e} 0,${e / 2}`;
     case "hexagon": {
-      const o = e * 0.25;
-      return `${o},0 ${e - o},0 ${e},${n / 2} ${e - o},${n} ${o},${n} 0,${n / 2}`;
+      const o = n * 0.25;
+      return `${o},0 ${n - o},0 ${n},${e / 2} ${n - o},${e} ${o},${e} 0,${e / 2}`;
     }
     case "star": {
-      const o = e / 2, r = n / 2, l = Math.min(e, n) / 2, d = l * 0.4, m = [];
-      for (let b = 0; b < 10; b++) {
-        const g = Math.PI / 5 * b - Math.PI / 2, h = b % 2 === 0 ? l : d;
-        m.push(`${o + h * Math.cos(g)},${r + h * Math.sin(g)}`);
+      const o = n / 2, i = e / 2, u = Math.min(n, e) / 2, d = u * 0.4, y = [];
+      for (let g = 0; g < 10; g++) {
+        const w = Math.PI / 5 * g - Math.PI / 2, l = g % 2 === 0 ? u : d;
+        y.push(`${o + l * Math.cos(w)},${i + l * Math.sin(w)}`);
       }
-      return m.join(" ");
+      return y.join(" ");
     }
     default:
       return "";
   }
 }
-function kn(t) {
+function Se(t) {
   if (t.length === 0) return "";
   if (t.length === 1) return `M ${t[0][0]} ${t[0][1]} L ${t[0][0] + 0.1} ${t[0][1]}`;
-  let e = `M ${t[0][0]} ${t[0][1]}`;
+  let n = `M ${t[0][0]} ${t[0][1]}`;
   for (let o = 1; o < t.length - 1; o++) {
-    const [r, l] = t[o], [d, m] = t[o + 1];
-    e += ` Q ${r} ${l} ${(r + d) / 2} ${(l + m) / 2}`;
+    const [i, u] = t[o], [d, y] = t[o + 1];
+    n += ` Q ${i} ${u} ${(i + d) / 2} ${(u + y) / 2}`;
   }
-  const n = t[t.length - 1];
-  return `${e} L ${n[0]} ${n[1]}`;
+  const e = t[t.length - 1];
+  return `${n} L ${e[0]} ${e[1]}`;
 }
-function mt(t) {
-  return t.replace(/[&<>\"]/g, (e) => e === "&" ? "&amp;" : e === "<" ? "&lt;" : e === ">" ? "&gt;" : "&quot;");
+function bt(t) {
+  return t.replace(/[&<>\"]/g, (n) => n === "&" ? "&amp;" : n === "<" ? "&lt;" : n === ">" ? "&gt;" : "&quot;");
 }
-function Mn(t) {
-  const e = document.createElement("template");
-  e.innerHTML = t;
-  const n = [[]], o = (r, l) => {
-    r.childNodes.forEach((d) => {
+function Ce(t) {
+  const n = document.createElement("template");
+  n.innerHTML = t;
+  const e = [[]], o = (i, u) => {
+    i.childNodes.forEach((d) => {
       if (d.nodeType === Node.TEXT_NODE) {
-        const h = d.textContent ?? "";
-        h && n[n.length - 1].push({ text: h, ...l });
+        const l = d.textContent ?? "";
+        l && e[e.length - 1].push({ text: l, ...u });
         return;
       }
       if (d.nodeType !== Node.ELEMENT_NODE) return;
-      const m = d;
-      if (m.tagName === "BR") {
-        n.push([]);
+      const y = d;
+      if (y.tagName === "BR") {
+        e.push([]);
         return;
       }
-      const b = { bold: l.bold || m.tagName === "B" || m.tagName === "STRONG", italic: l.italic || m.tagName === "I" || m.tagName === "EM", underline: l.underline || m.tagName === "U" }, g = m.tagName === "DIV" || m.tagName === "P" || m.tagName === "LI";
-      g && n[n.length - 1].length > 0 && n.push([]), o(m, b), g && n.push([]);
+      const g = { bold: u.bold || y.tagName === "B" || y.tagName === "STRONG", italic: u.italic || y.tagName === "I" || y.tagName === "EM", underline: u.underline || y.tagName === "U" }, w = y.tagName === "DIV" || y.tagName === "P" || y.tagName === "LI";
+      w && e[e.length - 1].length > 0 && e.push([]), o(y, g), w && e.push([]);
     });
   };
-  return o(e.content, { bold: !1, italic: !1, underline: !1 }), n.filter((r) => r.length > 0);
+  return o(n.content, { bold: !1, italic: !1, underline: !1 }), e.filter((i) => i.length > 0);
 }
-function Dt(t) {
-  return t.html ? nn(t.html) : t.text ? mt(t.text).replace(/\n/g, "<br>") : "";
+function Kt(t) {
+  return t.html ? re(t.html) : t.text ? bt(t.text).replace(/\n/g, "<br>") : "";
 }
-function tn(t) {
+function oe(t) {
   if (t)
     try {
-      return Qn(t);
+      return an(t);
     } catch {
       return;
     }
 }
-function on(t) {
+function Ne(t) {
   try {
-    return qn(t);
+    return rn(t);
   } catch {
     return null;
   }
 }
-function Ot(t) {
-  return t.html ? Mn(t.html).map((e) => e.map((n) => n.text).join("")).join(`
+function Rt(t) {
+  return t.html ? Ce(t.html).map((n) => n.map((e) => e.text).join("")).join(`
 `) : t.text ?? "";
 }
-const Lt = 12;
-function pt(t) {
+const Dt = 12;
+function $t(t) {
   return {
     minX: Math.min(t.x, t.x + t.w),
     minY: Math.min(t.y, t.y + t.h),
@@ -320,214 +320,221 @@ function pt(t) {
     maxY: Math.max(t.y, t.y + t.h)
   };
 }
-function dt(t) {
+function mt(t) {
   return { x: t.x + t.w / 2, y: t.y + t.h / 2 };
 }
-function et(t) {
-  const e = t.rotation ?? 0, n = pt(t);
-  if (!e) return n;
-  const o = dt(t), r = Math.cos(e), l = Math.sin(e), d = [
-    [n.minX, n.minY],
-    [n.maxX, n.minY],
-    [n.maxX, n.maxY],
-    [n.minX, n.maxY]
-  ].map(([g, h]) => {
-    const i = g - o.x, u = h - o.y;
-    return [o.x + i * r - u * l, o.y + i * l + u * r];
-  }), m = d.map((g) => g[0]), b = d.map((g) => g[1]);
-  return { minX: Math.min(...m), minY: Math.min(...b), maxX: Math.max(...m), maxY: Math.max(...b) };
+function nt(t) {
+  const n = t.rotation ?? 0, e = $t(t);
+  if (!n) return e;
+  const o = mt(t), i = Math.cos(n), u = Math.sin(n), d = [
+    [e.minX, e.minY],
+    [e.maxX, e.minY],
+    [e.maxX, e.maxY],
+    [e.minX, e.maxY]
+  ].map(([w, l]) => {
+    const r = w - o.x, f = l - o.y;
+    return [o.x + r * i - f * u, o.y + r * u + f * i];
+  }), y = d.map((w) => w[0]), g = d.map((w) => w[1]);
+  return { minX: Math.min(...y), minY: Math.min(...g), maxX: Math.max(...y), maxY: Math.max(...g) };
 }
-function Xn(t, e, n) {
+function Ie(t, n, e) {
   const o = t.rotation ?? 0;
-  if (!o) return { x: e, y: n };
-  const r = dt(t), l = Math.cos(-o), d = Math.sin(-o), m = e - r.x, b = n - r.y;
-  return { x: r.x + m * l - b * d, y: r.y + m * d + b * l };
+  if (!o) return { x: n, y: e };
+  const i = mt(t), u = Math.cos(-o), d = Math.sin(-o), y = n - i.x, g = e - i.y;
+  return { x: i.x + y * u - g * d, y: i.y + y * d + g * u };
 }
-function Ft(t, e, n, o, r, l) {
-  const d = r - n, m = l - o, b = d * d + m * m, g = b === 0 ? 0 : Math.max(0, Math.min(1, ((t - n) * d + (e - o) * m) / b));
-  return Math.hypot(t - (n + g * d), e - (o + g * m));
+function _t(t, n, e, o, i, u) {
+  const d = i - e, y = u - o, g = d * d + y * y, w = g === 0 ? 0 : Math.max(0, Math.min(1, ((t - e) * d + (n - o) * y) / g));
+  return Math.hypot(t - (e + w * d), n - (o + w * y));
 }
-function Tt(t, e, n, o, r, l) {
+function jt(t, n, e, o, i, u) {
   const d = 8 / o;
   if (t.type === "arrow") {
-    const g = xt(t, r ?? /* @__PURE__ */ new Map(), l);
-    if (g.routing === "orthogonal" && g.pathPoints && g.pathPoints.length > 1) {
-      for (let i = 1; i < g.pathPoints.length; i++) {
-        const u = g.pathPoints[i - 1], c = g.pathPoints[i];
-        if (Ft(e, n, u.x, u.y, c.x, c.y) <= d) return !0;
+    const w = (t.strokeWidth ?? 2.5) / o / 2 + d, l = pt(t, i ?? /* @__PURE__ */ new Map(), u);
+    if (l.routing === "orthogonal" && l.pathPoints && l.pathPoints.length > 1) {
+      for (let f = 1; f < l.pathPoints.length; f++) {
+        const c = l.pathPoints[f - 1], v = l.pathPoints[f];
+        if (_t(n, e, c.x, c.y, v.x, v.y) <= w) return !0;
       }
       return !1;
     }
-    if (g.bend === 0) return Ft(e, n, g.start.x, g.start.y, g.end.x, g.end.y) <= d;
-    let h = g.start;
-    for (let i = 1; i <= 16; i++) {
-      const u = St(i / 16, g.start, g.control, g.end);
-      if (Ft(e, n, h.x, h.y, u.x, u.y) <= d) return !0;
-      h = u;
+    if (l.bend === 0) return _t(n, e, l.start.x, l.start.y, l.end.x, l.end.y) <= w;
+    let r = l.start;
+    for (let f = 1; f <= 16; f++) {
+      const c = Ft(f / 16, l.start, l.control, l.end);
+      if (_t(n, e, r.x, r.y, c.x, c.y) <= w) return !0;
+      r = c;
     }
     return !1;
   }
   if (t.type === "draw" && t.points) {
-    for (let g = 1; g < t.points.length; g++) {
-      const [h, i] = t.points[g - 1], [u, c] = t.points[g];
-      if (Ft(e, n, h, i, u, c) <= d) return !0;
+    const w = (t.strokeWidth ?? 3) / o / 2 + d;
+    for (let l = 1; l < t.points.length; l++) {
+      const [r, f] = t.points[l - 1], [c, v] = t.points[l];
+      if (_t(n, e, r, f, c, v) <= w) return !0;
     }
     return !1;
   }
-  const m = Xn(t, e, n), b = pt(t);
+  const y = Ie(t, n, e), g = $t(t);
   if (t.type === "frame") {
-    const g = m.x >= b.minX - d && m.x <= b.maxX + d && m.y >= b.minY - d && m.y <= b.maxY + d && (m.x <= b.minX + d || m.x >= b.maxX - d || m.y <= b.minY + d || m.y >= b.maxY - d), h = m.x >= b.minX - d && m.x <= b.maxX + d && m.y >= b.minY - 28 / o && m.y <= b.minY;
-    return g || h;
+    const w = y.x >= g.minX - d && y.x <= g.maxX + d && y.y >= g.minY - d && y.y <= g.maxY + d && (y.x <= g.minX + d || y.x >= g.maxX - d || y.y <= g.minY + d || y.y >= g.maxY - d), l = y.x >= g.minX - d && y.x <= g.maxX + d && y.y >= g.minY - 28 / o && y.y <= g.minY;
+    return w || l;
   }
-  return m.x >= b.minX - d && m.x <= b.maxX + d && m.y >= b.minY - d && m.y <= b.maxY + d;
+  return y.x >= g.minX - d && y.x <= g.maxX + d && y.y >= g.minY - d && y.y <= g.maxY + d;
 }
-function $t(t, e, n) {
-  const o = pt(t), r = (o.minX + o.maxX) / 2, l = (o.minY + o.maxY) / 2, d = e - r, m = n - l;
-  if (d === 0 && m === 0) return { x: r, y: l, side: "e" };
-  const b = (o.maxX - o.minX) / 2, g = (o.maxY - o.minY) / 2, h = b === 0 ? 1 / 0 : Math.abs(b / d), i = g === 0 ? 1 / 0 : Math.abs(g / m);
-  return h <= i ? { x: r + d * h, y: l + m * h, side: d >= 0 ? "e" : "w" } : { x: r + d * i, y: l + m * i, side: m >= 0 ? "s" : "n" };
+function Yt(t, n, e) {
+  const o = $t(t), i = (o.minX + o.maxX) / 2, u = (o.minY + o.maxY) / 2, d = n - i, y = e - u;
+  if (d === 0 && y === 0) return { x: i, y: u, side: "e" };
+  const g = (o.maxX - o.minX) / 2, w = (o.maxY - o.minY) / 2, l = g === 0 ? 1 / 0 : Math.abs(g / d), r = w === 0 ? 1 / 0 : Math.abs(w / y);
+  return l <= r ? { x: i + d * l, y: u + y * l, side: d >= 0 ? "e" : "w" } : { x: i + d * r, y: u + y * r, side: y >= 0 ? "s" : "n" };
 }
-function Yn(t, e, n, o) {
-  const r = /* @__PURE__ */ new Set([e.id, n, o]);
-  return t.filter((l) => !r.has(l.id)).map((l) => {
-    const d = et(l);
-    return { minX: d.minX - Lt, minY: d.minY - Lt, maxX: d.maxX + Lt, maxY: d.maxY + Lt };
-  }).filter((l) => l.maxX > l.minX && l.maxY > l.minY);
+function Pe(t, n, e, o) {
+  const i = /* @__PURE__ */ new Set([n.id, e, o]);
+  return t.filter((u) => !i.has(u.id)).map((u) => {
+    const d = nt(u);
+    return { minX: d.minX - Dt, minY: d.minY - Dt, maxX: d.maxX + Dt, maxY: d.maxY + Dt };
+  }).filter((u) => u.maxX > u.minX && u.maxY > u.minY);
 }
-function xt(t, e, n = []) {
-  const o = t.fromId ? e.get(t.fromId) : void 0, r = t.toId ? e.get(t.toId) : void 0;
-  let l = { x: t.x, y: t.y }, d = { x: t.x + t.w, y: t.y + t.h };
-  if (o && r) {
-    const v = dt(o), a = dt(r);
-    l = $t(o, a.x, a.y), d = $t(r, v.x, v.y);
-  } else o ? l = $t(o, d.x, d.y) : r && (d = $t(r, l.x, l.y));
-  const m = (l.x + d.x) / 2, b = (l.y + d.y) / 2, g = t.bend ?? 0;
-  let h = { x: m, y: b };
-  if (g !== 0) {
-    const v = d.x - l.x, a = d.y - l.y, X = Math.hypot(v, a) || 1;
-    h = { x: m + -a / X * g, y: b + v / X * g };
+function pt(t, n, e = []) {
+  const o = t.fromId ? n.get(t.fromId) : void 0, i = t.toId ? n.get(t.toId) : void 0;
+  let u = { x: t.x, y: t.y }, d = { x: t.x + t.w, y: t.y + t.h };
+  if (o && i) {
+    const v = mt(o), a = mt(i);
+    u = Yt(o, a.x, a.y), d = Yt(i, v.x, v.y);
+  } else o ? u = Yt(o, d.x, d.y) : i && (d = Yt(i, u.x, u.y));
+  const y = (u.x + d.x) / 2, g = (u.y + d.y) / 2, w = t.bend ?? 0;
+  let l = { x: y, y: g };
+  if (w !== 0) {
+    const v = d.x - u.x, a = d.y - u.y, S = Math.hypot(v, a) || 1;
+    l = { x: y + -a / S * w, y: g + v / S * w };
   }
-  const i = !!(o || r), u = t.routing ?? (i ? "orthogonal" : g !== 0 ? "curved" : "straight");
-  if (u !== "orthogonal") return { start: l, end: d, control: h, bend: g, routing: u };
-  const c = Yn(n, t, o == null ? void 0 : o.id, r == null ? void 0 : r.id);
+  const r = !!(o || i), f = t.routing ?? (r ? "orthogonal" : w !== 0 ? "curved" : "straight");
+  if (f !== "orthogonal") return { start: u, end: d, control: l, bend: w, routing: f };
+  const c = Pe(e, t, o == null ? void 0 : o.id, i == null ? void 0 : i.id);
   return {
-    start: l,
+    start: u,
     end: d,
-    control: h,
-    bend: g,
-    routing: u,
-    pathPoints: wn(zn(l, d, c, t.orthogonalVariant, t.orthogonalWaypoints))
+    control: l,
+    bend: w,
+    routing: f,
+    pathPoints: ke(ze(u, d, c, t.orthogonalVariant, t.orthogonalWaypoints))
   };
 }
-function St(t, e, n, o) {
-  const r = 1 - t;
-  return { x: r * r * e.x + 2 * r * t * n.x + t * t * o.x, y: r * r * e.y + 2 * r * t * n.y + t * t * o.y };
+function Ft(t, n, e, o) {
+  const i = 1 - t;
+  return { x: i * i * n.x + 2 * i * t * e.x + t * t * o.x, y: i * i * n.y + 2 * i * t * e.y + t * t * o.y };
 }
-function Sn(t, e, n, o, r) {
-  const l = [];
+function Ee(t, n, e, o, i) {
+  const u = [];
   let d = 0;
-  for (const m of t) {
-    if (m.type !== "draw" || !m.points) {
-      if (Tt(m, e, n, r)) continue;
-      l.push(m);
+  for (const y of t) {
+    if (y.type !== "draw" || !y.points) {
+      if (jt(y, n, e, i)) continue;
+      u.push(y);
       continue;
     }
-    const b = [];
-    let g = [];
-    for (const [i, u] of m.points)
-      Math.hypot(i - e, u - n) <= o / r ? (g.length > 1 && b.push(g), g = []) : g.push([i, u]);
-    if (g.length > 1 && b.push(g), b.length === 0) continue;
-    const h = pt(m);
-    b.forEach((i) => l.push({ ...m, id: `${m.id}-e${d++}`, points: i, x: h.minX, y: h.minY, w: h.maxX - h.minX, h: h.maxY - h.minY }));
+    const g = [];
+    let w = [];
+    for (const [r, f] of y.points)
+      Math.hypot(r - n, f - e) <= o / i ? (w.length > 1 && g.push(w), w = []) : w.push([r, f]);
+    if (w.length > 1 && g.push(w), g.length === 0) continue;
+    const l = $t(y);
+    g.forEach((r) => u.push({ ...y, id: `${y.id}-e${d++}`, points: r, x: l.minX, y: l.minY, w: l.maxX - l.minX, h: l.maxY - l.minY }));
   }
-  return l;
+  return u;
 }
-function ze(t, e, n) {
-  const o = 6 / n;
-  let r = null, l = null;
-  const d = [], m = [t.minX, (t.minX + t.maxX) / 2, t.maxX], b = [t.minY, (t.minY + t.maxY) / 2, t.maxY];
-  for (const g of e) {
-    const h = et(g), i = [h.minX, (h.minX + h.maxX) / 2, h.maxX], u = [h.minY, (h.minY + h.maxY) / 2, h.maxY];
-    for (const c of m) for (const v of i) {
+function Nn(t, n, e) {
+  const o = 6 / e;
+  let i = null, u = null;
+  const d = [], y = [t.minX, (t.minX + t.maxX) / 2, t.maxX], g = [t.minY, (t.minY + t.maxY) / 2, t.maxY];
+  for (const w of n) {
+    const l = nt(w), r = [l.minX, (l.minX + l.maxX) / 2, l.maxX], f = [l.minY, (l.minY + l.maxY) / 2, l.maxY];
+    for (const c of y) for (const v of r) {
       const a = v - c;
-      Math.abs(a) <= o && (!r || Math.abs(a) < Math.abs(r.delta)) && (r = { delta: a, at: v });
+      Math.abs(a) <= o && (!i || Math.abs(a) < Math.abs(i.delta)) && (i = { delta: a, at: v });
     }
-    for (const c of b) for (const v of u) {
+    for (const c of g) for (const v of f) {
       const a = v - c;
-      Math.abs(a) <= o && (!l || Math.abs(a) < Math.abs(l.delta)) && (l = { delta: a, at: v });
+      Math.abs(a) <= o && (!u || Math.abs(a) < Math.abs(u.delta)) && (u = { delta: a, at: v });
     }
   }
-  return r && d.push({ x1: r.at, y1: t.minY - 1e3, x2: r.at, y2: t.maxY + 1e3 }), l && d.push({ x1: t.minX - 1e3, y1: l.at, x2: t.maxX + 1e3, y2: l.at }), { dx: (r == null ? void 0 : r.delta) ?? 0, dy: (l == null ? void 0 : l.delta) ?? 0, guides: d };
+  return i && d.push({ x1: i.at, y1: t.minY - 1e3, x2: i.at, y2: t.maxY + 1e3 }), u && d.push({ x1: t.minX - 1e3, y1: u.at, x2: t.maxX + 1e3, y2: u.at }), { dx: (i == null ? void 0 : i.delta) ?? 0, dy: (u == null ? void 0 : u.delta) ?? 0, guides: d };
 }
-const ke = 14;
-function Me({
+const In = 14;
+function Pn({
   visiblePaintOrder: t,
-  selected: e,
-  shapeById: n,
+  selected: n,
+  shapeById: e,
   allShapes: o,
-  camera: r,
-  interaction: l,
+  camera: i,
+  interaction: u,
   eraserPos: d,
-  guides: m,
-  marquee: b,
-  strokeColorOf: g
+  guides: y,
+  marquee: g,
+  strokeColorOf: w
 }) {
-  return /* @__PURE__ */ C("svg", { className: "absolute inset-0 w-full h-full pointer-events-none overflow-visible", children: /* @__PURE__ */ j("g", { transform: `scale(${r.z}) translate(${-r.x}, ${-r.y})`, children: [
-    t.map((h) => {
-      if (h.type === "draw" && h.points)
-        return /* @__PURE__ */ C(
+  return /* @__PURE__ */ N("svg", { className: "absolute inset-0 w-full h-full pointer-events-none overflow-visible", children: /* @__PURE__ */ K("g", { transform: `scale(${i.z}) translate(${-i.x}, ${-i.y})`, children: [
+    t.map((l) => {
+      if (l.type === "draw" && l.points) {
+        const $ = l.drawMode ?? "pen", M = l.strokeWidth ?? 3;
+        return /* @__PURE__ */ N(
           "path",
           {
-            "data-canvas-vector-shape-id": h.id,
+            "data-canvas-vector-shape-id": l.id,
             "data-canvas-vector-shape-type": "draw",
-            d: kn(h.points),
+            "data-canvas-draw-mode": $,
+            "data-canvas-stroke-width": M,
+            d: Se(l.points),
             fill: "none",
-            stroke: e.has(h.id) ? _.blue : g(h),
-            strokeWidth: 3 / r.z,
+            stroke: n.has(l.id) ? H.blue : w(l),
+            strokeWidth: M / i.z,
+            strokeOpacity: $ === "highlighter" ? 0.35 : void 0,
             strokeLinecap: "round",
             strokeLinejoin: "round"
           },
-          h.id
+          l.id
         );
-      if (h.type !== "arrow") return null;
-      const i = e.has(h.id) ? _.blue : g(h), u = xt(h, n, o), c = 14 / r.z, v = 5 / r.z, a = u.routing === "orthogonal" && u.pathPoints ? u.pathPoints : null, X = a && a.length > 1;
-      let x, y;
-      if (X)
-        x = qt(a), y = be(a);
-      else if (u.routing === "curved") {
-        x = `M ${u.start.x} ${u.start.y} Q ${u.control.x} ${u.control.y} ${u.end.x} ${u.end.y}`;
-        const $ = St(0.94, u.start, u.control, u.end);
-        y = Math.atan2(u.end.y - $.y, u.end.x - $.x);
+      }
+      if (l.type !== "arrow") return null;
+      const r = n.has(l.id) ? H.blue : w(l), f = pt(l, e, o), c = l.strokeWidth ?? 2.5, v = c / i.z, a = Math.max(10, 8 + c * 2), S = Math.max(4, 2 + c), h = a / i.z, Y = S / i.z, z = f.routing === "orthogonal" && f.pathPoints ? f.pathPoints : null, s = z && z.length > 1;
+      let x, k;
+      if (s)
+        x = ee(z), k = Me(z);
+      else if (f.routing === "curved") {
+        x = `M ${f.start.x} ${f.start.y} Q ${f.control.x} ${f.control.y} ${f.end.x} ${f.end.y}`;
+        const $ = Ft(0.94, f.start, f.control, f.end);
+        k = Math.atan2(f.end.y - $.y, f.end.x - $.x);
       } else
-        x = `M ${u.start.x} ${u.start.y} L ${u.end.x} ${u.end.y}`, y = Math.atan2(u.end.y - u.start.y, u.end.x - u.start.x);
-      const z = X && a.length >= 2 ? Zt(a[0], a[1]) : u.routing === "orthogonal" && u.start.side ? u.start.side === "e" ? 0 : u.start.side === "w" ? Math.PI : u.start.side === "s" ? Math.PI / 2 : -Math.PI / 2 : Zt(u.start, u.end), s = h.strokeStyle === "dashed" ? `${8 / r.z} ${5 / r.z}` : h.strokeStyle === "dotted" ? `${1.5 / r.z} ${4 / r.z}` : void 0, f = ($, Y, w, p) => $ === "dot" ? /* @__PURE__ */ C("circle", { cx: Y, cy: w, r: v, fill: i }) : $ === "none" ? null : /* @__PURE__ */ C(
+        x = `M ${f.start.x} ${f.start.y} L ${f.end.x} ${f.end.y}`, k = Math.atan2(f.end.y - f.start.y, f.end.x - f.start.x);
+      const p = s && z.length >= 2 ? Lt(z[0], z[1]) : f.routing === "orthogonal" && f.start.side ? f.start.side === "e" ? 0 : f.start.side === "w" ? Math.PI : f.start.side === "s" ? Math.PI / 2 : -Math.PI / 2 : Lt(f.start, f.end), b = l.strokeStyle === "dashed" ? `${8 / i.z} ${5 / i.z}` : l.strokeStyle === "dotted" ? `${1.5 / i.z} ${4 / i.z}` : void 0, m = ($, M, C, I) => $ === "dot" ? /* @__PURE__ */ N("circle", { "data-canvas-arrow-dot-radius": S, cx: M, cy: C, r: Y, fill: r }) : $ === "none" ? null : /* @__PURE__ */ N(
         "polygon",
         {
-          points: `${Y},${w} ${Y - c * Math.cos(p - 0.4)},${w - c * Math.sin(p - 0.4)} ${Y - c * Math.cos(p + 0.4)},${w - c * Math.sin(p + 0.4)}`,
-          fill: i
+          "data-canvas-arrowhead-size": a,
+          points: `${M},${C} ${M - h * Math.cos(I - 0.4)},${C - h * Math.sin(I - 0.4)} ${M - h * Math.cos(I + 0.4)},${C - h * Math.sin(I + 0.4)}`,
+          fill: r
         }
       );
-      return /* @__PURE__ */ j("g", { "data-canvas-vector-shape-id": h.id, "data-canvas-vector-shape-type": "arrow", "data-canvas-routing": u.routing, children: [
-        /* @__PURE__ */ C("path", { d: x, fill: "none", stroke: i, strokeWidth: 2.5 / r.z, strokeLinecap: "round", strokeLinejoin: "round", strokeDasharray: s }),
-        f(h.arrowEnd ?? "arrow", u.end.x, u.end.y, y),
-        f(h.arrowStart ?? "none", u.start.x, u.start.y, z + Math.PI)
-      ] }, h.id);
+      return /* @__PURE__ */ K("g", { "data-canvas-vector-shape-id": l.id, "data-canvas-vector-shape-type": "arrow", "data-canvas-routing": f.routing, "data-canvas-stroke-width": c, children: [
+        /* @__PURE__ */ N("path", { d: x, fill: "none", stroke: r, strokeWidth: v, strokeLinecap: "round", strokeLinejoin: "round", strokeDasharray: b }),
+        m(l.arrowEnd ?? "arrow", f.end.x, f.end.y, k),
+        m(l.arrowStart ?? "none", f.start.x, f.start.y, p + Math.PI)
+      ] }, l.id);
     }),
-    l.kind === "connect" && l.fromId !== void 0 && l.toX !== void 0 && l.toY !== void 0 && (() => {
-      const h = n.get(l.fromId);
-      if (!h) return null;
-      const i = $t(h, l.toX, l.toY), u = l.hoverId ? n.get(l.hoverId) : null, c = u ? $t(u, i.x, i.y) : { x: l.toX, y: l.toY }, v = u ? zn(i, c, Yn(o, { id: "__preview" }, h.id, u.id)) : [i, c];
-      return /* @__PURE__ */ j("g", { children: [
-        /* @__PURE__ */ C("path", { d: qt(v), stroke: _.blue, strokeWidth: 2 / r.z, strokeDasharray: `${5 / r.z} ${4 / r.z}` }),
-        u ? /* @__PURE__ */ C("rect", { x: et(u).minX - 3 / r.z, y: et(u).minY - 3 / r.z, width: et(u).maxX - et(u).minX + 6 / r.z, height: et(u).maxY - et(u).minY + 6 / r.z, fill: "none", stroke: _.blue, strokeWidth: 2 / r.z, rx: 6 / r.z }) : /* @__PURE__ */ C("circle", { cx: c.x, cy: c.y, r: 5 / r.z, fill: _.blue })
+    u.kind === "connect" && u.fromId !== void 0 && u.toX !== void 0 && u.toY !== void 0 && (() => {
+      const l = e.get(u.fromId);
+      if (!l) return null;
+      const r = Yt(l, u.toX, u.toY), f = u.hoverId ? e.get(u.hoverId) : null, c = f ? Yt(f, r.x, r.y) : { x: u.toX, y: u.toY }, v = f ? ze(r, c, Pe(o, { id: "__preview" }, l.id, f.id)) : [r, c];
+      return /* @__PURE__ */ K("g", { children: [
+        /* @__PURE__ */ N("path", { d: ee(v), stroke: H.blue, strokeWidth: 2 / i.z, strokeDasharray: `${5 / i.z} ${4 / i.z}` }),
+        f ? /* @__PURE__ */ N("rect", { x: nt(f).minX - 3 / i.z, y: nt(f).minY - 3 / i.z, width: nt(f).maxX - nt(f).minX + 6 / i.z, height: nt(f).maxY - nt(f).minY + 6 / i.z, fill: "none", stroke: H.blue, strokeWidth: 2 / i.z, rx: 6 / i.z }) : /* @__PURE__ */ N("circle", { cx: c.x, cy: c.y, r: 5 / i.z, fill: H.blue })
       ] });
     })(),
-    d && /* @__PURE__ */ C("circle", { cx: d.x, cy: d.y, r: ke / r.z, fill: _.roseSoft, stroke: _.rose, strokeWidth: 1 / r.z }),
-    m.map((h, i) => /* @__PURE__ */ C("line", { x1: h.x1, y1: h.y1, x2: h.x2, y2: h.y2, stroke: _.pink, strokeWidth: 1 / r.z, strokeDasharray: `${4 / r.z} ${4 / r.z}` }, `guide-${i}`)),
-    b && /* @__PURE__ */ C("rect", { x: Math.min(b.startX, b.curX), y: Math.min(b.startY, b.curY), width: Math.abs(b.curX - b.startX), height: Math.abs(b.curY - b.startY), fill: _.marqueeFill, stroke: _.blue, strokeWidth: 1 / r.z })
+    d && /* @__PURE__ */ N("circle", { cx: d.x, cy: d.y, r: In / i.z, fill: H.roseSoft, stroke: H.rose, strokeWidth: 1 / i.z }),
+    y.map((l, r) => /* @__PURE__ */ N("line", { x1: l.x1, y1: l.y1, x2: l.x2, y2: l.y2, stroke: H.pink, strokeWidth: 1 / i.z, strokeDasharray: `${4 / i.z} ${4 / i.z}` }, `guide-${r}`)),
+    g && /* @__PURE__ */ N("rect", { x: Math.min(g.startX, g.curX), y: Math.min(g.startY, g.curY), width: Math.abs(g.curX - g.startX), height: Math.abs(g.curY - g.startY), fill: H.marqueeFill, stroke: H.blue, strokeWidth: 1 / i.z })
   ] }) });
 }
-const Xe = ["sans", "serif", "mono", "gothic", "korean", "chosunmyjo", "hdhyundai", "custom"], Ye = /* @__PURE__ */ new Set([
+const En = ["sans", "serif", "mono", "gothic", "korean", "chosunmyjo", "hdhyundai", "custom"], Ln = /* @__PURE__ */ new Set([
   "serif",
   "sans-serif",
   "monospace",
@@ -540,7 +547,7 @@ const Xe = ["sans", "serif", "mono", "gothic", "korean", "chosunmyjo", "hdhyunda
   "emoji",
   "math",
   "fangsong"
-]), Se = [
+]), Fn = [
   "Arial",
   "Arial Black",
   "Calibri",
@@ -576,43 +583,43 @@ const Xe = ["sans", "serif", "mono", "gothic", "korean", "chosunmyjo", "hdhyunda
   "Verdana",
   "Yu Gothic"
 ];
-function _t(t) {
+function Ut(t) {
   return t.replace(/[\u0000-\u001f\u007f]/g, "").replace(/[{}\\]/g, "").trim().slice(0, 120);
 }
-function Cn(t) {
-  return Ye.has(t.trim().toLowerCase());
+function Le(t) {
+  return Ln.has(t.trim().toLowerCase());
 }
-function Nn(t) {
-  const e = _t(t);
-  return e ? Cn(e) ? e : `"${e.replace(/"/g, '\\"')}"` : "";
+function Fe(t) {
+  const n = Ut(t);
+  return n ? Le(n) ? n : `"${n.replace(/"/g, '\\"')}"` : "";
 }
-function Ce(t) {
-  return _t(t).split(",").map((e) => e.trim()).filter(Boolean).map(Nn).filter(Boolean).join(", ");
+function Tn(t) {
+  return Ut(t).split(",").map((n) => n.trim()).filter(Boolean).map(Fe).filter(Boolean).join(", ");
 }
-function Pn(t) {
-  return _t(t).split(",").map((e) => e.trim().replace(/^["']|["']$/g, "")).filter(Boolean).join(", ").slice(0, 120);
+function Te(t) {
+  return Ut(t).split(",").map((n) => n.trim().replace(/^["']|["']$/g, "")).filter(Boolean).join(", ").slice(0, 120);
 }
-function Yt(t) {
-  return t.split(",").map((e) => _t(e).replace(/^["']|["']$/g, "")).filter(Boolean).filter((e) => !Cn(e));
+function Et(t) {
+  return t.split(",").map((n) => Ut(n).replace(/^["']|["']$/g, "")).filter(Boolean).filter((n) => !Le(n));
 }
-const At = Array.from(/* @__PURE__ */ new Set([
-  ...Se,
-  ...Yt(ut.sans.stack),
-  ...Yt(ut.serif.stack),
-  ...Yt(ut.mono.stack),
-  ...Yt(ut.gothic.stack),
-  ...Yt(ut.korean.stack)
+const Ht = Array.from(/* @__PURE__ */ new Set([
+  ...Fn,
+  ...Et(vt.sans.stack),
+  ...Et(vt.serif.stack),
+  ...Et(vt.mono.stack),
+  ...Et(vt.gothic.stack),
+  ...Et(vt.korean.stack)
 ]));
-function Ne() {
+function An() {
   if (typeof document > "u" || !("fonts" in document) || typeof document.fonts.check != "function")
-    return At;
-  const t = At.filter((e) => {
-    const n = Nn(e);
-    return n ? document.fonts.check(`12px ${n}`) : !1;
+    return Ht;
+  const t = Ht.filter((n) => {
+    const e = Fe(n);
+    return e ? document.fonts.check(`12px ${e}`) : !1;
   });
-  return t.length > 0 ? t : At;
+  return t.length > 0 ? t : Ht;
 }
-const Pe = {
+const Wn = {
   note: 14,
   card: 16,
   text: 20,
@@ -620,50 +627,50 @@ const Pe = {
   ellipse: 14,
   frame: 13,
   arrow: 12
-}, Ie = 24, Ee = 28, In = 720;
+}, On = 24, Dn = 28, Ae = 720;
 function at(t) {
-  return t.fontSize ?? Pe[t.type] ?? 14;
+  return t.fontSize ?? Wn[t.type] ?? 14;
 }
 function ct(t) {
-  var e;
-  if (!t.fontFamily) return ut.sans.stack;
+  var n;
+  if (!t.fontFamily) return vt.sans.stack;
   if (t.fontFamily === "custom") {
-    let n = "";
+    let e = "";
     try {
-      n = Pn(Zn(t.customFontFamily ?? ""));
+      e = Te(cn(t.customFontFamily ?? ""));
     } catch {
     }
-    return Ce(n) || ut.sans.stack;
+    return Tn(e) || vt.sans.stack;
   }
-  return ((e = ut[t.fontFamily]) == null ? void 0 : e.stack) ?? ut.sans.stack;
+  return ((n = vt[t.fontFamily]) == null ? void 0 : n.stack) ?? vt.sans.stack;
 }
-function lt(t) {
+function ut(t) {
   return t.textAlign ? t.textAlign : ["rect", "ellipse", "triangle", "diamond", "hexagon", "star"].includes(t.type) ? "center" : "left";
 }
-function Le(t) {
+function _n(t) {
   return t === "serif" || t === "mono" || t === "sans" || t === "custom" || t === "gothic" || t === "korean" || t === "chosunmyjo" || t === "hdhyundai" ? t : "sans";
 }
-function Fe(t) {
-  var e, n, o;
-  if ((e = t.html) != null && e.includes('<ul data-list-style="dash">')) return "dash";
-  if ((n = t.html) != null && n.includes("<ul>")) return "bullet";
+function Hn(t) {
+  var n, e, o;
+  if ((n = t.html) != null && n.includes('<ul data-list-style="dash">')) return "dash";
+  if ((e = t.html) != null && e.includes("<ul>")) return "bullet";
   if ((o = t.html) != null && o.includes("<ol>")) return "number";
 }
-function Ae(t, e) {
+function Bn(t, n) {
   return {
-    w: Math.min(In, Math.max(Ie, Math.ceil(t))),
-    h: Math.max(Ee, Math.ceil(e))
+    w: Math.min(Ae, Math.max(On, Math.ceil(t))),
+    h: Math.max(Dn, Math.ceil(n))
   };
 }
-function Te(t, e) {
-  const n = t.cloneNode(!0);
-  n.removeAttribute("id"), n.removeAttribute("role"), n.removeAttribute("aria-label"), n.removeAttribute("aria-multiline"), n.removeAttribute("contenteditable"), n.removeAttribute("data-seeded"), n.innerHTML = nn(t.innerHTML), (n.textContent || "").length === 0 && (n.innerHTML = "&nbsp;"), Object.assign(n.style, {
+function jn(t, n) {
+  const e = t.cloneNode(!0);
+  e.removeAttribute("id"), e.removeAttribute("role"), e.removeAttribute("aria-label"), e.removeAttribute("aria-multiline"), e.removeAttribute("contenteditable"), e.removeAttribute("data-seeded"), e.innerHTML = re(t.innerHTML), (e.textContent || "").length === 0 && (e.innerHTML = "&nbsp;"), Object.assign(e.style, {
     position: "absolute",
     left: "-10000px",
     top: "-10000px",
     width: "max-content",
     minWidth: "0",
-    maxWidth: `${In}px`,
+    maxWidth: `${Ae}px`,
     height: "auto",
     minHeight: "0",
     maxHeight: "none",
@@ -678,273 +685,323 @@ function Te(t, e) {
     overflow: "visible",
     overflowWrap: "break-word",
     wordBreak: "normal",
-    fontSize: `${at(e)}px`,
-    fontFamily: ct(e)
-  }), document.body.appendChild(n);
-  const o = n.getBoundingClientRect();
-  return n.remove(), Ae(o.width, o.height);
+    fontSize: `${at(n)}px`,
+    fontFamily: ct(n)
+  }), document.body.appendChild(e);
+  const o = e.getBoundingClientRect();
+  return e.remove(), Bn(o.width, o.height);
 }
-const De = /* @__PURE__ */ new Set(["note", "card", "text", "rect", "ellipse", "triangle", "diamond", "hexagon", "star", "frame", "arrow"]), Oe = /* @__PURE__ */ new Set(["note", "card", "rect", "ellipse", "text", "image"]);
-function _e({
+const Kn = /* @__PURE__ */ new Set(["note", "card", "text", "rect", "ellipse", "triangle", "diamond", "hexagon", "star", "frame", "arrow"]), Rn = /* @__PURE__ */ new Set(["note", "card", "rect", "ellipse", "text", "image"]);
+function Un({
   visiblePaintOrder: t,
-  selected: e,
-  editingId: n,
+  selected: n,
+  editingId: e,
   camera: o,
-  shapeById: r,
-  allShapes: l,
+  shapeById: i,
+  allShapes: u,
   peerCursors: d,
-  isDarkMode: m,
-  renderEditor: b,
-  renderShapeBody: g,
-  setEditingId: h,
-  onBendHandleDown: i,
-  onOrthogonalSegmentHandleDown: u,
+  isDarkMode: y,
+  renderEditor: g,
+  renderShapeBody: w,
+  setEditingId: l,
+  onBendHandleDown: r,
+  onOrthogonalSegmentHandleDown: f,
   onResizeHandleDown: c,
   onRotateHandleDown: v,
   onConnectHandleDown: a,
-  onArrowEndpointDown: X
+  onArrowEndpointDown: S
 }) {
-  return /* @__PURE__ */ j(gt, { children: [
-    /* @__PURE__ */ C("div", { className: "absolute top-0 left-0 origin-top-left", style: { transform: `scale(${o.z}) translate(${-o.x}px, ${-o.y}px)` }, children: t.map((x) => {
-      if (x.type === "draw") return null;
-      if (x.type === "arrow") {
-        const s = xt(x, r, l), f = s.routing === "orthogonal" && s.pathPoints ? en(s.pathPoints) : s.routing === "curved" ? St(0.5, s.start, s.control, s.end) : { x: (s.start.x + s.end.x) / 2, y: (s.start.y + s.end.y) / 2 }, $ = n === x.id, Y = Dt(x), w = e.has(x.id), p = Ot(x).trim(), k = Y || (w ? "관계 입력" : "");
-        return !k && !$ ? null : /* @__PURE__ */ C(xn.Fragment, { children: /* @__PURE__ */ C("div", { "data-canvas-arrow-label-hit-area": !0, className: "absolute flex items-center justify-center", style: { left: f.x - 90, top: f.y - 18, width: 180, height: 36 }, onDoubleClick: (M) => {
-          M.stopPropagation(), h(x.id);
-        }, children: (k || $) && /* @__PURE__ */ C(
+  return /* @__PURE__ */ K(Mt, { children: [
+    /* @__PURE__ */ N("div", { className: "absolute top-0 left-0 origin-top-left", style: { transform: `scale(${o.z}) translate(${-o.x}px, ${-o.y}px)` }, children: t.map((h) => {
+      if (h.type === "draw") return null;
+      if (h.type === "arrow") {
+        const s = pt(h, i, u), x = s.routing === "orthogonal" && s.pathPoints ? ie(s.pathPoints) : s.routing === "curved" ? Ft(0.5, s.start, s.control, s.end) : { x: (s.start.x + s.end.x) / 2, y: (s.start.y + s.end.y) / 2 }, k = e === h.id, p = Kt(h), b = n.has(h.id), m = Rt(h).trim(), $ = p || (b ? "관계 입력" : "");
+        return !$ && !k ? null : /* @__PURE__ */ N(Jt.Fragment, { children: /* @__PURE__ */ N("div", { "data-canvas-arrow-label-hit-area": !0, className: "absolute flex items-center justify-center", style: { left: x.x - 90, top: x.y - 18, width: 180, height: 36 }, onDoubleClick: (M) => {
+          M.stopPropagation(), l(h.id);
+        }, children: ($ || k) && /* @__PURE__ */ N(
           "div",
           {
             "data-canvas-arrow-label": "true",
-            "aria-label": p ? `관계 설명: ${p}` : "관계 설명 입력",
-            title: $ ? void 0 : p ? "더블클릭하여 관계 설명 편집" : "더블클릭하여 관계 입력",
-            className: `px-3 py-1 rounded-full border-2 shadow-sm ${m ? "bg-slate-900 border-slate-600 text-slate-100" : "bg-white border-slate-300 text-slate-800"}`,
+            "aria-label": m ? `관계 설명: ${m}` : "관계 설명 입력",
+            title: k ? void 0 : m ? "더블클릭하여 관계 설명 편집" : "더블클릭하여 관계 입력",
+            className: `px-3 py-1 rounded-full border-2 shadow-sm ${y ? "bg-slate-900 border-slate-600 text-slate-100" : "bg-white border-slate-300 text-slate-800"}`,
             style: {
-              fontSize: at(x),
-              fontFamily: ct(x),
+              fontSize: at(h),
+              fontFamily: ct(h),
               maxWidth: "100%",
-              minWidth: $ ? 120 / o.z : void 0,
-              minHeight: $ ? 28 / o.z : void 0,
-              color: x.textColor
+              minWidth: k ? 120 / o.z : void 0,
+              minHeight: k ? 28 / o.z : void 0,
+              color: h.textColor
             },
-            children: $ ? b("text-center whitespace-nowrap") : /* @__PURE__ */ C("span", { dangerouslySetInnerHTML: { __html: k } }, "canvas-view")
+            children: k ? g("text-center whitespace-nowrap") : /* @__PURE__ */ N("span", { dangerouslySetInnerHTML: { __html: $ } }, "canvas-view")
           }
-        ) }) }, x.id);
+        ) }) }, h.id);
       }
-      const y = e.has(x.id), z = pt(x);
-      return /* @__PURE__ */ j(
+      const Y = n.has(h.id), z = $t(h);
+      return /* @__PURE__ */ K(
         "div",
         {
-          "data-canvas-shape-id": x.id,
-          "data-canvas-shape-type": x.type,
-          "data-canvas-selected": y ? "true" : void 0,
-          "data-canvas-text-align": lt(x),
-          "data-canvas-text-color": x.textColor,
-          "data-canvas-font-size": at(x),
-          "data-canvas-font-family": x.fontFamily === "custom" ? x.customFontFamily ?? "custom" : x.fontFamily ?? "sans",
-          "data-canvas-manual-size": x.manualSize ? "true" : void 0,
-          "data-canvas-group-id": x.groupId,
-          "data-canvas-list-kind": Fe(x),
-          "data-canvas-x": x.x,
-          "data-canvas-y": x.y,
-          "data-canvas-width": x.w,
-          "data-canvas-height": x.h,
+          "data-canvas-shape-id": h.id,
+          "data-canvas-shape-type": h.type,
+          "data-canvas-selected": Y ? "true" : void 0,
+          "data-canvas-text-align": ut(h),
+          "data-canvas-text-color": h.textColor,
+          "data-canvas-font-size": at(h),
+          "data-canvas-font-family": h.fontFamily === "custom" ? h.customFontFamily ?? "custom" : h.fontFamily ?? "sans",
+          "data-canvas-manual-size": h.manualSize ? "true" : void 0,
+          "data-canvas-group-id": h.groupId,
+          "data-canvas-list-kind": Hn(h),
+          "data-canvas-x": h.x,
+          "data-canvas-y": h.y,
+          "data-canvas-width": h.w,
+          "data-canvas-height": h.h,
           className: "absolute",
-          style: { left: z.minX, top: z.minY, width: z.maxX - z.minX, height: z.maxY - z.minY, transform: x.rotation ? `rotate(${x.rotation}rad)` : void 0, transformOrigin: "center" },
+          style: { left: z.minX, top: z.minY, width: z.maxX - z.minX, height: z.maxY - z.minY, transform: h.rotation ? `rotate(${h.rotation}rad)` : void 0, transformOrigin: "center" },
           onDoubleClick: (s) => {
-            s.stopPropagation(), De.has(x.type) && h(x.id);
+            s.stopPropagation(), Kn.has(h.type) && l(h.id);
           },
           children: [
-            g(x),
-            y && /* @__PURE__ */ j(gt, { children: [
-              /* @__PURE__ */ C("div", { className: "absolute -inset-0.5 pointer-events-none", style: { outline: `${2 / o.z}px solid ${_.blue}` } }),
-              e.size === 1 && /* @__PURE__ */ j(gt, { children: [
-                ["nw", "ne", "sw", "se"].map((s) => /* @__PURE__ */ C("div", { "data-canvas-resize-handle": s, onPointerDown: (f) => c(f, x, s), className: "absolute z-20 bg-white border-2 border-blue-600 rounded-sm", style: { width: 10 / o.z, height: 10 / o.z, cursor: `${s}-resize`, left: s.includes("w") ? -5 / o.z : void 0, right: s.includes("e") ? -5 / o.z : void 0, top: s.includes("n") ? -5 / o.z : void 0, bottom: s.includes("s") ? -5 / o.z : void 0 } }, s)),
-                /* @__PURE__ */ C("div", { onPointerDown: (s) => v(s, x), title: "회전 (Shift로 15도 단위)", className: "absolute z-20 bg-blue-600 rounded-full", style: { width: 12 / o.z, height: 12 / o.z, left: "50%", marginLeft: -6 / o.z, top: -28 / o.z, cursor: "grab" } }),
-                Oe.has(x.type) && ["n", "s", "w", "e"].map((s) => /* @__PURE__ */ C("div", { onPointerDown: (f) => a(f, x), title: "드래그해서 연결 (관계 생성)", className: "absolute z-20 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500", style: { ...s === "n" ? { left: "50%", top: -30 / o.z, marginLeft: -9 / o.z } : s === "s" ? { left: "50%", bottom: -30 / o.z, marginLeft: -9 / o.z } : s === "w" ? { top: "50%", left: -30 / o.z, marginTop: -9 / o.z } : { top: "50%", right: -30 / o.z, marginTop: -9 / o.z }, width: 18 / o.z, height: 18 / o.z, fontSize: 13 / o.z, lineHeight: 1, cursor: "crosshair" }, children: "+" }, `plus-${s}`))
+            w(h),
+            Y && /* @__PURE__ */ K(Mt, { children: [
+              /* @__PURE__ */ N("div", { "data-canvas-selection-box": "true", className: "absolute -inset-0.5 pointer-events-none", style: { outline: `${2 / o.z}px solid ${H.blue}` } }),
+              n.size === 1 && /* @__PURE__ */ K(Mt, { children: [
+                ["nw", "ne", "sw", "se"].map((s) => /* @__PURE__ */ N("div", { "data-canvas-resize-handle": s, onPointerDown: (x) => c(x, h, s), className: "absolute z-20 bg-white border-2 border-blue-600 rounded-sm", style: { width: 10 / o.z, height: 10 / o.z, cursor: `${s}-resize`, left: s.includes("w") ? -5 / o.z : void 0, right: s.includes("e") ? -5 / o.z : void 0, top: s.includes("n") ? -5 / o.z : void 0, bottom: s.includes("s") ? -5 / o.z : void 0 } }, s)),
+                /* @__PURE__ */ N("div", { onPointerDown: (s) => v(s, h), title: "회전 (Shift로 15도 단위)", className: "absolute z-20 bg-blue-600 rounded-full", style: { width: 12 / o.z, height: 12 / o.z, left: "50%", marginLeft: -6 / o.z, top: -28 / o.z, cursor: "grab" } }),
+                Rn.has(h.type) && ["n", "s", "w", "e"].map((s) => /* @__PURE__ */ N("div", { onPointerDown: (x) => a(x, h), title: "드래그해서 연결 (관계 생성)", className: "absolute z-20 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500", style: { ...s === "n" ? { left: "50%", top: -30 / o.z, marginLeft: -9 / o.z } : s === "s" ? { left: "50%", bottom: -30 / o.z, marginLeft: -9 / o.z } : s === "w" ? { top: "50%", left: -30 / o.z, marginTop: -9 / o.z } : { top: "50%", right: -30 / o.z, marginTop: -9 / o.z }, width: 18 / o.z, height: 18 / o.z, fontSize: 13 / o.z, lineHeight: 1, cursor: "crosshair" }, children: "+" }, `plus-${s}`))
               ] })
             ] })
           ]
         },
-        x.id
+        h.id
       );
     }) }),
-    e.size === 1 && l.filter((x) => x.type === "arrow" && e.has(x.id)).map((x) => {
-      const y = xt(x, r, l), z = (s, f) => ({
-        left: (s.x - o.x) * o.z - f / 2,
-        top: (s.y - o.y) * o.z - f / 2
+    n.size === 1 && u.filter((h) => h.type === "arrow" && n.has(h.id)).map((h) => {
+      const Y = pt(h, i, u), z = (s, x) => ({
+        left: (s.x - o.x) * o.z - x / 2,
+        top: (s.y - o.y) * o.z - x / 2
       });
-      return /* @__PURE__ */ j(xn.Fragment, { children: [
-        y.routing === "orthogonal" && y.pathPoints && y.pathPoints.length > 2 ? y.pathPoints.slice(0, -1).map((s, f) => {
-          var w;
-          const $ = (w = y.pathPoints) == null ? void 0 : w[f + 1];
-          if (!$) return null;
-          const Y = { x: (s.x + $.x) / 2, y: (s.y + $.y) / 2 };
-          return /* @__PURE__ */ C("div", { "data-canvas-arrow-segment-handle": f, onPointerDown: (p) => u(p, x, f), title: "드래그해서 직각선 구간 이동", className: "absolute z-50 pointer-events-auto rounded-sm bg-white border-2 border-blue-600", style: { width: 12, height: 12, ...z(Y, 12), cursor: s.x === $.x ? "ew-resize" : "ns-resize" } }, `segment-${f}`);
-        }) : y.routing === "curved" && /* @__PURE__ */ C("div", { "data-canvas-arrow-bend-handle": !0, onPointerDown: (s) => i(s, x), title: "드래그해서 곡선 휘기", className: "absolute z-50 pointer-events-auto rounded-full bg-white border-2 border-blue-600", style: { width: 10, height: 10, left: (y.start.x + y.end.x) / 2 * o.z - o.x * o.z - 5, top: (y.start.y + y.end.y) / 2 * o.z - o.y * o.z - 10, cursor: "grab" } }),
+      return /* @__PURE__ */ K(Jt.Fragment, { children: [
+        Y.routing === "orthogonal" && Y.pathPoints && Y.pathPoints.length > 2 ? Y.pathPoints.slice(0, -1).map((s, x) => {
+          var b;
+          const k = (b = Y.pathPoints) == null ? void 0 : b[x + 1];
+          if (!k) return null;
+          const p = { x: (s.x + k.x) / 2, y: (s.y + k.y) / 2 };
+          return /* @__PURE__ */ N("div", { "data-canvas-arrow-segment-handle": x, onPointerDown: (m) => f(m, h, x), title: "드래그해서 직각선 구간 이동", className: "absolute z-50 pointer-events-auto rounded-sm bg-white border-2 border-blue-600", style: { width: 12, height: 12, ...z(p, 12), cursor: s.x === k.x ? "ew-resize" : "ns-resize" } }, `segment-${x}`);
+        }) : Y.routing === "curved" && /* @__PURE__ */ N("div", { "data-canvas-arrow-bend-handle": !0, onPointerDown: (s) => r(s, h), title: "드래그해서 곡선 휘기", className: "absolute z-50 pointer-events-auto rounded-full bg-white border-2 border-blue-600", style: { width: 10, height: 10, left: (Y.start.x + Y.end.x) / 2 * o.z - o.x * o.z - 5, top: (Y.start.y + Y.end.y) / 2 * o.z - o.y * o.z - 10, cursor: "grab" } }),
         ["start", "end"].map((s) => {
-          const f = s === "start" ? y.start : y.end;
-          return /* @__PURE__ */ C("div", { "data-canvas-arrow-endpoint": s, onPointerDown: ($) => X($, x, s), title: "드래그해서 끝점 이동 (노드 위에 놓으면 연결)", className: "absolute z-50 pointer-events-auto bg-white border-2 border-blue-600 rounded-full", style: { width: 12, height: 12, ...z(f, 12), cursor: "grab" } }, s);
+          const x = s === "start" ? Y.start : Y.end;
+          return /* @__PURE__ */ N("div", { "data-canvas-arrow-endpoint": s, onPointerDown: (k) => S(k, h, s), title: "드래그해서 끝점 이동 (노드 위에 놓으면 연결)", className: "absolute z-50 pointer-events-auto bg-white border-2 border-blue-600 rounded-full", style: { width: 12, height: 12, ...z(x, 12), cursor: "grab" } }, s);
         })
-      ] }, `arrow-handles-${x.id}`);
+      ] }, `arrow-handles-${h.id}`);
     }),
-    d == null ? void 0 : d.map((x) => /* @__PURE__ */ j("div", { className: "absolute pointer-events-none z-40", style: { left: (x.x - o.x) * o.z, top: (x.y - o.y) * o.z, transform: "translate(-2px, -2px)" }, children: [
-      /* @__PURE__ */ C("svg", { width: "20", height: "24", viewBox: "0 0 20 24", children: /* @__PURE__ */ C("path", { d: "M 1 1 L 1 18 L 6 13 L 9 20 L 12 19 L 9 12 L 15 12 Z", fill: x.color, stroke: _.white, strokeWidth: "1.5", strokeLinejoin: "round" }) }),
-      /* @__PURE__ */ C("div", { className: "mt-1 px-1.5 py-0.5 rounded text-[11px] font-medium text-white whitespace-nowrap", style: { background: x.color }, children: x.name })
-    ] }, x.id))
+    d == null ? void 0 : d.map((h) => /* @__PURE__ */ K("div", { className: "absolute pointer-events-none z-40", style: { left: (h.x - o.x) * o.z, top: (h.y - o.y) * o.z, transform: "translate(-2px, -2px)" }, children: [
+      /* @__PURE__ */ N("svg", { width: "20", height: "24", viewBox: "0 0 20 24", children: /* @__PURE__ */ N("path", { d: "M 1 1 L 1 18 L 6 13 L 9 20 L 12 19 L 9 12 L 15 12 Z", fill: h.color, stroke: H.white, strokeWidth: "1.5", strokeLinejoin: "round" }) }),
+      /* @__PURE__ */ N("div", { className: "mt-1 px-1.5 py-0.5 rounded text-[11px] font-medium text-white whitespace-nowrap", style: { background: h.color }, children: h.name })
+    ] }, h.id))
   ] });
 }
-function Be({
+const Vn = [2, 4, 6, 8];
+function Gn(t) {
+  switch (t.type) {
+    case "arrow":
+    case "frame":
+    case "rect":
+    case "ellipse":
+    case "triangle":
+    case "diamond":
+    case "hexagon":
+    case "star":
+    case "draw":
+      return !0;
+    case "note":
+    case "card":
+    case "text":
+    case "image":
+      return !1;
+    default:
+      return We(t);
+  }
+}
+function qn(t) {
+  switch (t.type) {
+    case "arrow":
+    case "frame":
+    case "rect":
+    case "ellipse":
+    case "triangle":
+    case "diamond":
+    case "hexagon":
+    case "star":
+    case "draw":
+      return t.strokeWidth;
+    case "note":
+    case "card":
+    case "text":
+    case "image":
+      return;
+    default:
+      return We(t);
+  }
+}
+function We(t) {
+  throw new Error(`Unhandled canvas shape: ${String(t)}.`);
+}
+function Qn({
   shape: t,
-  shapes: e,
-  camera: n,
+  shapes: n,
+  camera: e,
   canvasSize: o,
-  isDarkMode: r,
-  editing: l,
+  isDarkMode: i,
+  editing: u,
   showPalette: d,
-  installedFontFamilies: m,
-  setShowPalette: b,
-  setActiveColor: g,
-  patchSelected: h,
-  applyFormat: i,
-  applyList: u,
+  installedFontFamilies: y,
+  setShowPalette: g,
+  setActiveColor: w,
+  patchSelected: l,
+  applyFormat: r,
+  applyList: f,
   applyCustomFontFamily: c
 }) {
-  var G, nt;
-  const v = r ? "text-slate-200 hover:bg-slate-800" : "text-slate-700 hover:bg-slate-100", a = t.type === "draw", X = a ? t.color ? st[t.color].border : _.ink : wt(t), x = tt(null), [y, z] = it({ width: 380, height: 260 });
-  Gt(() => {
-    const S = x.current;
-    if (!S) return;
-    const F = () => {
-      const q = Math.max(1, Math.ceil(S.getBoundingClientRect().width)), J = Math.max(1, Math.ceil(S.getBoundingClientRect().height));
-      z((ot) => ot.width === q && ot.height === J ? ot : { width: q, height: J });
+  var ot, xt;
+  const v = i ? "text-slate-200 hover:bg-slate-800" : "text-slate-700 hover:bg-slate-100", a = t.type === "draw", S = a ? t.color ? dt[t.color].border : H.ink : Xt(t), h = tt(null), [Y, z] = it({ width: 380, height: 260 });
+  te(() => {
+    const X = h.current;
+    if (!X) return;
+    const T = () => {
+      const Q = Math.max(1, Math.ceil(X.getBoundingClientRect().width)), et = Math.max(1, Math.ceil(X.getBoundingClientRect().height));
+      z((st) => st.width === Q && st.height === et ? st : { width: Q, height: et });
     };
-    if (F(), typeof ResizeObserver > "u") return;
-    const V = new ResizeObserver(F);
-    return V.observe(S), () => V.disconnect();
-  }, [l, m.length, r, t, d]);
-  const s = y.width, f = y.height, $ = et(t), Y = ($.minX - n.x) * n.z, w = ($.minY - n.y) * n.z, p = ($.maxX - n.x) * n.z, k = ($.maxY - n.y) * n.z, M = Math.max(8, o.width - s - 8), N = Math.max(8, o.height - f - 8), P = (S, F) => ({ left: Math.min(Math.max(8, S), M), top: Math.min(Math.max(8, F), N) }), E = [
-    P((Y + p) / 2 - s / 2, w - f - 12),
-    P((Y + p) / 2 - s / 2, k + 12),
-    P((o.width - s) / 2, 12),
-    P(Y - s - 12, w + (k - w - f) / 2),
-    P(p + 12, w + (k - w - f) / 2)
-  ], O = e.map((S) => {
-    const F = et(S);
-    return { left: (F.minX - n.x) * n.z, top: (F.minY - n.y) * n.z, right: (F.maxX - n.x) * n.z, bottom: (F.maxY - n.y) * n.z };
+    if (T(), typeof ResizeObserver > "u") return;
+    const j = new ResizeObserver(T);
+    return j.observe(X), () => j.disconnect();
+  }, [u, y.length, i, t, d]);
+  const s = Y.width, x = Y.height, k = nt(t), p = (k.minX - e.x) * e.z, b = (k.minY - e.y) * e.z, m = (k.maxX - e.x) * e.z, $ = (k.maxY - e.y) * e.z, M = Math.max(8, o.width - s - 8), C = Math.max(8, o.height - x - 8), I = (X, T) => ({ left: Math.min(Math.max(8, X), M), top: Math.min(Math.max(8, T), C) }), E = [
+    I((p + m) / 2 - s / 2, b - x - 12),
+    I((p + m) / 2 - s / 2, $ + 12),
+    I((o.width - s) / 2, 12),
+    I(p - s - 12, b + ($ - b - x) / 2),
+    I(m + 12, b + ($ - b - x) / 2)
+  ], D = n.map((X) => {
+    const T = nt(X);
+    return { left: (T.minX - e.x) * e.z, top: (T.minY - e.y) * e.z, right: (T.maxX - e.x) * e.z, bottom: (T.maxY - e.y) * e.z };
   });
   if (t.type === "arrow") {
-    const S = xt(t, new Map(e.map((J) => [J.id, J])), e), F = S.routing === "orthogonal" && S.pathPoints ? en(S.pathPoints) : { x: (S.start.x + S.end.x) / 2, y: (S.start.y + S.end.y) / 2 }, V = 180 * n.z, q = 36 * n.z;
-    O.push({
-      left: (F.x - n.x) * n.z - V / 2,
-      top: (F.y - n.y) * n.z - q / 2,
-      right: (F.x - n.x) * n.z + V / 2,
-      bottom: (F.y - n.y) * n.z + q / 2
+    const X = pt(t, new Map(n.map((et) => [et.id, et])), n), T = X.routing === "orthogonal" && X.pathPoints ? ie(X.pathPoints) : { x: (X.start.x + X.end.x) / 2, y: (X.start.y + X.end.y) / 2 }, j = 180 * e.z, Q = 36 * e.z;
+    D.push({
+      left: (T.x - e.x) * e.z - j / 2,
+      top: (T.y - e.y) * e.z - Q / 2,
+      right: (T.x - e.x) * e.z + j / 2,
+      bottom: (T.y - e.y) * e.z + Q / 2
     });
   }
-  const I = E[0], T = (S, F) => {
-    const V = Math.max(0, Math.min(S.left + s, F.right) - Math.max(S.left, F.left)), q = Math.max(0, Math.min(S.top + f, F.bottom) - Math.max(S.top, F.top));
-    return V * q;
-  }, L = ((G = E.map((S) => ({
-    candidate: S,
-    overlap: O.reduce((F, V) => F + T(S, V), 0),
-    distance: Math.hypot(S.left - I.left, S.top - I.top)
-  })).sort((S, F) => S.overlap - F.overlap || S.distance - F.distance)[0]) == null ? void 0 : G.candidate) ?? I, R = at(t), D = t.type === "arrow" && !!((nt = t.orthogonalWaypoints) != null && nt.length), B = t.type === "arrow" ? t.arrowStart ?? "none" : "none", U = t.type === "arrow" ? t.arrowEnd ?? "arrow" : "arrow", Q = (S, F, V, q, J = q) => /* @__PURE__ */ C("button", { type: "button", title: q, "aria-label": J, onClick: V, className: `h-7 min-w-9 px-2 rounded text-[11px] font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 ${F ? "bg-blue-600 text-white" : v}`, children: S }), K = (S) => /* @__PURE__ */ C("span", { className: "px-1 text-[10px] font-semibold tracking-wide opacity-60", children: S });
-  return /* @__PURE__ */ j("div", { ref: x, "data-canvas-inspector": a ? "draw" : "text", className: `absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${r ? "bg-slate-900/95 border-slate-700 text-slate-200" : "bg-white/95 border-slate-200 text-slate-700"}`, style: { left: L.left, top: L.top }, onPointerDown: (S) => {
-    S.stopPropagation();
-    const F = S.target instanceof Element ? S.target : null;
-    F != null && F.closest("input, select, textarea") || S.preventDefault();
-  }, onClick: (S) => S.stopPropagation(), children: [
-    /* @__PURE__ */ j("div", { className: "relative flex items-center gap-1.5 pointer-events-none", children: [
-      /* @__PURE__ */ C("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: a ? "그리기" : "색상" }),
-      /* @__PURE__ */ C("button", { type: "button", title: a ? "그리기 색상 팔레트" : "색상 팔레트", "aria-label": a ? "그리기 색상" : "도형 색상", onClick: () => b((S) => !S), className: `pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${r ? "border-slate-700 hover:bg-slate-800" : "border-slate-200 hover:bg-slate-50"}`, children: /* @__PURE__ */ C(ee, { className: "w-4 h-4", style: { color: X } }) }),
-      d && /* @__PURE__ */ j("div", { className: `pointer-events-auto absolute left-0 top-10 z-50 flex items-center gap-1.5 p-2 rounded-xl border shadow-xl ${r ? "bg-slate-900 border-slate-700" : "bg-white border-slate-200"}`, children: [
-        Jn.map((S) => /* @__PURE__ */ C("button", { type: "button", title: st[S].label, "aria-label": `색 ${st[S].label}`, onClick: () => {
-          g(S), h({ color: S, fillColor: void 0 }), b(!1);
-        }, className: "w-5 h-5 rounded-full border", style: { background: st[S].bg, borderColor: st[S].border, outline: t.color === S && !t.fillColor ? `2px solid ${_.blue}` : void 0, outlineOffset: 1 } }, S)),
-        !a && /* @__PURE__ */ C("label", { title: "배경 색 (자유 선택)", className: "w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center", style: { background: t.fillColor ?? Jt(t), outline: t.fillColor ? `2px solid ${_.blue}` : void 0, outlineOffset: 1 }, children: /* @__PURE__ */ C("input", { type: "color", value: t.fillColor ?? Jt(t), onChange: (S) => {
-          h({ fillColor: S.target.value }), b(!1);
+  const G = E[0], P = (X, T) => {
+    const j = Math.max(0, Math.min(X.left + s, T.right) - Math.max(X.left, T.left)), Q = Math.max(0, Math.min(X.top + x, T.bottom) - Math.max(X.top, T.top));
+    return j * Q;
+  }, F = ((ot = E.map((X) => ({
+    candidate: X,
+    overlap: D.reduce((T, j) => T + P(X, j), 0),
+    distance: Math.hypot(X.left - G.left, X.top - G.top)
+  })).sort((X, T) => X.overlap - T.overlap || X.distance - T.distance)[0]) == null ? void 0 : ot.candidate) ?? G, L = at(t), O = qn(t), W = Gn(t), q = t.type === "arrow" && !!((xt = t.orthogonalWaypoints) != null && xt.length), U = t.type === "arrow" ? t.arrowStart ?? "none" : "none", Z = t.type === "arrow" ? t.arrowEnd ?? "arrow" : "arrow", _ = (X, T, j, Q, et = Q) => /* @__PURE__ */ N("button", { type: "button", title: Q, "aria-label": et, onClick: j, className: `h-7 min-w-9 px-2 rounded text-[11px] font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 ${T ? "bg-blue-600 text-white" : v}`, children: X }), V = (X) => /* @__PURE__ */ N("span", { className: "px-1 text-[10px] font-semibold tracking-wide opacity-60", children: X });
+  return /* @__PURE__ */ K("div", { ref: h, "data-canvas-inspector": a ? "draw" : "text", className: `absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${i ? "bg-slate-900/95 border-slate-700 text-slate-200" : "bg-white/95 border-slate-200 text-slate-700"}`, style: { left: F.left, top: F.top }, onPointerDown: (X) => {
+    X.stopPropagation();
+    const T = X.target instanceof Element ? X.target : null;
+    T != null && T.closest("input, select, textarea") || X.preventDefault();
+  }, onClick: (X) => X.stopPropagation(), children: [
+    /* @__PURE__ */ K("div", { className: "relative flex items-center gap-1.5 pointer-events-none", children: [
+      /* @__PURE__ */ N("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: a ? "그리기" : "색상" }),
+      /* @__PURE__ */ N("button", { type: "button", title: a ? "그리기 색상 팔레트" : "색상 팔레트", "aria-label": a ? "그리기 색상" : "도형 색상", onClick: () => g((X) => !X), className: `pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${i ? "border-slate-700 hover:bg-slate-800" : "border-slate-200 hover:bg-slate-50"}`, children: /* @__PURE__ */ N(xn, { className: "w-4 h-4", style: { color: S } }) }),
+      d && /* @__PURE__ */ K("div", { className: `pointer-events-auto absolute left-0 top-10 z-50 flex items-center gap-1.5 p-2 rounded-xl border shadow-xl ${i ? "bg-slate-900 border-slate-700" : "bg-white border-slate-200"}`, children: [
+        sn.map((X) => /* @__PURE__ */ N("button", { type: "button", title: dt[X].label, "aria-label": `색 ${dt[X].label}`, onClick: () => {
+          w(X), l({ color: X, fillColor: void 0 }), g(!1);
+        }, className: "w-5 h-5 rounded-full border", style: { background: dt[X].bg, borderColor: dt[X].border, outline: t.color === X && !t.fillColor ? `2px solid ${H.blue}` : void 0, outlineOffset: 1 } }, X)),
+        !a && /* @__PURE__ */ N("label", { title: "배경 색 (자유 선택)", className: "w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center", style: { background: t.fillColor ?? Bt(t), outline: t.fillColor ? `2px solid ${H.blue}` : void 0, outlineOffset: 1 }, children: /* @__PURE__ */ N("input", { type: "color", value: t.fillColor ?? Bt(t), onChange: (X) => {
+          l({ fillColor: X.target.value }), g(!1);
         }, className: "absolute inset-0 opacity-0 cursor-pointer" }) })
       ] })
     ] }),
-    !a && /* @__PURE__ */ j(gt, { children: [
-      /* @__PURE__ */ j("div", { className: "flex flex-wrap items-center gap-2 pointer-events-none", children: [
-        /* @__PURE__ */ C("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: "텍스트" }),
-        /* @__PURE__ */ j("label", { title: "글씨 색", className: "pointer-events-auto w-8 h-8 rounded-lg border relative overflow-hidden cursor-pointer flex items-center justify-center text-[11px] font-bold shadow-sm", style: { background: wt(t), color: _.white, mixBlendMode: "normal" }, children: [
-          /* @__PURE__ */ C("span", { "aria-hidden": "true", children: "A" }),
-          /* @__PURE__ */ C("input", { "data-canvas-control": "text-color", type: "color", value: t.textColor ?? wt(t), onChange: (S) => h({ textColor: S.target.value }), className: "absolute inset-0 opacity-0 cursor-pointer" })
+    !a && /* @__PURE__ */ K(Mt, { children: [
+      /* @__PURE__ */ K("div", { className: "flex flex-wrap items-center gap-2 pointer-events-none", children: [
+        /* @__PURE__ */ N("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: "텍스트" }),
+        /* @__PURE__ */ K("label", { title: "글씨 색", className: "pointer-events-auto w-8 h-8 rounded-lg border relative overflow-hidden cursor-pointer flex items-center justify-center text-[11px] font-bold shadow-sm", style: { background: Xt(t), color: H.white, mixBlendMode: "normal" }, children: [
+          /* @__PURE__ */ N("span", { "aria-hidden": "true", children: "A" }),
+          /* @__PURE__ */ N("input", { "data-canvas-control": "text-color", type: "color", value: t.textColor ?? Xt(t), onChange: (X) => l({ textColor: X.target.value }), className: "absolute inset-0 opacity-0 cursor-pointer" })
         ] }),
-        /* @__PURE__ */ j("div", { className: `pointer-events-none flex items-center gap-0.5 px-1 rounded-lg border ${r ? "border-slate-700 bg-slate-950/60" : "border-slate-200 bg-slate-50"}`, children: [
-          /* @__PURE__ */ C("span", { className: "px-1 text-[10px] font-medium opacity-60", children: "크기" }),
-          /* @__PURE__ */ C("button", { type: "button", title: "글씨 작게", "aria-label": "글씨 작게", onClick: () => h({ fontSize: Math.max(8, R - 2) }), className: `pointer-events-auto w-7 h-7 rounded-md flex items-center justify-center ${v}`, children: /* @__PURE__ */ C(oe, { className: "w-3.5 h-3.5" }) }),
-          /* @__PURE__ */ C("span", { className: "pointer-events-none w-8 text-center text-xs font-semibold tabular-nums", children: R }),
-          /* @__PURE__ */ C("button", { type: "button", title: "글씨 크게", "aria-label": "글씨 크게", onClick: () => h({ fontSize: Math.min(96, R + 2) }), className: `pointer-events-auto w-7 h-7 rounded-md flex items-center justify-center ${v}`, children: /* @__PURE__ */ C(re, { className: "w-3.5 h-3.5" }) })
+        /* @__PURE__ */ K("div", { className: `pointer-events-none flex items-center gap-0.5 px-1 rounded-lg border ${i ? "border-slate-700 bg-slate-950/60" : "border-slate-200 bg-slate-50"}`, children: [
+          /* @__PURE__ */ N("span", { className: "px-1 text-[10px] font-medium opacity-60", children: "크기" }),
+          /* @__PURE__ */ N("button", { type: "button", title: "글씨 작게", "aria-label": "글씨 작게", onClick: () => l({ fontSize: Math.max(8, L - 2) }), className: `pointer-events-auto w-7 h-7 rounded-md flex items-center justify-center ${v}`, children: /* @__PURE__ */ N(hn, { className: "w-3.5 h-3.5" }) }),
+          /* @__PURE__ */ N("span", { className: "pointer-events-none w-8 text-center text-xs font-semibold tabular-nums", children: L }),
+          /* @__PURE__ */ N("button", { type: "button", title: "글씨 크게", "aria-label": "글씨 크게", onClick: () => l({ fontSize: Math.min(96, L + 2) }), className: `pointer-events-auto w-7 h-7 rounded-md flex items-center justify-center ${v}`, children: /* @__PURE__ */ N(fn, { className: "w-3.5 h-3.5" }) })
         ] }),
-        /* @__PURE__ */ j("label", { className: `pointer-events-auto relative flex items-center h-8 rounded-lg border ${r ? "bg-slate-950 border-slate-700" : "bg-white border-slate-200"}`, children: [
-          /* @__PURE__ */ C("select", { title: "글꼴", "aria-label": "글꼴", value: t.fontFamily ?? "sans", onChange: (S) => {
-            const F = Le(S.target.value);
-            h(F === "custom" ? { fontFamily: "custom", customFontFamily: t.customFontFamily } : { fontFamily: F, customFontFamily: void 0 });
-          }, className: `h-full min-w-20 appearance-none bg-transparent rounded-lg text-xs font-medium pl-2 pr-7 outline-none ${r ? "text-slate-200" : "text-slate-700"}`, children: Xe.map((S) => /* @__PURE__ */ C("option", { value: S, className: r ? "bg-slate-900 text-slate-200" : "bg-white text-slate-800", children: ut[S].label }, S)) }),
-          /* @__PURE__ */ C(ie, { className: "pointer-events-none absolute right-1.5 w-3.5 h-3.5 opacity-60" })
+        /* @__PURE__ */ K("label", { className: `pointer-events-auto relative flex items-center h-8 rounded-lg border ${i ? "bg-slate-950 border-slate-700" : "bg-white border-slate-200"}`, children: [
+          /* @__PURE__ */ N("select", { title: "글꼴", "aria-label": "글꼴", value: t.fontFamily ?? "sans", onChange: (X) => {
+            const T = _n(X.target.value);
+            l(T === "custom" ? { fontFamily: "custom", customFontFamily: t.customFontFamily } : { fontFamily: T, customFontFamily: void 0 });
+          }, className: `h-full min-w-20 appearance-none bg-transparent rounded-lg text-xs font-medium pl-2 pr-7 outline-none ${i ? "text-slate-200" : "text-slate-700"}`, children: En.map((X) => /* @__PURE__ */ N("option", { value: X, className: i ? "bg-slate-900 text-slate-200" : "bg-white text-slate-800", children: vt[X].label }, X)) }),
+          /* @__PURE__ */ N(mn, { className: "pointer-events-none absolute right-1.5 w-3.5 h-3.5 opacity-60" })
         ] }),
-        t.fontFamily === "custom" && /* @__PURE__ */ j(gt, { children: [
-          /* @__PURE__ */ C("input", { type: "text", list: `canvas-font-families-${t.id}`, title: "폰트 직접입력", "aria-label": "폰트 직접입력", defaultValue: t.customFontFamily ?? "", onBlur: (S) => c(S.target.value), onChange: (S) => S.currentTarget.value && c(S.currentTarget.value), onKeyDown: (S) => {
-            S.key === "Enter" && (S.preventDefault(), c(S.currentTarget.value));
-          }, onDoubleClick: (S) => S.stopPropagation(), onPointerDown: (S) => S.stopPropagation(), placeholder: "Noto Sans KR", className: `pointer-events-auto h-8 w-44 rounded-lg border px-2 text-xs ${r ? "bg-slate-950 border-slate-700" : "bg-white border-slate-200"}` }),
-          /* @__PURE__ */ C("datalist", { id: `canvas-font-families-${t.id}`, children: m.map((S) => /* @__PURE__ */ C("option", { value: S }, S)) })
+        t.fontFamily === "custom" && /* @__PURE__ */ K(Mt, { children: [
+          /* @__PURE__ */ N("input", { type: "text", list: `canvas-font-families-${t.id}`, title: "폰트 직접입력", "aria-label": "폰트 직접입력", defaultValue: t.customFontFamily ?? "", onBlur: (X) => c(X.target.value), onChange: (X) => X.currentTarget.value && c(X.currentTarget.value), onKeyDown: (X) => {
+            X.key === "Enter" && (X.preventDefault(), c(X.currentTarget.value));
+          }, onDoubleClick: (X) => X.stopPropagation(), onPointerDown: (X) => X.stopPropagation(), placeholder: "Noto Sans KR", className: `pointer-events-auto h-8 w-44 rounded-lg border px-2 text-xs ${i ? "bg-slate-950 border-slate-700" : "bg-white border-slate-200"}` }),
+          /* @__PURE__ */ N("datalist", { id: `canvas-font-families-${t.id}`, children: y.map((X) => /* @__PURE__ */ N("option", { value: X }, X)) })
         ] })
       ] }),
-      /* @__PURE__ */ j("div", { className: `flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-none ${r ? "border-slate-700" : "border-slate-100"}`, children: [
-        /* @__PURE__ */ C("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: "문단" }),
-        /* @__PURE__ */ C("div", { className: `pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${r ? "bg-slate-950/70" : "bg-slate-50"}`, children: [["left", ae, "왼쪽 정렬"], ["center", ce, "가운데 정렬"], ["right", se, "오른쪽 정렬"]].map(([S, F, V]) => /* @__PURE__ */ C("button", { type: "button", "aria-label": V, title: V, onClick: () => h({ textAlign: S }), className: `pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${lt(t) === S ? "bg-blue-600 text-white shadow-sm" : v}`, children: /* @__PURE__ */ C(F, { className: "w-4 h-4" }) }, S)) }),
-        l && /* @__PURE__ */ j(gt, { children: [
-          /* @__PURE__ */ C("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: "목록" }),
-          /* @__PURE__ */ C("div", { className: `pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${r ? "bg-slate-950/70" : "bg-slate-50"}`, children: [["bullet", le, "글머리표 목록"], ["dash", null, "대시 목록"], ["number", de, "번호 목록"]].map(([S, F, V]) => /* @__PURE__ */ C("button", { type: "button", onClick: () => u(S), "aria-label": V, title: V, className: `pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${v}`, children: F ? /* @__PURE__ */ C(F, { className: "w-4 h-4" }) : /* @__PURE__ */ C("span", { className: "text-base leading-none", children: "–" }) }, S)) }),
-          /* @__PURE__ */ C("div", { className: `pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${r ? "bg-slate-950/70" : "bg-slate-50"}`, children: [{ cmd: "bold", Icon: ue, label: "굵게" }, { cmd: "italic", Icon: xe, label: "기울임" }, { cmd: "underline", Icon: fe, label: "밑줄" }].map(({ cmd: S, Icon: F, label: V }) => /* @__PURE__ */ C("button", { type: "button", onClick: () => i(S), "aria-label": V, title: V, className: `pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${v}`, children: /* @__PURE__ */ C(F, { className: "w-4 h-4" }) }, S)) })
+      /* @__PURE__ */ K("div", { className: `flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-none ${i ? "border-slate-700" : "border-slate-100"}`, children: [
+        /* @__PURE__ */ N("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: "문단" }),
+        /* @__PURE__ */ N("div", { className: `pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${i ? "bg-slate-950/70" : "bg-slate-50"}`, children: [["left", vn, "왼쪽 정렬"], ["center", pn, "가운데 정렬"], ["right", yn, "오른쪽 정렬"]].map(([X, T, j]) => /* @__PURE__ */ N("button", { type: "button", "aria-label": j, title: j, onClick: () => l({ textAlign: X }), className: `pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${ut(t) === X ? "bg-blue-600 text-white shadow-sm" : v}`, children: /* @__PURE__ */ N(T, { className: "w-4 h-4" }) }, X)) }),
+        u && /* @__PURE__ */ K(Mt, { children: [
+          /* @__PURE__ */ N("span", { className: "pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60", children: "목록" }),
+          /* @__PURE__ */ N("div", { className: `pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${i ? "bg-slate-950/70" : "bg-slate-50"}`, children: [["bullet", gn, "글머리표 목록"], ["dash", null, "대시 목록"], ["number", wn, "번호 목록"]].map(([X, T, j]) => /* @__PURE__ */ N("button", { type: "button", onClick: () => f(X), "aria-label": j, title: j, className: `pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${v}`, children: T ? /* @__PURE__ */ N(T, { className: "w-4 h-4" }) : /* @__PURE__ */ N("span", { className: "text-base leading-none", children: "–" }) }, X)) }),
+          /* @__PURE__ */ N("div", { className: `pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${i ? "bg-slate-950/70" : "bg-slate-50"}`, children: [{ cmd: "bold", Icon: bn, label: "굵게" }, { cmd: "italic", Icon: kn, label: "기울임" }, { cmd: "underline", Icon: $n, label: "밑줄" }].map(({ cmd: X, Icon: T, label: j }) => /* @__PURE__ */ N("button", { type: "button", onClick: () => r(X), "aria-label": j, title: j, className: `pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${v}`, children: /* @__PURE__ */ N(T, { className: "w-4 h-4" }) }, X)) })
         ] })
       ] }),
-      (t.type === "card" || t.type === "arrow") && /* @__PURE__ */ j("div", { className: `flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-auto ${r ? "border-slate-700" : "border-slate-100"}`, children: [
-        t.type === "card" && /* @__PURE__ */ j(gt, { children: [
-          /* @__PURE__ */ C("div", { className: `w-px h-6 ${r ? "bg-slate-700" : "bg-slate-200"}` }),
-          /* @__PURE__ */ C("input", { type: "text", title: "카드 Type", "aria-label": "카드 Type", value: t.category ?? "", placeholder: "TYPE", onPointerDown: (S) => S.stopPropagation(), onChange: (S) => h({ category: S.target.value.toUpperCase() }), className: `h-7 w-24 rounded text-[11px] px-1.5 border uppercase ${r ? "bg-slate-950 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"}` })
+      (t.type === "card" || t.type === "arrow") && /* @__PURE__ */ K("div", { className: `flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-auto ${i ? "border-slate-700" : "border-slate-100"}`, children: [
+        t.type === "card" && /* @__PURE__ */ K(Mt, { children: [
+          /* @__PURE__ */ N("div", { className: `w-px h-6 ${i ? "bg-slate-700" : "bg-slate-200"}` }),
+          /* @__PURE__ */ N("input", { type: "text", title: "카드 Type", "aria-label": "카드 Type", value: t.category ?? "", placeholder: "TYPE", onPointerDown: (X) => X.stopPropagation(), onChange: (X) => l({ category: X.target.value.toUpperCase() }), className: `h-7 w-24 rounded text-[11px] px-1.5 border uppercase ${i ? "bg-slate-950 border-slate-700 text-slate-200" : "bg-white border-slate-200 text-slate-700"}` })
         ] }),
-        t.type === "arrow" && /* @__PURE__ */ j("div", { className: "flex flex-wrap items-center gap-2", children: [
-          /* @__PURE__ */ j("div", { className: "flex items-center gap-1", children: [
-            K("경로"),
-            Q("직선", (t.routing ?? "straight") === "straight", () => h({ routing: "straight", bend: 0, orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "직선"),
-            Q("직각", t.routing === "orthogonal", () => h({ routing: "orthogonal", bend: 0, orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "직각: 자동으로 장애물 회피"),
-            Q("곡선", (t.routing ?? "") === "curved", () => h({ routing: "curved", bend: t.bend || 60, orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "곡선"),
-            D && Q("자동", !1, () => h({ routing: "orthogonal", orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "직각 경로를 자동으로 다시 계산")
+        t.type === "arrow" && /* @__PURE__ */ K("div", { className: "flex flex-wrap items-center gap-2", children: [
+          /* @__PURE__ */ K("div", { className: "flex items-center gap-1", children: [
+            V("경로"),
+            _("직선", (t.routing ?? "straight") === "straight", () => l({ routing: "straight", bend: 0, orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "직선"),
+            _("직각", t.routing === "orthogonal", () => l({ routing: "orthogonal", bend: 0, orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "직각: 자동으로 장애물 회피"),
+            _("곡선", (t.routing ?? "") === "curved", () => l({ routing: "curved", bend: t.bend || 60, orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "곡선"),
+            q && _("자동", !1, () => l({ routing: "orthogonal", orthogonalVariant: void 0, orthogonalWaypoints: void 0 }), "직각 경로를 자동으로 다시 계산")
           ] }),
-          /* @__PURE__ */ j("div", { className: "flex items-center gap-1", children: [
-            K("선"),
-            Q("—", (t.strokeStyle ?? "solid") === "solid", () => h({ strokeStyle: "solid" }), "실선"),
-            Q("- -", t.strokeStyle === "dashed", () => h({ strokeStyle: "dashed" }), "파선"),
-            Q("···", t.strokeStyle === "dotted", () => h({ strokeStyle: "dotted" }), "점선")
+          /* @__PURE__ */ K("div", { className: "flex items-center gap-1", children: [
+            V("선"),
+            _("—", (t.strokeStyle ?? "solid") === "solid", () => l({ strokeStyle: "solid" }), "실선"),
+            _("- -", t.strokeStyle === "dashed", () => l({ strokeStyle: "dashed" }), "파선"),
+            _("···", t.strokeStyle === "dotted", () => l({ strokeStyle: "dotted" }), "점선")
           ] }),
-          /* @__PURE__ */ j("div", { className: "flex items-center gap-1", children: [
-            K("시작"),
-            Q(B === "none" ? "○" : B === "dot" ? "●" : "◀", B !== "none", () => h({ arrowStart: B === "none" ? "arrow" : B === "arrow" ? "dot" : "none" }), "시작점 표식", `시작점 표식: ${B === "none" ? "없음" : B === "dot" ? "점" : "화살표"}`)
+          /* @__PURE__ */ K("div", { className: "flex items-center gap-1", children: [
+            V("시작"),
+            _(U === "none" ? "○" : U === "dot" ? "●" : "◀", U !== "none", () => l({ arrowStart: U === "none" ? "arrow" : U === "arrow" ? "dot" : "none" }), "시작점 표식", `시작점 표식: ${U === "none" ? "없음" : U === "dot" ? "점" : "화살표"}`)
           ] }),
-          /* @__PURE__ */ j("div", { className: "flex items-center gap-1", children: [
-            K("끝"),
-            Q(U === "none" ? "○" : U === "dot" ? "●" : "▶", U !== "none", () => h({ arrowEnd: U === "arrow" ? "dot" : U === "dot" ? "none" : "arrow" }), "끝점 표식", `끝점 표식: ${U === "none" ? "없음" : U === "dot" ? "점" : "화살표"}`)
+          /* @__PURE__ */ K("div", { className: "flex items-center gap-1", children: [
+            V("끝"),
+            _(Z === "none" ? "○" : Z === "dot" ? "●" : "▶", Z !== "none", () => l({ arrowEnd: Z === "arrow" ? "dot" : Z === "dot" ? "none" : "arrow" }), "끝점 표식", `끝점 표식: ${Z === "none" ? "없음" : Z === "dot" ? "점" : "화살표"}`)
           ] })
         ] })
       ] })
+    ] }),
+    W && /* @__PURE__ */ K("div", { className: `flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-none ${i ? "border-slate-700" : "border-slate-100"}`, children: [
+      V("굵기"),
+      Vn.map((X) => /* @__PURE__ */ N(Jt.Fragment, { children: _(String(X), O === X, () => l({ strokeWidth: X }), `굵기 ${X}`) }, X))
     ] })
   ] });
 }
-function He({
+function Zn({
   camera: t,
-  editingId: e,
-  isDarkMode: n,
+  editingId: n,
+  isDarkMode: e,
   editorRef: o,
-  commitEditorHtml: r,
-  onEditorKeyDown: l,
+  commitEditorHtml: i,
+  onEditorKeyDown: u,
   setShapes: d,
-  onDirty: m
+  onDirty: y
 }) {
-  const b = "canvas-rich-text w-full h-full outline-none whitespace-pre-wrap break-words overflow-hidden", g = (i, u) => /* @__PURE__ */ C(
+  const g = "canvas-rich-text w-full h-full outline-none whitespace-pre-wrap break-words overflow-hidden", w = (r, f) => /* @__PURE__ */ N(
     "div",
     {
       ref: o,
@@ -953,25 +1010,27 @@ function He({
       "aria-label": "텍스트 편집",
       contentEditable: !0,
       suppressContentEditableWarning: !0,
-      onInput: r,
-      onBlur: r,
+      onInput: i,
+      onBlur: i,
       onPointerDown: (c) => c.stopPropagation(),
       onDoubleClick: (c) => c.stopPropagation(),
-      onKeyDown: l,
-      className: `${b} ${i}`,
-      style: u
+      onKeyDown: u,
+      className: `${g} ${r}`,
+      style: f
     },
     "canvas-editor"
   );
-  return { renderEditor: g, renderShapeBody: (i) => {
-    const u = st[i.color ?? "blue"], c = e === i.id, v = Dt(i);
-    if (i.type === "frame")
-      return /* @__PURE__ */ C(
+  return { renderEditor: w, renderShapeBody: (r) => {
+    const f = dt[r.color ?? "blue"], c = n === r.id, v = Kt(r);
+    if (r.type === "frame") {
+      const x = r.strokeWidth ?? 2;
+      return /* @__PURE__ */ N(
         "div",
         {
+          "data-canvas-stroke-width": x,
           className: "w-full h-full rounded",
-          style: { border: `${2 / t.z}px solid ${n ? _.slate600 : _.slate400}` },
-          children: /* @__PURE__ */ C(
+          style: { border: `${x / t.z}px solid ${e ? H.slate600 : H.slate400}` },
+          children: /* @__PURE__ */ N(
             "div",
             {
               className: "absolute font-semibold",
@@ -979,115 +1038,119 @@ function He({
                 top: -22 / t.z,
                 left: 0,
                 fontSize: 13 / t.z,
-                color: n ? _.slate400 : _.muted
+                color: e ? H.slate400 : H.muted
               },
-              children: c ? g("", { fontSize: 13 / t.z }) : Ot(i) || "프레임"
+              children: c ? w("", { fontSize: 13 / t.z }) : Rt(r) || "프레임"
             }
           )
         }
       );
-    if (i.type === "note")
-      return /* @__PURE__ */ C(
+    }
+    if (r.type === "note")
+      return /* @__PURE__ */ N(
         "div",
         {
           className: "w-full h-full flex p-3 shadow-md",
-          style: { background: u.bg, borderTop: `6px solid ${u.border}`, color: u.text },
-          children: c ? g("font-medium", { color: wt(i), fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }) : v ? /* @__PURE__ */ C("div", { "data-canvas-text-view": !0, className: "canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words overflow-hidden", style: { color: wt(i), fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }, dangerouslySetInnerHTML: { __html: v } }, "canvas-view") : /* @__PURE__ */ C("div", { "data-canvas-text-view": !0, className: "canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words overflow-hidden", style: { color: wt(i), fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }, children: /* @__PURE__ */ C("span", { className: "opacity-40", children: "메모 입력..." }) }, "canvas-view")
+          style: { background: f.bg, borderTop: `6px solid ${f.border}`, color: f.text },
+          children: c ? w("font-medium", { color: Xt(r), fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }) : v ? /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, className: "canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words overflow-hidden", style: { color: Xt(r), fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }, dangerouslySetInnerHTML: { __html: v } }, "canvas-view") : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, className: "canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words overflow-hidden", style: { color: Xt(r), fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }, children: /* @__PURE__ */ N("span", { className: "opacity-40", children: "메모 입력..." }) }, "canvas-view")
         }
       );
-    if (i.type === "card") {
-      const s = i.cardStyle === "glass";
-      return /* @__PURE__ */ j(
+    if (r.type === "card") {
+      const x = r.cardStyle === "glass";
+      return /* @__PURE__ */ K(
         "div",
         {
           className: "w-full h-full flex flex-col p-4 rounded-2xl text-white overflow-hidden",
           style: {
-            background: s ? _.glassFill : _.slateCard,
-            backdropFilter: s ? "blur(12px)" : void 0,
-            WebkitBackdropFilter: s ? "blur(12px)" : void 0,
-            border: `1px solid ${s ? _.glassBorder : _.darkBorder}`,
-            boxShadow: s ? _.glassShadow : _.cardShadow
+            background: x ? H.glassFill : H.slateCard,
+            backdropFilter: x ? "blur(12px)" : void 0,
+            WebkitBackdropFilter: x ? "blur(12px)" : void 0,
+            border: `1px solid ${x ? H.glassBorder : H.darkBorder}`,
+            boxShadow: x ? H.glassShadow : H.cardShadow
           },
           children: [
-            /* @__PURE__ */ j(
+            /* @__PURE__ */ K(
               "div",
               {
                 className: "text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 outline-none",
                 contentEditable: !0,
                 suppressContentEditableWarning: !0,
-                onPointerDown: (f) => f.stopPropagation(),
-                onDoubleClick: (f) => f.stopPropagation(),
-                onBlur: (f) => {
-                  const Y = (f.currentTarget.textContent || "").replace(/^\[\s*|\s*\]$/g, "").trim().toUpperCase() || "ENTITY";
-                  d((w) => w.map((p) => p.id === i.id ? { ...p, category: Y } : p)), m();
+                onPointerDown: (k) => k.stopPropagation(),
+                onDoubleClick: (k) => k.stopPropagation(),
+                onBlur: (k) => {
+                  const b = (k.currentTarget.textContent || "").replace(/^\[\s*|\s*\]$/g, "").trim().toUpperCase() || "ENTITY";
+                  d((m) => m.map(($) => $.id === r.id ? { ...$, category: b } : $)), y();
                 },
-                onKeyDown: (f) => {
-                  f.key === "Enter" && (f.preventDefault(), f.currentTarget.blur());
+                onKeyDown: (k) => {
+                  k.key === "Enter" && (k.preventDefault(), k.currentTarget.blur());
                 },
                 children: [
                   "[ ",
-                  i.category || "ENTITY",
+                  r.category || "ENTITY",
                   " ]"
                 ]
               }
             ),
-            c ? g("flex-1 font-medium", { color: i.textColor ?? _.white, fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }) : /* @__PURE__ */ C("div", { "data-canvas-text-view": !0, className: "canvas-rich-text flex-1 font-medium break-words overflow-hidden", style: { color: i.textColor ?? _.white, fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }, dangerouslySetInnerHTML: { __html: v } }, "canvas-view"),
-            /* @__PURE__ */ j("div", { className: "text-[11px] text-slate-300 border-t border-white/10 pt-2 mt-1", children: [
+            c ? w("flex-1 font-medium", { color: r.textColor ?? H.white, fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, className: "canvas-rich-text flex-1 font-medium break-words overflow-hidden", style: { color: r.textColor ?? H.white, fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }, dangerouslySetInnerHTML: { __html: v } }, "canvas-view"),
+            /* @__PURE__ */ K("div", { className: "text-[11px] text-slate-300 border-t border-white/10 pt-2 mt-1", children: [
               "• Type: ",
-              i.category || "Entity"
+              r.category || "Entity"
             ] })
           ]
         }
       );
     }
-    if (i.type === "text") {
-      const s = n ? "text-slate-100" : "text-slate-900", f = {
-        className: `canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words ${s}`,
-        style: { color: i.textColor, fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }
+    if (r.type === "text") {
+      const x = e ? "text-slate-100" : "text-slate-900", k = {
+        className: `canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words ${x}`,
+        style: { color: r.textColor, fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }
       };
-      return c ? g(`font-medium ${s}`, f.style) : v ? /* @__PURE__ */ C(
+      return c ? w(`font-medium ${x}`, k.style) : v ? /* @__PURE__ */ N(
         "div",
         {
           "data-canvas-text-view": !0,
-          ...f,
+          ...k,
           dangerouslySetInnerHTML: { __html: v }
         },
         "canvas-view"
-      ) : /* @__PURE__ */ C("div", { "data-canvas-text-view": !0, ...f, children: /* @__PURE__ */ C("span", { className: "opacity-40", children: "텍스트 입력..." }) }, "canvas-view");
+      ) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, ...k, children: /* @__PURE__ */ N("span", { className: "opacity-40", children: "텍스트 입력..." }) }, "canvas-view");
     }
-    if (i.type === "image") {
-      const s = tn(i.src);
-      return s ? /* @__PURE__ */ C(
+    if (r.type === "image") {
+      const x = oe(r.src);
+      return x ? /* @__PURE__ */ N(
         "img",
         {
-          src: s,
-          alt: i.fileName || "캔버스 이미지",
+          src: x,
+          alt: r.fileName || "캔버스 이미지",
           className: "w-full h-full object-contain pointer-events-none rounded-lg",
           draggable: !1
         }
       ) : null;
     }
-    const a = Jt(i), X = we(i), x = wt(i);
-    if (i.type === "triangle" || i.type === "diamond" || i.type === "hexagon" || i.type === "star")
-      return /* @__PURE__ */ j("div", { className: "relative w-full h-full", children: [
-        /* @__PURE__ */ C("svg", { className: "absolute inset-0 w-full h-full pointer-events-none", viewBox: `0 0 ${i.w} ${i.h}`, preserveAspectRatio: "none", children: /* @__PURE__ */ C("polygon", { points: $e(i.type, i.w, i.h), fill: a, stroke: X, strokeWidth: 2, strokeLinejoin: "round" }) }),
-        /* @__PURE__ */ C("div", { className: "absolute inset-0 flex items-center justify-center p-3", style: { color: x }, children: c ? g("font-medium", { color: x, fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }) : /* @__PURE__ */ C("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }, dangerouslySetInnerHTML: { __html: v } }, "canvas-view") })
+    const a = Bt(r), S = Xe(r), h = Xt(r);
+    if (r.type === "triangle" || r.type === "diamond" || r.type === "hexagon" || r.type === "star") {
+      const x = r.strokeWidth ?? 2;
+      return /* @__PURE__ */ K("div", { className: "relative w-full h-full", children: [
+        /* @__PURE__ */ N("svg", { className: "absolute inset-0 w-full h-full pointer-events-none", viewBox: `0 0 ${r.w} ${r.h}`, preserveAspectRatio: "none", children: /* @__PURE__ */ N("polygon", { "data-canvas-stroke-width": x, points: Ye(r.type, r.w, r.h), fill: a, stroke: S, strokeWidth: x / t.z, strokeLinejoin: "round" }) }),
+        /* @__PURE__ */ N("div", { className: "absolute inset-0 flex items-center justify-center p-3", style: { color: h }, children: c ? w("font-medium", { color: h, fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }) : /* @__PURE__ */ N("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }, dangerouslySetInnerHTML: { __html: v } }, "canvas-view") })
       ] });
-    const z = tn(i.src);
-    return /* @__PURE__ */ C(
+    }
+    const z = oe(r.src), s = r.type === "rect" || r.type === "ellipse" ? r.strokeWidth ?? 2 : 2;
+    return /* @__PURE__ */ N(
       "div",
       {
-        className: `w-full h-full flex items-center justify-center p-3 ${i.type === "ellipse" ? "rounded-full" : "rounded-xl"}`,
-        style: { background: a, border: `2px solid ${X}`, color: x },
-        children: c ? g("font-medium", { color: x, fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }) : /* @__PURE__ */ j("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: at(i), fontFamily: ct(i), textAlign: lt(i) }, children: [
-          /* @__PURE__ */ C("div", { dangerouslySetInnerHTML: { __html: v } }),
-          z && /* @__PURE__ */ C(
+        "data-canvas-stroke-width": s,
+        className: `w-full h-full flex items-center justify-center p-3 ${r.type === "ellipse" ? "rounded-full" : "rounded-xl"}`,
+        style: { background: a, border: `${s / t.z}px solid ${S}`, color: h },
+        children: c ? w("font-medium", { color: h, fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }) : /* @__PURE__ */ K("div", { "data-canvas-text-view": !0, className: "canvas-rich-text font-medium whitespace-pre-wrap break-words overflow-hidden", style: { fontSize: at(r), fontFamily: ct(r), textAlign: ut(r) }, children: [
+          /* @__PURE__ */ N("div", { dangerouslySetInnerHTML: { __html: v } }),
+          z && /* @__PURE__ */ N(
             "a",
             {
               href: z,
               target: "_blank",
               rel: "noreferrer",
-              onPointerDown: (s) => s.stopPropagation(),
+              onPointerDown: (x) => x.stopPropagation(),
               className: "block mt-1 text-[11px] underline opacity-70",
               children: "파일 열기"
             }
@@ -1097,129 +1160,129 @@ function He({
     );
   } };
 }
-function We({
+function Jn({
   containerRef: t,
-  shapesRef: e,
-  shapes: n,
+  shapesRef: n,
+  shapes: e,
   camera: o,
-  selected: r,
-  editingId: l,
+  selected: i,
+  editingId: u,
   boardIdentity: d
 }) {
-  const [m, b] = it({ width: 0, height: 0 });
-  ft(() => {
+  const [y, g] = it({ width: 0, height: 0 });
+  yt(() => {
     const v = t.current;
     if (!v) return;
-    let a = -1, X = -1;
-    const x = (z = v.clientWidth, s = v.clientHeight) => {
-      z === a && s === X || (a = z, X = s, b({ width: z, height: s }));
+    let a = -1, S = -1;
+    const h = (z = v.clientWidth, s = v.clientHeight) => {
+      z === a && s === S || (a = z, S = s, g({ width: z, height: s }));
     };
-    if (x(), typeof ResizeObserver < "u") {
+    if (h(), typeof ResizeObserver < "u") {
       const z = new ResizeObserver((s) => {
-        var $;
-        const f = ($ = s[0]) == null ? void 0 : $.contentRect;
-        x((f == null ? void 0 : f.width) ?? v.clientWidth, (f == null ? void 0 : f.height) ?? v.clientHeight);
+        var k;
+        const x = (k = s[0]) == null ? void 0 : k.contentRect;
+        h((x == null ? void 0 : x.width) ?? v.clientWidth, (x == null ? void 0 : x.height) ?? v.clientHeight);
       });
       return z.observe(v), () => z.disconnect();
     }
-    const y = () => x();
-    return window.addEventListener("resize", y), () => window.removeEventListener("resize", y);
+    const Y = () => h();
+    return window.addEventListener("resize", Y), () => window.removeEventListener("resize", Y);
   }, [d, t]);
-  const g = bt(() => new Map(n.map((v) => [v.id, v])), [n]), h = bt(
-    () => [...n].sort((v, a) => (v.type === "frame" ? -1 : 0) - (a.type === "frame" ? -1 : 0)),
-    [n]
-  ), i = bt(() => {
-    if (!t.current || m.width <= 0 || m.height <= 0) return null;
+  const w = kt(() => new Map(e.map((v) => [v.id, v])), [e]), l = kt(
+    () => [...e].sort((v, a) => (v.type === "frame" ? -1 : 0) - (a.type === "frame" ? -1 : 0)),
+    [e]
+  ), r = kt(() => {
+    if (!t.current || y.width <= 0 || y.height <= 0) return null;
     const v = 200 / o.z;
     return {
       minX: o.x - v,
       minY: o.y - v,
-      maxX: o.x + m.width / o.z + v,
-      maxY: o.y + m.height / o.z + v
+      maxX: o.x + y.width / o.z + v,
+      maxY: o.y + y.height / o.z + v
     };
-  }, [o, t, m]), u = rt((v) => {
-    if (!i) return !1;
-    if (v.id === l || r.has(v.id)) return !0;
+  }, [o, t, y]), f = rt((v) => {
+    if (!r) return !1;
+    if (v.id === u || i.has(v.id)) return !0;
     if (v.type === "arrow") {
-      const X = xt(v, g, e.current), y = (X.routing === "orthogonal" ? X.pathPoints : null) ?? [X.start, X.end], z = Math.min(...y.map((Y) => Y.x)), s = Math.max(...y.map((Y) => Y.x)), f = Math.min(...y.map((Y) => Y.y)), $ = Math.max(...y.map((Y) => Y.y));
-      return s >= i.minX && z <= i.maxX && $ >= i.minY && f <= i.maxY;
+      const S = pt(v, w, n.current), Y = (S.routing === "orthogonal" ? S.pathPoints : null) ?? [S.start, S.end], z = Math.min(...Y.map((p) => p.x)), s = Math.max(...Y.map((p) => p.x)), x = Math.min(...Y.map((p) => p.y)), k = Math.max(...Y.map((p) => p.y));
+      return s >= r.minX && z <= r.maxX && k >= r.minY && x <= r.maxY;
     }
-    const a = et(v);
-    return a.maxX >= i.minX && a.minX <= i.maxX && a.maxY >= i.minY && a.minY <= i.maxY;
-  }, [l, r, g, e, i]), c = bt(
-    () => h.filter(u),
-    [u, h]
+    const a = nt(v);
+    return a.maxX >= r.minX && a.minX <= r.maxX && a.maxY >= r.minY && a.minY <= r.maxY;
+  }, [u, i, w, n, r]), c = kt(
+    () => l.filter(f),
+    [f, l]
   );
-  return { shapeById: g, visiblePaintOrder: c };
+  return { shapeById: w, visiblePaintOrder: c };
 }
-function je({
+function to({
   editorRef: t,
-  editingId: e,
-  setShapes: n,
+  editingId: n,
+  setShapes: e,
   setAnnouncement: o,
-  onDirty: r,
-  patchSelected: l
+  onDirty: i,
+  patchSelected: u
 }) {
   const d = rt(() => {
     const c = t.current;
-    if (!c || !e) return;
+    if (!c || !n) return;
     let v;
     try {
-      v = nn(c.innerHTML);
+      v = re(c.innerHTML);
     } catch {
       o("입력 내용이 너무 깊거나 깁니다. 일부 내용을 줄인 뒤 다시 시도해 주세요.");
       return;
     }
     const a = c.scrollHeight;
-    n((X) => X.map((x) => {
-      if (x.id !== e) return x;
-      const y = { ...x, html: v, text: void 0 };
-      if (x.type === "text")
-        return x.manualSize ? y : { ...y, ...Te(c, x) };
-      if (x.type === "arrow") return y;
-      const z = x.type === "note" ? 32 : x.type === "card" ? 96 : (
+    e((S) => S.map((h) => {
+      if (h.id !== n) return h;
+      const Y = { ...h, html: v, text: void 0 };
+      if (h.type === "text")
+        return h.manualSize ? Y : { ...Y, ...jn(c, h) };
+      if (h.type === "arrow") return Y;
+      const z = h.type === "note" ? 32 : h.type === "card" ? 96 : (
         // category header + type footer
-        (x.type === "frame", 24)
-      ), s = Math.max(x.h, a + z);
-      return { ...y, h: s };
-    })), r();
-  }, [e, r]), m = (c) => {
+        (h.type === "frame", 24)
+      ), s = Math.max(h.h, a + z);
+      return { ...Y, h: s };
+    })), i();
+  }, [n, i]), y = (c) => {
     var v;
     (v = t.current) == null || v.focus(), document.execCommand("styleWithCSS", !1, "false"), document.execCommand(c), d();
-  }, b = () => {
-    var X;
-    const c = (X = window.getSelection()) == null ? void 0 : X.anchorNode, v = c instanceof Element ? c : c == null ? void 0 : c.parentElement, a = v == null ? void 0 : v.closest("ul, ol");
+  }, g = () => {
+    var S;
+    const c = (S = window.getSelection()) == null ? void 0 : S.anchorNode, v = c instanceof Element ? c : c == null ? void 0 : c.parentElement, a = v == null ? void 0 : v.closest("ul, ol");
     return a instanceof HTMLElement ? a : null;
-  }, g = (c, v, a) => {
-    const X = document.createElement(v);
-    for (; c.firstChild; ) X.append(c.firstChild);
-    return c.replaceWith(X), X;
-  }, h = (c) => {
+  }, w = (c, v, a) => {
+    const S = document.createElement(v);
+    for (; c.firstChild; ) S.append(c.firstChild);
+    return c.replaceWith(S), S;
+  }, l = (c) => {
     const v = t.current;
     if (!v) return;
     v.focus();
-    const a = b();
+    const a = g();
     if (c === "number")
       if ((a == null ? void 0 : a.tagName) === "OL")
         a.removeAttribute("data-list-style");
       else if ((a == null ? void 0 : a.tagName) === "UL")
-        g(a, "ol");
+        w(a, "ol");
       else {
         document.execCommand("insertOrderedList");
-        const X = b();
-        X == null || X.removeAttribute("data-list-style");
+        const S = g();
+        S == null || S.removeAttribute("data-list-style");
       }
     else if ((a == null ? void 0 : a.tagName) === "UL") {
-      const X = a.dataset.listStyle;
-      c === X ? document.execCommand("insertUnorderedList") : a.dataset.listStyle = c;
+      const S = a.dataset.listStyle;
+      c === S ? document.execCommand("insertUnorderedList") : a.dataset.listStyle = c;
     } else {
       (a == null ? void 0 : a.tagName) === "OL" && document.execCommand("insertOrderedList"), document.execCommand("insertUnorderedList");
-      const X = b();
-      X && (X.dataset.listStyle = c);
+      const S = g();
+      S && (S.dataset.listStyle = c);
     }
     d();
   };
-  return { commitEditorHtml: d, applyFormat: m, applyList: h, onEditorKeyDown: (c) => {
+  return { commitEditorHtml: d, applyFormat: y, applyList: l, onEditorKeyDown: (c) => {
     if (c.key === "Tab") {
       c.preventDefault(), document.execCommand(c.shiftKey ? "outdent" : "indent"), d();
       return;
@@ -1227,573 +1290,616 @@ function je({
     if (c.key === " ") {
       const v = window.getSelection();
       if (v && v.isCollapsed && v.anchorNode) {
-        const a = v.anchorNode, X = a.textContent || "", x = v.anchorOffset, y = X.slice(0, x).trim();
-        if (!b()) {
-          if (y === "-" || y === "–") {
-            c.preventDefault(), a.textContent = X.slice(x), h("dash");
+        const a = v.anchorNode, S = a.textContent || "", h = v.anchorOffset, Y = S.slice(0, h).trim();
+        if (!g()) {
+          if (Y === "-" || Y === "–") {
+            c.preventDefault(), a.textContent = S.slice(h), l("dash");
             return;
           }
-          if (y === "*") {
-            c.preventDefault(), a.textContent = X.slice(x), h("bullet");
+          if (Y === "*") {
+            c.preventDefault(), a.textContent = S.slice(h), l("bullet");
             return;
           }
-          if (y === "1.") {
-            c.preventDefault(), a.textContent = X.slice(x), h("number");
+          if (Y === "1.") {
+            c.preventDefault(), a.textContent = S.slice(h), l("number");
             return;
           }
         }
       }
     }
   }, applyCustomFontFamily: (c) => {
-    const v = Pn(c);
+    const v = Te(c);
     if (!v) {
-      l({
+      u({
         fontFamily: "sans",
         customFontFamily: void 0
       });
       return;
     }
-    l({
+    u({
       fontFamily: "custom",
       customFontFamily: v
     });
   } };
 }
-function Ke({
+function eo({
   boardIdentity: t,
-  tool: e,
-  controlledShapes: n,
+  tool: n,
+  controlledShapes: e,
   onShapesChange: o,
-  onDirty: r
+  onDirty: i
 }) {
-  const l = tt(null), d = tt(null), [m, b] = it([]), g = n !== void 0 && o !== void 0, h = tt(/* @__PURE__ */ new WeakMap()), i = bt(() => {
-    const A = h.current;
-    return (g ? n ?? [] : m).map((W) => {
-      let H = A.get(W);
-      return H === void 0 && (H = on(W), A.set(W, H)), H;
-    }).filter((W) => W !== null);
-  }, [g, n, m]), u = tt(o);
-  u.current = o;
+  const u = tt(null), d = tt(null), [y, g] = it([]), w = e !== void 0 && o !== void 0, l = tt(/* @__PURE__ */ new WeakMap()), r = kt(() => {
+    const A = l.current;
+    return (w ? e ?? [] : y).map((R) => {
+      let B = A.get(R);
+      return B === void 0 && (B = Ne(R), A.set(R, B)), B;
+    }).filter((R) => R !== null);
+  }, [w, e, y]), f = tt(o);
+  f.current = o;
   const c = rt((A) => {
-    const W = u.current;
-    if (!W) {
-      b(A);
+    const R = f.current;
+    if (!R) {
+      g(A);
       return;
     }
-    W(typeof A == "function" ? A : () => A);
-  }, []), [v, a] = it({ x: -400, y: -300, z: 1 }), [X, x] = it(/* @__PURE__ */ new Set()), [y, z] = it(null), [s, f] = it({ kind: "none" }), [$, Y] = it(!1), [w, p] = it([]), [k, M] = it(""), [N, P] = it(!1), [E, O] = it(null), [I, T] = it("blue"), [L, R] = it(At), D = tt(I);
-  D.current = I;
-  const B = tt([]), U = tt([]), Q = tt(null), K = tt(/* @__PURE__ */ new Map()), G = tt(i), nt = tt(v), S = tt(e), F = tt(X), V = tt(y);
-  G.current = i, nt.current = v, S.current = e, F.current = X, V.current = y;
-  const q = tt({ kind: "none" }), J = rt((A) => {
-    q.current = A, f(A);
-  }, []), ot = rt((A) => {
-    F.current = A, x(A);
+    R(typeof A == "function" ? A : () => A);
+  }, []), [v, a] = it({ x: -400, y: -300, z: 1 }), [S, h] = it(/* @__PURE__ */ new Set()), [Y, z] = it(null), [s, x] = it({ kind: "none" }), [k, p] = it(!1), [b, m] = it([]), [$, M] = it(""), [C, I] = it(!1), [E, D] = it(null), [G, P] = it("blue"), [F, L] = it(Ht), O = tt(G);
+  O.current = G;
+  const W = tt([]), q = tt([]), U = tt(null), Z = tt(/* @__PURE__ */ new Map()), _ = tt(r), V = tt(v), ot = tt(n), xt = tt(S), X = tt(Y);
+  _.current = r, V.current = v, ot.current = n, xt.current = S, X.current = Y;
+  const T = tt({ kind: "none" }), j = rt((A) => {
+    T.current = A, x(A);
+  }, []), Q = rt((A) => {
+    xt.current = A, h(A);
   }, []);
-  Gt(() => {
-    var W;
+  te(() => {
+    var R;
     const A = /* @__PURE__ */ new Set();
-    F.current = A, V.current = null, K.current.clear(), B.current = [], U.current = [], Q.current = null, J({ kind: "none" }), x(A), z(null), Y(!1), p([]), O(null), M(""), (W = l.current) == null || W.focus();
-  }, [J, t]), ft(() => {
+    xt.current = A, X.current = null, Z.current.clear(), W.current = [], q.current = [], U.current = null, j({ kind: "none" }), h(A), z(null), p(!1), m([]), D(null), M(""), (R = u.current) == null || R.focus();
+  }, [j, t]), yt(() => {
     let A = !1;
-    const W = () => {
-      const Z = Ne();
-      A || R(Z);
+    const R = () => {
+      const J = An();
+      A || L(J);
     };
-    if (W(), typeof document > "u" || !("fonts" in document)) return;
-    const H = () => W();
-    return document.fonts.addEventListener("loadingdone", H), () => {
-      A = !0, document.fonts.removeEventListener("loadingdone", H);
+    if (R(), typeof document > "u" || !("fonts" in document)) return;
+    const B = () => R();
+    return document.fonts.addEventListener("loadingdone", B), () => {
+      A = !0, document.fonts.removeEventListener("loadingdone", B);
     };
   }, [t]);
-  const Ct = (y ? i.find((A) => A.id === y) : void 0) !== void 0;
-  Gt(() => {
-    if (!y || !Ct) return;
+  const st = (Y ? r.find((A) => A.id === Y) : void 0) !== void 0;
+  te(() => {
+    if (!Y || !st) return;
     const A = () => {
-      const H = d.current, Z = G.current.find((Kt) => Kt.id === y);
-      if (!H || !Z || (H.dataset.seeded !== y && (H.innerHTML = Dt(Z), H.dataset.seeded = y), document.activeElement === H)) return;
-      H.focus();
-      const ht = document.createRange();
-      ht.selectNodeContents(H), ht.collapse(!1);
-      const vt = window.getSelection();
-      vt == null || vt.removeAllRanges(), vt == null || vt.addRange(ht);
+      const B = d.current, J = _.current.find((Qt) => Qt.id === Y);
+      if (!B || !J || (B.dataset.seeded !== Y && (B.innerHTML = Kt(J), B.dataset.seeded = Y), document.activeElement === B)) return;
+      B.focus();
+      const gt = document.createRange();
+      gt.selectNodeContents(B), gt.collapse(!1);
+      const wt = window.getSelection();
+      wt == null || wt.removeAllRanges(), wt == null || wt.addRange(gt);
     };
     A();
-    const W = requestAnimationFrame(A);
-    return () => cancelAnimationFrame(W);
-  }, [y, Ct]);
-  const kt = rt((A) => {
-    c((W) => {
-      const H = typeof A == "function" ? A(W) : A;
-      return B.current.push(W), B.current.length > 100 && B.current.shift(), U.current = [], H;
-    }), r();
-  }, [r]), Bt = rt((A) => A.size === 0 ? !1 : (kt((W) => W.filter((H) => A.has(H.id) ? !1 : H.type !== "arrow" ? !0 : !(H.fromId && A.has(H.fromId)) && !(H.toId && A.has(H.toId)))), ot(/* @__PURE__ */ new Set()), M(`${A.size}개 삭제됨`), !0), [kt, ot]), Ht = rt(() => {
-    Q.current = G.current;
-  }, []), Wt = rt(() => {
-    const A = Q.current;
-    Q.current = null, !(!A || A === G.current) && (B.current.push(A), B.current.length > 100 && B.current.shift(), U.current = [], r());
-  }, [r]), Mt = rt((A, W) => {
-    var ht;
-    const H = (ht = l.current) == null ? void 0 : ht.getBoundingClientRect(), Z = nt.current;
-    return H ? { x: (A - H.left) / Z.z + Z.x, y: (W - H.top) / Z.z + Z.y } : { x: 0, y: 0 };
-  }, []), Nt = rt(() => {
-    var H;
-    const A = (H = l.current) == null ? void 0 : H.getBoundingClientRect(), W = nt.current;
-    return A ? { x: W.x + A.width / 2 / W.z, y: W.y + A.height / 2 / W.z } : { x: 0, y: 0 };
-  }, []), jt = rt((A) => {
-    const W = new Set(G.current.filter((Z) => A.has(Z.id) && Z.groupId).map((Z) => Z.groupId));
-    if (W.size === 0) return A;
-    const H = new Set(A);
-    for (const Z of G.current) Z.groupId && W.has(Z.groupId) && H.add(Z.id);
-    return H;
+    const R = requestAnimationFrame(A);
+    return () => cancelAnimationFrame(R);
+  }, [Y, st]);
+  const It = rt((A) => {
+    c((R) => {
+      const B = typeof A == "function" ? A(R) : A;
+      return W.current.push(R), W.current.length > 100 && W.current.shift(), q.current = [], B;
+    }), i();
+  }, [i]), Tt = rt((A) => A.size === 0 ? !1 : (It((R) => R.filter((B) => A.has(B.id) ? !1 : B.type !== "arrow" ? !0 : !(B.fromId && A.has(B.fromId)) && !(B.toId && A.has(B.toId)))), Q(/* @__PURE__ */ new Set()), M(`${A.size}개 삭제됨`), !0), [It, Q]), Vt = rt(() => {
+    U.current = _.current;
+  }, []), Gt = rt(() => {
+    const A = U.current;
+    U.current = null, !(!A || A === _.current) && (W.current.push(A), W.current.length > 100 && W.current.shift(), q.current = [], i());
+  }, [i]), qt = rt((A, R) => {
+    var gt;
+    const B = (gt = u.current) == null ? void 0 : gt.getBoundingClientRect(), J = V.current;
+    return B ? { x: (A - B.left) / J.z + J.x, y: (R - B.top) / J.z + J.y } : { x: 0, y: 0 };
+  }, []), St = rt(() => {
+    var B;
+    const A = (B = u.current) == null ? void 0 : B.getBoundingClientRect(), R = V.current;
+    return A ? { x: R.x + A.width / 2 / R.z, y: R.y + A.height / 2 / R.z } : { x: 0, y: 0 };
+  }, []), zt = rt((A) => {
+    const R = new Set(_.current.filter((J) => A.has(J.id) && J.groupId).map((J) => J.groupId));
+    if (R.size === 0) return A;
+    const B = new Set(A);
+    for (const J of _.current) J.groupId && R.has(J.groupId) && B.add(J.id);
+    return B;
   }, []);
   return {
-    containerRef: l,
+    containerRef: u,
     editorRef: d,
-    localShapes: m,
-    setLocalShapes: b,
-    controlled: g,
-    shapes: i,
+    localShapes: y,
+    setLocalShapes: g,
+    controlled: w,
+    shapes: r,
     setShapes: c,
     camera: v,
     setCamera: a,
-    cameraRef: nt,
-    selected: X,
-    setSelected: x,
-    selectedRef: F,
-    editingId: y,
+    cameraRef: V,
+    selected: S,
+    setSelected: h,
+    selectedRef: xt,
+    editingId: Y,
     setEditingId: z,
-    editingIdRef: V,
+    editingIdRef: X,
     interaction: s,
-    interactionRef: q,
-    applyInteraction: J,
-    isSpaceDown: $,
-    setIsSpaceDown: Y,
-    guides: w,
-    setGuides: p,
-    announcement: k,
+    interactionRef: T,
+    applyInteraction: j,
+    isSpaceDown: k,
+    setIsSpaceDown: p,
+    guides: b,
+    setGuides: m,
+    announcement: $,
     setAnnouncement: M,
-    showInspectorPalette: N,
-    setShowInspectorPalette: P,
+    showInspectorPalette: C,
+    setShowInspectorPalette: I,
     eraserPos: E,
-    setEraserPos: O,
-    activeColor: I,
-    setActiveColor: T,
-    activeColorRef: D,
-    installedFontFamilies: L,
-    pointers: K,
-    past: B,
-    future: U,
-    selectNow: ot,
-    commit: kt,
-    deleteSelection: Bt,
-    beginHistory: Ht,
-    endHistory: Wt,
-    toPage: Mt,
-    viewportCentre: Nt,
-    expandToGroups: jt,
-    toolRef: S,
-    shapesRef: G
+    setEraserPos: D,
+    activeColor: G,
+    setActiveColor: P,
+    activeColorRef: O,
+    installedFontFamilies: F,
+    pointers: Z,
+    past: W,
+    future: q,
+    selectNow: Q,
+    commit: It,
+    deleteSelection: Tt,
+    beginHistory: Vt,
+    endHistory: Gt,
+    toPage: qt,
+    viewportCentre: St,
+    expandToGroups: zt,
+    toolRef: ot,
+    shapesRef: _
   };
 }
-function Ve({
+function no({
   containerRef: t,
-  camera: e,
-  setCamera: n,
+  camera: n,
+  setCamera: e,
   minZoom: o,
-  maxZoom: r,
-  shapes: l,
+  maxZoom: i,
+  shapes: u,
   selected: d,
-  editingId: m,
-  textualTypes: b,
-  onZoomChange: g,
-  onSelectionChange: h,
-  onLocalCursor: i,
-  toPage: u
+  editingId: y,
+  textualTypes: g,
+  onZoomChange: w,
+  onSelectionChange: l,
+  onLocalCursor: r,
+  toPage: f
 }) {
-  ft(() => {
-    g == null || g(e.z);
-  }, [e.z, g]), ft(() => {
-    const y = t.current;
-    if (!y) return;
+  yt(() => {
+    w == null || w(n.z);
+  }, [n.z, w]), yt(() => {
+    const Y = t.current;
+    if (!Y) return;
     const z = (s) => {
       if (s.preventDefault(), s.ctrlKey || s.metaKey) {
-        const f = y.getBoundingClientRect();
-        n(($) => {
-          const Y = Math.min(r, Math.max(o, $.z * Math.exp(-s.deltaY * 0.01))), w = s.clientX - f.left, p = s.clientY - f.top;
-          return { x: $.x + w / $.z - w / Y, y: $.y + p / $.z - p / Y, z: Y };
+        const x = Y.getBoundingClientRect();
+        e((k) => {
+          const p = Math.min(i, Math.max(o, k.z * Math.exp(-s.deltaY * 0.01))), b = s.clientX - x.left, m = s.clientY - x.top;
+          return { x: k.x + b / k.z - b / p, y: k.y + m / k.z - m / p, z: p };
         });
       } else
-        n((f) => ({ ...f, x: f.x + s.deltaX / f.z, y: f.y + s.deltaY / f.z }));
+        e((x) => ({ ...x, x: x.x + s.deltaX / x.z, y: x.y + s.deltaY / x.z }));
     };
-    return y.addEventListener("wheel", z, { passive: !1 }), () => y.removeEventListener("wheel", z);
-  }, [t, r, o, n]);
-  const c = bt(() => {
-    const y = l.filter((z) => d.has(z.id));
+    return Y.addEventListener("wheel", z, { passive: !1 }), () => Y.removeEventListener("wheel", z);
+  }, [t, i, o, e]);
+  const c = kt(() => {
+    const Y = u.filter((z) => d.has(z.id));
     return {
-      count: y.length,
-      canGroup: y.length > 1,
-      canUngroup: y.some((z) => !!z.groupId),
-      isTextual: y.length === 1 && b.includes(y[0].type)
+      count: Y.length,
+      canGroup: Y.length > 1,
+      canUngroup: Y.some((z) => !!z.groupId),
+      isTextual: Y.length === 1 && g.includes(Y[0].type)
     };
-  }, [d, l, b]);
-  ft(() => {
-    h == null || h(c);
-  }, [h, c]);
-  const v = bt(() => {
-    if (m) {
-      const s = l.find((f) => f.id === m);
+  }, [d, u, g]);
+  yt(() => {
+    l == null || l(c);
+  }, [l, c]);
+  const v = kt(() => {
+    if (y) {
+      const s = u.find((x) => x.id === y);
       return s && s.type !== "image" && s.type !== "draw" ? s : null;
     }
-    const y = l.filter((s) => d.has(s.id));
-    if (y.length > 1 && y.every((s) => s.type === "draw")) return y[0] ?? null;
-    if (y.length !== 1) return null;
-    const z = y[0];
+    const Y = u.filter((s) => d.has(s.id));
+    if (Y.length > 1 && Y.every((s) => s.type === "draw")) return Y[0] ?? null;
+    if (Y.length !== 1) return null;
+    const z = Y[0];
     return z && z.type !== "image" ? z : null;
-  }, [m, d, l]), a = tt(0);
-  return { selectionInfo: c, inspectorShape: v, onContainerPointerMove: i ? (y) => {
+  }, [y, d, u]), a = tt(0);
+  return { selectionInfo: c, inspectorShape: v, onContainerPointerMove: r ? (Y) => {
     const z = performance.now();
-    z - a.current < 60 || (a.current = z, i(u(y.clientX, y.clientY)));
-  } : void 0, onContainerPointerLeave: i ? () => i(null) : void 0 };
+    z - a.current < 60 || (a.current = z, r(f(Y.clientX, Y.clientY)));
+  } : void 0, onContainerPointerLeave: r ? () => r(null) : void 0 };
 }
-function Re(t, e) {
+function oo(t, n) {
   if (t.length === 0) return null;
-  let n = 1 / 0, o = 1 / 0, r = -1 / 0, l = -1 / 0;
-  for (const i of t) {
-    const u = et(i);
-    n = Math.min(n, u.minX), o = Math.min(o, u.minY), r = Math.max(r, u.maxX), l = Math.max(l, u.maxY);
+  let e = 1 / 0, o = 1 / 0, i = -1 / 0, u = -1 / 0;
+  for (const r of t) {
+    const f = nt(r);
+    e = Math.min(e, f.minX), o = Math.min(o, f.minY), i = Math.max(i, f.maxX), u = Math.max(u, f.maxY);
   }
-  const d = 40, m = r - n + d * 2, b = l - o + d * 2;
-  if (!Number.isFinite(m) || !Number.isFinite(b) || m > zt.maxExportDimension || b > zt.maxExportDimension || m * b > zt.maxExportPixels) return null;
-  const g = (i, u, c, v, a) => {
-    const X = i.fontSize ?? c, x = ct(i), y = Mn(Dt(i));
-    if (y.length === 0) return "";
-    const z = pt(i), s = i.textAlign === "right" ? "end" : i.textAlign === "center" ? "middle" : i.textAlign === "left" ? "start" : a, f = s === "end" ? z.maxX - 12 : s === "middle" ? (z.minX + z.maxX) / 2 : z.minX + 12, $ = z.minY + X + 12;
-    return y.map((Y, w) => {
-      const p = Y.map((k) => `<tspan style="${[
-        k.bold ? "font-weight:700" : `font-weight:${v}`,
-        k.italic ? "font-style:italic" : "",
-        k.underline ? "text-decoration:underline" : ""
-      ].filter(Boolean).join(";")}">${mt(k.text)}</tspan>`).join("");
-      return `<text x="${f}" y="${$ + w * X * 1.4}" font-family="${mt(x)}" font-size="${X}" fill="${u}" text-anchor="${s}">${p}</text>`;
+  const d = 40, y = i - e + d * 2, g = u - o + d * 2;
+  if (!Number.isFinite(y) || !Number.isFinite(g) || y > Nt.maxExportDimension || g > Nt.maxExportDimension || y * g > Nt.maxExportPixels) return null;
+  const w = (r, f, c, v, a) => {
+    const S = r.fontSize ?? c, h = ct(r), Y = Ce(Kt(r));
+    if (Y.length === 0) return "";
+    const z = $t(r), s = r.textAlign === "right" ? "end" : r.textAlign === "center" ? "middle" : r.textAlign === "left" ? "start" : a, x = s === "end" ? z.maxX - 12 : s === "middle" ? (z.minX + z.maxX) / 2 : z.minX + 12, k = z.minY + S + 12;
+    return Y.map((p, b) => {
+      const m = p.map(($) => `<tspan style="${[
+        $.bold ? "font-weight:700" : `font-weight:${v}`,
+        $.italic ? "font-style:italic" : "",
+        $.underline ? "text-decoration:underline" : ""
+      ].filter(Boolean).join(";")}">${bt($.text)}</tspan>`).join("");
+      return `<text x="${x}" y="${k + b * S * 1.4}" font-family="${bt(h)}" font-size="${S}" fill="${f}" text-anchor="${s}">${m}</text>`;
     }).join("");
-  }, h = t.map((i) => {
-    const u = st[i.color ?? "blue"], c = pt(i), v = dt(i), a = i.rotation ? ` transform="rotate(${i.rotation * 180 / Math.PI} ${v.x} ${v.y})"` : "", X = i.color ? st[i.color].border : _.ink;
-    if (i.type === "draw" && i.points)
-      return `<path d="${kn(i.points)}" fill="none" stroke="${X}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
-    if (i.type === "arrow") {
-      const y = xt(i, new Map(t.map((P) => [P.id, P])), t), z = y.routing === "orthogonal" && y.pathPoints && y.pathPoints.length > 1 ? y.pathPoints[y.pathPoints.length - 2] : null, s = y.routing === "orthogonal" && z ? z : St(0.94, y.start, y.control, y.end), f = Math.atan2(y.end.y - s.y, y.end.x - s.x), $ = 14, Y = `${y.end.x - $ * Math.cos(f - 0.4)},${y.end.y - $ * Math.sin(f - 0.4)}`, w = `${y.end.x - $ * Math.cos(f + 0.4)},${y.end.y - $ * Math.sin(f + 0.4)}`, p = y.routing === "orthogonal" && y.pathPoints ? qt(y.pathPoints) : y.bend === 0 ? `M ${y.start.x} ${y.start.y} L ${y.end.x} ${y.end.y}` : `M ${y.start.x} ${y.start.y} Q ${y.control.x} ${y.control.y} ${y.end.x} ${y.end.y}`, k = y.routing === "orthogonal" && y.pathPoints ? en(y.pathPoints) : y.bend === 0 ? { x: (y.start.x + y.end.x) / 2, y: (y.start.y + y.end.y) / 2 } : St(0.5, y.start, y.control, y.end), M = Ot(i), N = M ? `<text x="${k.x}" y="${k.y - 6}" text-anchor="middle" font-family="${mt(ct(i))}" font-size="${i.fontSize ?? 12}" fill="${X}">${mt(M)}</text>` : "";
-      return `<path d="${p}" fill="none" stroke="${X}" stroke-width="2.5" stroke-linecap="round"/><polygon points="${y.end.x},${y.end.y} ${Y} ${w}" fill="${X}"/>` + N;
+  }, l = t.map((r) => {
+    const f = dt[r.color ?? "blue"], c = $t(r), v = mt(r), a = r.rotation ? ` transform="rotate(${r.rotation * 180 / Math.PI} ${v.x} ${v.y})"` : "", S = r.color ? dt[r.color].border : H.ink;
+    if (r.type === "draw" && r.points) {
+      const p = (r.drawMode ?? "pen") === "highlighter" ? ' stroke-opacity="0.35"' : "";
+      return `<path d="${Se(r.points)}" fill="none" stroke="${S}" stroke-width="${r.strokeWidth ?? 3}"${p} stroke-linecap="round" stroke-linejoin="round"/>`;
     }
-    if (i.type === "image" && i.src) {
-      const y = tn(i.src);
-      return y ? `<image href="${mt(y)}" x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}"${a}/>` : "";
+    if (r.type === "arrow") {
+      const p = pt(r, new Map(t.map((W) => [W.id, W])), t), b = r.strokeWidth ?? 2.5, m = Math.max(10, 8 + b * 2), $ = Math.max(4, 2 + b), M = p.routing === "orthogonal" && p.pathPoints ? p.pathPoints : null, C = M && M.length > 1, I = C ? ee(M) : p.routing === "curved" ? `M ${p.start.x} ${p.start.y} Q ${p.control.x} ${p.control.y} ${p.end.x} ${p.end.y}` : `M ${p.start.x} ${p.start.y} L ${p.end.x} ${p.end.y}`, E = C ? Me(M) : p.routing === "curved" ? (() => {
+        const W = Ft(0.94, p.start, p.control, p.end);
+        return Math.atan2(p.end.y - W.y, p.end.x - W.x);
+      })() : Math.atan2(p.end.y - p.start.y, p.end.x - p.start.x), D = C ? Lt(M[0], M[1]) : p.routing === "orthogonal" && p.start.side ? p.start.side === "e" ? 0 : p.start.side === "w" ? Math.PI : p.start.side === "s" ? Math.PI / 2 : -Math.PI / 2 : Lt(p.start, p.end), G = r.strokeStyle === "dashed" ? ' stroke-dasharray="8 5"' : r.strokeStyle === "dotted" ? ' stroke-dasharray="1.5 4"' : "", P = (W, q, U, Z) => {
+        if (W === "dot") return `<circle cx="${q}" cy="${U}" r="${$}" fill="${S}"/>`;
+        if (W === "none") return "";
+        const _ = `${q - m * Math.cos(Z - 0.4)},${U - m * Math.sin(Z - 0.4)}`, V = `${q - m * Math.cos(Z + 0.4)},${U - m * Math.sin(Z + 0.4)}`;
+        return `<polygon points="${q},${U} ${_} ${V}" fill="${S}"/>`;
+      }, F = p.routing === "orthogonal" && p.pathPoints ? ie(p.pathPoints) : p.bend === 0 ? { x: (p.start.x + p.end.x) / 2, y: (p.start.y + p.end.y) / 2 } : Ft(0.5, p.start, p.control, p.end), L = Rt(r), O = L ? `<text x="${F.x}" y="${F.y - 6}" text-anchor="middle" font-family="${bt(ct(r))}" font-size="${r.fontSize ?? 12}" fill="${S}">${bt(L)}</text>` : "";
+      return `<path d="${I}" fill="none" stroke="${S}" stroke-width="${b}" stroke-linecap="round" stroke-linejoin="round"${G}/>` + P(r.arrowEnd ?? "arrow", p.end.x, p.end.y, E) + P(r.arrowStart ?? "none", p.start.x, p.start.y, D + Math.PI) + O;
     }
-    if (i.type === "frame")
-      return `<g${a}><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" fill="none" stroke="${_.slate400}" stroke-width="2" rx="4"/><text x="${c.minX}" y="${c.minY - 8}" font-family="Inter, system-ui, sans-serif" font-size="13" fill="${_.muted}">${mt(i.text ?? "프레임")}</text></g>`;
-    if (i.type === "note")
-      return `<g${a}><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" fill="${u.bg}"/><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="6" fill="${u.border}"/>` + g(i, u.text, 14, "600", "start") + "</g>";
-    if (i.type === "card") {
-      const y = i.cardStyle === "glass";
-      return `<g${a}><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" rx="16" fill="${y ? _.glassFill : _.slateCard}"/><text x="${c.minX + 16}" y="${c.minY + 24}" font-family="Inter, system-ui, sans-serif" font-size="10" fill="${_.slate400}">[ ${mt(i.category ?? "ENTITY")} ]</text>` + g(i, _.white, 16, "700", "start") + "</g>";
+    if (r.type === "image" && r.src) {
+      const p = oe(r.src);
+      return p ? `<image href="${bt(p)}" x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}"${a}/>` : "";
     }
-    const x = i.type === "ellipse" ? `<ellipse cx="${(c.minX + c.maxX) / 2}" cy="${(c.minY + c.maxY) / 2}" rx="${(c.maxX - c.minX) / 2}" ry="${(c.maxY - c.minY) / 2}" fill="${u.bg}" stroke="${u.border}" stroke-width="2"/>` : `<rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" rx="12" fill="${u.bg}" stroke="${u.border}" stroke-width="2"/>`;
-    return `<g${a}>${x}${g(i, u.text, 14, "700", "middle")}</g>`;
+    if (r.type === "frame")
+      return `<g${a}><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" fill="none" stroke="${H.slate400}" stroke-width="${r.strokeWidth ?? 2}" rx="4"/><text x="${c.minX}" y="${c.minY - 8}" font-family="Inter, system-ui, sans-serif" font-size="13" fill="${H.muted}">${bt(r.text ?? "프레임")}</text></g>`;
+    if (r.type === "note")
+      return `<g${a}><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" fill="${f.bg}"/><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="6" fill="${f.border}"/>` + w(r, f.text, 14, "600", "start") + "</g>";
+    if (r.type === "card") {
+      const p = r.cardStyle === "glass";
+      return `<g${a}><rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" rx="16" fill="${p ? H.glassFill : H.slateCard}"/><text x="${c.minX + 16}" y="${c.minY + 24}" font-family="Inter, system-ui, sans-serif" font-size="10" fill="${H.slate400}">[ ${bt(r.category ?? "ENTITY")} ]</text>` + w(r, H.white, 16, "700", "start") + "</g>";
+    }
+    const h = r.type === "rect" || r.type === "ellipse" || r.type === "triangle" || r.type === "diamond" || r.type === "hexagon" || r.type === "star" ? r.strokeWidth ?? 2 : 2, Y = Bt(r), z = Xe(r), s = r.type === "triangle" || r.type === "diamond" || r.type === "hexagon" || r.type === "star", x = s ? Ye(r.type, c.maxX - c.minX, c.maxY - c.minY).split(" ").map((p) => {
+      const [b, m] = p.split(",").map(Number);
+      return `${b + c.minX},${m + c.minY}`;
+    }).join(" ") : "", k = r.type === "ellipse" ? `<ellipse cx="${(c.minX + c.maxX) / 2}" cy="${(c.minY + c.maxY) / 2}" rx="${(c.maxX - c.minX) / 2}" ry="${(c.maxY - c.minY) / 2}" fill="${Y}" stroke="${z}" stroke-width="${h}"/>` : s ? `<polygon points="${x}" fill="${Y}" stroke="${z}" stroke-width="${h}" stroke-linejoin="round"/>` : `<rect x="${c.minX}" y="${c.minY}" width="${c.maxX - c.minX}" height="${c.maxY - c.minY}" rx="12" fill="${Y}" stroke="${z}" stroke-width="${h}"/>`;
+    return `<g${a}>${k}${w(r, f.text, 14, "700", "middle")}</g>`;
   }).join(`
 `);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${m}" height="${b}" viewBox="${n - d} ${o - d} ${m} ${b}"><rect x="${n - d}" y="${o - d}" width="${m}" height="${b}" fill="${e ? _.canvasDark : _.canvasLight}"/>` + h + "</svg>";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${y}" height="${g}" viewBox="${e - d} ${o - d} ${y} ${g}"><rect x="${e - d}" y="${o - d}" width="${y}" height="${g}" fill="${n ? H.canvasDark : H.canvasLight}"/>` + l + "</svg>";
 }
-async function Ue(t) {
-  const e = t();
-  if (!e) return null;
-  const n = /width="([\d.]+)" height="([\d.]+)"/.exec(e), o = Math.ceil(Number((n == null ? void 0 : n[1]) ?? 1200)), r = Math.ceil(Number((n == null ? void 0 : n[2]) ?? 800)), l = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(e)}`, d = new Image();
+async function ro(t) {
+  const n = t();
+  if (!n) return null;
+  const e = /width="([\d.]+)" height="([\d.]+)"/.exec(n), o = Math.ceil(Number((e == null ? void 0 : e[1]) ?? 1200)), i = Math.ceil(Number((e == null ? void 0 : e[2]) ?? 800)), u = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(n)}`, d = new Image();
   d.crossOrigin = "anonymous";
   try {
-    await new Promise((u, c) => {
-      d.onload = () => u(), d.onerror = () => c(new Error("svg rasterise failed")), d.src = l;
+    await new Promise((f, c) => {
+      d.onload = () => f(), d.onerror = () => c(new Error("svg rasterise failed")), d.src = u;
     });
   } catch {
     return null;
   }
-  const m = 2, b = o * m, g = r * m;
-  if (!Number.isSafeInteger(b) || !Number.isSafeInteger(g) || b > zt.maxExportDimension || g > zt.maxExportDimension || b * g > zt.maxExportPixels) return null;
-  const h = document.createElement("canvas");
-  h.width = b, h.height = g;
-  const i = h.getContext("2d");
-  return i ? (i.scale(m, m), i.drawImage(d, 0, 0), new Promise((u) => {
+  const y = 2, g = o * y, w = i * y;
+  if (!Number.isSafeInteger(g) || !Number.isSafeInteger(w) || g > Nt.maxExportDimension || w > Nt.maxExportDimension || g * w > Nt.maxExportPixels) return null;
+  const l = document.createElement("canvas");
+  l.width = g, l.height = w;
+  const r = l.getContext("2d");
+  return r ? (r.scale(y, y), r.drawImage(d, 0, 0), new Promise((f) => {
     try {
-      h.toBlob((c) => u(c), "image/png");
+      l.toBlob((c) => f(c), "image/png");
     } catch {
-      u(null);
+      f(null);
     }
   })) : null;
 }
-function Ge(t, e, n) {
+function io(t, n, e) {
   if (t.length < 2) return;
   const o = t.filter(
-    (u) => u.type !== "draw" && u.type !== "arrow" && u.type !== "frame" && u.type !== "image"
+    (f) => f.type !== "draw" && f.type !== "arrow" && f.type !== "frame" && f.type !== "image"
   );
   if (o.length < 2) return;
-  const r = o.map((u, c) => ({
-    id: u.id,
+  const i = o.map((f, c) => ({
+    id: f.id,
     i: c,
-    x: dt(u).x,
+    x: mt(f).x,
     // Deterministic jitter breaks the singularity when nodes start at
     // identical positions — otherwise every unit vector is (0, 0) and no
     // force ever separates them.
-    y: dt(u).y,
+    y: mt(f).y,
     vx: 0,
     vy: 0
   }));
-  for (let u = 0; u < r.length; u++)
-    for (let c = 0; c < u; c++)
-      if (Math.abs(r[u].x - r[c].x) < 1 && Math.abs(r[u].y - r[c].y) < 1) {
-        const v = 2 * Math.PI * u / r.length;
-        r[u].x += Math.cos(v) * 10, r[u].y += Math.sin(v) * 10;
+  for (let f = 0; f < i.length; f++)
+    for (let c = 0; c < f; c++)
+      if (Math.abs(i[f].x - i[c].x) < 1 && Math.abs(i[f].y - i[c].y) < 1) {
+        const v = 2 * Math.PI * f / i.length;
+        i[f].x += Math.cos(v) * 10, i[f].y += Math.sin(v) * 10;
         break;
       }
-  const l = new Map(r.map((u) => [u.id, u])), d = [];
-  for (const u of t) {
-    if (u.type !== "arrow") continue;
-    const c = u.fromId ? l.get(u.fromId) : null, v = u.toId ? l.get(u.toId) : null;
+  const u = new Map(i.map((f) => [f.id, f])), d = [];
+  for (const f of t) {
+    if (f.type !== "arrow") continue;
+    const c = f.fromId ? u.get(f.fromId) : null, v = f.toId ? u.get(f.toId) : null;
     c && v && d.push([c, v]);
   }
-  const m = 220, b = m * m, g = 80;
-  let h = 400;
-  const i = h / g;
-  for (let u = 0; u < g; u++) {
-    for (let c = 0; c < r.length; c++)
-      r[c].vx = 0, r[c].vy = 0;
-    for (let c = 0; c < r.length; c++)
-      for (let v = c + 1; v < r.length; v++) {
-        const a = r[c], X = r[v], x = a.x - X.x, y = a.y - X.y, z = Math.hypot(x, y) || 0.01, s = b / z, f = x / z * s, $ = y / z * s;
-        a.vx += f, a.vy += $, X.vx -= f, X.vy -= $;
+  const y = 220, g = y * y, w = 80;
+  let l = 400;
+  const r = l / w;
+  for (let f = 0; f < w; f++) {
+    for (let c = 0; c < i.length; c++)
+      i[c].vx = 0, i[c].vy = 0;
+    for (let c = 0; c < i.length; c++)
+      for (let v = c + 1; v < i.length; v++) {
+        const a = i[c], S = i[v], h = a.x - S.x, Y = a.y - S.y, z = Math.hypot(h, Y) || 0.01, s = g / z, x = h / z * s, k = Y / z * s;
+        a.vx += x, a.vy += k, S.vx -= x, S.vy -= k;
       }
     for (const [c, v] of d) {
-      const a = c.x - v.x, X = c.y - v.y, x = Math.hypot(a, X) || 0.01, y = x * x / m, z = a / x * y, s = X / x * y;
+      const a = c.x - v.x, S = c.y - v.y, h = Math.hypot(a, S) || 0.01, Y = h * h / y, z = a / h * Y, s = S / h * Y;
       c.vx -= z, c.vy -= s, v.vx += z, v.vy += s;
     }
-    for (const c of r) {
-      const v = Math.hypot(c.vx, c.vy) || 0.01, a = Math.min(v, h);
+    for (const c of i) {
+      const v = Math.hypot(c.vx, c.vy) || 0.01, a = Math.min(v, l);
       c.x += c.vx / v * a, c.y += c.vy / v * a;
     }
-    h = Math.max(0.5, h - i);
+    l = Math.max(0.5, l - r);
   }
-  e((u) => u.map((c) => {
-    const v = l.get(c.id);
+  n((f) => f.map((c) => {
+    const v = u.get(c.id);
     return v ? { ...c, x: v.x - c.w / 2, y: v.y - c.h / 2 } : c;
-  })), n();
+  })), e();
 }
-function qe(t, {
-  controlled: e,
-  past: n,
+function ao(t, {
+  controlled: n,
+  past: e,
   future: o,
-  setLocalShapes: r,
-  setCamera: l,
+  setLocalShapes: i,
+  setCamera: u,
   selectNow: d,
-  setEditingId: m
+  setEditingId: y
 }) {
-  const b = t;
-  if (!b || b.version !== "canvas-v1") return;
   let g;
   try {
-    g = te({ version: "canvas-v1", shapes: [], camera: b.camera }).camera;
+    g = ln(t);
   } catch {
     return;
   }
-  !e && Array.isArray(b.shapes) && b.shapes.length <= zt.maxShapes && (n.current = [], o.current = [], r(b.shapes.map(on).filter((h) => h !== null))), l(g), d(/* @__PURE__ */ new Set()), m(null);
+  n || (e.current = [], o.current = [], i(g.shapes.map(co))), u(g.camera), d(/* @__PURE__ */ new Set()), y(null);
 }
-function Qe({
+function co(t) {
+  var n;
+  switch (t.type) {
+    case "arrow":
+      return {
+        ...t,
+        orthogonalWaypoints: (n = t.orthogonalWaypoints) == null ? void 0 : n.map((e) => ({ x: e.x, y: e.y }))
+      };
+    case "draw":
+      return {
+        ...t,
+        points: t.points.map(([e, o]) => [e, o])
+      };
+    case "note":
+    case "card":
+    case "text":
+    case "image":
+    case "frame":
+    case "rect":
+    case "ellipse":
+    case "triangle":
+    case "diamond":
+    case "hexagon":
+    case "star":
+      return { ...t };
+    default:
+      return so(t);
+  }
+}
+function so(t) {
+  throw new dn(`Unhandled canvas shape type: ${String(t)}.`);
+}
+function lo({
   ref: t,
-  containerRef: e,
-  shapesRef: n,
+  containerRef: n,
+  shapesRef: e,
   cameraRef: o,
-  selectedRef: r,
-  past: l,
+  selectedRef: i,
+  past: u,
   future: d,
-  controlled: m,
-  isDarkMode: b,
-  minZoom: g,
-  maxZoom: h,
-  onToolChange: i,
-  onDirty: u,
+  controlled: y,
+  isDarkMode: g,
+  minZoom: w,
+  maxZoom: l,
+  onToolChange: r,
+  onDirty: f,
   commit: c,
   deleteSelection: v,
   selectNow: a,
-  viewportCentre: X,
-  setShapes: x,
-  setLocalShapes: y,
+  viewportCentre: S,
+  setShapes: h,
+  setLocalShapes: Y,
   setCamera: z,
   setEditingId: s,
-  setAnnouncement: f,
-  createId: $
+  setAnnouncement: x,
+  createId: k
 }) {
-  const Y = rt((p) => {
-    const k = X(), M = on({
-      id: $(),
-      x: p.x ?? k.x - p.w / 2,
-      y: p.y ?? k.y - p.h / 2,
-      ...p
+  const p = rt((m) => {
+    const $ = S(), M = Ne({
+      id: k(),
+      x: m.x ?? $.x - m.w / 2,
+      y: m.y ?? $.y - m.h / 2,
+      ...m
     });
     if (!M) throw new Error("Canvas could not create a valid shape.");
-    return c((N) => [...N, M]), a(/* @__PURE__ */ new Set([M.id])), i("select"), f(`${M.type} 추가됨`), M;
-  }, [c, $, i, a, f, X]), w = rt(() => Re(n.current, b), [b, n]);
-  Un(t, () => ({
-    addNote: (p) => {
-      const k = Y({ type: "note", w: 180, h: 180, color: p, text: "" });
-      s(k.id);
+    return c((C) => [...C, M]), a(/* @__PURE__ */ new Set([M.id])), r("select"), x(`${M.type} 추가됨`), M;
+  }, [c, k, r, a, x, S]), b = rt(() => oo(e.current, g), [g, e]);
+  nn(t, () => ({
+    addNote: (m) => {
+      const $ = p({ type: "note", w: 180, h: 180, color: m, text: "" });
+      s($.id);
     },
-    addCard: (p, k, M, N) => {
-      Y({ type: "card", w: 260, h: 150, text: p, category: k, cardStyle: M, color: N });
+    addCard: (m, $, M, C) => {
+      p({ type: "card", w: 260, h: 150, text: m, category: $, cardStyle: M, color: C });
     },
     addText: () => {
-      const p = Y({ type: "text", w: 220, h: 44, text: "" });
-      s(p.id);
+      const m = p({ type: "text", w: 220, h: 44, text: "" });
+      s(m.id);
     },
-    addShape: (p, k, M) => {
-      Y({
-        type: p,
-        w: p === "ellipse" ? 220 : 200,
-        h: p === "ellipse" ? 110 : 140,
-        color: k,
+    addShape: (m, $, M) => {
+      p({
+        type: m,
+        w: m === "ellipse" ? 220 : 200,
+        h: m === "ellipse" ? 110 : 140,
+        color: $,
         text: M ?? ""
       });
     },
     addArrow: () => {
-      const p = X(), k = { id: $(), type: "arrow", x: p.x - 140, y: p.y, w: 280, h: 0 };
-      c((M) => [...M, k]), a(/* @__PURE__ */ new Set([k.id])), i("select");
+      const m = S(), $ = { id: k(), type: "arrow", x: m.x - 140, y: m.y, w: 280, h: 0 };
+      c((M) => [...M, $]), a(/* @__PURE__ */ new Set([$.id])), r("select");
     },
-    addImage: (p, k, M, N) => {
-      Y({ type: "image", w: M, h: N, src: p, fileName: k });
+    addImage: (m, $, M, C) => {
+      p({ type: "image", w: M, h: C, src: m, fileName: $ });
     },
-    addFileCard: (p, k, M) => {
-      Y({ type: "rect", w: 260, h: 120, color: "purple", text: M, src: k, fileName: p });
+    addFileCard: (m, $, M) => {
+      p({ type: "rect", w: 260, h: 120, color: "purple", text: M, src: $, fileName: m });
     },
-    setTool: i,
+    setTool: r,
     undo: () => {
-      const p = l.current.pop();
-      p && (d.current.push(n.current), x(p), a(/* @__PURE__ */ new Set()), s(null), u(), f("실행 취소"));
+      const m = u.current.pop();
+      m && (d.current.push(e.current), h(m), a(/* @__PURE__ */ new Set()), s(null), f(), x("실행 취소"));
     },
     redo: () => {
-      const p = d.current.pop();
-      p && (l.current.push(n.current), x(p), a(/* @__PURE__ */ new Set()), s(null), u(), f("다시 실행"));
+      const m = d.current.pop();
+      m && (u.current.push(e.current), h(m), a(/* @__PURE__ */ new Set()), s(null), f(), x("다시 실행"));
     },
     deleteSelected: () => {
-      v(r.current);
+      v(i.current);
     },
     duplicateSelected: () => {
-      var N;
-      const p = r.current;
-      if (p.size === 0) return;
-      const k = [], M = /* @__PURE__ */ new Map();
-      for (const P of n.current) {
-        if (!p.has(P.id)) continue;
-        let E = P.groupId;
-        E && (M.has(E) || M.set(E, $("g")), E = M.get(E)), k.push({
-          ...P,
-          id: $(),
-          x: P.x + 24,
-          y: P.y + 24,
+      var C;
+      const m = i.current;
+      if (m.size === 0) return;
+      const $ = [], M = /* @__PURE__ */ new Map();
+      for (const I of e.current) {
+        if (!m.has(I.id)) continue;
+        let E = I.groupId;
+        E && (M.has(E) || M.set(E, k("g")), E = M.get(E)), $.push({
+          ...I,
+          id: k(),
+          x: I.x + 24,
+          y: I.y + 24,
           groupId: E,
-          points: (N = P.points) == null ? void 0 : N.map(([O, I]) => [O + 24, I + 24]),
-          orthogonalWaypoints: P.type === "arrow" && P.orthogonalWaypoints ? P.orthogonalWaypoints.map((O) => ({ x: O.x + 24, y: O.y + 24 })) : void 0
+          points: (C = I.points) == null ? void 0 : C.map(([D, G]) => [D + 24, G + 24]),
+          orthogonalWaypoints: I.type === "arrow" && I.orthogonalWaypoints ? I.orthogonalWaypoints.map((D) => ({ x: D.x + 24, y: D.y + 24 })) : void 0
         });
       }
-      c((P) => [...P, ...k]), a(new Set(k.map((P) => P.id))), f(`${k.length}개 복제됨`);
+      c((I) => [...I, ...$]), a(new Set($.map((I) => I.id))), x(`${$.length}개 복제됨`);
     },
     group: () => {
       var M;
-      const p = r.current;
-      if (p.size < 2) return;
-      const k = $("g");
-      c((N) => N.map((P) => p.has(P.id) ? { ...P, groupId: k } : P)), f(`${p.size}개 그룹화됨`), (M = e.current) == null || M.focus();
+      const m = i.current;
+      if (m.size < 2) return;
+      const $ = k("g");
+      c((C) => C.map((I) => m.has(I.id) ? { ...I, groupId: $ } : I)), x(`${m.size}개 그룹화됨`), (M = n.current) == null || M.focus();
     },
     ungroup: () => {
-      var k;
-      const p = r.current;
-      p.size !== 0 && (c((M) => M.map((N) => p.has(N.id) ? { ...N, groupId: void 0 } : N)), f("그룹 해제됨"), (k = e.current) == null || k.focus());
+      var $;
+      const m = i.current;
+      m.size !== 0 && (c((M) => M.map((C) => m.has(C.id) ? { ...C, groupId: void 0 } : C)), x("그룹 해제됨"), ($ = n.current) == null || $.focus());
     },
-    zoomBy: (p) => {
-      z((k) => {
-        var O;
-        const M = (O = e.current) == null ? void 0 : O.getBoundingClientRect(), N = Math.min(h, Math.max(g, k.z * p));
-        if (!M) return { ...k, z: N };
-        const P = k.x + M.width / 2 / k.z, E = k.y + M.height / 2 / k.z;
-        return { x: P - M.width / 2 / N, y: E - M.height / 2 / N, z: N };
+    zoomBy: (m) => {
+      z(($) => {
+        var D;
+        const M = (D = n.current) == null ? void 0 : D.getBoundingClientRect(), C = Math.min(l, Math.max(w, $.z * m));
+        if (!M) return { ...$, z: C };
+        const I = $.x + M.width / 2 / $.z, E = $.y + M.height / 2 / $.z;
+        return { x: I - M.width / 2 / C, y: E - M.height / 2 / C, z: C };
       });
     },
-    zoomTo: (p) => {
-      z((k) => {
-        var O;
-        const M = (O = e.current) == null ? void 0 : O.getBoundingClientRect(), N = Math.min(h, Math.max(g, p));
-        if (!M) return { ...k, z: N };
-        const P = k.x + M.width / 2 / k.z, E = k.y + M.height / 2 / k.z;
-        return { x: P - M.width / 2 / N, y: E - M.height / 2 / N, z: N };
+    zoomTo: (m) => {
+      z(($) => {
+        var D;
+        const M = (D = n.current) == null ? void 0 : D.getBoundingClientRect(), C = Math.min(l, Math.max(w, m));
+        if (!M) return { ...$, z: C };
+        const I = $.x + M.width / 2 / $.z, E = $.y + M.height / 2 / $.z;
+        return { x: I - M.width / 2 / C, y: E - M.height / 2 / C, z: C };
       });
     },
     resetZoom: () => {
-      z((p) => {
-        var P;
-        const k = (P = e.current) == null ? void 0 : P.getBoundingClientRect();
-        if (!k) return { ...p, z: 1 };
-        const M = p.x + k.width / 2 / p.z, N = p.y + k.height / 2 / p.z;
-        return { x: M - k.width / 2, y: N - k.height / 2, z: 1 };
+      z((m) => {
+        var I;
+        const $ = (I = n.current) == null ? void 0 : I.getBoundingClientRect();
+        if (!$) return { ...m, z: 1 };
+        const M = m.x + $.width / 2 / m.z, C = m.y + $.height / 2 / m.z;
+        return { x: M - $.width / 2, y: C - $.height / 2, z: 1 };
       });
     },
     zoomToFit: () => {
-      var T;
-      const p = n.current, k = (T = e.current) == null ? void 0 : T.getBoundingClientRect();
-      if (p.length === 0 || !k) return;
-      let M = 1 / 0, N = 1 / 0, P = -1 / 0, E = -1 / 0;
-      for (const L of p) {
-        const R = et(L);
-        M = Math.min(M, R.minX), N = Math.min(N, R.minY), P = Math.max(P, R.maxX), E = Math.max(E, R.maxY);
+      var P;
+      const m = e.current, $ = (P = n.current) == null ? void 0 : P.getBoundingClientRect();
+      if (m.length === 0 || !$) return;
+      let M = 1 / 0, C = 1 / 0, I = -1 / 0, E = -1 / 0;
+      for (const F of m) {
+        const L = nt(F);
+        M = Math.min(M, L.minX), C = Math.min(C, L.minY), I = Math.max(I, L.maxX), E = Math.max(E, L.maxY);
       }
-      const O = 80, I = Math.min(h, Math.max(
-        g,
-        Math.min(k.width / (P - M + O * 2), k.height / (E - N + O * 2))
+      const D = 80, G = Math.min(l, Math.max(
+        w,
+        Math.min($.width / (I - M + D * 2), $.height / (E - C + D * 2))
       ));
       z({
-        x: (M + P) / 2 - k.width / 2 / I,
-        y: (N + E) / 2 - k.height / 2 / I,
-        z: I
+        x: (M + I) / 2 - $.width / 2 / G,
+        y: (C + E) / 2 - $.height / 2 / G,
+        z: G
       });
     },
-    autoLayout: () => Ge(n.current, c, () => f("자동 배치 완료")),
-    exportSvg: w,
-    exportPng: () => Ue(w),
-    getSnapshot: () => ({ version: "canvas-v1", shapes: n.current, camera: o.current }),
-    loadSnapshot: (p) => qe(p, {
-      controlled: m,
-      past: l,
+    autoLayout: () => io(e.current, c, () => x("자동 배치 완료")),
+    exportSvg: b,
+    exportPng: () => ro(b),
+    getSnapshot: () => ({ version: "canvas-v1", shapes: e.current, camera: o.current }),
+    loadSnapshot: (m) => ao(m, {
+      controlled: y,
+      past: u,
       future: d,
-      setLocalShapes: y,
+      setLocalShapes: Y,
       setCamera: z,
       selectNow: a,
       setEditingId: s
     })
   }), [
-    Y,
-    w,
-    c,
-    $,
-    v,
+    p,
     b,
-    h,
+    c,
+    k,
+    v,
     g,
-    u,
-    i,
+    l,
+    w,
+    f,
+    r,
     a,
     z,
     s,
-    y,
+    Y,
+    h,
     x,
-    f,
-    X,
-    m
+    S,
+    y
   ]);
 }
-function Ze(t) {
+function uo(t) {
   if (t.altKey || t.ctrlKey || t.metaKey) return null;
   switch (t.code) {
     case "KeyV":
@@ -1808,324 +1914,336 @@ function Ze(t) {
       return null;
   }
 }
-function Je({
+function xo({
   containerRef: t,
-  editorRef: e,
-  shapesRef: n,
+  editorRef: n,
+  shapesRef: e,
   selectedRef: o,
-  editingIdRef: r,
-  toolRef: l,
+  editingIdRef: i,
+  toolRef: u,
   past: d,
-  future: m,
-  textualTypes: b,
-  setIsSpaceDown: g,
-  setEditingId: h,
-  setShapes: i,
-  setAnnouncement: u,
+  future: y,
+  textualTypes: g,
+  setIsSpaceDown: w,
+  setEditingId: l,
+  setShapes: r,
+  setAnnouncement: f,
   commit: c,
   deleteSelection: v,
   selectNow: a,
-  onDirty: X,
-  onToolChange: x,
-  createId: y
+  onDirty: S,
+  onToolChange: h,
+  createId: Y
 }) {
-  const z = rt((s, f) => {
-    const $ = o.current;
-    $.size !== 0 && c((Y) => Y.map((w) => {
-      var p;
-      return $.has(w.id) ? {
-        ...w,
-        x: w.x + s,
-        y: w.y + f,
-        points: (p = w.points) == null ? void 0 : p.map(([k, M]) => [k + s, M + f])
-      } : w;
+  const z = rt((s, x) => {
+    const k = o.current;
+    k.size !== 0 && c((p) => p.map((b) => {
+      var m;
+      return k.has(b.id) ? {
+        ...b,
+        x: b.x + s,
+        y: b.y + x,
+        points: (m = b.points) == null ? void 0 : m.map(([$, M]) => [$ + s, M + x])
+      } : b;
     }));
   }, [c, o]);
-  ft(() => {
-    const s = (w) => {
-      const p = w;
-      return !!p && (p.tagName === "INPUT" || p.tagName === "TEXTAREA" || p.isContentEditable);
-    }, f = (w) => w instanceof Element && !!w.closest("input, select, button, textarea, option, label, [data-canvas-control]"), $ = (w) => {
-      var I, T, L, R;
-      const p = t.current, k = document.activeElement, M = w.target instanceof Node && !!(p != null && p.contains(w.target)), N = !!p && (k === p || p.contains(k));
-      if (!M && !N || f(w.target)) return;
-      if (w.code === "Space" && !s(w.target)) {
-        g(!0), w.preventDefault();
+  yt(() => {
+    const s = (b) => {
+      const m = b;
+      return !!m && (m.tagName === "INPUT" || m.tagName === "TEXTAREA" || m.isContentEditable);
+    }, x = (b) => b instanceof Element && !!b.closest("input, select, button, textarea, option, label, [data-canvas-control]"), k = (b) => {
+      var G, P, F, L;
+      const m = t.current, $ = document.activeElement, M = b.target instanceof Node && !!(m != null && m.contains(b.target)), C = !!m && ($ === m || m.contains($));
+      if (!M && !C || x(b.target)) return;
+      if (b.code === "Space" && !s(b.target)) {
+        w(!0), b.preventDefault();
         return;
       }
-      if (s(w.target)) {
-        if (w.key === "Escape")
-          w.preventDefault(), h(null), (I = e.current) == null || I.blur(), (T = t.current) == null || T.focus();
-        else if ((w.key === "Delete" || w.key === "Backspace") && !r.current) {
-          const D = o.current;
-          v(D) && w.preventDefault();
+      if (s(b.target)) {
+        if (b.key === "Escape")
+          b.preventDefault(), l(null), (G = n.current) == null || G.blur(), (P = t.current) == null || P.focus();
+        else if ((b.key === "Delete" || b.key === "Backspace") && !i.current) {
+          const O = o.current;
+          v(O) && b.preventDefault();
         }
         return;
       }
-      const P = w.metaKey || w.ctrlKey, E = o.current;
-      if (P && w.key.toLowerCase() === "z") {
-        if (w.preventDefault(), w.shiftKey) {
-          const D = m.current.pop();
-          D && (d.current.push(n.current), i(D), X());
+      const I = b.metaKey || b.ctrlKey, E = o.current;
+      if (I && b.key.toLowerCase() === "z") {
+        if (b.preventDefault(), b.shiftKey) {
+          const O = y.current.pop();
+          O && (d.current.push(e.current), r(O), S());
         } else {
-          const D = d.current.pop();
-          D && (m.current.push(n.current), i(D), X());
+          const O = d.current.pop();
+          O && (y.current.push(e.current), r(O), S());
         }
         a(/* @__PURE__ */ new Set());
         return;
       }
-      if (P && w.key.toLowerCase() === "g") {
-        if (w.preventDefault(), w.shiftKey)
-          E.size > 0 && (c((D) => D.map((B) => E.has(B.id) ? { ...B, groupId: void 0 } : B)), u("그룹 해제됨"));
+      if (I && b.key.toLowerCase() === "g") {
+        if (b.preventDefault(), b.shiftKey)
+          E.size > 0 && (c((O) => O.map((W) => E.has(W.id) ? { ...W, groupId: void 0 } : W)), f("그룹 해제됨"));
         else if (E.size > 1) {
-          const D = y("g");
-          c((B) => B.map((U) => E.has(U.id) ? { ...U, groupId: D } : U)), u(`${E.size}개 그룹화됨`);
+          const O = Y("g");
+          c((W) => W.map((q) => E.has(q.id) ? { ...q, groupId: O } : q)), f(`${E.size}개 그룹화됨`);
         }
         return;
       }
-      if (P && w.key.toLowerCase() === "a") {
-        w.preventDefault(), a(new Set(n.current.map((D) => D.id))), u(`전체 ${n.current.length}개 선택됨`);
+      if (I && b.key.toLowerCase() === "a") {
+        b.preventDefault(), a(new Set(e.current.map((O) => O.id))), f(`전체 ${e.current.length}개 선택됨`);
         return;
       }
-      if (w.key === "Delete" || w.key === "Backspace") {
-        v(E) && w.preventDefault();
+      if (b.key === "Delete" || b.key === "Backspace") {
+        v(E) && b.preventDefault();
         return;
       }
-      if (w.key.startsWith("Arrow")) {
-        w.preventDefault();
-        const D = w.shiftKey ? 10 : 1;
-        w.key === "ArrowLeft" && z(-D, 0), w.key === "ArrowRight" && z(D, 0), w.key === "ArrowUp" && z(0, -D), w.key === "ArrowDown" && z(0, D);
+      if (b.key.startsWith("Arrow")) {
+        b.preventDefault();
+        const O = b.shiftKey ? 10 : 1;
+        b.key === "ArrowLeft" && z(-O, 0), b.key === "ArrowRight" && z(O, 0), b.key === "ArrowUp" && z(0, -O), b.key === "ArrowDown" && z(0, O);
         return;
       }
-      if (w.key === "Tab" && n.current.length > 0) {
-        w.preventDefault();
-        const D = n.current, B = D.findIndex((K) => E.has(K.id)), U = w.shiftKey ? B <= 0 ? D.length - 1 : B - 1 : B === -1 || B === D.length - 1 ? 0 : B + 1, Q = D[U];
-        a(/* @__PURE__ */ new Set([Q.id])), u(`${Q.type} 선택됨: ${Ot(Q) || "내용 없음"}`);
+      if (b.key === "Tab" && e.current.length > 0) {
+        b.preventDefault();
+        const O = e.current, W = O.findIndex((Z) => E.has(Z.id)), q = b.shiftKey ? W <= 0 ? O.length - 1 : W - 1 : W === -1 || W === O.length - 1 ? 0 : W + 1, U = O[q];
+        a(/* @__PURE__ */ new Set([U.id])), f(`${U.type} 선택됨: ${Rt(U) || "내용 없음"}`);
         return;
       }
-      if (w.key === "Enter" && E.size === 1) {
-        const D = n.current.find((B) => E.has(B.id));
-        D && b.includes(D.type) && (w.preventDefault(), h(D.id));
+      if (b.key === "Enter" && E.size === 1) {
+        const O = e.current.find((W) => E.has(W.id));
+        O && g.includes(O.type) && (b.preventDefault(), l(O.id));
         return;
       }
-      if (w.key === "Escape") {
-        if (r.current) {
-          w.preventDefault(), h(null), (L = e.current) == null || L.blur(), (R = t.current) == null || R.focus(), x("select");
+      if (b.key === "Escape") {
+        if (i.current) {
+          b.preventDefault(), l(null), (F = n.current) == null || F.blur(), (L = t.current) == null || L.focus(), h("select");
           return;
         }
-        a(/* @__PURE__ */ new Set()), x("select");
+        a(/* @__PURE__ */ new Set()), h("select");
         return;
       }
-      const O = Ze(w);
-      O && (w.preventDefault(), l.current = O, x(O));
-    }, Y = (w) => {
-      const p = t.current;
-      !p || !(document.activeElement === p || p.contains(document.activeElement)) || w.code === "Space" && g(!1);
+      const D = uo(b);
+      D && (b.preventDefault(), u.current = D, h(D));
+    }, p = (b) => {
+      const m = t.current;
+      !m || !(document.activeElement === m || m.contains(document.activeElement)) || b.code === "Space" && w(!1);
     };
-    return window.addEventListener("keydown", $), window.addEventListener("keyup", Y), () => {
-      window.removeEventListener("keydown", $), window.removeEventListener("keyup", Y);
+    return window.addEventListener("keydown", k), window.addEventListener("keyup", p), () => {
+      window.removeEventListener("keydown", k), window.removeEventListener("keyup", p);
     };
   }, [
     c,
     t,
-    y,
+    Y,
     v,
-    r,
-    e,
-    m,
+    i,
+    n,
+    y,
     z,
-    X,
-    x,
+    S,
+    h,
     d,
     a,
     o,
-    u,
-    h,
+    f,
+    l,
+    w,
+    r,
+    e,
     g,
-    i,
-    n,
-    b,
-    l
+    u
   ]);
 }
-const to = 400;
-function no({
+const ho = 400;
+function fo({
   containerRef: t,
-  editorRef: e,
-  pointers: n,
+  editorRef: n,
+  pointers: e,
   cameraRef: o,
-  shapesRef: r,
-  toolRef: l,
+  shapesRef: i,
+  toolRef: u,
   activeColorRef: d,
-  camera: m,
-  shapes: b,
-  selected: g,
-  isSpaceDown: h,
-  textualTypes: i,
-  setShapes: u,
-  setEditingId: c,
-  applyInteraction: v,
-  selectNow: a,
-  beginHistory: X,
-  commit: x,
-  onToolChange: y,
-  expandToGroups: z,
-  toPage: s,
-  createId: f
+  drawStrokeWidth: y,
+  camera: g,
+  shapes: w,
+  selected: l,
+  isSpaceDown: r,
+  textualTypes: f,
+  setShapes: c,
+  setEditingId: v,
+  applyInteraction: a,
+  selectNow: S,
+  beginHistory: h,
+  commit: Y,
+  onToolChange: z,
+  expandToGroups: s,
+  toPage: x,
+  createId: k
 }) {
-  const $ = f, Y = tt(null), w = (I, T) => {
-    var B;
-    const L = ((B = t.current) == null ? void 0 : B.dataset.canvasActiveTool) === "text" ? "text" : l.current;
+  const p = k, b = tt(null), m = (P, F) => {
+    var q;
+    const L = ((q = t.current) == null ? void 0 : q.dataset.canvasActiveTool) === "text" ? "text" : u.current;
     if (L !== "note" && L !== "text") return;
-    const R = s(I, T), D = L === "note" ? { id: $(), type: "note", x: R.x - 90, y: R.y - 90, w: 180, h: 180, color: "yellow", text: "" } : { id: $(), type: "text", x: R.x, y: R.y - 22, w: 220, h: 44, text: "" };
-    x((U) => [...U, D]), a(/* @__PURE__ */ new Set([D.id])), c(D.id), y("select");
+    const O = x(P, F), W = L === "note" ? { id: p(), type: "note", x: O.x - 90, y: O.y - 90, w: 180, h: 180, color: "yellow", text: "" } : { id: p(), type: "text", x: O.x, y: O.y - 22, w: 220, h: 44, text: "" };
+    Y((U) => [...U, W]), S(/* @__PURE__ */ new Set([W.id])), v(W.id), z("select");
   };
-  return ft(() => {
-    const I = (T) => {
+  return yt(() => {
+    const P = (F) => {
       var L;
-      (L = t.current) != null && L.contains(T.target) && (T.target instanceof Element && T.target.closest('[role="textbox"], [data-canvas-inspector]') || w(T.clientX, T.clientY));
+      (L = t.current) != null && L.contains(F.target) && (F.target instanceof Element && F.target.closest('[role="textbox"], [data-canvas-inspector]') || m(F.clientX, F.clientY));
     };
-    return window.addEventListener("click", I, !0), () => window.removeEventListener("click", I, !0);
-  }), { onPointerDown: (I) => {
-    var B, U, Q;
-    const T = l.current;
-    if (n.current.set(I.pointerId, { x: I.clientX, y: I.clientY }), n.current.size === 2) {
-      const [K, G] = [...n.current.values()], nt = o.current;
-      v({
+    return window.addEventListener("click", P, !0), () => window.removeEventListener("click", P, !0);
+  }), { onPointerDown: (P) => {
+    var q, U, Z;
+    const F = u.current;
+    if (e.current.set(P.pointerId, { x: P.clientX, y: P.clientY }), e.current.size === 2) {
+      const [_, V] = [...e.current.values()], ot = o.current;
+      a({
         kind: "pinch",
-        startDist: Math.hypot(G.x - K.x, G.y - K.y) || 1,
-        startZoom: nt.z,
-        startMidX: (K.x + G.x) / 2,
-        startMidY: (K.y + G.y) / 2,
-        camX: nt.x,
-        camY: nt.y
+        startDist: Math.hypot(V.x - _.x, V.y - _.y) || 1,
+        startZoom: ot.z,
+        startMidX: (_.x + V.x) / 2,
+        startMidY: (_.y + V.y) / 2,
+        camX: ot.x,
+        camY: ot.y
       });
       return;
     }
-    if (n.current.size > 2) return;
-    if (I.button === 1 || h || T === "hand" || I.button === 0 && T === "select" && I.altKey) {
-      v({ kind: "pan", startX: I.clientX, startY: I.clientY, camX: m.x, camY: m.y });
+    if (e.current.size > 2) return;
+    if (P.button === 1 || r || F === "hand" || P.button === 0 && F === "select" && P.altKey) {
+      a({ kind: "pan", startX: P.clientX, startY: P.clientY, camX: g.x, camY: g.y });
       return;
     }
-    if (I.button !== 0) return;
-    const L = s(I.clientX, I.clientY);
-    if (c(null), (B = e.current) == null || B.blur(), (U = t.current) == null || U.focus(), T === "draw") {
-      const K = { id: $(), type: "draw", x: L.x, y: L.y, w: 0, h: 0, points: [[L.x, L.y]], color: d.current };
-      X(), u((G) => [...G, K]), v({ kind: "drawing", id: K.id });
+    if (P.button !== 0) return;
+    const L = x(P.clientX, P.clientY);
+    if (v(null), (q = n.current) == null || q.blur(), (U = t.current) == null || U.focus(), F === "draw" || F === "highlighter") {
+      const _ = {
+        id: p(),
+        type: "draw",
+        x: L.x,
+        y: L.y,
+        w: 0,
+        h: 0,
+        points: [[L.x, L.y]],
+        color: d.current,
+        strokeWidth: y,
+        drawMode: F === "highlighter" ? "highlighter" : "pen"
+      };
+      h(), c((V) => [...V, _]), a({ kind: "drawing", id: _.id });
       return;
     }
-    if (T === "arrow" || T === "frame" || ne.includes(T)) {
-      const K = T, G = T === "arrow" ? { id: $(), type: "arrow", x: L.x, y: L.y, w: 0, h: 0, color: d.current } : T === "frame" ? { id: $(), type: "frame", x: L.x, y: L.y, w: 0, h: 0, text: "프레임" } : { id: $(), type: K, x: L.x, y: L.y, w: 0, h: 0, color: d.current, text: "" };
-      X(), u((nt) => [...nt, G]), v({ kind: "creating", id: G.id, startX: L.x, startY: L.y });
+    if (F === "arrow" || F === "frame" || un.includes(F)) {
+      const _ = F, V = F === "arrow" ? { id: p(), type: "arrow", x: L.x, y: L.y, w: 0, h: 0, color: d.current } : F === "frame" ? { id: p(), type: "frame", x: L.x, y: L.y, w: 0, h: 0, text: "프레임" } : { id: p(), type: _, x: L.x, y: L.y, w: 0, h: 0, color: d.current, text: "" };
+      h(), c((ot) => [...ot, V]), a({ kind: "creating", id: V.id, startX: L.x, startY: L.y });
       return;
     }
-    if (T === "note" || T === "text") return;
-    if (T === "eraser") {
-      X(), u((K) => Sn(K, L.x, L.y, 14 / m.z, m.z)), v({ kind: "erasing" });
+    if (F === "note" || F === "text") return;
+    if (F === "eraser") {
+      h(), c((_) => Ee(_, L.x, L.y, 14 / g.z, g.z)), a({ kind: "erasing" });
       return;
     }
-    const R = new Map(b.map((K) => [K.id, K])), D = [...b].reverse().find((K) => Tt(K, L.x, L.y, m.z, R, b));
-    if (!D)
-      Y.current = null;
+    const O = new Map(w.map((_) => [_.id, _])), W = [...w].reverse().find((_) => jt(_, L.x, L.y, g.z, O, w));
+    if (!W)
+      b.current = null;
     else {
-      const K = Date.now(), G = !I.shiftKey && i.includes(D.type) && ((Q = Y.current) == null ? void 0 : Q.id) === D.id && K - Y.current.time < to, nt = G ? D.id : void 0;
-      Y.current = G ? null : { id: D.id, time: K };
-      const S = I.shiftKey ? new Set(g).add(D.id) : g.has(D.id) ? g : /* @__PURE__ */ new Set([D.id]), F = z(S);
-      a(F);
-      const V = /* @__PURE__ */ new Map();
-      for (const q of b) F.has(q.id) && V.set(q.id, q);
-      for (const q of b) {
-        if (q.type !== "frame" || !F.has(q.id)) continue;
-        const J = et(q);
-        for (const ot of b) {
-          if (ot.id === q.id || V.has(ot.id)) continue;
-          const yt = dt(ot);
-          yt.x >= J.minX && yt.x <= J.maxX && yt.y >= J.minY && yt.y <= J.maxY && V.set(ot.id, ot);
+      const _ = Date.now(), V = !P.shiftKey && f.includes(W.type) && ((Z = b.current) == null ? void 0 : Z.id) === W.id && _ - b.current.time < ho, ot = V ? W.id : void 0;
+      b.current = V ? null : { id: W.id, time: _ };
+      const xt = P.shiftKey ? new Set(l).add(W.id) : l.has(W.id) ? l : /* @__PURE__ */ new Set([W.id]), X = s(xt);
+      S(X);
+      const T = /* @__PURE__ */ new Map();
+      for (const j of w) X.has(j.id) && T.set(j.id, j);
+      for (const j of w) {
+        if (j.type !== "frame" || !X.has(j.id)) continue;
+        const Q = nt(j);
+        for (const et of w) {
+          if (et.id === j.id || T.has(et.id)) continue;
+          const st = mt(et);
+          st.x >= Q.minX && st.x <= Q.maxX && st.y >= Q.minY && st.y <= Q.maxY && T.set(et.id, et);
         }
       }
-      X(), v({ kind: "move", startX: L.x, startY: L.y, origin: V, editOnReleaseId: nt });
+      h(), a({ kind: "move", startX: L.x, startY: L.y, origin: T, editOnReleaseId: ot });
       return;
     }
-    I.shiftKey || a(/* @__PURE__ */ new Set()), v({
+    P.shiftKey || S(/* @__PURE__ */ new Set()), a({
       kind: "marquee",
       startX: L.x,
       startY: L.y,
       curX: L.x,
       curY: L.y,
-      screenStartX: I.clientX,
-      screenStartY: I.clientY
+      screenStartX: P.clientX,
+      screenStartY: P.clientY
     });
-  }, onResizeHandleDown: (I, T, L) => {
-    I.stopPropagation(), n.current.set(I.pointerId, { x: I.clientX, y: I.clientY }), X(), v({ kind: "resize", id: T.id, handle: L, start: T });
-  }, onRotateHandleDown: (I, T) => {
-    I.stopPropagation(), n.current.set(I.pointerId, { x: I.clientX, y: I.clientY });
-    const L = s(I.clientX, I.clientY), R = dt(T);
-    X(), v({
+  }, onResizeHandleDown: (P, F, L) => {
+    P.stopPropagation(), e.current.set(P.pointerId, { x: P.clientX, y: P.clientY }), h(), a({ kind: "resize", id: F.id, handle: L, start: F });
+  }, onRotateHandleDown: (P, F) => {
+    P.stopPropagation(), e.current.set(P.pointerId, { x: P.clientX, y: P.clientY });
+    const L = x(P.clientX, P.clientY), O = mt(F);
+    h(), a({
       kind: "rotate",
-      id: T.id,
-      startAngle: Math.atan2(L.y - R.y, L.x - R.x),
-      startRotation: T.rotation ?? 0
+      id: F.id,
+      startAngle: Math.atan2(L.y - O.y, L.x - O.x),
+      startRotation: F.rotation ?? 0
     });
-  }, onConnectHandleDown: (I, T) => {
-    I.stopPropagation(), n.current.set(I.pointerId, { x: I.clientX, y: I.clientY });
-    const L = s(I.clientX, I.clientY);
-    v({ kind: "connect", fromId: T.id, toX: L.x, toY: L.y, hoverId: null });
-  }, onBendHandleDown: (I, T) => {
-    I.stopPropagation(), n.current.set(I.pointerId, { x: I.clientX, y: I.clientY }), X(), v({ kind: "bend", id: T.id });
-  }, onOrthogonalSegmentHandleDown: (I, T, L) => {
-    I.stopPropagation(), n.current.set(I.pointerId, { x: I.clientX, y: I.clientY }), X(), v({ kind: "orthogonal-segment", id: T.id, segmentIndex: L });
-  }, onArrowEndpointDown: (I, T, L) => {
-    I.stopPropagation(), n.current.set(I.pointerId, { x: I.clientX, y: I.clientY }), X(), v({ kind: "arrow-endpoint", id: T.id, endpoint: L, hoverId: null });
+  }, onConnectHandleDown: (P, F) => {
+    P.stopPropagation(), e.current.set(P.pointerId, { x: P.clientX, y: P.clientY });
+    const L = x(P.clientX, P.clientY);
+    a({ kind: "connect", fromId: F.id, toX: L.x, toY: L.y, hoverId: null });
+  }, onBendHandleDown: (P, F) => {
+    P.stopPropagation(), e.current.set(P.pointerId, { x: P.clientX, y: P.clientY }), h(), a({ kind: "bend", id: F.id });
+  }, onOrthogonalSegmentHandleDown: (P, F, L) => {
+    P.stopPropagation(), e.current.set(P.pointerId, { x: P.clientX, y: P.clientY }), h(), a({ kind: "orthogonal-segment", id: F.id, segmentIndex: L });
+  }, onArrowEndpointDown: (P, F, L) => {
+    P.stopPropagation(), e.current.set(P.pointerId, { x: P.clientX, y: P.clientY }), h(), a({ kind: "arrow-endpoint", id: F.id, endpoint: L, hoverId: null });
   } };
 }
-const eo = 0.1, oo = 4, ro = 14, io = 4, vn = ["note", "card", "rect", "ellipse", "text", "image"];
-function ao({
+const mo = 0.1, vo = 4, po = 14, yo = 4, ve = ["note", "card", "rect", "ellipse", "text", "image"];
+function go({
   pointers: t,
-  interactionRef: e,
-  cameraRef: n,
+  interactionRef: n,
+  cameraRef: e,
   toPage: o,
-  shapesRef: r,
-  setShapes: l,
+  shapesRef: i,
+  setShapes: u,
   setEditingId: d,
-  setEraserPos: m,
-  setGuides: b,
-  setAnnouncement: g,
-  applyInteraction: h,
-  selectNow: i,
-  endHistory: u,
+  setEraserPos: y,
+  setGuides: g,
+  setAnnouncement: w,
+  applyInteraction: l,
+  selectNow: r,
+  endHistory: f,
   commit: c,
   onToolChange: v,
   createId: a
 }) {
-  const X = a;
-  ft(() => {
-    const x = (y) => {
-      t.current.delete(y.pointerId);
-      const z = e.current;
+  const S = a;
+  yt(() => {
+    const h = (Y) => {
+      t.current.delete(Y.pointerId);
+      const z = n.current;
       if (z.kind !== "none") {
         if (z.kind === "pinch") {
-          t.current.size < 2 && h({ kind: "none" });
+          t.current.size < 2 && l({ kind: "none" });
           return;
         }
-        if (b([]), z.kind === "erasing") {
-          m(null), u(), h({ kind: "none" });
+        if (g([]), z.kind === "erasing") {
+          y(null), f(), l({ kind: "none" });
           return;
         }
         if (z.kind === "connect") {
-          const f = r.current.find((M) => M.id === z.fromId);
-          if (h({ kind: "none" }), !f) return;
-          const $ = { x: z.toX, y: z.toY }, Y = dt(f);
-          if (!z.hoverId && Math.hypot($.x - Y.x, $.y - Y.y) < 30) return;
-          const w = [];
-          let p = z.hoverId;
-          if (!p) {
-            const M = f.type === "note" ? 180 : 200, N = f.type === "note" ? 180 : 120, P = {
-              ...f,
-              id: X(),
-              x: $.x - M / 2,
-              y: $.y - N / 2,
+          const x = i.current.find((M) => M.id === z.fromId);
+          if (l({ kind: "none" }), !x) return;
+          const k = { x: z.toX, y: z.toY }, p = mt(x);
+          if (!z.hoverId && Math.hypot(k.x - p.x, k.y - p.y) < 30) return;
+          const b = [];
+          let m = z.hoverId;
+          if (!m) {
+            const M = x.type === "note" ? 180 : 200, C = x.type === "note" ? 180 : 120, I = {
+              ...x,
+              id: S(),
+              x: k.x - M / 2,
+              y: k.y - C / 2,
               w: M,
-              h: N,
+              h: C,
               html: void 0,
               text: "",
               rotation: 0,
@@ -2135,517 +2253,604 @@ function ao({
               toId: void 0,
               bend: void 0
             };
-            w.push(P), p = P.id;
+            b.push(I), m = I.id;
           }
-          const k = {
-            id: X(),
+          const $ = {
+            id: S(),
             type: "arrow",
             x: 0,
             y: 0,
             w: 0,
             h: 0,
-            fromId: f.id,
-            toId: p,
+            fromId: x.id,
+            toId: m,
             text: ""
           };
-          w.push(k), c((M) => [...M, ...w]), i(/* @__PURE__ */ new Set([k.id])), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => d(k.id)) : d(k.id), g("연결 생성됨");
+          b.push($), c((M) => [...M, ...b]), r(/* @__PURE__ */ new Set([$.id])), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => d($.id)) : d($.id), w("연결 생성됨");
           return;
         }
         if (z.kind === "bend") {
-          u(), h({ kind: "none" });
+          f(), l({ kind: "none" });
           return;
         }
         if (z.kind === "drawing") {
-          l((s) => s.map((f) => {
-            if (f.id !== z.id || !f.points) return f;
-            const $ = f.points.map((k) => k[0]), Y = f.points.map((k) => k[1]), w = Math.min(...$), p = Math.min(...Y);
-            return { ...f, x: w, y: p, w: Math.max(...$) - w, h: Math.max(...Y) - p };
-          })), u(), h({ kind: "none" });
+          u((s) => s.map((x) => {
+            if (x.id !== z.id || !x.points) return x;
+            const k = x.points.map(($) => $[0]), p = x.points.map(($) => $[1]), b = Math.min(...k), m = Math.min(...p);
+            return { ...x, x: b, y: m, w: Math.max(...k) - b, h: Math.max(...p) - m };
+          })), f(), l({ kind: "none" });
           return;
         }
         if (z.kind === "creating") {
-          l((s) => s.map((f) => {
-            if (f.id !== z.id) return f;
-            const $ = Math.abs(f.w) < 4 && Math.abs(f.h) < 4 ? {
-              ...f,
-              w: f.type === "arrow" ? 200 : f.type === "frame" ? 480 : 180,
-              h: f.type === "arrow" ? 0 : f.type === "frame" ? 320 : 120
-            } : f;
-            if ($.type === "arrow") return $;
-            const Y = pt($);
-            return { ...$, x: Y.minX, y: Y.minY, w: Y.maxX - Y.minX, h: Y.maxY - Y.minY };
-          })), u(), i(/* @__PURE__ */ new Set([z.id])), v("select"), h({ kind: "none" });
+          u((s) => s.map((x) => {
+            if (x.id !== z.id) return x;
+            const k = Math.abs(x.w) < 4 && Math.abs(x.h) < 4 ? {
+              ...x,
+              w: x.type === "arrow" ? 200 : x.type === "frame" ? 480 : 180,
+              h: x.type === "arrow" ? 0 : x.type === "frame" ? 320 : 120
+            } : x;
+            if (k.type === "arrow") return k;
+            const p = $t(k);
+            return { ...k, x: p.minX, y: p.minY, w: p.maxX - p.minX, h: p.maxY - p.minY };
+          })), f(), r(/* @__PURE__ */ new Set([z.id])), v("select"), l({ kind: "none" });
           return;
         }
-        if ((z.kind === "move" || z.kind === "resize" || z.kind === "rotate" || z.kind === "orthogonal-segment" || z.kind === "arrow-endpoint") && u(), z.kind === "move" && z.editOnReleaseId && y.type === "pointerup") {
-          const s = o(y.clientX, y.clientY);
-          Math.hypot(s.x - z.startX, s.y - z.startY) * n.current.z <= io && d(z.editOnReleaseId);
+        if ((z.kind === "move" || z.kind === "resize" || z.kind === "rotate" || z.kind === "orthogonal-segment" || z.kind === "arrow-endpoint") && f(), z.kind === "move" && z.editOnReleaseId && Y.type === "pointerup") {
+          const s = o(Y.clientX, Y.clientY);
+          Math.hypot(s.x - z.startX, s.y - z.startY) * e.current.z <= yo && d(z.editOnReleaseId);
         }
-        h({ kind: "none" });
+        l({ kind: "none" });
       }
     };
-    return window.addEventListener("pointerup", x), window.addEventListener("pointercancel", x), () => {
-      window.removeEventListener("pointerup", x), window.removeEventListener("pointercancel", x);
+    return window.addEventListener("pointerup", h), window.addEventListener("pointercancel", h), () => {
+      window.removeEventListener("pointerup", h), window.removeEventListener("pointercancel", h);
     };
-  }, [h, n, a, u, e, v, t, i, g, d, l, r, o]);
+  }, [l, e, a, f, n, v, t, r, w, d, u, i, o]);
 }
-function co({
+function wo({
   containerRef: t,
-  pointers: e,
-  interactionRef: n,
+  pointers: n,
+  interactionRef: e,
   cameraRef: o,
-  shapesRef: r,
-  setCamera: l,
+  shapesRef: i,
+  setCamera: u,
   setShapes: d,
-  setEraserPos: m,
-  setGuides: b,
-  applyInteraction: g,
-  selectNow: h,
-  expandToGroups: i,
-  toPage: u
+  setEraserPos: y,
+  setGuides: g,
+  applyInteraction: w,
+  selectNow: l,
+  expandToGroups: r,
+  toPage: f
 }) {
-  ft(() => {
+  yt(() => {
     const c = (v) => {
-      var y, z;
-      e.current.has(v.pointerId) && e.current.set(v.pointerId, { x: v.clientX, y: v.clientY });
-      const a = n.current;
+      var Y, z;
+      n.current.has(v.pointerId) && n.current.set(v.pointerId, { x: v.clientX, y: v.clientY });
+      const a = e.current;
       if (a.kind === "none") return;
-      const X = o.current;
+      const S = o.current;
       if (a.kind === "pinch") {
-        if (e.current.size < 2) return;
-        const [s, f] = [...e.current.values()], $ = Math.hypot(f.x - s.x, f.y - s.y) || 1, Y = (s.x + f.x) / 2, w = (s.y + f.y) / 2, p = (y = t.current) == null ? void 0 : y.getBoundingClientRect();
-        if (!p) return;
-        const k = Math.min(oo, Math.max(eo, a.startZoom * ($ / a.startDist))), M = a.camX + (a.startMidX - p.left) / a.startZoom, N = a.camY + (a.startMidY - p.top) / a.startZoom;
-        l({ x: M - (Y - p.left) / k, y: N - (w - p.top) / k, z: k });
+        if (n.current.size < 2) return;
+        const [s, x] = [...n.current.values()], k = Math.hypot(x.x - s.x, x.y - s.y) || 1, p = (s.x + x.x) / 2, b = (s.y + x.y) / 2, m = (Y = t.current) == null ? void 0 : Y.getBoundingClientRect();
+        if (!m) return;
+        const $ = Math.min(vo, Math.max(mo, a.startZoom * (k / a.startDist))), M = a.camX + (a.startMidX - m.left) / a.startZoom, C = a.camY + (a.startMidY - m.top) / a.startZoom;
+        u({ x: M - (p - m.left) / $, y: C - (b - m.top) / $, z: $ });
         return;
       }
       if (a.kind === "pan") {
-        l({
-          x: a.camX - (v.clientX - a.startX) / X.z,
-          y: a.camY - (v.clientY - a.startY) / X.z,
-          z: X.z
+        u({
+          x: a.camX - (v.clientX - a.startX) / S.z,
+          y: a.camY - (v.clientY - a.startY) / S.z,
+          z: S.z
         });
         return;
       }
-      const x = u(v.clientX, v.clientY);
+      const h = f(v.clientX, v.clientY);
       if (a.kind === "erasing") {
-        d((s) => Sn(s, x.x, x.y, ro / X.z, X.z)), m({ x: x.x, y: x.y });
+        d((s) => Ee(s, h.x, h.y, po / S.z, S.z)), y({ x: h.x, y: h.y });
         return;
       }
       if (a.kind === "connect") {
-        const s = r.current, f = new Map(s.map((Y) => [Y.id, Y])), $ = [...s].reverse().find((Y) => Y.id !== a.fromId && vn.includes(Y.type) && Tt(Y, x.x, x.y, X.z, f, s));
-        g({ ...a, toX: x.x, toY: x.y, hoverId: ($ == null ? void 0 : $.id) ?? null });
+        const s = i.current, x = new Map(s.map((p) => [p.id, p])), k = [...s].reverse().find((p) => p.id !== a.fromId && ve.includes(p.type) && jt(p, h.x, h.y, S.z, x, s));
+        w({ ...a, toX: h.x, toY: h.y, hoverId: (k == null ? void 0 : k.id) ?? null });
         return;
       }
       if (a.kind === "bend") {
-        const s = r.current, f = s.find((P) => P.id === a.id);
-        if (!f) return;
-        const $ = xt(f, new Map(s.map((P) => [P.id, P])), s), Y = $.end.x - $.start.x, w = $.end.y - $.start.y, p = Math.hypot(Y, w) || 1, k = ($.start.x + $.end.x) / 2, M = ($.start.y + $.end.y) / 2, N = (x.x - k) * (-w / p) + (x.y - M) * (Y / p);
-        d((P) => P.map((E) => E.id === a.id ? { ...E, bend: N } : E));
+        const s = i.current, x = s.find((I) => I.id === a.id);
+        if (!x) return;
+        const k = pt(x, new Map(s.map((I) => [I.id, I])), s), p = k.end.x - k.start.x, b = k.end.y - k.start.y, m = Math.hypot(p, b) || 1, $ = (k.start.x + k.end.x) / 2, M = (k.start.y + k.end.y) / 2, C = (h.x - $) * (-b / m) + (h.y - M) * (p / m);
+        d((I) => I.map((E) => E.id === a.id ? { ...E, bend: C } : E));
         return;
       }
       if (a.kind === "orthogonal-segment") {
-        const s = r.current, f = s.find((N) => N.id === a.id);
-        if (!f) return;
-        const $ = xt(f, new Map(s.map((N) => [N.id, N])), s), Y = $.routing === "orthogonal" ? $.pathPoints : void 0;
-        if (!Y || Y.length < 2) return;
-        const w = Y[a.segmentIndex], p = Y[a.segmentIndex + 1];
-        if (!w || !p) return;
-        const k = w.x === p.x ? x.x : x.y, M = ye(Y, a.segmentIndex, k);
-        d((N) => N.map((P) => P.id === a.id ? { ...P, routing: "orthogonal", orthogonalVariant: void 0, orthogonalWaypoints: M.slice(1, -1).map((E) => ({ x: E.x, y: E.y })) } : P));
+        const s = i.current, x = s.find((C) => C.id === a.id);
+        if (!x) return;
+        const k = pt(x, new Map(s.map((C) => [C.id, C])), s), p = k.routing === "orthogonal" ? k.pathPoints : void 0;
+        if (!p || p.length < 2) return;
+        const b = p[a.segmentIndex], m = p[a.segmentIndex + 1];
+        if (!b || !m) return;
+        const $ = b.x === m.x ? h.x : h.y, M = Sn(p, a.segmentIndex, $);
+        d((C) => C.map((I) => I.id === a.id ? { ...I, routing: "orthogonal", orthogonalVariant: void 0, orthogonalWaypoints: M.slice(1, -1).map((E) => ({ x: E.x, y: E.y })) } : I));
         return;
       }
       if (a.kind === "arrow-endpoint") {
-        const s = r.current, f = s.find((M) => M.id === a.id);
-        if (!f) return;
-        const $ = new Map(s.map((M) => [M.id, M])), Y = xt(f, $, s), w = a.endpoint === "start" ? Y.end : Y.start, p = [...s].reverse().find((M) => M.id !== f.id && vn.includes(M.type) && Tt(M, x.x, x.y, X.z, $, s)), k = p ? $t(p, w.x, w.y) : { x: x.x, y: x.y };
-        g({ ...a, hoverId: (p == null ? void 0 : p.id) ?? null }), d((M) => M.map((N) => {
-          if (N.id !== f.id) return N;
-          const P = a.endpoint === "start" ? k : w, E = a.endpoint === "end" ? k : w;
+        const s = i.current, x = s.find((M) => M.id === a.id);
+        if (!x) return;
+        const k = new Map(s.map((M) => [M.id, M])), p = pt(x, k, s), b = a.endpoint === "start" ? p.end : p.start, m = [...s].reverse().find((M) => M.id !== x.id && ve.includes(M.type) && jt(M, h.x, h.y, S.z, k, s)), $ = m ? Yt(m, b.x, b.y) : { x: h.x, y: h.y };
+        w({ ...a, hoverId: (m == null ? void 0 : m.id) ?? null }), d((M) => M.map((C) => {
+          if (C.id !== x.id) return C;
+          const I = a.endpoint === "start" ? $ : b, E = a.endpoint === "end" ? $ : b;
           return {
-            ...N,
-            x: P.x,
-            y: P.y,
-            w: E.x - P.x,
-            h: E.y - P.y,
-            fromId: a.endpoint === "start" ? p == null ? void 0 : p.id : N.fromId,
-            toId: a.endpoint === "end" ? p == null ? void 0 : p.id : N.toId
+            ...C,
+            x: I.x,
+            y: I.y,
+            w: E.x - I.x,
+            h: E.y - I.y,
+            fromId: a.endpoint === "start" ? m == null ? void 0 : m.id : C.fromId,
+            toId: a.endpoint === "end" ? m == null ? void 0 : m.id : C.toId
           };
         }));
         return;
       }
       if (a.kind === "marquee") {
-        g({ ...a, curX: x.x, curY: x.y });
-        const s = Math.min(a.startX, x.x), f = Math.max(a.startX, x.x), $ = Math.min(a.startY, x.y), Y = Math.max(a.startY, x.y), w = Math.min(a.screenStartX, v.clientX), p = Math.max(a.screenStartX, v.clientX), k = Math.min(a.screenStartY, v.clientY), M = Math.max(a.screenStartY, v.clientY), N = /* @__PURE__ */ new Map();
+        w({ ...a, curX: h.x, curY: h.y });
+        const s = Math.min(a.startX, h.x), x = Math.max(a.startX, h.x), k = Math.min(a.startY, h.y), p = Math.max(a.startY, h.y), b = Math.min(a.screenStartX, v.clientX), m = Math.max(a.screenStartX, v.clientX), $ = Math.min(a.screenStartY, v.clientY), M = Math.max(a.screenStartY, v.clientY), C = /* @__PURE__ */ new Map();
         (z = t.current) == null || z.querySelectorAll("[data-canvas-shape-id]").forEach((E) => {
-          const O = E.dataset.canvasShapeId;
-          O && N.set(O, E.getBoundingClientRect());
+          const D = E.dataset.canvasShapeId;
+          D && C.set(D, E.getBoundingClientRect());
         });
-        const P = r.current.filter((E) => {
-          const O = N.get(E.id);
-          if (O)
-            return O.right >= w && O.left <= p && O.bottom >= k && O.top <= M;
-          const I = et(E);
-          return I.maxX >= s && I.minX <= f && I.maxY >= $ && I.minY <= Y;
+        const I = i.current.filter((E) => {
+          const D = C.get(E.id);
+          if (D)
+            return D.right >= b && D.left <= m && D.bottom >= $ && D.top <= M;
+          const G = nt(E);
+          return G.maxX >= s && G.minX <= x && G.maxY >= k && G.minY <= p;
         }).map((E) => E.id);
-        h(i(new Set(P)));
+        l(r(new Set(I)));
         return;
       }
       if (a.kind === "move") {
-        let s = x.x - a.startX, f = x.y - a.startY;
-        const $ = a.origin, Y = (() => {
-          let k = 1 / 0, M = 1 / 0, N = -1 / 0, P = -1 / 0;
-          return $.forEach((E) => {
-            const O = et({ ...E, x: E.x + s, y: E.y + f });
-            k = Math.min(k, O.minX), M = Math.min(M, O.minY), N = Math.max(N, O.maxX), P = Math.max(P, O.maxY);
-          }), { minX: k, minY: M, maxX: N, maxY: P };
-        })(), w = r.current.filter((k) => !$.has(k.id)), p = ze(Y, w, X.z);
-        s += p.dx, f += p.dy, b(p.guides), d((k) => k.map((M) => {
-          var P;
-          const N = $.get(M.id);
-          return N ? {
+        let s = h.x - a.startX, x = h.y - a.startY;
+        const k = a.origin, p = (() => {
+          let $ = 1 / 0, M = 1 / 0, C = -1 / 0, I = -1 / 0;
+          return k.forEach((E) => {
+            const D = nt({ ...E, x: E.x + s, y: E.y + x });
+            $ = Math.min($, D.minX), M = Math.min(M, D.minY), C = Math.max(C, D.maxX), I = Math.max(I, D.maxY);
+          }), { minX: $, minY: M, maxX: C, maxY: I };
+        })(), b = i.current.filter(($) => !k.has($.id)), m = Nn(p, b, S.z);
+        s += m.dx, x += m.dy, g(m.guides), d(($) => $.map((M) => {
+          var I;
+          const C = k.get(M.id);
+          return C ? {
             ...M,
-            x: N.x + s,
-            y: N.y + f,
-            points: (P = N.points) == null ? void 0 : P.map(([E, O]) => [E + s, O + f]),
-            ...N.type === "arrow" && N.orthogonalWaypoints ? { orthogonalWaypoints: N.orthogonalWaypoints.map((E) => ({ x: E.x + s, y: E.y + f })) } : {}
+            x: C.x + s,
+            y: C.y + x,
+            points: (I = C.points) == null ? void 0 : I.map(([E, D]) => [E + s, D + x]),
+            ...C.type === "arrow" && C.orthogonalWaypoints ? { orthogonalWaypoints: C.orthogonalWaypoints.map((E) => ({ x: E.x + s, y: E.y + x })) } : {}
           } : M;
         }));
         return;
       }
       if (a.kind === "drawing") {
-        d((s) => s.map((f) => {
-          if (f.id !== a.id || !f.points) return f;
-          const $ = f.points[f.points.length - 1];
-          return Math.hypot(x.x - $[0], x.y - $[1]) < 2 / X.z ? f : { ...f, points: [...f.points, [x.x, x.y]] };
+        d((s) => s.map((x) => {
+          if (x.id !== a.id || !x.points) return x;
+          if (v.shiftKey) {
+            const p = x.points[0];
+            return p ? { ...x, points: [p, [h.x, h.y]] } : x;
+          }
+          const k = x.points[x.points.length - 1];
+          return Math.hypot(h.x - k[0], h.y - k[1]) < 2 / S.z ? x : { ...x, points: [...x.points, [h.x, h.y]] };
         }));
         return;
       }
       if (a.kind === "creating") {
-        d((s) => s.map((f) => f.id === a.id ? { ...f, w: x.x - a.startX, h: x.y - a.startY } : f));
+        d((s) => s.map((x) => x.id === a.id ? { ...x, w: h.x - a.startX, h: h.y - a.startY } : x));
         return;
       }
       if (a.kind === "rotate") {
-        const s = r.current.find((w) => w.id === a.id);
+        const s = i.current.find((b) => b.id === a.id);
         if (!s) return;
-        const f = dt(s), $ = Math.atan2(x.y - f.y, x.x - f.x);
-        let Y = a.startRotation + ($ - a.startAngle);
-        v.shiftKey && (Y = Math.round(Y / (Math.PI / 12)) * (Math.PI / 12)), d((w) => w.map((p) => p.id === a.id ? { ...p, rotation: Y } : p));
+        const x = mt(s), k = Math.atan2(h.y - x.y, h.x - x.x);
+        let p = a.startRotation + (k - a.startAngle);
+        v.shiftKey && (p = Math.round(p / (Math.PI / 12)) * (Math.PI / 12)), d((b) => b.map((m) => m.id === a.id ? { ...m, rotation: p } : m));
         return;
       }
       if (a.kind === "resize") {
-        const { start: s, handle: f } = a, $ = Xn(s, x.x, x.y);
-        d((Y) => Y.map((w) => {
-          if (w.id !== s.id) return w;
-          let { x: p, y: k, w: M, h: N } = s;
-          if (f.includes("e") && (M = Math.max(20, $.x - s.x)), f.includes("s") && (N = Math.max(20, $.y - s.y)), f.includes("w")) {
-            const P = s.x + s.w;
-            p = Math.min($.x, P - 20), M = P - p;
+        const { start: s, handle: x } = a, k = Ie(s, h.x, h.y);
+        d((p) => p.map((b) => {
+          if (b.id !== s.id) return b;
+          let { x: m, y: $, w: M, h: C } = s;
+          if (x.includes("e") && (M = Math.max(20, k.x - s.x)), x.includes("s") && (C = Math.max(20, k.y - s.y)), x.includes("w")) {
+            const I = s.x + s.w;
+            m = Math.min(k.x, I - 20), M = I - m;
           }
-          if (f.includes("n")) {
-            const P = s.y + s.h;
-            k = Math.min($.y, P - 20), N = P - k;
+          if (x.includes("n")) {
+            const I = s.y + s.h;
+            $ = Math.min(k.y, I - 20), C = I - $;
           }
-          return { ...w, x: p, y: k, w: M, h: N, manualSize: w.type === "text" ? !0 : w.manualSize };
+          return { ...b, x: m, y: $, w: M, h: C, manualSize: b.type === "text" ? !0 : b.manualSize };
         }));
       }
     };
     return window.addEventListener("pointermove", c), () => window.removeEventListener("pointermove", c);
-  }, [g, t, i, n, e, h, r, u]);
+  }, [w, t, r, e, n, l, i, f]);
 }
-function so(t) {
-  co(t), ao(t);
+function bo(t) {
+  wo(t), go(t);
 }
-function lo({
+function ko({
   containerRef: t,
-  editorRef: e,
-  pointers: n,
+  editorRef: n,
+  pointers: e,
   interactionRef: o,
-  cameraRef: r,
-  shapesRef: l,
+  cameraRef: i,
+  shapesRef: u,
   toolRef: d,
-  activeColorRef: m,
-  camera: b,
-  shapes: g,
-  selected: h,
-  isSpaceDown: i,
-  textualTypes: u,
-  setCamera: c,
-  setShapes: v,
-  setEditingId: a,
-  setEraserPos: X,
-  setGuides: x,
-  setAnnouncement: y,
-  applyInteraction: z,
-  selectNow: s,
-  beginHistory: f,
-  endHistory: $,
-  commit: Y,
-  onToolChange: w,
-  expandToGroups: p,
-  toPage: k,
-  createId: M
+  activeColorRef: y,
+  drawStrokeWidth: g,
+  camera: w,
+  shapes: l,
+  selected: r,
+  isSpaceDown: f,
+  textualTypes: c,
+  setCamera: v,
+  setShapes: a,
+  setEditingId: S,
+  setEraserPos: h,
+  setGuides: Y,
+  setAnnouncement: z,
+  applyInteraction: s,
+  selectNow: x,
+  beginHistory: k,
+  endHistory: p,
+  commit: b,
+  onToolChange: m,
+  expandToGroups: $,
+  toPage: M,
+  createId: C
 }) {
-  const N = no({
+  const I = fo({
     containerRef: t,
-    editorRef: e,
-    pointers: n,
-    cameraRef: r,
-    shapesRef: l,
+    editorRef: n,
+    pointers: e,
+    cameraRef: i,
+    shapesRef: u,
     toolRef: d,
-    activeColorRef: m,
-    camera: b,
-    shapes: g,
-    selected: h,
-    isSpaceDown: i,
-    textualTypes: u,
-    setShapes: v,
-    setEditingId: a,
-    applyInteraction: z,
-    selectNow: s,
-    beginHistory: f,
-    commit: Y,
-    onToolChange: w,
-    expandToGroups: p,
-    toPage: k,
-    createId: M
+    activeColorRef: y,
+    drawStrokeWidth: g,
+    camera: w,
+    shapes: l,
+    selected: r,
+    isSpaceDown: f,
+    textualTypes: c,
+    setShapes: a,
+    setEditingId: S,
+    applyInteraction: s,
+    selectNow: x,
+    beginHistory: k,
+    commit: b,
+    onToolChange: m,
+    expandToGroups: $,
+    toPage: M,
+    createId: C
   });
-  return so({
+  return bo({
     containerRef: t,
-    pointers: n,
+    pointers: e,
     interactionRef: o,
-    cameraRef: r,
-    shapesRef: l,
-    setCamera: c,
-    setShapes: v,
-    setEditingId: a,
-    setEraserPos: X,
-    setGuides: x,
-    setAnnouncement: y,
-    applyInteraction: z,
-    selectNow: s,
-    endHistory: $,
-    commit: Y,
-    onToolChange: w,
-    expandToGroups: p,
-    toPage: k,
-    createId: M
-  }), N;
+    cameraRef: i,
+    shapesRef: u,
+    setCamera: v,
+    setShapes: a,
+    setEditingId: S,
+    setEraserPos: h,
+    setGuides: Y,
+    setAnnouncement: z,
+    applyInteraction: s,
+    selectNow: x,
+    endHistory: p,
+    commit: b,
+    onToolChange: m,
+    expandToGroups: $,
+    toPage: M,
+    createId: C
+  }), I;
 }
-function uo(t) {
-  return Qe(t), Je(t), lo(t);
+function $o(t) {
+  lo(t);
+  const n = kt(() => ({
+    get current() {
+      return t.toolRef.current === "highlighter" ? "draw" : t.toolRef.current;
+    },
+    set current(e) {
+      t.toolRef.current = e;
+    }
+  }), [t.toolRef]);
+  return xo({ ...t, toolRef: n }), ko(t);
 }
-function xo({
+function zo({
   isDarkMode: t,
-  tool: e,
-  isSpaceDown: n,
+  tool: n,
+  isSpaceDown: e,
   interaction: o,
-  zoom: r
+  zoom: i
 }) {
-  const l = n || o.kind === "pan" ? "grabbing" : e === "hand" ? "grab" : e === "draw" ? "crosshair" : e === "eraser" ? "cell" : e === "select" ? "default" : "crosshair", d = t ? _.gridDark : _.gridLight, m = 40 * r;
-  return { cursor: l, gridColor: d, gridSize: m, strokeColorOf: (g) => g.color ? st[g.color].border : t ? "var(--canvas-slate-200)" : _.ink };
+  const u = e || o.kind === "pan" ? "grabbing" : n === "hand" ? "grab" : n === "draw" ? "crosshair" : n === "eraser" ? "cell" : n === "select" ? "default" : "crosshair", d = t ? H.gridDark : H.gridLight, y = 40 * i;
+  return { cursor: u, gridColor: d, gridSize: y, strokeColorOf: (w) => w.color ? dt[w.color].border : t ? "var(--canvas-slate-200)" : H.ink };
 }
 if (typeof document < "u" && !document.querySelector("style[data-invoicex-canvas]")) {
   const t = document.createElement("style");
-  t.setAttribute("data-invoicex-canvas", ""), t.textContent = he, document.head.appendChild(t);
+  t.setAttribute("data-invoicex-canvas", ""), t.textContent = zn, document.head.appendChild(t);
 }
-const mn = 0.1, pn = 4, yn = ["note", "card", "text", "rect", "ellipse", "triangle", "diamond", "hexagon", "star", "frame", "arrow"];
-function fo(t = "s") {
+const pe = 0.1, ye = 4, ge = ["note", "card", "text", "rect", "ellipse", "triangle", "diamond", "hexagon", "star", "frame", "arrow"];
+function Oe(t) {
+  throw new Error(`Unhandled canvas shape: ${String(t)}.`);
+}
+function Mo(t, n, e) {
+  return t.map((o) => {
+    if (!n.has(o.id)) return o;
+    switch (o.type) {
+      case "arrow":
+      case "frame":
+      case "rect":
+      case "ellipse":
+      case "triangle":
+      case "diamond":
+      case "hexagon":
+      case "star":
+      case "draw":
+        return { ...o, strokeWidth: e };
+      case "note":
+      case "card":
+      case "text":
+      case "image":
+        return o;
+      default:
+        return Oe(o);
+    }
+  });
+}
+function Xo(t, n, e) {
+  return t.map((o) => n.has(o.id) && o.type === "draw" ? { ...o, ...e } : o);
+}
+function Yo(t = "s") {
   return `${t}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 }
-const yo = Gn(function({
-  boardIdentity: e = "standalone",
-  isDarkMode: n,
+const Po = on(function({
+  boardIdentity: n = "standalone",
+  isDarkMode: e,
   tool: o,
-  onToolChange: r,
-  onDirty: l,
-  onZoomChange: d,
-  onSelectionChange: m,
-  shapes: b,
-  onShapesChange: g,
-  peerCursors: h,
-  onLocalCursor: i
-}, u) {
-  var ln, dn;
+  drawStrokeWidth: i = 4,
+  onToolChange: u,
+  onDirty: d,
+  onZoomChange: y,
+  onSelectionChange: g,
+  shapes: w,
+  onShapesChange: l,
+  peerCursors: r,
+  onLocalCursor: f
+}, c) {
+  var de, ue;
   const {
-    containerRef: c,
-    editorRef: v,
-    setLocalShapes: a,
-    controlled: X,
-    shapes: x,
-    setShapes: y,
-    camera: z,
-    setCamera: s,
-    cameraRef: f,
-    selected: $,
-    selectedRef: Y,
-    editingId: w,
-    setEditingId: p,
-    editingIdRef: k,
-    interaction: M,
-    interactionRef: N,
-    applyInteraction: P,
-    isSpaceDown: E,
-    setIsSpaceDown: O,
-    guides: I,
-    setGuides: T,
+    containerRef: v,
+    editorRef: a,
+    setLocalShapes: S,
+    controlled: h,
+    shapes: Y,
+    setShapes: z,
+    camera: s,
+    setCamera: x,
+    cameraRef: k,
+    selected: p,
+    selectedRef: b,
+    editingId: m,
+    setEditingId: $,
+    editingIdRef: M,
+    interaction: C,
+    interactionRef: I,
+    applyInteraction: E,
+    isSpaceDown: D,
+    setIsSpaceDown: G,
+    guides: P,
+    setGuides: F,
     announcement: L,
-    setAnnouncement: R,
-    showInspectorPalette: D,
-    setShowInspectorPalette: B,
+    setAnnouncement: O,
+    showInspectorPalette: W,
+    setShowInspectorPalette: q,
     eraserPos: U,
-    setEraserPos: Q,
-    setActiveColor: K,
-    activeColorRef: G,
-    installedFontFamilies: nt,
-    pointers: S,
-    past: F,
-    future: V,
-    selectNow: q,
-    commit: J,
-    deleteSelection: ot,
-    beginHistory: yt,
-    endHistory: Ct,
-    toPage: kt,
-    viewportCentre: Bt,
-    expandToGroups: Ht,
-    toolRef: Wt,
-    shapesRef: Mt
-  } = Ke({ boardIdentity: e, tool: o, controlledShapes: b, onShapesChange: g, onDirty: l }), {
-    inspectorShape: Nt,
-    onContainerPointerMove: jt,
-    onContainerPointerLeave: A
-  } = Ve({
-    containerRef: c,
-    camera: z,
-    setCamera: s,
-    minZoom: mn,
-    maxZoom: pn,
-    shapes: x,
-    selected: $,
-    editingId: w,
-    textualTypes: yn,
-    onZoomChange: d,
-    onSelectionChange: m,
-    onLocalCursor: i,
-    toPage: kt
+    setEraserPos: Z,
+    setActiveColor: _,
+    activeColorRef: V,
+    installedFontFamilies: ot,
+    pointers: xt,
+    past: X,
+    future: T,
+    selectNow: j,
+    commit: Q,
+    deleteSelection: et,
+    beginHistory: st,
+    endHistory: It,
+    toPage: Tt,
+    viewportCentre: Vt,
+    expandToGroups: Gt,
+    toolRef: qt,
+    shapesRef: St
+  } = eo({ boardIdentity: n, tool: o, controlledShapes: w, onShapesChange: l, onDirty: d }), {
+    inspectorShape: zt,
+    onContainerPointerMove: A,
+    onContainerPointerLeave: R
+  } = no({
+    containerRef: v,
+    camera: s,
+    setCamera: x,
+    minZoom: pe,
+    maxZoom: ye,
+    shapes: Y,
+    selected: p,
+    editingId: m,
+    textualTypes: ge,
+    onZoomChange: y,
+    onSelectionChange: g,
+    onLocalCursor: f,
+    toPage: Tt
   }), {
-    onPointerDown: W,
-    onResizeHandleDown: H,
-    onRotateHandleDown: Z,
-    onConnectHandleDown: ht,
-    onBendHandleDown: vt,
-    onOrthogonalSegmentHandleDown: Kt,
-    onArrowEndpointDown: En
-  } = uo({
-    ref: u,
-    containerRef: c,
-    editorRef: v,
-    pointers: S,
-    interactionRef: N,
-    cameraRef: f,
-    shapesRef: Mt,
-    toolRef: Wt,
-    activeColorRef: G,
-    camera: z,
-    shapes: x,
-    selected: $,
-    isSpaceDown: E,
-    setCamera: s,
-    setShapes: y,
-    setEditingId: p,
-    setEraserPos: Q,
-    setGuides: T,
-    setAnnouncement: R,
-    applyInteraction: P,
-    selectNow: q,
-    past: F,
-    future: V,
-    beginHistory: yt,
-    endHistory: Ct,
-    commit: J,
-    deleteSelection: ot,
-    onDirty: l,
-    onToolChange: r,
-    controlled: X,
-    isDarkMode: n,
-    minZoom: mn,
-    maxZoom: pn,
-    textualTypes: yn,
-    selectedRef: Y,
-    editingIdRef: k,
-    setIsSpaceDown: O,
-    viewportCentre: Bt,
-    setLocalShapes: a,
-    expandToGroups: Ht,
-    toPage: kt,
-    createId: fo
-  }), { cursor: Ln, gridColor: Fn, gridSize: rn, strokeColorOf: An } = xo({
-    isDarkMode: n,
-    tool: o,
-    isSpaceDown: E,
-    interaction: M,
-    zoom: z.z
-  }), an = (Kn) => {
-    const Vn = Y.current, un = k.current, Vt = new Set(Vn);
-    un && Vt.add(un), Vt.size !== 0 && J((Rn) => Rn.map((Rt) => Vt.has(Rt.id) ? { ...Rt, ...Kn } : Rt));
+    onPointerDown: B,
+    onResizeHandleDown: J,
+    onRotateHandleDown: gt,
+    onConnectHandleDown: wt,
+    onBendHandleDown: Qt,
+    onOrthogonalSegmentHandleDown: De,
+    onArrowEndpointDown: _e
+  } = $o({
+    ref: c,
+    containerRef: v,
+    editorRef: a,
+    pointers: xt,
+    interactionRef: I,
+    cameraRef: k,
+    shapesRef: St,
+    toolRef: qt,
+    activeColorRef: V,
+    drawStrokeWidth: i,
+    camera: s,
+    shapes: Y,
+    selected: p,
+    isSpaceDown: D,
+    setCamera: x,
+    setShapes: z,
+    setEditingId: $,
+    setEraserPos: Z,
+    setGuides: F,
+    setAnnouncement: O,
+    applyInteraction: E,
+    selectNow: j,
+    past: X,
+    future: T,
+    beginHistory: st,
+    endHistory: It,
+    commit: Q,
+    deleteSelection: et,
+    onDirty: d,
+    onToolChange: u,
+    controlled: h,
+    isDarkMode: e,
+    minZoom: pe,
+    maxZoom: ye,
+    textualTypes: ge,
+    selectedRef: b,
+    editingIdRef: M,
+    setIsSpaceDown: G,
+    viewportCentre: Vt,
+    setLocalShapes: S,
+    expandToGroups: Gt,
+    toPage: Tt,
+    createId: Yo
+  }), { cursor: He, gridColor: Be, gridSize: ae, strokeColorOf: je } = zo({
+    isDarkMode: e,
+    tool: o === "highlighter" ? "draw" : o,
+    isSpaceDown: D,
+    interaction: C,
+    zoom: s.z
+  }), ce = (ht) => {
+    const Je = b.current, xe = M.current, Pt = new Set(Je);
+    if (xe && Pt.add(xe), Pt.size === 0) return;
+    const he = "strokeWidth" in ht, tn = Object.keys(ht).every((ft) => ft === "color" || ft === "fillColor" || ft === "strokeWidth");
+    if ((zt == null ? void 0 : zt.type) === "draw" && tn) {
+      const ft = "color" in ht ? ht.color : void 0, lt = "strokeWidth" in ht ? ht.strokeWidth : void 0;
+      Q((en) => Xo(en, Pt, {
+        ...ft !== void 0 ? { color: ft } : {},
+        ...lt !== void 0 ? { strokeWidth: lt } : {}
+      }));
+      return;
+    }
+    if (he) {
+      const ft = ht.strokeWidth;
+      if (ft !== void 0 && Object.keys(ht).length === 1) {
+        Q((lt) => Mo(lt, Pt, ft));
+        return;
+      }
+    }
+    Q((ft) => ft.map((lt) => {
+      if (!Pt.has(lt.id)) return lt;
+      if (!he) return { ...lt, ...ht };
+      switch (lt.type) {
+        case "arrow":
+        case "frame":
+        case "rect":
+        case "ellipse":
+        case "triangle":
+        case "diamond":
+        case "hexagon":
+        case "star":
+          return { ...lt, ...ht };
+        case "note":
+        case "card":
+        case "text":
+        case "image":
+          return lt;
+        case "draw":
+          return { ...lt, ...ht };
+        default:
+          return Oe(lt);
+      }
+    }));
   }, {
-    commitEditorHtml: Tn,
-    applyFormat: Dn,
-    applyList: On,
-    onEditorKeyDown: _n,
-    applyCustomFontFamily: Bn
-  } = je({
-    editorRef: v,
-    editingId: w,
-    setShapes: y,
-    setAnnouncement: R,
-    onDirty: l,
-    patchSelected: an
-  }), { renderEditor: Hn, renderShapeBody: Wn } = He({
-    camera: z,
-    editingId: w,
-    isDarkMode: n,
-    editorRef: v,
-    commitEditorHtml: Tn,
-    onEditorKeyDown: _n,
-    setShapes: y,
-    onDirty: l
-  }), jn = M.kind === "marquee" ? M : null, { shapeById: cn, visiblePaintOrder: sn } = We({
-    containerRef: c,
-    shapesRef: Mt,
-    shapes: x,
-    camera: z,
-    selected: $,
-    editingId: w,
-    boardIdentity: e
+    commitEditorHtml: Ke,
+    applyFormat: Re,
+    applyList: Ue,
+    onEditorKeyDown: Ve,
+    applyCustomFontFamily: Ge
+  } = to({
+    editorRef: a,
+    editingId: m,
+    setShapes: z,
+    setAnnouncement: O,
+    onDirty: d,
+    patchSelected: ce
+  }), { renderEditor: qe, renderShapeBody: Qe } = Zn({
+    camera: s,
+    editingId: m,
+    isDarkMode: e,
+    editorRef: a,
+    commitEditorHtml: Ke,
+    onEditorKeyDown: Ve,
+    setShapes: z,
+    onDirty: d
+  }), Ze = C.kind === "marquee" ? C : null, { shapeById: se, visiblePaintOrder: le } = Jn({
+    containerRef: v,
+    shapesRef: St,
+    shapes: Y,
+    camera: s,
+    selected: p,
+    editingId: m,
+    boardIdentity: n
   });
-  return /* @__PURE__ */ j(
+  return /* @__PURE__ */ K(
     "div",
     {
-      ref: c,
-      onPointerDown: W,
-      onPointerMove: jt,
-      onPointerLeave: A,
+      ref: v,
+      onPointerDown: B,
+      onPointerMove: A,
+      onPointerLeave: R,
       role: "application",
-      "data-canvas-board-id": e,
+      "data-canvas-board-id": n,
       "data-canvas-active-tool": o,
-      "data-canvas-camera-x": z.x,
-      "data-canvas-camera-y": z.y,
-      "data-canvas-camera-z": z.z,
+      "data-canvas-camera-x": s.x,
+      "data-canvas-camera-y": s.y,
+      "data-canvas-camera-z": s.z,
       "aria-label": "무한 캔버스. Tab으로 개체 이동, Enter로 편집, 방향키로 위치 조정.",
       tabIndex: 0,
       className: "invoicex-canvas absolute inset-0 overflow-hidden touch-none select-none focus:outline-none",
       style: {
-        cursor: Ln,
-        background: n ? _.canvasDark : _.canvasLight,
-        backgroundImage: `radial-gradient(${Fn} 1px, transparent 1px)`,
-        backgroundSize: `${rn}px ${rn}px`,
-        backgroundPosition: `${-z.x * z.z}px ${-z.y * z.z}px`
+        cursor: He,
+        background: e ? H.canvasDark : H.canvasLight,
+        backgroundImage: `radial-gradient(${Be} 1px, transparent 1px)`,
+        backgroundSize: `${ae}px ${ae}px`,
+        backgroundPosition: `${-s.x * s.z}px ${-s.y * s.z}px`
       },
       children: [
-        /* @__PURE__ */ C("style", { children: '.invoicex-canvas .canvas-rich-text ul,.invoicex-canvas .canvas-rich-text ol{margin:0;padding-left:0;list-style:none}.invoicex-canvas .canvas-rich-text ul>li::before{content:"• "}.invoicex-canvas .canvas-rich-text ul[data-list-style="dash"]>li::before{content:"– "}.invoicex-canvas .canvas-rich-text ol{counter-reset:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li{counter-increment:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li::before{content:counter(canvas-list-item) ". "}' }),
-        /* @__PURE__ */ C(
+        /* @__PURE__ */ N("style", { children: '.invoicex-canvas .canvas-rich-text ul,.invoicex-canvas .canvas-rich-text ol{margin:0;padding-left:0;list-style:none}.invoicex-canvas .canvas-rich-text ul>li::before{content:"• "}.invoicex-canvas .canvas-rich-text ul[data-list-style="dash"]>li::before{content:"– "}.invoicex-canvas .canvas-rich-text ol{counter-reset:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li{counter-increment:canvas-list-item}.invoicex-canvas .canvas-rich-text ol>li::before{content:counter(canvas-list-item) ". "}' }),
+        /* @__PURE__ */ N(
           "div",
           {
             "aria-live": "polite",
@@ -2655,60 +2860,60 @@ const yo = Gn(function({
             children: L
           }
         ),
-        /* @__PURE__ */ C(
-          Me,
+        /* @__PURE__ */ N(
+          Pn,
           {
-            visiblePaintOrder: sn,
-            selected: $,
-            shapeById: cn,
-            allShapes: Mt.current,
-            camera: z,
-            interaction: M,
+            visiblePaintOrder: le,
+            selected: p,
+            shapeById: se,
+            allShapes: St.current,
+            camera: s,
+            interaction: C,
             eraserPos: U,
-            guides: I,
-            marquee: jn,
-            strokeColorOf: An
+            guides: P,
+            marquee: Ze,
+            strokeColorOf: je
           }
         ),
-        /* @__PURE__ */ C(
-          _e,
+        /* @__PURE__ */ N(
+          Un,
           {
-            visiblePaintOrder: sn,
-            selected: $,
-            editingId: w,
-            camera: z,
-            shapeById: cn,
-            allShapes: Mt.current,
-            peerCursors: h,
-            isDarkMode: n,
-            renderEditor: Hn,
-            renderShapeBody: Wn,
-            setEditingId: p,
-            onBendHandleDown: vt,
-            onOrthogonalSegmentHandleDown: Kt,
-            onResizeHandleDown: H,
-            onRotateHandleDown: Z,
-            onConnectHandleDown: ht,
-            onArrowEndpointDown: En
+            visiblePaintOrder: le,
+            selected: p,
+            editingId: m,
+            camera: s,
+            shapeById: se,
+            allShapes: St.current,
+            peerCursors: r,
+            isDarkMode: e,
+            renderEditor: qe,
+            renderShapeBody: Qe,
+            setEditingId: $,
+            onBendHandleDown: Qt,
+            onOrthogonalSegmentHandleDown: De,
+            onResizeHandleDown: J,
+            onRotateHandleDown: gt,
+            onConnectHandleDown: wt,
+            onArrowEndpointDown: _e
           }
         ),
-        Nt && /* @__PURE__ */ C(
-          Be,
+        zt && /* @__PURE__ */ N(
+          Qn,
           {
-            shape: Nt,
-            shapes: x,
-            camera: z,
-            canvasSize: { width: ((ln = c.current) == null ? void 0 : ln.clientWidth) ?? 380, height: ((dn = c.current) == null ? void 0 : dn.clientHeight) ?? 190 },
-            isDarkMode: n,
-            editing: !!w,
-            showPalette: D,
-            installedFontFamilies: nt,
-            setShowPalette: B,
-            setActiveColor: K,
-            patchSelected: an,
-            applyFormat: Dn,
-            applyList: On,
-            applyCustomFontFamily: Bn
+            shape: zt,
+            shapes: Y,
+            camera: s,
+            canvasSize: { width: ((de = v.current) == null ? void 0 : de.clientWidth) ?? 380, height: ((ue = v.current) == null ? void 0 : ue.clientHeight) ?? 190 },
+            isDarkMode: e,
+            editing: !!m,
+            showPalette: W,
+            installedFontFamilies: ot,
+            setShowPalette: q,
+            setActiveColor: _,
+            patchSelected: ce,
+            applyFormat: Re,
+            applyList: Ue,
+            applyCustomFontFamily: Ge
           }
         )
       ]
@@ -2716,9 +2921,11 @@ const yo = Gn(function({
   );
 });
 export {
-  st as CANVAS_COLORS,
-  Jn as CANVAS_COLOR_KEYS,
-  ut as CANVAS_FONTS,
-  yo as InfiniteCanvas,
-  ne as SHAPE_TOOLS
+  dt as CANVAS_COLORS,
+  sn as CANVAS_COLOR_KEYS,
+  vt as CANVAS_FONTS,
+  Po as InfiniteCanvas,
+  un as SHAPE_TOOLS,
+  Xo as applySelectedDrawStyle,
+  Mo as applySelectedStrokeWidth
 };

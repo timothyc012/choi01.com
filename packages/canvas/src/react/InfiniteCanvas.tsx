@@ -27,8 +27,9 @@ import type {
   CanvasFontKey,
   CanvasShape as DocumentCanvasShape,
   CanvasShapeType,
+  CanvasStrokeWidth,
   CanvasTextAlign,
-  CanvasTool,
+  CanvasTool as CoreCanvasTool,
   OrthogonalVariant,
 } from '../core/index.ts';
 import {
@@ -62,7 +63,8 @@ import { getCanvasRenderConfig } from './canvasRenderConfig';
  */
 
 export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../core/index.ts';
-export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, CanvasTool, OrthogonalVariant } from '../core/index.ts';
+export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, OrthogonalVariant } from '../core/index.ts';
+export type CanvasTool = CoreCanvasTool | 'highlighter';
 
 type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape
   ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'orthogonalWaypoints' | 'arrowStart' | 'arrowEnd'> & {
@@ -104,6 +106,56 @@ const MAX_ZOOM = 4;
 const SNAP_THRESHOLD = 6;
 const TEXTUAL: CanvasShapeType[] = ['note', 'card', 'text', 'rect', 'ellipse', 'triangle', 'diamond', 'hexagon', 'star', 'frame', 'arrow'];
 
+function assertNeverCanvasShape(shape: never): never {
+  throw new Error(`Unhandled canvas shape: ${String(shape)}.`);
+}
+
+export function applySelectedStrokeWidth(
+  shapes: CanvasShape[],
+  targetIds: Set<string>,
+  strokeWidth: CanvasStrokeWidth,
+): CanvasShape[] {
+  return shapes.map(shape => {
+    if (!targetIds.has(shape.id)) return shape;
+    switch (shape.type) {
+      case 'arrow':
+      case 'frame':
+      case 'rect':
+      case 'ellipse':
+      case 'triangle':
+      case 'diamond':
+      case 'hexagon':
+      case 'star':
+      case 'draw':
+        return { ...shape, strokeWidth };
+      case 'note':
+      case 'card':
+      case 'text':
+      case 'image':
+        return shape;
+      default:
+        return assertNeverCanvasShape(shape);
+    }
+  });
+}
+
+interface SelectedDrawStyle {
+  readonly color?: CanvasColorKey;
+  readonly strokeWidth?: CanvasStrokeWidth;
+}
+
+export function applySelectedDrawStyle(
+  shapes: CanvasShape[],
+  targetIds: Set<string>,
+  style: SelectedDrawStyle,
+): CanvasShape[] {
+  return shapes.map(shape => (
+    targetIds.has(shape.id) && shape.type === 'draw'
+      ? { ...shape, ...style }
+      : shape
+  ));
+}
+
 export interface InfiniteCanvasHandle {
   addNote: (color: CanvasColorKey) => void;
   addCard: (label: string, category: string, cardStyle: 'solid' | 'glass', color: CanvasColorKey) => void;
@@ -112,7 +164,7 @@ export interface InfiniteCanvasHandle {
   addArrow: () => void;
   addImage: (src: string, fileName: string, w: number, h: number) => void;
   addFileCard: (fileName: string, src: string, label: string) => void;
-  setTool: (tool: CanvasTool) => void;
+  setTool: (tool: CoreCanvasTool) => void;
   undo: () => void;
   redo: () => void;
   deleteSelected: () => void;
@@ -135,6 +187,7 @@ interface InfiniteCanvasProps {
   boardIdentity?: string;
   isDarkMode: boolean;
   tool: CanvasTool;
+  drawStrokeWidth?: CanvasStrokeWidth;
   onToolChange: (tool: CanvasTool) => void;
   onDirty: () => void;
   onZoomChange?: (zoom: number) => void;
@@ -158,7 +211,7 @@ function uid(prefix = 's'): string {
 }
 
 export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(function InfiniteCanvas(
-  { boardIdentity = 'standalone', isDarkMode, tool, onToolChange, onDirty, onZoomChange, onSelectionChange,
+  { boardIdentity = 'standalone', isDarkMode, tool, drawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
     shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor }, ref
 ) {
   const {
@@ -249,6 +302,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     shapesRef,
     toolRef,
     activeColorRef,
+    drawStrokeWidth,
     camera,
     shapes,
     selected,
@@ -286,7 +340,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
 
   // --- Rendering -----------------------------------------------------------
   const { cursor, gridColor, gridSize, strokeColorOf } = getCanvasRenderConfig({
-    isDarkMode, tool, isSpaceDown, interaction, zoom: camera.z,
+    isDarkMode, tool: tool === 'highlighter' ? 'draw' : tool, isSpaceDown, interaction, zoom: camera.z,
   });
 
   /** Apply a property to every selected shape (including the one currently being edited). */
@@ -296,7 +350,48 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     const targetIds = new Set(sel);
     if (eid) targetIds.add(eid);
     if (targetIds.size === 0) return;
-    commit(prev => prev.map(s => (targetIds.has(s.id) ? { ...s, ...patch } : s)));
+    const includesStrokeWidth = 'strokeWidth' in patch;
+    const drawStyleKeys = Object.keys(patch).every(key => key === 'color' || key === 'fillColor' || key === 'strokeWidth');
+    if (inspectorShape?.type === 'draw' && drawStyleKeys) {
+      const color = 'color' in patch ? patch.color : undefined;
+      const strokeWidth = 'strokeWidth' in patch ? patch.strokeWidth : undefined;
+      commit(prev => applySelectedDrawStyle(prev, targetIds, {
+        ...(color !== undefined ? { color } : {}),
+        ...(strokeWidth !== undefined ? { strokeWidth } : {}),
+      }));
+      return;
+    }
+    if (includesStrokeWidth) {
+      const strokeWidth = patch.strokeWidth;
+      if (strokeWidth !== undefined && Object.keys(patch).length === 1) {
+        commit(prev => applySelectedStrokeWidth(prev, targetIds, strokeWidth));
+        return;
+      }
+    }
+    commit(prev => prev.map(s => {
+      if (!targetIds.has(s.id)) return s;
+      if (!includesStrokeWidth) return { ...s, ...patch };
+      switch (s.type) {
+        case 'arrow':
+        case 'frame':
+        case 'rect':
+        case 'ellipse':
+        case 'triangle':
+        case 'diamond':
+        case 'hexagon':
+        case 'star':
+          return { ...s, ...patch };
+        case 'note':
+        case 'card':
+        case 'text':
+        case 'image':
+          return s;
+        case 'draw':
+          return { ...s, ...patch };
+        default:
+          return assertNeverCanvasShape(s);
+      }
+    }));
   };
 
   const {

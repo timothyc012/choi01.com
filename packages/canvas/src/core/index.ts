@@ -25,6 +25,7 @@ export type {
   CanvasSimpleShapeType,
   CanvasShapeType,
   CanvasSnapshot,
+  CanvasStrokeWidth,
   CanvasTextAlign,
   CanvasTool,
   OrthogonalVariant,

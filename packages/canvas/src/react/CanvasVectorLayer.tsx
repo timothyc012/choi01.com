@@ -42,15 +42,20 @@ export function CanvasVectorLayer({
       <g transform={`scale(${camera.z}) translate(${-camera.x}, ${-camera.y})`}>
         {visiblePaintOrder.map(s => {
           if (s.type === 'draw' && s.points) {
+            const drawMode = s.drawMode ?? 'pen';
+            const documentStrokeWidth = s.strokeWidth ?? 3;
             return (
               <path
                 key={s.id}
                 data-canvas-vector-shape-id={s.id}
                 data-canvas-vector-shape-type="draw"
+                data-canvas-draw-mode={drawMode}
+                data-canvas-stroke-width={documentStrokeWidth}
                 d={strokePath(s.points)}
                 fill="none"
                 stroke={selected.has(s.id) ? CANVAS_UI_COLORS.blue : strokeColorOf(s)}
-                strokeWidth={3 / camera.z}
+                strokeWidth={documentStrokeWidth / camera.z}
+                strokeOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -59,8 +64,12 @@ export function CanvasVectorLayer({
           if (s.type !== 'arrow') return null;
           const stroke = selected.has(s.id) ? CANVAS_UI_COLORS.blue : strokeColorOf(s);
           const geometry = arrowGeometry(s, shapeById, allShapes);
-          const head = 14 / camera.z;
-          const dot = 5 / camera.z;
+          const documentStrokeWidth = s.strokeWidth ?? 2.5;
+          const renderedStrokeWidth = documentStrokeWidth / camera.z;
+          const arrowheadSize = Math.max(10, 8 + documentStrokeWidth * 2);
+          const dotRadius = Math.max(4, 2 + documentStrokeWidth);
+          const head = arrowheadSize / camera.z;
+          const dot = dotRadius / camera.z;
           const pathPoints = geometry.routing === 'orthogonal' && geometry.pathPoints ? geometry.pathPoints : null;
           const orthLine = pathPoints && pathPoints.length > 1;
           let d: string;
@@ -85,16 +94,17 @@ export function CanvasVectorLayer({
           const strokeDash = s.strokeStyle === 'dashed' ? `${8 / camera.z} ${5 / camera.z}`
             : s.strokeStyle === 'dotted' ? `${1.5 / camera.z} ${4 / camera.z}` : undefined;
           const capAt = (cap: 'none' | 'arrow' | 'dot' | undefined, tipX: number, tipY: number, dirAngle: number) => {
-            if (cap === 'dot') return <circle cx={tipX} cy={tipY} r={dot} fill={stroke} />;
+            if (cap === 'dot') return <circle data-canvas-arrow-dot-radius={dotRadius} cx={tipX} cy={tipY} r={dot} fill={stroke} />;
             if (cap === 'none') return null;
             return <polygon
+              data-canvas-arrowhead-size={arrowheadSize}
               points={`${tipX},${tipY} ${tipX - head * Math.cos(dirAngle - 0.4)},${tipY - head * Math.sin(dirAngle - 0.4)} ${tipX - head * Math.cos(dirAngle + 0.4)},${tipY - head * Math.sin(dirAngle + 0.4)}`}
               fill={stroke}
             />;
           };
           return (
-            <g key={s.id} data-canvas-vector-shape-id={s.id} data-canvas-vector-shape-type="arrow" data-canvas-routing={geometry.routing}>
-              <path d={d} fill="none" stroke={stroke} strokeWidth={2.5 / camera.z} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={strokeDash} />
+            <g key={s.id} data-canvas-vector-shape-id={s.id} data-canvas-vector-shape-type="arrow" data-canvas-routing={geometry.routing} data-canvas-stroke-width={documentStrokeWidth}>
+              <path d={d} fill="none" stroke={stroke} strokeWidth={renderedStrokeWidth} strokeLinecap="round" strokeLinejoin="round" strokeDasharray={strokeDash} />
               {capAt(s.arrowEnd ?? 'arrow', geometry.end.x, geometry.end.y, angle)}
               {capAt(s.arrowStart ?? 'none', geometry.start.x, geometry.start.y, startAngle + Math.PI)}
             </g>

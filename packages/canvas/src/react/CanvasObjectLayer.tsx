@@ -102,7 +102,7 @@ export function CanvasObjectLayer({
             >
               {renderShapeBody(s)}
               {isSelected && <>
-                <div className="absolute -inset-0.5 pointer-events-none" style={{ outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
+                <div data-canvas-selection-box="true" className="absolute -inset-0.5 pointer-events-none" style={{ outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
                 {selected.size === 1 && <>
                   {(['nw', 'ne', 'sw', 'se'] as const).map(handle => <div key={handle} data-canvas-resize-handle={handle} onPointerDown={event => onResizeHandleDown(event, s, handle)} className="absolute z-20 bg-white border-2 border-blue-600 rounded-sm" style={{ width: 10 / camera.z, height: 10 / camera.z, cursor: `${handle}-resize`, left: handle.includes('w') ? -5 / camera.z : undefined, right: handle.includes('e') ? -5 / camera.z : undefined, top: handle.includes('n') ? -5 / camera.z : undefined, bottom: handle.includes('s') ? -5 / camera.z : undefined }} />)}
                   <div onPointerDown={event => onRotateHandleDown(event, s)} title="회전 (Shift로 15도 단위)" className="absolute z-20 bg-blue-600 rounded-full" style={{ width: 12 / camera.z, height: 12 / camera.z, left: '50%', marginLeft: -6 / camera.z, top: -28 / camera.z, cursor: 'grab' }} />

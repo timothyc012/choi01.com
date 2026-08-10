@@ -6,8 +6,8 @@ import type {
   SetStateAction,
 } from 'react';
 import { SHAPE_TOOLS } from '../core/index.ts';
-import type { CanvasColorKey, CanvasShapeType, CanvasTool } from '../core/index.ts';
-import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
+import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import {
   bounds,
   centreOf,
@@ -35,6 +35,7 @@ interface PointerDownOptions {
   shapesRef: RefObject<CanvasShape[]>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
+  drawStrokeWidth: CanvasStrokeWidth;
   camera: Camera;
   shapes: CanvasShape[];
   selected: Set<string>;
@@ -70,6 +71,7 @@ export function useCanvasPointerDown({
   shapesRef,
   toolRef,
   activeColorRef,
+  drawStrokeWidth,
   camera,
   shapes,
   selected,
@@ -146,8 +148,19 @@ export function useCanvasPointerDown({
     editorRef.current?.blur();
     containerRef.current?.focus();
 
-    if (activeTool === 'draw') {
-      const created: CanvasShape = { id: uid(), type: 'draw', x: p.x, y: p.y, w: 0, h: 0, points: [[p.x, p.y]], color: activeColorRef.current };
+    if (activeTool === 'draw' || activeTool === 'highlighter') {
+      const created: CanvasShape = {
+        id: uid(),
+        type: 'draw',
+        x: p.x,
+        y: p.y,
+        w: 0,
+        h: 0,
+        points: [[p.x, p.y]],
+        color: activeColorRef.current,
+        strokeWidth: drawStrokeWidth,
+        drawMode: activeTool === 'highlighter' ? 'highlighter' : 'pen',
+      };
       beginHistory();
       setShapes(prev => [...prev, created]);
       applyInteraction({ kind: 'drawing', id: created.id });
@@ -157,7 +170,7 @@ export function useCanvasPointerDown({
     if (activeTool === 'arrow' || activeTool === 'frame' || SHAPE_TOOLS.includes(activeTool)) {
       // The `tool` narrowing is opaque to TS inside SHAPE_TOOLS.includes(), so
       // cast to the concrete shape-type union for the polygon path.
-      const shapeType = activeTool as Exclude<typeof activeTool, 'select' | 'draw' | 'eraser' | 'note' | 'card' | 'text' | 'image'>;
+      const shapeType = activeTool as Exclude<typeof activeTool, 'select' | 'draw' | 'highlighter' | 'eraser' | 'note' | 'card' | 'text' | 'image'>;
       const created: CanvasShape = activeTool === 'arrow'
         ? { id: uid(), type: 'arrow', x: p.x, y: p.y, w: 0, h: 0, color: activeColorRef.current }
         : activeTool === 'frame'

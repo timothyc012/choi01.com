@@ -1,7 +1,7 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react';
-import { CANVAS_LIMITS, parseCanvasSnapshot } from '../core/index.ts';
+import { CanvasValidationError, parseCanvasSnapshot } from '../core/index.ts';
+import type { CanvasShape as ParsedCanvasShape } from '../core/index.ts';
 import type { CanvasShape, CanvasSnapshot } from './InfiniteCanvas';
-import { sanitizeShapeForCanvas } from './canvasGeometry';
 
 type Camera = CanvasSnapshot['camera'];
 
@@ -25,13 +25,9 @@ export function loadCanvasSnapshot(snapshot: unknown, {
   selectNow,
   setEditingId,
 }: CanvasSnapshotLoadOptions): void {
-  const snap = snapshot as Partial<CanvasSnapshot> | null;
-  // Older boards may hold an unsupported snapshot schema; start clean
-  // rather than crashing on data this engine cannot read.
-  if (!snap || snap.version !== 'canvas-v1') return;
-  let validatedCamera: Camera;
+  let parsed: ReturnType<typeof parseCanvasSnapshot>;
   try {
-    validatedCamera = parseCanvasSnapshot({ version: 'canvas-v1', shapes: [], camera: snap.camera }).camera;
+    parsed = parseCanvasSnapshot(snapshot);
   } catch {
     return;
   }
@@ -40,13 +36,48 @@ export function loadCanvasSnapshot(snapshot: unknown, {
   // shape array, so ignore that half of the snapshot — otherwise a naive
   // reseed here would race the collab layer. We still honour the camera
   // because that's per-viewer state, not shared.
-  if (!controlled && Array.isArray(snap.shapes) && snap.shapes.length <= CANVAS_LIMITS.maxShapes) {
+  if (!controlled) {
     past.current = [];
     future.current = [];
-    // Markup from storage is untrusted — re-sanitise on the way in.
-    setLocalShapes(snap.shapes.map(sanitizeShapeForCanvas).filter((s): s is CanvasShape => s !== null));
+    setLocalShapes(parsed.shapes.map(toEditableCanvasShape));
   }
-  setCamera(validatedCamera);
+  setCamera(parsed.camera);
   selectNow(new Set());
   setEditingId(null);
+}
+
+function toEditableCanvasShape(shape: ParsedCanvasShape): CanvasShape {
+  switch (shape.type) {
+    case 'arrow':
+      return {
+        ...shape,
+        orthogonalWaypoints: shape.orthogonalWaypoints?.map(point => ({ x: point.x, y: point.y })),
+      };
+    case 'draw':
+      return {
+        ...shape,
+        points: shape.points.map(([x, y]) => {
+          const point: [number, number] = [x, y];
+          return point;
+        }),
+      };
+    case 'note':
+    case 'card':
+    case 'text':
+    case 'image':
+    case 'frame':
+    case 'rect':
+    case 'ellipse':
+    case 'triangle':
+    case 'diamond':
+    case 'hexagon':
+    case 'star':
+      return { ...shape };
+    default:
+      return assertNever(shape);
+  }
+}
+
+function assertNever(shape: never): never {
+  throw new CanvasValidationError(`Unhandled canvas shape type: ${String(shape)}.`);
 }
