@@ -9,9 +9,12 @@ import {
 } from 'lucide-react';
 import {
   InfiniteCanvas, CANVAS_COLORS,
-  type InfiniteCanvasHandle, type CanvasTool, type CanvasColorKey, type CanvasSelectionInfo,
+  type InfiniteCanvasHandle, type CanvasTool, type CanvasColorKey, type CanvasSelectionInfo, type CanvasShape,
 } from 'chois-canvas/react';
 import { parseCanvasSnapshot } from 'chois-canvas/core';
+import { DiagramComposer } from './diagram/DiagramComposer';
+import { DiagramSourceDrawer } from './diagram/DiagramSourceDrawer';
+import { MermaidDiagram } from './diagram/MermaidDiagram';
 
 type CanvasStrokeWidth = 2 | 4 | 6 | 8;
 type GuestCanvasTool = CanvasTool | 'highlighter';
@@ -85,15 +88,37 @@ export const GuestCanvasPage: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [selection, setSelection] = useState<CanvasSelectionInfo>({
-    count: 0, canGroup: false, canUngroup: false, isTextual: false,
+    count: 0, canGroup: false, canUngroup: false, isTextual: false, selectedIds: [],
   });
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showNotice, setShowNotice] = useState(true);
   const [showStickyPalette, setShowStickyPalette] = useState(false);
   const [showShapesMenu, setShowShapesMenu] = useState(false);
   const [showStrokeWidths, setShowStrokeWidths] = useState(false);
+  const [showDiagramComposer, setShowDiagramComposer] = useState(false);
+  const [openDiagramId, setOpenDiagramId] = useState<string | null>(null);
 
   const markDirty = useCallback(() => setHasUnsavedChanges(true), []);
+
+  const handleSelectionChange = useCallback((info: CanvasSelectionInfo) => {
+    setSelection(info);
+    const selectedId = info.selectedIds.length === 1 ? info.selectedIds[0] : null;
+    const shape = selectedId ? canvasRef.current?.getSnapshot().shapes.find(candidate => candidate.id === selectedId) : undefined;
+    setOpenDiagramId(shape?.type === 'card' && shape.category?.toLowerCase() === 'diagram' ? shape.id : null);
+  }, []);
+
+  const handleCreateDiagram = useCallback((source: string) => {
+    canvasRef.current?.addCard(source, 'diagram', 'solid', 'blue');
+    setShowNotice(false);
+  }, []);
+
+  const handleDiagramSourceChange = useCallback((source: string) => {
+    if (openDiagramId) canvasRef.current?.updateShapeText(openDiagramId, source);
+  }, [openDiagramId]);
+
+  const renderDiagram = useCallback((shape: CanvasShape) => (
+    <MermaidDiagram source={shape.text ?? ''} diagramId={shape.id} />
+  ), []);
 
   const handleSaveToFile = useCallback(() => {
     const handle = canvasRef.current;
@@ -246,7 +271,8 @@ export const GuestCanvasPage: React.FC = () => {
           onToolChange={setActiveTool}
           onDirty={markDirty}
           onZoomChange={setZoom}
-          onSelectionChange={setSelection}
+          onSelectionChange={handleSelectionChange}
+          renderDiagram={renderDiagram}
         />
 
         {/* Floating toolbar */}
@@ -256,6 +282,9 @@ export const GuestCanvasPage: React.FC = () => {
           </button>
           <button type="button" onClick={() => setActiveTool('hand')} className={toolButtonClass('hand')} title="손 도구 / 화면 이동 (H)">
             <Hand className="gc-icon" />
+          </button>
+          <button type="button" onClick={() => setShowDiagramComposer(true)} className="gc-tool gc-tool-diagram" title="Mermaid 다이어그램 만들기">
+            <FileCode className="gc-icon" />
           </button>
 
           <div className="gc-popover-anchor">
@@ -438,6 +467,13 @@ export const GuestCanvasPage: React.FC = () => {
         <div className="gc-hint">
           더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl+휠로 확대 · Ctrl+S 파일 저장
         </div>
+
+        {openDiagramId && (() => {
+          const shape = canvasRef.current?.getSnapshot().shapes.find(candidate => candidate.id === openDiagramId);
+          return shape?.type === 'card' ? <DiagramSourceDrawer source={shape.text ?? ''} onChange={handleDiagramSourceChange} onClose={() => setOpenDiagramId(null)} /> : null;
+        })()}
+
+        <DiagramComposer open={showDiagramComposer} onClose={() => setShowDiagramComposer(false)} onCreate={handleCreateDiagram} />
 
         {showNotice && (
           <div className="gc-notice" role="status">

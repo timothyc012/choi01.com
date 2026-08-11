@@ -64,6 +64,8 @@ import { getCanvasRenderConfig } from './canvasRenderConfig';
 
 export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../core/index.ts';
 export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, OrthogonalVariant } from '../core/index.ts';
+export { diagramTemplate, getInspectorGroups, isDiagramShape } from './canvasDiagram';
+export type { DiagramTemplateKind, InspectorGroup } from './canvasDiagram';
 export type CanvasTool = CoreCanvasTool | 'highlighter';
 
 type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape
@@ -98,6 +100,7 @@ export interface CanvasSelectionInfo {
   canGroup: boolean;
   canUngroup: boolean;
   isTextual: boolean;
+  selectedIds: readonly string[];
 }
 
 const MIN_ZOOM = 0.1;
@@ -164,6 +167,7 @@ export interface InfiniteCanvasHandle {
   addArrow: () => void;
   addImage: (src: string, fileName: string, w: number, h: number) => void;
   addFileCard: (fileName: string, src: string, label: string) => void;
+  updateShapeText: (id: string, text: string) => void;
   setTool: (tool: CoreCanvasTool) => void;
   undo: () => void;
   redo: () => void;
@@ -204,6 +208,7 @@ interface InfiniteCanvasProps {
   peerCursors?: Array<{ id: number; name: string; color: string; x: number; y: number }>;
   /** Called on every pointer move in page space so the outer layer can broadcast. */
   onLocalCursor?: (page: { x: number; y: number } | null) => void;
+  renderDiagram?: (shape: CanvasShape) => React.ReactNode;
 }
 
 function uid(prefix = 's'): string {
@@ -212,7 +217,7 @@ function uid(prefix = 's'): string {
 
 export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(function InfiniteCanvas(
   { boardIdentity = 'standalone', isDarkMode, tool, drawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
-    shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor }, ref
+    shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram }, ref
 ) {
   const {
     containerRef,
@@ -418,6 +423,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     onEditorKeyDown,
     setShapes,
     onDirty,
+    renderDiagram,
   });
 
   const marquee = interaction.kind === 'marquee' ? interaction : null;

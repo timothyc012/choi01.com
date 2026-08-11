@@ -79,6 +79,12 @@ Content width: 1180px max, 20px mobile gutter, 32px desktop gutter. Hero is one-
 - Structure: static table-like grid of subdomains and purpose.
 - Accessibility: headings and readable text; no tiny cells.
 
+### Canvas Diagram Composer
+- Structure: toolbar action opens a modal with Flowchart, Sequence, and Class Mermaid starters; created diagrams render as canvas cards.
+- Editing: the selected diagram exposes a compact `Diagram` inspector group and a source drawer for direct Mermaid edits.
+- States: loading, rendered SVG, and parse error preserve the source for recovery. The drawer fits narrow viewports without leaving the canvas.
+- Persistence: source text stays on the diagram card so the existing canvas-v1 save/load path remains authoritative.
+
 ## 6. Motion & Interaction
 
 Use subtle transform/opacity only. Interactive links and buttons transition in 160ms. Entrance animation is optional and disabled for reduced motion. No decorative looping motion.

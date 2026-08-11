@@ -114,6 +114,9 @@ export function useCanvasImperativeHandle({
     addFileCard: (fileName, src, label) => {
       addAtCentre({ type: 'rect', w: 260, h: 120, color: 'purple', text: label, src, fileName });
     },
+    updateShapeText: (id, text) => {
+      commit(prev => prev.map(shape => shape.id === id ? { ...shape, text, html: undefined } : shape));
+    },
     setTool: onToolChange,
     undo: () => {
       const prev = past.current.pop();

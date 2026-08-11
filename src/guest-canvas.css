@@ -442,3 +442,126 @@ body {
   .gc-button { padding: 0 9px; }
   .gc-hint { display: none; }
 }
+
+.gc-tool-diagram { color: var(--gc-accent); }
+.gc-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--gc-border);
+  border-radius: 10px;
+  background: var(--gc-surface);
+  color: var(--gc-muted);
+  cursor: pointer;
+}
+.gc-icon-button:hover { border-color: var(--gc-accent); color: var(--gc-text); }
+.gc-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(21, 32, 27, 0.2);
+  backdrop-filter: blur(3px);
+}
+.gc-diagram-composer,
+.gc-diagram-drawer {
+  border: 1px solid var(--gc-border);
+  background: var(--gc-surface);
+  color: var(--gc-text);
+  box-shadow: var(--gc-shadow);
+}
+.gc-diagram-composer {
+  width: min(680px, 100%);
+  padding: 24px;
+  border-radius: 18px;
+}
+.gc-diagram-composer-head,
+.gc-diagram-drawer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.gc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gc-accent);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.gc-diagram-composer h2,
+.gc-diagram-drawer h2 { margin: 6px 0 4px; font-size: 18px; line-height: 1.25; }
+.gc-diagram-composer p,
+.gc-diagram-drawer-copy { margin: 0; color: var(--gc-muted); font-size: 13px; line-height: 1.55; }
+.gc-template-row { display: flex; gap: 6px; margin: 20px 0 14px; }
+.gc-template-button {
+  padding: 7px 11px;
+  border: 1px solid var(--gc-border);
+  border-radius: 9px;
+  background: var(--gc-surface-soft);
+  color: var(--gc-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.gc-template-button.is-selected { border-color: var(--gc-accent); background: color-mix(in srgb, var(--gc-accent) 10%, var(--gc-surface)); color: var(--gc-accent-strong); }
+.gc-source-label { display: block; margin-bottom: 6px; color: var(--gc-muted); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+.gc-diagram-composer textarea,
+.gc-diagram-drawer textarea {
+  display: block;
+  width: 100%;
+  min-height: 230px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid var(--gc-border);
+  border-radius: 10px;
+  background: var(--gc-surface-soft);
+  color: var(--gc-text);
+  font: 12px/1.6 'Cascadia Mono', 'SFMono-Regular', Consolas, monospace;
+}
+.gc-diagram-composer textarea:focus,
+.gc-diagram-drawer textarea:focus { outline: 2px solid var(--gc-accent); outline-offset: 1px; border-color: var(--gc-accent); }
+.gc-diagram-composer-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.gc-diagram-drawer {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 45;
+  width: min(400px, calc(100vw - 32px));
+  padding: 20px;
+  border-radius: 16px;
+}
+.gc-diagram-drawer-copy { margin: 16px 0 20px; }
+.gc-diagram-drawer textarea { height: calc(100% - 142px); min-height: 220px; }
+.gc-diagram-drawer-meta { margin-top: 8px; color: var(--gc-faint); font: 11px/1.4 'Cascadia Mono', monospace; text-align: right; }
+.gc-diagram-error,
+.gc-diagram-loading {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  color: var(--gc-muted);
+  font-size: 12px;
+  text-align: center;
+}
+.gc-diagram-error { color: var(--gc-red); background: color-mix(in srgb, var(--gc-red) 8%, transparent); }
+.gc-diagram-svg { width: 100%; height: 100%; display: grid; place-items: center; overflow: auto; padding: 10px; background: rgba(255, 255, 255, 0.92); }
+.gc-diagram-svg svg { max-width: 100%; max-height: 100%; }
+
+@media (max-width: 720px) {
+  .gc-modal-backdrop { padding: 12px; place-items: end center; }
+  .gc-diagram-composer { padding: 18px; border-radius: 16px; }
+  .gc-diagram-composer textarea { min-height: 200px; }
+  .gc-diagram-drawer { top: auto; left: 12px; right: 12px; bottom: 12px; width: auto; height: min(70dvh, 520px); }
+  .gc-diagram-drawer textarea { height: calc(100% - 142px); }
+}

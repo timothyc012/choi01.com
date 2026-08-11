@@ -11,11 +11,12 @@ interface CanvasShapeRendererOptions {
     onEditorKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
     setShapes: Dispatch<SetStateAction<CanvasShape[]>>;
     onDirty: () => void;
+    renderDiagram?: (shape: CanvasShape) => ReactNode;
 }
 interface CanvasShapeRenderer {
     renderEditor: (extra: string, style?: CSSProperties) => ReactElement;
     renderShapeBody: (shape: CanvasShape) => ReactNode;
 }
-export declare function createCanvasShapeRenderer({ camera, editingId, isDarkMode, editorRef, commitEditorHtml, onEditorKeyDown, setShapes, onDirty, }: CanvasShapeRendererOptions): CanvasShapeRenderer;
+export declare function createCanvasShapeRenderer({ camera, editingId, isDarkMode, editorRef, commitEditorHtml, onEditorKeyDown, setShapes, onDirty, renderDiagram, }: CanvasShapeRendererOptions): CanvasShapeRenderer;
 export {};
 //# sourceMappingURL=CanvasShapeRenderer.d.ts.map

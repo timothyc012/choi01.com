@@ -11,6 +11,8 @@ import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasStrokeWi
  */
 export { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS, SHAPE_TOOLS } from '../core/index.js';
 export type { CanvasColorKey, CanvasFontKey, CanvasShapeType, CanvasTextAlign, OrthogonalVariant } from '../core/index.js';
+export { diagramTemplate, getInspectorGroups, isDiagramShape } from './canvasDiagram';
+export type { DiagramTemplateKind, InspectorGroup } from './canvasDiagram';
 export type CanvasTool = CoreCanvasTool | 'highlighter';
 type EditableCanvasShape<Shape> = Shape extends DocumentCanvasShape ? Omit<Shape, 'id' | 'points' | 'fromId' | 'toId' | 'bend' | 'routing' | 'orthogonalVariant' | 'orthogonalWaypoints' | 'arrowStart' | 'arrowEnd'> & {
     id: string;
@@ -44,6 +46,7 @@ export interface CanvasSelectionInfo {
     canGroup: boolean;
     canUngroup: boolean;
     isTextual: boolean;
+    selectedIds: readonly string[];
 }
 export declare function applySelectedStrokeWidth(shapes: CanvasShape[], targetIds: Set<string>, strokeWidth: CanvasStrokeWidth): CanvasShape[];
 interface SelectedDrawStyle {
@@ -59,6 +62,7 @@ export interface InfiniteCanvasHandle {
     addArrow: () => void;
     addImage: (src: string, fileName: string, w: number, h: number) => void;
     addFileCard: (fileName: string, src: string, label: string) => void;
+    updateShapeText: (id: string, text: string) => void;
     setTool: (tool: CoreCanvasTool) => void;
     undo: () => void;
     redo: () => void;
@@ -107,6 +111,7 @@ interface InfiniteCanvasProps {
         x: number;
         y: number;
     } | null) => void;
+    renderDiagram?: (shape: CanvasShape) => React.ReactNode;
 }
 export declare const InfiniteCanvas: React.ForwardRefExoticComponent<InfiniteCanvasProps & React.RefAttributes<InfiniteCanvasHandle>>;
 //# sourceMappingURL=InfiniteCanvas.d.ts.map

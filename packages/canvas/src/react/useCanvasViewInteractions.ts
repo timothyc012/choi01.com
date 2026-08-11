@@ -78,6 +78,7 @@ export function useCanvasViewInteractions({
       canGroup: picked.length > 1,
       canUngroup: picked.some(s => !!s.groupId),
       isTextual: picked.length === 1 && textualTypes.includes(picked[0].type),
+      selectedIds: picked.map(shape => shape.id),
     };
   }, [selected, shapes, textualTypes]);
 

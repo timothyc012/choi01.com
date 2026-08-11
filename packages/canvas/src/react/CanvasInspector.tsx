@@ -7,6 +7,7 @@ import { arrowGeometry, bounds, effectiveFill, effectiveText } from './canvasGeo
 import { pathMidpoint } from './canvasRouting';
 import { CANVAS_FONT_KEYS, canvasFontFromValue, fontSizeForShape, textAlignForShape } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
+import { getInspectorGroups, type InspectorGroup } from './canvasDiagram';
 
 interface Camera { x: number; y: number; z: number }
 interface CanvasInspectorProps {
@@ -160,15 +161,25 @@ export function CanvasInspector({
   const size = fontSizeForShape(s);
   const strokeWidth = inspectorStrokeWidth(s);
   const hasStrokeWidthControl = supportsStrokeWidth(s);
+  const groups = getInspectorGroups(s);
+  const defaultGroup: InspectorGroup = s.type === 'arrow' ? 'arrow' : (groups[0] ?? 'color');
+  const [openGroup, setOpenGroup] = useState<InspectorGroup>(defaultGroup);
+  useLayoutEffect(() => {
+    if (!groups.includes(openGroup)) setOpenGroup(defaultGroup);
+  }, [defaultGroup, groups, openGroup]);
   const manualOrthogonal = s.type === 'arrow' && Boolean(s.orthogonalWaypoints?.length);
   const startCap = s.type === 'arrow' ? (s.arrowStart ?? 'none') : 'none';
   const endCap = s.type === 'arrow' ? (s.arrowEnd ?? 'arrow') : 'arrow';
   const segment = (label: string, active: boolean, onClick: () => void, title: string, ariaLabel = title) => <button type="button" title={title} aria-label={ariaLabel} onClick={onClick} className={`h-7 min-w-9 px-2 rounded text-[11px] font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 ${active ? 'bg-blue-600 text-white' : btn}`}>{label}</button>;
   const groupLabel = (label: string) => <span className="px-1 text-[10px] font-semibold tracking-wide opacity-60">{label}</span>;
+  const groupNames: Record<InspectorGroup, string> = { color: '색상', text: '텍스트', arrow: '선', arrange: '정렬', diagram: 'Diagram' };
 
   return (
     <div ref={inspectorRef} data-canvas-inspector={isDraw ? 'draw' : 'text'} className={`absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-200 text-slate-700'}`} style={{ left: position.left, top: position.top }} onPointerDown={event => { event.stopPropagation(); const target = event.target instanceof Element ? event.target : null; if (!target?.closest('input, select, textarea')) event.preventDefault(); }} onClick={event => event.stopPropagation()}>
-      <div className="relative flex items-center gap-1.5 pointer-events-none">
+      <div className="flex flex-wrap items-center gap-1 pointer-events-auto" role="tablist" aria-label="선택 개체 도구 그룹">
+        {groups.map(group => <button key={group} type="button" role="tab" aria-selected={openGroup === group} onClick={() => setOpenGroup(group)} className={`h-7 px-2.5 rounded-lg text-[11px] font-semibold transition-colors ${openGroup === group ? 'bg-blue-600 text-white' : btn}`}>{groupNames[group]}</button>)}
+      </div>
+      <div className="relative flex items-center gap-1.5 pointer-events-none" style={{ display: openGroup === 'color' || isDraw ? undefined : 'none' }}>
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">{isDraw ? '그리기' : '색상'}</span>
         <button type="button" title={isDraw ? '그리기 색상 팔레트' : '색상 팔레트'} aria-label={isDraw ? '그리기 색상' : '도형 색상'} onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}><Palette className="w-4 h-4" style={{ color: swatchColor }} /></button>
         {showPalette && <div className={`pointer-events-auto absolute left-0 top-10 z-50 flex items-center gap-1.5 p-2 rounded-xl border shadow-xl ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
@@ -176,7 +187,7 @@ export function CanvasInspector({
           {!isDraw && <label title="배경 색 (자유 선택)" className="w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center" style={{ background: s.fillColor ?? effectiveFill(s), outline: s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }}><input type="color" value={s.fillColor ?? effectiveFill(s)} onChange={event => { patchSelected({ fillColor: event.target.value }); setShowPalette(false); }} className="absolute inset-0 opacity-0 cursor-pointer" /></label>}
         </div>}
       </div>
-      {!isDraw && <>
+      {openGroup !== 'color' && !isDraw && <>
       <div className="flex flex-wrap items-center gap-2 pointer-events-none">
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">텍스트</span>
         <label title="글씨 색" className="pointer-events-auto w-8 h-8 rounded-lg border relative overflow-hidden cursor-pointer flex items-center justify-center text-[11px] font-bold shadow-sm" style={{ background: effectiveText(s), color: CANVAS_UI_COLORS.white, mixBlendMode: 'normal' }}><span aria-hidden="true">A</span><input data-canvas-control="text-color" type="color" value={s.textColor ?? effectiveText(s)} onChange={event => patchSelected({ textColor: event.target.value })} className="absolute inset-0 opacity-0 cursor-pointer" /></label>
@@ -185,7 +196,7 @@ export function CanvasInspector({
         {s.fontFamily === 'custom' && <><input type="text" list={`canvas-font-families-${s.id}`} title="폰트 직접입력" aria-label="폰트 직접입력" defaultValue={s.customFontFamily ?? ''} onBlur={event => applyCustomFontFamily(event.target.value)} onChange={event => event.currentTarget.value && applyCustomFontFamily(event.currentTarget.value)} onKeyDown={event => { if (event.key === 'Enter') { event.preventDefault(); applyCustomFontFamily(event.currentTarget.value); } }} onDoubleClick={event => event.stopPropagation()} onPointerDown={event => event.stopPropagation()} placeholder="Noto Sans KR" className={`pointer-events-auto h-8 w-44 rounded-lg border px-2 text-xs ${isDarkMode ? 'bg-slate-950 border-slate-700' : 'bg-white border-slate-200'}`} /><datalist id={`canvas-font-families-${s.id}`}>{installedFontFamilies.map(font => <option key={font} value={font} />)}</datalist></>}
       </div>
       <div className={`flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-none ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}><span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">문단</span><div className={`pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${isDarkMode ? 'bg-slate-950/70' : 'bg-slate-50'}`}>{([['left', AlignLeft, '왼쪽 정렬'], ['center', AlignCenter, '가운데 정렬'], ['right', AlignRight, '오른쪽 정렬']] as const).map(([alignment, Icon, label]) => <button key={alignment} type="button" aria-label={label} title={label} onClick={() => patchSelected({ textAlign: alignment })} className={`pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${textAlignForShape(s) === alignment ? 'bg-blue-600 text-white shadow-sm' : btn}`}><Icon className="w-4 h-4" /></button>)}</div>{editing && <><span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">목록</span><div className={`pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${isDarkMode ? 'bg-slate-950/70' : 'bg-slate-50'}`}>{([['bullet', List, '글머리표 목록'], ['dash', null, '대시 목록'], ['number', ListOrdered, '번호 목록']] as const).map(([kind, Icon, label]) => <button key={kind} type="button" onClick={() => applyList(kind)} aria-label={label} title={label} className={`pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${btn}`}>{Icon ? <Icon className="w-4 h-4" /> : <span className="text-base leading-none">–</span>}</button>)}</div><div className={`pointer-events-none flex items-center gap-0.5 p-0.5 rounded-lg ${isDarkMode ? 'bg-slate-950/70' : 'bg-slate-50'}`}>{([{ cmd: 'bold' as const, Icon: Bold, label: '굵게' }, { cmd: 'italic' as const, Icon: Italic, label: '기울임' }, { cmd: 'underline' as const, Icon: Underline, label: '밑줄' }]).map(({ cmd, Icon, label }) => <button key={cmd} type="button" onClick={() => applyFormat(cmd)} aria-label={label} title={label} className={`pointer-events-auto w-8 h-8 rounded-md flex items-center justify-center ${btn}`}><Icon className="w-4 h-4" /></button>)}</div></>}</div>
-      {(s.type === 'card' || s.type === 'arrow') && <div className={`flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-auto ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
+      {((openGroup === 'arrange' && s.type === 'card') || (openGroup === 'arrow' && s.type === 'arrow')) && <div className={`flex flex-wrap items-center gap-2 pt-1.5 border-t pointer-events-auto ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
         {s.type === 'card' && <><div className={`w-px h-6 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'}`} /><input type="text" title="카드 Type" aria-label="카드 Type" value={s.category ?? ''} placeholder="TYPE" onPointerDown={event => event.stopPropagation()} onChange={event => patchSelected({ category: event.target.value.toUpperCase() })} className={`h-7 w-24 rounded text-[11px] px-1.5 border uppercase ${isDarkMode ? 'bg-slate-950 border-slate-700 text-slate-200' : 'bg-white border-slate-200 text-slate-700'}`} /></>}
         {s.type === 'arrow' && <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1">{groupLabel('경로')}{segment('직선', (s.routing ?? 'straight') === 'straight', () => patchSelected({ routing: 'straight', bend: 0, orthogonalVariant: undefined, orthogonalWaypoints: undefined }), '직선')}{segment('직각', s.routing === 'orthogonal', () => patchSelected({ routing: 'orthogonal', bend: 0, orthogonalVariant: undefined, orthogonalWaypoints: undefined }), '직각: 자동으로 장애물 회피')}{segment('곡선', (s.routing ?? '') === 'curved', () => patchSelected({ routing: 'curved', bend: s.bend || 60, orthogonalVariant: undefined, orthogonalWaypoints: undefined }), '곡선')}{manualOrthogonal && segment('자동', false, () => patchSelected({ routing: 'orthogonal', orthogonalVariant: undefined, orthogonalWaypoints: undefined }), '직각 경로를 자동으로 다시 계산')}</div>
@@ -194,6 +205,7 @@ export function CanvasInspector({
           <div className="flex items-center gap-1">{groupLabel('끝')}{segment(endCap === 'none' ? '○' : endCap === 'dot' ? '●' : '▶', endCap !== 'none', () => patchSelected({ arrowEnd: endCap === 'arrow' ? 'dot' : endCap === 'dot' ? 'none' : 'arrow' }), '끝점 표식', `끝점 표식: ${endCap === 'none' ? '없음' : endCap === 'dot' ? '점' : '화살표'}`)}</div>
         </div>}
       </div>}
+      {openGroup === 'diagram' && <div className={`pt-1.5 border-t text-[11px] opacity-70 ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>Mermaid 소스는 오른쪽 Diagram 편집기에서 수정할 수 있습니다.</div>}
       </>}
       {hasStrokeWidthControl && <div className={`flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-none ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
         {groupLabel('굵기')}

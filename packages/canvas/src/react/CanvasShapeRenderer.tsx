@@ -25,6 +25,7 @@ import {
   textAlignForShape,
 } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
+import { isDiagramShape } from './canvasDiagram';
 
 interface CanvasShapeRendererOptions {
   camera: { readonly z: number };
@@ -35,6 +36,7 @@ interface CanvasShapeRendererOptions {
   onEditorKeyDown: (event: KeyboardEvent<HTMLDivElement>) => void;
   setShapes: Dispatch<SetStateAction<CanvasShape[]>>;
   onDirty: () => void;
+  renderDiagram?: (shape: CanvasShape) => ReactNode;
 }
 
 interface CanvasShapeRenderer {
@@ -51,6 +53,7 @@ export function createCanvasShapeRenderer({
   onEditorKeyDown,
   setShapes,
   onDirty,
+  renderDiagram,
 }: CanvasShapeRendererOptions): CanvasShapeRenderer {
   const editorClasses = 'canvas-rich-text w-full h-full outline-none whitespace-pre-wrap break-words overflow-hidden';
   const renderEditor = (extra: string, style?: CSSProperties) => (
@@ -123,6 +126,13 @@ export function createCanvasShapeRenderer({
 
     if (s.type === 'card') {
       const isGlass = s.cardStyle === 'glass';
+      if (isDiagramShape(s) && renderDiagram && !isEditing) {
+        return (
+          <div className="w-full h-full overflow-hidden rounded-2xl" data-canvas-diagram>
+            {renderDiagram(s)}
+          </div>
+        );
+      }
       return (
         <div
           className="w-full h-full flex flex-col p-4 rounded-2xl text-white overflow-hidden"

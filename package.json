@@ -7,11 +7,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "doctor": "react-doctor --no-supply-chain --no-dead-code --no-lint ."
   },
   "dependencies": {
     "chois-canvas": "file:packages/canvas",
     "lucide-react": "^0.562.0",
+    "mermaid": "^11.16.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
@@ -19,6 +21,9 @@
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.0",
+    "react-doctor": "^0.9.11",
+    "react-grab": "^0.1.50",
+    "react-scan": "^0.5.7",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
