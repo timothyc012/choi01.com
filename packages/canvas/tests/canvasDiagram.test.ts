@@ -1,7 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { diagramTemplate, getInspectorGroups, isDiagramShape } from '../src/react/canvasDiagram.ts';
+import {
+  diagramTemplate,
+  getInspectorGroups,
+  isDiagramShape,
+} from '../src/react/canvasDiagram.ts';
 import type { CanvasShape } from '../src/core/model.ts';
 
 const card = (overrides: Partial<CanvasShape> = {}): CanvasShape => ({
@@ -16,14 +20,21 @@ const card = (overrides: Partial<CanvasShape> = {}): CanvasShape => ({
   ...overrides,
 });
 
-test('recognises diagram cards and exposes compact inspector groups', () => {
+test('recognises diagram cards without changing the canvas shape contract', () => {
   assert.equal(isDiagramShape(card()), true);
   assert.equal(isDiagramShape(card({ category: 'entity' })), false);
+  assert.equal(isDiagramShape({ ...card(), type: 'note' }), false);
+});
+
+test('returns the compact inspector groups relevant to each selection', () => {
   assert.deepEqual(getInspectorGroups(card()), ['color', 'text', 'arrange', 'diagram']);
+  assert.deepEqual(getInspectorGroups({ ...card(), type: 'arrow' }), ['color', 'arrow', 'arrange']);
+  assert.deepEqual(getInspectorGroups({ ...card(), type: 'text', category: undefined }), ['color', 'text', 'arrange']);
 });
 
 test('provides deterministic Mermaid starter templates', () => {
   assert.match(diagramTemplate('flowchart'), /^flowchart TD/m);
   assert.match(diagramTemplate('sequence'), /^sequenceDiagram/m);
   assert.match(diagramTemplate('class'), /^classDiagram/m);
+  assert.equal(diagramTemplate('flowchart'), diagramTemplate('flowchart'));
 });

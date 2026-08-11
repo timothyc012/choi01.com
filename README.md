@@ -27,8 +27,8 @@ upstream first (see its README integration policy).
 ## Vendored chois-canvas
 
 `packages/canvas` is a snapshot of the private `timothyc012/chois-canvas`
-repository, pinned at upstream commit `455d0db` (2026-08-03, "fix(canvas):
-enter edit mode from two quick clicks, not just native dblclick").
+repository, pinned at upstream commit `ff7f17f` (2026-08-11, "feat(canvas):
+port stroke width and highlighter work from choi01.com vendor").
 
 Per the upstream integration policy:
 
