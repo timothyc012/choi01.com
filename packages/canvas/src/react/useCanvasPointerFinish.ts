@@ -21,6 +21,8 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'commit'
   | 'onToolChange'
   | 'createId'
+  | 'pendingDrawPointsRef'
+  | 'drawRafRef'
 >;
 
 /** Binds pointer completion/cancellation and commits the completed gesture. */
@@ -41,6 +43,8 @@ export function useCanvasPointerFinish({
   commit,
   onToolChange,
   createId,
+  pendingDrawPointsRef,
+  drawRafRef,
 }: PointerFinishOptions): void {
   const uid = createId;
   useEffect(() => {
@@ -135,15 +139,19 @@ export function useCanvasPointerFinish({
       if (interaction.kind === 'drawing') {
         // Flush any pending draw points that haven't been rAF-processed yet,
         // so the final stroke segment isn't lost.
-        // (pendingDrawPointsRef is owned by useCanvasPointerMove; the rAF
-        // callback reads it on the next frame, which will fire before paint.)
+        if (drawRafRef.current !== null) {
+          cancelAnimationFrame(drawRafRef.current);
+          drawRafRef.current = null;
+        }
+        const pending = pendingDrawPointsRef.current.splice(0);
         // Collapse the stroke's bbox so hit-testing and marquee select work.
         setShapes(prev => prev.map(s => {
           if (s.id !== interaction.id || !s.points) return s;
-          const xs = s.points.map(pt => pt[0]);
-          const ys = s.points.map(pt => pt[1]);
+          const points = [...s.points, ...pending];
+          const xs = points.map(pt => pt[0]);
+          const ys = points.map(pt => pt[1]);
           const minX = Math.min(...xs), minY = Math.min(...ys);
-          return { ...s, x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
+          return { ...s, points, x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
         }));
         endHistory();
         // Keep the pen active so consecutive strokes can be drawn without

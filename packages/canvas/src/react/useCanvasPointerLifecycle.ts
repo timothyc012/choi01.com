@@ -1,9 +1,13 @@
+import { useRef } from 'react';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
 import { useCanvasPointerFinish } from './useCanvasPointerFinish';
 import { useCanvasPointerMove } from './useCanvasPointerMove';
 
 /** Composes the movement and completion listeners for an active pointer gesture. */
 export function useCanvasPointerLifecycle(options: PointerLifecycleOptions): void {
-  useCanvasPointerMove(options);
-  useCanvasPointerFinish(options);
+  const pendingDrawPointsRef = useRef<[number, number][]>([]);
+  const drawRafRef = useRef<number | null>(null);
+  const lifecycleOptions = { ...options, pendingDrawPointsRef, drawRafRef };
+  useCanvasPointerMove(lifecycleOptions);
+  useCanvasPointerFinish(lifecycleOptions);
 }

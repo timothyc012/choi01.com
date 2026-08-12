@@ -24,4 +24,6 @@ export interface PointerLifecycleOptions {
   expandToGroups: (ids: Set<string>) => Set<string>;
   toPage: (clientX: number, clientY: number) => { x: number; y: number };
   createId: (prefix?: string) => string;
+  pendingDrawPointsRef?: RefObject<[number, number][]>;
+  drawRafRef?: RefObject<number | null>;
 }

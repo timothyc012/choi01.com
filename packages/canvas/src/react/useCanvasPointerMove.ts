@@ -32,6 +32,8 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'selectNow'
   | 'expandToGroups'
   | 'toPage'
+  | 'pendingDrawPointsRef'
+  | 'drawRafRef'
 >;
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
@@ -49,14 +51,14 @@ export function useCanvasPointerMove({
   selectNow,
   expandToGroups,
   toPage,
+  pendingDrawPointsRef,
+  drawRafRef,
 }: PointerMoveOptions): void {
   // Pending drawing points collected between animation frames. Each pointermove
   // pushes into this buffer; a single rAF callback flushes them to setShapes so
   // React re-renders at most once per frame instead of once per raw event.
   // On high-frequency inputs (120 Hz trackpads, coalesced touch events) this
   // prevents dropped points and the choppy stroke they produce.
-  const pendingDrawPointsRef = useRef<[number, number][]>([]);
-  const drawRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
