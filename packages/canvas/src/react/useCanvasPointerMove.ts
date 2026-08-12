@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
 import {
   arrowGeometry,
@@ -50,6 +50,20 @@ export function useCanvasPointerMove({
   expandToGroups,
   toPage,
 }: PointerMoveOptions): void {
+  // Pending drawing points collected between animation frames. Each pointermove
+  // pushes into this buffer; a single rAF callback flushes them to setShapes so
+  // React re-renders at most once per frame instead of once per raw event.
+  // On high-frequency inputs (120 Hz trackpads, coalesced touch events) this
+  // prevents dropped points and the choppy stroke they produce.
+  const pendingDrawPointsRef = useRef<[number, number][]>([]);
+  const drawRafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (drawRafRef.current !== null) cancelAnimationFrame(drawRafRef.current);
+    };
+  }, []);
+
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
       if (pointers.current.has(e.pointerId)) {
@@ -241,17 +255,46 @@ export function useCanvasPointerMove({
       }
 
       if (interaction.kind === 'drawing') {
-        setShapes(prev => prev.map(s => {
-          if (s.id !== interaction.id || !s.points) return s;
-          if (e.shiftKey) {
+        // Shift = straight line from first point to cursor (bypass batching).
+        if (e.shiftKey) {
+          setShapes(prev => prev.map(s => {
+            if (s.id !== interaction.id || !s.points) return s;
             const first = s.points[0];
             return first ? { ...s, points: [first, [p.x, p.y]] } : s;
-          }
-          const last = s.points[s.points.length - 1];
-          // Skip sub-pixel moves so the point list stays manageable.
-          if (Math.hypot(p.x - last[0], p.y - last[1]) < 2 / cam.z) return s;
-          return { ...s, points: [...s.points, [p.x, p.y]] };
-        }));
+          }));
+          return;
+        }
+        // Buffer the point and schedule a single rAF flush. This decouples
+        // point capture from React state updates: raw pointermove fires 120+
+        // times/second on some devices, but setShapes + re-render only needs
+        // to happen once per animation frame. Without batching, fast events
+        // pile up during the render commit and their points are silently
+        // dropped, producing a choppy, disconnected stroke.
+        pendingDrawPointsRef.current.push([p.x, p.y]);
+        if (drawRafRef.current === null) {
+          drawRafRef.current = requestAnimationFrame(() => {
+            drawRafRef.current = null;
+            const pending = pendingDrawPointsRef.current;
+            if (pending.length === 0) return;
+            pendingDrawPointsRef.current = [];
+            const z = cameraRef.current.z;
+            setShapes(prev => prev.map(s => {
+              if (s.id !== interaction.id || !s.points) return s;
+              let lx = s.points[s.points.length - 1][0];
+              let ly = s.points[s.points.length - 1][1];
+              const merged = [...s.points];
+              for (const [px, py] of pending) {
+                // tldraw-inspired: if the new point is within 1px (screen space)
+                // of the last recorded point, merge instead of append. This
+                // keeps the point list short without creating visible gaps.
+                if (Math.hypot(px - lx, py - ly) < 1 / z) continue;
+                merged.push([px, py]);
+                lx = px; ly = py;
+              }
+              return merged.length === s.points.length ? s : { ...s, points: merged };
+            }));
+          });
+        }
         return;
       }
 

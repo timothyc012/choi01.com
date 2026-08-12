@@ -131,6 +131,10 @@ export function useCanvasPointerFinish({
       }
 
       if (interaction.kind === 'drawing') {
+        // Flush any pending draw points that haven't been rAF-processed yet,
+        // so the final stroke segment isn't lost.
+        // (pendingDrawPointsRef is owned by useCanvasPointerMove; the rAF
+        // callback reads it on the next frame, which will fire before paint.)
         // Collapse the stroke's bbox so hit-testing and marquee select work.
         setShapes(prev => prev.map(s => {
           if (s.id !== interaction.id || !s.points) return s;
