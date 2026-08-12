@@ -143,11 +143,23 @@ export function useCanvasPointerFinish({
           cancelAnimationFrame(drawRafRef.current);
           drawRafRef.current = null;
         }
+        // pointerup is also a sample. On fast strokes the last pointermove can
+        // be older than the release position, so include the final coordinate
+        // before committing the stroke.
+        const finalPoint = toPage(e.clientX, e.clientY);
+        pendingDrawPointsRef.current.push([finalPoint.x, finalPoint.y]);
         const pending = pendingDrawPointsRef.current.splice(0);
         // Collapse the stroke's bbox so hit-testing and marquee select work.
         setShapes(prev => prev.map(s => {
           if (s.id !== interaction.id || !s.points) return s;
-          const points = [...s.points, ...pending];
+          const points = [...s.points];
+          let last = points[points.length - 1];
+          for (const point of pending) {
+            if (!last || Math.hypot(point[0] - last[0], point[1] - last[1]) >= 1 / cameraRef.current.z) {
+              points.push(point);
+              last = point;
+            }
+          }
           const xs = points.map(pt => pt[0]);
           const ys = points.map(pt => pt[1]);
           const minX = Math.min(...xs), minY = Math.min(...ys);

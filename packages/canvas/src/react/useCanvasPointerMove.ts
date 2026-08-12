@@ -266,13 +266,25 @@ export function useCanvasPointerMove({
           }));
           return;
         }
-        // Buffer the point and schedule a single rAF flush. This decouples
-        // point capture from React state updates: raw pointermove fires 120+
-        // times/second on some devices, but setShapes + re-render only needs
-        // to happen once per animation frame. Without batching, fast events
-        // pile up during the render commit and their points are silently
-        // dropped, producing a choppy, disconnected stroke.
+        // Preserve every hardware sample, not only the dispatch point. Browsers
+        // may coalesce several stylus/touch samples into one pointermove while
+        // React/SVG is rendering. tldraw consumes these coalesced samples before
+        // batching the document update; otherwise fast strokes develop gaps.
+        const samples = typeof e.getCoalescedEvents === 'function'
+          ? e.getCoalescedEvents()
+          : [];
+        if (samples.length > 0) {
+          for (const sample of samples) {
+            const samplePoint = toPage(sample.clientX, sample.clientY);
+            pendingDrawPointsRef.current.push([samplePoint.x, samplePoint.y]);
+          }
+        }
+        // getCoalescedEvents() may contain only the samples preceding the
+        // dispatched event. Always append the current event as tldraw does;
+        // the flush's distance filter removes an exact duplicate cheaply.
         pendingDrawPointsRef.current.push([p.x, p.y]);
+        // Schedule one React update per frame. Input capture stays synchronous;
+        // rendering is the part that is allowed to batch.
         if (drawRafRef.current === null) {
           drawRafRef.current = requestAnimationFrame(() => {
             drawRafRef.current = null;
