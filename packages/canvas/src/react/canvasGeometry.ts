@@ -106,7 +106,17 @@ export function hitTest(
     return false;
   }
   if (s.type === 'draw' && s.points) {
-    const edgeThreshold = (s.strokeWidth ?? 3) / zoom / 2 + slop;
+    // perfect-freehand renders a filled polygon whose width ≈ size (strokeWidth).
+    // For highlighter the visual width is 2.5× strokeWidth. Account for that
+    // so clicking anywhere on the visible ink registers as a hit.
+    const drawMode = s.drawMode ?? 'pen';
+    const visualWidth = drawMode === 'highlighter' ? (s.strokeWidth ?? 3) * 2.5 : (s.strokeWidth ?? 3);
+    const edgeThreshold = visualWidth / zoom / 2 + slop;
+    // Single-point dot: test as a small circle around the point.
+    if (s.points.length === 1) {
+      const [x, y] = s.points[0];
+      return Math.hypot(px - x, py - y) <= edgeThreshold;
+    }
     for (let i = 1; i < s.points.length; i++) {
       const [ax, ay] = s.points[i - 1];
       const [bx, by] = s.points[i];

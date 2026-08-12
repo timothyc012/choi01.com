@@ -119,6 +119,14 @@ export function useCanvasPointerDown({
     const activeTool = toolRef.current;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
+    // Prevent the browser from starting a native drag of toolbar buttons,
+    // text selections, or images when the pointer leaves the canvas mid-stroke.
+    if (e.cancelable) e.preventDefault();
+    // Capture the pointer so pointermove/pointerup keep firing on this element
+    // even if the cursor leaves the canvas bounds during a fast stroke.
+    const target = e.currentTarget as HTMLElement;
+    try { target.setPointerCapture(e.pointerId); } catch { /* not all elements support it */ }
+
     // Second finger down promotes the gesture to a pinch, so touch devices get
     // zoom without a keyboard modifier.
     if (pointers.current.size === 2) {

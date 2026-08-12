@@ -79,6 +79,13 @@ export function freehandOutlinePath(
   mode: 'pen' | 'highlighter',
 ): string {
   if (points.length === 0) return '';
+  // Single-point "dot": draw a small filled circle so a tap leaves a visible mark.
+  // perfect-freehand returns an empty outline for a single point.
+  if (points.length === 1) {
+    const [x, y] = points[0];
+    const r = (mode === 'highlighter' ? strokeWidth * 1.25 : strokeWidth / 2);
+    return `M ${x - r} ${y} A ${r} ${r} 0 1 0 ${x + r} ${y} A ${r} ${r} 0 1 0 ${x - r} ${y} Z`;
+  }
   const opts = mode === 'highlighter'
     ? { size: strokeWidth * 2.5, thinning: 0, smoothing: 0.5, streamline: 0.5, last: true }
     : { size: strokeWidth, thinning: 0.5, smoothing: 0.62, streamline: 0.62, last: true };

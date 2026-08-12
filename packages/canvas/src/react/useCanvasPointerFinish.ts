@@ -46,6 +46,8 @@ export function useCanvasPointerFinish({
   useEffect(() => {
     const finish = (e: PointerEvent) => {
       pointers.current.delete(e.pointerId);
+      // Release pointer capture so the element doesn't keep exclusive capture.
+      try { (e.target as HTMLElement)?.releasePointerCapture?.(e.pointerId); } catch { /* noop */ }
       const interaction = interactionRef.current;
       if (interaction.kind === 'none') return;
 
