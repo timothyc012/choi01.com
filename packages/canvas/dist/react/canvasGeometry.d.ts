@@ -2,7 +2,7 @@ import type { CanvasShape } from './InfiniteCanvas';
 import type { BoundingBox, EdgeSide, OrthogonalPoint } from './canvasRouting';
 export type { BoundingBox, EdgeSide, OrthogonalPoint } from './canvasRouting';
 export { orthogonalEndAngle, orthogonalPathPoints, pathMidpoint, segmentAngle, toPath } from './canvasRouting';
-export { effectiveFill, effectiveBorder, effectiveText, polygonPoints, strokePath, escapeHtml, htmlToLines, shapeHtml, safeAssetUrl, sanitizeShapeForCanvas, shapePlainText, } from './canvasShapeStyle';
+export { effectiveFill, effectiveBorder, effectiveText, polygonPoints, strokePath, freehandOutlinePath, escapeHtml, htmlToLines, shapeHtml, safeAssetUrl, sanitizeShapeForCanvas, shapePlainText, } from './canvasShapeStyle';
 export interface SnapResult {
     dx: number;
     dy: number;

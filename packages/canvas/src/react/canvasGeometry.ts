@@ -9,6 +9,7 @@ export {
   effectiveText,
   polygonPoints,
   strokePath,
+  freehandOutlinePath,
   escapeHtml,
   htmlToLines,
   shapeHtml,

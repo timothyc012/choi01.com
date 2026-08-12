@@ -48,6 +48,10 @@ export function polygonPoints(type: CanvasShapeType, w: number, h: number): stri
   }
 }
 
+/**
+ * Build a smooth SVG path from raw freehand points using quadratic Bézier
+ * through midpoints. Used for export and as a fallback.
+ */
 export function strokePath(points: [number, number][]): string {
   if (points.length === 0) return '';
   if (points.length === 1) return `M ${points[0][0]} ${points[0][1]} L ${points[0][0] + 0.1} ${points[0][1]}`;
@@ -58,6 +62,32 @@ export function strokePath(points: [number, number][]): string {
   }
   const last = points[points.length - 1];
   return `${d} L ${last[0]} ${last[1]}`;
+}
+
+/**
+ * Build a filled SVG outline path using perfect-freehand. This produces a
+ * variable-width, pressure-sensitive stroke outline (polygon) that looks
+ * like a natural pen stroke — thick on slow curves, thin on fast flicks.
+ *
+ * The caller fills (not strokes) the resulting path.
+ */
+import getStroke from 'perfect-freehand';
+
+export function freehandOutlinePath(
+  points: [number, number][],
+  strokeWidth: number,
+  mode: 'pen' | 'highlighter',
+): string {
+  if (points.length === 0) return '';
+  const opts = mode === 'highlighter'
+    ? { size: strokeWidth * 2.5, thinning: 0, smoothing: 0.5, streamline: 0.5, last: true }
+    : { size: strokeWidth, thinning: 0.5, smoothing: 0.62, streamline: 0.62, last: true };
+  const outline = getStroke(points, opts);
+  if (outline.length === 0) return '';
+  return outline.reduce(
+    (d, [x, y], i) => d + (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`),
+    '',
+  ) + ' Z';
 }
 
 export function escapeHtml(s: string): string {

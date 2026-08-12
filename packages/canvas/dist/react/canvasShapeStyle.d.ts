@@ -4,7 +4,12 @@ export declare function effectiveFill(s: CanvasShape): string;
 export declare function effectiveBorder(s: CanvasShape): string;
 export declare function effectiveText(s: CanvasShape): string;
 export declare function polygonPoints(type: CanvasShapeType, w: number, h: number): string;
+/**
+ * Build a smooth SVG path from raw freehand points using quadratic Bézier
+ * through midpoints. Used for export and as a fallback.
+ */
 export declare function strokePath(points: [number, number][]): string;
+export declare function freehandOutlinePath(points: [number, number][], strokeWidth: number, mode: 'pen' | 'highlighter'): string;
 export declare function escapeHtml(s: string): string;
 type TextRun = {
     text: string;

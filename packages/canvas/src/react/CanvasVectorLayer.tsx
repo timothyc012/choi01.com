@@ -8,6 +8,7 @@ import {
   edgePoint,
   strokePath,
 } from './canvasGeometry';
+import { freehandOutlinePath } from './canvasShapeStyle';
 import { orthogonalEndAngle, orthogonalPathPoints, segmentAngle, toPath } from './canvasRouting';
 import { CANVAS_UI_COLORS } from './theme';
 
@@ -44,6 +45,13 @@ export function CanvasVectorLayer({
           if (s.type === 'draw' && s.points) {
             const drawMode = s.drawMode ?? 'pen';
             const documentStrokeWidth = s.strokeWidth ?? 3;
+            const color = selected.has(s.id) ? CANVAS_UI_COLORS.blue : strokeColorOf(s);
+            // perfect-freehand produces a filled polygon outline that gives
+            // variable-width, natural-looking strokes (thick on slow curves,
+            // thin on fast flicks). Fall back to simple stroke for single points.
+            const outlineD = s.points.length >= 2
+              ? freehandOutlinePath(s.points, documentStrokeWidth, drawMode)
+              : '';
             return (
               <path
                 key={s.id}
@@ -51,11 +59,12 @@ export function CanvasVectorLayer({
                 data-canvas-vector-shape-type="draw"
                 data-canvas-draw-mode={drawMode}
                 data-canvas-stroke-width={documentStrokeWidth}
-                d={strokePath(s.points)}
-                fill="none"
-                stroke={selected.has(s.id) ? CANVAS_UI_COLORS.blue : strokeColorOf(s)}
+                d={outlineD || strokePath(s.points)}
+                fill={outlineD ? color : 'none'}
+                stroke={outlineD ? 'none' : color}
                 strokeWidth={documentStrokeWidth / camera.z}
                 strokeOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
+                fillOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
