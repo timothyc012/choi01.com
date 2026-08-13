@@ -168,6 +168,7 @@ export interface InfiniteCanvasHandle {
   addImage: (src: string, fileName: string, w: number, h: number) => void;
   addFileCard: (fileName: string, src: string, label: string) => void;
   updateShapeText: (id: string, text: string) => void;
+  setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
   setTool: (tool: CoreCanvasTool) => void;
   undo: () => void;
   redo: () => void;
@@ -289,6 +290,12 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     toPage,
   });
 
+  const setSelectedStrokeWidth = React.useCallback((strokeWidth: CanvasStrokeWidth) => {
+    const targetIds = new Set(selectedRef.current);
+    if (targetIds.size === 0) return;
+    commit(prev => applySelectedStrokeWidth(prev, targetIds, strokeWidth));
+  }, [commit, selectedRef]);
+
   const {
     onPointerDown,
     onResizeHandleDown,
@@ -308,6 +315,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     toolRef,
     activeColorRef,
     drawStrokeWidth,
+    setSelectedStrokeWidth,
     camera,
     shapes,
     selected,

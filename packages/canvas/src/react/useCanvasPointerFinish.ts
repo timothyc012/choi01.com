@@ -21,9 +21,7 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'commit'
   | 'onToolChange'
   | 'createId'
-  | 'pendingDrawPointsRef'
-  | 'drawRafRef'
->;
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer completion/cancellation and commits the completed gesture. */
 export function useCanvasPointerFinish({

@@ -386,7 +386,8 @@ export const GuestCanvasPage: React.FC = () => {
                     type="button"
                     onClick={() => {
                       setDrawStrokeWidth(width);
-                      setShowStrokeWidths(true);
+                      canvasRef.current?.setSelectedStrokeWidth(width);
+                      setShowStrokeWidths(false);
                     }}
                     className={`gc-tool${drawStrokeWidth === width ? ' is-active' : ''}`}
                     title={`굵기 ${width}`}

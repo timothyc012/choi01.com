@@ -1,6 +1,6 @@
 import { useCallback, useImperativeHandle } from 'react';
 import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
-import type { CanvasTool } from '../core/index.ts';
+import type { CanvasStrokeWidth, CanvasTool } from '../core/index.ts';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
 import { bounds, sanitizeShapeForCanvas } from './canvasGeometry';
 import { buildCanvasSvg, exportCanvasPng } from './canvasExport';
@@ -23,6 +23,7 @@ interface UseCanvasImperativeHandleOptions {
   minZoom: number;
   maxZoom: number;
   onToolChange: (tool: CanvasTool) => void;
+  setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
   onDirty: () => void;
   commit: (next: ShapeUpdater) => void;
   deleteSelection: (selection: Set<string>) => boolean;
@@ -49,6 +50,7 @@ export function useCanvasImperativeHandle({
   minZoom,
   maxZoom,
   onToolChange,
+  setSelectedStrokeWidth,
   onDirty,
   commit,
   deleteSelection,
@@ -117,6 +119,7 @@ export function useCanvasImperativeHandle({
     updateShapeText: (id, text) => {
       commit(prev => prev.map(shape => shape.id === id ? { ...shape, text, html: undefined } : shape));
     },
+    setSelectedStrokeWidth,
     setTool: onToolChange,
     undo: () => {
       const prev = past.current.pop();
@@ -248,7 +251,7 @@ export function useCanvasImperativeHandle({
     }),
   }), [
     addAtCentre, buildSvg, commit, createId, deleteSelection, isDarkMode, maxZoom, minZoom, onDirty,
-    onToolChange, selectNow, setCamera, setEditingId, setLocalShapes, setShapes,
+    onToolChange, selectNow, setCamera, setEditingId, setLocalShapes, setSelectedStrokeWidth, setShapes,
     setAnnouncement, viewportCentre, controlled,
   ]);
 }

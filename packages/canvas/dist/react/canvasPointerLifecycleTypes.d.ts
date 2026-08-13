@@ -29,5 +29,7 @@ export interface PointerLifecycleOptions {
         y: number;
     };
     createId: (prefix?: string) => string;
+    pendingDrawPointsRef?: RefObject<[number, number][]>;
+    drawRafRef?: RefObject<number | null>;
 }
 //# sourceMappingURL=canvasPointerLifecycleTypes.d.ts.map

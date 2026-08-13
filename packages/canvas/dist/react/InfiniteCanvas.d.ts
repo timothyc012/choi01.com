@@ -63,6 +63,7 @@ export interface InfiniteCanvasHandle {
     addImage: (src: string, fileName: string, w: number, h: number) => void;
     addFileCard: (fileName: string, src: string, label: string) => void;
     updateShapeText: (id: string, text: string) => void;
+    setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
     setTool: (tool: CoreCanvasTool) => void;
     undo: () => void;
     redo: () => void;

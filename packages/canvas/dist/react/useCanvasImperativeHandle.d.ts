@@ -1,5 +1,5 @@
 import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
-import type { CanvasTool } from '../core/index.js';
+import type { CanvasStrokeWidth, CanvasTool } from '../core/index.js';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
 type Camera = CanvasSnapshot['camera'];
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
@@ -16,6 +16,7 @@ interface UseCanvasImperativeHandleOptions {
     minZoom: number;
     maxZoom: number;
     onToolChange: (tool: CanvasTool) => void;
+    setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
     onDirty: () => void;
     commit: (next: ShapeUpdater) => void;
     deleteSelection: (selection: Set<string>) => boolean;
@@ -31,6 +32,6 @@ interface UseCanvasImperativeHandleOptions {
     setAnnouncement: Dispatch<SetStateAction<string>>;
     createId: (prefix?: string) => string;
 }
-export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, selectedRef, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, onDirty, commit, deleteSelection, selectNow, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
+export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, selectedRef, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, deleteSelection, selectNow, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
 export {};
 //# sourceMappingURL=useCanvasImperativeHandle.d.ts.map

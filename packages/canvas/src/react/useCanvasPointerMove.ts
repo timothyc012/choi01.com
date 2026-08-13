@@ -32,9 +32,7 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'selectNow'
   | 'expandToGroups'
   | 'toPage'
-  | 'pendingDrawPointsRef'
-  | 'drawRafRef'
->;
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
 export function useCanvasPointerMove({
