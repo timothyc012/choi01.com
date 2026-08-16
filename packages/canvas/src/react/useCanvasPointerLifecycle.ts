@@ -7,7 +7,8 @@ import { useCanvasPointerMove } from './useCanvasPointerMove';
 export function useCanvasPointerLifecycle(options: PointerLifecycleOptions): void {
   const pendingDrawPointsRef = useRef<[number, number][]>([]);
   const drawRafRef = useRef<number | null>(null);
-  const lifecycleOptions = { ...options, pendingDrawPointsRef, drawRafRef };
+  const rawDrawPointerIdsRef = useRef(new Set<number>());
+  const lifecycleOptions = { ...options, pendingDrawPointsRef, drawRafRef, rawDrawPointerIdsRef };
   useCanvasPointerMove(lifecycleOptions);
   useCanvasPointerFinish(lifecycleOptions);
 }

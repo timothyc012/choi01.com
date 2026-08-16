@@ -141,6 +141,7 @@ export interface CanvasShapeBase {
   readonly textAlign?: CanvasTextAlign;
   readonly manualSize?: boolean;
   readonly fillColor?: string;
+  readonly strokeColor?: string;
   readonly textColor?: string;
   readonly strokeStyle?: 'solid' | 'dashed' | 'dotted';
 }
@@ -208,13 +209,13 @@ export interface CanvasSelectionInfo {
 }
 
 export const CANVAS_FONTS = {
-  sans: { label: '고딕', stack: '"Inter", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, sans-serif' },
-  serif: { label: '명조', stack: '"Noto Serif KR", "Noto Serif", "Malgun Gothic", Batang, "Times New Roman", serif' },
-  mono: { label: '모노', stack: '"JetBrains Mono", "D2Coding", "Consolas", "Courier New", ui-monospace, monospace' },
-  gothic: { label: 'Gothic', stack: '"Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "Pretendard", "Nanum Gothic", "Gulim", sans-serif' },
-  korean: { label: 'Korean', stack: '"Noto Serif KR", "Noto Serif", "Batang", "Gungsuh", "GungsuhChe", serif' },
-  chosunmyjo: { label: '조선일보명조', stack: '"조선일보명조", "Noto Serif KR", "Noto Serif", "NanumMyeongjo", serif' },
-  hdhyundai: { label: 'HD현대체', stack: '"HD현대체", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif' },
+  sans: { label: '고딕', stack: 'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif' },
+  serif: { label: '명조', stack: 'ui-serif, "AppleMyungjo", "Noto Serif KR", "Noto Serif", "Batang", "Times New Roman", serif' },
+  mono: { label: '모노', stack: 'ui-monospace, "SFMono-Regular", "JetBrains Mono", "D2Coding", "Consolas", "Courier New", monospace' },
+  gothic: { label: 'Gothic', stack: '"Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Pretendard", "Nanum Gothic", "Gulim", ui-sans-serif, sans-serif' },
+  korean: { label: 'Korean', stack: '"AppleMyungjo", "Noto Serif KR", "Noto Serif", "Batang", "Gungsuh", "GungsuhChe", ui-serif, serif' },
+  chosunmyjo: { label: '조선일보명조', stack: '"조선일보명조", "AppleMyungjo", "Noto Serif KR", "Noto Serif", "NanumMyeongjo", ui-serif, serif' },
+  hdhyundai: { label: 'HD현대체', stack: '"HD현대체", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", ui-sans-serif, sans-serif' },
   custom: { label: '직접입력', stack: 'sans-serif' },
 } as const satisfies Record<CanvasFontKey, { readonly label: string; readonly stack: string }>;
 

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Italic, List, ListOrdered, Minus, Palette, Plus, Underline } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Italic, List, ListOrdered, Minus, Plus, Underline } from 'lucide-react';
 import { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS } from '../core/index.ts';
 import type { CanvasColorKey, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
@@ -8,6 +8,7 @@ import { pathMidpoint } from './canvasRouting';
 import { CANVAS_FONT_KEYS, canvasFontFromValue, fontSizeForShape, textAlignForShape } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
 import { getInspectorGroups, type InspectorGroup } from './canvasDiagram';
+import { CanvasColorWheel, colorToHex } from './CanvasColorWheel';
 
 interface Camera { x: number; y: number; z: number }
 interface CanvasInspectorProps {
@@ -28,6 +29,7 @@ interface CanvasInspectorProps {
 }
 
 const STROKE_WIDTHS = [2, 4, 6, 8] as const satisfies readonly CanvasStrokeWidth[];
+type ColorTarget = 'fill' | 'stroke' | 'text';
 
 function supportsStrokeWidth(shape: CanvasShape): boolean {
   switch (shape.type) {
@@ -77,6 +79,16 @@ function assertNeverShape(shape: never): never {
   throw new Error(`Unhandled canvas shape: ${String(shape)}.`);
 }
 
+function supportsFillColor(shape: CanvasShape): boolean {
+  return shape.type === 'note' || shape.type === 'card' || shape.type === 'rect' || shape.type === 'ellipse'
+    || shape.type === 'triangle' || shape.type === 'diamond' || shape.type === 'hexagon' || shape.type === 'star';
+}
+
+function supportsStrokeColor(shape: CanvasShape): boolean {
+  return shape.type === 'draw' || shape.type === 'arrow' || shape.type === 'frame' || shape.type === 'rect'
+    || shape.type === 'ellipse' || shape.type === 'triangle' || shape.type === 'diamond' || shape.type === 'hexagon' || shape.type === 'star';
+}
+
 /** Selection inspector kept separate from the canvas scene for package reuse. */
 export function CanvasInspector({
   shape: s, shapes, camera, canvasSize, isDarkMode, editing, showPalette,
@@ -85,9 +97,31 @@ export function CanvasInspector({
 }: CanvasInspectorProps) {
   const btn = isDarkMode ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100';
   const isDraw = s.type === 'draw';
-  const swatchColor = isDraw
-    ? (s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink)
-    : effectiveText(s);
+  const defaultColorTarget: ColorTarget = isDraw || (supportsStrokeColor(s) && !supportsFillColor(s))
+    ? 'stroke'
+    : supportsFillColor(s) ? 'fill' : 'text';
+  const [colorTarget, setColorTarget] = useState<ColorTarget>(defaultColorTarget);
+  const [hexValue, setHexValue] = useState('');
+  useLayoutEffect(() => setColorTarget(defaultColorTarget), [defaultColorTarget, s.id]);
+  const colorValue = colorTarget === 'text'
+    ? effectiveText(s)
+    : colorTarget === 'stroke'
+      ? (s.strokeColor ?? (s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink))
+      : effectiveFill(s);
+  useLayoutEffect(() => setHexValue(colorToHex(colorValue).toUpperCase()), [colorValue]);
+  const swatchColor = colorToHex(colorValue);
+  const applyCustomColor = (value: string) => {
+    if (isDraw || colorTarget === 'stroke') patchSelected({ strokeColor: value });
+    else if (colorTarget === 'text') patchSelected({ textColor: value });
+    else patchSelected({ fillColor: value });
+  };
+  const applyPresetColor = (key: CanvasColorKey) => {
+    setActiveColor(key);
+    if (isDraw || colorTarget === 'stroke') patchSelected({ color: key, strokeColor: undefined });
+    else if (colorTarget === 'text') patchSelected({ textColor: CANVAS_COLORS[key].text });
+    else patchSelected({ color: key, fillColor: undefined });
+    setShowPalette(false);
+  };
   // The inspector wraps on narrow canvases and when the list/arrow controls
   // are visible. Measure the rendered panel instead of using a desktop-only
   // height estimate; stale geometry was allowing the panel to overlap the
@@ -181,10 +215,37 @@ export function CanvasInspector({
       </div>
       <div className="relative flex items-center gap-1.5 pointer-events-none" style={{ display: openGroup === 'color' || isDraw ? undefined : 'none' }}>
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">{isDraw ? '그리기' : '색상'}</span>
-        <button type="button" title={isDraw ? '그리기 색상 팔레트' : '색상 팔레트'} aria-label={isDraw ? '그리기 색상' : '도형 색상'} onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}><Palette className="w-4 h-4" style={{ color: swatchColor }} /></button>
-        {showPalette && <div className={`pointer-events-auto absolute left-0 top-10 z-50 flex items-center gap-1.5 p-2 rounded-xl border shadow-xl ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
-          {CANVAS_COLOR_KEYS.map(key => <button key={key} type="button" title={CANVAS_COLORS[key].label} aria-label={`색 ${CANVAS_COLORS[key].label}`} onClick={() => { setActiveColor(key); patchSelected({ color: key, fillColor: undefined }); setShowPalette(false); }} className="w-5 h-5 rounded-full border" style={{ background: CANVAS_COLORS[key].bg, borderColor: CANVAS_COLORS[key].border, outline: s.color === key && !s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }} />)}
-          {!isDraw && <label title="배경 색 (자유 선택)" className="w-5 h-5 rounded-full border relative overflow-hidden cursor-pointer flex items-center justify-center" style={{ background: s.fillColor ?? effectiveFill(s), outline: s.fillColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }}><input type="color" value={s.fillColor ?? effectiveFill(s)} onChange={event => { patchSelected({ fillColor: event.target.value }); setShowPalette(false); }} className="absolute inset-0 opacity-0 cursor-pointer" /></label>}
+        <button type="button" title={isDraw ? '그리기 무지개 컬러휠' : '무지개 컬러휠'} aria-label={isDraw ? '그리기 무지개 컬러휠' : '무지개 컬러휠'} onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}>
+          <span className="canvas-color-wheel-trigger" aria-hidden="true"><span className="canvas-color-wheel-trigger-dot" style={{ background: swatchColor }} /></span>
+        </button>
+        {showPalette && <div data-canvas-color-popover className={`pointer-events-auto absolute left-0 top-10 z-50 flex flex-col gap-2 p-2.5 rounded-xl border shadow-xl ${isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'}`}>
+          {!isDraw && <div className="canvas-color-targets" role="tablist" aria-label="세부 색상 대상">
+            {supportsFillColor(s) && <button type="button" role="tab" aria-selected={colorTarget === 'fill'} onClick={() => setColorTarget('fill')} className={colorTarget === 'fill' ? 'is-active' : ''}>배경</button>}
+            {supportsStrokeColor(s) && <button type="button" role="tab" aria-selected={colorTarget === 'stroke'} onClick={() => setColorTarget('stroke')} className={colorTarget === 'stroke' ? 'is-active' : ''}>선</button>}
+            <button type="button" role="tab" aria-selected={colorTarget === 'text'} onClick={() => setColorTarget('text')} className={colorTarget === 'text' ? 'is-active' : ''}>글씨</button>
+          </div>}
+          <div className="canvas-color-presets" aria-label="기본 색상">
+            {CANVAS_COLOR_KEYS.map(key => <button key={key} type="button" title={CANVAS_COLORS[key].label} aria-label={`색 ${CANVAS_COLORS[key].label}`} onClick={() => applyPresetColor(key)} className="canvas-color-preset" style={{ background: CANVAS_COLORS[key].bg, borderColor: CANVAS_COLORS[key].border, outline: s.color === key && !s.fillColor && !s.strokeColor ? `2px solid ${CANVAS_UI_COLORS.blue}` : undefined, outlineOffset: 1 }} />)}
+          </div>
+          <CanvasColorWheel value={colorValue} onChange={applyCustomColor} />
+          <label className="canvas-color-hex">
+            <span>#</span>
+            <input
+              data-canvas-control="color-hex"
+              type="text"
+              inputMode="text"
+              aria-label="HEX 색상"
+              value={hexValue.replace(/^#/, '')}
+              onChange={event => {
+                const next = event.currentTarget.value.replace(/[^0-9a-f]/gi, '').slice(0, 6);
+                setHexValue(`#${next}`.toUpperCase());
+                if (next.length === 6) applyCustomColor(`#${next}`);
+              }}
+              onBlur={() => setHexValue(colorToHex(colorValue).toUpperCase())}
+              onPointerDown={event => event.stopPropagation()}
+              className="canvas-color-hex-input"
+            />
+          </label>
         </div>}
       </div>
       {openGroup !== 'color' && !isDraw && <>

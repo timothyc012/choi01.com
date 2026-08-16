@@ -5,6 +5,7 @@ import {
 import type { CanvasShape } from './InfiniteCanvas';
 import type { Interaction } from './canvasPointerTypes';
 import { CANVAS_UI_COLORS } from './theme';
+import { effectiveStroke } from './canvasGeometry';
 
 interface CanvasRenderConfigOptions {
   isDarkMode: boolean;
@@ -32,6 +33,6 @@ export function getCanvasRenderConfig({
   const gridSize = 40 * zoom;
   /** Strokes and arrows use the saturated edge of the palette entry. */
   const strokeColorOf = (s: CanvasShape) =>
-    s.color ? CANVAS_COLORS[s.color].border : (isDarkMode ? 'var(--canvas-slate-200)' : CANVAS_UI_COLORS.ink);
+    s.strokeColor ? effectiveStroke(s) : s.color ? CANVAS_COLORS[s.color].border : (isDarkMode ? 'var(--canvas-slate-200)' : CANVAS_UI_COLORS.ink);
   return { cursor, gridColor, gridSize, strokeColorOf };
 }

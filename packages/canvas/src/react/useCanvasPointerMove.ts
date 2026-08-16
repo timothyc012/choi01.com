@@ -32,7 +32,7 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'selectNow'
   | 'expandToGroups'
   | 'toPage'
-> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef' | 'rawDrawPointerIdsRef'>>;
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
 export function useCanvasPointerMove({
@@ -51,6 +51,7 @@ export function useCanvasPointerMove({
   toPage,
   pendingDrawPointsRef,
   drawRafRef,
+  rawDrawPointerIdsRef,
 }: PointerMoveOptions): void {
   // Pending drawing points collected between animation frames. Each pointermove
   // pushes into this buffer; a single rAF callback flushes them to setShapes so
@@ -62,9 +63,57 @@ export function useCanvasPointerMove({
     return () => {
       if (drawRafRef.current !== null) cancelAnimationFrame(drawRafRef.current);
     };
-  }, []);
+  }, [drawRafRef]);
 
   useEffect(() => {
+    const captureDrawingSamples = (e: PointerEvent, drawingId: string) => {
+      const p = toPage(e.clientX, e.clientY);
+      // Shift = straight line from first point to cursor (bypass batching).
+      if (e.shiftKey) {
+        setShapes(prev => prev.map(s => {
+          if (s.id !== drawingId || !s.points) return s;
+          const first = s.points[0];
+          return first ? { ...s, points: [first, [p.x, p.y]] } : s;
+        }));
+        return;
+      }
+
+      const samples = typeof e.getCoalescedEvents === 'function'
+        ? e.getCoalescedEvents()
+        : [];
+      if (samples.length > 0) {
+        for (const sample of samples) {
+          const samplePoint = toPage(sample.clientX, sample.clientY);
+          pendingDrawPointsRef.current.push([samplePoint.x, samplePoint.y]);
+        }
+      }
+      // Some engines omit the dispatch point from the coalesced list. The
+      // distance filter below removes it cheaply when it is already present.
+      pendingDrawPointsRef.current.push([p.x, p.y]);
+
+      if (drawRafRef.current !== null) return;
+      drawRafRef.current = requestAnimationFrame(() => {
+        drawRafRef.current = null;
+        const pending = pendingDrawPointsRef.current;
+        if (pending.length === 0) return;
+        pendingDrawPointsRef.current = [];
+        const z = cameraRef.current.z;
+        setShapes(prev => prev.map(s => {
+          if (s.id !== drawingId || !s.points) return s;
+          let lx = s.points[s.points.length - 1][0];
+          let ly = s.points[s.points.length - 1][1];
+          const merged = [...s.points];
+          for (const [px, py] of pending) {
+            if (Math.hypot(px - lx, py - ly) < 1 / z) continue;
+            merged.push([px, py]);
+            lx = px;
+            ly = py;
+          }
+          return merged.length === s.points.length ? s : { ...s, points: merged };
+        }));
+      });
+    };
+
     const onMove = (e: PointerEvent) => {
       if (pointers.current.has(e.pointerId)) {
         pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -255,57 +304,11 @@ export function useCanvasPointerMove({
       }
 
       if (interaction.kind === 'drawing') {
-        // Shift = straight line from first point to cursor (bypass batching).
-        if (e.shiftKey) {
-          setShapes(prev => prev.map(s => {
-            if (s.id !== interaction.id || !s.points) return s;
-            const first = s.points[0];
-            return first ? { ...s, points: [first, [p.x, p.y]] } : s;
-          }));
-          return;
-        }
-        // Preserve every hardware sample, not only the dispatch point. Browsers
-        // may coalesce several stylus/touch samples into one pointermove while
-        // React/SVG is rendering. tldraw consumes these coalesced samples before
-        // batching the document update; otherwise fast strokes develop gaps.
-        const samples = typeof e.getCoalescedEvents === 'function'
-          ? e.getCoalescedEvents()
-          : [];
-        if (samples.length > 0) {
-          for (const sample of samples) {
-            const samplePoint = toPage(sample.clientX, sample.clientY);
-            pendingDrawPointsRef.current.push([samplePoint.x, samplePoint.y]);
-          }
-        }
-        // getCoalescedEvents() may contain only the samples preceding the
-        // dispatched event. Always append the current event as tldraw does;
-        // the flush's distance filter removes an exact duplicate cheaply.
-        pendingDrawPointsRef.current.push([p.x, p.y]);
-        // Schedule one React update per frame. Input capture stays synchronous;
-        // rendering is the part that is allowed to batch.
-        if (drawRafRef.current === null) {
-          drawRafRef.current = requestAnimationFrame(() => {
-            drawRafRef.current = null;
-            const pending = pendingDrawPointsRef.current;
-            if (pending.length === 0) return;
-            pendingDrawPointsRef.current = [];
-            const z = cameraRef.current.z;
-            setShapes(prev => prev.map(s => {
-              if (s.id !== interaction.id || !s.points) return s;
-              let lx = s.points[s.points.length - 1][0];
-              let ly = s.points[s.points.length - 1][1];
-              const merged = [...s.points];
-              for (const [px, py] of pending) {
-                // tldraw-inspired: if the new point is within 1px (screen space)
-                // of the last recorded point, merge instead of append. This
-                // keeps the point list short without creating visible gaps.
-                if (Math.hypot(px - lx, py - ly) < 1 / z) continue;
-                merged.push([px, py]);
-                lx = px; ly = py;
-              }
-              return merged.length === s.points.length ? s : { ...s, points: merged };
-            }));
-          });
+        // Once this pointer has a raw stream, its later pointermove contains
+        // the same samples again. Process one stream only so the stroke never
+        // doubles back through duplicated points.
+        if (!rawDrawPointerIdsRef.current.has(e.pointerId)) {
+          captureDrawingSamples(e, interaction.id);
         }
         return;
       }
@@ -345,7 +348,40 @@ export function useCanvasPointerMove({
       }
     };
 
+    const onRawUpdate = (event: Event) => {
+      if (!(event instanceof PointerEvent)) return;
+      const e = event;
+      const interaction = interactionRef.current;
+      if (interaction.kind !== 'drawing') return;
+      if (pointers.current.has(e.pointerId)) {
+        pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      }
+      rawDrawPointerIdsRef.current.add(e.pointerId);
+      captureDrawingSamples(e, interaction.id);
+    };
+
     window.addEventListener('pointermove', onMove);
-    return () => window.removeEventListener('pointermove', onMove);
-  }, [applyInteraction, containerRef, expandToGroups, interactionRef, pointers, selectNow, shapesRef, toPage]);
+    window.addEventListener('pointerrawupdate', onRawUpdate);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerrawupdate', onRawUpdate);
+    };
+  }, [
+    applyInteraction,
+    cameraRef,
+    containerRef,
+    drawRafRef,
+    expandToGroups,
+    interactionRef,
+    pendingDrawPointsRef,
+    pointers,
+    rawDrawPointerIdsRef,
+    selectNow,
+    setCamera,
+    setEraserPos,
+    setGuides,
+    setShapes,
+    shapesRef,
+    toPage,
+  ]);
 }

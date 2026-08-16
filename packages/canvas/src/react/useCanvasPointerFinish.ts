@@ -21,7 +21,7 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'commit'
   | 'onToolChange'
   | 'createId'
-> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef' | 'rawDrawPointerIdsRef'>>;
 
 /** Binds pointer completion/cancellation and commits the completed gesture. */
 export function useCanvasPointerFinish({
@@ -43,11 +43,13 @@ export function useCanvasPointerFinish({
   createId,
   pendingDrawPointsRef,
   drawRafRef,
+  rawDrawPointerIdsRef,
 }: PointerFinishOptions): void {
   const uid = createId;
   useEffect(() => {
     const finish = (e: PointerEvent) => {
       pointers.current.delete(e.pointerId);
+      rawDrawPointerIdsRef.current.delete(e.pointerId);
       // Release pointer capture so the element doesn't keep exclusive capture.
       try { (e.target as HTMLElement)?.releasePointerCapture?.(e.pointerId); } catch { /* noop */ }
       const interaction = interactionRef.current;
@@ -215,5 +217,25 @@ export function useCanvasPointerFinish({
       window.removeEventListener('pointerup', finish);
       window.removeEventListener('pointercancel', finish);
     };
-  }, [applyInteraction, cameraRef, createId, endHistory, interactionRef, onToolChange, pointers, selectNow, setAnnouncement, setEditingId, setShapes, shapesRef, toPage]);
+  }, [
+    applyInteraction,
+    cameraRef,
+    commit,
+    createId,
+    drawRafRef,
+    endHistory,
+    interactionRef,
+    onToolChange,
+    pendingDrawPointsRef,
+    pointers,
+    rawDrawPointerIdsRef,
+    selectNow,
+    setAnnouncement,
+    setEditingId,
+    setEraserPos,
+    setGuides,
+    setShapes,
+    shapesRef,
+    toPage,
+  ]);
 }

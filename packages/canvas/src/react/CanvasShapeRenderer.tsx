@@ -67,11 +67,11 @@ export function createCanvasShapeRenderer({
       role="textbox"
       aria-multiline="true"
       aria-label="텍스트 편집"
+      data-canvas-editor
       contentEditable
       suppressContentEditableWarning
       onInput={commitEditorHtml}
       onBlur={commitEditorHtml}
-      onPointerDown={e => e.stopPropagation()}
       onDoubleClick={e => e.stopPropagation()}
       onKeyDown={onEditorKeyDown}
       className={`${editorClasses} ${extra}`}
@@ -113,7 +113,7 @@ export function createCanvasShapeRenderer({
       return (
         <div
           className="w-full h-full flex p-3 shadow-md"
-          style={{ background: palette.bg, borderTop: `6px solid ${palette.border}`, color: palette.text }}
+          style={{ background: effectiveFill(s), borderTop: `6px solid ${palette.border}`, color: palette.text }}
         >
           {isEditing
             ? renderEditor('font-medium', { color: effectiveText(s), fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) })
@@ -137,7 +137,7 @@ export function createCanvasShapeRenderer({
         <div
           className="w-full h-full flex flex-col p-4 rounded-2xl text-white overflow-hidden"
           style={{
-            background: isGlass ? CANVAS_UI_COLORS.glassFill : CANVAS_UI_COLORS.slateCard,
+            background: isGlass ? CANVAS_UI_COLORS.glassFill : (s.fillColor ?? CANVAS_UI_COLORS.slateCard),
             backdropFilter: isGlass ? 'blur(12px)' : undefined,
             WebkitBackdropFilter: isGlass ? 'blur(12px)' : undefined,
             border: `1px solid ${isGlass ? CANVAS_UI_COLORS.glassBorder : CANVAS_UI_COLORS.darkBorder}`,

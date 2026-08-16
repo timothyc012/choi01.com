@@ -10,18 +10,25 @@ import type { CanvasShape } from './InfiniteCanvas';
 
 export function effectiveFill(s: CanvasShape): string {
   if (s.fillColor) {
-    try { return validateCanvasCssColor(s.fillColor); } catch { /* palette fallback */ }
+    try { return validateCanvasCssColor(s.fillColor); } catch { return s.color ? CANVAS_COLORS[s.color].bg : CANVAS_COLORS.blue.bg; }
   }
   return s.color ? CANVAS_COLORS[s.color].bg : CANVAS_COLORS.blue.bg;
 }
 
-export function effectiveBorder(s: CanvasShape): string {
+export function effectiveStroke(s: CanvasShape): string {
+  if (s.strokeColor) {
+    try { return validateCanvasCssColor(s.strokeColor); } catch { return s.color ? CANVAS_COLORS[s.color].border : '#2563eb'; }
+  }
   return s.color ? CANVAS_COLORS[s.color].border : '#2563eb';
+}
+
+export function effectiveBorder(s: CanvasShape): string {
+  return effectiveStroke(s);
 }
 
 export function effectiveText(s: CanvasShape): string {
   if (s.textColor) {
-    try { return validateCanvasCssColor(s.textColor); } catch { /* palette fallback */ }
+    try { return validateCanvasCssColor(s.textColor); } catch { return s.color ? CANVAS_COLORS[s.color].text : '#0f172a'; }
   }
   return s.color ? CANVAS_COLORS[s.color].text : '#0f172a';
 }

@@ -33,6 +33,7 @@ interface PointerDownOptions {
   pointers: RefObject<Map<number, PointerPosition>>;
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
+  editingIdRef: RefObject<string | null>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
@@ -69,6 +70,7 @@ export function useCanvasPointerDown({
   pointers,
   cameraRef,
   shapesRef,
+  editingIdRef,
   toolRef,
   activeColorRef,
   drawStrokeWidth,
@@ -117,11 +119,13 @@ export function useCanvasPointerDown({
 
   const onPointerDown = (e: ReactPointerEvent) => {
     const activeTool = toolRef.current;
+    const targetElement = e.target instanceof Element ? e.target : null;
+    const isEditorPointer = Boolean(targetElement?.closest('[data-canvas-editor]')) && editingIdRef.current !== null;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     // Prevent the browser from starting a native drag of toolbar buttons,
     // text selections, or images when the pointer leaves the canvas mid-stroke.
-    if (e.cancelable) e.preventDefault();
+    if (!isEditorPointer && e.cancelable) e.preventDefault();
     // Capture the pointer so pointermove/pointerup keep firing on this element
     // even if the cursor leaves the canvas bounds during a fast stroke.
     const target = e.currentTarget as HTMLElement;
@@ -152,9 +156,11 @@ export function useCanvasPointerDown({
     if (e.button !== 0) return;
 
     const p = toPage(e.clientX, e.clientY);
-    setEditingId(null);
-    editorRef.current?.blur();
-    containerRef.current?.focus();
+    if (!isEditorPointer) {
+      setEditingId(null);
+      editorRef.current?.blur();
+      containerRef.current?.focus();
+    }
 
     if (activeTool === 'draw' || activeTool === 'highlighter') {
       const created: CanvasShape = {
@@ -202,7 +208,10 @@ export function useCanvasPointerDown({
 
     // Topmost shape wins, matching paint order.
     const byId = new Map(shapes.map(s => [s.id, s]));
-    const hit = [...shapes].reverse().find(s => hitTest(s, p.x, p.y, camera.z, byId, shapes));
+    const editingShape = editingIdRef.current ? shapes.find(s => s.id === editingIdRef.current) : undefined;
+    const hit = isEditorPointer && editingShape
+      ? editingShape
+      : [...shapes].reverse().find(s => hitTest(s, p.x, p.y, camera.z, byId, shapes));
 
     if (!hit) {
       lastClickRef.current = null;

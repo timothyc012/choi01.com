@@ -21,6 +21,41 @@ after(async () => {
 });
 
 describe('freehand drawing stays responsive on a dense board', () => {
+  it('captures a fast curved stroke delivered before the next pointermove', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({
+        version: 'canvas-v1',
+        shapes: [],
+        camera: { x: -400, y: -300, z: 1 },
+      });
+    });
+    await cv.act(async () => { cv.hostApi.setTool('draw'); });
+
+    const start = cv.pageToClient(180, 180);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', start.clientX, start.clientY));
+
+    // A short, fast pen stroke can begin and end between display-aligned
+    // pointermove events. Chrome still exposes its hardware samples through
+    // pointerrawupdate, including a curve that returns near its start point.
+    const rawPoints = [
+      [220, 140], [280, 130], [340, 170], [350, 230],
+      [300, 270], [240, 260], [190, 220], [180, 180],
+    ];
+    for (const [x, y] of rawPoints) {
+      const point = cv.pageToClient(x, y);
+      await cv.dispatch(window, cv.pointer('pointerrawupdate', point.clientX, point.clientY));
+    }
+    await cv.dispatch(window, cv.pointer('pointerup', start.clientX, start.clientY));
+
+    const stroke = cv.shapes().find(s => s.type === 'draw');
+    assert.ok(stroke, 'the fast stroke is created');
+    assert.ok(
+      stroke.points.length >= rawPoints.length,
+      `the raw samples must survive even when no pointermove arrives, captured ${stroke.points.length} of ${rawPoints.length}`,
+    );
+    assert.ok(stroke.w > 150 && stroke.h > 100, 'the captured stroke keeps the full curved gesture bounds');
+  });
+
   it('streams stroke samples without re-paying the whole-board sanitize cost', async () => {
     // Seed a board dense with rich-text shapes, like a real diagram.
     const html = '<p><b>관계 설명</b>과 노드 상세 내용을 담은 리치 텍스트</p>'.repeat(24);

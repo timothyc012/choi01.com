@@ -52,6 +52,7 @@ export declare function applySelectedStrokeWidth(shapes: CanvasShape[], targetId
 interface SelectedDrawStyle {
     readonly color?: CanvasColorKey;
     readonly strokeWidth?: CanvasStrokeWidth;
+    readonly strokeColor?: string;
 }
 export declare function applySelectedDrawStyle(shapes: CanvasShape[], targetIds: Set<string>, style: SelectedDrawStyle): CanvasShape[];
 export interface InfiniteCanvasHandle {

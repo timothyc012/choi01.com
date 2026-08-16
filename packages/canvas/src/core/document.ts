@@ -219,6 +219,7 @@ function parseCommonShape(
     textAlign: readOptionalTextAlign(input, 'textAlign'),
     manualSize: readOptionalBoolean(input, 'manualSize'),
     fillColor: readOptionalCssColor(input, 'fillColor'),
+    strokeColor: readOptionalCssColor(input, 'strokeColor'),
     textColor: readOptionalCssColor(input, 'textColor'),
     strokeStyle: readOptionalStrokeStyle(input, 'strokeStyle'),
   };

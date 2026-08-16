@@ -1,0 +1,1 @@
+{"version":3,"file":"CanvasColorWheel.d.ts","sourceRoot":"","sources":["../../src/react/CanvasColorWheel.tsx"],"names":[],"mappings":"AAEA,MAAM,WAAW,qBAAqB;IACpC,KAAK,EAAE,MAAM,CAAC;IACd,QAAQ,EAAE,CAAC,KAAK,EAAE,MAAM,KAAK,IAAI,CAAC;CACnC;AA2BD,wBAAgB,UAAU,CAAC,KAAK,EAAE,MAAM,GAAG,MAAM,CAuBhD;AA2CD,wBAAgB,gBAAgB,CAAC,EAAE,KAAK,EAAE,QAAQ,EAAE,EAAE,qBAAqB,+BAsH1E"}

@@ -145,6 +145,7 @@ export function applySelectedStrokeWidth(
 interface SelectedDrawStyle {
   readonly color?: CanvasColorKey;
   readonly strokeWidth?: CanvasStrokeWidth;
+  readonly strokeColor?: string;
 }
 
 export function applySelectedDrawStyle(
@@ -364,13 +365,15 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     if (eid) targetIds.add(eid);
     if (targetIds.size === 0) return;
     const includesStrokeWidth = 'strokeWidth' in patch;
-    const drawStyleKeys = Object.keys(patch).every(key => key === 'color' || key === 'fillColor' || key === 'strokeWidth');
+    const drawStyleKeys = Object.keys(patch).every(key => key === 'color' || key === 'fillColor' || key === 'strokeColor' || key === 'strokeWidth');
     if (inspectorShape?.type === 'draw' && drawStyleKeys) {
       const color = 'color' in patch ? patch.color : undefined;
       const strokeWidth = 'strokeWidth' in patch ? patch.strokeWidth : undefined;
+      const strokeColor = 'strokeColor' in patch ? patch.strokeColor : undefined;
       commit(prev => applySelectedDrawStyle(prev, targetIds, {
         ...(color !== undefined ? { color } : {}),
         ...(strokeWidth !== undefined ? { strokeWidth } : {}),
+        ...(strokeColor !== undefined ? { strokeColor } : {}),
       }));
       return;
     }

@@ -26,4 +26,5 @@ export interface PointerLifecycleOptions {
   createId: (prefix?: string) => string;
   pendingDrawPointsRef?: RefObject<[number, number][]>;
   drawRafRef?: RefObject<number | null>;
+  rawDrawPointerIdsRef?: RefObject<Set<number>>;
 }

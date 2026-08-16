@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import type { RefObject } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import { sanitizeCanvasHtml } from '../core/index.ts';
+import { shapePlainText } from './canvasGeometry';
+import { isDiagramShape } from './canvasDiagram';
 import {
   measureTextBoxContent,
   normalizeCustomFontFamily,
@@ -50,7 +52,9 @@ export function useCanvasTextEditing({
     const scrollH = el.scrollHeight;
     setShapes(prev => prev.map(s => {
       if (s.id !== editingId) return s;
-      const next = { ...s, html, text: undefined };
+      const next = isDiagramShape(s)
+        ? { ...s, text: shapePlainText({ ...s, html, text: undefined }), html: undefined }
+        : { ...s, html, text: undefined };
       if (s.type === 'text') {
         return s.manualSize ? next : { ...next, ...measureTextBoxContent(el, s) };
       }

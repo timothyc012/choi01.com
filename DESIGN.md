@@ -85,9 +85,22 @@ Content width: 1180px max, 20px mobile gutter, 32px desktop gutter. Hero is one-
 - States: loading, rendered SVG, and parse error preserve the source for recovery. The drawer fits narrow viewports without leaving the canvas.
 - Persistence: source text stays on the diagram card so the existing canvas-v1 save/load path remains authoritative.
 
+### Canvas Color Wheel
+- Structure: the selected-object color popover combines preset swatches with a hue ring, saturation/value square, target tabs, and a six-digit hex field.
+- Targets: drawing/line objects edit `strokeColor`; filled objects can edit `fillColor`, `strokeColor`, or `textColor` without losing the preset palette value.
+- States: pointer-captured drag updates the live swatch; the active target and current color are announced through labels and remain keyboard-editable through the hex field.
+- Accessibility: the ring and square expose named slider-like controls, visible focus, and a reduced-motion-safe response.
+
+### Canvas Selection Drag
+- Mechanism: a pointer press on a selected object records immutable origins and moves the object set in page coordinates with snap guides. Freehand points and connector waypoints translate with the object.
+- Text editing bridge: a press inside the active contenteditable bubbles to the canvas. A release within the 4px drift threshold keeps the caret; a real drag moves the text object while preserving its content.
+- Novel interaction note: beui.dev source consultation was attempted but unavailable in this environment, so this pointer-capture gesture is recorded here as a project-specific mechanism rather than copied from a catalog component.
+
 ## 6. Motion & Interaction
 
 Use subtle transform/opacity only. Interactive links and buttons transition in 160ms. Entrance animation is optional and disabled for reduced motion. No decorative looping motion.
+
+Canvas gestures are direct-manipulation interactions, not decorative motion: selection movement follows the pointer immediately, color-wheel updates are live, and the 4px text-editor drift threshold distinguishes caret placement from repositioning. `prefers-reduced-motion: reduce` removes transition easing but never disables pointer input or live color feedback.
 
 ## 7. Depth & Surface
 

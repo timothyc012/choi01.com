@@ -193,6 +193,34 @@
 .invoicex-canvas .pointer-events-auto { pointer-events: auto; }
 .invoicex-canvas .backdrop-blur-sm { backdrop-filter: blur(4px); }
 .invoicex-canvas .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-duration: 150ms; }
+.invoicex-canvas .canvas-color-targets { display: flex; gap: 3px; padding: 3px; border-radius: 8px; background: var(--canvas-slate-100); }
+.invoicex-canvas .canvas-color-targets button { min-width: 48px; height: 26px; padding: 0 7px; border: 0; border-radius: 6px; background: transparent; color: var(--canvas-slate-600); font: 600 11px/1 inherit; cursor: pointer; }
+.invoicex-canvas .canvas-color-targets button:hover { background: var(--canvas-white); color: var(--canvas-slate-900); }
+.invoicex-canvas .canvas-color-targets button.is-active { background: var(--canvas-blue-600); color: var(--canvas-white); }
+.invoicex-canvas .canvas-color-presets { display: flex; flex-wrap: wrap; gap: 6px; max-width: 286px; padding: 2px 1px; }
+.invoicex-canvas .canvas-color-preset { width: 20px; height: 20px; border: 1px solid; border-radius: 999px; cursor: pointer; }
+.invoicex-canvas .canvas-color-wheel-trigger { display: inline-flex; width: 21px; height: 21px; padding: 3px; border-radius: 999px; background: conic-gradient(from -30deg, #ff3b30, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #ff2d55, #ff3b30); box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.14); }
+.invoicex-canvas .canvas-color-wheel-trigger-dot { display: block; width: 100%; height: 100%; border: 1.5px solid var(--canvas-white); border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.16); }
+.invoicex-canvas .canvas-color-preset:focus-visible,
+.invoicex-canvas .canvas-color-targets button:focus-visible,
+.invoicex-canvas .canvas-color-hex-input:focus-visible,
+.invoicex-canvas .canvas-color-wheel-hue:focus-visible,
+.invoicex-canvas .canvas-color-wheel-sv:focus-visible { outline: 2px solid var(--canvas-blue-600); outline-offset: 2px; }
+.invoicex-canvas .canvas-color-wheel { display: grid; grid-template-columns: 132px 132px; gap: 8px; align-items: center; }
+.invoicex-canvas .canvas-color-wheel-hue,
+.invoicex-canvas .canvas-color-wheel-sv { position: relative; width: 132px; height: 132px; border-radius: 999px; touch-action: none; cursor: crosshair; }
+.invoicex-canvas .canvas-color-wheel-hue { background: conic-gradient(#ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); }
+.invoicex-canvas .canvas-color-wheel-core { position: absolute; inset: 23px; border: 2px solid var(--canvas-white); border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.22), 0 1px 3px rgba(15, 23, 42, 0.18); }
+.invoicex-canvas .canvas-color-wheel-hue-marker,
+.invoicex-canvas .canvas-color-wheel-sv-marker { position: absolute; width: 14px; height: 14px; border: 2px solid var(--canvas-white); border-radius: 999px; box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.72), 0 1px 3px rgba(15, 23, 42, 0.28); transform: translate(-50%, -50%); pointer-events: none; }
+.invoicex-canvas .canvas-color-wheel-sv { border-radius: 8px; background-image: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent); }
+.invoicex-canvas .canvas-color-wheel-sv-marker { left: 0; top: 0; }
+.invoicex-canvas .canvas-color-wheel-value { grid-column: 1 / -1; display: flex; align-items: center; gap: 7px; min-height: 26px; color: var(--canvas-slate-500); font: 700 11px/1 ui-monospace, monospace; }
+.invoicex-canvas .canvas-color-wheel-preview { width: 22px; height: 22px; border: 1px solid var(--canvas-slate-300); border-radius: 6px; }
+.invoicex-canvas .canvas-color-hex { grid-column: 1 / -1; display: flex; align-items: center; gap: 5px; height: 30px; padding: 0 8px; border: 1px solid var(--canvas-slate-200); border-radius: 7px; background: var(--canvas-white); color: var(--canvas-slate-500); font: 700 11px/1 ui-monospace, monospace; }
+.invoicex-canvas .canvas-color-hex-input { min-width: 0; flex: 1; height: 26px; border: 0; outline: 0; background: transparent; color: var(--canvas-slate-800); font: inherit; letter-spacing: 0.08em; }
+.invoicex-canvas .canvas-color-hex-input:focus-visible { outline-offset: -1px; }
+.invoicex-canvas .bg-slate-100 { background-color: var(--canvas-slate-100); }
 .invoicex-canvas .canvas-rich-text ul, .invoicex-canvas .canvas-rich-text ol { margin: 0; padding-left: 0; list-style: none; }
 .invoicex-canvas [data-canvas-text-view] ul, .invoicex-canvas [data-canvas-text-view] ol, .invoicex-canvas [data-canvas-text-view] li { pointer-events: none; }
 .invoicex-canvas [data-canvas-text-view] li a { pointer-events: auto; }

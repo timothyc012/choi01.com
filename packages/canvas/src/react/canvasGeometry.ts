@@ -5,6 +5,7 @@ export type { BoundingBox, EdgeSide, OrthogonalPoint } from './canvasRouting';
 export { orthogonalEndAngle, orthogonalPathPoints, pathMidpoint, segmentAngle, toPath } from './canvasRouting';
 export {
   effectiveFill,
+  effectiveStroke,
   effectiveBorder,
   effectiveText,
   polygonPoints,

@@ -1,6 +1,7 @@
 import type { CanvasShapeType } from '../core/index.js';
 import type { CanvasShape } from './InfiniteCanvas';
 export declare function effectiveFill(s: CanvasShape): string;
+export declare function effectiveStroke(s: CanvasShape): string;
 export declare function effectiveBorder(s: CanvasShape): string;
 export declare function effectiveText(s: CanvasShape): string;
 export declare function polygonPoints(type: CanvasShapeType, w: number, h: number): string;

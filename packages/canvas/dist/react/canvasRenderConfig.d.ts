@@ -12,7 +12,7 @@ export declare function getCanvasRenderConfig({ isDarkMode, tool, isSpaceDown, i
     cursor: string;
     gridColor: "rgba(148,163,184,0.16)" | "rgba(100,116,139,0.18)";
     gridSize: number;
-    strokeColorOf: (s: CanvasShape) => "#facc15" | "#f472b6" | "#c084fc" | "#38bdf8" | "#4ade80" | "#fb923c" | "#94a3b8" | "#003087" | "#ef4444" | "#0f172a" | "var(--canvas-slate-200)";
+    strokeColorOf: (s: CanvasShape) => string;
 };
 export {};
 //# sourceMappingURL=canvasRenderConfig.d.ts.map

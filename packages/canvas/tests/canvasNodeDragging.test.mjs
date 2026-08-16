@@ -112,4 +112,49 @@ describe('node position can be adjusted after creation', () => {
       'the connected node must be draggable to a new position',
     );
   });
+
+  it('moves a text node directly from its active editor', async () => {
+    await cv.settle();
+    await cv.act(async () => { cv.hostApi.canvasRef.current.addText(); });
+    const created = cv.shapes().find(s => s.type === 'text');
+    assert.ok(created, 'the text tool creates a text node');
+    const editor = cv.canvasEl.querySelector(`[data-canvas-shape-id="${created.id}"] [data-canvas-editor]`);
+    assert.ok(editor, 'the active text editor is rendered inside the node');
+
+    const centre = cv.shapeCentre(created);
+    const from = cv.pageToClient(centre.x, centre.y);
+    const to = cv.pageToClient(centre.x + 72, centre.y + 36);
+    await cv.dispatch(editor, cv.pointer('pointerdown', from.clientX, from.clientY));
+    await cv.dispatch(window, cv.pointer('pointermove', to.clientX, to.clientY));
+    await cv.dispatch(window, cv.pointer('pointerup', to.clientX, to.clientY));
+
+    const moved = cv.shapes().find(s => s.id === created.id);
+    assert.deepEqual(
+      { x: Math.round(moved.x), y: Math.round(moved.y) },
+      { x: Math.round(created.x + 72), y: Math.round(created.y + 36) },
+      'dragging from an active editor must reposition the text node',
+    );
+    assert.ok(cv.editorOf(created.id), 'moving text does not discard its active editor');
+  });
+
+  it('moves a freehand stroke after marquee selection', async () => {
+    await cv.settle();
+    await cv.act(async () => { cv.hostApi.setTool('draw'); });
+    await cv.drag({ x: 120, y: 220 }, { x: 240, y: 270 });
+    const created = cv.shapes().find(s => s.type === 'draw');
+    assert.ok(created, 'the pen creates a freehand stroke');
+    await cv.act(async () => { cv.hostApi.setTool('select'); });
+
+    await cv.drag({ x: 100, y: 200 }, { x: 260, y: 290 });
+    assert.ok(cv.canvasEl.querySelector('[data-canvas-inspector="draw"]'), 'marquee selection exposes the stroke inspector');
+
+    const centre = cv.shapeCentre(created);
+    await cv.drag(centre, { x: centre.x + 48, y: centre.y - 24 });
+    const moved = cv.shapes().find(s => s.id === created.id);
+    assert.deepEqual(
+      { x: Math.round(moved.x), y: Math.round(moved.y) },
+      { x: Math.round(created.x + 48), y: Math.round(created.y - 24) },
+      'a marquee-selected stroke must remain movable as a normal object',
+    );
+  });
 });

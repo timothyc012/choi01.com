@@ -56,6 +56,7 @@ export interface CanvasShapeBase {
     readonly textAlign?: CanvasTextAlign;
     readonly manualSize?: boolean;
     readonly fillColor?: string;
+    readonly strokeColor?: string;
     readonly textColor?: string;
     readonly strokeStyle?: 'solid' | 'dashed' | 'dotted';
 }
@@ -116,31 +117,31 @@ export interface CanvasSelectionInfo {
 export declare const CANVAS_FONTS: {
     readonly sans: {
         readonly label: "고딕";
-        readonly stack: "\"Inter\", \"Noto Sans KR\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", system-ui, -apple-system, sans-serif";
+        readonly stack: "ui-sans-serif, -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Noto Sans KR\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", sans-serif";
     };
     readonly serif: {
         readonly label: "명조";
-        readonly stack: "\"Noto Serif KR\", \"Noto Serif\", \"Malgun Gothic\", Batang, \"Times New Roman\", serif";
+        readonly stack: "ui-serif, \"AppleMyungjo\", \"Noto Serif KR\", \"Noto Serif\", \"Batang\", \"Times New Roman\", serif";
     };
     readonly mono: {
         readonly label: "모노";
-        readonly stack: "\"JetBrains Mono\", \"D2Coding\", \"Consolas\", \"Courier New\", ui-monospace, monospace";
+        readonly stack: "ui-monospace, \"SFMono-Regular\", \"JetBrains Mono\", \"D2Coding\", \"Consolas\", \"Courier New\", monospace";
     };
     readonly gothic: {
         readonly label: "Gothic";
-        readonly stack: "\"Malgun Gothic\", \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Pretendard\", \"Nanum Gothic\", \"Gulim\", sans-serif";
+        readonly stack: "\"Apple SD Gothic Neo\", \"Malgun Gothic\", \"Noto Sans KR\", \"Pretendard\", \"Nanum Gothic\", \"Gulim\", ui-sans-serif, sans-serif";
     };
     readonly korean: {
         readonly label: "Korean";
-        readonly stack: "\"Noto Serif KR\", \"Noto Serif\", \"Batang\", \"Gungsuh\", \"GungsuhChe\", serif";
+        readonly stack: "\"AppleMyungjo\", \"Noto Serif KR\", \"Noto Serif\", \"Batang\", \"Gungsuh\", \"GungsuhChe\", ui-serif, serif";
     };
     readonly chosunmyjo: {
         readonly label: "조선일보명조";
-        readonly stack: "\"조선일보명조\", \"Noto Serif KR\", \"Noto Serif\", \"NanumMyeongjo\", serif";
+        readonly stack: "\"조선일보명조\", \"AppleMyungjo\", \"Noto Serif KR\", \"Noto Serif\", \"NanumMyeongjo\", ui-serif, serif";
     };
     readonly hdhyundai: {
         readonly label: "HD현대체";
-        readonly stack: "\"HD현대체\", \"Malgun Gothic\", \"Apple SD Gothic Neo\", \"Noto Sans KR\", sans-serif";
+        readonly stack: "\"HD현대체\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"Noto Sans KR\", ui-sans-serif, sans-serif";
     };
     readonly custom: {
         readonly label: "직접입력";
