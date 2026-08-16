@@ -276,7 +276,11 @@ export const GuestCanvasPage: React.FC = () => {
         />
 
         {/* Floating toolbar */}
-        <div className="gc-toolbar">
+        <div
+          className="gc-toolbar"
+          draggable={false}
+          onDragStart={event => event.preventDefault()}
+        >
           <button type="button" onClick={() => setActiveTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동" aria-label="선택 / 이동">
             <MousePointer className="gc-icon" />
           </button>

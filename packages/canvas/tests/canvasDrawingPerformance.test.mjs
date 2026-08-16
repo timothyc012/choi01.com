@@ -67,4 +67,53 @@ describe('freehand drawing stays responsive on a dense board', () => {
       `each stroke sample must stay fluid even on a dense board, took ${perMoveMs.toFixed(1)}ms/move (${elapsedMs.toFixed(0)}ms for ${moves} moves)`,
     );
   });
+
+  it('keeps finished freehand outlines from re-rendering during the next stroke', async () => {
+    const pointsPerStroke = 600;
+    const seeded = Array.from({ length: 80 }, (_, shapeIndex) => {
+      const originX = (shapeIndex % 10) * 90;
+      const originY = Math.floor(shapeIndex / 10) * 55;
+      const points = Array.from({ length: pointsPerStroke }, (_, pointIndex) => [
+        originX + pointIndex * 0.35,
+        originY + Math.sin(pointIndex / 12) * 8,
+      ]);
+      return {
+        id: `dense-${shapeIndex}`,
+        type: 'draw',
+        x: originX,
+        y: originY - 8,
+        w: points.at(-1)[0] - originX,
+        h: 16,
+        points,
+        color: 'blue',
+        strokeWidth: 4,
+        drawMode: 'pen',
+      };
+    });
+
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({
+        version: 'canvas-v1',
+        shapes: seeded,
+        camera: { x: -400, y: -300, z: 1 },
+      });
+    });
+    await cv.act(async () => { cv.hostApi.setTool('draw'); });
+
+    const start = cv.pageToClient(100, 100);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', start.clientX, start.clientY));
+    const moves = 24;
+    const started = performance.now();
+    for (let i = 1; i <= moves; i++) {
+      const p = cv.pageToClient(100 + i * 8, 100 + i * 4);
+      await cv.dispatch(window, cv.pointer('pointermove', p.clientX, p.clientY));
+    }
+    const elapsedMs = performance.now() - started;
+    await cv.dispatch(window, cv.pointer('pointerup', ...Object.values(cv.pageToClient(100 + moves * 8, 100 + moves * 4))));
+
+    assert.ok(
+      elapsedMs / moves < 5,
+      `finished freehand paths must not make each new sample stall, took ${(elapsedMs / moves).toFixed(1)}ms/move (${elapsedMs.toFixed(0)}ms total)`,
+    );
+  });
 });

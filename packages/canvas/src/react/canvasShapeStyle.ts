@@ -128,10 +128,18 @@ export function htmlToLines(html: string): TextRun[][] {
   return lines.filter(line => line.length > 0);
 }
 
+const shapeHtmlCache = new WeakMap<CanvasShape, string>();
+
 export function shapeHtml(s: CanvasShape): string {
-  if (s.html) return sanitizeCanvasHtml(s.html);
-  if (!s.text) return '';
-  return escapeHtml(s.text).replace(/\n/g, '<br>');
+  const cached = shapeHtmlCache.get(s);
+  if (cached !== undefined) return cached;
+  const html = s.html
+    ? sanitizeCanvasHtml(s.html)
+    : s.text
+      ? escapeHtml(s.text).replace(/\n/g, '<br>')
+      : '';
+  shapeHtmlCache.set(s, html);
+  return html;
 }
 
 export function safeAssetUrl(value: string | undefined): string | undefined {

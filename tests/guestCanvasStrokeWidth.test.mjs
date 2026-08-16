@@ -94,3 +94,15 @@ it('applies a toolbar width to the selected stroke and the next stroke', async (
     .map(path => path.getAttribute('data-canvas-stroke-width'));
   assert.deepEqual(widths, ['8', '8']);
 });
+
+it('does not let a drag that starts on the floating toolbar become a native browser drag', async () => {
+  const toolbar = container.querySelector('.gc-toolbar');
+  const pen = toolbar?.querySelector('button[aria-label="펜"]');
+  assert.ok(toolbar && pen, 'expected the floating toolbar and pen control to exist');
+
+  const dragStart = new window.Event('dragstart', { bubbles: true, cancelable: true });
+  await act(async () => { pen.dispatchEvent(dragStart); });
+
+  assert.equal(toolbar.getAttribute('draggable'), 'false');
+  assert.equal(dragStart.defaultPrevented, true, 'toolbar drag must be cancelled before it can move a tool');
+});

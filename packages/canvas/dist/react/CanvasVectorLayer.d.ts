@@ -7,6 +7,7 @@ interface Camera {
 }
 type VectorInteraction = {
     kind: string;
+    id?: string;
     fromId?: string;
     toX?: number;
     toY?: number;
