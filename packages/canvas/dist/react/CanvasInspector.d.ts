@@ -1,6 +1,7 @@
 import React from 'react';
 import type { CanvasColorKey } from '../core/index.js';
 import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 interface Camera {
     x: number;
     y: number;
@@ -8,6 +9,9 @@ interface Camera {
 }
 interface CanvasInspectorProps {
     shape: CanvasShape;
+    /** Everything the panel acts on: one shape, or the whole multi-selection. */
+    selection: readonly CanvasShape[];
+    selectionActions: CanvasSelectionActions;
     shapes: CanvasShape[];
     camera: Camera;
     canvasSize: {
@@ -26,6 +30,6 @@ interface CanvasInspectorProps {
     applyCustomFontFamily: (value: string) => void;
 }
 /** Selection inspector kept separate from the canvas scene for package reuse. */
-export declare function CanvasInspector({ shape: s, shapes, camera, canvasSize, isDarkMode, editing, showPalette, installedFontFamilies, setShowPalette, setActiveColor, patchSelected, applyFormat, applyList, applyCustomFontFamily, }: CanvasInspectorProps): React.JSX.Element;
+export declare function CanvasInspector({ shape: s, selection, selectionActions, shapes, camera, canvasSize, isDarkMode, editing, showPalette, installedFontFamilies, setShowPalette, setActiveColor, patchSelected, applyFormat, applyList, applyCustomFontFamily, }: CanvasInspectorProps): React.JSX.Element;
 export {};
 //# sourceMappingURL=CanvasInspector.d.ts.map

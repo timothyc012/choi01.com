@@ -1,6 +1,7 @@
 import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
 import type { CanvasStrokeWidth, CanvasTool } from '../core/index.js';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
+import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 type Camera = CanvasSnapshot['camera'];
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
 interface UseCanvasImperativeHandleOptions {
@@ -8,7 +9,6 @@ interface UseCanvasImperativeHandleOptions {
     containerRef: RefObject<HTMLDivElement | null>;
     shapesRef: RefObject<CanvasShape[]>;
     cameraRef: RefObject<Camera>;
-    selectedRef: RefObject<Set<string>>;
     past: RefObject<CanvasShape[][]>;
     future: RefObject<CanvasShape[][]>;
     controlled: boolean;
@@ -19,8 +19,8 @@ interface UseCanvasImperativeHandleOptions {
     setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
     onDirty: () => void;
     commit: (next: ShapeUpdater) => void;
-    deleteSelection: (selection: Set<string>) => boolean;
     selectNow: (selection: Set<string>) => void;
+    selectionActions: CanvasSelectionActions;
     viewportCentre: () => {
         x: number;
         y: number;
@@ -32,6 +32,6 @@ interface UseCanvasImperativeHandleOptions {
     setAnnouncement: Dispatch<SetStateAction<string>>;
     createId: (prefix?: string) => string;
 }
-export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, selectedRef, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, deleteSelection, selectNow, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
+export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, selectNow, selectionActions, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
 export {};
 //# sourceMappingURL=useCanvasImperativeHandle.d.ts.map

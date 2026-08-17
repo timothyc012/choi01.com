@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Italic, List, ListOrdered, Minus, Plus, Underline } from 'lucide-react';
+import { AlignCenter, AlignLeft, AlignRight, Bold, ChevronDown, Copy, Group, Italic, List, ListOrdered, Minus, Plus, Trash2, Underline, Ungroup } from 'lucide-react';
 import { CANVAS_COLORS, CANVAS_COLOR_KEYS, CANVAS_FONTS } from '../core/index.ts';
 import type { CanvasColorKey, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
@@ -9,10 +9,14 @@ import { CANVAS_FONT_KEYS, canvasFontFromValue, fontSizeForShape, textAlignForSh
 import { CANVAS_UI_COLORS } from './theme';
 import { getInspectorGroups, type InspectorGroup } from './canvasDiagram';
 import { CanvasColorWheel, colorToHex } from './CanvasColorWheel';
+import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 
 interface Camera { x: number; y: number; z: number }
 interface CanvasInspectorProps {
   shape: CanvasShape;
+  /** Everything the panel acts on: one shape, or the whole multi-selection. */
+  selection: readonly CanvasShape[];
+  selectionActions: CanvasSelectionActions;
   shapes: CanvasShape[];
   camera: Camera;
   canvasSize: { width: number; height: number };
@@ -91,11 +95,16 @@ function supportsStrokeColor(shape: CanvasShape): boolean {
 
 /** Selection inspector kept separate from the canvas scene for package reuse. */
 export function CanvasInspector({
-  shape: s, shapes, camera, canvasSize, isDarkMode, editing, showPalette,
+  shape: s, selection, selectionActions, shapes, camera, canvasSize, isDarkMode, editing, showPalette,
   installedFontFamilies, setShowPalette, setActiveColor, patchSelected,
   applyFormat, applyList, applyCustomFontFamily,
 }: CanvasInspectorProps) {
   const btn = isDarkMode ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100';
+  // A multi-selection has no single set of text/arrow properties to show, so
+  // the panel collapses to what applies to every member: colour, stroke width,
+  // and the selection-wide commands.
+  const multi = selection.length > 1;
+  const canUngroup = selection.some(shape => !!shape.groupId);
   const isDraw = s.type === 'draw';
   const defaultColorTarget: ColorTarget = isDraw || (supportsStrokeColor(s) && !supportsFillColor(s))
     ? 'stroke'
@@ -146,7 +155,15 @@ export function CanvasInspector({
   }, [editing, installedFontFamilies.length, isDarkMode, s, showPalette]);
   const toolbarWidth = inspectorSize.width;
   const toolbarHeight = inspectorSize.height;
-  const selected = bounds(s);
+  const selected = selection.reduce((box, shape) => {
+    const b = bounds(shape);
+    return {
+      minX: Math.min(box.minX, b.minX),
+      minY: Math.min(box.minY, b.minY),
+      maxX: Math.max(box.maxX, b.maxX),
+      maxY: Math.max(box.maxY, b.maxY),
+    };
+  }, bounds(s));
   const left = (selected.minX - camera.x) * camera.z;
   const top = (selected.minY - camera.y) * camera.z;
   const right = (selected.maxX - camera.x) * camera.z;
@@ -193,8 +210,11 @@ export function CanvasInspector({
     }))
     .sort((a, b) => a.overlap - b.overlap || a.distance - b.distance)[0]?.candidate ?? preferred;
   const size = fontSizeForShape(s);
-  const strokeWidth = inspectorStrokeWidth(s);
-  const hasStrokeWidthControl = supportsStrokeWidth(s);
+  const hasStrokeWidthControl = selection.every(supportsStrokeWidth);
+  // Mixed widths across a selection show no active segment rather than
+  // pretending the whole selection shares the first shape's width.
+  const widths = new Set(selection.map(inspectorStrokeWidth));
+  const strokeWidth = widths.size === 1 ? inspectorStrokeWidth(s) : undefined;
   const groups = getInspectorGroups(s);
   const defaultGroup: InspectorGroup = s.type === 'arrow' ? 'arrow' : (groups[0] ?? 'color');
   const [openGroup, setOpenGroup] = useState<InspectorGroup>(defaultGroup);
@@ -206,14 +226,30 @@ export function CanvasInspector({
   const endCap = s.type === 'arrow' ? (s.arrowEnd ?? 'arrow') : 'arrow';
   const segment = (label: string, active: boolean, onClick: () => void, title: string, ariaLabel = title) => <button type="button" title={title} aria-label={ariaLabel} onClick={onClick} className={`h-7 min-w-9 px-2 rounded text-[11px] font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-blue-600 ${active ? 'bg-blue-600 text-white' : btn}`}>{label}</button>;
   const groupLabel = (label: string) => <span className="px-1 text-[10px] font-semibold tracking-wide opacity-60">{label}</span>;
+  const action = (
+    Icon: typeof Copy,
+    label: string,
+    onClick: () => void,
+    enabled: boolean,
+    danger = false,
+  ) => <button
+    type="button"
+    title={label}
+    aria-label={label}
+    disabled={!enabled}
+    onClick={onClick}
+    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors disabled:opacity-30 disabled:cursor-default ${danger ? 'text-rose-500 hover:bg-rose-500/10' : btn}`}
+  ><Icon className="w-4 h-4" /></button>;
   const groupNames: Record<InspectorGroup, string> = { color: '색상', text: '텍스트', arrow: '선', arrange: '정렬', diagram: 'Diagram' };
 
   return (
     <div ref={inspectorRef} data-canvas-inspector={isDraw ? 'draw' : 'text'} className={`absolute z-40 pointer-events-none flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-200 text-slate-700'}`} style={{ left: position.left, top: position.top }} onPointerDown={event => { event.stopPropagation(); const target = event.target instanceof Element ? event.target : null; if (!target?.closest('input, select, textarea')) event.preventDefault(); }} onClick={event => event.stopPropagation()}>
-      <div className="flex flex-wrap items-center gap-1 pointer-events-auto" role="tablist" aria-label="선택 개체 도구 그룹">
-        {groups.map(group => <button key={group} type="button" role="tab" aria-selected={openGroup === group} onClick={() => setOpenGroup(group)} className={`h-7 px-2.5 rounded-lg text-[11px] font-semibold transition-colors ${openGroup === group ? 'bg-blue-600 text-white' : btn}`}>{groupNames[group]}</button>)}
-      </div>
-      <div className="relative flex items-center gap-1.5 pointer-events-none" style={{ display: openGroup === 'color' || isDraw ? undefined : 'none' }}>
+      {multi
+        ? <div className="flex items-center gap-1 px-1 text-[11px] font-semibold opacity-70">{selection.length}개 선택됨</div>
+        : <div className="flex flex-wrap items-center gap-1 pointer-events-auto" role="tablist" aria-label="선택 개체 도구 그룹">
+            {groups.map(group => <button key={group} type="button" role="tab" aria-selected={openGroup === group} onClick={() => setOpenGroup(group)} className={`h-7 px-2.5 rounded-lg text-[11px] font-semibold transition-colors ${openGroup === group ? 'bg-blue-600 text-white' : btn}`}>{groupNames[group]}</button>)}
+          </div>}
+      <div className="relative flex items-center gap-1.5 pointer-events-none" style={{ display: multi || openGroup === 'color' || isDraw ? undefined : 'none' }}>
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">{isDraw ? '그리기' : '색상'}</span>
         <button type="button" title={isDraw ? '그리기 무지개 컬러휠' : '무지개 컬러휠'} aria-label={isDraw ? '그리기 무지개 컬러휠' : '무지개 컬러휠'} onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}>
           <span className="canvas-color-wheel-trigger" aria-hidden="true"><span className="canvas-color-wheel-trigger-dot" style={{ background: swatchColor }} /></span>
@@ -248,7 +284,7 @@ export function CanvasInspector({
           </label>
         </div>}
       </div>
-      {openGroup !== 'color' && !isDraw && <>
+      {!multi && openGroup !== 'color' && !isDraw && <>
       <div className="flex flex-wrap items-center gap-2 pointer-events-none">
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">텍스트</span>
         <label title="글씨 색" className="pointer-events-auto w-8 h-8 rounded-lg border relative overflow-hidden cursor-pointer flex items-center justify-center text-[11px] font-bold shadow-sm" style={{ background: effectiveText(s), color: CANVAS_UI_COLORS.white, mixBlendMode: 'normal' }}><span aria-hidden="true">A</span><input data-canvas-control="text-color" type="color" value={s.textColor ?? effectiveText(s)} onChange={event => patchSelected({ textColor: event.target.value })} className="absolute inset-0 opacity-0 cursor-pointer" /></label>
@@ -272,6 +308,13 @@ export function CanvasInspector({
         {groupLabel('굵기')}
         {STROKE_WIDTHS.map(width => <React.Fragment key={width}>{segment(String(width), strokeWidth === width, () => patchSelected({ strokeWidth: width }), `굵기 ${width}`)}</React.Fragment>)}
       </div>}
+      <div className={`flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-auto ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
+        {groupLabel('선택')}
+        {action(Group, '그룹 (Ctrl+G)', selectionActions.group, multi)}
+        {action(Ungroup, '그룹 해제 (Ctrl+Shift+G)', selectionActions.ungroup, canUngroup)}
+        {action(Copy, '복제', selectionActions.duplicateSelected, true)}
+        {action(Trash2, '삭제 (Delete)', selectionActions.deleteSelected, true, true)}
+      </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { bounds, sanitizeShapeForCanvas } from './canvasGeometry';
 import { buildCanvasSvg, exportCanvasPng } from './canvasExport';
 import { autoLayoutCanvas } from './canvasAutoLayout';
 import { loadCanvasSnapshot } from './canvasSnapshot';
+import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 
 type Camera = CanvasSnapshot['camera'];
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
@@ -15,7 +16,6 @@ interface UseCanvasImperativeHandleOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   shapesRef: RefObject<CanvasShape[]>;
   cameraRef: RefObject<Camera>;
-  selectedRef: RefObject<Set<string>>;
   past: RefObject<CanvasShape[][]>;
   future: RefObject<CanvasShape[][]>;
   controlled: boolean;
@@ -26,8 +26,8 @@ interface UseCanvasImperativeHandleOptions {
   setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
   onDirty: () => void;
   commit: (next: ShapeUpdater) => void;
-  deleteSelection: (selection: Set<string>) => boolean;
   selectNow: (selection: Set<string>) => void;
+  selectionActions: CanvasSelectionActions;
   viewportCentre: () => { x: number; y: number };
   setShapes: (updater: SetStateAction<CanvasShape[]>) => void;
   setLocalShapes: Dispatch<SetStateAction<CanvasShape[]>>;
@@ -42,7 +42,6 @@ export function useCanvasImperativeHandle({
   containerRef,
   shapesRef,
   cameraRef,
-  selectedRef,
   past,
   future,
   controlled,
@@ -53,8 +52,8 @@ export function useCanvasImperativeHandle({
   setSelectedStrokeWidth,
   onDirty,
   commit,
-  deleteSelection,
   selectNow,
+  selectionActions,
   viewportCentre,
   setShapes,
   setLocalShapes,
@@ -141,52 +140,10 @@ export function useCanvasImperativeHandle({
       onDirty();
       setAnnouncement('다시 실행');
     },
-    deleteSelected: () => {
-      deleteSelection(selectedRef.current);
-    },
-    duplicateSelected: () => {
-      const sel = selectedRef.current;
-      if (sel.size === 0) return;
-      const copies: CanvasShape[] = [];
-      const groupRemap = new Map<string, string>();
-      for (const s of shapesRef.current) {
-        if (!sel.has(s.id)) continue;
-        let groupId = s.groupId;
-        if (groupId) {
-          if (!groupRemap.has(groupId)) groupRemap.set(groupId, createId('g'));
-          groupId = groupRemap.get(groupId);
-        }
-        copies.push({
-          ...s,
-          id: createId(),
-          x: s.x + 24,
-          y: s.y + 24,
-          groupId,
-          points: s.points?.map(([px, py]) => [px + 24, py + 24] as [number, number]),
-          orthogonalWaypoints: s.type === 'arrow' && s.orthogonalWaypoints
-            ? s.orthogonalWaypoints.map(point => ({ x: point.x + 24, y: point.y + 24 }))
-            : undefined,
-        });
-      }
-      commit(prev => [...prev, ...copies]);
-      selectNow(new Set(copies.map(c => c.id)));
-      setAnnouncement(`${copies.length}개 복제됨`);
-    },
-    group: () => {
-      const sel = selectedRef.current;
-      if (sel.size < 2) return;
-      const groupId = createId('g');
-      commit(prev => prev.map(s => (sel.has(s.id) ? { ...s, groupId } : s)));
-      setAnnouncement(`${sel.size}개 그룹화됨`);
-      containerRef.current?.focus();
-    },
-    ungroup: () => {
-      const sel = selectedRef.current;
-      if (sel.size === 0) return;
-      commit(prev => prev.map(s => (sel.has(s.id) ? { ...s, groupId: undefined } : s)));
-      setAnnouncement('그룹 해제됨');
-      containerRef.current?.focus();
-    },
+    deleteSelected: selectionActions.deleteSelected,
+    duplicateSelected: selectionActions.duplicateSelected,
+    group: selectionActions.group,
+    ungroup: selectionActions.ungroup,
     zoomBy: (factor) => {
       setCamera(cam => {
         const rect = containerRef.current?.getBoundingClientRect();
@@ -250,8 +207,8 @@ export function useCanvasImperativeHandle({
       setEditingId,
     }),
   }), [
-    addAtCentre, buildSvg, commit, createId, deleteSelection, isDarkMode, maxZoom, minZoom, onDirty,
-    onToolChange, selectNow, setCamera, setEditingId, setLocalShapes, setSelectedStrokeWidth, setShapes,
-    setAnnouncement, viewportCentre, controlled,
+    addAtCentre, buildSvg, commit, createId, isDarkMode, maxZoom, minZoom, onDirty,
+    onToolChange, selectionActions, selectNow, setCamera, setEditingId, setLocalShapes,
+    setSelectedStrokeWidth, setShapes, setAnnouncement, viewportCentre, controlled,
   ]);
 }

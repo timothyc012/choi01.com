@@ -27,6 +27,9 @@ interface ViewInteractionsOptions {
 
 interface ViewInteractionsResult {
   selectionInfo: CanvasSelectionInfo;
+  /** Every shape the inspector acts on. Empty when no panel should render. */
+  inspectorSelection: readonly CanvasShape[];
+  /** Representative shape whose values the per-shape controls display. */
   inspectorShape: CanvasShape | null;
   onContainerPointerMove?: (event: React.PointerEvent) => void;
   onContainerPointerLeave?: () => void;
@@ -84,17 +87,25 @@ export function useCanvasViewInteractions({
 
   useEffect(() => { onSelectionChange?.(selectionInfo); }, [onSelectionChange, selectionInfo]);
 
-  const inspectorShape = useMemo(() => {
+  // While text is being edited the panel belongs to that one shape; otherwise
+  // it covers the whole selection so multi-select still gets group/duplicate/
+  // delete and the shared colour controls.
+  const inspectorSelection = useMemo<readonly CanvasShape[]>(() => {
     if (editingId) {
       const editing = shapes.find(s => s.id === editingId);
-      return editing && editing.type !== 'image' && editing.type !== 'draw' ? editing : null;
+      return editing && editing.type !== 'image' && editing.type !== 'draw' ? [editing] : [];
     }
     const picked = shapes.filter(s => selected.has(s.id));
-    if (picked.length > 1 && picked.every(s => s.type === 'draw')) return picked[0] ?? null;
-    if (picked.length !== 1) return null;
-    const only = picked[0];
-    return only && only.type !== 'image' ? only : null;
+    if (picked.length === 1) return picked[0].type === 'image' ? [] : picked;
+    return picked;
   }, [editingId, selected, shapes]);
+
+  const inspectorShape = useMemo(() => {
+    if (inspectorSelection.length === 0) return null;
+    // Images carry no colour or text state, so a mixed selection reads its
+    // displayed values off a shape that actually has them.
+    return inspectorSelection.find(s => s.type !== 'image') ?? null;
+  }, [inspectorSelection]);
 
   const cursorReportTimer = useRef<number>(0);
   const onContainerPointerMove = onLocalCursor
@@ -107,5 +118,5 @@ export function useCanvasViewInteractions({
     : undefined;
   const onContainerPointerLeave = onLocalCursor ? () => onLocalCursor(null) : undefined;
 
-  return { selectionInfo, inspectorShape, onContainerPointerMove, onContainerPointerLeave };
+  return { selectionInfo, inspectorSelection, inspectorShape, onContainerPointerMove, onContainerPointerLeave };
 }

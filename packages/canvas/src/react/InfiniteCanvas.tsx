@@ -49,6 +49,7 @@ import { useCanvasViewport } from './useCanvasViewport';
 import { useCanvasTextEditing } from './useCanvasTextEditing';
 import { useCanvasEditorState } from './useCanvasEditorState';
 import { useCanvasViewInteractions } from './useCanvasViewInteractions';
+import { useCanvasSelectionActions } from './useCanvasSelectionActions';
 import { useCanvasRuntimeInteractions } from './useCanvasRuntimeInteractions';
 import { getCanvasRenderConfig } from './canvasRenderConfig';
 
@@ -270,8 +271,20 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     shapesRef,
   } = useCanvasEditorState({ boardIdentity, tool, controlledShapes, onShapesChange, onDirty });
 
+  const selectionActions = useCanvasSelectionActions({
+    containerRef,
+    shapesRef,
+    selectedRef,
+    commit,
+    deleteSelection,
+    selectNow,
+    setAnnouncement,
+    createId: uid,
+  });
+
   const {
     selectionInfo,
+    inspectorSelection,
     inspectorShape,
     onContainerPointerMove,
     onContainerPointerLeave,
@@ -329,6 +342,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     setAnnouncement,
     applyInteraction,
     selectNow,
+    selectionActions,
     past,
     future,
     beginHistory,
@@ -366,7 +380,11 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     if (targetIds.size === 0) return;
     const includesStrokeWidth = 'strokeWidth' in patch;
     const drawStyleKeys = Object.keys(patch).every(key => key === 'color' || key === 'fillColor' || key === 'strokeColor' || key === 'strokeWidth');
-    if (inspectorShape?.type === 'draw' && drawStyleKeys) {
+    // Freehand strokes carry colour on the stroke itself; only take that path
+    // when the whole selection is freehand, so a mixed selection still routes
+    // through the generic patch below and every shape gets recoloured.
+    const allDraw = inspectorSelection.length > 0 && inspectorSelection.every(shape => shape.type === 'draw');
+    if (allDraw && drawStyleKeys) {
       const color = 'color' in patch ? patch.color : undefined;
       const strokeWidth = 'strokeWidth' in patch ? patch.strokeWidth : undefined;
       const strokeColor = 'strokeColor' in patch ? patch.strokeColor : undefined;
@@ -520,6 +538,8 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
       {inspectorShape && (
         <CanvasInspector
           shape={inspectorShape}
+          selection={inspectorSelection}
+          selectionActions={selectionActions}
           shapes={shapes}
           camera={camera}
           canvasSize={{ width: containerRef.current?.clientWidth ?? 380, height: containerRef.current?.clientHeight ?? 190 }}
