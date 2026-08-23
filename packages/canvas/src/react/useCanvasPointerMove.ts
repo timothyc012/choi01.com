@@ -66,7 +66,7 @@ export function useCanvasPointerMove({
   }, [drawRafRef]);
 
   useEffect(() => {
-    const captureDrawingSamples = (e: PointerEvent, drawingId: string) => {
+    const captureDrawingSamples = (e: PointerEvent, drawingId: string, includeCoalesced = true) => {
       const p = toPage(e.clientX, e.clientY);
       // Shift = straight line from first point to cursor (bypass batching).
       if (e.shiftKey) {
@@ -78,7 +78,7 @@ export function useCanvasPointerMove({
         return;
       }
 
-      const samples = typeof e.getCoalescedEvents === 'function'
+      const samples = includeCoalesced && typeof e.getCoalescedEvents === 'function'
         ? e.getCoalescedEvents()
         : [];
       if (samples.length > 0) {
@@ -357,7 +357,10 @@ export function useCanvasPointerMove({
         pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
       }
       rawDrawPointerIdsRef.current.add(e.pointerId);
-      captureDrawingSamples(e, interaction.id);
+      // pointerrawupdate is already the hardware-rate stream. Do not expand
+      // coalescedEvents here: browsers may expose the same raw samples again,
+      // which makes the pending queue grow rapidly and stalls path rendering.
+      captureDrawingSamples(e, interaction.id, false);
     };
 
     window.addEventListener('pointermove', onMove);
