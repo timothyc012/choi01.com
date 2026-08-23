@@ -34,24 +34,27 @@ describe('freehand drawing stays responsive on a dense board', () => {
     const start = cv.pageToClient(180, 180);
     await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', start.clientX, start.clientY));
 
-    // A short, fast pen stroke can begin and end between display-aligned
-    // pointermove events. Chrome still exposes its hardware samples through
-    // pointerrawupdate, including a curve that returns near its start point.
+    // A short, fast pen stroke may arrive as one display-aligned pointermove
+    // carrying several coalesced hardware samples, including a curve that
+    // returns near its start point.
     const rawPoints = [
       [220, 140], [280, 130], [340, 170], [350, 230],
       [300, 270], [240, 260], [190, 220], [180, 180],
     ];
-    for (const [x, y] of rawPoints) {
+    const finalPoint = cv.pageToClient(...rawPoints.at(-1));
+    const move = cv.pointer('pointermove', finalPoint.clientX, finalPoint.clientY);
+    Object.defineProperty(move, 'getCoalescedEvents', { value: () => rawPoints.map(([x, y]) => {
       const point = cv.pageToClient(x, y);
-      await cv.dispatch(window, cv.pointer('pointerrawupdate', point.clientX, point.clientY));
-    }
+      return { clientX: point.clientX, clientY: point.clientY };
+    }) });
+    await cv.dispatch(window, move);
     await cv.dispatch(window, cv.pointer('pointerup', start.clientX, start.clientY));
 
     const stroke = cv.shapes().find(s => s.type === 'draw');
     assert.ok(stroke, 'the fast stroke is created');
     assert.ok(
       stroke.points.length >= rawPoints.length,
-      `the raw samples must survive even when no pointermove arrives, captured ${stroke.points.length} of ${rawPoints.length}`,
+      `the coalesced samples must survive in one pointermove, captured ${stroke.points.length} of ${rawPoints.length}`,
     );
     assert.ok(stroke.w > 150 && stroke.h > 100, 'the captured stroke keeps the full curved gesture bounds');
   });

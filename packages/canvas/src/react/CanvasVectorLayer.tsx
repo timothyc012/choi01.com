@@ -8,7 +8,7 @@ import {
   edgePoint,
   strokePath,
 } from './canvasGeometry';
-import { freehandOutlinePath } from './canvasShapeStyle';
+
 import { orthogonalEndAngle, orthogonalPathPoints, segmentAngle, toPath } from './canvasRouting';
 import { CANVAS_UI_COLORS } from './theme';
 
@@ -24,30 +24,25 @@ interface CanvasDrawPathProps {
   shape: DrawShape;
   cameraZoom: number;
   color: string;
-  isActive: boolean;
 }
 
 const CanvasDrawPath = React.memo(function CanvasDrawPath({
   shape,
   cameraZoom,
   color,
-  isActive,
 }: CanvasDrawPathProps) {
   if (!shape.points) return null;
   const drawMode = shape.drawMode ?? 'pen';
   const documentStrokeWidth = shape.strokeWidth ?? 3;
-  const outlineD = !isActive && shape.points.length >= 2
-    ? freehandOutlinePath(shape.points, documentStrokeWidth, drawMode)
-    : '';
   return (
     <path
       data-canvas-vector-shape-id={shape.id}
       data-canvas-vector-shape-type="draw"
       data-canvas-draw-mode={drawMode}
       data-canvas-stroke-width={documentStrokeWidth}
-      d={outlineD || strokePath(shape.points)}
-      fill={outlineD ? color : 'none'}
-      stroke={outlineD ? 'none' : color}
+      d={strokePath(shape.points)}
+      fill="none"
+      stroke={color}
       strokeWidth={documentStrokeWidth / cameraZoom}
       strokeOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
       fillOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
@@ -83,14 +78,12 @@ export function CanvasVectorLayer({
         {visiblePaintOrder.map(s => {
           if (s.type === 'draw' && s.points) {
             const isSelected = selected.has(s.id);
-            const isActive = interaction.kind === 'drawing' && interaction.id === s.id;
             return (
               <CanvasDrawPath
                 key={s.id}
                 shape={s}
                 cameraZoom={camera.z}
                 color={isSelected ? CANVAS_UI_COLORS.blue : strokeColorOf(s)}
-                isActive={isActive}
               />
             );
           }

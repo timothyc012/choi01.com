@@ -32,7 +32,7 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'selectNow'
   | 'expandToGroups'
   | 'toPage'
-> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef' | 'rawDrawPointerIdsRef'>>;
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
 export function useCanvasPointerMove({
@@ -51,7 +51,6 @@ export function useCanvasPointerMove({
   toPage,
   pendingDrawPointsRef,
   drawRafRef,
-  rawDrawPointerIdsRef,
 }: PointerMoveOptions): void {
   // Pending drawing points collected between animation frames. Each pointermove
   // pushes into this buffer; a single rAF callback flushes them to setShapes so
@@ -304,12 +303,7 @@ export function useCanvasPointerMove({
       }
 
       if (interaction.kind === 'drawing') {
-        // Once this pointer has a raw stream, its later pointermove contains
-        // the same samples again. Process one stream only so the stroke never
-        // doubles back through duplicated points.
-        if (!rawDrawPointerIdsRef.current.has(e.pointerId)) {
-          captureDrawingSamples(e, interaction.id);
-        }
+        captureDrawingSamples(e, interaction.id);
         return;
       }
 
@@ -348,26 +342,9 @@ export function useCanvasPointerMove({
       }
     };
 
-    const onRawUpdate = (event: Event) => {
-      if (!(event instanceof PointerEvent)) return;
-      const e = event;
-      const interaction = interactionRef.current;
-      if (interaction.kind !== 'drawing') return;
-      if (pointers.current.has(e.pointerId)) {
-        pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      }
-      rawDrawPointerIdsRef.current.add(e.pointerId);
-      // pointerrawupdate is already the hardware-rate stream. Do not expand
-      // coalescedEvents here: browsers may expose the same raw samples again,
-      // which makes the pending queue grow rapidly and stalls path rendering.
-      captureDrawingSamples(e, interaction.id, false);
-    };
-
     window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerrawupdate', onRawUpdate);
     return () => {
       window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerrawupdate', onRawUpdate);
     };
   }, [
     applyInteraction,
@@ -378,7 +355,7 @@ export function useCanvasPointerMove({
     interactionRef,
     pendingDrawPointsRef,
     pointers,
-    rawDrawPointerIdsRef,
+
     selectNow,
     setCamera,
     setEraserPos,

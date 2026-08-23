@@ -94,8 +94,8 @@ export function freehandOutlinePath(
     return `M ${x - r} ${y} A ${r} ${r} 0 1 0 ${x + r} ${y} A ${r} ${r} 0 1 0 ${x - r} ${y} Z`;
   }
   const opts = mode === 'highlighter'
-    ? { size: strokeWidth * 2.5, thinning: 0, smoothing: 0.5, streamline: 0.5, last: true }
-    : { size: strokeWidth, thinning: 0.5, smoothing: 0.62, streamline: 0.62, last: true };
+    ? { size: strokeWidth * 2.5, thinning: 0, simulatePressure: false, smoothing: 0.5, streamline: 0.5, last: true }
+    : { size: strokeWidth, thinning: 0, simulatePressure: false, smoothing: 0.62, streamline: 0.62, last: true };
   const outline = getStroke(points, opts);
   if (outline.length === 0) return '';
   return outline.reduce(
