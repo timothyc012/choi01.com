@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import {
   arrowGeometry,
@@ -20,16 +20,62 @@ interface Marquee { startX: number; startY: number; curX: number; curY: number }
 
 type DrawShape = Extract<CanvasShape, { type: 'draw' }>;
 
+type StrokePathCache = {
+  count: number;
+  lastX: number;
+  lastY: number;
+  d: string;
+};
+
+function incrementalStrokePath(shape: DrawShape, cache: Map<string, StrokePathCache>): string {
+  const points = shape.points as [number, number][];
+  const previous = cache.get(shape.id);
+  if (!previous || previous.count > points.length) {
+    const d = strokePath(points);
+    cache.set(shape.id, { count: points.length, lastX: points.at(-1)?.[0] ?? 0, lastY: points.at(-1)?.[1] ?? 0, d });
+    return d;
+  }
+  const currentLast = points[points.length - 1];
+  if (previous.count === points.length) {
+    if (currentLast && previous.lastX === currentLast[0] && previous.lastY === currentLast[1]) return previous.d;
+    const d = strokePath(points);
+    cache.set(shape.id, { count: points.length, lastX: currentLast?.[0] ?? 0, lastY: currentLast?.[1] ?? 0, d });
+    return d;
+  }
+
+  // strokePath ends in `L lastX lastY`. Remove only that terminal segment,
+  // then extend the quadratic path from the previous last point. This avoids
+  // rebuilding the entire active stroke on every animation frame.
+  let d = previous.d;
+  const terminal = d.lastIndexOf(' L ');
+  if (terminal < 0) {
+    d = strokePath(points);
+  } else {
+    d = d.slice(0, terminal);
+    for (let i = previous.count - 1; i < points.length - 1; i++) {
+      const [cx, cy] = points[i];
+      const [nx, ny] = points[i + 1];
+      d += ` Q ${cx} ${cy} ${(cx + nx) / 2} ${(cy + ny) / 2}`;
+    }
+    const last = points[points.length - 1];
+    d += ` L ${last[0]} ${last[1]}`;
+  }
+  cache.set(shape.id, { count: points.length, lastX: points.at(-1)?.[0] ?? 0, lastY: points.at(-1)?.[1] ?? 0, d });
+  return d;
+}
+
 interface CanvasDrawPathProps {
   shape: DrawShape;
   cameraZoom: number;
   color: string;
+  pathD: string;
 }
 
 const CanvasDrawPath = React.memo(function CanvasDrawPath({
   shape,
   cameraZoom,
   color,
+  pathD,
 }: CanvasDrawPathProps) {
   if (!shape.points) return null;
   const drawMode = shape.drawMode ?? 'pen';
@@ -40,7 +86,7 @@ const CanvasDrawPath = React.memo(function CanvasDrawPath({
       data-canvas-vector-shape-type="draw"
       data-canvas-draw-mode={drawMode}
       data-canvas-stroke-width={documentStrokeWidth}
-      d={strokePath(shape.points)}
+      d={pathD}
       fill="none"
       stroke={color}
       strokeWidth={documentStrokeWidth / cameraZoom}
@@ -72,6 +118,7 @@ export function CanvasVectorLayer({
   visiblePaintOrder, selected, shapeById, allShapes, camera, interaction,
   eraserPos, guides, marquee, strokeColorOf,
 }: CanvasVectorLayerProps) {
+  const strokePathCache = useRef(new Map<string, StrokePathCache>());
   return (
     <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
       <g transform={`scale(${camera.z}) translate(${-camera.x}, ${-camera.y})`}>
@@ -84,6 +131,7 @@ export function CanvasVectorLayer({
                 shape={s}
                 cameraZoom={camera.z}
                 color={isSelected ? CANVAS_UI_COLORS.blue : strokeColorOf(s)}
+                pathD={incrementalStrokePath(s, strokePathCache.current)}
               />
             );
           }
