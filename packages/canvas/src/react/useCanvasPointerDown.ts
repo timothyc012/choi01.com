@@ -31,6 +31,7 @@ interface PointerDownOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   editorRef: RefObject<HTMLDivElement | null>;
   pointers: RefObject<Map<number, PointerPosition>>;
+  interactionRef: RefObject<Interaction>;
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
   editingIdRef: RefObject<string | null>;
@@ -68,6 +69,7 @@ export function useCanvasPointerDown({
   containerRef,
   editorRef,
   pointers,
+  interactionRef,
   cameraRef,
   shapesRef,
   editingIdRef,
@@ -136,6 +138,7 @@ export function useCanvasPointerDown({
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()];
       const cam = cameraRef.current;
+      const previousInteraction = interactionRef.current;
       applyInteraction({
         kind: 'pinch',
         startDist: Math.hypot(b.x - a.x, b.y - a.y) || 1,
@@ -144,6 +147,7 @@ export function useCanvasPointerDown({
         startMidY: (a.y + b.y) / 2,
         camX: cam.x,
         camY: cam.y,
+        ...(previousInteraction.kind === 'drawing' ? { interruptedDrawingId: previousInteraction.id } : {}),
       });
       return;
     }

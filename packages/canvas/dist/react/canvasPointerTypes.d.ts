@@ -26,6 +26,7 @@ export type Interaction = {
     startMidY: number;
     camX: number;
     camY: number;
+    interruptedDrawingId?: string;
 } | {
     kind: 'marquee';
     startX: number;

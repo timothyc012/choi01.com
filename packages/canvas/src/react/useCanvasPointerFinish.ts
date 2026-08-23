@@ -46,6 +46,30 @@ export function useCanvasPointerFinish({
 }: PointerFinishOptions): void {
   const uid = createId;
   useEffect(() => {
+    const finalizeDrawing = (drawingId: string) => {
+      if (drawRafRef.current !== null) {
+        cancelAnimationFrame(drawRafRef.current);
+        drawRafRef.current = null;
+      }
+      const pending = pendingDrawPointsRef.current.splice(0);
+      setShapes(prev => prev.map(s => {
+        if (s.id !== drawingId || !s.points) return s;
+        const points = [...s.points];
+        let last = points[points.length - 1];
+        for (const point of pending) {
+          if (!last || Math.hypot(point[0] - last[0], point[1] - last[1]) >= 1 / cameraRef.current.z) {
+            points.push(point);
+            last = point;
+          }
+        }
+        const xs = points.map(point => point[0]);
+        const ys = points.map(point => point[1]);
+        const minX = Math.min(...xs), minY = Math.min(...ys);
+        return { ...s, points, x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
+      }));
+      endHistory();
+    };
+
     const finish = (e: PointerEvent) => {
       pointers.current.delete(e.pointerId);
 
@@ -56,7 +80,10 @@ export function useCanvasPointerFinish({
 
       // Lifting one finger of a pinch shouldn't resume a drag with the other.
       if (interaction.kind === 'pinch') {
-        if (pointers.current.size < 2) applyInteraction({ kind: 'none' });
+        if (pointers.current.size < 2) {
+          if (interaction.interruptedDrawingId) finalizeDrawing(interaction.interruptedDrawingId);
+          applyInteraction({ kind: 'none' });
+        }
         return;
       }
 

@@ -21,6 +21,33 @@ after(async () => {
 });
 
 describe('freehand drawing stays responsive on a dense board', () => {
+  it('starts the next stroke immediately after pointerup', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({
+        version: 'canvas-v1',
+        shapes: [],
+        camera: { x: -400, y: -300, z: 1 },
+      });
+    });
+    await cv.act(async () => { cv.hostApi.setTool('draw'); });
+
+    const firstStart = cv.pageToClient(100, 100);
+    const firstEnd = cv.pageToClient(150, 120);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', firstStart.clientX, firstStart.clientY));
+    await cv.dispatch(window, cv.pointer('pointermove', firstEnd.clientX, firstEnd.clientY));
+    await cv.dispatch(window, cv.pointer('pointerup', firstEnd.clientX, firstEnd.clientY));
+
+    const secondStart = cv.pageToClient(200, 160);
+    const secondEnd = cv.pageToClient(260, 190);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', secondStart.clientX, secondStart.clientY));
+    await cv.dispatch(window, cv.pointer('pointermove', secondEnd.clientX, secondEnd.clientY));
+    await cv.dispatch(window, cv.pointer('pointerup', secondEnd.clientX, secondEnd.clientY));
+
+    const strokes = cv.shapes().filter(shape => shape.type === 'draw');
+    assert.equal(strokes.length, 2, 'a second stroke starts without waiting for outline conversion');
+    assert.ok(strokes.every(stroke => stroke.points.length >= 2), 'both strokes retain their points');
+  });
+
   it('captures a fast curved stroke delivered before the next pointermove', async () => {
     await cv.act(async () => {
       cv.hostApi.canvasRef.current.loadSnapshot({

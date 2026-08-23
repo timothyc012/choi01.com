@@ -90,6 +90,7 @@ export function useCanvasPointerInteractions({
     containerRef,
     editorRef,
     pointers,
+    interactionRef,
     cameraRef,
     shapesRef,
     editingIdRef,

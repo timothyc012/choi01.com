@@ -18,7 +18,6 @@ import {
   shapeHtml,
   shapePlainText,
   strokePath,
-  freehandOutlinePath,
 } from './canvasGeometry';
 import { orthogonalEndAngle, pathMidpoint, segmentAngle, toPath } from './canvasRouting';
 import { fontStackForShape } from './canvasText';
@@ -75,11 +74,6 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
     if (s.type === 'draw' && s.points) {
       const drawMode = s.drawMode ?? 'pen';
       const sw = s.strokeWidth ?? 3;
-      const outlineD = s.points.length >= 2 ? freehandOutlinePath(s.points, sw, drawMode) : '';
-      if (outlineD) {
-        const opacity = drawMode === 'highlighter' ? ' fill-opacity="0.35"' : '';
-        return `<path d="${outlineD}" fill="${ink}"${opacity} fill-rule="evenodd" stroke="none"/>`;
-      }
       const opacity = drawMode === 'highlighter' ? ' stroke-opacity="0.35"' : '';
       return `<path d="${strokePath(s.points)}" fill="none" stroke="${ink}" stroke-width="${sw}"${opacity} stroke-linecap="round" stroke-linejoin="round"/>`;
     }

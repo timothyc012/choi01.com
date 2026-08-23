@@ -69,6 +69,14 @@ export function useCanvasPointerMove({
       const p = toPage(e.clientX, e.clientY);
       // Shift = straight line from first point to cursor (bypass batching).
       if (e.shiftKey) {
+        // Discard queued freehand samples before switching this stroke to a
+        // straight segment; otherwise the old rAF callback can append them
+        // after the Shift update.
+        if (drawRafRef.current !== null) {
+          cancelAnimationFrame(drawRafRef.current);
+          drawRafRef.current = null;
+        }
+        pendingDrawPointsRef.current = [];
         setShapes(prev => prev.map(s => {
           if (s.id !== drawingId || !s.points) return s;
           const first = s.points[0];

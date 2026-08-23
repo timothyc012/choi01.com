@@ -13,7 +13,7 @@ export type PointerPosition = { x: number; y: number };
 export type Interaction =
   | { kind: 'none' }
   | { kind: 'pan'; startX: number; startY: number; camX: number; camY: number }
-  | { kind: 'pinch'; startDist: number; startZoom: number; startMidX: number; startMidY: number; camX: number; camY: number }
+  | { kind: 'pinch'; startDist: number; startZoom: number; startMidX: number; startMidY: number; camX: number; camY: number; interruptedDrawingId?: string }
   | { kind: 'marquee'; startX: number; startY: number; curX: number; curY: number; screenStartX: number; screenStartY: number }
   | { kind: 'move'; startX: number; startY: number; origin: Map<string, CanvasShape>; editOnReleaseId?: string }
   | { kind: 'resize'; id: string; handle: string; start: CanvasShape }
