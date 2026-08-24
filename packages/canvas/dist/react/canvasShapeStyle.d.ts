@@ -10,6 +10,7 @@ export declare function polygonPoints(type: CanvasShapeType, w: number, h: numbe
  * through midpoints. Used for export and as a fallback.
  */
 export declare function strokePath(points: [number, number][]): string;
+export declare function freehandOutlinePoints(points: [number, number][], strokeWidth: number, mode: 'pen' | 'highlighter'): number[][];
 export declare function freehandOutlinePath(points: [number, number][], strokeWidth: number, mode: 'pen' | 'highlighter'): string;
 export declare function escapeHtml(s: string): string;
 type TextRun = {

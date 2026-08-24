@@ -21,6 +21,41 @@ after(async () => {
 });
 
 describe('freehand drawing stays responsive on a dense board', () => {
+  it('keeps the active stroke out of React state until pointerup', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({ version: 'canvas-v1', shapes: [], camera: { x: -400, y: -300, z: 1 } });
+      cv.hostApi.setTool('draw');
+    });
+    const start = cv.pageToClient(40, 40);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', start.clientX, start.clientY));
+    const move = cv.pageToClient(80, 60);
+    await cv.dispatch(window, cv.pointer('pointermove', move.clientX, move.clientY));
+    assert.equal(cv.shapes().filter(shape => shape.type === 'draw').length, 0);
+    await cv.dispatch(window, cv.pointer('pointerup', move.clientX, move.clientY));
+    await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(cv.shapes().filter(shape => shape.type === 'draw').length, 1);
+  });
+
+  it('commits zero-gap repeated handwriting strokes without panning', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({ version: 'canvas-v1', shapes: [], camera: { x: -400, y: -300, z: 1 } });
+      cv.hostApi.setTool('draw');
+    });
+    const cameraBefore = cv.hostApi.canvasRef.current.getSnapshot().camera;
+    await cv.act(async () => {
+      for (let stroke = 0; stroke < 50; stroke += 1) {
+        const start = cv.pageToClient(100 + (stroke % 10) * 20, 120 + Math.floor(stroke / 10) * 16);
+        cv.canvasEl.dispatchEvent(cv.pointer('pointerdown', start.clientX, start.clientY, stroke + 1));
+        const end = cv.pageToClient(108 + (stroke % 10) * 20, 124 + Math.floor(stroke / 10) * 16);
+        window.dispatchEvent(cv.pointer('pointermove', end.clientX, end.clientY, stroke + 1));
+        window.dispatchEvent(cv.pointer('pointerup', end.clientX, end.clientY, stroke + 1));
+      }
+    });
+    await new Promise(resolve => setTimeout(resolve, 40));
+    assert.equal(cv.shapes().filter(shape => shape.type === 'draw').length, 50);
+    assert.deepEqual(cv.hostApi.canvasRef.current.getSnapshot().camera, cameraBefore);
+  });
+
   it('starts the next stroke immediately after pointerup', async () => {
     await cv.act(async () => {
       cv.hostApi.canvasRef.current.loadSnapshot({

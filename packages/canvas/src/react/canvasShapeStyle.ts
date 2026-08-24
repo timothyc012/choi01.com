@@ -80,6 +80,17 @@ export function strokePath(points: [number, number][]): string {
  */
 import getStroke from 'perfect-freehand';
 
+export function freehandOutlinePoints(
+  points: [number, number][],
+  strokeWidth: number,
+  mode: 'pen' | 'highlighter',
+): number[][] {
+  const opts = mode === 'highlighter'
+    ? { size: strokeWidth * 2.5, thinning: 0, simulatePressure: false, smoothing: 0.5, streamline: 0.5, last: true }
+    : { size: strokeWidth, thinning: 0, simulatePressure: false, smoothing: 0.62, streamline: 0.62, last: true };
+  return getStroke(points, opts);
+}
+
 export function freehandOutlinePath(
   points: [number, number][],
   strokeWidth: number,
@@ -93,10 +104,7 @@ export function freehandOutlinePath(
     const r = (mode === 'highlighter' ? strokeWidth * 1.25 : strokeWidth / 2);
     return `M ${x - r} ${y} A ${r} ${r} 0 1 0 ${x + r} ${y} A ${r} ${r} 0 1 0 ${x - r} ${y} Z`;
   }
-  const opts = mode === 'highlighter'
-    ? { size: strokeWidth * 2.5, thinning: 0, simulatePressure: false, smoothing: 0.5, streamline: 0.5, last: true }
-    : { size: strokeWidth, thinning: 0, simulatePressure: false, smoothing: 0.62, streamline: 0.62, last: true };
-  const outline = getStroke(points, opts);
+  const outline = freehandOutlinePoints(points, strokeWidth, mode);
   if (outline.length === 0) return '';
   return outline.reduce(
     (d, [x, y], i) => d + (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`),

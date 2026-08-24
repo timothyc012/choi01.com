@@ -8,6 +8,7 @@ import type {
 import { SHAPE_TOOLS } from '../core/index.ts';
 import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
+import { paintLiveStrokes } from './liveStrokeCanvas';
 import {
   bounds,
   centreOf,
@@ -53,6 +54,9 @@ interface PointerDownOptions {
   expandToGroups: (ids: Set<string>) => Set<string>;
   toPage: (clientX: number, clientY: number) => { x: number; y: number };
   createId: (prefix?: string) => string;
+  liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+  activeDrawRef: RefObject<CanvasShape | null>;
+  pendingDrawsRef: RefObject<CanvasShape[]>;
 }
 
 export interface PointerDownHandlers {
@@ -91,6 +95,9 @@ export function useCanvasPointerDown({
   expandToGroups,
   toPage,
   createId,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
 }: PointerDownOptions): PointerDownHandlers {
   const uid = createId;
   const lastClickRef = useRef<{ id: string; time: number } | null>(null);
@@ -124,6 +131,11 @@ export function useCanvasPointerDown({
     const targetElement = e.target instanceof Element ? e.target : null;
     const isEditorPointer = Boolean(targetElement?.closest('[data-canvas-editor]')) && editingIdRef.current !== null;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (interactionRef.current.kind === 'drawing' && interactionRef.current.pointerId !== e.pointerId) {
+      pointers.current.delete(e.pointerId);
+      return;
+    }
 
     // Prevent the browser from starting a native drag of toolbar buttons,
     // text selections, or images when the pointer leaves the canvas mid-stroke.
@@ -179,9 +191,9 @@ export function useCanvasPointerDown({
         strokeWidth: drawStrokeWidth,
         drawMode: activeTool === 'highlighter' ? 'highlighter' : 'pen',
       };
-      beginHistory();
-      setShapes(prev => [...prev, created]);
-      applyInteraction({ kind: 'drawing', id: created.id });
+      activeDrawRef.current = created;
+      paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, created, cameraRef.current, window.devicePixelRatio || 1);
+      applyInteraction({ kind: 'drawing', id: created.id, pointerId: e.pointerId });
       return;
     }
 

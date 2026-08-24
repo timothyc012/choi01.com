@@ -26,5 +26,10 @@ export interface PointerLifecycleOptions {
   createId: (prefix?: string) => string;
   pendingDrawPointsRef?: RefObject<[number, number][]>;
   drawRafRef?: RefObject<number | null>;
+  liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+  activeDrawRef: RefObject<CanvasShape | null>;
+  pendingDrawsRef: RefObject<CanvasShape[]>;
+  queuedDrawIdsRef: RefObject<Set<string>>;
+  commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 
 }

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useLayoutEffect } from 'react';
 import './styles.css';
 import canvasCssText from './styles.css?inline';
 
@@ -52,6 +52,7 @@ import { useCanvasViewInteractions } from './useCanvasViewInteractions';
 import { useCanvasSelectionActions } from './useCanvasSelectionActions';
 import { useCanvasRuntimeInteractions } from './useCanvasRuntimeInteractions';
 import { getCanvasRenderConfig } from './canvasRenderConfig';
+import { paintLiveStrokes, prepareLiveStrokeCanvas } from './liveStrokeCanvas';
 
 /**
  * Self-contained infinite canvas engine.
@@ -269,7 +270,31 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     expandToGroups,
     toolRef,
     shapesRef,
+    liveStrokeCanvasRef,
+    activeDrawRef,
+    pendingDrawsRef,
+    queuedDrawIdsRef,
+    commitDrawBatch,
   } = useCanvasEditorState({ boardIdentity, tool, controlledShapes, onShapesChange, onDirty });
+
+  useLayoutEffect(() => {
+    const canvas = liveStrokeCanvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const repaint = () => {
+      const dpr = window.devicePixelRatio || 1;
+      prepareLiveStrokeCanvas(canvas, container.clientWidth, container.clientHeight, dpr);
+      const committedIds = new Set(shapes.map(shape => shape.id));
+      pendingDrawsRef.current = pendingDrawsRef.current.filter(stroke => !committedIds.has(stroke.id));
+      for (const id of committedIds) queuedDrawIdsRef.current.delete(id);
+      paintLiveStrokes(canvas, pendingDrawsRef.current, activeDrawRef.current, cameraRef.current, dpr);
+    };
+    repaint();
+    const observer = new ResizeObserver(repaint);
+    observer.observe(container);
+    window.addEventListener('resize', repaint);
+    return () => { observer.disconnect(); window.removeEventListener('resize', repaint); };
+  }, [activeDrawRef, camera, cameraRef, containerRef, liveStrokeCanvasRef, pendingDrawsRef, queuedDrawIdsRef, shapes]);
 
   const selectionActions = useCanvasSelectionActions({
     containerRef,
@@ -364,6 +389,11 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     expandToGroups,
     toPage,
     createId: uid,
+    liveStrokeCanvasRef,
+    activeDrawRef,
+    pendingDrawsRef,
+    queuedDrawIdsRef,
+    commitDrawBatch,
   });
 
   // --- Rendering -----------------------------------------------------------
@@ -513,6 +543,8 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         marquee={marquee}
         strokeColorOf={strokeColorOf}
       />
+
+      <canvas ref={liveStrokeCanvasRef} aria-hidden="true" data-canvas-live-strokes="true" className="absolute inset-0 w-full h-full pointer-events-none" />
 
       {/* DOM layer: everything with text, so it stays selectable and editable. */}
       <CanvasObjectLayer

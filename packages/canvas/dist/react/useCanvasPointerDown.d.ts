@@ -31,6 +31,9 @@ interface PointerDownOptions {
         y: number;
     };
     createId: (prefix?: string) => string;
+    liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+    activeDrawRef: RefObject<CanvasShape | null>;
+    pendingDrawsRef: RefObject<CanvasShape[]>;
 }
 export interface PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
@@ -41,6 +44,6 @@ export interface PointerDownHandlers {
     onOrthogonalSegmentHandleDown: (event: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => void;
     onArrowEndpointDown: (event: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
 }
-export declare function useCanvasPointerDown({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, editingIdRef, toolRef, activeColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerDownOptions): PointerDownHandlers;
+export declare function useCanvasPointerDown({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, editingIdRef, toolRef, activeColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, }: PointerDownOptions): PointerDownHandlers;
 export {};
 //# sourceMappingURL=useCanvasPointerDown.d.ts.map

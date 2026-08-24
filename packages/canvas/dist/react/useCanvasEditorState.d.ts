@@ -69,6 +69,11 @@ export interface CanvasEditorState {
     expandToGroups: (ids: Set<string>) => Set<string>;
     toolRef: RefObject<CanvasTool>;
     shapesRef: RefObject<CanvasShape[]>;
+    liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+    activeDrawRef: RefObject<CanvasShape | null>;
+    pendingDrawsRef: RefObject<CanvasShape[]>;
+    queuedDrawIdsRef: RefObject<Set<string>>;
+    commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 }
 /** Owns the mutable editor model, refs, history, and coordinate actions. */
 export declare function useCanvasEditorState({ boardIdentity, tool, controlledShapes, onShapesChange, onDirty, }: EditorStateOptions): CanvasEditorState;

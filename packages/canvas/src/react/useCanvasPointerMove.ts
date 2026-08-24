@@ -17,6 +17,7 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
 } from './canvasPointerTypes';
+import { appendDistinctLivePoints, paintLiveStrokes } from './liveStrokeCanvas';
 
 type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'containerRef'
@@ -32,6 +33,9 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'selectNow'
   | 'expandToGroups'
   | 'toPage'
+  | 'liveStrokeCanvasRef'
+  | 'activeDrawRef'
+  | 'pendingDrawsRef'
 > & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
@@ -51,6 +55,9 @@ export function useCanvasPointerMove({
   toPage,
   pendingDrawPointsRef,
   drawRafRef,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
 }: PointerMoveOptions): void {
   // Pending drawing points collected between animation frames. Each pointermove
   // pushes into this buffer; a single rAF callback flushes them to setShapes so
@@ -67,21 +74,17 @@ export function useCanvasPointerMove({
   useEffect(() => {
     const captureDrawingSamples = (e: PointerEvent, drawingId: string, includeCoalesced = true) => {
       const p = toPage(e.clientX, e.clientY);
-      // Shift = straight line from first point to cursor (bypass batching).
+      const active = activeDrawRef.current;
+      if (!active || active.id !== drawingId || !active.points) return;
       if (e.shiftKey) {
-        // Discard queued freehand samples before switching this stroke to a
-        // straight segment; otherwise the old rAF callback can append them
-        // after the Shift update.
         if (drawRafRef.current !== null) {
           cancelAnimationFrame(drawRafRef.current);
           drawRafRef.current = null;
         }
         pendingDrawPointsRef.current = [];
-        setShapes(prev => prev.map(s => {
-          if (s.id !== drawingId || !s.points) return s;
-          const first = s.points[0];
-          return first ? { ...s, points: [first, [p.x, p.y]] } : s;
-        }));
+        const first = active.points[0];
+        if (first) active.points = [first, [p.x, p.y]];
+        paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, active, cameraRef.current, window.devicePixelRatio || 1);
         return;
       }
 
@@ -104,20 +107,10 @@ export function useCanvasPointerMove({
         const pending = pendingDrawPointsRef.current;
         if (pending.length === 0) return;
         pendingDrawPointsRef.current = [];
-        const z = cameraRef.current.z;
-        setShapes(prev => prev.map(s => {
-          if (s.id !== drawingId || !s.points) return s;
-          let lx = s.points[s.points.length - 1][0];
-          let ly = s.points[s.points.length - 1][1];
-          const merged = [...s.points];
-          for (const [px, py] of pending) {
-            if (Math.hypot(px - lx, py - ly) < 1 / z) continue;
-            merged.push([px, py]);
-            lx = px;
-            ly = py;
-          }
-          return merged.length === s.points.length ? s : { ...s, points: merged };
-        }));
+        const current = activeDrawRef.current;
+        if (!current || current.id !== drawingId || !current.points) return;
+        appendDistinctLivePoints(current.points, pending, cameraRef.current.z);
+        paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, current, cameraRef.current, window.devicePixelRatio || 1);
       });
     };
 

@@ -59,6 +59,7 @@ export type Interaction = {
 } | {
     kind: 'drawing';
     id: string;
+    pointerId: number;
 } | {
     kind: 'connect';
     fromId: string;

@@ -42,10 +42,15 @@ interface PointerInteractionOptions {
         y: number;
     };
     createId: (prefix?: string) => string;
+    liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+    activeDrawRef: RefObject<CanvasShape | null>;
+    pendingDrawsRef: RefObject<CanvasShape[]>;
+    queuedDrawIdsRef: RefObject<Set<string>>;
+    commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 }
 export interface PointerInteractionHandlers extends PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
 }
 /** Composes pointer-start and global drag lifecycle handlers. */
-export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, editingIdRef, toolRef, activeColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, commit, onToolChange, expandToGroups, toPage, createId, }: PointerInteractionOptions): PointerInteractionHandlers;
+export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, cameraRef, shapesRef, editingIdRef, toolRef, activeColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch, }: PointerInteractionOptions): PointerInteractionHandlers;
 //# sourceMappingURL=useCanvasPointerInteractions.d.ts.map

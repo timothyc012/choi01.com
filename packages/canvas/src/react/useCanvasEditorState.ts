@@ -66,6 +66,11 @@ export interface CanvasEditorState {
   expandToGroups: (ids: Set<string>) => Set<string>;
   toolRef: RefObject<CanvasTool>;
   shapesRef: RefObject<CanvasShape[]>;
+  liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+  activeDrawRef: RefObject<CanvasShape | null>;
+  pendingDrawsRef: RefObject<CanvasShape[]>;
+  queuedDrawIdsRef: RefObject<Set<string>>;
+  commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 }
 
 /** Owns the mutable editor model, refs, history, and coordinate actions. */
@@ -127,6 +132,10 @@ export function useCanvasEditorState({
   const future = useRef<CanvasShape[][]>([]);
   const historyBase = useRef<CanvasShape[] | null>(null);
   const pointers = useRef<Map<number, PointerPosition>>(new Map());
+  const liveStrokeCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const activeDrawRef = useRef<CanvasShape | null>(null);
+  const pendingDrawsRef = useRef<CanvasShape[]>([]);
+  const queuedDrawIdsRef = useRef<Set<string>>(new Set());
   const shapesRef = useRef(shapes);
   const cameraRef = useRef(camera);
   const toolRef = useRef(tool);
@@ -157,6 +166,9 @@ export function useCanvasEditorState({
     past.current = [];
     future.current = [];
     historyBase.current = null;
+    activeDrawRef.current = null;
+    pendingDrawsRef.current = [];
+    queuedDrawIdsRef.current.clear();
     applyInteraction({ kind: 'none' });
     setSelected(emptySelection);
     setEditingId(null);
@@ -220,6 +232,19 @@ export function useCanvasEditorState({
     onDirty();
   }, [onDirty]);
 
+  const commitDrawBatch = useCallback((strokes: readonly CanvasShape[]) => {
+    if (strokes.length === 0) return;
+    let historyCursor = shapesRef.current;
+    for (const stroke of strokes) {
+      past.current.push(historyCursor);
+      historyCursor = [...historyCursor, stroke];
+    }
+    if (past.current.length > 100) past.current.splice(0, past.current.length - 100);
+    future.current = [];
+    setShapes(prev => [...prev, ...strokes]);
+    onDirty();
+  }, [onDirty]);
+
   const deleteSelection = useCallback((sel: Set<string>) => {
     if (sel.size === 0) return false;
     // A connector is a relationship between its endpoints. Removing one
@@ -277,5 +302,6 @@ export function useCanvasEditorState({
     eraserPos, setEraserPos, activeColor, setActiveColor, activeColorRef, installedFontFamilies,
     pointers, past, future, selectNow, commit, deleteSelection, beginHistory, endHistory,
     toPage, viewportCentre, expandToGroups, toolRef, shapesRef,
+    liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch,
   };
 }

@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
 import { centreOf, rawBounds } from './canvasGeometry';
 import { DOUBLE_CLICK_DRIFT_PX } from './canvasPointerTypes';
+import { appendDistinctLivePoints, finalizeLiveStroke, paintLiveStrokes } from './liveStrokeCanvas';
 
 type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'pointers'
@@ -21,6 +22,11 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'commit'
   | 'onToolChange'
   | 'createId'
+  | 'liveStrokeCanvasRef'
+  | 'activeDrawRef'
+  | 'pendingDrawsRef'
+  | 'queuedDrawIdsRef'
+  | 'commitDrawBatch'
 > & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer completion/cancellation and commits the completed gesture. */
@@ -43,8 +49,14 @@ export function useCanvasPointerFinish({
   createId,
   pendingDrawPointsRef,
   drawRafRef,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
+  queuedDrawIdsRef,
+  commitDrawBatch,
 }: PointerFinishOptions): void {
   const uid = createId;
+  const drawCommitRafRef = useRef<number | null>(null);
   useEffect(() => {
     const finalizeDrawing = (drawingId: string) => {
       if (drawRafRef.current !== null) {
@@ -163,35 +175,38 @@ export function useCanvasPointerFinish({
       }
 
       if (interaction.kind === 'drawing') {
-        // Flush any pending draw points that haven't been rAF-processed yet,
-        // so the final stroke segment isn't lost.
+        if (interaction.pointerId !== e.pointerId) return;
         if (drawRafRef.current !== null) {
           cancelAnimationFrame(drawRafRef.current);
           drawRafRef.current = null;
         }
-        // pointerup is also a sample. On fast strokes the last pointermove can
-        // be older than the release position, so include the final coordinate
-        // before committing the stroke.
-        const finalPoint = toPage(e.clientX, e.clientY);
-        pendingDrawPointsRef.current.push([finalPoint.x, finalPoint.y]);
         const pending = pendingDrawPointsRef.current.splice(0);
-        // Collapse the stroke's bbox so hit-testing and marquee select work.
-        setShapes(prev => prev.map(s => {
-          if (s.id !== interaction.id || !s.points) return s;
-          const points = [...s.points];
-          let last = points[points.length - 1];
-          for (const point of pending) {
-            if (!last || Math.hypot(point[0] - last[0], point[1] - last[1]) >= 1 / cameraRef.current.z) {
-              points.push(point);
-              last = point;
-            }
+        const active = activeDrawRef.current;
+        if (active && active.id === interaction.id && active.points) {
+          appendDistinctLivePoints(active.points, pending, cameraRef.current.z);
+          if (e.type === 'pointerup') {
+            const finalPoint = toPage(e.clientX, e.clientY);
+            appendDistinctLivePoints(active.points, [[finalPoint.x, finalPoint.y]], cameraRef.current.z);
           }
-          const xs = points.map(pt => pt[0]);
-          const ys = points.map(pt => pt[1]);
-          const minX = Math.min(...xs), minY = Math.min(...ys);
-          return { ...s, points, x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
-        }));
-        endHistory();
+          const finalized = finalizeLiveStroke(active);
+          pendingDrawsRef.current = [...pendingDrawsRef.current, finalized];
+          activeDrawRef.current = null;
+          paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, null, cameraRef.current, window.devicePixelRatio || 1);
+          if (drawCommitRafRef.current === null) {
+            drawCommitRafRef.current = requestAnimationFrame(() => {
+              drawCommitRafRef.current = null;
+              const batch = pendingDrawsRef.current.filter(stroke => !queuedDrawIdsRef.current.has(stroke.id));
+              for (const stroke of batch) queuedDrawIdsRef.current.add(stroke.id);
+              commitDrawBatch(batch);
+              for (const stroke of batch) window.setTimeout(() => {
+                if (!queuedDrawIdsRef.current.has(stroke.id)) return;
+                pendingDrawsRef.current = pendingDrawsRef.current.filter(candidate => candidate.id !== stroke.id);
+                queuedDrawIdsRef.current.delete(stroke.id);
+                paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, activeDrawRef.current, cameraRef.current, window.devicePixelRatio || 1);
+              }, 5000);
+            });
+          }
+        }
         // Keep the pen active so consecutive strokes can be drawn without
         // reselecting the tool. The user can switch tools explicitly.
         applyInteraction({ kind: 'none' });
@@ -240,20 +255,26 @@ export function useCanvasPointerFinish({
     window.addEventListener('pointerup', finish);
     window.addEventListener('pointercancel', finish);
     return () => {
+      if (drawCommitRafRef.current !== null) cancelAnimationFrame(drawCommitRafRef.current);
       window.removeEventListener('pointerup', finish);
       window.removeEventListener('pointercancel', finish);
     };
   }, [
     applyInteraction,
+    activeDrawRef,
     cameraRef,
+    commitDrawBatch,
     commit,
     createId,
     drawRafRef,
     endHistory,
     interactionRef,
+    liveStrokeCanvasRef,
     onToolChange,
     pendingDrawPointsRef,
+    pendingDrawsRef,
     pointers,
+    queuedDrawIdsRef,
 
     selectNow,
     setAnnouncement,

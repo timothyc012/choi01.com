@@ -19,7 +19,7 @@ export type Interaction =
   | { kind: 'resize'; id: string; handle: string; start: CanvasShape }
   | { kind: 'rotate'; id: string; startAngle: number; startRotation: number }
   | { kind: 'creating'; id: string; startX: number; startY: number }
-  | { kind: 'drawing'; id: string }
+  | { kind: 'drawing'; id: string; pointerId: number }
   | { kind: 'connect'; fromId: string; toX: number; toY: number; hoverId: string | null }
   | { kind: 'bend'; id: string }
   | { kind: 'orthogonal-segment'; id: string; segmentIndex: number }
