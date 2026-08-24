@@ -51,9 +51,6 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
-    "perfect-freehand": "^1.2.3"
-  },
   "peerDependencies": {
     "lucide-react": ">=0.562 <1",
     "react": ">=18 <20",
@@ -75,5 +72,8 @@
     "build": "npm run build:js && npm run build:types",
     "build:js": "vite build --config vite.config.ts",
     "build:types": "tsc -p tsconfig.types.json --types node,react,react-dom && node scripts/rewrite-canvas-declarations.mjs"
+  },
+  "dependencies": {
+    "perfect-freehand": "^1.2.3"
   }
 }
