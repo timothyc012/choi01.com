@@ -6,10 +6,10 @@ import {
   getInspectorGroups,
   isDiagramShape,
 } from '../src/react/canvasDiagram.ts';
-import type { CanvasShape } from '../src/core/model.ts';
+import { createCanvasShapeId, type CanvasUnoutlinedShape } from '../src/core/model.ts';
 
-const card = (overrides: Partial<CanvasShape> = {}): CanvasShape => ({
-  id: 'diagram-test',
+const card = (overrides: Omit<Partial<CanvasUnoutlinedShape>, 'type'> = {}): CanvasUnoutlinedShape => ({
+  id: createCanvasShapeId('diagram-test'),
   type: 'card',
   x: 0,
   y: 0,

@@ -242,6 +242,26 @@ body {
   -webkit-user-drag: none;
 }
 
+/*
+ * The full tool column needs ~800px of viewport height. Below that the last
+ * buttons (group / ungroup) used to fall below the fold with no way to reach
+ * them, so on shorter screens the tools lay out in two columns instead.
+ * A grid — rather than a scroll container — keeps the fly-out popovers of the
+ * sticky / shape / stroke tools visible instead of clipping them.
+ */
+@media (max-height: 820px) {
+  .gc-toolbar {
+    display: grid;
+    grid-template-columns: repeat(2, 36px);
+    justify-items: center;
+  }
+
+  .gc-toolbar .gc-toolbar-divider {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}
+
 .gc-tool {
   display: flex;
   align-items: center;

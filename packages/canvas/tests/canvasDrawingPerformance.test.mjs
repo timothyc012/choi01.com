@@ -21,6 +21,68 @@ after(async () => {
 });
 
 describe('freehand drawing stays responsive on a dense board', () => {
+  it('keeps the active stroke out of React state until pointerup', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({ version: 'canvas-v1', shapes: [], camera: { x: -400, y: -300, z: 1 } });
+      cv.hostApi.setTool('draw');
+    });
+    const start = cv.pageToClient(40, 40);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', start.clientX, start.clientY));
+    const move = cv.pageToClient(80, 60);
+    await cv.dispatch(window, cv.pointer('pointermove', move.clientX, move.clientY));
+    assert.equal(cv.shapes().filter(shape => shape.type === 'draw').length, 0);
+    await cv.dispatch(window, cv.pointer('pointerup', move.clientX, move.clientY));
+    await new Promise(resolve => setTimeout(resolve, 30));
+    assert.equal(cv.shapes().filter(shape => shape.type === 'draw').length, 1);
+  });
+
+  it('commits zero-gap repeated handwriting strokes without panning', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({ version: 'canvas-v1', shapes: [], camera: { x: -400, y: -300, z: 1 } });
+      cv.hostApi.setTool('draw');
+    });
+    const cameraBefore = cv.hostApi.canvasRef.current.getSnapshot().camera;
+    await cv.act(async () => {
+      for (let stroke = 0; stroke < 50; stroke += 1) {
+        const start = cv.pageToClient(100 + (stroke % 10) * 20, 120 + Math.floor(stroke / 10) * 16);
+        cv.canvasEl.dispatchEvent(cv.pointer('pointerdown', start.clientX, start.clientY, stroke + 1));
+        const end = cv.pageToClient(108 + (stroke % 10) * 20, 124 + Math.floor(stroke / 10) * 16);
+        window.dispatchEvent(cv.pointer('pointermove', end.clientX, end.clientY, stroke + 1));
+        window.dispatchEvent(cv.pointer('pointerup', end.clientX, end.clientY, stroke + 1));
+      }
+    });
+    await new Promise(resolve => setTimeout(resolve, 40));
+    assert.equal(cv.shapes().filter(shape => shape.type === 'draw').length, 50);
+    assert.deepEqual(cv.hostApi.canvasRef.current.getSnapshot().camera, cameraBefore);
+  });
+
+  it('starts the next stroke immediately after pointerup', async () => {
+    await cv.act(async () => {
+      cv.hostApi.canvasRef.current.loadSnapshot({
+        version: 'canvas-v1',
+        shapes: [],
+        camera: { x: -400, y: -300, z: 1 },
+      });
+    });
+    await cv.act(async () => { cv.hostApi.setTool('draw'); });
+
+    const firstStart = cv.pageToClient(100, 100);
+    const firstEnd = cv.pageToClient(150, 120);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', firstStart.clientX, firstStart.clientY));
+    await cv.dispatch(window, cv.pointer('pointermove', firstEnd.clientX, firstEnd.clientY));
+    await cv.dispatch(window, cv.pointer('pointerup', firstEnd.clientX, firstEnd.clientY));
+
+    const secondStart = cv.pageToClient(200, 160);
+    const secondEnd = cv.pageToClient(260, 190);
+    await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', secondStart.clientX, secondStart.clientY));
+    await cv.dispatch(window, cv.pointer('pointermove', secondEnd.clientX, secondEnd.clientY));
+    await cv.dispatch(window, cv.pointer('pointerup', secondEnd.clientX, secondEnd.clientY));
+
+    const strokes = cv.shapes().filter(shape => shape.type === 'draw');
+    assert.equal(strokes.length, 2, 'a second stroke starts without waiting for outline conversion');
+    assert.ok(strokes.every(stroke => stroke.points.length >= 2), 'both strokes retain their points');
+  });
+
   it('captures a fast curved stroke delivered before the next pointermove', async () => {
     await cv.act(async () => {
       cv.hostApi.canvasRef.current.loadSnapshot({
@@ -34,24 +96,27 @@ describe('freehand drawing stays responsive on a dense board', () => {
     const start = cv.pageToClient(180, 180);
     await cv.dispatch(cv.canvasEl, cv.pointer('pointerdown', start.clientX, start.clientY));
 
-    // A short, fast pen stroke can begin and end between display-aligned
-    // pointermove events. Chrome still exposes its hardware samples through
-    // pointerrawupdate, including a curve that returns near its start point.
+    // A short, fast pen stroke may arrive as one display-aligned pointermove
+    // carrying several coalesced hardware samples, including a curve that
+    // returns near its start point.
     const rawPoints = [
       [220, 140], [280, 130], [340, 170], [350, 230],
       [300, 270], [240, 260], [190, 220], [180, 180],
     ];
-    for (const [x, y] of rawPoints) {
+    const finalPoint = cv.pageToClient(...rawPoints.at(-1));
+    const move = cv.pointer('pointermove', finalPoint.clientX, finalPoint.clientY);
+    Object.defineProperty(move, 'getCoalescedEvents', { value: () => rawPoints.map(([x, y]) => {
       const point = cv.pageToClient(x, y);
-      await cv.dispatch(window, cv.pointer('pointerrawupdate', point.clientX, point.clientY));
-    }
+      return { clientX: point.clientX, clientY: point.clientY };
+    }) });
+    await cv.dispatch(window, move);
     await cv.dispatch(window, cv.pointer('pointerup', start.clientX, start.clientY));
 
     const stroke = cv.shapes().find(s => s.type === 'draw');
     assert.ok(stroke, 'the fast stroke is created');
     assert.ok(
       stroke.points.length >= rawPoints.length,
-      `the raw samples must survive even when no pointermove arrives, captured ${stroke.points.length} of ${rawPoints.length}`,
+      `the coalesced samples must survive in one pointermove, captured ${stroke.points.length} of ${rawPoints.length}`,
     );
     assert.ok(stroke.w > 150 && stroke.h > 100, 'the captured stroke keeps the full curved gesture bounds');
   });
