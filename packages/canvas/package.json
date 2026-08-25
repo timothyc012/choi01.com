@@ -71,7 +71,10 @@
     "prepack": "npm run build",
     "build": "npm run build:js && npm run build:types",
     "build:js": "vite build --config vite.config.ts",
-    "build:types": "tsc -p tsconfig.types.json --types node,react,react-dom && node scripts/rewrite-canvas-declarations.mjs"
+    "build:types": "tsc -p tsconfig.types.json --types node,react,react-dom && node scripts/rewrite-canvas-declarations.mjs",
+    "sync": "node scripts/sync-canvas.mjs --write",
+    "sync:check": "node scripts/sync-canvas.mjs --strict",
+    "hooks:install": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "perfect-freehand": "^1.2.3"
