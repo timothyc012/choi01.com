@@ -304,7 +304,7 @@ export function CanvasInspector({
       </div>}
       {openGroup === 'diagram' && <div className={`pt-1.5 border-t text-[11px] opacity-70 ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>Mermaid 소스는 오른쪽 Diagram 편집기에서 수정할 수 있습니다.</div>}
       </>}
-      {hasStrokeWidthControl && <div className={`flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-none ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
+      {hasStrokeWidthControl && <div className={`flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-auto ${isDarkMode ? 'border-slate-700' : 'border-slate-100'}`}>
         {groupLabel('굵기')}
         {STROKE_WIDTHS.map(width => <React.Fragment key={width}>{segment(String(width), strokeWidth === width, () => patchSelected({ strokeWidth: width }), `굵기 ${width}`)}</React.Fragment>)}
       </div>}

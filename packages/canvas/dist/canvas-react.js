@@ -1441,7 +1441,7 @@ function Nr({
       ] }),
       tt === "diagram" && /* @__PURE__ */ Y("div", { className: `pt-1.5 border-t text-[11px] opacity-70 ${a ? "border-slate-700" : "border-slate-100"}`, children: "Mermaid 소스는 오른쪽 Diagram 편집기에서 수정할 수 있습니다." })
     ] }),
-    $t && /* @__PURE__ */ K("div", { className: `flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-none ${a ? "border-slate-700" : "border-slate-100"}`, children: [
+    $t && /* @__PURE__ */ K("div", { className: `flex flex-wrap items-center gap-1 pt-1.5 border-t pointer-events-auto ${a ? "border-slate-700" : "border-slate-100"}`, children: [
       at("굵기"),
       Xr.map((g) => /* @__PURE__ */ Y(me.Fragment, { children: J(String(g), Yt === g, () => i({ strokeWidth: g }), `굵기 ${g}`) }, g))
     ] }),
