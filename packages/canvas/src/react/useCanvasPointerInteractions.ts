@@ -21,9 +21,9 @@ interface PointerInteractionOptions {
   editorRef: RefObject<HTMLDivElement | null>;
   pointers: RefObject<Map<number, PointerPosition>>;
   interactionRef: RefObject<Interaction>;
+  editingIdRef: RefObject<string | null>;
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
-  editingIdRef: RefObject<string | null>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
@@ -47,6 +47,11 @@ interface PointerInteractionOptions {
   expandToGroups: (ids: Set<string>) => Set<string>;
   toPage: (clientX: number, clientY: number) => { x: number; y: number };
   createId: (prefix?: string) => string;
+  liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+  activeDrawRef: RefObject<CanvasShape | null>;
+  pendingDrawsRef: RefObject<CanvasShape[]>;
+  queuedDrawIdsRef: RefObject<Set<string>>;
+  commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 }
 
 export interface PointerInteractionHandlers extends PointerDownHandlers {
@@ -59,9 +64,9 @@ export function useCanvasPointerInteractions({
   editorRef,
   pointers,
   interactionRef,
+  editingIdRef,
   cameraRef,
   shapesRef,
-  editingIdRef,
   toolRef,
   activeColorRef,
   drawStrokeWidth,
@@ -85,14 +90,20 @@ export function useCanvasPointerInteractions({
   expandToGroups,
   toPage,
   createId,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
+  queuedDrawIdsRef,
+  commitDrawBatch,
 }: PointerInteractionOptions): PointerInteractionHandlers {
   const down = useCanvasPointerDown({
     containerRef,
     editorRef,
     pointers,
+    interactionRef,
+    editingIdRef,
     cameraRef,
     shapesRef,
-    editingIdRef,
     toolRef,
     activeColorRef,
     drawStrokeWidth,
@@ -111,6 +122,9 @@ export function useCanvasPointerInteractions({
     expandToGroups,
     toPage,
     createId,
+    liveStrokeCanvasRef,
+    activeDrawRef,
+    pendingDrawsRef,
   });
 
   useCanvasPointerLifecycle({
@@ -133,6 +147,11 @@ export function useCanvasPointerInteractions({
     expandToGroups,
     toPage,
     createId,
+    liveStrokeCanvasRef,
+    activeDrawRef,
+    pendingDrawsRef,
+    queuedDrawIdsRef,
+    commitDrawBatch,
   });
 
   return down;

@@ -24,7 +24,16 @@ export interface PointerLifecycleOptions {
   expandToGroups: (ids: Set<string>) => Set<string>;
   toPage: (clientX: number, clientY: number) => { x: number; y: number };
   createId: (prefix?: string) => string;
+  /** Samples captured since the last animation frame. Owned by the lifecycle hook. */
   pendingDrawPointsRef?: RefObject<[number, number][]>;
   drawRafRef?: RefObject<number | null>;
-  rawDrawPointerIdsRef?: RefObject<Set<number>>;
+  /** Overlay that renders strokes not yet present in React state. */
+  liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+  /** The stroke currently under the pen; not in `shapes` until it finishes. */
+  activeDrawRef: RefObject<CanvasShape | null>;
+  /** Finished strokes still waiting to appear in `shapes`. */
+  pendingDrawsRef: RefObject<CanvasShape[]>;
+  /** Ids handed to `commitDrawBatch`, so each stroke commits exactly once. */
+  queuedDrawIdsRef: RefObject<Set<string>>;
+  commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 }

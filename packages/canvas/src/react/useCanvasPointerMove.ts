@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
+import { appendDistinctLivePoints, paintLiveStrokes } from './liveStrokeCanvas';
 import {
   arrowGeometry,
   bounds,
@@ -32,7 +33,10 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'selectNow'
   | 'expandToGroups'
   | 'toPage'
-> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef' | 'rawDrawPointerIdsRef'>>;
+  | 'liveStrokeCanvasRef'
+  | 'activeDrawRef'
+  | 'pendingDrawsRef'
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
 export function useCanvasPointerMove({
@@ -51,14 +55,10 @@ export function useCanvasPointerMove({
   toPage,
   pendingDrawPointsRef,
   drawRafRef,
-  rawDrawPointerIdsRef,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
 }: PointerMoveOptions): void {
-  // Pending drawing points collected between animation frames. Each pointermove
-  // pushes into this buffer; a single rAF callback flushes them to setShapes so
-  // React re-renders at most once per frame instead of once per raw event.
-  // On high-frequency inputs (120 Hz trackpads, coalesced touch events) this
-  // prevents dropped points and the choppy stroke they produce.
-
   useEffect(() => {
     return () => {
       if (drawRafRef.current !== null) cancelAnimationFrame(drawRafRef.current);
@@ -66,29 +66,50 @@ export function useCanvasPointerMove({
   }, [drawRafRef]);
 
   useEffect(() => {
+    /**
+     * Collect every sample this event carries and repaint the live overlay.
+     *
+     * Two things matter here for fast handwriting:
+     *
+     *  - `getCoalescedEvents()`. When the pen outruns the event loop the
+     *    browser merges samples into one dispatched pointermove; the merged
+     *    ones exist ONLY in the coalesced list. Reading just `e.clientX/Y`
+     *    throws away everything between the last event and this one, which is
+     *    what turned fast strokes into polygons. Batching cannot recover them:
+     *    by the time any handler runs, the browser has already merged.
+     *
+     *  - The stroke id check. Points belong to the stroke that was under the
+     *    pen when they were captured. A frame boundary can fall between two
+     *    strokes, so a flush that arrives after the pen has lifted must be
+     *    discarded rather than appended to whatever is active now.
+     */
     const captureDrawingSamples = (e: PointerEvent, drawingId: string) => {
+      const active = activeDrawRef.current;
+      if (!active || active.id !== drawingId || !active.points) return;
       const p = toPage(e.clientX, e.clientY);
-      // Shift = straight line from first point to cursor (bypass batching).
+
+      // Shift = straight line from the first point to the cursor. Drop any
+      // buffered curve so the segment does not inherit it.
       if (e.shiftKey) {
-        setShapes(prev => prev.map(s => {
-          if (s.id !== drawingId || !s.points) return s;
-          const first = s.points[0];
-          return first ? { ...s, points: [first, [p.x, p.y]] } : s;
-        }));
+        if (drawRafRef.current !== null) {
+          cancelAnimationFrame(drawRafRef.current);
+          drawRafRef.current = null;
+        }
+        pendingDrawPointsRef.current = [];
+        const first = active.points[0];
+        if (first) active.points = [first, [p.x, p.y]];
+        paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, active, cameraRef.current, window.devicePixelRatio || 1);
         return;
       }
 
-      const samples = typeof e.getCoalescedEvents === 'function'
-        ? e.getCoalescedEvents()
-        : [];
-      if (samples.length > 0) {
-        for (const sample of samples) {
-          const samplePoint = toPage(sample.clientX, sample.clientY);
-          pendingDrawPointsRef.current.push([samplePoint.x, samplePoint.y]);
-        }
+      const coalesced = typeof e.getCoalescedEvents === 'function' ? e.getCoalescedEvents() : [];
+      for (const sample of coalesced) {
+        const point = toPage(sample.clientX, sample.clientY);
+        pendingDrawPointsRef.current.push([point.x, point.y]);
       }
-      // Some engines omit the dispatch point from the coalesced list. The
-      // distance filter below removes it cheaply when it is already present.
+      // Some engines omit the dispatched point from the coalesced list, others
+      // include it. Push it either way; the distance filter in
+      // appendDistinctLivePoints drops the duplicate.
       pendingDrawPointsRef.current.push([p.x, p.y]);
 
       if (drawRafRef.current !== null) return;
@@ -97,20 +118,12 @@ export function useCanvasPointerMove({
         const pending = pendingDrawPointsRef.current;
         if (pending.length === 0) return;
         pendingDrawPointsRef.current = [];
-        const z = cameraRef.current.z;
-        setShapes(prev => prev.map(s => {
-          if (s.id !== drawingId || !s.points) return s;
-          let lx = s.points[s.points.length - 1][0];
-          let ly = s.points[s.points.length - 1][1];
-          const merged = [...s.points];
-          for (const [px, py] of pending) {
-            if (Math.hypot(px - lx, py - ly) < 1 / z) continue;
-            merged.push([px, py]);
-            lx = px;
-            ly = py;
-          }
-          return merged.length === s.points.length ? s : { ...s, points: merged };
-        }));
+        const current = activeDrawRef.current;
+        // The stroke these points belong to is gone: discard them instead of
+        // grafting them onto whatever stroke is active now.
+        if (!current || current.id !== drawingId || !current.points) return;
+        appendDistinctLivePoints(current.points, pending, cameraRef.current.z);
+        paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, current, cameraRef.current, window.devicePixelRatio || 1);
       });
     };
 
@@ -304,12 +317,10 @@ export function useCanvasPointerMove({
       }
 
       if (interaction.kind === 'drawing') {
-        // Once this pointer has a raw stream, its later pointermove contains
-        // the same samples again. Process one stream only so the stroke never
-        // doubles back through duplicated points.
-        if (!rawDrawPointerIdsRef.current.has(e.pointerId)) {
-          captureDrawingSamples(e, interaction.id);
-        }
+        // Only the pointer that began the stroke may extend it, so a resting
+        // palm or a second finger cannot inject points into it.
+        if (interaction.pointerId !== e.pointerId) return;
+        captureDrawingSamples(e, interaction.id);
         return;
       }
 
@@ -348,40 +359,11 @@ export function useCanvasPointerMove({
       }
     };
 
-    const onRawUpdate = (event: Event) => {
-      if (!(event instanceof PointerEvent)) return;
-      const e = event;
-      const interaction = interactionRef.current;
-      if (interaction.kind !== 'drawing') return;
-      if (pointers.current.has(e.pointerId)) {
-        pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      }
-      rawDrawPointerIdsRef.current.add(e.pointerId);
-      captureDrawingSamples(e, interaction.id);
-    };
-
     window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerrawupdate', onRawUpdate);
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerrawupdate', onRawUpdate);
-    };
+    return () => window.removeEventListener('pointermove', onMove);
   }, [
-    applyInteraction,
-    cameraRef,
-    containerRef,
-    drawRafRef,
-    expandToGroups,
-    interactionRef,
-    pendingDrawPointsRef,
-    pointers,
-    rawDrawPointerIdsRef,
-    selectNow,
-    setCamera,
-    setEraserPos,
-    setGuides,
-    setShapes,
-    shapesRef,
-    toPage,
+    activeDrawRef, applyInteraction, cameraRef, containerRef, drawRafRef, expandToGroups,
+    interactionRef, liveStrokeCanvasRef, pendingDrawPointsRef, pendingDrawsRef, pointers,
+    selectNow, shapesRef, toPage,
   ]);
 }

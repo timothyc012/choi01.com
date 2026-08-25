@@ -15,6 +15,7 @@ export function effectiveFill(s: CanvasShape): string {
   return s.color ? CANVAS_COLORS[s.color].bg : CANVAS_COLORS.blue.bg;
 }
 
+/** A custom stroke colour set through the colour wheel wins over the palette. */
 export function effectiveStroke(s: CanvasShape): string {
   if (s.strokeColor) {
     try { return validateCanvasCssColor(s.strokeColor); } catch { return s.color ? CANVAS_COLORS[s.color].border : '#2563eb'; }
@@ -80,6 +81,37 @@ export function strokePath(points: [number, number][]): string {
  */
 import getStroke from 'perfect-freehand';
 
+/**
+ * The single definition of a stroke's shape. The live overlay (canvas), the
+ * committed shape (SVG), and the export path all resolve through here, so a
+ * stroke keeps its exact appearance when the pen lifts and the in-progress
+ * stroke is replaced by the committed one.
+ */
+export function freehandStrokeOptions(strokeWidth: number, mode: 'pen' | 'highlighter') {
+  return mode === 'highlighter'
+    ? { size: strokeWidth * 2.5, thinning: 0, smoothing: 0.5, streamline: 0.5, last: true }
+    : { size: strokeWidth, thinning: 0.5, smoothing: 0.62, streamline: 0.62, last: true };
+}
+
+/** Radius of the dot a single-point tap leaves behind. */
+export function freehandDotRadius(strokeWidth: number, mode: 'pen' | 'highlighter'): number {
+  return mode === 'highlighter' ? strokeWidth * 1.25 : strokeWidth / 2;
+}
+
+/**
+ * The raw perfect-freehand outline polygon. Callers that rasterise directly
+ * (the live-stroke canvas) want these points; callers that emit SVG want
+ * `freehandOutlinePath`.
+ */
+export function freehandOutlinePoints(
+  points: [number, number][],
+  strokeWidth: number,
+  mode: 'pen' | 'highlighter',
+): number[][] {
+  if (points.length < 2) return [];
+  return getStroke(points, freehandStrokeOptions(strokeWidth, mode));
+}
+
 export function freehandOutlinePath(
   points: [number, number][],
   strokeWidth: number,
@@ -90,18 +122,38 @@ export function freehandOutlinePath(
   // perfect-freehand returns an empty outline for a single point.
   if (points.length === 1) {
     const [x, y] = points[0];
-    const r = (mode === 'highlighter' ? strokeWidth * 1.25 : strokeWidth / 2);
+    const r = freehandDotRadius(strokeWidth, mode);
     return `M ${x - r} ${y} A ${r} ${r} 0 1 0 ${x + r} ${y} A ${r} ${r} 0 1 0 ${x - r} ${y} Z`;
   }
-  const opts = mode === 'highlighter'
-    ? { size: strokeWidth * 2.5, thinning: 0, smoothing: 0.5, streamline: 0.5, last: true }
-    : { size: strokeWidth, thinning: 0.5, smoothing: 0.62, streamline: 0.62, last: true };
-  const outline = getStroke(points, opts);
+  const outline = freehandOutlinePoints(points, strokeWidth, mode);
   if (outline.length === 0) return '';
   return outline.reduce(
     (d, [x, y], i) => d + (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`),
     '',
   ) + ' Z';
+}
+
+const outlinePathCache = new WeakMap<CanvasShape, string>();
+
+/**
+ * The outline path for a committed stroke, cached against the shape object.
+ *
+ * Rebuilding a perfect-freehand outline is O(points), and a board re-renders
+ * for reasons that have nothing to do with its strokes — panning, selecting,
+ * editing a note. Shapes are immutable, so a shape that has not changed keeps
+ * its path. The stroke under the pen does not come through here at all; it is
+ * rasterised on the live overlay and only reaches this cache once, when it is
+ * committed.
+ */
+export function shapeOutlinePath(s: CanvasShape): string {
+  const cached = outlinePathCache.get(s);
+  if (cached !== undefined) return cached;
+  const points = s.points as [number, number][] | undefined;
+  const d = s.type === 'draw' && points && points.length >= 2
+    ? freehandOutlinePath(points, s.strokeWidth ?? 3, s.drawMode ?? 'pen')
+    : '';
+  outlinePathCache.set(s, d);
+  return d;
 }
 
 export function escapeHtml(s: string): string {
@@ -135,6 +187,12 @@ export function htmlToLines(html: string): TextRun[][] {
   return lines.filter(line => line.length > 0);
 }
 
+/**
+ * Sanitizing rich text is the most expensive thing done per shape per render,
+ * and shapes are immutable, so the result is cached against the object. A board
+ * dense with rich text used to re-pay the whole parse/sanitize cost on every
+ * frame of a stroke, which stalled input.
+ */
 const shapeHtmlCache = new WeakMap<CanvasShape, string>();
 
 export function shapeHtml(s: CanvasShape): string {

@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
 import { centreOf, rawBounds } from './canvasGeometry';
 import { DOUBLE_CLICK_DRIFT_PX } from './canvasPointerTypes';
+import { appendDistinctLivePoints, finalizeLiveStroke, paintLiveStrokes } from './liveStrokeCanvas';
 
 type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'pointers'
@@ -21,7 +22,12 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'commit'
   | 'onToolChange'
   | 'createId'
-> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef' | 'rawDrawPointerIdsRef'>>;
+  | 'liveStrokeCanvasRef'
+  | 'activeDrawRef'
+  | 'pendingDrawsRef'
+  | 'queuedDrawIdsRef'
+  | 'commitDrawBatch'
+> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
 
 /** Binds pointer completion/cancellation and commits the completed gesture. */
 export function useCanvasPointerFinish({
@@ -43,13 +49,17 @@ export function useCanvasPointerFinish({
   createId,
   pendingDrawPointsRef,
   drawRafRef,
-  rawDrawPointerIdsRef,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
+  queuedDrawIdsRef,
+  commitDrawBatch,
 }: PointerFinishOptions): void {
   const uid = createId;
+  const drawCommitRafRef = useRef<number | null>(null);
   useEffect(() => {
     const finish = (e: PointerEvent) => {
       pointers.current.delete(e.pointerId);
-      rawDrawPointerIdsRef.current.delete(e.pointerId);
       // Release pointer capture so the element doesn't keep exclusive capture.
       try { (e.target as HTMLElement)?.releasePointerCapture?.(e.pointerId); } catch { /* noop */ }
       const interaction = interactionRef.current;
@@ -137,35 +147,45 @@ export function useCanvasPointerFinish({
       }
 
       if (interaction.kind === 'drawing') {
-        // Flush any pending draw points that haven't been rAF-processed yet,
-        // so the final stroke segment isn't lost.
+        // Only the pointer that drew the stroke may end it.
+        if (interaction.pointerId !== e.pointerId) return;
+
+        // Drain the buffer synchronously. The scheduled frame has not run yet,
+        // so cancelling it and taking the points here is what keeps the tail
+        // of a fast stroke — and makes the bounding box below cover it.
         if (drawRafRef.current !== null) {
           cancelAnimationFrame(drawRafRef.current);
           drawRafRef.current = null;
         }
-        // pointerup is also a sample. On fast strokes the last pointermove can
-        // be older than the release position, so include the final coordinate
-        // before committing the stroke.
-        const finalPoint = toPage(e.clientX, e.clientY);
-        pendingDrawPointsRef.current.push([finalPoint.x, finalPoint.y]);
         const pending = pendingDrawPointsRef.current.splice(0);
-        // Collapse the stroke's bbox so hit-testing and marquee select work.
-        setShapes(prev => prev.map(s => {
-          if (s.id !== interaction.id || !s.points) return s;
-          const points = [...s.points];
-          let last = points[points.length - 1];
-          for (const point of pending) {
-            if (!last || Math.hypot(point[0] - last[0], point[1] - last[1]) >= 1 / cameraRef.current.z) {
-              points.push(point);
-              last = point;
-            }
+        const active = activeDrawRef.current;
+        if (active && active.id === interaction.id && active.points) {
+          appendDistinctLivePoints(active.points, pending, cameraRef.current.z);
+          if (e.type === 'pointerup') {
+            const release = toPage(e.clientX, e.clientY);
+            appendDistinctLivePoints(active.points, [[release.x, release.y]], cameraRef.current.z);
           }
-          const xs = points.map(pt => pt[0]);
-          const ys = points.map(pt => pt[1]);
-          const minX = Math.min(...xs), minY = Math.min(...ys);
-          return { ...s, points, x: minX, y: minY, w: Math.max(...xs) - minX, h: Math.max(...ys) - minY };
-        }));
-        endHistory();
+          // finalizeLiveStroke fits the bbox around every point, including the
+          // ones just drained, so hit-testing and marquee select match the ink.
+          const finalized = finalizeLiveStroke(active);
+          pendingDrawsRef.current = [...pendingDrawsRef.current, finalized];
+          activeDrawRef.current = null;
+          // Keep it on the overlay until the committed shape renders, so there
+          // is no blink between lifting the pen and the SVG appearing.
+          paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, null, cameraRef.current, window.devicePixelRatio || 1);
+
+          // Commit on the next frame, so several strokes finished in one frame
+          // of fast writing land in a single state update.
+          if (drawCommitRafRef.current === null) {
+            drawCommitRafRef.current = requestAnimationFrame(() => {
+              drawCommitRafRef.current = null;
+              const batch = pendingDrawsRef.current.filter(stroke => !queuedDrawIdsRef.current.has(stroke.id));
+              if (batch.length === 0) return;
+              for (const stroke of batch) queuedDrawIdsRef.current.add(stroke.id);
+              commitDrawBatch(batch);
+            });
+          }
+        }
         // Keep the pen active so consecutive strokes can be drawn without
         // reselecting the tool. The user can switch tools explicitly.
         applyInteraction({ kind: 'none' });
@@ -218,24 +238,9 @@ export function useCanvasPointerFinish({
       window.removeEventListener('pointercancel', finish);
     };
   }, [
-    applyInteraction,
-    cameraRef,
-    commit,
-    createId,
-    drawRafRef,
-    endHistory,
-    interactionRef,
-    onToolChange,
-    pendingDrawPointsRef,
-    pointers,
-    rawDrawPointerIdsRef,
-    selectNow,
-    setAnnouncement,
-    setEditingId,
-    setEraserPos,
-    setGuides,
-    setShapes,
-    shapesRef,
-    toPage,
+    activeDrawRef, applyInteraction, cameraRef, commitDrawBatch, createId, drawRafRef, endHistory,
+    interactionRef, liveStrokeCanvasRef, onToolChange, pendingDrawPointsRef, pendingDrawsRef,
+    pointers, queuedDrawIdsRef, selectNow, setAnnouncement, setEditingId, setGuides, setEraserPos,
+    setShapes, shapesRef, toPage, commit,
   ]);
 }

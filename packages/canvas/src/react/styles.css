@@ -33,6 +33,8 @@
   --canvas-white-95: rgba(255,255,255,0.95);
   --canvas-white-10: rgba(255,255,255,0.1);
   --canvas-blue-600-60: rgba(37,99,235,0.6);
+  --canvas-rose-500: #f43f5e;
+  --canvas-rose-500-10: rgba(244,63,94,0.1);
   --canvas-grid-dark: rgba(148,163,184,0.16);
   --canvas-grid-light: rgba(100,116,139,0.18);
   --canvas-shadow-sm: 0 1px 2px rgba(15,23,42,0.12);
@@ -174,9 +176,13 @@
 .invoicex-canvas .text-decoration-underline { text-decoration: underline; }
 .invoicex-canvas .hover\:bg-blue-500:hover { background-color: var(--canvas-blue-500); }
 .invoicex-canvas .hover\:bg-blue-50:hover { background-color: var(--canvas-blue-50); }
-.invoicex-canvas .hover\:bg-slate-800:hover { background-color: var(--canvas-slate-800); }
-.invoicex-canvas .hover\:bg-slate-100:hover { background-color: var(--canvas-slate-100); }
+.invoicex-canvas .hover\:bg-slate-800:hover:not(:disabled) { background-color: var(--canvas-slate-800); }
+.invoicex-canvas .hover\:bg-slate-100:hover:not(:disabled) { background-color: var(--canvas-slate-100); }
 .invoicex-canvas .hover\:bg-slate-50:hover { background-color: var(--canvas-slate-50); }
+.invoicex-canvas .text-rose-500 { color: var(--canvas-rose-500); }
+.invoicex-canvas .hover\:bg-rose-500\/10:hover:not(:disabled) { background-color: var(--canvas-rose-500-10); }
+.invoicex-canvas .disabled\:opacity-30:disabled { opacity: 0.3; }
+.invoicex-canvas .disabled\:cursor-default:disabled { cursor: default; }
 .invoicex-canvas .focus\:outline-none:focus { outline: none; }
 .invoicex-canvas .-inset-0\.5 { inset: -0.125rem; }
 .invoicex-canvas .w-3\.5 { width: 0.875rem; }

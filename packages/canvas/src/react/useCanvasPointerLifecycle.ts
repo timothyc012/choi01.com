@@ -5,10 +5,11 @@ import { useCanvasPointerMove } from './useCanvasPointerMove';
 
 /** Composes the movement and completion listeners for an active pointer gesture. */
 export function useCanvasPointerLifecycle(options: PointerLifecycleOptions): void {
+  // The draw buffer is shared between move (which fills it) and finish (which
+  // drains it), so it is owned here rather than inside either hook.
   const pendingDrawPointsRef = useRef<[number, number][]>([]);
   const drawRafRef = useRef<number | null>(null);
-  const rawDrawPointerIdsRef = useRef(new Set<number>());
-  const lifecycleOptions = { ...options, pendingDrawPointsRef, drawRafRef, rawDrawPointerIdsRef };
+  const lifecycleOptions = { ...options, pendingDrawPointsRef, drawRafRef };
   useCanvasPointerMove(lifecycleOptions);
   useCanvasPointerFinish(lifecycleOptions);
 }

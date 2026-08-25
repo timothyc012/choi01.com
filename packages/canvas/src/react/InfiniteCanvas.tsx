@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useLayoutEffect } from 'react';
 import './styles.css';
 import canvasCssText from './styles.css?inline';
 
@@ -49,8 +49,10 @@ import { useCanvasViewport } from './useCanvasViewport';
 import { useCanvasTextEditing } from './useCanvasTextEditing';
 import { useCanvasEditorState } from './useCanvasEditorState';
 import { useCanvasViewInteractions } from './useCanvasViewInteractions';
+import { useCanvasSelectionActions } from './useCanvasSelectionActions';
 import { useCanvasRuntimeInteractions } from './useCanvasRuntimeInteractions';
 import { getCanvasRenderConfig } from './canvasRenderConfig';
+import { paintLiveStrokes, prepareLiveStrokeCanvas } from './liveStrokeCanvas';
 
 /**
  * Self-contained infinite canvas engine.
@@ -268,10 +270,51 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     expandToGroups,
     toolRef,
     shapesRef,
+    liveStrokeCanvasRef,
+    activeDrawRef,
+    pendingDrawsRef,
+    queuedDrawIdsRef,
+    commitDrawBatch,
   } = useCanvasEditorState({ boardIdentity, tool, controlledShapes, onShapesChange, onDirty });
+
+  useLayoutEffect(() => {
+    const canvas = liveStrokeCanvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+    const repaint = () => {
+      // prepareLiveStrokeCanvas caps the ratio; paint with the value it used
+      // so the transform matches the backing store it actually allocated.
+      const dpr = prepareLiveStrokeCanvas(canvas, container.clientWidth, container.clientHeight, window.devicePixelRatio || 1);
+      const committedIds = new Set(shapes.map(shape => shape.id));
+      pendingDrawsRef.current = pendingDrawsRef.current.filter(stroke => !committedIds.has(stroke.id));
+      for (const id of committedIds) queuedDrawIdsRef.current.delete(id);
+      paintLiveStrokes(canvas, pendingDrawsRef.current, activeDrawRef.current, cameraRef.current, dpr);
+    };
+    repaint();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', repaint);
+      return () => window.removeEventListener('resize', repaint);
+    }
+    const observer = new ResizeObserver(repaint);
+    observer.observe(container);
+    window.addEventListener('resize', repaint);
+    return () => { observer.disconnect(); window.removeEventListener('resize', repaint); };
+  }, [activeDrawRef, camera, cameraRef, containerRef, liveStrokeCanvasRef, pendingDrawsRef, queuedDrawIdsRef, shapes]);
+
+  const selectionActions = useCanvasSelectionActions({
+    containerRef,
+    shapesRef,
+    selectedRef,
+    commit,
+    deleteSelection,
+    selectNow,
+    setAnnouncement,
+    createId: uid,
+  });
 
   const {
     selectionInfo,
+    inspectorSelection,
     inspectorShape,
     onContainerPointerMove,
     onContainerPointerLeave,
@@ -329,6 +372,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     setAnnouncement,
     applyInteraction,
     selectNow,
+    selectionActions,
     past,
     future,
     beginHistory,
@@ -350,6 +394,11 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     expandToGroups,
     toPage,
     createId: uid,
+    liveStrokeCanvasRef,
+    activeDrawRef,
+    pendingDrawsRef,
+    queuedDrawIdsRef,
+    commitDrawBatch,
   });
 
   // --- Rendering -----------------------------------------------------------
@@ -366,7 +415,11 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     if (targetIds.size === 0) return;
     const includesStrokeWidth = 'strokeWidth' in patch;
     const drawStyleKeys = Object.keys(patch).every(key => key === 'color' || key === 'fillColor' || key === 'strokeColor' || key === 'strokeWidth');
-    if (inspectorShape?.type === 'draw' && drawStyleKeys) {
+    // Freehand strokes carry colour on the stroke itself; only take that path
+    // when the whole selection is freehand, so a mixed selection still routes
+    // through the generic patch below and every shape gets recoloured.
+    const allDraw = inspectorSelection.length > 0 && inspectorSelection.every(shape => shape.type === 'draw');
+    if (allDraw && drawStyleKeys) {
       const color = 'color' in patch ? patch.color : undefined;
       const strokeWidth = 'strokeWidth' in patch ? patch.strokeWidth : undefined;
       const strokeColor = 'strokeColor' in patch ? patch.strokeColor : undefined;
@@ -496,6 +549,8 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         strokeColorOf={strokeColorOf}
       />
 
+      <canvas ref={liveStrokeCanvasRef} aria-hidden="true" data-canvas-live-strokes="true" className="absolute inset-0 w-full h-full pointer-events-none" />
+
       {/* DOM layer: everything with text, so it stays selectable and editable. */}
       <CanvasObjectLayer
         visiblePaintOrder={visiblePaintOrder}
@@ -520,6 +575,8 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
       {inspectorShape && (
         <CanvasInspector
           shape={inspectorShape}
+          selection={inspectorSelection}
+          selectionActions={selectionActions}
           shapes={shapes}
           camera={camera}
           canvasSize={{ width: containerRef.current?.clientWidth ?? 380, height: containerRef.current?.clientHeight ?? 190 }}

@@ -29,6 +29,9 @@ interface ViewInteractionsOptions {
 }
 interface ViewInteractionsResult {
     selectionInfo: CanvasSelectionInfo;
+    /** Every shape the inspector acts on. Empty when no panel should render. */
+    inspectorSelection: readonly CanvasShape[];
+    /** Representative shape whose values the per-shape controls display. */
     inspectorShape: CanvasShape | null;
     onContainerPointerMove?: (event: React.PointerEvent) => void;
     onContainerPointerLeave?: () => void;

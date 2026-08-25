@@ -8,54 +8,15 @@ import {
   edgePoint,
   strokePath,
 } from './canvasGeometry';
-import { freehandOutlinePath } from './canvasShapeStyle';
+import { shapeOutlinePath } from './canvasShapeStyle';
 import { orthogonalEndAngle, orthogonalPathPoints, segmentAngle, toPath } from './canvasRouting';
 import { CANVAS_UI_COLORS } from './theme';
 
 interface Camera { x: number; y: number; z: number }
-type VectorInteraction = { kind: string; id?: string; fromId?: string; toX?: number; toY?: number; hoverId?: string | null };
+type VectorInteraction = { kind: string; fromId?: string; toX?: number; toY?: number; hoverId?: string | null };
 interface Guide { x1: number; y1: number; x2: number; y2: number }
 
 interface Marquee { startX: number; startY: number; curX: number; curY: number }
-
-type DrawShape = Extract<CanvasShape, { type: 'draw' }>;
-
-interface CanvasDrawPathProps {
-  shape: DrawShape;
-  cameraZoom: number;
-  color: string;
-  isActive: boolean;
-}
-
-const CanvasDrawPath = React.memo(function CanvasDrawPath({
-  shape,
-  cameraZoom,
-  color,
-  isActive,
-}: CanvasDrawPathProps) {
-  if (!shape.points) return null;
-  const drawMode = shape.drawMode ?? 'pen';
-  const documentStrokeWidth = shape.strokeWidth ?? 3;
-  const outlineD = !isActive && shape.points.length >= 2
-    ? freehandOutlinePath(shape.points, documentStrokeWidth, drawMode)
-    : '';
-  return (
-    <path
-      data-canvas-vector-shape-id={shape.id}
-      data-canvas-vector-shape-type="draw"
-      data-canvas-draw-mode={drawMode}
-      data-canvas-stroke-width={documentStrokeWidth}
-      d={outlineD || strokePath(shape.points)}
-      fill={outlineD ? color : 'none'}
-      stroke={outlineD ? 'none' : color}
-      strokeWidth={documentStrokeWidth / cameraZoom}
-      strokeOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
-      fillOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  );
-});
 
 interface CanvasVectorLayerProps {
   visiblePaintOrder: CanvasShape[];
@@ -82,15 +43,30 @@ export function CanvasVectorLayer({
       <g transform={`scale(${camera.z}) translate(${-camera.x}, ${-camera.y})`}>
         {visiblePaintOrder.map(s => {
           if (s.type === 'draw' && s.points) {
-            const isSelected = selected.has(s.id);
-            const isActive = interaction.kind === 'drawing' && interaction.id === s.id;
+            const drawMode = s.drawMode ?? 'pen';
+            const documentStrokeWidth = s.strokeWidth ?? 3;
+            const color = selected.has(s.id) ? CANVAS_UI_COLORS.blue : strokeColorOf(s);
+            // perfect-freehand produces a filled polygon outline that gives
+            // variable-width, natural-looking strokes (thick on slow curves,
+            // thin on fast flicks). Cached against the shape, so an unrelated
+            // re-render does not rebuild it. Single points fall back to a
+            // simple stroke, which perfect-freehand cannot outline.
+            const outlineD = shapeOutlinePath(s);
             return (
-              <CanvasDrawPath
+              <path
                 key={s.id}
-                shape={s}
-                cameraZoom={camera.z}
-                color={isSelected ? CANVAS_UI_COLORS.blue : strokeColorOf(s)}
-                isActive={isActive}
+                data-canvas-vector-shape-id={s.id}
+                data-canvas-vector-shape-type="draw"
+                data-canvas-draw-mode={drawMode}
+                data-canvas-stroke-width={documentStrokeWidth}
+                d={outlineD || strokePath(s.points)}
+                fill={outlineD ? color : 'none'}
+                stroke={outlineD ? 'none' : color}
+                strokeWidth={documentStrokeWidth / camera.z}
+                strokeOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
+                fillOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             );
           }

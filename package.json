@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "test": "node --test tests/*.test.mjs",
-    "build": "vite build",
+    "build": "npm run verify:canvas-vendor && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "doctor": "react-doctor --no-supply-chain --no-dead-code --no-lint ."
+    "doctor": "react-doctor --no-supply-chain --no-dead-code --no-lint .",
+    "verify:canvas-vendor": "node scripts/verify-canvas-vendor.mjs packages/canvas"
   },
   "dependencies": {
     "chois-canvas": "file:packages/canvas",

@@ -8,6 +8,7 @@ import type {
 import { SHAPE_TOOLS } from '../core/index.ts';
 import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
+import { paintLiveStrokes } from './liveStrokeCanvas';
 import {
   bounds,
   centreOf,
@@ -31,9 +32,10 @@ interface PointerDownOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   editorRef: RefObject<HTMLDivElement | null>;
   pointers: RefObject<Map<number, PointerPosition>>;
+  interactionRef: RefObject<Interaction>;
+  editingIdRef: RefObject<string | null>;
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
-  editingIdRef: RefObject<string | null>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
@@ -52,6 +54,9 @@ interface PointerDownOptions {
   expandToGroups: (ids: Set<string>) => Set<string>;
   toPage: (clientX: number, clientY: number) => { x: number; y: number };
   createId: (prefix?: string) => string;
+  liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
+  activeDrawRef: RefObject<CanvasShape | null>;
+  pendingDrawsRef: RefObject<CanvasShape[]>;
 }
 
 export interface PointerDownHandlers {
@@ -68,9 +73,10 @@ export function useCanvasPointerDown({
   containerRef,
   editorRef,
   pointers,
+  interactionRef,
+  editingIdRef,
   cameraRef,
   shapesRef,
-  editingIdRef,
   toolRef,
   activeColorRef,
   drawStrokeWidth,
@@ -89,6 +95,9 @@ export function useCanvasPointerDown({
   expandToGroups,
   toPage,
   createId,
+  liveStrokeCanvasRef,
+  activeDrawRef,
+  pendingDrawsRef,
 }: PointerDownOptions): PointerDownHandlers {
   const uid = createId;
   const lastClickRef = useRef<{ id: string; time: number } | null>(null);
@@ -119,9 +128,22 @@ export function useCanvasPointerDown({
 
   const onPointerDown = (e: ReactPointerEvent) => {
     const activeTool = toolRef.current;
+    // A press that lands inside an open text editor belongs to that editor.
+    // The editor no longer stops propagation (the canvas needs the event to
+    // start a drag), so the gesture is identified here instead and the
+    // editor-clearing side effects below are skipped.
     const targetElement = e.target instanceof Element ? e.target : null;
     const isEditorPointer = Boolean(targetElement?.closest('[data-canvas-editor]')) && editingIdRef.current !== null;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    // Palm rejection: while a stroke is being drawn, ignore every other
+    // pointer. A resting hand must not promote the gesture to a pinch and
+    // interrupt the character being written.
+    const current = interactionRef.current;
+    if (current.kind === 'drawing' && current.pointerId !== e.pointerId) {
+      pointers.current.delete(e.pointerId);
+      return;
+    }
 
     // Prevent the browser from starting a native drag of toolbar buttons,
     // text selections, or images when the pointer leaves the canvas mid-stroke.
@@ -175,9 +197,13 @@ export function useCanvasPointerDown({
         strokeWidth: drawStrokeWidth,
         drawMode: activeTool === 'highlighter' ? 'highlighter' : 'pen',
       };
-      beginHistory();
-      setShapes(prev => [...prev, created]);
-      applyInteraction({ kind: 'drawing', id: created.id });
+      // The stroke stays out of React state until the pen lifts: every
+      // sample would otherwise cost a full board re-render, which is what
+      // made fast handwriting fall behind the pen. It is painted onto the
+      // live overlay instead, and committed once in `useCanvasPointerFinish`.
+      activeDrawRef.current = created;
+      paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, created, cameraRef.current, window.devicePixelRatio || 1);
+      applyInteraction({ kind: 'drawing', id: created.id, pointerId: e.pointerId });
       return;
     }
 
@@ -208,6 +234,8 @@ export function useCanvasPointerDown({
 
     // Topmost shape wins, matching paint order.
     const byId = new Map(shapes.map(s => [s.id, s]));
+    // Dragging from inside an editor moves the shape being edited, even where
+    // the press lands over another shape's bounds.
     const editingShape = editingIdRef.current ? shapes.find(s => s.id === editingIdRef.current) : undefined;
     const hit = isEditorPointer && editingShape
       ? editingShape
