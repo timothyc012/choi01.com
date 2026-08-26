@@ -1,6 +1,6 @@
 import { useCallback, useImperativeHandle } from 'react';
 import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
-import type { CanvasStrokeWidth, CanvasTool } from '../core/index.ts';
+import type { CanvasColorKey, CanvasStrokeWidth, CanvasTool } from '../core/index.ts';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
 import { bounds, sanitizeShapeForCanvas } from './canvasGeometry';
 import { buildCanvasSvg, exportCanvasPng } from './canvasExport';
@@ -9,6 +9,8 @@ import { loadCanvasSnapshot } from './canvasSnapshot';
 import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 
 type Camera = CanvasSnapshot['camera'];
+
+const isDrawTool = (tool: CanvasTool | 'highlighter') => tool === 'draw' || tool === 'highlighter';
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
 
 interface UseCanvasImperativeHandleOptions {
@@ -16,6 +18,11 @@ interface UseCanvasImperativeHandleOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   shapesRef: RefObject<CanvasShape[]>;
   cameraRef: RefObject<Camera>;
+  toolRef: RefObject<CanvasTool | 'highlighter'>;
+  activeColorRef: RefObject<CanvasColorKey>;
+  drawColorRef: RefObject<CanvasColorKey>;
+  setDrawColor: (color: CanvasColorKey) => void;
+  setActiveColor: (color: CanvasColorKey) => void;
   past: RefObject<CanvasShape[][]>;
   future: RefObject<CanvasShape[][]>;
   controlled: boolean;
@@ -42,6 +49,11 @@ export function useCanvasImperativeHandle({
   containerRef,
   shapesRef,
   cameraRef,
+  toolRef,
+  activeColorRef,
+  drawColorRef,
+  setDrawColor,
+  setActiveColor,
   past,
   future,
   controlled,
@@ -119,6 +131,14 @@ export function useCanvasImperativeHandle({
       commit(prev => prev.map(shape => shape.id === id ? { ...shape, text, html: undefined } : shape));
     },
     setSelectedStrokeWidth,
+    // While a pen tool is active the "active colour" is the pen colour, so
+    // hosts that drive the palette through the handle see the same thing the
+    // user sees on the canvas. Other tools keep the note/shape colour.
+    setActiveColor: (color: CanvasColorKey) => {
+      if (isDrawTool(toolRef.current)) setDrawColor(color);
+      else setActiveColor(color);
+    },
+    getActiveColor: () => (isDrawTool(toolRef.current) ? drawColorRef.current : activeColorRef.current),
     setTool: onToolChange,
     undo: () => {
       const prev = past.current.pop();

@@ -65,6 +65,8 @@ export interface InfiniteCanvasHandle {
     addFileCard: (fileName: string, src: string, label: string) => void;
     updateShapeText: (id: string, text: string) => void;
     setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
+    setActiveColor: (color: CanvasColorKey) => void;
+    getActiveColor: () => CanvasColorKey;
     setTool: (tool: CoreCanvasTool) => void;
     undo: () => void;
     redo: () => void;
@@ -87,6 +89,9 @@ interface InfiniteCanvasProps {
     boardIdentity?: string;
     isDarkMode: boolean;
     tool: CanvasTool;
+    activeColor?: CanvasColorKey;
+    defaultActiveColor?: CanvasColorKey;
+    onActiveColorChange?: (color: CanvasColorKey) => void;
     drawStrokeWidth?: CanvasStrokeWidth;
     onToolChange: (tool: CanvasTool) => void;
     onDirty: () => void;

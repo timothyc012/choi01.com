@@ -43,6 +43,7 @@ import { CANVAS_UI_COLORS } from './theme';
 import { CanvasVectorLayer } from './CanvasVectorLayer';
 import { CanvasObjectLayer } from './CanvasObjectLayer';
 import { CanvasInspector } from './CanvasInspector';
+import { CanvasPenPalette } from './CanvasPenPalette';
 import { createCanvasShapeRenderer } from './CanvasShapeRenderer';
 import { type Interaction } from './useCanvasPointerInteractions';
 import { useCanvasViewport } from './useCanvasViewport';
@@ -172,6 +173,8 @@ export interface InfiniteCanvasHandle {
   addFileCard: (fileName: string, src: string, label: string) => void;
   updateShapeText: (id: string, text: string) => void;
   setSelectedStrokeWidth: (strokeWidth: CanvasStrokeWidth) => void;
+  setActiveColor: (color: CanvasColorKey) => void;
+  getActiveColor: () => CanvasColorKey;
   setTool: (tool: CoreCanvasTool) => void;
   undo: () => void;
   redo: () => void;
@@ -195,6 +198,9 @@ interface InfiniteCanvasProps {
   boardIdentity?: string;
   isDarkMode: boolean;
   tool: CanvasTool;
+  activeColor?: CanvasColorKey;
+  defaultActiveColor?: CanvasColorKey;
+  onActiveColorChange?: (color: CanvasColorKey) => void;
   drawStrokeWidth?: CanvasStrokeWidth;
   onToolChange: (tool: CanvasTool) => void;
   onDirty: () => void;
@@ -220,7 +226,7 @@ function uid(prefix = 's'): string {
 }
 
 export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(function InfiniteCanvas(
-  { boardIdentity = 'standalone', isDarkMode, tool, drawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
+  { boardIdentity = 'standalone', isDarkMode, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, drawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
     shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram }, ref
 ) {
   const {
@@ -256,6 +262,9 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     activeColor,
     setActiveColor,
     activeColorRef,
+    drawColor,
+    setDrawColor,
+    drawColorRef,
     installedFontFamilies,
     pointers,
     past,
@@ -275,7 +284,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     pendingDrawsRef,
     queuedDrawIdsRef,
     commitDrawBatch,
-  } = useCanvasEditorState({ boardIdentity, tool, controlledShapes, onShapesChange, onDirty });
+  } = useCanvasEditorState({ boardIdentity, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, controlledShapes, onShapesChange, onDirty });
 
   useLayoutEffect(() => {
     const canvas = liveStrokeCanvasRef.current;
@@ -358,6 +367,9 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     shapesRef,
     toolRef,
     activeColorRef,
+    drawColorRef,
+    setDrawColor,
+    setActiveColor,
     drawStrokeWidth,
     setSelectedStrokeWidth,
     camera,
@@ -592,6 +604,15 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
           applyCustomFontFamily={applyCustomFontFamily}
         />
       )}
+
+      <CanvasPenPalette
+        tool={tool}
+        activeColor={drawColor}
+        drawStrokeWidth={drawStrokeWidth}
+        isDarkMode={isDarkMode}
+        onSelectColor={setDrawColor}
+        onSelectStrokeWidth={setSelectedStrokeWidth}
+      />
     </div>
   );
 });

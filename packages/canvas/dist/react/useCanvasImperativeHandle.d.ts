@@ -1,5 +1,5 @@
 import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
-import type { CanvasStrokeWidth, CanvasTool } from '../core/index.js';
+import type { CanvasColorKey, CanvasStrokeWidth, CanvasTool } from '../core/index.js';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
 import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 type Camera = CanvasSnapshot['camera'];
@@ -9,6 +9,11 @@ interface UseCanvasImperativeHandleOptions {
     containerRef: RefObject<HTMLDivElement | null>;
     shapesRef: RefObject<CanvasShape[]>;
     cameraRef: RefObject<Camera>;
+    toolRef: RefObject<CanvasTool | 'highlighter'>;
+    activeColorRef: RefObject<CanvasColorKey>;
+    drawColorRef: RefObject<CanvasColorKey>;
+    setDrawColor: (color: CanvasColorKey) => void;
+    setActiveColor: (color: CanvasColorKey) => void;
     past: RefObject<CanvasShape[][]>;
     future: RefObject<CanvasShape[][]>;
     controlled: boolean;
@@ -32,6 +37,6 @@ interface UseCanvasImperativeHandleOptions {
     setAnnouncement: Dispatch<SetStateAction<string>>;
     createId: (prefix?: string) => string;
 }
-export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, selectNow, selectionActions, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
+export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, toolRef, activeColorRef, drawColorRef, setDrawColor, setActiveColor, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, selectNow, selectionActions, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
 export {};
 //# sourceMappingURL=useCanvasImperativeHandle.d.ts.map

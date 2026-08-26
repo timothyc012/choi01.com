@@ -26,6 +26,7 @@ interface PointerInteractionOptions {
   shapesRef: RefObject<CanvasShape[]>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
+  drawColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
   camera: Camera;
   shapes: CanvasShape[];
@@ -69,6 +70,7 @@ export function useCanvasPointerInteractions({
   shapesRef,
   toolRef,
   activeColorRef,
+  drawColorRef,
   drawStrokeWidth,
   camera,
   shapes,
@@ -106,6 +108,7 @@ export function useCanvasPointerInteractions({
     shapesRef,
     toolRef,
     activeColorRef,
+    drawColorRef,
     drawStrokeWidth,
     camera,
     shapes,

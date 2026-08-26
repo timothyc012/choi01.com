@@ -38,6 +38,7 @@ interface PointerDownOptions {
   shapesRef: RefObject<CanvasShape[]>;
   toolRef: RefObject<CanvasTool>;
   activeColorRef: RefObject<CanvasColorKey>;
+  drawColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
   camera: Camera;
   shapes: CanvasShape[];
@@ -79,6 +80,7 @@ export function useCanvasPointerDown({
   shapesRef,
   toolRef,
   activeColorRef,
+  drawColorRef,
   drawStrokeWidth,
   camera,
   shapes,
@@ -193,7 +195,7 @@ export function useCanvasPointerDown({
         w: 0,
         h: 0,
         points: [[p.x, p.y]],
-        color: activeColorRef.current,
+        color: drawColorRef.current,
         strokeWidth: drawStrokeWidth,
         drawMode: activeTool === 'highlighter' ? 'highlighter' : 'pen',
       };

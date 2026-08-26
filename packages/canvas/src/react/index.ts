@@ -17,5 +17,6 @@ export type {
   CanvasTool,
   InfiniteCanvasHandle,
 } from './InfiniteCanvas';
+export { CanvasPenPalette } from './CanvasPenPalette';
 export { diagramTemplate, getInspectorGroups, isDiagramShape } from './canvasDiagram';
 export type { DiagramTemplateKind, InspectorGroup } from './canvasDiagram';

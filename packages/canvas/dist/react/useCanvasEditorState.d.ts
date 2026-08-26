@@ -6,6 +6,9 @@ import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes'
 interface EditorStateOptions {
     boardIdentity: string;
     tool: CanvasTool;
+    activeColor?: CanvasColorKey;
+    defaultActiveColor?: CanvasColorKey;
+    onActiveColorChange?: (color: CanvasColorKey) => void;
     controlledShapes?: CanvasShape[];
     onShapesChange?: (updater: (prev: CanvasShape[]) => CanvasShape[]) => void;
     onDirty: () => void;
@@ -47,8 +50,11 @@ export interface CanvasEditorState {
         y: number;
     } | null>>;
     activeColor: CanvasColorKey;
-    setActiveColor: Dispatch<SetStateAction<CanvasColorKey>>;
+    setActiveColor: (updater: SetStateAction<CanvasColorKey>) => void;
     activeColorRef: RefObject<CanvasColorKey>;
+    drawColor: CanvasColorKey;
+    setDrawColor: (color: CanvasColorKey) => void;
+    drawColorRef: RefObject<CanvasColorKey>;
     installedFontFamilies: readonly string[];
     pointers: RefObject<Map<number, PointerPosition>>;
     past: RefObject<CanvasShape[][]>;
@@ -76,6 +82,6 @@ export interface CanvasEditorState {
     commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
 }
 /** Owns the mutable editor model, refs, history, and coordinate actions. */
-export declare function useCanvasEditorState({ boardIdentity, tool, controlledShapes, onShapesChange, onDirty, }: EditorStateOptions): CanvasEditorState;
+export declare function useCanvasEditorState({ boardIdentity, tool, activeColor: controlledActiveColor, defaultActiveColor, onActiveColorChange, controlledShapes, onShapesChange, onDirty, }: EditorStateOptions): CanvasEditorState;
 export {};
 //# sourceMappingURL=useCanvasEditorState.d.ts.map

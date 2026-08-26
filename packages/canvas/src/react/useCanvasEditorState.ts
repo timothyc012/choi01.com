@@ -14,6 +14,9 @@ import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes'
 interface EditorStateOptions {
   boardIdentity: string;
   tool: CanvasTool;
+  activeColor?: CanvasColorKey;
+  defaultActiveColor?: CanvasColorKey;
+  onActiveColorChange?: (color: CanvasColorKey) => void;
   controlledShapes?: CanvasShape[];
   onShapesChange?: (updater: (prev: CanvasShape[]) => CanvasShape[]) => void;
   onDirty: () => void;
@@ -50,8 +53,11 @@ export interface CanvasEditorState {
   eraserPos: { x: number; y: number } | null;
   setEraserPos: Dispatch<SetStateAction<{ x: number; y: number } | null>>;
   activeColor: CanvasColorKey;
-  setActiveColor: Dispatch<SetStateAction<CanvasColorKey>>;
+  setActiveColor: (updater: SetStateAction<CanvasColorKey>) => void;
   activeColorRef: RefObject<CanvasColorKey>;
+  drawColor: CanvasColorKey;
+  setDrawColor: (color: CanvasColorKey) => void;
+  drawColorRef: RefObject<CanvasColorKey>;
   installedFontFamilies: readonly string[];
   pointers: RefObject<Map<number, PointerPosition>>;
   past: RefObject<CanvasShape[][]>;
@@ -77,6 +83,9 @@ export interface CanvasEditorState {
 export function useCanvasEditorState({
   boardIdentity,
   tool,
+  activeColor: controlledActiveColor,
+  defaultActiveColor,
+  onActiveColorChange,
   controlledShapes,
   onShapesChange,
   onDirty,
@@ -123,7 +132,17 @@ export function useCanvasEditorState({
   const [announcement, setAnnouncement] = useState('');
   const [showInspectorPalette, setShowInspectorPalette] = useState(false);
   const [eraserPos, setEraserPos] = useState<{ x: number; y: number } | null>(null);
-  const [activeColor, setActiveColor] = useState<CanvasColorKey>('blue');
+  const [uncontrolledActiveColor, setUncontrolledActiveColor] = useState<CanvasColorKey>(controlledActiveColor ?? defaultActiveColor ?? 'blue');
+  const activeColor = controlledActiveColor ?? uncontrolledActiveColor;
+  const onActiveColorChangeRef = useRef(onActiveColorChange);
+  onActiveColorChangeRef.current = onActiveColorChange;
+  const setActiveColor = useCallback((updater: SetStateAction<CanvasColorKey>) => {
+    setUncontrolledActiveColor(prev => {
+      const next = typeof updater === 'function' ? updater(prev) : updater;
+      onActiveColorChangeRef.current?.(next);
+      return next;
+    });
+  }, []);
   const [installedFontFamilies, setInstalledFontFamilies] = useState<readonly string[]>(CANVAS_FONT_FAMILY_CANDIDATES);
   const activeColorRef = useRef(activeColor);
   activeColorRef.current = activeColor;
@@ -146,6 +165,18 @@ export function useCanvasEditorState({
   toolRef.current = tool;
   selectedRef.current = selected;
   editingIdRef.current = editingId;
+  // Pen and highlighter keep their own colours, separate from the note/shape
+  // colour: a black pen and a yellow highlighter are the expected defaults,
+  // while notes still default to the sky-blue sticky.
+  const [penColor, setPenColor] = useState<CanvasColorKey>('ink');
+  const [highlighterColor, setHighlighterColor] = useState<CanvasColorKey>('yellow');
+  const drawColor = tool === 'highlighter' ? highlighterColor : penColor;
+  const drawColorRef = useRef(drawColor);
+  drawColorRef.current = drawColor;
+  const setDrawColor = useCallback((color: CanvasColorKey) => {
+    if (toolRef.current === 'highlighter') setHighlighterColor(color);
+    else setPenColor(color);
+  }, []);
 
   const interactionRef = useRef<Interaction>({ kind: 'none' });
   const applyInteraction = useCallback((next: Interaction) => {
@@ -306,7 +337,7 @@ export function useCanvasEditorState({
     camera, setCamera, cameraRef, selected, setSelected, selectedRef, editingId, setEditingId,
     editingIdRef, interaction, interactionRef, applyInteraction, isSpaceDown, setIsSpaceDown,
     guides, setGuides, announcement, setAnnouncement, showInspectorPalette, setShowInspectorPalette,
-    eraserPos, setEraserPos, activeColor, setActiveColor, activeColorRef, installedFontFamilies,
+    eraserPos, setEraserPos, activeColor, setActiveColor, activeColorRef, drawColor, setDrawColor, drawColorRef, installedFontFamilies,
     pointers, past, future, selectNow, commit, deleteSelection, beginHistory, endHistory,
     toPage, viewportCentre, expandToGroups, toolRef, shapesRef,
     liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch,
