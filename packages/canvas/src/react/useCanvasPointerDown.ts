@@ -17,6 +17,7 @@ import {
 } from './canvasGeometry';
 import {
   type Camera,
+  ERASER_RADIUS,
   type Interaction,
   type PointerPosition,
 } from './canvasPointerTypes';
@@ -229,8 +230,8 @@ export function useCanvasPointerDown({
     if (activeTool === 'eraser') {
       // Held down and dragged, so a stroke can be rubbed out progressively.
       beginHistory();
-      setShapes(prev => eraseAt(prev, p.x, p.y, 14 / camera.z, camera.z));
-      applyInteraction({ kind: 'erasing' });
+      setShapes(prev => eraseAt(prev, p.x, p.y, ERASER_RADIUS, camera.z));
+      applyInteraction({ kind: 'erasing', lastX: p.x, lastY: p.y });
       return;
     }
 

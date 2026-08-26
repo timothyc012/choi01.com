@@ -403,16 +403,16 @@ export const GuestCanvasPage: React.FC = () => {
               </div>
             )}
           </div>
-          <button type="button" onClick={() => setActiveTool('eraser')} className={toolButtonClass('eraser', true)} title="지우개 — 클릭한 개체 삭제">
+          <button type="button" onClick={() => setActiveTool('eraser')} className={toolButtonClass('eraser', true)} title="지우개 — 손글씨는 닿은 구간만, 도형은 전체 삭제">
             <Eraser className="gc-icon" />
           </button>
 
           <div className="gc-toolbar-divider" />
 
-          <button type="button" onClick={() => canvasRef.current?.undo()} className="gc-tool" title="실행 취소 (Ctrl+Z)">
+          <button type="button" onClick={() => canvasRef.current?.undo()} className="gc-tool" title="실행 취소 (Ctrl/⌘+Z)">
             <Undo2 className="gc-icon" />
           </button>
-          <button type="button" onClick={() => canvasRef.current?.redo()} className="gc-tool" title="다시 실행 (Ctrl+Shift+Z)">
+          <button type="button" onClick={() => canvasRef.current?.redo()} className="gc-tool" title="다시 실행 (Ctrl/⌘+Shift+Z 또는 Ctrl/⌘+Y)">
             <Redo2 className="gc-icon" />
           </button>
           <button type="button" onClick={() => canvasRef.current?.duplicateSelected()} disabled={selection.count === 0} className="gc-tool" title="선택 항목 복제">
@@ -470,7 +470,7 @@ export const GuestCanvasPage: React.FC = () => {
         </div>
 
         <div className="gc-hint">
-          더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl+휠로 확대 · Ctrl+S 파일 저장
+          더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl/⌘+Z 되돌리기 · Ctrl/⌘+Shift+Z 다시 실행 · Ctrl+S 파일 저장
         </div>
 
         {openDiagramId && (() => {

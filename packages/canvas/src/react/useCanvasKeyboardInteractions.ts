@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import type { CanvasShapeType, CanvasTool } from '../core/index.ts';
-import { toolShortcutFromKeyboardEvent } from './keyboardShortcuts';
+import { historyShortcutFromKeyboardEvent, toolShortcutFromKeyboardEvent } from './keyboardShortcuts';
 import type { CanvasShape } from './InfiniteCanvas';
 import { shapePlainText } from './canvasGeometry';
 
@@ -102,22 +102,33 @@ export function useCanvasKeyboardInteractions({
         return;
       }
 
-      const mod = e.metaKey || e.ctrlKey;
       const sel = selectedRef.current;
 
-      if (mod && e.key.toLowerCase() === 'z') {
+      const historyShortcut = historyShortcutFromKeyboardEvent(e);
+      if (historyShortcut) {
         e.preventDefault();
-        if (e.shiftKey) {
+        if (historyShortcut === 'redo') {
           const next = future.current.pop();
-          if (next) { past.current.push(shapesRef.current); setShapes(next); onDirty(); }
+          if (next) {
+            past.current.push(shapesRef.current);
+            setShapes(next);
+            onDirty();
+            setAnnouncement('다시 실행');
+          }
         } else {
           const prev = past.current.pop();
-          if (prev) { future.current.push(shapesRef.current); setShapes(prev); onDirty(); }
+          if (prev) {
+            future.current.push(shapesRef.current);
+            setShapes(prev);
+            onDirty();
+            setAnnouncement('실행 취소');
+          }
         }
         selectNow(new Set());
         return;
       }
 
+      const mod = e.metaKey || e.ctrlKey;
       if (mod && e.key.toLowerCase() === 'g') {
         e.preventDefault();
         if (e.shiftKey) {

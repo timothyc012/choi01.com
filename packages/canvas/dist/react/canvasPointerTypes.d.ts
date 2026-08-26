@@ -80,6 +80,8 @@ export type Interaction = {
     hoverId: string | null;
 } | {
     kind: 'erasing';
+    lastX: number;
+    lastY: number;
 };
 export declare const MIN_ZOOM = 0.1;
 export declare const MAX_ZOOM = 4;

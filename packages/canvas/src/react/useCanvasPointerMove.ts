@@ -7,7 +7,7 @@ import {
   centreOf,
   computeSnap,
   edgePoint,
-  eraseAt,
+  eraseAlongPath,
   hitTest,
   toLocal,
 } from './canvasGeometry';
@@ -164,8 +164,15 @@ export function useCanvasPointerMove({
       const p = toPage(e.clientX, e.clientY);
 
       if (interaction.kind === 'erasing') {
-        setShapes(prev => eraseAt(prev, p.x, p.y, ERASER_RADIUS / cam.z, cam.z));
+        setShapes(prev => eraseAlongPath(
+          prev,
+          { x: interaction.lastX, y: interaction.lastY },
+          p,
+          ERASER_RADIUS,
+          cam.z,
+        ));
         setEraserPos({ x: p.x, y: p.y });
+        applyInteraction({ kind: 'erasing', lastX: p.x, lastY: p.y });
         return;
       }
 

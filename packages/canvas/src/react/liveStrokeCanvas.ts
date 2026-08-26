@@ -17,7 +17,7 @@
  */
 import type { CanvasShape } from './InfiniteCanvas';
 import type { Camera } from './canvasPointerTypes';
-import { CANVAS_COLORS } from '../core/index.ts';
+import { CANVAS_COLORS, CANVAS_LIMITS } from '../core/index.ts';
 import { freehandDotRadius, freehandOutlinePoints } from './canvasShapeStyle';
 
 function screenPoint(point: [number, number], camera: Camera): [number, number] {
@@ -34,13 +34,38 @@ export function appendDistinctLivePoints(
   samples: readonly [number, number][],
   zoom: number,
 ): void {
-  const threshold = 0.05 / Math.max(zoom, 0.1);
+  const safeZoom = Math.max(zoom, 0.1);
+  const threshold = 0.05 / safeZoom;
+  // WebKit only exposed coalesced PointerEvent samples relatively recently,
+  // and embedded browsers can still hand us two positions a long way apart.
+  // Keep a small screen-space gap so perfect-freehand never has to turn one
+  // sparse event into a visibly pinched or angular segment.
+  const maxStep = 4 / safeZoom;
   let last = points[points.length - 1];
   for (const sample of samples) {
-    if (!last || Math.hypot(sample[0] - last[0], sample[1] - last[1]) >= threshold) {
+    if (!last) {
       points.push(sample);
       last = sample;
+      continue;
     }
+    const dx = sample[0] - last[0];
+    const dy = sample[1] - last[1];
+    const distance = Math.hypot(dx, dy);
+    if (distance < threshold) continue;
+    const desiredSteps = Math.max(1, Math.ceil(distance / maxStep));
+    // The snapshot boundary already defines the safe upper bound. Stop there
+    // rather than silently widening interpolation gaps or committing a stroke
+    // that the document parser would reject on the next render.
+    const steps = Math.min(desiredSteps, CANVAS_LIMITS.maxDrawPoints - points.length);
+    if (steps <= 0) return;
+    for (let step = 1; step <= steps; step++) {
+      const point: [number, number] = [
+        last[0] + dx * (step / desiredSteps),
+        last[1] + dy * (step / desiredSteps),
+      ];
+      points.push(point);
+    }
+    last = points[points.length - 1];
   }
 }
 

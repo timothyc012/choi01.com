@@ -196,29 +196,302 @@ export function bezierAt(t: number, s: { x: number; y: number }, c: { x: number;
   return { x: mt * mt * s.x + 2 * mt * t * c.x + t * t * e.x, y: mt * mt * s.y + 2 * mt * t * c.y + t * t * e.y };
 }
 
-export function eraseAt(shapes: CanvasShape[], px: number, py: number, radius: number, zoom: number): CanvasShape[] {
+type EraserPoint = { x: number; y: number };
+type ParameterInterval = { start: number; end: number };
+
+function intersectIntervals(a: ParameterInterval | null, b: ParameterInterval | null): ParameterInterval | null {
+  if (!a || !b) return null;
+  const start = Math.max(a.start, b.start);
+  const end = Math.min(a.end, b.end);
+  return start <= end ? { start, end } : null;
+}
+
+function linearRangeInterval(origin: number, delta: number, min: number, max: number): ParameterInterval | null {
+  if (Math.abs(delta) < 1e-12) return origin >= min && origin <= max ? { start: 0, end: 1 } : null;
+  const first = (min - origin) / delta;
+  const second = (max - origin) / delta;
+  return intersectIntervals(
+    { start: Math.min(first, second), end: Math.max(first, second) },
+    { start: 0, end: 1 },
+  );
+}
+
+function circleIntersectionInterval(
+  start: readonly [number, number],
+  end: readonly [number, number],
+  centre: EraserPoint,
+  radius: number,
+): ParameterInterval | null {
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const offsetX = start[0] - centre.x;
+  const offsetY = start[1] - centre.y;
+  const a = dx * dx + dy * dy;
+  if (a < 1e-12) {
+    return offsetX * offsetX + offsetY * offsetY <= radius * radius ? { start: 0, end: 1 } : null;
+  }
+  const b = 2 * (offsetX * dx + offsetY * dy);
+  const c = offsetX * offsetX + offsetY * offsetY - radius * radius;
+  const discriminant = b * b - 4 * a * c;
+  if (discriminant < 0) return null;
+  const root = Math.sqrt(discriminant);
+  return intersectIntervals(
+    { start: (-b - root) / (2 * a), end: (-b + root) / (2 * a) },
+    { start: 0, end: 1 },
+  );
+}
+
+/** Parameter interval where a stroke segment lies inside a swept eraser capsule. */
+function capsuleIntersectionInterval(
+  start: readonly [number, number],
+  end: readonly [number, number],
+  from: EraserPoint,
+  to: EraserPoint,
+  radius: number,
+): ParameterInterval | null {
+  const sweepX = to.x - from.x;
+  const sweepY = to.y - from.y;
+  const sweepLength = Math.hypot(sweepX, sweepY);
+  if (sweepLength < 1e-12) return circleIntersectionInterval(start, end, from, radius);
+
+  const unitX = sweepX / sweepLength;
+  const unitY = sweepY / sweepLength;
+  const segmentX = end[0] - start[0];
+  const segmentY = end[1] - start[1];
+  const offsetX = start[0] - from.x;
+  const offsetY = start[1] - from.y;
+  const alongOrigin = offsetX * unitX + offsetY * unitY;
+  const alongDelta = segmentX * unitX + segmentY * unitY;
+  const normalOrigin = offsetX * -unitY + offsetY * unitX;
+  const normalDelta = segmentX * -unitY + segmentY * unitX;
+  const strip = intersectIntervals(
+    linearRangeInterval(alongOrigin, alongDelta, 0, sweepLength),
+    linearRangeInterval(normalOrigin, normalDelta, -radius, radius),
+  );
+  const intervals = [
+    strip,
+    circleIntersectionInterval(start, end, from, radius),
+    circleIntersectionInterval(start, end, to, radius),
+  ].filter((interval): interval is ParameterInterval => interval !== null);
+  if (intervals.length === 0) return null;
+  // A capsule is convex, so its intersection with a line segment is one
+  // continuous interval. Taking the extrema also absorbs floating-point seams
+  // where the central strip meets an end cap.
+  return {
+    start: Math.min(...intervals.map(interval => interval.start)),
+    end: Math.max(...intervals.map(interval => interval.end)),
+  };
+}
+
+function pointOnSegment(start: readonly [number, number], end: readonly [number, number], t: number): [number, number] {
+  return [start[0] + (end[0] - start[0]) * t, start[1] + (end[1] - start[1]) * t];
+}
+
+function appendPoint(points: [number, number][], point: readonly [number, number]): void {
+  const previous = points[points.length - 1];
+  if (!previous || Math.hypot(point[0] - previous[0], point[1] - previous[1]) > 1e-9) {
+    points.push([point[0], point[1]]);
+  }
+}
+
+function strokeRunShape(shape: CanvasShape, id: string, points: [number, number][]): CanvasShape {
+  let minX = points[0][0];
+  let minY = points[0][1];
+  let maxX = minX;
+  let maxY = minY;
+  for (const [x, y] of points) {
+    minX = Math.min(minX, x);
+    minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x);
+    maxY = Math.max(maxY, y);
+  }
+  return { ...shape, id, points, x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+}
+
+function nextEraserFragmentId(sourceId: string, usedIds: Set<string>): string {
+  const base = sourceId.slice(0, 480);
+  let sequence = 1;
+  let candidate = `${base}-e${sequence}`;
+  while (usedIds.has(candidate)) candidate = `${base}-e${++sequence}`;
+  usedIds.add(candidate);
+  return candidate;
+}
+
+function orientation(a: EraserPoint, b: EraserPoint, c: EraserPoint): number {
+  return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+function pointOnLineSegment(point: EraserPoint, start: EraserPoint, end: EraserPoint): boolean {
+  return Math.abs(orientation(start, end, point)) <= 1e-9
+    && point.x >= Math.min(start.x, end.x) - 1e-9 && point.x <= Math.max(start.x, end.x) + 1e-9
+    && point.y >= Math.min(start.y, end.y) - 1e-9 && point.y <= Math.max(start.y, end.y) + 1e-9;
+}
+
+function segmentsIntersect(a: EraserPoint, b: EraserPoint, c: EraserPoint, d: EraserPoint): boolean {
+  const abC = orientation(a, b, c);
+  const abD = orientation(a, b, d);
+  const cdA = orientation(c, d, a);
+  const cdB = orientation(c, d, b);
+  if (((abC > 0 && abD < 0) || (abC < 0 && abD > 0))
+    && ((cdA > 0 && cdB < 0) || (cdA < 0 && cdB > 0))) return true;
+  return (Math.abs(abC) <= 1e-9 && pointOnLineSegment(c, a, b))
+    || (Math.abs(abD) <= 1e-9 && pointOnLineSegment(d, a, b))
+    || (Math.abs(cdA) <= 1e-9 && pointOnLineSegment(a, c, d))
+    || (Math.abs(cdB) <= 1e-9 && pointOnLineSegment(b, c, d));
+}
+
+function distanceBetweenSegments(a: EraserPoint, b: EraserPoint, c: EraserPoint, d: EraserPoint): number {
+  if (segmentsIntersect(a, b, c, d)) return 0;
+  return Math.min(
+    distanceToSegment(a.x, a.y, c.x, c.y, d.x, d.y),
+    distanceToSegment(b.x, b.y, c.x, c.y, d.x, d.y),
+    distanceToSegment(c.x, c.y, a.x, a.y, b.x, b.y),
+    distanceToSegment(d.x, d.y, a.x, a.y, b.x, b.y),
+  );
+}
+
+function segmentIntersectsBox(from: EraserPoint, to: EraserPoint, box: BoundingBox, padding: number): boolean {
+  const xInterval = linearRangeInterval(from.x, to.x - from.x, box.minX - padding, box.maxX + padding);
+  const yInterval = linearRangeInterval(from.y, to.y - from.y, box.minY - padding, box.maxY + padding);
+  return intersectIntervals(xInterval, yInterval) !== null;
+}
+
+function pathHitsShape(
+  shape: CanvasShape,
+  from: EraserPoint,
+  to: EraserPoint,
+  radius: number,
+  zoom: number,
+  byId: Map<string, CanvasShape>,
+  allShapes: CanvasShape[],
+): boolean {
+  const slop = 8 / zoom;
+  if (shape.type === 'arrow') {
+    const threshold = radius + (shape.strokeWidth ?? 2.5) / zoom / 2 + slop;
+    const geometry = arrowGeometry(shape, byId, allShapes);
+    const segments: [EraserPoint, EraserPoint][] = [];
+    if (geometry.routing === 'orthogonal' && geometry.pathPoints && geometry.pathPoints.length > 1) {
+      for (let index = 1; index < geometry.pathPoints.length; index++) {
+        segments.push([geometry.pathPoints[index - 1], geometry.pathPoints[index]]);
+      }
+    } else if (geometry.bend === 0) {
+      segments.push([geometry.start, geometry.end]);
+    } else {
+      let previous = geometry.start;
+      for (let step = 1; step <= 16; step++) {
+        const point = bezierAt(step / 16, geometry.start, geometry.control, geometry.end);
+        segments.push([previous, point]);
+        previous = point;
+      }
+    }
+    return segments.some(([start, end]) => distanceBetweenSegments(from, to, start, end) <= threshold);
+  }
+
+  const localFrom = toLocal(shape, from.x, from.y);
+  const localTo = toLocal(shape, to.x, to.y);
+  const box = rawBounds(shape);
+  if (shape.type !== 'frame') return segmentIntersectsBox(localFrom, localTo, box, radius + slop);
+
+  const threshold = radius + slop;
+  const corners = [
+    { x: box.minX, y: box.minY }, { x: box.maxX, y: box.minY },
+    { x: box.maxX, y: box.maxY }, { x: box.minX, y: box.maxY },
+  ];
+  for (let index = 0; index < corners.length; index++) {
+    if (distanceBetweenSegments(localFrom, localTo, corners[index], corners[(index + 1) % corners.length]) <= threshold) return true;
+  }
+  const title = { minX: box.minX, minY: box.minY - 28 / zoom, maxX: box.maxX, maxY: box.minY };
+  return segmentIntersectsBox(localFrom, localTo, title, radius);
+}
+
+/**
+ * Rub ink out along a swept circular eraser path.
+ *
+ * `radius` is expressed in screen pixels. Draw strokes are split into the
+ * untouched runs; object shapes retain the existing whole-object behaviour.
+ */
+export function eraseAlongPath(
+  shapes: CanvasShape[],
+  from: EraserPoint,
+  to: EraserPoint,
+  radius: number,
+  zoom: number,
+): CanvasShape[] {
   const out: CanvasShape[] = [];
-  let seq = 0;
+  const safeZoom = Math.max(zoom, 0.1);
+  const pageRadius = radius / safeZoom;
+  const usedIds = new Set(shapes.map(shape => shape.id));
+  const byId = new Map(shapes.map(shape => [shape.id, shape]));
+
   for (const s of shapes) {
     if (s.type !== 'draw' || !s.points) {
-      if (hitTest(s, px, py, zoom)) continue;
+      if (pathHitsShape(s, from, to, pageRadius, safeZoom, byId, shapes)) continue;
       out.push(s);
       continue;
     }
+
+    const drawMode = s.drawMode ?? 'pen';
+    const visualWidth = drawMode === 'highlighter' ? (s.strokeWidth ?? 3) * 2.5 : (s.strokeWidth ?? 3);
+    const effectiveRadius = pageRadius + visualWidth / 2;
+    const shapeBounds = rawBounds(s);
+    if (!segmentIntersectsBox(from, to, shapeBounds, effectiveRadius)) {
+      out.push(s);
+      continue;
+    }
+
+    if (s.points.length === 0) {
+      out.push(s);
+      continue;
+    }
+    if (s.points.length === 1) {
+      const [x, y] = s.points[0];
+      if (distanceToSegment(x, y, from.x, from.y, to.x, to.y) > effectiveRadius) out.push(s);
+      continue;
+    }
+
     const runs: [number, number][][] = [];
     let run: [number, number][] = [];
-    for (const [x, y] of s.points) {
-      if (Math.hypot(x - px, y - py) <= radius / zoom) {
-        if (run.length > 1) runs.push(run);
-        run = [];
-      } else run.push([x, y]);
+    let erased = false;
+    const flushRun = () => {
+      if (run.length > 1) runs.push(run);
+      run = [];
+    };
+    for (let index = 1; index < s.points.length; index++) {
+      const start = s.points[index - 1];
+      const end = s.points[index];
+      const interval = capsuleIntersectionInterval(start, end, from, to, effectiveRadius);
+      if (!interval) {
+        if (run.length === 0) appendPoint(run, start);
+        appendPoint(run, end);
+        continue;
+      }
+
+      erased = true;
+      if (interval.start > 1e-9) {
+        if (run.length === 0) appendPoint(run, start);
+        appendPoint(run, pointOnSegment(start, end, interval.start));
+      }
+      flushRun();
+      if (interval.end < 1 - 1e-9) {
+        appendPoint(run, pointOnSegment(start, end, interval.end));
+        appendPoint(run, end);
+      }
     }
-    if (run.length > 1) runs.push(run);
-    if (runs.length === 0) continue;
-    const b = rawBounds(s);
-    runs.forEach(points => out.push({ ...s, id: `${s.id}-e${seq++}`, points, x: b.minX, y: b.minY, w: b.maxX - b.minX, h: b.maxY - b.minY }));
+    flushRun();
+    if (!erased) {
+      out.push(s);
+      continue;
+    }
+    runs.forEach((points, index) => {
+      const id = index === 0 ? s.id : nextEraserFragmentId(s.id, usedIds);
+      out.push(strokeRunShape(s, id, points));
+    });
   }
   return out;
+}
+
+export function eraseAt(shapes: CanvasShape[], px: number, py: number, radius: number, zoom: number): CanvasShape[] {
+  return eraseAlongPath(shapes, { x: px, y: py }, { x: px, y: py }, radius, zoom);
 }
 
 export function computeSnap(movingBox: BoundingBox, others: CanvasShape[], zoom: number): SnapResult {

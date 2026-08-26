@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
-import { centreOf, rawBounds } from './canvasGeometry';
-import { DOUBLE_CLICK_DRIFT_PX } from './canvasPointerTypes';
+import { centreOf, eraseAlongPath, rawBounds } from './canvasGeometry';
+import { DOUBLE_CLICK_DRIFT_PX, ERASER_RADIUS } from './canvasPointerTypes';
 import { appendDistinctLivePoints, finalizeLiveStroke, paintLiveStrokes } from './liveStrokeCanvas';
 
 type PointerFinishOptions = Pick<PointerLifecycleOptions,
@@ -74,6 +74,16 @@ export function useCanvasPointerFinish({
       setGuides([]);
 
       if (interaction.kind === 'erasing') {
+        if (e.type === 'pointerup') {
+          const release = toPage(e.clientX, e.clientY);
+          setShapes(prev => eraseAlongPath(
+            prev,
+            { x: interaction.lastX, y: interaction.lastY },
+            release,
+            ERASER_RADIUS,
+            cameraRef.current.z,
+          ));
+        }
         setEraserPos(null);
         endHistory();
         applyInteraction({ kind: 'none' });

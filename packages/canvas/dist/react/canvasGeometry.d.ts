@@ -64,6 +64,17 @@ export declare function bezierAt(t: number, s: {
     x: number;
     y: number;
 };
+type EraserPoint = {
+    x: number;
+    y: number;
+};
+/**
+ * Rub ink out along a swept circular eraser path.
+ *
+ * `radius` is expressed in screen pixels. Draw strokes are split into the
+ * untouched runs; object shapes retain the existing whole-object behaviour.
+ */
+export declare function eraseAlongPath(shapes: CanvasShape[], from: EraserPoint, to: EraserPoint, radius: number, zoom: number): CanvasShape[];
 export declare function eraseAt(shapes: CanvasShape[], px: number, py: number, radius: number, zoom: number): CanvasShape[];
 export declare function computeSnap(movingBox: BoundingBox, others: CanvasShape[], zoom: number): SnapResult;
 //# sourceMappingURL=canvasGeometry.d.ts.map
