@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDEKA 40474 주간 식탁 매니저 (2026.08.24 ~ 08.29)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1b2624;
+      --soft-ink: #4f5d59;
+      --faint-ink: #828f8a;
+      --paper: #f6f3eb;
+      --surface: #fffefb;
+      --surface-warm: #fcf6eb;
+      --line: #ded7ca;
+      --line-strong: #c5bba9;
+      --tomato: #d45937;
+      --tomato-deep: #a83f23;
+      --tomato-soft: #faede9;
+      --sage: #386f60;
+      --sage-soft: #e1eee8;
+      --gold: #b37e2c;
+      --gold-soft: #f7eed8;
+      --blue: #4a7585;
+      --blue-soft: #e3eff2;
+      --edeka-yellow: #fcd300;
+      --edeka-blue: #005696;
+      --shadow: 0 16px 40px rgba(50, 40, 25, .08);
+      --shadow-small: 0 6px 18px rgba(50, 40, 25, .06);
+      font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: radial-gradient(circle at 10% 0%, rgba(212, 89, 55, .07), transparent 30rem),
+                  radial-gradient(circle at 90% 15%, rgba(56, 111, 96, .06), transparent 28rem),
+                  var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    .shell { width: min(1280px, calc(100% - 40px)); margin: 0 auto; padding: 24px 0 60px; }
+
+    /* Top Notice Banner */
+    .top-notice-banner {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      padding: 10px 18px; border-radius: 6px; background: var(--edeka-blue); color: #fff;
+      font-size: 13px; font-weight: 500; margin-bottom: 20px; box-shadow: var(--shadow-small);
+    }
+    .top-notice-banner strong { color: var(--edeka-yellow); font-weight: 850; font-size: 14px; }
+    .top-notice-tags { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+    .top-notice-badge {
+      padding: 3px 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.2);
+      font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    }
+
+    /* Topbar */
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 4px 2px 22px; border-bottom: 1px solid var(--line-strong); }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-logo {
+      width: 44px; height: 44px; display: grid; place-items: center;
+      border: 2px solid var(--edeka-blue); border-radius: 8px;
+      background: var(--edeka-yellow); color: var(--edeka-blue);
+      font-weight: 900; font-size: 20px; letter-spacing: -0.05em;
+      box-shadow: 3px 3px 0 var(--edeka-blue);
+    }
+    .eyebrow { margin: 0 0 3px; color: var(--tomato-deep); font-size: 11px; font-weight: 850; letter-spacing: .15em; text-transform: uppercase; }
+    .brand h1 { margin: 0; font-family: "Noto Serif KR", Georgia, serif; font-size: clamp(22px, 2.8vw, 30px); letter-spacing: -.05em; line-height: 1.1; }
+    .top-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 254, 251, .85); color: var(--soft-ink); font-size: 12px; }
+    .chip strong { color: var(--ink); }
+    .chip.highlight { border-color: var(--tomato); background: var(--tomato-soft); color: var(--tomato-deep); font-weight: 700; }
+    .btn-action {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 13px;
+      border: 1px solid var(--line-strong); border-radius: 4px; background: var(--surface);
+      color: var(--soft-ink); font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none;
+      transition: all .16s ease;
+    }
+    .btn-action:hover { transform: translateY(-2px); border-color: var(--tomato); color: var(--tomato-deep); }
+
+    /* Intro Hero */
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(360px, .85fr); gap: 20px; padding: 24px 0 16px; }
+    .hero-card { padding: clamp(24px, 4vw, 36px); border: 1px solid var(--ink); border-radius: 6px; background: linear-gradient(135deg, rgba(255, 254, 251, .98), rgba(252, 246, 235, .95)); box-shadow: var(--shadow); }
+    .hero-card h2 { margin: 0; font-family: "Noto Serif KR", Georgia, serif; font-size: clamp(30px, 4vw, 50px); letter-spacing: -.06em; line-height: 1.08; }
+    .hero-card p { margin: 14px 0 0; color: var(--soft-ink); font-size: 14px; max-width: 640px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+
+    .strategy-card { padding: 24px; border: 1px solid #bdd2c6; border-radius: 6px; background: var(--sage-soft); box-shadow: var(--shadow-small); }
+    .strategy-card h3 { margin: 0; font-family: "Noto Serif KR", Georgia, serif; font-size: 21px; letter-spacing: -.04em; color: #214e41; }
+    .strategy-card p { margin: 8px 0 16px; color: #3d6356; font-size: 12px; }
+    .strategy-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+    .strategy-step { padding-top: 10px; border-top: 1px solid #b1cec0; }
+    .strategy-step b { display: block; color: #214e41; font-size: 11px; }
+    .strategy-step span { display: block; margin-top: 3px; color: #44685a; font-size: 10px; line-height: 1.35; }
+
+    /* KPIs */
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); box-shadow: var(--shadow-small); margin-top: 14px; }
+    .kpi { padding: 18px 20px; border-right: 1px solid var(--line); }
+    .kpi:last-child { border-right: 0; }
+    .kpi-label { color: var(--faint-ink); font-size: 10px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    .kpi-value { margin-top: 6px; font-size: clamp(24px, 3vw, 34px); font-weight: 900; letter-spacing: -.06em; line-height: 1; }
+    .kpi-value small { margin-left: 4px; color: var(--soft-ink); font-size: 12px; font-weight: 500; }
+    .kpi-note { margin-top: 6px; color: var(--faint-ink); font-size: 10px; }
+
+    /* Week Days Grid */
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 36px 0 14px; }
+    .section-head h2 { margin: 0; font-family: "Noto Serif KR", Georgia, serif; font-size: 28px; letter-spacing: -.05em; line-height: 1.1; }
+    .section-head p { margin: 0; color: var(--faint-ink); font-size: 12px; text-align: right; }
+    .week-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 9px; }
+    .day-card {
+      min-height: 205px; padding: 15px; border: 1px solid var(--line); border-radius: 5px;
+      background: rgba(255, 254, 251, .88); text-align: left; cursor: pointer;
+      box-shadow: var(--shadow-small); transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .day-card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+    .day-card.active { border-color: var(--tomato); background: var(--surface-warm); box-shadow: inset 0 4px 0 var(--tomato), var(--shadow-small); }
+    .day-top { display: flex; justify-content: space-between; align-items: baseline; }
+    .day-name { font-family: "Noto Serif KR", Georgia, serif; font-size: 22px; font-weight: 700; line-height: 1; }
+    .day-tag { color: var(--faint-ink); font-size: 10px; font-weight: 850; }
+    .day-cuisine { display: inline-block; margin-top: 13px; color: var(--sage); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .day-card h4 { margin: 8px 0 12px; font-size: 14px; letter-spacing: -.035em; line-height: 1.32; }
+    .day-meta-row { display: flex; justify-content: space-between; color: var(--soft-ink); font-size: 10px; margin-top: 3px; }
+    .day-meta-row b { color: var(--ink); font-size: 11px; }
+    .day-reuse { display: inline-flex; margin-top: 12px; padding: 3px 6px; border-radius: 3px; background: var(--blue-soft); color: var(--blue); font-size: 9px; font-weight: 800; }
+
+    /* Detail Grid (Execution Card + Shopping List) */
+    .detail-grid { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(360px, .82fr); gap: 20px; align-items: start; margin-top: 20px; }
+    .panel { border: 1px solid var(--line); border-radius: 6px; background: rgba(255, 254, 251, .92); box-shadow: var(--shadow-small); }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+    .panel-head h3 { margin: 0; font-size: 16px; letter-spacing: -.03em; }
+    .panel-head span { color: var(--faint-ink); font-size: 11px; }
+    .detail-body { padding: 24px 22px; }
+    .detail-kicker { color: var(--tomato-deep); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .detail-body h3 { margin: 6px 0 8px; font-family: "Noto Serif KR", Georgia, serif; font-size: 28px; letter-spacing: -.05em; line-height: 1.1; }
+    .detail-copy { margin: 0; color: var(--soft-ink); font-size: 13px; }
+
+    .detail-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 18px 0; }
+    .detail-metric { padding: 12px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+    .detail-metric span { display: block; color: var(--faint-ink); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .detail-metric b { display: block; margin-top: 4px; font-size: 18px; letter-spacing: -.04em; }
+
+    .detail-columns { display: grid; grid-template-columns: .85fr 1.15fr; gap: 24px; margin-top: 14px; }
+    .sub-head { margin: 0 0 10px; color: var(--faint-ink); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .detail-ingredients { display: flex; flex-wrap: wrap; gap: 6px; }
+    .detail-ingredients span { padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--soft-ink); font-size: 11px; }
+    .detail-ingredients span.offer { border-color: #bad2c3; background: var(--sage-soft); color: #275649; font-weight: 600; }
+    .steps { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .steps li { display: grid; grid-template-columns: 24px 1fr; gap: 10px; color: var(--soft-ink); font-size: 12px; line-height: 1.45; }
+    .steps li::before { content: attr(data-step); width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: var(--gold-soft); color: var(--gold); font-size: 10px; font-weight: 900; }
+    .detail-link-row { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; padding-top: 14px; border-top: 1px dashed var(--line); }
+    .detail-link { display: inline-flex; align-items: center; gap: 5px; color: var(--sage); font-size: 12px; font-weight: 850; text-decoration: none; }
+    .detail-link:hover { color: var(--tomato-deep); text-decoration: underline; }
+
+    /* Shopping List Panel */
+    .shopping-summary { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 12px; padding: 22px; border-bottom: 1px solid #ebdbb5; background: var(--gold-soft); border-radius: 5px 5px 0 0; }
+    .shopping-summary .label { color: #876226; font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .shopping-summary strong { display: block; margin-top: 4px; font-size: 32px; letter-spacing: -.06em; line-height: 1; }
+    .shopping-summary p { margin: 6px 0 0; color: #785c2c; font-size: 10px; }
+    .shopping-summary .used { color: #785c2c; font-size: 11px; font-weight: 850; text-align: right; }
+    .shopping-summary .used b { font-size: 16px; color: #573e15; display: block; margin-top: 2px; }
+
+    .shopping-list { margin: 0; padding: 0; list-style: none; }
+    .shopping-list li { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 13px 22px; border-bottom: 1px solid var(--line); }
+    .shopping-list li:last-child { border-bottom: 0; }
+    .shopping-list b { display: block; font-size: 12px; }
+    .shopping-list small { display: block; margin-top: 2px; color: var(--faint-ink); font-size: 10px; }
+    .shopping-list strong { align-self: center; font-size: 13px; white-space: nowrap; }
+    .shopping-foot { margin: 0; padding: 14px 22px 18px; color: var(--faint-ink); font-size: 10px; line-height: 1.5; }
+
+    /* =======================================================
+       CUISINE HIERARCHICAL REPERTORY SECTION
+       ======================================================= */
+    .cuisine-section { margin-top: 40px; padding: 24px 24px 30px; border: 1px solid var(--line); border-radius: 8px; background: rgba(255, 254, 251, .94); box-shadow: var(--shadow-small); }
+    .cuisine-section-head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 2px solid var(--ink); margin-bottom: 20px; }
+    .cuisine-title-wrap { display: flex; align-items: center; gap: 12px; }
+    .cuisine-icon { font-size: 24px; line-height: 1; }
+    .cuisine-title { margin: 0; font-family: "Noto Serif KR", Georgia, serif; font-size: 22px; font-weight: 700; letter-spacing: -0.04em; }
+    .cuisine-badge { padding: 4px 10px; border-radius: 999px; background: var(--sage-soft); color: var(--sage); font-size: 11px; font-weight: 800; }
+    .cuisine-desc { margin: 0; color: var(--faint-ink); font-size: 12px; }
+
+    .sub-group-block { margin-top: 24px; }
+    .sub-group-block:first-of-type { margin-top: 0; }
+    .sub-group-label {
+      display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px;
+      border-radius: 4px; background: var(--paper); color: var(--soft-ink);
+      font-size: 12px; font-weight: 850; letter-spacing: 0.03em; margin-bottom: 12px;
+      border-left: 3px solid var(--tomato);
+    }
+
+    .catalog-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .recipe-card {
+      display: flex; flex-direction: column; min-height: 200px; padding: 16px; border: 1px solid var(--line);
+      border-radius: 5px; background: var(--surface); box-shadow: 0 2px 8px rgba(50,40,25,.04);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+      cursor: pointer;
+    }
+    .recipe-card:hover { transform: translateY(-3px); border-color: var(--tomato); box-shadow: var(--shadow-small); }
+    .recipe-card[hidden] { display: none; }
+    .recipe-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .recipe-tag { color: var(--tomato-deep); font-size: 10px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+    .recipe-badge { padding: 3px 6px; border-radius: 3px; background: var(--sage-soft); color: var(--sage); font-size: 9px; font-weight: 850; }
+    .recipe-card h4 { min-height: 38px; margin: 10px 0 6px; font-size: 14px; letter-spacing: -.035em; line-height: 1.32; color: var(--ink); }
+    .recipe-card p { min-height: 34px; margin: 0; color: var(--soft-ink); font-size: 11px; line-height: 1.42; }
+    
+    .recipe-meta-foot { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--line); font-size: 10px; color: var(--faint-ink); }
+    .recipe-link-btn { color: var(--sage); font-size: 11px; font-weight: 850; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; }
+    .recipe-link-btn:hover { text-decoration: underline; color: var(--tomato-deep); }
+
+    /* Search & Tab Filters */
+    .search-row { display: grid; grid-template-columns: minmax(240px, 1fr) auto; gap: 12px; margin: 18px 0 14px; }
+    .search-input { width: 100%; min-height: 42px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 5px; background: var(--surface); color: var(--ink); outline: none; }
+    .search-input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px rgba(56, 111, 96, .12); }
+    
+    .filter-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .pill {
+      padding: 8px 16px; border: 1px solid var(--line-strong); border-radius: 999px;
+      background: var(--surface); color: var(--soft-ink); font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: all .16s ease;
+    }
+    .pill:hover { border-color: var(--tomato); }
+    .pill.active { border-color: var(--tomato); background: var(--tomato); color: #fff; box-shadow: 0 3px 10px rgba(212, 89, 55, .25); }
+
+    /* Footer */
+    .footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-top: 50px; padding-top: 24px; border-top: 1px solid var(--line-strong); color: var(--faint-ink); font-size: 11px; }
+    .footer a { color: var(--soft-ink); text-decoration: none; }
+
+    @media (max-width: 1080px) {
+      .week-grid { grid-template-columns: repeat(4, 1fr); }
+      .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 820px) {
+      .hero-grid, .detail-grid { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: repeat(2, 1fr); }
+      .kpi:nth-child(2) { border-right: 0; }
+      .kpi:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .detail-columns { grid-template-columns: 1fr; }
+      .cuisine-section-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: calc(100% - 24px); }
+      .topbar { flex-direction: column; align-items: flex-start; }
+      .top-actions { justify-content: flex-start; margin-top: 10px; }
+      .week-grid { grid-template-columns: repeat(2, 1fr); }
+      .catalog-grid { grid-template-columns: 1fr; }
+      .strategy-steps { grid-template-columns: 1fr; }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .section-head p { text-align: left; }
+      .footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+    @media print {
+      body { background: #fff; }
+      .shell { width: 100%; padding: 0; }
+      .top-notice-banner, .top-actions, .search-row, .filter-pills, .btn-action { display: none; }
+      .hero-card, .panel, .strategy-card, .recipe-card, .cuisine-section { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- Top Notice Banner: Clear Date & Store Visibility -->
+    <div class="top-notice-banner">
+      <div>
+        📅 이번 주 행사 기간: <strong>2026년 8월 24일(월) ~ 8월 29일(토)</strong> [KW 35]
+      </div>
+      <div class="top-notice-tags">
+        <span class="top-notice-badge">EDEKA Düsseldorf 40474</span>
+        <span class="top-notice-badge">단독 파일 100% 공유 가능</span>
+      </div>
+    </div>
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">E</div>
+        <div>
+          <p class="eyebrow">01ontology · Meal Planning & Recipe Pack</p>
+          <h1>이번 주의 식탁 · EDEKA Düsseldorf 40474</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <span class="chip highlight">📅 <strong>2026.08.24(월) – 08.29(토)</strong></span>
+        <span class="chip">매장 <strong>EDEKA Shariat (40474)</strong></span>
+        <a class="btn-action" href="./edeka_40474_discounts.csv" download>CSV 112행 열기 ↗</a>
+        <button class="btn-action" onclick="window.print()">인쇄 / PDF 저장</button>
+      </div>
+    </header>
+
+    <!-- Intro Hero & Strategy -->
+    <section class="hero-grid">
+      <article class="hero-card">
+        <p class="eyebrow">Smart Meal Routine · 7 Dinners (8.24 ~ 8.29)</p>
+        <h2>8월 마지막 주,<br />할인 식재료로 차리는 7일 식탁</h2>
+        <p>
+          <strong>2026년 8월 24일(월)부터 8월 29일(토)</strong>까지 진행되는 EDEKA 40474의 대표 행사 품목
+          (닭가슴살·다짐육·송어·스테이크·파프리카·주키니·감자·콜라비)을 
+          <strong>01ontology 레시피 팩(7.2만 건 지식그래프)</strong>과 연결했습니다.
+        </p>
+        <div class="hero-meta">
+          <span class="chip">📅 <strong>8.24(월) – 8.29(토) 유효</strong></span>
+          <span class="chip">1인 저녁 7끼 최적화</span>
+          <span class="chip">확장 레시피 35종</span>
+          <span class="chip">주간 실사용 식비 <strong>약 €16.80</strong></span>
+        </div>
+      </article>
+
+      <article class="strategy-card">
+        <h3>식재료 순환 플랜 (Zero Waste)</h3>
+        <p>1회 장보기로 1kg 닭가슴살과 2.5kg 감자를 주간 전체에 골고루 분배합니다.</p>
+        <div class="strategy-steps">
+          <div class="strategy-step">
+            <b>Step 1. 소분과 밑간</b>
+            <span>닭가슴살 1kg을 4회분(닭갈비, 오븐구이, 토달볶 등)으로 즉시 소분</span>
+          </div>
+          <div class="strategy-step">
+            <b>Step 2. 채소 교차 사용</b>
+            <span>감자·파프리카·주키니를 찌개·볶음·오븐 가니쉬로 순환 배치</span>
+          </div>
+          <div class="strategy-step">
+            <b>Step 3. 즉석 저장 반찬</b>
+            <span>0.59€ 콜라비로 무생채를 만들어 주중 내내 아삭하게 곁들임</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- KPIs -->
+    <section class="kpis" aria-label="핵심 지표">
+      <div class="kpi">
+        <div class="kpi-label">전체 할인 수록 품목</div>
+        <div class="kpi-value">112<small>개</small></div>
+        <div class="kpi-note">EDEKA Rhein-Ruhr KW35 (8.24~8.29)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">연계 추천 레시피</div>
+        <div class="kpi-value">35<small>종</small></div>
+        <div class="kpi-note">01ontology 레시피 팩 매칭</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">7일 장보기 패키지 총액</div>
+        <div class="kpi-value">€32.84</div>
+        <div class="kpi-note">매장 실결제액 기준 (기본 양념 제외)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">1인 저녁 7끼 실사용 원가</div>
+        <div class="kpi-value">€16.85</div>
+        <div class="kpi-note">끼니당 평균 약 €2.41</div>
+      </div>
+    </section>
+
+    <!-- Week Grid (7 Days) -->
+    <section aria-labelledby="weekTitle">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Weekly Schedule · 2026.08.24 - 08.29</p>
+          <h2 id="weekTitle">요일별 7일 저녁 실행 계획</h2>
+        </div>
+        <p>카드를 클릭하면 오른쪽 아래 상세 조리법과 재료가 즉시 전환됩니다.</p>
+      </div>
+      <div class="week-grid" id="weekGrid"></div>
+    </section>
+
+    <!-- Detail Grid (Selected Day Execution Card + Shopping List) -->
+    <section class="detail-grid" aria-label="선택한 메뉴 상세 및 장보기 목록">
+      <article class="panel">
+        <div class="panel-head">
+          <h3>선택한 메뉴의 실행 카드</h3>
+          <span id="detailDayLabel">월요일(8.24) · 30분</span>
+        </div>
+        <div class="detail-body">
+          <div class="detail-kicker" id="detailCuisine">한식·집밥 · 오늘의 1순위</div>
+          <h3 id="detailTitle">닭가슴살 닭갈비 + 감자·당근</h3>
+          <p class="detail-copy" id="detailCopy">행사 닭가슴살을 카레 대신 매콤한 닭갈비로. 감자·당근·파프리카로 식감과 색을 살립니다.</p>
+
+          <div class="detail-metrics">
+            <div class="detail-metric">
+              <span>사용 원가</span>
+              <b id="detailCost">€2.20</b>
+            </div>
+            <div class="detail-metric">
+              <span>예상 열량</span>
+              <b id="detailKcal">585 kcal</b>
+            </div>
+            <div class="detail-metric">
+              <span>단백질</span>
+              <b id="detailProtein">48 g</b>
+            </div>
+          </div>
+
+          <div class="detail-columns">
+            <div>
+              <p class="sub-head">필요 재료</p>
+              <div class="detail-ingredients" id="detailIngredients"></div>
+            </div>
+            <div>
+              <p class="sub-head">단계별 조리 순서</p>
+              <ol class="steps" id="detailSteps"></ol>
+            </div>
+          </div>
+
+          <div class="detail-link-row">
+            <span style="font-size: 11px; color: var(--faint-ink);">01ontology Recipe Pack 검증 완료</span>
+            <a class="detail-link" id="detailSource" href="https://www.10000recipe.com/recipe/7076192" target="_blank" rel="noreferrer">
+              원천 레시피 지식그래프 확인 ↗
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Shopping List -->
+      <article class="panel">
+        <div class="panel-head">
+          <h3>주간 장보기 최적화 목록 (8.24~8.29)</h3>
+          <span>남은 재료 주간 내 순환 소진</span>
+        </div>
+        <div class="shopping-summary">
+          <div>
+            <div class="label">장보기 패키지 실결제액</div>
+            <strong>€32.84</strong>
+            <p>EDEKA 행사품 기준 · 쌀 및 기본 양념 제외</p>
+          </div>
+          <div class="used">
+            주간 실사용 원가
+            <b>€16.85</b>
+          </div>
+        </div>
+        <ul class="shopping-list">
+          <li>
+            <div>
+              <b>Frische Hähnchenbrust / Schenkel</b>
+              <small>1kg 패키지 · 4.99€ · 월/수/토 요리에 소분 분배</small>
+            </div>
+            <strong>€4.99</strong>
+          </li>
+          <li>
+            <div>
+              <b>Oberschalenschnitzel / Hackfleisch</b>
+              <small>돼지등심 400g / 다짐육 500g · 화/목 요리에 분배</small>
+            </div>
+            <strong>약 €6.85</strong>
+          </li>
+          <li>
+            <div>
+              <b>Ausgenommene Forelle (손질 송어)</b>
+              <small>1마리 약 200g · 금요일 버터구이 사용</small>
+            </div>
+            <strong>약 €2.58</strong>
+          </li>
+          <li>
+            <div>
+              <b>Hüftsteak vom Jungbullen</b>
+              <small>소고기 우둔/안심 약 200g · 일요일 찹스테이크</small>
+            </div>
+            <strong>약 €5.38</strong>
+          </li>
+          <li>
+            <div>
+              <b>Spitzpaprika / Zucchini / Tomaten</b>
+              <small>500g / 1kg / 1kg · 주간 전체 요리에 공통 투입</small>
+            </div>
+            <strong>€3.97</strong>
+          </li>
+          <li>
+            <div>
+              <b>Speisekartoffeln / Möhren / Kohlrabi</b>
+              <small>2.5kg / 1kg / 1개 · 찌개·오븐구이·생체 공통 사용</small>
+            </div>
+            <strong>€3.58</strong>
+          </li>
+          <li>
+            <div>
+              <b>Weihenstephan Butter / Barilla Pesto</b>
+              <small>버터 250g(1.29€) + 바질페스토 190g(1.99€)</small>
+            </div>
+            <strong>€3.28</strong>
+          </li>
+          <li>
+            <div>
+              <b>Champignons / Lauchzwiebeln</b>
+              <small>400g 버섯(1.69€) + 쪽파 1단(0.49€)</small>
+            </div>
+            <strong>€2.18</strong>
+          </li>
+        </ul>
+        <p class="shopping-foot">
+          ※ 고기와 채소는 구입 즉시 1인분씩 밀폐용기에 소분 보관하면 일주일 내내 신선하게 조리할 수 있습니다.
+        </p>
+      </article>
+    </section>
+
+    <!-- =======================================================
+         HIERARCHICAL CUISINE RECIPE REPERTORY (35 CURATED RECIPES)
+         ======================================================= -->
+    <section style="margin-top: 50px;" aria-labelledby="catalogHead">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Cuisine Structure · Extended Knowledge Graph</p>
+          <h2 id="catalogHead">01ontology 요리 문화별 레시피 레퍼토리 (35종)</h2>
+        </div>
+        <p id="catalogCount">35개 레시피 전체 표시 중</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-row">
+        <input class="search-input" id="recipeSearch" type="search" placeholder="요리명, 재료 검색 (예: 닭갈비, 고추잡채, 찹스테이크, 파스타, 송어, 콜라비...)" aria-label="레시피 검색">
+      </div>
+
+      <!-- Cuisine Main Filter Tabs -->
+      <div class="filter-pills" id="cuisineFilterPills">
+        <button class="pill active" data-cuisine="all">전체 요리 보기 (35)</button>
+        <button class="pill" data-cuisine="korean">🥢 한식·집밥 (15)</button>
+        <button class="pill" data-cuisine="asian">🥡 중식·아시안 (7)</button>
+        <button class="pill" data-cuisine="western">🍝 양식·유럽식 (8)</button>
+        <button class="pill" data-cuisine="brunch">🥐 브런치·디저트 (5)</button>
+      </div>
+
+      <!-- Containers for Each Cuisine Section -->
+      <div id="cuisineContainers"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div>
+        <p><strong>01ontology</strong> Retail Offer & Recipe Pack Integration Demo</p>
+        <p style="margin-top: 3px;">행사 기간: 2026.08.24(월) ~ 2026.08.29(토) [KW 35] · EDEKA Rhein-Ruhr</p>
+      </div>
+      <div>
+        <a href="./edeka_40474_discounts.csv">edeka_40474_discounts.csv (112 items)</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // 7-Day Curated Meal Plan
+    const weekDays = [
+      {
+        day: "월",
+        fullDay: "월요일 (8.24)",
+        cuisine: "한식·집밥",
+        title: "닭가슴살 닭갈비 + 감자·당근",
+        copy: "행사 닭가슴살을 카레 대신 매콤한 닭갈비로. 감자·당근·파프리카로 식감과 색을 살립니다.",
+        cost: "€2.20",
+        kcal: "585 kcal",
+        protein: "48 g",
+        time: "30분",
+        reuse: "닭가슴살 1kg 소분 시작",
+        source: "https://www.10000recipe.com/recipe/7076192",
+        sourceId: "7076192",
+        ingredients: [
+          { name: "닭가슴살 180g", isOffer: true },
+          { name: "감자 120g", isOffer: true },
+          { name: "당근 80g", isOffer: true },
+          { name: "붉은 뾰족 파프리카 80g", isOffer: true },
+          { name: "양파 50g", isOffer: false },
+          { name: "고추장·고춧가루·간장", isOffer: false },
+          { name: "밥 1공기", isOffer: false }
+        ],
+        steps: [
+          "닭가슴살과 감자, 당근, 파프리카를 한입 크기로 큼직하게 썹니다.",
+          "고추장 1.5큰술, 고춧가루 1큰술, 진간장 1큰술, 다진 마늘 1작은술을 섞어 양념장을 만듭니다.",
+          "팬에 기름을 두르고 단단한 감자와 당근을 먼저 중불에 3분간 볶아 익힙니다.",
+          "닭가슴살과 파프리카, 양념장을 넣고 센불에서 닭고기 속까지 양념이 배도록 볶아 밥과 냅니다."
+        ]
+      },
+      {
+        day: "화",
+        fullDay: "화요일 (8.25)",
+        cuisine: "한식·찌개",
+        title: "감자·주키니 고추장찌개 + 콜라비 생채",
+        copy: "주키니 호박과 감자를 듬뿍 넣은 얼큰 찌개에, 0.59€ 콜라비를 채 썬 아삭 생채를 곁들입니다.",
+        cost: "€2.15",
+        kcal: "540 kcal",
+        protein: "42 g",
+        time: "25분",
+        reuse: "감자 2차 + 콜라비 즉석 반찬",
+        source: "https://www.10000recipe.com/recipe/6970410",
+        sourceId: "6970410",
+        ingredients: [
+          { name: "돼지 다짐육 150g", isOffer: true },
+          { name: "감자 150g", isOffer: true },
+          { name: "주키니 호박 120g", isOffer: true },
+          { name: "콜라비 150g", isOffer: true },
+          { name: "대파 30g", isOffer: true },
+          { name: "고추장·된장·고춧가루", isOffer: false }
+        ],
+        steps: [
+          "감자와 주키니는 도톰하게 깍둑썰고, 콜라비는 채 썰어 고춧가루, 식초, 설탕, 액젓에 무칩니다.",
+          "냄비에 다짐육을 참기름에 볶다가 고추장 1.5큰술, 된장 반 작은술을 넣어 볶아 향을 냅니다.",
+          "물 400ml와 감자를 넣고 끓이다가 주키니, 대파, 다진 마늘을 넣습니다.",
+          "중불에서 7분간 감자가 포슬하게 익을 때까지 자작하게 끓여냅니다."
+        ]
+      },
+      {
+        day: "수",
+        fullDay: "수요일 (8.26)",
+        cuisine: "양식·오븐",
+        title: "바질 토마토 닭가슴살 구이 + 감자",
+        copy: "오븐이나 에어프라이어 한 판으로 끝내는 간편 양식. 바질페스토의 향긋함이 닭고기에 배어듭니다.",
+        cost: "€2.30",
+        kcal: "560 kcal",
+        protein: "52 g",
+        time: "25분",
+        reuse: "닭가슴살 2차 + 토마토 1차",
+        source: "https://www.10000recipe.com/recipe/7006722",
+        sourceId: "7006722",
+        ingredients: [
+          { name: "닭가슴살 180g", isOffer: true },
+          { name: "완숙 토마토 200g", isOffer: true },
+          { name: "감자 150g", isOffer: true },
+          { name: "Barilla 바질페스토 2T", isOffer: true },
+          { name: "올리브유·소금·후추", isOffer: false }
+        ],
+        steps: [
+          "감자는 깍둑썰어 전자레인지에 2분간 먼저 돌려 반쯤 익힙니다.",
+          "닭가슴살은 포를 뜨듯 반으로 갈라 소금, 후추, 올리브유로 밑간합니다.",
+          "오븐 팬에 닭가슴살, 감자, 큼직하게 썬 토마토를 올리고 바질페스토를 고루 바릅니다.",
+          "190℃ 오븐(에어프라이어)에서 15~18분간 노릇하게 구워냅니다."
+        ]
+      },
+      {
+        day: "목",
+        fullDay: "목요일 (8.27)",
+        cuisine: "중식·아시안",
+        title: "중식 돼지고기 고추잡채 (파프리카 잡채)",
+        copy: "달콤한 뾰족 파프리카와 양송이버섯을 얇게 썬 등심과 함께 굴소스에 센불로 빠르게 볶아냅니다.",
+        cost: "€2.10",
+        kcal: "565 kcal",
+        protein: "40 g",
+        time: "20분",
+        reuse: "파프리카 소진 + 버섯 1차",
+        source: "https://www.10000recipe.com/recipe/7054761",
+        sourceId: "7054761",
+        ingredients: [
+          { name: "돼지 등심(슈니첼용) 160g", isOffer: true },
+          { name: "뾰족 파프리카 150g", isOffer: true },
+          { name: "양송이버섯 80g", isOffer: true },
+          { name: "대파 40g", isOffer: true },
+          { name: "굴소스 1.5T·고추기름", isOffer: false },
+          { name: "밥 1공기", isOffer: false }
+        ],
+        steps: [
+          "돼지고기 등심과 뾰족 파프리카, 양송이버섯을 길쭉하게 채 썹니다.",
+          "돼지고기에 간장, 맛술, 후추를 살짝 버무려 밑간합니다.",
+          "달군 팬에 고추기름을 두르고 대파를 볶아 향을 낸 뒤 고기를 센불에 볶아 덜어둡니다.",
+          "파프리카와 버섯을 센불에 1분 볶고, 고기와 굴소스를 넣어 30초간 불맛 나게 섞어 밥과 냅니다."
+        ]
+      },
+      {
+        day: "금",
+        fullDay: "금요일 (8.28)",
+        cuisine: "유럽식·클래식",
+        title: "버터 송어 구이 (Forelle Müllerin) + 삶은 감자",
+        copy: "신선 손질 송어를 Weihenstephan 버터에 바삭하게 지져내고 레몬즙과 파슬리로 산뜻함을 더합니다.",
+        cost: "€2.45",
+        kcal: "520 kcal",
+        protein: "46 g",
+        time: "20분",
+        reuse: "신선 생선 당일 소비 + 버터 개봉",
+        source: "https://www.10000recipe.com/recipe/6833368",
+        sourceId: "6833368",
+        ingredients: [
+          { name: "손질 송어 1마리(200g)", isOffer: true },
+          { name: "Weihenstephan 버터 25g", isOffer: true },
+          { name: "감자 200g", isOffer: true },
+          { name: "레몬 반 개", isOffer: true },
+          { name: "밀가루 1T·소금·후추", isOffer: false }
+        ],
+        steps: [
+          "감자는 껍질째 끓는 소금물에 15분간 삶아 삶은 감자(Pellkartoffeln)를 준비합니다.",
+          "송어 물기를 닦고 소금·후추를 뿌린 뒤 겉면에 밀가루를 얇게 털어가며 묻힙니다.",
+          "팬에 버터 15g과 오일을 두르고 송어를 중강불에서 앞뒤로 4~5분씩 노릇하게 굽습니다.",
+          "남은 버터 10g을 녹여 레몬즙과 파슬리를 섞어 송어와 감자 위에 뿌려냅니다."
+        ]
+      },
+      {
+        day: "토",
+        fullDay: "토요일 (8.29)",
+        cuisine: "중식·초간단",
+        title: "토마토 달걀 볶음 + 닭가슴살 구이",
+        copy: "주말 저녁 15분 만에 완성하는 원팬 단백질 요리. 닭가슴살 1kg 패키지를 완벽하게 소진합니다.",
+        cost: "€1.85",
+        kcal: "510 kcal",
+        protein: "49 g",
+        time: "15분",
+        reuse: "닭가슴살 1kg 완벽 소진",
+        source: "https://www.10000recipe.com/recipe/6980833",
+        sourceId: "6980833",
+        ingredients: [
+          { name: "닭가슴살 150g", isOffer: true },
+          { name: "완숙 토마토 2개", isOffer: true },
+          { name: "대파 30g", isOffer: true },
+          { name: "달걀 2개", isOffer: false },
+          { name: "굴소스 1t·소금·기름", isOffer: false },
+          { name: "밥 1공기", isOffer: false }
+        ],
+        steps: [
+          "달걀은 소금 한 꼬집을 넣고 풀고, 토마토는 한입 크기로 웨지 모양 썹니다.",
+          "닭가슴살은 얇게 편 썰어 소금·후추로 밑간 후 팬에 먼저 노릇하게 구워 덜어둡니다.",
+          "팬에 기름을 두르고 달걀물을 부어 스크램블을 70% 익혀 덜어냅니다.",
+          "파기름에 토마토를 볶다가 굴소스, 구운 닭고기, 달걀을 넣고 가볍게 섞어 밥 위에 올립니다."
+        ]
+      },
+      {
+        day: "일",
+        fullDay: "일요일 (주간 마무리)",
+        cuisine: "양식·고급형",
+        title: "소고기 파프리카 버섯 찹스테이크 + 그릴 채소",
+        copy: "한 주를 멋지게 마무리하는 일요일 특식. 남은 버섯·파프리카·주키니를 고기와 함께 센불에 볶아냅니다.",
+        cost: "€3.60",
+        kcal: "620 kcal",
+        protein: "55 g",
+        time: "20분",
+        reuse: "남은 채소 냉장고 완벽 털기",
+        source: "https://www.10000recipe.com/recipe/7037052",
+        sourceId: "7037052",
+        ingredients: [
+          { name: "Hüftsteak(소고기 우둔/안심) 200g", isOffer: true },
+          { name: "뾰족 파프리카 100g", isOffer: true },
+          { name: "양송이버섯 80g", isOffer: true },
+          { name: "주키니 호박 80g", isOffer: true },
+          { name: "Weihenstephan 버터 10g", isOffer: true },
+          { name: "스테이크소스·케첩·굴소스", isOffer: false }
+        ],
+        steps: [
+          "소고기는 핏물을 제거하고 2cm 주사위 모양으로 썰어 소금·후추·올리브유로 밑간합니다.",
+          "파프리카, 양송이, 주키니, 양파도 소고기와 비슷한 크기로 깍둑썹니다.",
+          "센불로 달군 팬에 고기 겉면을 1~2분간 빠르게 시어링하여 육즙을 가두고 덜어둡니다.",
+          "채소를 센불에 볶다가 고기, 양념장(스테이크소스+케첩+굴소스), 버터를 넣고 1분간 졸여냅니다."
+        ]
+      }
+    ];
+
+    // ========================================================
+    // CUISINE HIERARCHICAL REPERTORY DATA (35 CURATED RECIPES)
+    // ========================================================
+    const cuisineStructure = [
+      {
+        id: "korean",
+        icon: "🥢",
+        name: "한식·집밥 (Korean Home-Cooked)",
+        desc: "독일 EDEKA 식재료로 완벽 재현하는 얼큰 찌개, 닭볶음, 수육 및 매콤 볶음",
+        subgroups: [
+          {
+            subName: "닭고기 요리 (닭갈비 & 탕 & 덮밥)",
+            items: [
+              { title: "닭가슴살 닭갈비", desc: "감자·당근·파프리카를 넣어 매콤달콤하게 볶아내는 1인분 메인", time: "30분", rating: "4.9 (137후기)", id: "6885843", isOffer: "EDEKA 매칭" },
+              { title: "순살 얼큰 닭볶음탕", desc: "닭고기와 감자, 당근을 넣고 칼칼하게 끓여낸 밥도둑 찌개", time: "35분", rating: "5.0 (61후기)", id: "6970050", isOffer: "EDEKA 매칭" },
+              { title: "매콤 간장 닭볶음 (찜닭풍)", desc: "마늘·대파·간장 소스로 짭조름한 풍미를 낸 1인분 간장 닭볶음", time: "25분", rating: "4.9 (104후기)", id: "7020521", isOffer: "초간단" },
+              { title: "15분 닭가슴살 닭개장", desc: "대파 기름에 고춧가루를 볶아 버섯과 달걀을 푼 얼큰 국물 요리", time: "15분", rating: "5.0 (670후기)", id: "7069352", isOffer: "얼큰 해장" },
+              { title: "닭가슴살 덮밥 (오야코동풍)", desc: "양파와 달걀물을 부드럽게 익혀 밥 위에 얹는 든든한 한 그릇", time: "15분", rating: "4.9 (731후기)", id: "6862451", isOffer: "초간단" },
+              { title: "속 편한 닭가슴살 채소죽", desc: "닭가슴살과 당근, 주키니 호박을 잘게 다져 끓인 웰빙 식단", time: "30분", rating: "5.0 (1,815후기)", id: "6872321", isOffer: "속 편함" },
+              { title: "닭가슴살 장조림", desc: "통마늘과 간장으로 조려 일주일 내내 꺼내먹는 든든한 밑반찬", time: "40분", rating: "4.9 (446후기)", id: "6885183", isOffer: "저장 반찬" }
+            ]
+          },
+          {
+            subName: "돼지고기 & 다짐육 & 찌개",
+            items: [
+              { title: "감자·주키니 돼지 고추장찌개", desc: "다짐육과 감자, 주키니 호박을 듬뿍 넣고 자작하게 끓인 얼큰 찌개", time: "25분", rating: "5.0 (820후기)", id: "6970410", isOffer: "강력 추천" },
+              { title: "파프리카 다짐육 간장 볶음", desc: "달콤한 붉은 뾰족 파프리카와 짭조름한 다짐육의 간장 볶음 반찬", time: "12분", rating: "4.9 (310후기)", id: "6935495", isOffer: "초간단 밥도둑" },
+              { title: "매콤 돼지고기 제육볶음", desc: "등심(Schnitzel)을 얇게 썰어 대파와 파프리카를 넣고 센불에 볶아냄", time: "20분", rating: "5.0 (1,420후기)", id: "7054761", isOffer: "EDEKA 매칭" },
+              { title: "돼지고기 수육 & 콜라비 생채", desc: "통등심(Schweinerückenbraten)을 삶아 아삭한 콜라비 무침과 곁들임", time: "45분", rating: "4.9 (980후기)", id: "6885183", isOffer: "주말 특식" }
+            ]
+          },
+          {
+            subName: "소고기 & 생선 조림 & 즉석 반찬",
+            items: [
+              { title: "소고기 콜라비 맑은 뭇국", desc: "소고기 육수에 무 대신 아삭달콤한 콜라비를 썰어 넣은 시원한 국", time: "30분", rating: "4.9 (890후기)", id: "7016346", isOffer: "콜라비 응용" },
+              { title: "타펠슈피츠 맑은 곰탕 (양지 수육)", desc: "Tafelspitz를 푹 고아 맑은 국물과 부드러운 양지 수육으로 섭취", time: "60분", rating: "4.9 (310후기)", id: "6872321", isOffer: "Tafelspitz" },
+              { title: "소고기 볶음고추장 (약고추장)", desc: "소다짐육(Rinderhack)을 볶아 고추장과 꿀을 넣은 만능 비빔 양념", time: "20분", rating: "5.0 (1,950후기)", id: "6885843", isOffer: "만능 양념" },
+              { title: "칼칼한 송어 감자 조림", desc: "냄비 바닥에 감자를 깔고 송어를 칼칼한 고춧가루 양념에 조려냄", time: "25분", rating: "4.9 (410후기)", id: "7045794", isOffer: "밥도둑" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "asian",
+        icon: "🥡",
+        name: "중식·아시안 (Chinese & Asian Cuisine)",
+        desc: "불맛 살린 센불 볶음, 굴소스 잡채, 깐풍기 및 상큼한 냉채 요리",
+        subgroups: [
+          {
+            subName: "중식 센불 볶음 & 잡채",
+            items: [
+              { title: "중식 돼지고기 고추잡채", desc: "돼지고기 채와 뾰족 파프리카, 양송이버섯을 굴소스에 센불 볶음", time: "20분", rating: "5.0 (1,150후기)", id: "7054761", isOffer: "EDEKA 매칭" },
+              { title: "닭가슴살 파프리카 잡채", desc: "닭가슴살과 파프리카, 버섯을 길쭉하게 채 썰어 볶아낸 식감 요리", time: "20분", rating: "5.0 (2,165후기)", id: "1633372", isOffer: "인기 잡채" },
+              { title: "토마토 달걀 볶음 (토달볶)", desc: "완숙 토마토와 몽글한 달걀을 센불에 볶아낸 초간단 10분 건강식", time: "10분", rating: "5.0 (1,850후기)", id: "6980833", isOffer: "초간단 10분" },
+              { title: "마파두부 / 마파 버섯 덮밥", desc: "다짐육과 양송이버섯, 대파를 넣고 매콤한 소스에 졸여낸 덮밥", time: "20분", rating: "4.9 (920후기)", id: "7032731", isOffer: "다짐육 활용" }
+            ]
+          },
+          {
+            subName: "아시안 볶음밥 & 깐풍 & 냉채",
+            items: [
+              { title: "닭가슴살 깐풍기", desc: "팬/에어프라이어에 구워 식초·고추·마늘 소스에 버무린 요리", time: "25분", rating: "5.0 (1,815후기)", id: "3526900", isOffer: "에어프라이어" },
+              { title: "태국식 카오팟 치킨 볶음밥", desc: "피시소스/간장으로 불맛을 내고 파프리카와 계란을 볶은 볶음밥", time: "15분", rating: "4.9 (2,721후기)", id: "6940660", isOffer: "태국식" },
+              { title: "닭가슴살 오이 겨자 냉채", desc: "삶은 닭가슴살과 오이, 파프리카를 톡 쏘는 겨자소스에 버무림", time: "20분", rating: "4.9 (1,113후기)", id: "7015342", isOffer: "여름 별미" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "western",
+        icon: "🍝",
+        name: "양식·유럽식 (Western & European Classics)",
+        desc: "정통 비프 스테이크, 버터 송어 구이, 바질 토마토 파스타 및 오븐 요리",
+        subgroups: [
+          {
+            subName: "스테이크 & 오븐구이 & 돈가스",
+            items: [
+              { title: "소고기 파프리카 버섯 찹스테이크", desc: "Hüftsteak를 큐브로 썰어 파프리카, 양송이와 센불에 빠르게 볶음", time: "20분", rating: "5.0 (1,340후기)", id: "7037052", isOffer: "EDEKA 매칭" },
+              { title: "비프 안심 스테이크 & 구운 채소", desc: "Zartes Rinderfilet를 버터 아로제로 구워낸 프리미엄 안심 요리", time: "20분", rating: "5.0 (420후기)", id: "6971110", isOffer: "프리미엄 안심" },
+              { title: "바질 토마토 닭가슴살 구이", desc: "완숙 토마토, 감자, 바질페스토를 한 판에 넣고 굽는 지중해풍 오븐", time: "25분", rating: "4.9 (435후기)", id: "7006722", isOffer: "원팬 오븐" },
+              { title: "수제 바삭 등심 돈가스", desc: "Oberschalenschnitzel에 빵가루를 묻혀 바삭하게 튀긴 수제 돈가스", time: "30분", rating: "5.0 (2,100후기)", id: "6962812", isOffer: "Schnitzel" }
+            ]
+          },
+          {
+            subName: "파스타 & 해산물 요리",
+            items: [
+              { title: "버터 송어 구이 (Forelle Müllerin)", desc: "손질 송어를 밀가루 묻혀 버터에 노릇하게 굽고 레몬즙을 곁들임", time: "20분", rating: "4.9 (240후기)", id: "6833368", isOffer: "독일 클래식" },
+              { title: "연어 버터 스테이크 & 주키니", desc: "신선 연어를 겉바속촉 굽고 레몬 버터 소스와 주키니 곁들임", time: "15분", rating: "5.0 (1,120후기)", id: "7006722", isOffer: "신선 연어" },
+              { title: "정통 볼로네제 라구 파스타", desc: "다짐육과 토마토, 당근, 양파를 뭉근하게 끓여낸 Barilla 파스타", time: "30분", rating: "4.9 (1,780후기)", id: "6833368", isOffer: "Barilla 행사" },
+              { title: "스페인식 감바스 알 아히요", desc: "Costa 새우와 마늘, 페페론치노를 올리브유에 끓여 토스트에 곁들임", time: "15분", rating: "5.0 (3,100후기)", id: "6871908", isOffer: "Costa 새우" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "brunch",
+        icon: "🥐",
+        name: "브런치·디저트 & 사이드 (Brunch & Quick Sides)",
+        desc: "0.59€ 콜라비 즉석 반찬, 주키니전, 당근 라페, 그릴 치즈 토스트 & 홈카페",
+        subgroups: [
+          {
+            subName: "즉석 채소 반찬 & 전 요리",
+            items: [
+              { title: "아삭 달콤 콜라비 생채", desc: "0.59€ 콜라비를 채 썰어 고춧가루·식초에 무친 시원한 무생채 대용", time: "10분", rating: "5.0 (2,400후기)", id: "7015342", isOffer: "콜라비 0.59€" },
+              { title: "주키니(애호박)전 & 파프리카전", desc: "얇게 썬 주키니 호박과 파프리카에 달걀옷을 입혀 노릇하게 지짐", time: "15분", rating: "4.9 (1,970후기)", id: "6854902", isOffer: "주키니 0.99€" },
+              { title: "프랑스식 당근 라페", desc: "채 썬 당근을 올리브유, 레몬즙, 홀그레인 머스터드에 절인 피클", time: "10분", rating: "4.9 (880후기)", id: "6872172", isOffer: "당근 0.99€" },
+              { title: "감자 버터구이 & 쿼크 딥", desc: "삶은 감자에 Milram 허브 쿼크치즈(Gewürzquark)를 듬뿍 찍어먹음", time: "25분", rating: "4.8 (320후기)", id: "1643336", isOffer: "독일 정통" },
+              { title: "치즈 그릴 토스트 & 과일 요거트", desc: "Harry 토스트에 Milram 치즈를 굽고 복숭아·블루베리 요거트 곁들임", time: "10분", rating: "4.9 (760후기)", id: "6871908", isOffer: "브런치 세트" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Render Week Grid
+    function renderWeekGrid() {
+      const grid = document.getElementById("weekGrid");
+      grid.innerHTML = weekDays.map((item, idx) => `
+        <button class="day-card ${idx === 0 ? "active" : ""}" type="button" onclick="selectDay(${idx})" aria-label="${item.fullDay} ${item.title}">
+          <div class="day-top">
+            <span class="day-name">${item.day}</span>
+            <span class="day-tag">${item.time}</span>
+          </div>
+          <span class="day-cuisine">${item.cuisine}</span>
+          <h4>${item.title}</h4>
+          <div class="day-meta-row">
+            <span>원가 <b>${item.cost}</b></span>
+            <span>단백질 <b>${item.protein}</b></span>
+          </div>
+          <span class="day-reuse">${item.reuse}</span>
+        </button>
+      `).join("");
+    }
+
+    // Select Day in Execution Card
+    function selectDay(index) {
+      document.querySelectorAll(".day-card").forEach((c, idx) => {
+        c.classList.toggle("active", idx === index);
+      });
+      const d = weekDays[index];
+      document.getElementById("detailDayLabel").textContent = `${d.fullDay} · ${d.time}`;
+      document.getElementById("detailCuisine").textContent = `${d.cuisine} · 오늘의 추천 실행 카드`;
+      document.getElementById("detailTitle").textContent = d.title;
+      document.getElementById("detailCopy").textContent = d.copy;
+      document.getElementById("detailCost").textContent = d.cost;
+      document.getElementById("detailKcal").textContent = d.kcal;
+      document.getElementById("detailProtein").textContent = d.protein;
+
+      document.getElementById("detailIngredients").innerHTML = d.ingredients.map(ing => `
+        <span class="${ing.isOffer ? "offer" : ""}">${ing.isOffer ? "★ " : ""}${ing.name}</span>
+      `).join("");
+
+      document.getElementById("detailSteps").innerHTML = d.steps.map((step, idx) => `
+        <li data-step="${idx + 1}">${step}</li>
+      `).join("");
+
+      const srcLink = document.getElementById("detailSource");
+      srcLink.href = d.source;
+      srcLink.textContent = `원천 레시피 확인 (#${d.sourceId}) ↗`;
+    }
+
+    // Render Hierarchical Cuisine Sections
+    function renderCuisineSections(cuisineFilter = "all", query = "") {
+      const container = document.getElementById("cuisineContainers");
+      const q = query.trim().toLowerCase();
+      let totalVisible = 0;
+
+      container.innerHTML = cuisineStructure.map(cSec => {
+        const isCuisineMatch = (cuisineFilter === "all" || cSec.id === cuisineFilter);
+        if (!isCuisineMatch) return "";
+
+        let sectionVisibleCount = 0;
+
+        const subGroupsHtml = cSec.subgroups.map(sub => {
+          const cardsHtml = sub.items.map(item => {
+            const matchQuery = !q || (item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || sub.subName.toLowerCase().includes(q));
+            if (matchQuery) {
+              sectionVisibleCount++;
+              totalVisible++;
+            }
+
+            const recipeUrl = "https://www.10000recipe.com/recipe/" + item.id;
+
+            return `
+              <article class="recipe-card" ${matchQuery ? "" : "hidden"} onclick="window.open('${recipeUrl}', '_blank')">
+                <div class="recipe-top">
+                  <span class="recipe-tag">${sub.subName.split(" ")[0]}</span>
+                  <span class="recipe-badge">${item.isOffer}</span>
+                </div>
+                <h4>${item.title}</h4>
+                <p>${item.desc}</p>
+                <div class="recipe-meta-foot">
+                  <span>⏱️ ${item.time} · ⭐ ${item.rating}</span>
+                  <a class="recipe-link-btn" href="${recipeUrl}" target="_blank" rel="noreferrer" onclick="event.stopPropagation()">
+                    원천 #${item.id} ↗
+                  </a>
+                </div>
+              </article>
+            `;
+          }).join("");
+
+          return `
+            <div class="sub-group-block">
+              <div class="sub-group-label">📌 ${sub.subName}</div>
+              <div class="catalog-grid">${cardsHtml}</div>
+            </div>
+          `;
+        }).join("");
+
+        if (sectionVisibleCount === 0 && q) return "";
+
+        return `
+          <section class="cuisine-section">
+            <div class="cuisine-section-head">
+              <div class="cuisine-title-wrap">
+                <span class="cuisine-icon">${cSec.icon}</span>
+                <h3 class="cuisine-title">${cSec.name}</h3>
+                <span class="cuisine-badge">${sectionVisibleCount}개 메뉴</span>
+              </div>
+              <p class="cuisine-desc">${cSec.desc}</p>
+            </div>
+            ${subGroupsHtml}
+          </section>
+        `;
+      }).join("");
+
+      document.getElementById("catalogCount").textContent = `${totalVisible}개 레시피 표시 중`;
+    }
+
+    // Cuisine Filter Tabs
+    let currentCuisineFilter = "all";
+    document.querySelectorAll(".filter-pills .pill").forEach(pill => {
+      pill.addEventListener("click", () => {
+        document.querySelectorAll(".filter-pills .pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        currentCuisineFilter = pill.getAttribute("data-cuisine");
+        renderCuisineSections(currentCuisineFilter, document.getElementById("recipeSearch").value);
+      });
+    });
+
+    // Search Input
+    document.getElementById("recipeSearch").addEventListener("input", (e) => {
+      renderCuisineSections(currentCuisineFilter, e.target.value);
+    });
+
+    // Initialize
+    renderWeekGrid();
+    selectDay(0);
+    renderCuisineSections("all", "");
+  </script>
+</body>
+</html>
