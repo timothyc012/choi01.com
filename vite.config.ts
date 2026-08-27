@@ -11,6 +11,8 @@ export default defineConfig({
       input: {
         home: fileURLToPath(new URL('./index.html', import.meta.url)),
         canvas: fileURLToPath(new URL('./canvas/index.html', import.meta.url)),
+        meal: fileURLToPath(new URL('./meal/index.html', import.meta.url)),
+        mealLogin: fileURLToPath(new URL('./meal/login.html', import.meta.url)),
       },
     },
   },
