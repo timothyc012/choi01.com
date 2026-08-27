@@ -1,0 +1,91 @@
+name: private-meal-refresh
+
+on:
+  schedule:
+    - cron: "0 4,5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: private-meal-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out choi01.com
+        uses: actions/checkout@v4
+
+      - name: Check Berlin refresh window
+        id: window
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+        run: node scripts/check-meal-refresh-window.mjs
+
+      - name: Check out public-safe meal engine
+        if: steps.window.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: timothyc012/01ontology-open
+          path: meal-engine
+
+      - name: Set up Python
+        if: steps.window.outputs.run == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        if: steps.window.outputs.run == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install site dependencies
+        if: steps.window.outputs.run == 'true'
+        run: npm ci
+
+      - name: Install engine dependencies
+        if: steps.window.outputs.run == 'true'
+        working-directory: meal-engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Refresh private official food offers
+        if: steps.window.outputs.run == 'true'
+        working-directory: meal-engine
+        run: >-
+          python scripts/crawl_private_recipe_offers.py
+          --cache-dir ../.private-meal/cache
+          --render-command "node scripts/render_flyer_with_playwright.mjs {url}"
+
+      - name: Build protected meal data
+        if: steps.window.outputs.run == 'true'
+        working-directory: meal-engine
+        run: >-
+          python scripts/build_private_meal_site.py
+          --cache-dir ../.private-meal/cache
+          --output-dir ../public/meal/data
+
+      - name: Verify and build site
+        if: steps.window.outputs.run == 'true'
+        run: |
+          npm test
+          npm run typecheck
+          npm run build
+
+      - name: Deploy protected site
+        if: steps.window.outputs.run == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }}

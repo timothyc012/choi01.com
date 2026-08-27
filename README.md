@@ -44,3 +44,18 @@ npm run dev        # serves / (home) and /canvas/
 npm run build      # emits dist/ for both pages
 npm run typecheck
 ```
+
+## Private weekly meal note
+
+`/meal/` is an owner-only page. Cloudflare Pages Functions protect the page and
+every JSON path with a signed HTTP-only session cookie. Configure these secrets
+on the Cloudflare Pages project; never add them to GitHub or `.env` files:
+
+- `MEAL_PAGE_PASSWORD_HASH`
+- `MEAL_PAGE_SESSION_SECRET`
+
+The Monday refresh also needs GitHub repository secrets
+`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` and the repository variable
+`CLOUDFLARE_PAGES_PROJECT`. It checks the public-safe `01ontology-open` engine,
+collects only approved official food pages, builds short-lived JSON, deploys it,
+and does not commit prices or upload offer artifacts.
