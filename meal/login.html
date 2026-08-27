@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <title>개인 식단 노트 · Choi01</title>
+    <link rel="stylesheet" href="/meal/login.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-card" aria-labelledby="login-title">
+        <a class="home-link" href="/">Choi01</a>
+        <p class="eyebrow">PRIVATE WEEKLY NOTE</p>
+        <h1 id="login-title">개인 식단 노트</h1>
+        <p class="lede">도르트문트와 뒤셀도르프의 이번 주 식품 할인으로 메뉴를 고르는 잠긴 공간입니다.</p>
+        <form method="post" action="/meal/login">
+          <label for="password">비밀번호</label>
+          <input id="password" name="password" type="password" required maxlength="200" autocomplete="current-password" />
+          <button type="submit">노트 열기</button>
+        </form>
+        <p class="privacy-note">비밀번호와 할인 데이터는 페이지 코드에 저장되지 않습니다.</p>
+      </section>
+    </main>
+  </body>
+</html>

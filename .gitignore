@@ -4,9 +4,10 @@ node_modules/
 .env.*
 *.log
 *.pid
+public/meal/data/current/*.json
+!public/meal/data/current/.gitkeep
 
 # agent workspace — local only
 .omo/
 .gjc/
 .sisyphus/
-
