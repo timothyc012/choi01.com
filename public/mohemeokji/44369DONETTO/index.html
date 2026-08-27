@@ -719,7 +719,7 @@
         EDEKA:{ mon:"dakdoritang", tue:"salmon-salad", wed:"ragu", thu:"shrimp-pasta", fri:"zucchini-pancake", sat:"fish-tray", sun:null }
       };
       const labels = { "44369":"44369 Dortmund", "40468":"40468 Düsseldorf", "40474":"40474 Düsseldorf" };
-      const areaPaths = { "44369":"44369DORTNETTO", "40468":"40468DUSNETTO", "40474":"40474DUSEDEKA" };
+      const areaPaths = { "44369":"44369DONETTO", "40468":"40468DNETTO", "40474":"40474DEDEKA" };
       const pathArea = Object.keys(areaPaths).find((code) => location.pathname.toUpperCase().includes("/" + areaPaths[code] + "/"));
       let activeArea = pathArea || "44369";
       let activeStore = activeArea === "40474" ? "EDEKA" : "Netto";
