@@ -11,6 +11,7 @@ interface PointerDownOptions {
     cameraRef: RefObject<Camera>;
     shapesRef: RefObject<CanvasShape[]>;
     toolRef: RefObject<CanvasTool>;
+    penModeRef: RefObject<boolean>;
     activeColorRef: RefObject<CanvasColorKey>;
     drawColorRef: RefObject<CanvasColorKey>;
     drawStrokeWidth: CanvasStrokeWidth;
@@ -24,6 +25,7 @@ interface PointerDownOptions {
     applyInteraction: (next: Interaction) => void;
     selectNow: (next: Set<string>) => void;
     beginHistory: () => void;
+    cancelHistory: () => void;
     commit: (next: CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[])) => void;
     onToolChange: (tool: CanvasTool) => void;
     expandToGroups: (ids: Set<string>) => Set<string>;
@@ -35,6 +37,7 @@ interface PointerDownOptions {
     liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
     activeDrawRef: RefObject<CanvasShape | null>;
     pendingDrawsRef: RefObject<CanvasShape[]>;
+    setIsPenMode: (active: boolean) => void;
 }
 export interface PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
@@ -45,6 +48,6 @@ export interface PointerDownHandlers {
     onOrthogonalSegmentHandleDown: (event: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => void;
     onArrowEndpointDown: (event: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
 }
-export declare function useCanvasPointerDown({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, activeColorRef, drawColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, }: PointerDownOptions): PointerDownHandlers;
+export declare function useCanvasPointerDown({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, setIsPenMode, }: PointerDownOptions): PointerDownHandlers;
 export {};
 //# sourceMappingURL=useCanvasPointerDown.d.ts.map

@@ -18,7 +18,7 @@
 import type { CanvasShape } from './InfiniteCanvas';
 import type { Camera } from './canvasPointerTypes';
 import { CANVAS_COLORS, CANVAS_LIMITS } from '../core/index.ts';
-import { freehandDotRadius, freehandOutlinePoints } from './canvasShapeStyle';
+import { freehandDotRadius, freehandOutlinePath, freehandOutlinePoints } from './canvasShapeStyle';
 
 function screenPoint(point: [number, number], camera: Camera): [number, number] {
   return [(point[0] - camera.x) * camera.z, (point[1] - camera.y) * camera.z];
@@ -115,6 +115,14 @@ function drawStroke(
     return;
   }
 
+  const pathData = typeof Path2D === 'function' ? freehandOutlinePath(points, strokeWidth, mode) : '';
+  if (pathData && typeof Path2D === 'function') {
+    context.scale(camera.z, camera.z);
+    context.translate(-camera.x, -camera.y);
+    context.fill(new Path2D(pathData));
+    context.restore();
+    return;
+  }
   const outline = freehandOutlinePoints(points, strokeWidth, mode);
   if (outline.length === 0) { context.restore(); return; }
   context.beginPath();

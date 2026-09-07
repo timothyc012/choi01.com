@@ -49,6 +49,9 @@ export interface CanvasEditorState {
         x: number;
         y: number;
     } | null>>;
+    isPenMode: boolean;
+    setIsPenMode: (active: boolean) => void;
+    penModeRef: RefObject<boolean>;
     activeColor: CanvasColorKey;
     setActiveColor: (updater: SetStateAction<CanvasColorKey>) => void;
     activeColorRef: RefObject<CanvasColorKey>;
@@ -64,6 +67,7 @@ export interface CanvasEditorState {
     deleteSelection: (selection: Set<string>) => boolean;
     beginHistory: () => void;
     endHistory: () => void;
+    cancelHistory: () => void;
     toPage: (clientX: number, clientY: number) => {
         x: number;
         y: number;

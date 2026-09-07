@@ -8,6 +8,12 @@ import type {
 import { SHAPE_TOOLS } from '../core/index.ts';
 import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
+import {
+  hasDirectTouchInput,
+  isPenPointer,
+  pointerAllowedInPenMode,
+  shouldEnterPenMode,
+} from './canvasPenMode';
 import { paintLiveStrokes } from './liveStrokeCanvas';
 import {
   bounds,
@@ -38,6 +44,7 @@ interface PointerDownOptions {
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
   toolRef: RefObject<CanvasTool>;
+  penModeRef: RefObject<boolean>;
   activeColorRef: RefObject<CanvasColorKey>;
   drawColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
@@ -51,6 +58,7 @@ interface PointerDownOptions {
   applyInteraction: (next: Interaction) => void;
   selectNow: (next: Set<string>) => void;
   beginHistory: () => void;
+  cancelHistory: () => void;
   commit: (next: CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[])) => void;
   onToolChange: (tool: CanvasTool) => void;
   expandToGroups: (ids: Set<string>) => Set<string>;
@@ -59,6 +67,7 @@ interface PointerDownOptions {
   liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
   activeDrawRef: RefObject<CanvasShape | null>;
   pendingDrawsRef: RefObject<CanvasShape[]>;
+  setIsPenMode: (active: boolean) => void;
 }
 
 export interface PointerDownHandlers {
@@ -80,6 +89,7 @@ export function useCanvasPointerDown({
   cameraRef,
   shapesRef,
   toolRef,
+  penModeRef,
   activeColorRef,
   drawColorRef,
   drawStrokeWidth,
@@ -93,6 +103,7 @@ export function useCanvasPointerDown({
   applyInteraction,
   selectNow,
   beginHistory,
+  cancelHistory,
   commit,
   onToolChange,
   expandToGroups,
@@ -101,6 +112,7 @@ export function useCanvasPointerDown({
   liveStrokeCanvasRef,
   activeDrawRef,
   pendingDrawsRef,
+  setIsPenMode,
 }: PointerDownOptions): PointerDownHandlers {
   const uid = createId;
   const lastClickRef = useRef<{ id: string; time: number } | null>(null);
@@ -130,7 +142,34 @@ export function useCanvasPointerDown({
   });
 
   const onPointerDown = (e: ReactPointerEvent) => {
-    const activeTool = toolRef.current;
+    let activeTool = toolRef.current;
+    const target = e.target instanceof Element ? e.target : e.currentTarget;
+    const hadImplicitCaptureBeforeExplicitCapture = e.currentTarget.hasPointerCapture(e.pointerId)
+      || target.hasPointerCapture(e.pointerId);
+    if (!penModeRef.current && shouldEnterPenMode(e, hadImplicitCaptureBeforeExplicitCapture || hasDirectTouchInput())) {
+      cancelHistory();
+      pointers.current.clear();
+      activeDrawRef.current = null;
+      paintLiveStrokes(
+        liveStrokeCanvasRef.current,
+        pendingDrawsRef.current,
+        null,
+        cameraRef.current,
+        window.devicePixelRatio || 1,
+      );
+      applyInteraction({ kind: 'none' });
+      if (activeTool !== 'draw' && activeTool !== 'highlighter' && activeTool !== 'eraser') {
+        activeTool = 'draw';
+        toolRef.current = 'draw';
+        onToolChange('draw');
+      }
+      setIsPenMode(true);
+    }
+    if (!pointerAllowedInPenMode(penModeRef.current, e)) {
+      if (e.cancelable) e.preventDefault();
+      return;
+    }
+    if (penModeRef.current && !isPenPointer(e)) return;
     // A press that lands inside an open text editor belongs to that editor.
     // The editor no longer stops propagation (the canvas needs the event to
     // start a drag), so the gesture is identified here instead and the
@@ -153,8 +192,8 @@ export function useCanvasPointerDown({
     if (!isEditorPointer && e.cancelable) e.preventDefault();
     // Capture the pointer so pointermove/pointerup keep firing on this element
     // even if the cursor leaves the canvas bounds during a fast stroke.
-    const target = e.currentTarget as HTMLElement;
-    try { target.setPointerCapture(e.pointerId); } catch { /* not all elements support it */ }
+    const captureTarget = e.currentTarget as HTMLElement;
+    try { captureTarget.setPointerCapture(e.pointerId); } catch { /* not all elements support it */ }
 
     // Second finger down promotes the gesture to a pinch, so touch devices get
     // zoom without a keyboard modifier.

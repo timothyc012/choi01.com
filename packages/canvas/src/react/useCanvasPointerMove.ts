@@ -19,6 +19,12 @@ import {
   MIN_ZOOM,
 } from './canvasPointerTypes';
 
+declare global {
+  interface WindowEventMap {
+    pointerrawupdate: PointerEvent;
+  }
+}
+
 type PointerMoveOptions = Pick<PointerLifecycleOptions,
   | 'containerRef'
   | 'pointers'
@@ -164,15 +170,22 @@ export function useCanvasPointerMove({
       const p = toPage(e.clientX, e.clientY);
 
       if (interaction.kind === 'erasing') {
-        setShapes(prev => eraseAlongPath(
-          prev,
-          { x: interaction.lastX, y: interaction.lastY },
-          p,
-          ERASER_RADIUS,
-          cam.z,
-        ));
-        setEraserPos({ x: p.x, y: p.y });
-        applyInteraction({ kind: 'erasing', lastX: p.x, lastY: p.y });
+        const coalesced = typeof e.getCoalescedEvents === 'function' ? e.getCoalescedEvents() : [];
+        const samples = coalesced.map(sample => toPage(sample.clientX, sample.clientY));
+        samples.push(p);
+        const path = [{ x: interaction.lastX, y: interaction.lastY }, ...samples];
+        setShapes(prev => {
+          let next = prev;
+          for (let index = 1; index < path.length; index++) {
+            next = eraseAlongPath(next, path[index - 1], path[index], ERASER_RADIUS, cam.z);
+          }
+          return next;
+        });
+        const last = samples.at(-1);
+        if (last) {
+          setEraserPos(last);
+          applyInteraction({ kind: 'erasing', lastX: last.x, lastY: last.y });
+        }
         return;
       }
 
@@ -366,8 +379,18 @@ export function useCanvasPointerMove({
       }
     };
 
+    const onRawUpdate = (e: PointerEvent) => {
+      const interaction = interactionRef.current;
+      if (interaction.kind !== 'drawing' || interaction.pointerId !== e.pointerId) return;
+      captureDrawingSamples(e, interaction.id);
+    };
+
     window.addEventListener('pointermove', onMove);
-    return () => window.removeEventListener('pointermove', onMove);
+    window.addEventListener('pointerrawupdate', onRawUpdate);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerrawupdate', onRawUpdate);
+    };
   }, [
     activeDrawRef, applyInteraction, cameraRef, containerRef, drawRafRef, expandToGroups,
     interactionRef, liveStrokeCanvasRef, pendingDrawPointsRef, pendingDrawsRef, pointers,

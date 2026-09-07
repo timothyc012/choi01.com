@@ -44,6 +44,7 @@ import { CanvasVectorLayer } from './CanvasVectorLayer';
 import { CanvasObjectLayer } from './CanvasObjectLayer';
 import { CanvasInspector } from './CanvasInspector';
 import { CanvasPenPalette } from './CanvasPenPalette';
+import { CanvasPenModeExit } from './CanvasPenModeExit';
 import { createCanvasShapeRenderer } from './CanvasShapeRenderer';
 import { type Interaction } from './useCanvasPointerInteractions';
 import { useCanvasViewport } from './useCanvasViewport';
@@ -226,9 +227,11 @@ function uid(prefix = 's'): string {
 }
 
 export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(function InfiniteCanvas(
-  { boardIdentity = 'standalone', isDarkMode, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, drawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
+  { boardIdentity = 'standalone', isDarkMode, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, drawStrokeWidth: propDrawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
     shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram }, ref
 ) {
+  const [drawStrokeWidth, setDrawStrokeWidth] = React.useState<CanvasStrokeWidth>(propDrawStrokeWidth);
+  React.useEffect(() => setDrawStrokeWidth(propDrawStrokeWidth), [propDrawStrokeWidth]);
   const {
     containerRef,
     editorRef,
@@ -259,6 +262,9 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     setShowInspectorPalette,
     eraserPos,
     setEraserPos,
+    isPenMode,
+    setIsPenMode,
+    penModeRef,
     activeColor,
     setActiveColor,
     activeColorRef,
@@ -274,6 +280,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     deleteSelection,
     beginHistory,
     endHistory,
+    cancelHistory,
     toPage,
     viewportCentre,
     expandToGroups,
@@ -348,6 +355,21 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     if (targetIds.size === 0) return;
     commit(prev => applySelectedStrokeWidth(prev, targetIds, strokeWidth));
   }, [commit, selectedRef]);
+  const selectPenStrokeWidth = React.useCallback((strokeWidth: CanvasStrokeWidth) => {
+    setDrawStrokeWidth(strokeWidth);
+    setSelectedStrokeWidth(strokeWidth);
+  }, [setSelectedStrokeWidth]);
+  const selectPenColor = React.useCallback((color: CanvasColorKey) => {
+    setDrawColor(color);
+    const targetIds = new Set(
+      shapesRef.current
+        .filter(shape => shape.type === 'draw' && selectedRef.current.has(shape.id))
+        .map(shape => shape.id),
+    );
+    if (targetIds.size > 0) {
+      commit(prev => applySelectedDrawStyle(prev, targetIds, { color }));
+    }
+  }, [commit, selectedRef, setDrawColor, shapesRef]);
 
   const {
     onPointerDown,
@@ -366,6 +388,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     cameraRef,
     shapesRef,
     toolRef,
+    penModeRef,
     activeColorRef,
     drawColorRef,
     setDrawColor,
@@ -389,6 +412,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     future,
     beginHistory,
     endHistory,
+    cancelHistory,
     commit,
     deleteSelection,
     onDirty,
@@ -411,6 +435,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     pendingDrawsRef,
     queuedDrawIdsRef,
     commitDrawBatch,
+    setIsPenMode,
   });
 
   // --- Rendering -----------------------------------------------------------
@@ -504,6 +529,32 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
 
   const marquee = interaction.kind === 'marquee' ? interaction : null;
 
+  const exitPenMode = React.useCallback(() => {
+    pointers.current.clear();
+    activeDrawRef.current = null;
+    applyInteraction({ kind: 'none' });
+    paintLiveStrokes(
+      liveStrokeCanvasRef.current,
+      pendingDrawsRef.current,
+      null,
+      cameraRef.current,
+      window.devicePixelRatio || 1,
+    );
+    setIsPenMode(false);
+    onToolChange('select');
+    containerRef.current?.focus();
+  }, [
+    activeDrawRef,
+    applyInteraction,
+    cameraRef,
+    containerRef,
+    liveStrokeCanvasRef,
+    onToolChange,
+    pendingDrawsRef,
+    pointers,
+    setIsPenMode,
+  ]);
+
   const { shapeById, visiblePaintOrder } = useCanvasViewport({
     containerRef,
     shapesRef,
@@ -523,6 +574,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
       role="application"
       data-canvas-board-id={boardIdentity}
       data-canvas-active-tool={tool}
+      data-canvas-pen-mode={isPenMode ? 'true' : 'false'}
       data-canvas-camera-x={camera.x}
       data-canvas-camera-y={camera.y}
       data-canvas-camera-z={camera.z}
@@ -605,13 +657,17 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         />
       )}
 
+      {isPenMode && (
+        <CanvasPenModeExit isDarkMode={isDarkMode} onExit={exitPenMode} />
+      )}
+
       <CanvasPenPalette
         tool={tool}
         activeColor={drawColor}
         drawStrokeWidth={drawStrokeWidth}
         isDarkMode={isDarkMode}
-        onSelectColor={setDrawColor}
-        onSelectStrokeWidth={setSelectedStrokeWidth}
+        onSelectColor={selectPenColor}
+        onSelectStrokeWidth={selectPenStrokeWidth}
       />
     </div>
   );

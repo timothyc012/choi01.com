@@ -29,7 +29,7 @@ export function CanvasPenPalette({
   return (
     <div
       data-canvas-pen-palette="true"
-      className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto flex flex-wrap items-center gap-2 px-3 py-2 rounded-2xl border shadow-xl backdrop-blur-md transition-all ${
+      className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto flex flex-wrap items-center gap-2 px-3 py-2 rounded-2xl border shadow-xl backdrop-blur-md ${
         isDarkMode
           ? 'bg-slate-900/90 border-slate-700 text-slate-200 shadow-slate-950/40'
           : 'bg-white/90 border-slate-200 text-slate-700 shadow-slate-300/40'
@@ -75,7 +75,7 @@ export function CanvasPenPalette({
       </div>
 
       <div className="flex items-center gap-1 pl-2 border-l border-slate-300/40 dark:border-slate-700/60">
-        <span className="mr-1 text-[10px] font-semibold opacity-60">두께</span>
+        <span className={`mr-1 text-xs font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>두께</span>
         {STROKE_WIDTHS.map(w => {
           const isSelected = drawStrokeWidth === w;
           return (

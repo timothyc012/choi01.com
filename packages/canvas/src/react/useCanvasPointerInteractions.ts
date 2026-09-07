@@ -25,6 +25,7 @@ interface PointerInteractionOptions {
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
   toolRef: RefObject<CanvasTool>;
+  penModeRef: RefObject<boolean>;
   activeColorRef: RefObject<CanvasColorKey>;
   drawColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
@@ -43,6 +44,7 @@ interface PointerInteractionOptions {
   selectNow: (next: Set<string>) => void;
   beginHistory: () => void;
   endHistory: () => void;
+  cancelHistory: () => void;
   commit: (next: CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[])) => void;
   onToolChange: (tool: CanvasTool) => void;
   expandToGroups: (ids: Set<string>) => Set<string>;
@@ -53,6 +55,7 @@ interface PointerInteractionOptions {
   pendingDrawsRef: RefObject<CanvasShape[]>;
   queuedDrawIdsRef: RefObject<Set<string>>;
   commitDrawBatch: (strokes: readonly CanvasShape[]) => void;
+  setIsPenMode: (active: boolean) => void;
 }
 
 export interface PointerInteractionHandlers extends PointerDownHandlers {
@@ -69,6 +72,7 @@ export function useCanvasPointerInteractions({
   cameraRef,
   shapesRef,
   toolRef,
+  penModeRef,
   activeColorRef,
   drawColorRef,
   drawStrokeWidth,
@@ -87,6 +91,7 @@ export function useCanvasPointerInteractions({
   selectNow,
   beginHistory,
   endHistory,
+  cancelHistory,
   commit,
   onToolChange,
   expandToGroups,
@@ -97,6 +102,7 @@ export function useCanvasPointerInteractions({
   pendingDrawsRef,
   queuedDrawIdsRef,
   commitDrawBatch,
+  setIsPenMode,
 }: PointerInteractionOptions): PointerInteractionHandlers {
   const down = useCanvasPointerDown({
     containerRef,
@@ -107,6 +113,7 @@ export function useCanvasPointerInteractions({
     cameraRef,
     shapesRef,
     toolRef,
+    penModeRef,
     activeColorRef,
     drawColorRef,
     drawStrokeWidth,
@@ -120,6 +127,7 @@ export function useCanvasPointerInteractions({
     applyInteraction,
     selectNow,
     beginHistory,
+    cancelHistory,
     commit,
     onToolChange,
     expandToGroups,
@@ -128,6 +136,7 @@ export function useCanvasPointerInteractions({
     liveStrokeCanvasRef,
     activeDrawRef,
     pendingDrawsRef,
+    setIsPenMode,
   });
 
   useCanvasPointerLifecycle({

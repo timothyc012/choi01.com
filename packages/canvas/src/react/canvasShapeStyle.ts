@@ -127,10 +127,22 @@ export function freehandOutlinePath(
   }
   const outline = freehandOutlinePoints(points, strokeWidth, mode);
   if (outline.length === 0) return '';
-  return outline.reduce(
-    (d, [x, y], i) => d + (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`),
-    '',
-  ) + ' Z';
+  if (outline.length < 4) {
+    return outline.reduce(
+      (path, [x, y], index) => path + (index === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`),
+      '',
+    ) + ' Z';
+  }
+  const first = outline[0];
+  const control = outline[1];
+  const next = outline[2];
+  let path = `M ${first[0]} ${first[1]} Q ${control[0]} ${control[1]} ${(control[0] + next[0]) / 2} ${(control[1] + next[1]) / 2} T `;
+  for (let index = 2; index < outline.length - 1; index += 1) {
+    const point = outline[index];
+    const following = outline[index + 1];
+    path += `${(point[0] + following[0]) / 2} ${(point[1] + following[1]) / 2} `;
+  }
+  return `${path}Z`;
 }
 
 const outlinePathCache = new WeakMap<CanvasShape, string>();
