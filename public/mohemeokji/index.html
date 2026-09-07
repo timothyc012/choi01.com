@@ -453,6 +453,35 @@
       .detail-block h4 { margin: 0 0 10px; font-size: 13px; }
       .ingredient-list, .step-list { margin: 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.7; }
       .ingredient-list li strong { color: var(--ink); }
+      [hidden] { display: none !important; }
+      #todayCost, #totalCost { font-size: 24px; overflow-wrap: anywhere; }
+      .grocery-panel { padding: 20px; }
+      .grocery-summary { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+      .grocery-summary span { color: var(--muted); font-size: 12px; }
+      .grocery-list { list-style: none; margin: 0; padding: 0; }
+      .grocery-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-soft); }
+      .grocery-check { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; min-height: 44px; cursor: pointer; }
+      .grocery-check input { width: 22px; height: 22px; flex-shrink: 0; accent-color: var(--green); }
+      .grocery-check strong { display: block; font-size: 15px; }
+      .grocery-check small { display: block; margin-top: 5px; font-size: 11px; line-height: 1.5; color: var(--muted); }
+      .grocery-item-cost { font-size: 12px; white-space: nowrap; }
+      .grocery-item.completed .grocery-check strong { text-decoration: line-through; color: var(--muted); }
+      #groceryCompletedSection { margin-top: 20px; }
+      #groceryCompletedSection summary { cursor: pointer; font-size: 12px; color: var(--muted); line-height: 1.6; }
+      .shopping-items { list-style: none; padding: 0; margin: 18px 0 0; }
+      .shopping-item { padding: 16px 0; border-bottom: 1px solid var(--border-soft); }
+      .shopping-item-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center; }
+      .shopping-item-head label { font-size: 12px; color: var(--muted); cursor: pointer; }
+      .shopping-item small { display: block; margin-top: 6px; font-size: 11px; line-height: 1.5; color: var(--muted); }
+      .shopping-controls { display: grid; grid-template-columns: 70px minmax(90px, 1fr) auto; gap: 10px; align-items: end; margin-top: 12px; }
+      .shopping-controls label { font-size: 11px; color: var(--muted); }
+      .shopping-controls input { display: block; width: 100%; min-width: 0; padding: 9px 8px; margin-top: 5px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--canvas); color: var(--ink); font: inherit; font-size: 16px; }
+      .shopping-controls input:invalid { border-color: #b04432; }
+      .shopping-controls strong { padding-bottom: 10px; font-size: 13px; }
+      .shopping-item.owned .shopping-controls { opacity: .55; }
+      .shopping-total { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 24px; padding: 18px; background: var(--green-wash); border: 1px solid var(--border); border-radius: var(--radius); }
+      .shopping-total strong { font-size: 22px; }
+      .shopping-total p { width: 100%; margin: 0; font-size: 12px; line-height: 1.6; color: var(--muted); }
       .detail-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
       .toast {
         position: fixed;
@@ -531,6 +560,7 @@
             <a href="#today">오늘 추천</a>
             <a href="#week">이번 주</a>
             <a href="#library">메뉴 보관함</a>
+            <a href="#groceries">장보기</a>
           </nav>
           <label>
             <span class="mono" style="position:absolute;left:-9999px">지역 선택</span>
@@ -549,13 +579,13 @@
         <p class="eyebrow mono">TODAY · ONE GOOD DECISION</p>
         <h1 id="pageTitle">모해먹지?</h1>
         <p class="lede">
-          할인 재료, 시간, 비용, 최근 메뉴를 함께 보고 오늘의 한 가지를 먼저 추천합니다.
+          할인 재료와 조리 시간을 함께 보고 오늘의 한 가지를 먼저 추천합니다.
           마음에 들지 않으면 바로 다음 선택지를 보여드려요.
         </p>
         <div class="status-line" aria-live="polite">
           <span class="status-dot" aria-hidden="true"></span>
           <span id="sourceStatus">Netto CSV · 44369 Dortmund · 음식 재료 연결됨</span>
-          <span class="status-check" id="sourceCheck">· 공식 전단 일부 대조</span>
+          <span class="status-check" id="sourceCheck">· 저장된 포장 가격 기준</span>
         </div>
 
         <div class="decision-grid">
@@ -571,9 +601,11 @@
             <p class="decision-reason" id="todayReason"></p>
             <div class="decision-metrics">
               <div class="metric"><span>조리 시간</span><strong id="todayTime"></strong></div>
-              <div class="metric"><span>1인분 예상 원가</span><strong id="todayCost"></strong></div>
+              <div class="metric"><span id="todayCostLabel">재료 구매 합계</span><strong id="todayCost"></strong></div>
               <div class="metric"><span>할인 재료 활용</span><strong id="todayMatch"></strong></div>
             </div>
+            <p class="footer-note" id="todayCostNote"></p>
+            <button class="button button-small button-quiet" id="todayShopping">구매할 재료와 가격 보기</button>
             <div class="sale-strip" id="todayIngredients" aria-label="사용하는 할인 재료"></div>
             <div class="decision-actions">
               <button class="button button-primary" id="acceptToday">좋아, 이걸로 먹을게</button>
@@ -612,7 +644,7 @@
         <div class="stat-strip" aria-label="주간 요약">
           <article class="stat"><span>추천 가능한 메뉴</span><strong id="menuCount"></strong><small id="menuCountNote"></small></article>
           <article class="stat"><span>이번 주 할인자료</span><strong id="offerCount"></strong><small id="offerSummary"></small></article>
-          <article class="stat"><span>선택 메뉴 예상 합계</span><strong id="totalCost"></strong><small>실제 결제액과 다른 1인분 추정치</small></article>
+          <article class="stat"><span id="totalCostLabel">이번 주 장보기 합계</span><strong id="totalCost"></strong><small id="totalCostNote"></small></article>
         </div>
 
         <div class="workspace">
@@ -656,24 +688,51 @@
           </aside>
         </div>
       </section>
+      <section id="groceries" aria-labelledby="groceryTitle">
+        <div class="section-head">
+          <div>
+            <p class="panel-kicker mono">SHOPPING CHECKLIST</p>
+            <h2 id="groceryTitle" tabindex="-1">없는 재료만, 하나씩 체크하세요.</h2>
+            <p class="panel-copy">레시피에서 집에 있는 재료를 표시한 뒤 목록에 추가하세요. 같은 재료는 한 번만 담깁니다.</p>
+          </div>
+          <button class="button" id="prepareShopping">이번 주 재료 확인하고 추가</button>
+        </div>
+        <article class="panel grocery-panel">
+          <div class="grocery-summary" role="status" aria-live="polite">
+            <strong id="groceryProgress"></strong>
+            <span id="groceryCost"></span>
+          </div>
+          <p class="panel-copy" id="groceryEmpty">아직 장보기 목록이 비어 있어요. 메뉴의 ‘구매할 재료와 가격 보기’에서 없는 재료를 추가해보세요.</p>
+          <ul class="grocery-list" id="groceryPending" aria-label="아직 구매하지 않은 재료"></ul>
+          <details id="groceryCompletedSection" open hidden>
+            <summary id="groceryCompletedLabel">구매 완료</summary>
+            <ul class="grocery-list" id="groceryCompleted" aria-label="구매 완료한 재료"></ul>
+          </details>
+          <p class="footer-note" id="grocerySaveState">목록과 체크 상태는 이 브라우저에 자동으로 저장됩니다.</p>
+        </article>
+      </section>
     </main>
 
     <div class="detail-drawer" id="detailDrawer" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
       <aside class="detail">
-        <button class="icon-button detail-close" id="closeDetail" aria-label="레시피 닫기">×</button>
-        <p class="detail-kicker mono">RECIPE DETAIL · ESTIMATE</p>
+        <button class="icon-button detail-close" id="closeDetail" aria-label="상세 닫기">×</button>
+        <p class="detail-kicker mono" id="detailKicker">RECIPE · SHOPPING</p>
         <h3 id="detailTitle"></h3>
         <p class="detail-lede" id="detailIntro"></p>
         <div class="detail-block">
-          <h4>할인 재료와 추가 재료</h4>
-          <ul class="ingredient-list" id="detailIngredients"></ul>
+          <h4 id="shoppingTitle">구매할 재료</h4>
+          <p class="footer-note">재료별 판매 포장 1개가 기본입니다. 필요한 양에 맞게 포장 수를 조절하세요. ‘집에 있음’을 체크하면 구매금액에서 빠집니다. 밥은 쌀로 모아 계산합니다.</p>
+          <p class="footer-note" id="shoppingSource"></p>
+          <ul class="shopping-items" id="detailIngredients"></ul>
+          <div class="shopping-total" role="status" aria-live="polite"><span id="shoppingTotalLabel"></span><strong id="shoppingTotal"></strong><p id="shoppingNote"></p></div>
         </div>
-        <div class="detail-block">
+        <div class="detail-block" id="recipeStepsBlock">
           <h4>조리 순서</h4>
           <ol class="step-list" id="detailSteps"></ol>
         </div>
         <div class="detail-actions">
-          <button class="button button-primary" id="eatFromDetail">오늘 먹기</button>
+          <button class="button button-primary" id="addShoppingItems">없는 재료만 장보기 목록에 추가</button>
+          <button class="button" id="eatFromDetail">오늘 먹기</button>
           <button class="button" id="addFromDetail">식단표에 넣기</button>
           <button class="button button-quiet" id="closeDetailSecondary">닫기</button>
         </div>
@@ -682,27 +741,29 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="./meal-planner-recipe-data.js"></script>
+    <script src="/mohemeokji/meal-package-prices.js"></script>
+    <script src="/mohemeokji/meal-shopping.js"></script>
     <script>
       const meals = [
-        { id:"rice", store:"Netto", cuisine:"korean", title:"닭고기 파프리카·토마토 볶음 + 밥", time:20, cost:2.11, tags:["고단백"], filter:["korean","quick"], sale:["닭고기","파프리카","토마토","양파"], missing:["쌀","마늘","간장","기름"], steps:["밥을 안치고 닭고기·파프리카·토마토·양파를 썹니다.","마늘과 양파를 볶은 뒤 닭고기를 속까지 익힙니다.","파프리카와 토마토, 간장·후추를 넣고 밥과 함께 담습니다."] },
-        { id:"tray", store:"Netto", cuisine:"western", title:"바질 토마토 닭고기 구이 + 감자", time:25, cost:2.28, tags:["한 팬","고단백"], filter:["western","onepan"], sale:["닭고기","토마토","양파","감자"], missing:["허브","올리브유"], steps:["감자를 한입 크기로 잘라 먼저 반쯤 익힙니다.","닭고기·토마토·양파·감자를 허브와 기름에 버무립니다.","190°C에서 닭고기가 충분히 익을 때까지 구워냅니다."] },
-        { id:"pepper-pork", store:"Netto", cuisine:"asian", title:"돼지고기 고추잡채 + 밥", time:30, cost:1.92, tags:["채소 듬뿍"], filter:["asian"], sale:["돼지고기","파프리카","버섯","양파"], missing:["밥","굴소스","간장"], steps:["돼지고기·파프리카·양파·버섯을 길쭉하게 썹니다.","고기를 먼저 센불에 볶아 덜어둡니다.","채소를 빠르게 볶고 고기와 소스를 되넣어 밥과 냅니다."] },
-        { id:"tomato-egg", store:"Netto", cuisine:"asian", title:"토마토 달걀볶음 + 닭고기", time:15, cost:1.95, tags:["한 팬","빠른 메뉴"], filter:["asian","quick","onepan"], sale:["닭고기","토마토","양파"], missing:["달걀","밥"], steps:["달걀을 몽글하게 익혀 덜어둡니다.","닭고기와 양파를 익힌 뒤 토마토를 넣습니다.","달걀을 되넣고 가볍게 섞어 밥과 냅니다."] },
-        { id:"pasta", store:"Netto", cuisine:"western", title:"채소 파스타 + 치즈", time:20, cost:2.45, tags:["채식"], filter:["western","quick","vegetarian"], sale:["파프리카","토마토","치즈"], missing:["파스타","마늘","올리브유"], steps:["파스타를 삶고 면수를 남깁니다.","팬에 마늘과 채소를 볶습니다.","파스타와 면수를 섞고 치즈를 올립니다."] },
-        { id:"tomato-toast", store:"Netto", cuisine:"western", title:"토마토 파프리카 오픈 토스트", time:12, cost:1.80, tags:["간단식","채식"], filter:["western","quick","vegetarian"], sale:["토마토","파프리카","토스트"], missing:["치즈"], steps:["토마토와 파프리카를 얇게 썹니다.","빵에 채소와 치즈를 올립니다.","팬이나 오븐에서 치즈가 녹을 때까지 굽습니다."] },
-        { id:"dakdoritang", store:"EDEKA", cuisine:"korean", title:"얼큰 닭볶음탕", time:45, cost:2.20, tags:["한 냄비","주말"], filter:["korean","onepan"], sale:["닭고기","감자","주키니","당근","대파"], missing:["고추장","간장","마늘"], steps:["닭고기와 감자·주키니·당근을 큼직하게 썹니다.","냄비에 닭고기와 양념을 넣고 끓입니다.","채소를 넣고 국물이 걸쭉해질 때까지 익힌 뒤 대파를 올립니다."] },
-        { id:"salmon-salad", store:"EDEKA", cuisine:"western", title:"레몬 연어 스테이크 + 웜 샐러드", time:25, cost:3.60, tags:["고단백","가벼운"], filter:["western"], sale:["연어","양상추","오이","토마토","레몬"], missing:["올리브유","허브"], steps:["연어에 후추와 레몬즙을 뿌립니다.","팬에서 껍질 쪽부터 노릇하게 굽습니다.","양상추·오이·토마토와 따뜻하게 담습니다."] },
-        { id:"shrimp-pasta", store:"EDEKA", cuisine:"western", title:"레몬 갈릭 새우 오일 파스타", time:20, cost:3.10, tags:["한 팬"], filter:["western","quick","onepan"], sale:["새우","파스타","레몬"], missing:["마늘","올리브유"], steps:["파스타를 삶아 면수를 남깁니다.","팬에 마늘과 새우를 볶고 레몬즙을 넣습니다.","파스타와 면수를 넣어 윤기 나게 버무립니다."] },
-        { id:"ragu", store:"EDEKA", cuisine:"western", title:"토마토 다짐육 라구 파스타", time:35, cost:2.45, tags:["가족식","든든한"], filter:["western"], sale:["다진고기","파스타","토마토","당근","양파"], missing:["토마토페이스트","허브"], steps:["양파와 당근을 잘게 썰어 볶습니다.","다진고기를 갈색이 될 때까지 익힙니다.","토마토와 소스를 끓여 삶은 파스타에 올립니다."] },
-        { id:"zucchini-pancake", store:"EDEKA", cuisine:"korean", title:"애호박전 + 파간장", time:20, cost:1.65, tags:["채식"], filter:["korean","quick","vegetarian"], sale:["주키니","대파"], missing:["달걀","부침가루"], steps:["주키니를 얇게 썰어 소금을 살짝 뿌립니다.","달걀과 부침가루를 입혀 노릇하게 부칩니다.","대파를 넣은 간장을 곁들입니다."] },
-        { id:"mushroom-carbonara", store:"EDEKA", cuisine:"western", title:"버섯 베이컨 크림 파스타", time:25, cost:2.75, tags:["한 팬","든든한"], filter:["western","onepan"], sale:["베이컨","버섯","파스타","치즈"], missing:["달걀","후추"], steps:["파스타를 삶아 면수를 남깁니다.","베이컨과 버섯을 볶습니다.","파스타·치즈·면수를 섞어 크리미하게 마무리합니다."] },
-        { id:"fish-tray", store:"EDEKA", cuisine:"western", title:"버터 송어 구이 + 웨지감자", time:25, cost:2.45, tags:["독일식","가벼운"], filter:["western"], sale:["송어","감자","레몬","버터"], missing:["밀가루","허브"], steps:["감자를 삶거나 웨지 모양으로 굽습니다.","송어에 밀가루를 얇게 묻혀 버터에 굽습니다.","레몬과 허브를 올려 감자와 냅니다."] },
-        { id:"tomato-egg-edeka", store:"EDEKA", cuisine:"asian", title:"토마토 달걀 볶음 + 밥", time:15, cost:1.70, tags:["빠른 메뉴","채식"], filter:["asian","quick","vegetarian"], sale:["토마토","대파"], missing:["달걀","밥"], steps:["달걀을 몽글하게 익혀 덜어둡니다.","대파와 토마토를 센불에 볶습니다.","달걀을 되넣고 간을 맞춰 밥과 냅니다."] },
-        { id:"avocado-chicken", store:"EDEKA", cuisine:"western", title:"치킨 아보카도 웜 샐러드", time:18, cost:2.80, tags:["고단백","가벼운"], filter:["western","quick"], sale:["닭고기","아보카도","양상추","토마토","레몬"], missing:["올리브유","후추"], steps:["닭고기를 한입 크기로 잘라 굽습니다.","양상추·토마토·아보카도를 담습니다.","따뜻한 닭고기를 올리고 레몬 드레싱을 뿌립니다."] },
-        { id:"potato-quark", store:"EDEKA", cuisine:"western", title:"허브 쿼크 감자", time:18, cost:1.35, tags:["독일식","초간단"], filter:["western","quick","vegetarian"], sale:["감자","허브 쿼크","대파"], missing:["소금"], steps:["감자를 껍질째 삶습니다.","허브 쿼크에 대파를 섞습니다.","따뜻한 감자를 갈라 쿼크를 곁들입니다."] },
-        { id:"pesto-pasta", store:"EDEKA", cuisine:"western", title:"바질 페스토 파스타", time:15, cost:1.75, tags:["채식","초간단"], filter:["western","quick","vegetarian"], sale:["파스타","페스토"], missing:["토마토"], steps:["파스타를 삶아 면수를 남깁니다.","불을 끄고 페스토와 면수를 섞습니다.","토마토를 곁들여 냅니다."] },
-        { id:"cheese-toast", store:"EDEKA", cuisine:"western", title:"치즈 토마토 그릴 토스트", time:10, cost:1.45, tags:["간단식","채식"], filter:["western","quick","vegetarian"], sale:["치즈","토스트","토마토"], missing:["버터"], steps:["빵에 버터를 얇게 바릅니다.","치즈와 토마토를 올려 굽습니다.","후추를 뿌려 따뜻하게 냅니다."] },
-        { id:"blueberry-yogurt", store:"EDEKA", cuisine:"western", title:"블루베리 요거트 오버나이트 오트", time:5, cost:1.60, tags:["아침","채식"], filter:["western","quick","vegetarian"], sale:["블루베리","요거트"], missing:["오트밀"], steps:["요거트와 오트밀을 컵에 섞습니다.","블루베리를 올려 냉장 보관합니다.","차갑게 바로 먹습니다."] }
+        { id:"rice", store:"Netto", cuisine:"korean", title:"닭고기 파프리카·토마토 볶음 + 밥", time:20, tags:["고단백"], filter:["korean","quick"], sale:["닭고기","파프리카","토마토","양파"], missing:["쌀","마늘","간장","기름"], steps:["밥을 안치고 닭고기·파프리카·토마토·양파를 썹니다.","마늘과 양파를 볶은 뒤 닭고기를 속까지 익힙니다.","파프리카와 토마토, 간장·후추를 넣고 밥과 함께 담습니다."] },
+        { id:"tray", store:"Netto", cuisine:"western", title:"바질 토마토 닭고기 구이 + 감자", time:25, tags:["한 팬","고단백"], filter:["western","onepan"], sale:["닭고기","토마토","양파","감자"], missing:["허브","올리브유"], steps:["감자를 한입 크기로 잘라 먼저 반쯤 익힙니다.","닭고기·토마토·양파·감자를 허브와 기름에 버무립니다.","190°C에서 닭고기가 충분히 익을 때까지 구워냅니다."] },
+        { id:"pepper-pork", store:"Netto", cuisine:"asian", title:"돼지고기 고추잡채 + 밥", time:30, tags:["채소 듬뿍"], filter:["asian"], sale:["돼지고기","파프리카","버섯","양파"], missing:["밥","굴소스","간장"], steps:["돼지고기·파프리카·양파·버섯을 길쭉하게 썹니다.","고기를 먼저 센불에 볶아 덜어둡니다.","채소를 빠르게 볶고 고기와 소스를 되넣어 밥과 냅니다."] },
+        { id:"tomato-egg", store:"Netto", cuisine:"asian", title:"토마토 달걀볶음 + 닭고기", time:15, tags:["한 팬","빠른 메뉴"], filter:["asian","quick","onepan"], sale:["닭고기","토마토","양파"], missing:["달걀","밥"], steps:["달걀을 몽글하게 익혀 덜어둡니다.","닭고기와 양파를 익힌 뒤 토마토를 넣습니다.","달걀을 되넣고 가볍게 섞어 밥과 냅니다."] },
+        { id:"pasta", store:"Netto", cuisine:"western", title:"채소 파스타 + 치즈", time:20, tags:["채식"], filter:["western","quick","vegetarian"], sale:["파프리카","토마토","치즈"], missing:["파스타","마늘","올리브유"], steps:["파스타를 삶고 면수를 남깁니다.","팬에 마늘과 채소를 볶습니다.","파스타와 면수를 섞고 치즈를 올립니다."] },
+        { id:"tomato-toast", store:"Netto", cuisine:"western", title:"토마토 파프리카 오픈 토스트", time:12, tags:["간단식","채식"], filter:["western","quick","vegetarian"], sale:["토마토","파프리카","토스트"], missing:["치즈"], steps:["토마토와 파프리카를 얇게 썹니다.","빵에 채소와 치즈를 올립니다.","팬이나 오븐에서 치즈가 녹을 때까지 굽습니다."] },
+        { id:"dakdoritang", store:"EDEKA", cuisine:"korean", title:"얼큰 닭볶음탕", time:45, tags:["한 냄비","주말"], filter:["korean","onepan"], sale:["닭고기","감자","주키니","당근","대파"], missing:["고추장","간장","마늘"], steps:["닭고기와 감자·주키니·당근을 큼직하게 썹니다.","냄비에 닭고기와 양념을 넣고 끓입니다.","채소를 넣고 국물이 걸쭉해질 때까지 익힌 뒤 대파를 올립니다."] },
+        { id:"salmon-salad", store:"EDEKA", cuisine:"western", title:"레몬 연어 스테이크 + 웜 샐러드", time:25, tags:["고단백","가벼운"], filter:["western"], sale:["연어","양상추","오이","토마토","레몬"], missing:["올리브유","허브"], steps:["연어에 후추와 레몬즙을 뿌립니다.","팬에서 껍질 쪽부터 노릇하게 굽습니다.","양상추·오이·토마토와 따뜻하게 담습니다."] },
+        { id:"shrimp-pasta", store:"EDEKA", cuisine:"western", title:"레몬 갈릭 새우 오일 파스타", time:20, tags:["한 팬"], filter:["western","quick","onepan"], sale:["새우","파스타","레몬"], missing:["마늘","올리브유"], steps:["파스타를 삶아 면수를 남깁니다.","팬에 마늘과 새우를 볶고 레몬즙을 넣습니다.","파스타와 면수를 넣어 윤기 나게 버무립니다."] },
+        { id:"ragu", store:"EDEKA", cuisine:"western", title:"토마토 다짐육 라구 파스타", time:35, tags:["가족식","든든한"], filter:["western"], sale:["다진고기","파스타","토마토","당근","양파"], missing:["토마토페이스트","허브"], steps:["양파와 당근을 잘게 썰어 볶습니다.","다진고기를 갈색이 될 때까지 익힙니다.","토마토와 소스를 끓여 삶은 파스타에 올립니다."] },
+        { id:"zucchini-pancake", store:"EDEKA", cuisine:"korean", title:"애호박전 + 파간장", time:20, tags:["채식"], filter:["korean","quick","vegetarian"], sale:["주키니","대파"], missing:["달걀","부침가루"], steps:["주키니를 얇게 썰어 소금을 살짝 뿌립니다.","달걀과 부침가루를 입혀 노릇하게 부칩니다.","대파를 넣은 간장을 곁들입니다."] },
+        { id:"mushroom-carbonara", store:"EDEKA", cuisine:"western", title:"버섯 베이컨 크림 파스타", time:25, tags:["한 팬","든든한"], filter:["western","onepan"], sale:["베이컨","버섯","파스타","치즈"], missing:["달걀","후추"], steps:["파스타를 삶아 면수를 남깁니다.","베이컨과 버섯을 볶습니다.","파스타·치즈·면수를 섞어 크리미하게 마무리합니다."] },
+        { id:"fish-tray", store:"EDEKA", cuisine:"western", title:"버터 송어 구이 + 웨지감자", time:25, tags:["독일식","가벼운"], filter:["western"], sale:["송어","감자","레몬","버터"], missing:["밀가루","허브"], steps:["감자를 삶거나 웨지 모양으로 굽습니다.","송어에 밀가루를 얇게 묻혀 버터에 굽습니다.","레몬과 허브를 올려 감자와 냅니다."] },
+        { id:"tomato-egg-edeka", store:"EDEKA", cuisine:"asian", title:"토마토 달걀 볶음 + 밥", time:15, tags:["빠른 메뉴","채식"], filter:["asian","quick","vegetarian"], sale:["토마토","대파"], missing:["달걀","밥"], steps:["달걀을 몽글하게 익혀 덜어둡니다.","대파와 토마토를 센불에 볶습니다.","달걀을 되넣고 간을 맞춰 밥과 냅니다."] },
+        { id:"avocado-chicken", store:"EDEKA", cuisine:"western", title:"치킨 아보카도 웜 샐러드", time:18, tags:["고단백","가벼운"], filter:["western","quick"], sale:["닭고기","아보카도","양상추","토마토","레몬"], missing:["올리브유","후추"], steps:["닭고기를 한입 크기로 잘라 굽습니다.","양상추·토마토·아보카도를 담습니다.","따뜻한 닭고기를 올리고 레몬 드레싱을 뿌립니다."] },
+        { id:"potato-quark", store:"EDEKA", cuisine:"western", title:"허브 쿼크 감자", time:18, tags:["독일식","초간단"], filter:["western","quick","vegetarian"], sale:["감자","허브 쿼크","대파"], missing:["소금"], steps:["감자를 껍질째 삶습니다.","허브 쿼크에 대파를 섞습니다.","따뜻한 감자를 갈라 쿼크를 곁들입니다."] },
+        { id:"pesto-pasta", store:"EDEKA", cuisine:"western", title:"바질 페스토 파스타", time:15, tags:["채식","초간단"], filter:["western","quick","vegetarian"], sale:["파스타","페스토"], missing:["토마토"], steps:["파스타를 삶아 면수를 남깁니다.","불을 끄고 페스토와 면수를 섞습니다.","토마토를 곁들여 냅니다."] },
+        { id:"cheese-toast", store:"EDEKA", cuisine:"western", title:"치즈 토마토 그릴 토스트", time:10, tags:["간단식","채식"], filter:["western","quick","vegetarian"], sale:["치즈","토스트","토마토"], missing:["버터"], steps:["빵에 버터를 얇게 바릅니다.","치즈와 토마토를 올려 굽습니다.","후추를 뿌려 따뜻하게 냅니다."] },
+        { id:"blueberry-yogurt", store:"EDEKA", cuisine:"western", title:"블루베리 요거트 오버나이트 오트", time:5, tags:["아침","채식"], filter:["western","quick","vegetarian"], sale:["블루베리","요거트"], missing:["오트밀"], steps:["요거트와 오트밀을 컵에 섞습니다.","블루베리를 올려 냉장 보관합니다.","차갑게 바로 먹습니다."] }
       ];
       meals.push.apply(meals, window.expandedMealExtras || []);
 
@@ -724,7 +785,7 @@
       let activeArea = pathArea || "44369";
       let activeStore = activeArea === "40474" ? "EDEKA" : "Netto";
       let mealMoment = "저녁";
-      let plan = { ...autoPlans.Netto };
+      let plan = { ...autoPlans[activeStore] };
       let activeFilter = "all";
       let targetDay = "thu";
       let recommendationIndex = 0;
@@ -733,9 +794,46 @@
 
       const byId = (id) => document.getElementById(id);
       const mealById = (id) => meals.find((item) => item.id === id);
-      const euro = (value) => value.toFixed(2).replace(".", ",") + "€";
+      const shopping = window.MealShopping;
+      const shoppingStorageKey = "choi01-shopping-v1:" + activeArea;
+      let savedShopping = null;
+      try { savedShopping = localStorage.getItem(shoppingStorageKey); } catch {}
+      const shoppingState = shopping.restoreState(savedShopping);
+      function saveShopping() {
+        try {
+          localStorage.setItem(shoppingStorageKey, shopping.serializeState(shoppingState));
+          byId("grocerySaveState").textContent = "목록과 체크 상태는 이 브라우저에 자동으로 저장됩니다.";
+        } catch {
+          byId("grocerySaveState").textContent = "브라우저 저장을 사용할 수 없어 현재 화면에서만 유지됩니다.";
+        }
+      }
+      let shoppingScope = null;
+      let detailReturnFocus = null;
+      const catalog = window.mealPackagePrices;
+      const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+      function basketFor(items, scope) {
+        return shopping.basket(items, { catalog, pantry: shoppingState.pantry, prices: shoppingState.prices, quantities: shoppingState.quantities[scope] || {} });
+      }
+      const mealBasket = (item) => basketFor([item], "meal:" + item.id);
+      const planMeals = () => Object.values(plan).map(mealById).filter(Boolean);
+      const planBasket = () => basketFor(planMeals(), "week");
+      function costNote(cart) {
+        return cart.unknownCount
+          ? "미확인 " + cart.unknownCount + "종은 아직 합계에 포함되지 않았습니다. 가격을 입력하거나 집에 있는 재료를 제외하세요."
+          : "구매할 재료의 포장 가격 × 구매 수량 합계입니다.";
+      }
+      function renderCostSummary() {
+        const cart = mealBasket(currentRecommendation());
+        byId("todayCostLabel").textContent = cart.unknownCount ? "가격 확인된 재료 소계" : "재료 구매 합계";
+        byId("todayCost").textContent = shopping.amount(cart);
+        byId("todayCostNote").textContent = costNote(cart) + " 기본: 재료별 1포장.";
+        const weekCart = planBasket();
+        byId("totalCostLabel").textContent = weekCart.unknownCount ? "이번 주 확인된 재료 소계" : "이번 주 장보기 합계";
+        byId("totalCost").textContent = shopping.amount(weekCart);
+        byId("totalCostNote").textContent = costNote(weekCart) + " 공통 재료는 한 번만 담습니다. 목록에서 필요한 포장 수를 확인하세요.";
+      }
       function scoreMeal(item) {
-        return item.sale.length * 20 - item.missing.length * 7 - item.time * .35 - item.cost * .7;
+        return item.sale.length * 20 - item.missing.length * 7 - item.time * .35;
       }
       function activeMeals() {
         return meals.filter((item) => item.store === activeStore).sort((a, b) => scoreMeal(b) - scoreMeal(a));
@@ -765,18 +863,18 @@
         const profile = profiles[activeStore];
         byId("areaSelect").value = activeArea;
         byId("sourceStatus").textContent = profile.label + " · " + labels[activeArea] + " · 음식 재료 연결됨";
-        byId("sourceCheck").textContent = activeStore === "EDEKA" ? "· 공식 전단 대조 필요" : "· 공식 전단 일부 대조";
+        byId("sourceCheck").textContent = activeStore === "EDEKA" ? "· 포장 가격 입력 필요" : "· 저장된 KW36 가격 · 현재 매장 가격 확인 필요";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment + " · 1순위";
         byId("todayTitle").textContent = item.title;
         byId("todayReason").textContent = "할인 재료 " + item.sale.length + "개를 활용하고, 추가 구매는 " + item.missing.length + "개입니다. " + item.time + "분이면 완성할 수 있어 오늘의 첫 선택으로 추천합니다.";
         byId("todayTime").textContent = item.time + "분";
-        byId("todayCost").textContent = euro(item.cost);
+        renderCostSummary();
         byId("todayMatch").textContent = item.sale.length + "개";
         byId("todayIngredients").innerHTML = item.sale.map((name) => '<span class="ingredient-chip">' + name + '</span>').join("");
         byId("whyList").innerHTML =
           '<div class="why-item"><span class="why-index">01</span><div><b>할인 재료를 많이 씁니다</b><span>' + item.sale.join(" · ") + '</span></div></div>' +
           '<div class="why-item"><span class="why-index">02</span><div><b>추가 구매가 적습니다</b><span>' + (item.missing.length ? item.missing.join(" · ") : "추가 구매 없음") + '</span></div></div>' +
-          '<div class="why-item"><span class="why-index">03</span><div><b>오늘 만들 수 있는 시간입니다</b><span>조리 ' + item.time + '분 · 1인분 원가 ' + euro(item.cost) + ' 추정</span></div></div>';
+          '<div class="why-item"><span class="why-index">03</span><div><b>오늘 만들 수 있는 시간입니다</b><span>조리 ' + item.time + '분</span></div></div>';
         const pool = activeMeals();
         const alternatives = [pool[(recommendationIndex + 1) % pool.length], pool[(recommendationIndex + 2) % pool.length]];
         byId("alternativeList").innerHTML = alternatives.map((alt) => '<button class="alternative-button" type="button" data-alternative="' + alt.id + '">' + alt.title + ' · ' + alt.time + '분</button>').join("");
@@ -794,7 +892,7 @@
           const dayNote = day.id === "thu" ? "<small>오늘</small>" : "";
           return '<div class="week-row' + todayClass + '"><div class="day">' + day.label + dayNote + '</div><div class="slot" data-day="' + day.id + '" tabindex="0" aria-label="' + day.label + '요일 ' + mealMoment + ' 메뉴 칸">' +
             (item
-              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + euro(item.cost) + ' 예상</span><span>' + item.store + '</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
+              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + shopping.summary(mealBasket(item)) + '</span><span>' + item.store + '</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
               : '<div class="slot-empty"><span>' + mealMoment + ' 메뉴를 넣어보세요</span><button class="pick-slot" data-day="' + day.id + '">메뉴 고르기</button></div>') +
             '</div></div>';
         }).join("");
@@ -834,8 +932,7 @@
             showToast(days.find((day) => day.id === targetDay).label + "요일에 메뉴를 넣었습니다");
           });
         });
-        const total = Object.values(plan).reduce((sum, id) => sum + (mealById(id)?.cost || 0), 0);
-        byId("totalCost").textContent = euro(total);
+        renderCostSummary();
       }
       function renderMenu() {
         const query = byId("menuSearch").value.trim().toLowerCase();
@@ -855,7 +952,7 @@
           '<div class="menu-top"><h4 class="menu-title">' + item.title + '</h4><span class="match">' + item.sale.length + '개 할인재료</span></div>' +
           '<p class="menu-sub">사용: ' + item.sale.join(" · ") + '<br>추가: ' + item.missing.join(" · ") + '</p>' +
           '<div class="tag-row"><span class="tag tag-source">' + item.store + '</span>' + item.tags.map((tag) => '<span class="tag">' + tag + '</span>').join("") + '</div>' +
-          '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + euro(item.cost) + ' <span>1인분 추정</span></span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
+          '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
           '</article>'
         ).join("") : '<p class="panel-copy" style="padding:0 20px 20px">찾는 메뉴가 없습니다.</p>';
         document.querySelectorAll(".menu-item").forEach((card) => {
@@ -889,14 +986,118 @@
       function openDetail(id) {
         selectedMeal = mealById(id);
         if (!selectedMeal) return;
+        shoppingScope = "meal:" + selectedMeal.id;
+        byId("detailKicker").textContent = "RECIPE · SHOPPING";
         byId("detailTitle").textContent = selectedMeal.title;
-        byId("detailIntro").textContent = selectedMeal.store + " · " + selectedMeal.time + "분 · 1인분 " + euro(selectedMeal.cost) + " 추정";
-        byId("detailIngredients").innerHTML = selectedMeal.sale.map((name) => "<li><strong>" + name + "</strong> · 할인 재료</li>").concat(selectedMeal.missing.map((name) => "<li>" + name + " · 추가 구매</li>")).join("");
+        byId("detailIntro").textContent = selectedMeal.store + " · 조리 " + selectedMeal.time + "분";
         byId("detailSteps").innerHTML = selectedMeal.steps.map((step) => "<li>" + step + "</li>").join("");
-        byId("detailDrawer").classList.add("open");
+        setRecipeVisibility(true);
+        renderShopping();
+        showDetail();
         renderMenu();
       }
-      function closeDetail() { byId("detailDrawer").classList.remove("open"); }
+      function setRecipeVisibility(visible) {
+        ["recipeStepsBlock", "eatFromDetail", "addFromDetail"].forEach((id) => { byId(id).hidden = !visible; });
+      }
+      function showDetail() {
+        if (!byId("detailDrawer").classList.contains("open")) detailReturnFocus = document.activeElement;
+        byId("detailDrawer").classList.add("open");
+        document.body.style.overflow = "hidden";
+        byId("closeDetail").focus();
+      }
+      function closeDetail() {
+        byId("detailDrawer").classList.remove("open");
+        document.body.style.overflow = "";
+        shoppingScope = null;
+        if (detailReturnFocus?.isConnected) detailReturnFocus.focus();
+        else byId("todayShopping").focus();
+      }
+      function renderShopping() {
+        const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
+        byId("shoppingSource").innerHTML = activeStore === "Netto"
+          ? '<a href="/netto/netto_40468_vs_44369_kw36.csv">저장된 Netto KW36 포장 가격</a> 기준이며, 현재 매장 가격은 다를 수 있습니다. 수량과 가격을 직접 수정할 수 있습니다.'
+          : 'EDEKA 포장 가격 자료가 없습니다. 구매할 상품의 포장 가격을 입력해주세요.';
+        byId("detailIngredients").innerHTML = cart.items.length ? cart.items.map((item, index) => {
+          const price = item.priceCents === null ? "" : (item.priceCents / 100).toFixed(2).replace(".", ",");
+          const disabled = item.owned ? " disabled" : "";
+          return '<li class="shopping-item' + (item.owned ? ' owned' : '') + '">' +
+            '<div class="shopping-item-head"><strong>' + escapeHtml(item.name) + '</strong><label><input type="checkbox" data-shopping-index="' + index + '" data-shopping-field="owned" aria-label="' + escapeHtml(item.name) + ' 집에 있음"' + (item.owned ? ' checked' : '') + '> 집에 있음</label></div>' +
+            '<small>' + escapeHtml(item.product ? item.product + ' · ' + item.pack : item.pack) + '</small>' +
+            '<div class="shopping-controls"><label>포장 수<input type="number" min="1" max="999" step="1" value="' + item.quantity + '" data-shopping-index="' + index + '" data-shopping-field="quantity" aria-label="' + escapeHtml(item.name) + ' 구매 포장 수"' + disabled + '></label>' +
+            '<label>포장 가격 (€)<input type="text" inputmode="decimal" value="' + price + '" placeholder="가격 미확인" data-shopping-index="' + index + '" data-shopping-field="price" aria-label="' + escapeHtml(item.name) + ' 포장 가격"' + disabled + '></label>' +
+            '<strong>' + (item.owned ? '구매 제외' : item.subtotalCents === null ? '가격 미확인' : shopping.euro(item.subtotalCents)) + '</strong></div>' +
+            '<small>' + (item.customPrice ? '직접 입력한 가격' : item.source ? '저장된 KW36 가격' : '포장 크기와 가격을 확인해주세요') + '</small></li>';
+        }).join("") : '<li class="footer-note">식단표에 메뉴를 넣으면 구매할 재료가 여기에 표시됩니다.</li>';
+        renderShoppingSummary(cart);
+      }
+      function renderShoppingSummary(cart) {
+        byId("shoppingTitle").textContent = "구매할 재료 · " + cart.purchaseCount + "종";
+        byId("shoppingTotalLabel").textContent = cart.unknownCount ? "가격 확인된 재료 소계" : "구매할 재료 총액";
+        byId("shoppingTotal").textContent = shopping.amount(cart);
+        byId("shoppingNote").textContent = costNote(cart) + (shoppingScope === "week" ? " 공통 재료는 한 번만 담았습니다. 여러 끼에 필요한 포장 수로 조절해주세요." : "");
+      }
+      function updateShoppingInput(event) {
+        const input = event.target;
+        if (!input.dataset.shoppingField) return;
+        const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
+        const item = cart.items[Number(input.dataset.shoppingIndex)];
+        if (!item) return;
+        const field = input.dataset.shoppingField;
+        if (field === "owned" && event.type === "input") return;
+        input.setCustomValidity("");
+        if (field === "owned") {
+          if (input.checked) {
+            shoppingState.pantry.add(item.key);
+            shoppingState.list = shoppingState.list.filter((entry) => entry.key !== item.key);
+          } else shoppingState.pantry.delete(item.key);
+        } else if (field === "price") {
+          const cents = shopping.parsePrice(input.value);
+          if (input.value.trim() && cents === null) {
+            input.setCustomValidity("0 이상의 금액을 소수 둘째 자리까지 입력해주세요.");
+            if (event.type === "change") input.reportValidity();
+            return;
+          }
+          shoppingState.prices[item.key] = cents;
+          const listed = shoppingState.list.find((entry) => entry.key === item.key);
+          if (listed) listed.priceCents = cents;
+        } else {
+          const quantity = Number(input.value);
+          if (!Number.isInteger(quantity) || quantity < 1 || quantity > 999) {
+            input.setCustomValidity("구매할 포장 수를 1부터 999 사이의 정수로 입력해주세요.");
+            if (event.type === "change") input.reportValidity();
+            return;
+          }
+          shoppingState.quantities[shoppingScope] ||= {};
+          shoppingState.quantities[shoppingScope][item.key] = quantity;
+        }
+        if (field === "owned") {
+          const focusIndex = input.dataset.shoppingIndex;
+          renderShopping();
+          byId("detailIngredients").querySelector('[data-shopping-index="' + focusIndex + '"][data-shopping-field="owned"]').focus();
+        } else {
+          const updated = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
+          const updatedItem = updated.items[Number(input.dataset.shoppingIndex)];
+          const row = input.closest("li");
+          row.querySelector(".shopping-controls strong").textContent = updatedItem.subtotalCents === null ? "가격 미확인" : shopping.euro(updatedItem.subtotalCents);
+          if (field === "price") row.lastElementChild.textContent = "직접 입력한 가격";
+          renderShoppingSummary(updated);
+        }
+        saveShopping();
+        renderGroceryList();
+        renderPlan();
+        renderMenu();
+      }
+      byId("detailIngredients").addEventListener("input", updateShoppingInput);
+      byId("detailIngredients").addEventListener("change", updateShoppingInput);
+      byId("todayShopping").addEventListener("click", () => openDetail(currentRecommendation().id));
+      byId("detailDrawer").addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeDetail();
+        if (event.key !== "Tab") return;
+        const focusable = [...byId("detailDrawer").querySelectorAll('button, input, a[href]')].filter((item) => !item.disabled && !item.hidden && item.getClientRects().length);
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      });
       function acceptMeal(item) {
         acceptedMeal = item;
         plan.thu = item.id;
@@ -937,10 +1138,17 @@
         localStorage.setItem("choi01-today-meal-plan", JSON.stringify({ plan, mealMoment, activeArea }));
         showToast("이 브라우저에 식단을 저장했습니다");
       });
-      byId("shoppingList").addEventListener("click", () => {
-        const sale = [...new Set(Object.values(plan).filter(Boolean).flatMap((id) => mealById(id)?.sale || []))];
-        showToast("장보기 핵심 " + Math.min(sale.length, 9) + "종 · " + sale.slice(0, 4).join(" · "));
-      });
+      function openWeeklyShopping() {
+        shoppingScope = "week";
+        byId("detailKicker").textContent = "WEEKLY SHOPPING";
+        byId("detailTitle").textContent = "이번 주 장보기";
+        byId("detailIntro").textContent = "선택한 " + planMeals().length + "끼의 재료를 모았습니다. 같은 재료는 함께 구매합니다.";
+        setRecipeVisibility(false);
+        renderShopping();
+        showDetail();
+      }
+      byId("shoppingList").addEventListener("click", openWeeklyShopping);
+      byId("prepareShopping").addEventListener("click", openWeeklyShopping);
       byId("menuSearch").addEventListener("input", renderMenu);
       document.querySelectorAll(".filter").forEach((button) => button.addEventListener("click", () => {
         activeFilter = button.dataset.filter;
@@ -968,9 +1176,58 @@
         }
       });
 
+      function renderGroceryList() {
+        const list = shoppingState.list;
+        const progress = shopping.listProgress(list);
+        byId("groceryProgress").textContent = list.length ? "구매 완료 " + progress.completedCount + " / " + list.length + "종 · 남은 재료 " + progress.remainingCount + "종" : "구매할 재료를 추가해주세요";
+        byId("groceryCost").textContent = !list.length ? "" : "남은 구매금액 · " + shopping.summary(progress);
+        byId("groceryEmpty").hidden = list.length > 0;
+        const row = (item) => '<li class="grocery-item' + (item.completed ? ' completed' : '') + '">' +
+          '<label class="grocery-check"><input type="checkbox" data-grocery-key="' + escapeHtml(item.key) + '" aria-label="' + escapeHtml(item.name) + ' 구매 완료"' + (item.completed ? ' checked' : '') + '><span><strong>' + escapeHtml(item.name) + '</strong><small>' + escapeHtml(item.store + ' · ' + item.pack + ' × ' + item.quantity) + '</small></span></label>' +
+          '<span class="grocery-item-cost">' + (item.priceCents === null ? '가격 미확인' : shopping.euro(item.priceCents * item.quantity)) + '</span>' +
+          '<button class="icon-button" data-grocery-remove="' + escapeHtml(item.key) + '" aria-label="' + escapeHtml(item.name) + ' 장보기 목록에서 삭제">×</button></li>';
+        byId("groceryPending").innerHTML = list.filter((item) => !item.completed).map(row).join("");
+        byId("groceryCompleted").innerHTML = list.filter((item) => item.completed).map(row).join("");
+        byId("groceryCompletedSection").hidden = progress.completedCount === 0;
+        byId("groceryCompletedLabel").textContent = "구매 완료 " + progress.completedCount + "종 · 체크를 해제하면 다시 목록으로 돌아갑니다";
+      }
+      byId("addShoppingItems").addEventListener("click", () => {
+        const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
+        if (!cart.purchaseCount) {
+          showToast("추가할 재료가 없습니다. 집에 있는 재료는 구매 목록에서 제외됩니다.");
+          return;
+        }
+        shoppingState.list = shopping.addToList(shoppingState.list, cart);
+        saveShopping();
+        renderGroceryList();
+        closeDetail();
+        moveTo("groceries");
+        byId("groceryTitle").focus({ preventScroll: true });
+        showToast("없는 재료 " + cart.purchaseCount + "종을 장보기 목록에 반영했습니다");
+      });
+      byId("groceries").addEventListener("change", (event) => {
+        const key = event.target.dataset.groceryKey;
+        const item = shoppingState.list.find((entry) => entry.key === key);
+        if (!item) return;
+        item.completed = event.target.checked;
+        saveShopping();
+        renderGroceryList();
+        if (item.completed) byId("groceryCompletedSection").open = true;
+        [...byId("groceries").querySelectorAll("[data-grocery-key]")].find((input) => input.dataset.groceryKey === key)?.focus({ preventScroll: true });
+      });
+      byId("groceries").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-grocery-remove]");
+        if (!button) return;
+        shoppingState.list = shoppingState.list.filter((entry) => entry.key !== button.dataset.groceryRemove);
+        saveShopping();
+        renderGroceryList();
+        byId("groceryTitle").focus({ preventScroll: true });
+      });
+
       renderToday();
       renderPlan();
       renderMenu();
+      renderGroceryList();
     </script>
   </body>
 </html>
