@@ -686,6 +686,168 @@ window.mealPackagePricesByArea = {
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
         "sourceRow": 70
       }
+    },
+    "ALDI Nord": {
+      "요거트": {
+        "ingredient": "요거트",
+        "product": "MILSANI High Protein Joghurterzeugnis",
+        "priceCents": 79,
+        "appPriceCents": null,
+        "pack": "je Becher",
+        "detail": "je Becher",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Aspeystraße 75, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 739
+      }
+    },
+    "Lidl": {
+      "다진고기": {
+        "ingredient": "다진고기",
+        "product": "METZGERFRISCH Frisches Schweine-Hackfleisch",
+        "priceCents": 399,
+        "appPriceCents": null,
+        "pack": "je 1 kg",
+        "detail": "je 1 kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 807
+      },
+      "연어": {
+        "ingredient": "연어",
+        "product": "FISCHERSTOLZ Norwegische Lachsfilet-Portionen",
+        "priceCents": 1599,
+        "appPriceCents": null,
+        "pack": "mit Haut, 8 x 125 g",
+        "detail": "mit Haut, 8 x 125 g",
+        "category": "Fisch",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 815
+      },
+      "주키니": {
+        "ingredient": "주키니",
+        "product": "Zucchini",
+        "priceCents": 99,
+        "appPriceCents": null,
+        "pack": "lose, Ursprung Deutschland/Spanien, Klasse I",
+        "detail": "lose, Ursprung Deutschland/Spanien, Klasse I",
+        "category": "Obst & Gemüse",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 746
+      },
+      "오이": {
+        "ingredient": "오이",
+        "product": "Bauerngurken",
+        "priceCents": 99,
+        "appPriceCents": null,
+        "pack": "Ursprung Spanien/Deutschland, 750 g",
+        "detail": "Ursprung Spanien/Deutschland, 750 g | 3.32 / kg",
+        "category": "Obst & Gemüse",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 749
+      },
+      "요거트": {
+        "ingredient": "요거트",
+        "product": "BIOLAND Cremiger Joghurt",
+        "priceCents": 179,
+        "appPriceCents": null,
+        "pack": "gekühlt, 4 x 150 g",
+        "detail": "gekühlt, 4 x 150 g | 2.98 / kg",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 821
+      },
+      "치즈": {
+        "ingredient": "치즈",
+        "product": "Géramont Weichkäse",
+        "priceCents": 229,
+        "appPriceCents": null,
+        "pack": "versch. Sorten, gekühlt, je 150/200 g",
+        "detail": "versch. Sorten, gekühlt, je 150/200 g",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 783
+      },
+      "버터": {
+        "ingredient": "버터",
+        "product": "BIOLAND Butter",
+        "priceCents": 269,
+        "appPriceCents": null,
+        "pack": "gekühlt, 250 g",
+        "detail": "gekühlt, 250 g | 10.76 / kg",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 830
+      },
+      "파스타": {
+        "ingredient": "파스타",
+        "product": "Combino Spaghetti",
+        "priceCents": 59,
+        "appPriceCents": null,
+        "pack": "500 g",
+        "detail": "500 g | 1.18 / kg",
+        "category": "Kochen & Backen",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 757
+      },
+      "빵": {
+        "ingredient": "빵",
+        "product": "Weltmeisterbrötchen",
+        "priceCents": 78,
+        "appPriceCents": null,
+        "pack": "je 3 Stück, 3 für 2",
+        "detail": "je 3 Stück, 3 für 2",
+        "category": "Backstube",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 803
+      }
+    },
+    "REWE": {
+      "돼지고기": {
+        "ingredient": "돼지고기",
+        "product": "Schweine-Nackensteaks",
+        "priceCents": 699,
+        "appPriceCents": null,
+        "pack": "je Packung",
+        "detail": "je Packung",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Varziner Str. 7-17, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 716
+      },
+      "바나나": {
+        "ingredient": "바나나",
+        "product": "Bananen",
+        "priceCents": 179,
+        "appPriceCents": null,
+        "pack": "je 1 kg",
+        "detail": "je 1 kg",
+        "category": "Obst & Gemüse",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Varziner Str. 7-17, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 711
+      }
     }
   },
   "52062": {
@@ -963,6 +1125,34 @@ window.mealPackagePricesByArea = {
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
         "sourceRow": 437
       }
+    },
+    "REWE": {
+      "돼지고기": {
+        "ingredient": "돼지고기",
+        "product": "Schweine-Nackensteaks",
+        "priceCents": 699,
+        "appPriceCents": null,
+        "pack": "je Packung",
+        "detail": "je Packung",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-13.09.2026",
+        "branch": "Markt 29-31, 52062 Aachen",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 559
+      },
+      "바나나": {
+        "ingredient": "바나나",
+        "product": "Bananen",
+        "priceCents": 179,
+        "appPriceCents": null,
+        "pack": "je 1 kg",
+        "detail": "je 1 kg",
+        "category": "Obst & Gemüse",
+        "period": "07.09.2026-13.09.2026",
+        "branch": "Markt 29-31, 52062 Aachen",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 554
+      }
     }
   },
   "52064": {
@@ -1057,19 +1247,179 @@ window.mealPackagePricesByArea = {
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
         "sourceRow": 591
+      }
+    },
+    "ALDI SÜD": {
+      "닭고기": {
+        "ingredient": "닭고기",
+        "product": "Hähnchenbrustfilet",
+        "priceCents": 1299,
+        "appPriceCents": null,
+        "pack": "Meine Metzgerei, 1,5 kg",
+        "detail": "Meine Metzgerei, 1,5 kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 705
+      },
+      "연어": {
+        "ingredient": "연어",
+        "product": "Norwegisches Lachsfilet",
+        "priceCents": 449,
+        "appPriceCents": null,
+        "pack": "300 g",
+        "detail": "300 g | 14.97 / kg",
+        "category": "Fisch",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 709
+      },
+      "송어": {
+        "ingredient": "송어",
+        "product": "Lachsforellen-Filetseite",
+        "priceCents": 699,
+        "appPriceCents": null,
+        "pack": "je Packung",
+        "detail": "je Packung",
+        "category": "Fisch",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 703
+      },
+      "치즈": {
+        "ingredient": "치즈",
+        "product": "Körniger Frischkäse",
+        "priceCents": 119,
+        "appPriceCents": null,
+        "pack": "MILSANI",
+        "detail": "MILSANI",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 691
+      }
+    },
+    "Lidl": {
+      "다진고기": {
+        "ingredient": "다진고기",
+        "product": "METZGERFRISCH Frisches Schweine-Hackfleisch",
+        "priceCents": 399,
+        "appPriceCents": null,
+        "pack": "je 1 kg",
+        "detail": "je 1 kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 662
+      },
+      "연어": {
+        "ingredient": "연어",
+        "product": "FISCHERSTOLZ Norwegische Lachsfilet-Portionen",
+        "priceCents": 1599,
+        "appPriceCents": null,
+        "pack": "mit Haut, 8 x 125 g",
+        "detail": "mit Haut, 8 x 125 g",
+        "category": "Fisch",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 670
+      },
+      "주키니": {
+        "ingredient": "주키니",
+        "product": "Zucchini",
+        "priceCents": 99,
+        "appPriceCents": null,
+        "pack": "lose, Ursprung Deutschland/Spanien, Klasse I",
+        "detail": "lose, Ursprung Deutschland/Spanien, Klasse I",
+        "category": "Obst & Gemüse",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 601
+      },
+      "오이": {
+        "ingredient": "오이",
+        "product": "Bauerngurken",
+        "priceCents": 99,
+        "appPriceCents": null,
+        "pack": "Ursprung Spanien/Deutschland, 750 g",
+        "detail": "Ursprung Spanien/Deutschland, 750 g | 3.32 / kg",
+        "category": "Obst & Gemüse",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 604
+      },
+      "요거트": {
+        "ingredient": "요거트",
+        "product": "BIOLAND Cremiger Joghurt",
+        "priceCents": 179,
+        "appPriceCents": null,
+        "pack": "gekühlt, 4 x 150 g",
+        "detail": "gekühlt, 4 x 150 g | 2.98 / kg",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 676
+      },
+      "치즈": {
+        "ingredient": "치즈",
+        "product": "Géramont Weichkäse",
+        "priceCents": 229,
+        "appPriceCents": null,
+        "pack": "versch. Sorten, gekühlt, je 150/200 g",
+        "detail": "versch. Sorten, gekühlt, je 150/200 g",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 638
+      },
+      "버터": {
+        "ingredient": "버터",
+        "product": "BIOLAND Butter",
+        "priceCents": 269,
+        "appPriceCents": null,
+        "pack": "gekühlt, 250 g",
+        "detail": "gekühlt, 250 g | 10.76 / kg",
+        "category": "Kühlregal & Tiefkühlung",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 685
+      },
+      "파스타": {
+        "ingredient": "파스타",
+        "product": "Combino Spaghetti",
+        "priceCents": 59,
+        "appPriceCents": null,
+        "pack": "500 g",
+        "detail": "500 g | 1.18 / kg",
+        "category": "Kochen & Backen",
+        "period": "07.09.2026-12.09.2026",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "sourceRow": 612
       },
       "빵": {
         "ingredient": "빵",
-        "product": "Frikadellenbrötchen",
-        "priceCents": 350,
+        "product": "Weltmeisterbrötchen",
+        "priceCents": 78,
         "appPriceCents": null,
-        "pack": "je Stück",
-        "detail": "je Stück",
+        "pack": "je 3 Stück, 3 für 2",
+        "detail": "je 3 Stück, 3 für 2",
         "category": "Backstube",
         "period": "07.09.2026-12.09.2026",
-        "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 589
+        "sourceRow": 658
       }
     }
   }
@@ -1080,50 +1430,137 @@ window.mealOfferMeta = {
   "collectedAt": "unknown-date",
   "profiles": {
     "40468": {
-      "chain": "Netto",
-      "label": "Netto · 40468 · Düsseldorf",
-      "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
-      "offerCount": "173행",
-      "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
-      "period": "07.09.2026-12.09.2026",
-      "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      "Netto": {
+        "chain": "Netto",
+        "label": "Netto · 40468 · Düsseldorf",
+        "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
+        "offerCount": "173행",
+        "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      }
     },
     "40474": {
-      "chain": "EDEKA",
-      "label": "EDEKA · 40474 · Düsseldorf",
-      "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
-      "offerCount": "19행",
-      "offerSummary": "닭고기 · 칠면조 · 토마토 · 파프리카 · 바나나 · 07.09.2026-12.09.2026",
-      "period": "07.09.2026-12.09.2026",
-      "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      "EDEKA": {
+        "chain": "EDEKA",
+        "label": "EDEKA · 40474 · Düsseldorf",
+        "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
+        "offerCount": "19행",
+        "offerSummary": "닭고기 · 칠면조 · 토마토 · 파프리카 · 바나나 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      }
     },
     "44369": {
-      "chain": "Netto",
-      "label": "Netto · 44369 · Dortmund",
-      "branch": "Rahmer Str. 8, 44369 Dortmund",
-      "offerCount": "175행",
-      "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
-      "period": "07.09.2026-12.09.2026",
-      "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      "Netto": {
+        "chain": "Netto",
+        "label": "Netto · 44369 · Dortmund",
+        "branch": "Rahmer Str. 8, 44369 Dortmund",
+        "offerCount": "175행",
+        "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      },
+      "ALDI Nord": {
+        "chain": "ALDI Nord",
+        "label": "ALDI Nord · 44369 · Dortmund",
+        "branch": "Aspeystraße 75, 44369 Dortmund",
+        "offerCount": "10행",
+        "offerSummary": "요거트 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      },
+      "Lidl": {
+        "chain": "Lidl",
+        "label": "Lidl · 44369 · Dortmund",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "offerCount": "90행",
+        "offerSummary": "다진고기 · 연어 · 주키니 · 오이 · 요거트 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      },
+      "REWE": {
+        "chain": "REWE",
+        "label": "REWE · 44369 · Dortmund",
+        "branch": "Varziner Str. 7-17, 44369 Dortmund",
+        "offerCount": "21행",
+        "offerSummary": "돼지고기 · 바나나 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      }
     },
     "52062": {
-      "chain": "Netto",
-      "label": "Netto · 52062 · Aachen",
-      "branch": "Peterstr. 50, 52062 Aachen",
-      "offerCount": "174행",
-      "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
-      "period": "07.09.2026-12.09.2026",
-      "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      "Netto": {
+        "chain": "Netto",
+        "label": "Netto · 52062 · Aachen",
+        "branch": "Peterstr. 50, 52062 Aachen",
+        "offerCount": "174행",
+        "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      },
+      "REWE": {
+        "chain": "REWE",
+        "label": "REWE · 52062 · Aachen",
+        "branch": "Markt 29-31, 52062 Aachen",
+        "offerCount": "27행",
+        "offerSummary": "돼지고기 · 바나나 · 07.09.2026-13.09.2026",
+        "period": "07.09.2026-13.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      }
     },
     "52064": {
-      "chain": "EDEKA",
-      "label": "EDEKA · 52064 · Aachen",
-      "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
-      "offerCount": "26행",
-      "offerSummary": "닭고기 · 돼지고기 · 소고기 · 복숭아 · 사과 · 07.09.2026-12.09.2026",
-      "period": "07.09.2026-12.09.2026",
-      "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      "EDEKA": {
+        "chain": "EDEKA",
+        "label": "EDEKA · 52064 · Aachen",
+        "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
+        "offerCount": "26행",
+        "offerSummary": "닭고기 · 돼지고기 · 소고기 · 복숭아 · 사과 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      },
+      "ALDI SÜD": {
+        "chain": "ALDI SÜD",
+        "label": "ALDI SÜD · 52064 · Aachen",
+        "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
+        "offerCount": "24행",
+        "offerSummary": "닭고기 · 연어 · 송어 · 치즈 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      },
+      "Lidl": {
+        "chain": "Lidl",
+        "label": "Lidl · 52064 · Aachen",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "offerCount": "90행",
+        "offerSummary": "다진고기 · 연어 · 주키니 · 오이 · 요거트 · 07.09.2026-12.09.2026",
+        "period": "07.09.2026-12.09.2026",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv"
+      }
     }
+  },
+  "stores": {
+    "40468": [
+      "Netto"
+    ],
+    "40474": [
+      "EDEKA"
+    ],
+    "44369": [
+      "Netto",
+      "ALDI Nord",
+      "Lidl",
+      "REWE"
+    ],
+    "52062": [
+      "Netto",
+      "REWE"
+    ],
+    "52064": [
+      "EDEKA",
+      "ALDI SÜD",
+      "Lidl"
+    ]
   },
   "areas": {
     "40468": {

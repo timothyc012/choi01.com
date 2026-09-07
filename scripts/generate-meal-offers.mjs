@@ -66,7 +66,7 @@ const rules = {
   '블루베리': [/Heidelbeeren/i, /Heidelbeere/i],
   '딸기': [/Erdbeeren/i, /Erdbeere/i],
   '복숭아': [/Pfirsiche/i, /Pfirsich/i],
-  '사과': [/Äpfel/i, /^Apfel/i],
+  '사과': [/Äpfel/i, /^Apfel(?:$|\s|,)/i],
   '포도': [/Trauben/i, /Traube/i],
   '요거트': [/Joghurt/i, /^Skyr/i, /^Speisequark/i, /^Quark/i],
   '치즈': [/Käse/i, /Kaese/i, /Frischkäse/i, /Gouda/i, /Mozzarella/i],
@@ -76,7 +76,7 @@ const rules = {
   '토스트': [/Toast/i],
   '달걀': [/Eier/i, /^Ei\b/i],
   '쌀': [/Reis/i, /Basmati/i],
-  '빵': [/^Kürbiskernbrot$/i, /^Proteinbrötchen$/i, /^Frikadellenbrötchen$/i, /Brötchen/i, /Broetchen/i],
+  '빵': [/^Kürbiskernbrot$/i, /^Proteinbrötchen$/i, /Brötchen/i, /Broetchen/i],
   '또띠아': [/Wrap/i, /Tortilla/i],
   '올리브유': [/Olivenöl/i, /Olivenoel/i],
   '마늘': [/Knoblauch/i],
@@ -89,9 +89,11 @@ const excluded = {
   '바나나': [/schoko/i],
   '양상추': [/fleischsalat/i, /salatkrönung/i],
   '레몬': [/limonade/i, /eistee/i],
-  '치즈': [/pizza-fleischkäse/i],
   '요거트': [/pudding/i, /dessert/i],
-  '빵': [/Brotaufstrich/i, /Brotzeit/i]
+  '빵': [/Brotaufstrich/i, /Brotzeit/i, /Frikadellenbrötchen/i],
+  '버터': [/Buttermilch/i, /Buttercroissant/i],
+  '사과': [/Apfeltasche/i],
+  '치즈': [/pizza-fleischkäse/i, /Leberkäse/i, /Pizza/i, /Ofenfrische/i]
 };
 
 function chainName(value) { return value.toLowerCase() === 'edeka' ? 'EDEKA' : value; }
@@ -134,29 +136,37 @@ function serializeOffer(row, ingredient, sourceRow) {
 
 const packageCatalog = {};
 const profiles = {};
+const stores = {};
 for (const [area, meta] of Object.entries(areaDefaults)) {
-  packageCatalog[area] = { [meta.chain]: {} };
-  const areaRows = rows.filter((row) => row['우편번호'] === area && chainName(row['체인']) === meta.chain);
-  const first = areaRows[0];
-  for (const [ingredient] of Object.entries(rules)) {
-    const offer = pickOffer(area, meta.chain, ingredient);
-    if (!offer) continue;
-    const rowIndex = rows.indexOf(offer) + 2;
-    const serialized = serializeOffer(offer, ingredient, rowIndex);
-    if (serialized) packageCatalog[area][meta.chain][ingredient] = serialized;
+  const areaChains = [...new Set(rows.filter((row) => row['우편번호'] === area).map((row) => chainName(row['체인'])))]
+    .sort((left, right) => left === meta.chain ? -1 : right === meta.chain ? 1 : left.localeCompare(right));
+  stores[area] = areaChains;
+  packageCatalog[area] = {};
+  profiles[area] = {};
+  for (const chain of areaChains) {
+    packageCatalog[area][chain] = {};
+    const areaRows = rows.filter((row) => row['우편번호'] === area && chainName(row['체인']) === chain);
+    const first = areaRows[0];
+    for (const [ingredient] of Object.entries(rules)) {
+      const offer = pickOffer(area, chain, ingredient);
+      if (!offer) continue;
+      const rowIndex = rows.indexOf(offer) + 2;
+      const serialized = serializeOffer(offer, ingredient, rowIndex);
+      if (serialized) packageCatalog[area][chain][ingredient] = serialized;
+    }
+    const summary = Object.values(packageCatalog[area][chain]).slice(0, 5).map((offer) => offer.ingredient).join(' · ');
+    profiles[area][chain] = {
+      chain,
+      label: chain + ' · ' + meta.label,
+      branch: compact(first?.['지점']),
+      offerCount: areaRows.length + '행',
+      offerSummary: (summary || '행사 상품') + ' · ' + compact(first?.['행사기간']),
+      period: compact(first?.['행사기간']),
+      source: sourcePublicPath
+    };
   }
-  const summary = Object.values(packageCatalog[area][meta.chain]).slice(0, 5).map((offer) => offer.ingredient).join(' · ');
-  profiles[area] = {
-    chain: meta.chain,
-    label: meta.chain + ' · ' + meta.label,
-    branch: compact(first?.['지점']),
-    offerCount: areaRows.length + '행',
-    offerSummary: (summary || '행사 상품') + ' · ' + compact(first?.['행사기간']),
-    period: compact(first?.['행사기간']),
-    source: sourcePublicPath
-  };
 }
 
-const generated = `/* Generated from ${path.basename(input)}. Prices are sale package prices, not recipe portions. */\nwindow.mealPackagePricesByArea = ${JSON.stringify(packageCatalog, null, 2)};\nwindow.mealPackagePrices = window.mealPackagePricesByArea['44369'];\nwindow.mealOfferMeta = ${JSON.stringify({ source: sourcePublicPath, collectedAt, profiles, areas: areaDefaults }, null, 2)};\n`;
+const generated = `/* Generated from ${path.basename(input)}. Prices are sale package prices, not recipe portions. */\nwindow.mealPackagePricesByArea = ${JSON.stringify(packageCatalog, null, 2)};\nwindow.mealPackagePrices = window.mealPackagePricesByArea['44369'];\nwindow.mealOfferMeta = ${JSON.stringify({ source: sourcePublicPath, collectedAt, profiles, stores, areas: areaDefaults }, null, 2)};\n`;
 fs.writeFileSync(output, generated);
 console.log(`generated ${output}: ${Object.keys(packageCatalog).length} areas, ${rows.length} source rows`);

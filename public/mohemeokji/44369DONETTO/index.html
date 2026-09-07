@@ -3,7 +3,7 @@
   Choi01 · Today-first meal manager concept
   Product thesis: resolve "오늘 뭐 해먹지?" in one decision, then reveal the
   weekly planner, broad menu library, recipe details, and shopping consequences.
-  Data is a private prototype based on owner-provided Netto/EDEKA CSV samples.
+  Data is a private prototype based on owner-provided supermarket CSV samples.
 -->
 <html lang="ko">
   <head>
@@ -87,12 +87,14 @@
         border-radius: var(--radius);
         background: var(--surface);
       }
-      .nav-area { display: flex; align-items: center; gap: 22px; }
+      .nav-area { display: flex; align-items: center; gap: 14px; }
       .nav-links { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 13px; }
       .nav-links a:hover { color: var(--green); }
+      .location-picker { display: grid; grid-template-columns: minmax(145px, 1fr) minmax(120px, .8fr); gap: 7px; }
+      .location-field { display: grid; gap: 3px; color: var(--faint); font-size: 9px; font-weight: 700; letter-spacing: .04em; }
       .area-select {
         min-height: 40px;
-        max-width: 230px;
+        max-width: 190px;
         padding: 0 12px;
         border: 1px solid var(--border);
         border-radius: var(--radius);
@@ -518,8 +520,9 @@
         .shell { width: calc(100% - 28px); }
         .topbar-inner { min-height: 60px; gap: 12px; }
         .brand span:last-child { display: none; }
-        .nav-area { min-width: 0; }
-        .area-select { width: 180px; max-width: 180px; font-size: 11px; }
+        .nav-area { min-width: 0; flex: 1; justify-content: end; }
+        .location-picker { width: min(100%, 300px); grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); }
+        .area-select { width: 100%; max-width: none; padding: 0 8px; font-size: 11px; }
         main { padding-top: 38px; }
         h1 { font-size: 48px; }
         .decision-card { padding: 22px 18px; }
@@ -567,16 +570,20 @@
             <a href="#library">메뉴 보관함</a>
             <a href="#groceries">장보기</a>
           </nav>
-          <label>
-            <span class="mono" style="position:absolute;left:-9999px">지역 선택</span>
-            <select class="area-select" id="areaSelect" aria-label="지역 선택">
-              <option value="44369">44369 · Dortmund · Netto</option>
-              <option value="40468">40468 · Düsseldorf · Netto</option>
-              <option value="40474">40474 · Düsseldorf · EDEKA</option>
-              <option value="52062">52062 · Aachen · Netto</option>
-              <option value="52064">52064 · Aachen · EDEKA</option>
-            </select>
-          </label>
+          <div class="location-picker" aria-label="장보기 지역과 마트">
+            <label class="location-field"><span>우편번호</span>
+              <select class="area-select" id="postcodeSelect" aria-label="우편번호 선택">
+                <option value="44369">44369 · Dortmund</option>
+                <option value="40468">40468 · Düsseldorf</option>
+                <option value="40474">40474 · Düsseldorf</option>
+                <option value="52062">52062 · Aachen</option>
+                <option value="52064">52064 · Aachen</option>
+              </select>
+            </label>
+            <label class="location-field"><span>마트</span>
+              <select class="area-select" id="storeSelect" aria-label="마트 선택"></select>
+            </label>
+          </div>
         </div>
       </div>
     </header>
@@ -754,10 +761,10 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="/mohemeokji/ontology-recipe-details.js?v=20260907-r3"></script>
-    <script src="./meal-planner-recipe-data.js?v=20260907-r3"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=20260907-r3"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=20260907-r3"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=20260907-r4"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=20260907-r4"></script>
+    <script src="./meal-planner-recipe-data.js?v=20260907-r4"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=20260907-r4"></script>
     <script>
       const meals = (window.expandedMealExtras || []).slice();
 
@@ -766,12 +773,17 @@
         { id:"thu", label:"목" }, { id:"fri", label:"금" }, { id:"sat", label:"토" }, { id:"sun", label:"일" }
       ];
       const profiles = window.mealOfferMeta.profiles;
+      const storesByArea = window.mealOfferMeta.stores;
+      const areas = window.mealOfferMeta.areas;
       const todayDay = days[(new Date().getDay() + 6) % 7];
-      const labels = Object.fromEntries(Object.entries(profiles).map(([area, profile]) => [area, profile.label]));
-      const areaPaths = Object.fromEntries(Object.entries(window.mealOfferMeta.areas).map(([area, meta]) => [area, meta.path]));
-      const pathArea = Object.keys(areaPaths).find((code) => location.pathname.toUpperCase().includes("/" + areaPaths[code] + "/"));
-      let activeArea = pathArea || "44369";
-      let activeStore = profiles[activeArea].chain;
+      const locationParams = new URLSearchParams(location.search);
+      const pathSegments = location.pathname.toUpperCase().split("/").filter(Boolean);
+      const pathArea = Object.keys(areas).find((code) => pathSegments.includes(areas[code].path));
+      const requestedArea = locationParams.get("postcode");
+      let activeArea = Object.hasOwn(areas, requestedArea) ? requestedArea : pathArea || "44369";
+      const requestedStore = locationParams.get("store");
+      let activeStore = storesByArea[activeArea].includes(requestedStore) ? requestedStore : areas[activeArea].chain;
+      const profile = profiles[activeArea][activeStore];
       let mealMoment = "저녁";
       let plan = {};
       let activeFilter = "all";
@@ -783,7 +795,8 @@
       const byId = (id) => document.getElementById(id);
       const mealById = (id) => meals.find((item) => item.id === id);
       const shopping = window.MealShopping;
-      const shoppingStorageKey = "choi01-shopping-v1:" + activeArea;
+      const shoppingStorageKey = "choi01-shopping-v1:" + activeArea + ":" + activeStore;
+      const planStorageKey = "choi01-today-meal-plan:" + activeArea + ":" + activeStore;
       let savedShopping = null;
       try { savedShopping = localStorage.getItem(shoppingStorageKey); } catch {}
       const shoppingState = shopping.restoreState(savedShopping);
@@ -799,17 +812,22 @@
       let detailReturnFocus = null;
       const catalog = window.mealPackagePricesByArea?.[activeArea] || window.mealPackagePrices;
       const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+      byId("postcodeSelect").value = activeArea;
+      byId("storeSelect").innerHTML = storesByArea[activeArea].map((store) => '<option value="' + escapeHtml(store) + '">' + escapeHtml(store) + '</option>').join("");
+      byId("storeSelect").value = activeStore;
       meals.filter((item) => item.store === activeStore).forEach((item) => {
         Object.assign(item, shopping.classifyIngredients(item, catalog[item.store] || {}));
       });
       plan = createAutoPlan();
       try {
-        const savedPlan = JSON.parse(localStorage.getItem("choi01-today-meal-plan"));
-        const validPlan = savedPlan?.activeArea === activeArea && savedPlan.plan
+        const savedPlan = JSON.parse(localStorage.getItem(planStorageKey));
+        const validPlan = savedPlan?.activeArea === activeArea && savedPlan?.activeStore === activeStore && savedPlan.plan
           && days.every((day) => Object.hasOwn(savedPlan.plan, day.id)
             && (savedPlan.plan[day.id] === null || mealById(savedPlan.plan[day.id])?.store === activeStore));
-        if (validPlan) plan = Object.fromEntries(days.map((day) => [day.id, savedPlan.plan[day.id]]));
-        if (["점심", "저녁"].includes(savedPlan?.mealMoment)) mealMoment = savedPlan.mealMoment;
+        if (validPlan) {
+          plan = Object.fromEntries(days.map((day) => [day.id, savedPlan.plan[day.id]]));
+          if (["점심", "저녁"].includes(savedPlan.mealMoment)) mealMoment = savedPlan.mealMoment;
+        }
       } catch { /* Missing or outdated saved plans fall back to current recommendations. */ }
       byId("todayPlanNote").textContent = todayDay.label + "요일이 오늘입니다. 선택한 오늘 메뉴는 이 칸에 자동으로 들어갑니다.";
       function basketFor(items, scope) {
@@ -866,8 +884,6 @@
         const item = currentRecommendation();
         if (!item) return;
         selectedMeal = item;
-        const profile = profiles[activeArea];
-        byId("areaSelect").value = activeArea;
         byId("sourceStatus").textContent = profile.label + " · 음식 재료 연결됨";
         byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment + " · 1순위";
@@ -948,7 +964,6 @@
           const matchesQuery = !query || [item.title, ...item.sale, ...item.missing, ...item.detailIngredients].join(" ").toLowerCase().includes(query);
           return matchesFilter && matchesQuery;
         });
-        const profile = profiles[activeArea];
         byId("menuCount").textContent = pool.length;
         byId("offerCount").textContent = profile.offerCount;
         byId("offerSummary").textContent = profile.offerSummary;
@@ -1024,7 +1039,6 @@
         else byId("todayShopping").focus();
       }
       function renderShopping() {
-        const profile = profiles[activeArea];
         const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
         byId("shoppingSource").innerHTML = '<a href="' + escapeHtml(profile.source) + '">새 행사 데이터 ' + escapeHtml(profile.period) + '</a> 기준입니다. ' + escapeHtml(profile.branch) + '의 행사 포장 가격을 연결했습니다. 원문 중량과 포장량을 비교할 수 있는 재료는 필요한 포장 수를 자동 계산하며, 현재 매장 가격은 다를 수 있습니다.';
         byId("detailIngredients").innerHTML = cart.items.length ? cart.items.map((item, index) => {
@@ -1145,7 +1159,7 @@
         showToast("식단표를 비웠습니다");
       });
       byId("savePlan").addEventListener("click", () => {
-        localStorage.setItem("choi01-today-meal-plan", JSON.stringify({ plan, mealMoment, activeArea }));
+        localStorage.setItem(planStorageKey, JSON.stringify({ plan, mealMoment, activeArea, activeStore }));
         showToast("이 브라우저에 식단을 저장했습니다");
       });
       function openWeeklyShopping() {
@@ -1178,13 +1192,15 @@
         closeDetail();
         showToast(days.find((day) => day.id === dayId).label + "요일 " + mealMoment + "에 넣었습니다");
       });
-      byId("areaSelect").addEventListener("change", (event) => {
-        activeArea = event.target.value;
-        const path = areaPaths[activeArea];
-        if (path) {
-          window.location.href = "/mohemeokji/" + path + "/";
-        }
+      function openLocation(postcode, store) {
+        const params = new URLSearchParams({ postcode, store });
+        window.location.href = "/mohemeokji/?" + params.toString();
+      }
+      byId("postcodeSelect").addEventListener("change", (event) => {
+        const postcode = event.target.value;
+        openLocation(postcode, storesByArea[postcode][0]);
       });
+      byId("storeSelect").addEventListener("change", (event) => openLocation(activeArea, event.target.value));
 
       function renderGroceryList() {
         const list = shoppingState.list;

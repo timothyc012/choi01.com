@@ -148,7 +148,9 @@
     try {
       const saved = JSON.parse(serialized);
       if (!saved || saved.version !== 1) return state;
-      const validKey = (key) => /^(Netto|EDEKA):.+$/.test(key);
+      const availableStores = [...new Set(Object.values(window.mealOfferMeta?.stores || {}).flat())];
+      const validStore = (store) => (availableStores.length ? availableStores : ["Netto", "EDEKA"]).includes(store);
+      const validKey = (key) => typeof key === "string" && key.includes(":") && validStore(key.slice(0, key.indexOf(":"))) && key.slice(key.indexOf(":") + 1).length > 0;
       const validPrice = (value) => value === null || (Number.isSafeInteger(value) && value >= 0 && value <= 100000000);
       const validQuantity = (value) => Number.isInteger(value) && value >= 1 && value <= 999;
       const record = (value) => value && typeof value === "object" && !Array.isArray(value);
@@ -162,7 +164,7 @@
       if (Array.isArray(saved.list)) {
         const seen = new Set();
         state.list = saved.list.filter((item) => {
-          if (!item || !["Netto", "EDEKA"].includes(item.store) || typeof item.name !== "string" || !item.name.trim()
+          if (!item || !validStore(item.store) || typeof item.name !== "string" || !item.name.trim()
             || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
             || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;

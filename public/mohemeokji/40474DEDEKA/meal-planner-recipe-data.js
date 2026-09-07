@@ -1,11 +1,12 @@
 /* Store-specific menu records derived from the recipe-full source IDs. */
 (function () {
   const details = window.ontologyRecipeDetails || [];
-  const stores = ['Netto', 'EDEKA'];
+  const stores = [...new Set(Object.values(window.mealOfferMeta?.stores || {}).flat())];
+  const storeSlug = (store) => store.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   window.expandedMealExtras = stores.flatMap((store) => details.map((detail) => ({
     ...detail,
-    id: store.toLowerCase() + '-recipe-' + detail.sourceRecipeId,
+    id: storeSlug(store) + '-recipe-' + detail.sourceRecipeId,
     store,
     filter: [detail.cuisine].concat(detail.filters || []),
     tags: detail.tags.slice(),

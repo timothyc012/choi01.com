@@ -140,28 +140,41 @@ test('classifies recipe ingredients against the active store offer catalog', () 
 test('generated catalog covers five postcodes and points to the exact row in the new CSV', () => {
   const source = parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv', import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(sourceCatalog).sort(), ['40468', '40474', '44369', '52062', '52064']);
-  for (const [area, profile] of Object.entries(sourceMeta.profiles)) {
-    const catalog = sourceCatalog[area][profile.chain];
-    assert.ok(Object.keys(catalog).length > 0, area);
-    for (const offer of Object.values(catalog)) {
-      const row = source[offer.sourceRow - 2];
-      assert.equal(row['상품명'].replace(/\s+/g, ' ').trim(), offer.product, offer.ingredient);
-      assert.equal(Math.round(Number(row['행사가격'].replace(',', '.')) * 100), offer.priceCents, offer.ingredient);
-      assert.equal(offer.source, '/offers/supermarket_food_offers_2026-09-07.csv');
-      assert.ok(offer.pack.length > 0);
+  for (const [area, storeProfiles] of Object.entries(sourceMeta.profiles)) {
+    for (const [store, profile] of Object.entries(storeProfiles)) {
+      const catalog = sourceCatalog[area][store];
+      assert.ok(Object.keys(catalog).length > 0, area + ' ' + store);
+      assert.equal(profile.chain, store);
+      for (const offer of Object.values(catalog)) {
+        const row = source[offer.sourceRow - 2];
+        assert.equal(row['상품명'].replace(/\s+/g, ' ').trim(), offer.product, offer.ingredient);
+        assert.equal(Math.round(Number(row['행사가격'].replace(',', '.')) * 100), offer.priceCents, offer.ingredient);
+        assert.equal(offer.source, '/offers/supermarket_food_offers_2026-09-07.csv');
+        assert.ok(offer.pack.length > 0);
+      }
     }
   }
   assert.equal(sourceCatalog['44369'].Netto['빵'].product, 'Kürbiskernbrot');
   assert.equal('토마토' in sourceCatalog['52064'].EDEKA, false);
+  assert.equal('치즈' in sourceCatalog['44369']['ALDI Nord'], false);
+  assert.equal('치즈' in sourceCatalog['52062'].REWE, false);
+  assert.equal('사과' in sourceCatalog['44369'].Lidl, false);
+  assert.doesNotMatch(sourceCatalog['52064'].Lidl['버터'].product, /Buttermilch/i);
+  assert.equal('빵' in sourceCatalog['52064'].EDEKA, false);
 });
 
-test('new profiles preserve branch, date, count, and default store metadata', () => {
-  assert.equal(sourceMeta.profiles['52062'].chain, 'Netto');
-  assert.equal(sourceMeta.profiles['52064'].chain, 'EDEKA');
-  assert.equal(sourceMeta.profiles['52062'].offerCount, '174행');
-  assert.equal(sourceMeta.profiles['52064'].offerCount, '26행');
-  assert.match(sourceMeta.profiles['52062'].branch, /Peterstr\. 50/);
-  assert.match(sourceMeta.profiles['52064'].branch, /Schillerstraße/);
+test('profiles group every available supermarket under its postcode', () => {
+  assert.deepEqual([...sourceMeta.stores['44369']], ['Netto', 'ALDI Nord', 'Lidl', 'REWE']);
+  assert.deepEqual([...sourceMeta.stores['40468']], ['Netto']);
+  assert.deepEqual([...sourceMeta.stores['40474']], ['EDEKA']);
+  assert.deepEqual([...sourceMeta.stores['52062']], ['Netto', 'REWE']);
+  assert.deepEqual([...sourceMeta.stores['52064']], ['EDEKA', 'ALDI SÜD', 'Lidl']);
+  assert.equal(sourceMeta.profiles['52062'].Netto.offerCount, '174행');
+  assert.equal(sourceMeta.profiles['52062'].REWE.offerCount, '27행');
+  assert.equal(sourceMeta.profiles['52064'].EDEKA.offerCount, '26행');
+  assert.equal(sourceMeta.profiles['52064'].Lidl.offerCount, '90행');
+  assert.match(sourceMeta.profiles['52062'].Netto.branch, /Peterstr\. 50/);
+  assert.match(sourceMeta.profiles['52064'].EDEKA.branch, /Schillerstraße/);
   assert.equal(sourceMeta.areas['52062'].path, '52062NETTO');
   assert.equal(sourceMeta.areas['52064'].path, '52064EDEKA');
 });
@@ -173,22 +186,25 @@ test('all six entry pages are identical and use current recipes without portion 
     const html = fs.readFileSync(new URL(path + 'index.html', root), 'utf8');
     assert.equal(html, canonical, path);
     assert.doesNotMatch(html, /1인분|\bcost:/);
-    assert.match(html, /52062 · Aachen · Netto/);
-    assert.match(html, /52064 · Aachen · EDEKA/);
-    assert.match(html, /ontology-recipe-details\.js\?v=20260907-r3/);
-    assert.match(html, /meal-planner-recipe-data\.js\?v=20260907-r3/);
-    assert.match(html, /meal-package-prices\.js\?v=20260907-r3/);
-    assert.match(html, /meal-shopping\.js\?v=20260907-r3/);
+    assert.match(html, /52062 · Aachen/);
+    assert.match(html, /52064 · Aachen/);
+    assert.match(html, /id="postcodeSelect"/);
+    assert.match(html, /id="storeSelect"/);
+    assert.match(html, /ontology-recipe-details\.js\?v=20260907-r4/);
+    assert.match(html, /meal-planner-recipe-data\.js\?v=20260907-r4/);
+    assert.match(html, /meal-package-prices\.js\?v=20260907-r4/);
+    assert.match(html, /meal-shopping\.js\?v=20260907-r4/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);
+    vm.runInContext(fs.readFileSync(new URL('meal-package-prices.js', root), 'utf8'), recipes);
     vm.runInContext(fs.readFileSync(new URL(path + 'meal-planner-recipe-data.js', root), 'utf8'), recipes);
-    assert.equal(recipes.window.expandedMealExtras.length, 60);
-    assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === 'Netto').length, 30);
-    assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === 'EDEKA').length, 30);
+    const stores = [...new Set(Object.values(sourceMeta.stores).flat())];
+    assert.equal(recipes.window.expandedMealExtras.length, stores.length * 30);
+    for (const store of stores) assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === store).length, 30);
     for (const meal of recipes.window.expandedMealExtras) {
       assert.equal('cost' in meal, false);
-      assert.equal(meal.id, meal.store.toLowerCase() + '-recipe-' + meal.sourceRecipeId);
+      assert.match(meal.id, new RegExp('-recipe-' + meal.sourceRecipeId + '$'));
       assert.ok(meal.detailIngredients.length >= 4, meal.title);
       assert.ok(meal.steps.length >= 5, meal.title);
       assert.match(meal.sourceUrl, /^https:\/\/www\.10000recipe\.com\/recipe\/\d+$/);
@@ -222,11 +238,19 @@ test('shopping detail resolves the active area profile before rendering its sour
   const html = fs.readFileSync(new URL('index.html', root), 'utf8');
   const renderShopping = html.match(/function renderShopping\(\) \{([\s\S]*?)\n      \}\n      function renderShoppingSummary/);
   assert.ok(renderShopping);
-  assert.match(renderShopping[1], /const profile = profiles\[activeArea\];/);
+  assert.match(html, /const profile = profiles\[activeArea\]\[activeStore\];/);
   assert.match(renderShopping[1], /profile\.source/);
   assert.match(html, /id="recipeAmounts"/);
   assert.match(html, /id="recipeSource"/);
   assert.match(html, /id="recipeProvenance"/);
+});
+
+test('location selection isolates saved plans and recognizes legacy paths without a trailing slash', () => {
+  const html = fs.readFileSync(new URL('index.html', root), 'utf8');
+  assert.match(html, /const pathSegments = location\.pathname\.toUpperCase\(\)\.split\("\/"\)/);
+  assert.match(html, /const planStorageKey = "choi01-today-meal-plan:" \+ activeArea \+ ":" \+ activeStore/);
+  assert.match(html, /localStorage\.getItem\(planStorageKey\)/);
+  assert.match(html, /localStorage\.setItem\(planStorageKey/);
 });
 
 test('adds only missing ingredients and does not duplicate shared ingredients on repeated adds', () => {
@@ -279,6 +303,19 @@ test('round-trips pantry, custom prices, quantities, and checked purchases throu
   assert.equal(restored.quantities.week['Netto:닭고기'], 2);
   assert.equal(restored.list.length, 7);
   assert.equal(restored.list[0].completed, true);
+});
+
+test('restores shopping state for every supermarket exposed by the active dataset', () => {
+  const restored = shopping.restoreState(JSON.stringify({
+    version: 1,
+    pantry: ['Lidl:닭고기'],
+    prices: { 'REWE:쌀': 199 },
+    quantities: {},
+    list: [{ key: 'ALDI SÜD:사과', name: '사과', store: 'ALDI SÜD', pack: '1 kg', quantity: 1, priceCents: 249, completed: false }]
+  }));
+  assert.equal(restored.pantry.has('Lidl:닭고기'), true);
+  assert.equal(restored.prices['REWE:쌀'], 199);
+  assert.equal(restored.list[0].store, 'ALDI SÜD');
 });
 
 test('corrupt storage cannot break the list or restore invalid, duplicate, or owned entries', () => {
