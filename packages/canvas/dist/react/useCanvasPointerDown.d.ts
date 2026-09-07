@@ -1,8 +1,10 @@
 import type { Dispatch, PointerEvent as ReactPointerEvent, RefObject, SetStateAction } from 'react';
 import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.js';
 import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
+import type { CanvasDrawingHandlers } from './useCanvasDrawing';
 import { type Camera, type Interaction, type PointerPosition } from './canvasPointerTypes';
 interface PointerDownOptions {
+    drawing: CanvasDrawingHandlers;
     containerRef: RefObject<HTMLDivElement | null>;
     editorRef: RefObject<HTMLDivElement | null>;
     pointers: RefObject<Map<number, PointerPosition>>;
@@ -48,6 +50,6 @@ export interface PointerDownHandlers {
     onOrthogonalSegmentHandleDown: (event: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => void;
     onArrowEndpointDown: (event: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => void;
 }
-export declare function useCanvasPointerDown({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, setIsPenMode, }: PointerDownOptions): PointerDownHandlers;
+export declare function useCanvasPointerDown({ drawing, containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setShapes, setEditingId, applyInteraction, selectNow, beginHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, setIsPenMode, }: PointerDownOptions): PointerDownHandlers;
 export {};
 //# sourceMappingURL=useCanvasPointerDown.d.ts.map

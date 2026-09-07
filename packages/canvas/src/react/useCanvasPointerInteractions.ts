@@ -12,6 +12,8 @@ import {
   type PointerDownHandlers,
 } from './useCanvasPointerDown';
 import { useCanvasPointerLifecycle } from './useCanvasPointerLifecycle';
+import { useCanvasDrawing } from './useCanvasDrawing';
+import { useCanvasNativeInput } from './useCanvasNativeInput';
 import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes';
 
 export type { Interaction } from './canvasPointerTypes';
@@ -104,7 +106,13 @@ export function useCanvasPointerInteractions({
   commitDrawBatch,
   setIsPenMode,
 }: PointerInteractionOptions): PointerInteractionHandlers {
+  useCanvasNativeInput({ containerRef, penModeRef, toolRef });
+  const drawing = useCanvasDrawing({
+    containerRef, pointers, interactionRef, cameraRef, toPage, applyInteraction,
+    liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch,
+  });
   const down = useCanvasPointerDown({
+    drawing,
     containerRef,
     editorRef,
     pointers,
@@ -140,6 +148,7 @@ export function useCanvasPointerInteractions({
   });
 
   useCanvasPointerLifecycle({
+    drawing,
     containerRef,
     pointers,
     interactionRef,

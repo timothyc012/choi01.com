@@ -20,6 +20,7 @@ export function shouldEnterPenMode(
   return directTouchInput && isPenPointer(input);
 }
 
+/** Content editing only; two-finger navigation is handled separately. */
 export function pointerAllowedInPenMode(
   penMode: boolean,
   input: CanvasPointerDeviceInput,

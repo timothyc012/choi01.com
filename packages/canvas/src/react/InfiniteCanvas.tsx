@@ -639,7 +639,12 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         onArrowEndpointDown={onArrowEndpointDown}
       />
 
-      {inspectorShape && (
+      {/*
+        Pen mode shows the pen palette instead. The inspector's popovers hold
+        text inputs (HEX colour, card TYPE, custom font). Keep these inactive
+        while drawing instead of exposing nearby native handwriting targets.
+      */}
+      {inspectorShape && !isPenMode && (
         <CanvasInspector
           shape={inspectorShape}
           selection={inspectorSelection}

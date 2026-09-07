@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
 import { centreOf, eraseAlongPath, rawBounds } from './canvasGeometry';
 import { DOUBLE_CLICK_DRIFT_PX, ERASER_RADIUS } from './canvasPointerTypes';
-import { appendDistinctLivePoints, finalizeLiveStroke, paintLiveStrokes } from './liveStrokeCanvas';
 
 type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'pointers'
@@ -22,12 +21,8 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'commit'
   | 'onToolChange'
   | 'createId'
-  | 'liveStrokeCanvasRef'
-  | 'activeDrawRef'
-  | 'pendingDrawsRef'
-  | 'queuedDrawIdsRef'
-  | 'commitDrawBatch'
-> & Required<Pick<PointerLifecycleOptions, 'pendingDrawPointsRef' | 'drawRafRef'>>;
+  | 'drawing'
+>;
 
 /** Binds pointer completion/cancellation and commits the completed gesture. */
 export function useCanvasPointerFinish({
@@ -47,19 +42,13 @@ export function useCanvasPointerFinish({
   commit,
   onToolChange,
   createId,
-  pendingDrawPointsRef,
-  drawRafRef,
-  liveStrokeCanvasRef,
-  activeDrawRef,
-  pendingDrawsRef,
-  queuedDrawIdsRef,
-  commitDrawBatch,
+  drawing,
 }: PointerFinishOptions): void {
   const uid = createId;
-  const drawCommitRafRef = useRef<number | null>(null);
   useEffect(() => {
     const finish = (e: PointerEvent) => {
-      pointers.current.delete(e.pointerId);
+      // Ignore releases from rejected palms and fingers superseded by a pen.
+      if (!pointers.current.delete(e.pointerId)) return;
       // Release pointer capture so the element doesn't keep exclusive capture.
       try { (e.target as HTMLElement)?.releasePointerCapture?.(e.pointerId); } catch { /* noop */ }
       const interaction = interactionRef.current;
@@ -157,48 +146,7 @@ export function useCanvasPointerFinish({
       }
 
       if (interaction.kind === 'drawing') {
-        // Only the pointer that drew the stroke may end it.
-        if (interaction.pointerId !== e.pointerId) return;
-
-        // Drain the buffer synchronously. The scheduled frame has not run yet,
-        // so cancelling it and taking the points here is what keeps the tail
-        // of a fast stroke — and makes the bounding box below cover it.
-        if (drawRafRef.current !== null) {
-          cancelAnimationFrame(drawRafRef.current);
-          drawRafRef.current = null;
-        }
-        const pending = pendingDrawPointsRef.current.splice(0);
-        const active = activeDrawRef.current;
-        if (active && active.id === interaction.id && active.points) {
-          appendDistinctLivePoints(active.points, pending, cameraRef.current.z);
-          if (e.type === 'pointerup') {
-            const release = toPage(e.clientX, e.clientY);
-            appendDistinctLivePoints(active.points, [[release.x, release.y]], cameraRef.current.z);
-          }
-          // finalizeLiveStroke fits the bbox around every point, including the
-          // ones just drained, so hit-testing and marquee select match the ink.
-          const finalized = finalizeLiveStroke(active);
-          pendingDrawsRef.current = [...pendingDrawsRef.current, finalized];
-          activeDrawRef.current = null;
-          // Keep it on the overlay until the committed shape renders, so there
-          // is no blink between lifting the pen and the SVG appearing.
-          paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, null, cameraRef.current, window.devicePixelRatio || 1);
-
-          // Commit on the next frame, so several strokes finished in one frame
-          // of fast writing land in a single state update.
-          if (drawCommitRafRef.current === null) {
-            drawCommitRafRef.current = requestAnimationFrame(() => {
-              drawCommitRafRef.current = null;
-              const batch = pendingDrawsRef.current.filter(stroke => !queuedDrawIdsRef.current.has(stroke.id));
-              if (batch.length === 0) return;
-              for (const stroke of batch) queuedDrawIdsRef.current.add(stroke.id);
-              commitDrawBatch(batch);
-            });
-          }
-        }
-        // Keep the pen active so consecutive strokes can be drawn without
-        // reselecting the tool. The user can switch tools explicitly.
-        applyInteraction({ kind: 'none' });
+        drawing.finish(e);
         return;
       }
 
@@ -248,9 +196,9 @@ export function useCanvasPointerFinish({
       window.removeEventListener('pointercancel', finish);
     };
   }, [
-    activeDrawRef, applyInteraction, cameraRef, commitDrawBatch, createId, drawRafRef, endHistory,
-    interactionRef, liveStrokeCanvasRef, onToolChange, pendingDrawPointsRef, pendingDrawsRef,
-    pointers, queuedDrawIdsRef, selectNow, setAnnouncement, setEditingId, setGuides, setEraserPos,
+    applyInteraction, cameraRef, createId, drawing, endHistory,
+    interactionRef, onToolChange,
+    pointers, selectNow, setAnnouncement, setEditingId, setGuides, setEraserPos,
     setShapes, shapesRef, toPage, commit,
   ]);
 }

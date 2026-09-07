@@ -47,6 +47,20 @@
   --canvas-shadow-xl: 0 20px 25px -5px rgba(15,23,42,0.2), 0 8px 10px -6px rgba(15,23,42,0.1);
 }
 .invoicex-canvas, .invoicex-canvas *, .invoicex-canvas *::before, .invoicex-canvas *::after { box-sizing: border-box; }
+.invoicex-canvas * {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.invoicex-canvas input,
+.invoicex-canvas textarea,
+.invoicex-canvas [contenteditable="true"],
+.invoicex-canvas [contenteditable="true"] * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.invoicex-canvas a { -webkit-touch-callout: initial; }
 .invoicex-canvas .absolute { position: absolute; }
 .invoicex-canvas .relative { position: relative; }
 .invoicex-canvas .inset-0 { inset: 0; }
