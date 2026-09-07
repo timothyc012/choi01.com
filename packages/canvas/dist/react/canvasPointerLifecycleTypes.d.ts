@@ -3,6 +3,7 @@ import type { CanvasTool } from '../core/index.js';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes';
+import type { CanvasDrawingHandlers } from './useCanvasDrawing';
 export interface PointerLifecycleOptions {
     containerRef: RefObject<HTMLDivElement | null>;
     pointers: RefObject<Map<number, PointerPosition>>;
@@ -29,9 +30,7 @@ export interface PointerLifecycleOptions {
         y: number;
     };
     createId: (prefix?: string) => string;
-    /** Samples captured since the last animation frame. Owned by the lifecycle hook. */
-    pendingDrawPointsRef?: RefObject<[number, number][]>;
-    drawRafRef?: RefObject<number | null>;
+    drawing: CanvasDrawingHandlers;
     /** Overlay that renders strokes not yet present in React state. */
     liveStrokeCanvasRef: RefObject<HTMLCanvasElement | null>;
     /** The stroke currently under the pen; not in `shapes` until it finishes. */

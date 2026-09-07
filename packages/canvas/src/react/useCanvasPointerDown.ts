@@ -15,6 +15,7 @@ import {
   shouldEnterPenMode,
 } from './canvasPenMode';
 import { paintLiveStrokes } from './liveStrokeCanvas';
+import type { CanvasDrawingHandlers } from './useCanvasDrawing';
 import {
   bounds,
   centreOf,
@@ -36,6 +37,7 @@ import {
 const REPEAT_CLICK_WINDOW_MS = 400;
 
 interface PointerDownOptions {
+  drawing: CanvasDrawingHandlers;
   containerRef: RefObject<HTMLDivElement | null>;
   editorRef: RefObject<HTMLDivElement | null>;
   pointers: RefObject<Map<number, PointerPosition>>;
@@ -81,6 +83,7 @@ export interface PointerDownHandlers {
 }
 
 export function useCanvasPointerDown({
+  drawing,
   containerRef,
   editorRef,
   pointers,
@@ -150,6 +153,20 @@ export function useCanvasPointerDown({
     };
   }, [containerRef, penModeRef]);
 
+  const startPinch = () => {
+    const [a, b] = [...pointers.current.values()];
+    const cam = cameraRef.current;
+    applyInteraction({
+      kind: 'pinch',
+      startDist: Math.hypot(b.x - a.x, b.y - a.y) || 1,
+      startZoom: cam.z,
+      startMidX: (a.x + b.x) / 2,
+      startMidY: (a.y + b.y) / 2,
+      camX: cam.x,
+      camY: cam.y,
+    });
+  };
+
   const onPointerDown = (e: ReactPointerEvent) => {
     let activeTool = toolRef.current;
     const target = e.target instanceof Element ? e.target : e.currentTarget;
@@ -174,11 +191,31 @@ export function useCanvasPointerDown({
       }
       setIsPenMode(true);
     }
+    if (penModeRef.current && e.pointerType === 'touch') {
+      if (e.cancelable) e.preventDefault();
+      // One finger never edits or draws in pen mode. Two fingers may navigate
+      // while the pen is lifted, but palms arriving during a pen gesture must
+      // not replace it. An established pinch keeps its original two pointers.
+      if (interactionRef.current.kind !== 'none') return;
+      pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* capture is optional */ }
+      if (pointers.current.size === 2) startPinch();
+      return;
+    }
     if (!pointerAllowedInPenMode(penModeRef.current, e)) {
       if (e.cancelable) e.preventDefault();
       return;
     }
-    if (penModeRef.current && !isPenPointer(e)) return;
+    // Excalidraw also finalizes a previous interaction at a fresh press when
+    // its pointerup was missed. A second pen contact is a new stroke, not a palm.
+    if (isPenPointer(e) && interactionRef.current.kind === 'drawing') drawing.finish();
+    if (penModeRef.current && isPenPointer(e)
+      && (interactionRef.current.kind === 'none' || interactionRef.current.kind === 'pinch')) {
+      // A fresh Pencil contact takes over from navigation. Finger releases
+      // that arrive later must not end this new pen gesture.
+      pointers.current.clear();
+      applyInteraction({ kind: 'none' });
+    }
     // A press that lands inside an open text editor belongs to that editor.
     // The editor no longer stops propagation (the canvas needs the event to
     // start a drag), so the gesture is identified here instead and the
@@ -207,17 +244,7 @@ export function useCanvasPointerDown({
     // Second finger down promotes the gesture to a pinch, so touch devices get
     // zoom without a keyboard modifier.
     if (pointers.current.size === 2) {
-      const [a, b] = [...pointers.current.values()];
-      const cam = cameraRef.current;
-      applyInteraction({
-        kind: 'pinch',
-        startDist: Math.hypot(b.x - a.x, b.y - a.y) || 1,
-        startZoom: cam.z,
-        startMidX: (a.x + b.x) / 2,
-        startMidY: (a.y + b.y) / 2,
-        camX: cam.x,
-        camY: cam.y,
-      });
+      startPinch();
       return;
     }
     if (pointers.current.size > 2) return;
@@ -251,10 +278,8 @@ export function useCanvasPointerDown({
       // The stroke stays out of React state until the pen lifts: every
       // sample would otherwise cost a full board re-render, which is what
       // made fast handwriting fall behind the pen. It is painted onto the
-      // live overlay instead, and committed once in `useCanvasPointerFinish`.
-      activeDrawRef.current = created;
-      paintLiveStrokes(liveStrokeCanvasRef.current, pendingDrawsRef.current, created, cameraRef.current, window.devicePixelRatio || 1);
-      applyInteraction({ kind: 'drawing', id: created.id, pointerId: e.pointerId });
+      // live overlay instead, and finalized by `useCanvasDrawing`.
+      drawing.start(created, e);
       return;
     }
 
