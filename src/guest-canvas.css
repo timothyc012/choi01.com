@@ -285,18 +285,25 @@ body {
   transition: background 160ms ease, color 160ms ease;
 }
 
-.gc-tool:hover:not(:disabled) {
+/* iPad can retain :hover after a tap. Hover must never cover a selected tool. */
+.gc-tool:hover:not(:disabled):not(.is-active):not(.is-active-danger):not(.is-active-sticky) {
   background: var(--gc-surface-soft);
   color: var(--gc-text);
 }
 
-.gc-root.dark .gc-tool:hover:not(:disabled) {
+.gc-root.dark .gc-tool:hover:not(:disabled):not(.is-active):not(.is-active-danger):not(.is-active-sticky) {
   background: var(--gc-border-soft);
 }
 
 .gc-tool:disabled {
   opacity: 0.3;
   cursor: default;
+}
+
+.gc-tool.is-active,
+.gc-tool.is-active-danger,
+.gc-tool.is-active-sticky {
+  transition: none;
 }
 
 .gc-tool.is-active {
