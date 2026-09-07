@@ -13,6 +13,42 @@
     return Number.isSafeInteger(cents) && cents <= 100000000 ? cents : null;
   }
 
+  function classifyIngredients(meal, storeCatalog = {}) {
+    const names = [];
+    const seen = new Set();
+    for (const originalName of [...meal.sale, ...meal.missing]) {
+      const name = normalize(originalName);
+      if (seen.has(name)) continue;
+      seen.add(name);
+      names.push(name);
+    }
+    return {
+      sale: names.filter((name) => Object.hasOwn(storeCatalog, name)),
+      missing: names.filter((name) => !Object.hasOwn(storeCatalog, name))
+    };
+  }
+
+  function metricAmount(value) {
+    const text = String(value || "").trim().replace(",", ".");
+    const bundle = text.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
+    const match = bundle || text.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
+    if (!match) return null;
+    const factor = bundle ? Number(match[1]) : 1;
+    const amount = Number(bundle ? match[2] : match[1]) * factor;
+    const unit = (bundle ? match[3] : match[2]).toLowerCase();
+    if (unit === "kg") return { amount: amount * 1000, unit: "g" };
+    if (unit === "l") return { amount: amount * 1000, unit: "ml" };
+    return { amount, unit };
+  }
+
+  function formatRequired(required) {
+    if (!required) return "";
+    const useLargeUnit = required.amount >= 1000;
+    const amount = useLargeUnit ? required.amount / 1000 : required.amount;
+    const unit = useLargeUnit ? (required.unit === "g" ? "kg" : "l") : required.unit;
+    return String(Number(amount.toFixed(2))) + " " + unit + " 필요";
+  }
+
   function basket(meals, options = {}) {
     const { catalog = {}, pantry = new Set(), prices = {}, quantities = {} } = options;
     const ingredients = new Map();
@@ -20,22 +56,43 @@
       for (const originalName of [...meal.sale, ...meal.missing]) {
         const name = normalize(originalName);
         const key = keyFor(meal.store, name);
-        if (ingredients.has(key)) continue;
+        const required = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name] || null;
+        const existing = ingredients.get(key);
+        if (existing) {
+          if (required && (!existing.requiredAmount || existing.requiredAmount.unit === required.unit)) {
+            existing.requiredAmount = {
+              amount: (existing.requiredAmount?.amount || 0) + required.amount,
+              unit: required.unit
+            };
+          }
+          continue;
+        }
         const offer = catalog[meal.store]?.[name];
         const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
         const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
-        const quantity = Number.isSafeInteger(quantities[key]) && quantities[key] > 0
-          && quantities[key] <= 999 ? quantities[key] : 1;
         ingredients.set(key, {
           key, name, store: meal.store, pack: offer?.pack || "구매 단위 직접 확인",
           product: offer?.product || "", source: offer?.source || "",
           customPrice: Object.hasOwn(prices, key),
-          priceCents, quantity, owned: pantry.has(key),
-          subtotalCents: priceCents === null ? null : priceCents * quantity
+          priceCents, owned: pantry.has(key), requiredAmount: required ? { ...required } : null
         });
       }
     }
-    const items = [...ingredients.values()];
+    const items = [...ingredients.values()].map((item) => {
+      const manualQuantity = Number.isSafeInteger(quantities[item.key]) && quantities[item.key] > 0 && quantities[item.key] <= 999
+        ? quantities[item.key] : null;
+      const packAmount = metricAmount(item.pack);
+      const calculatedQuantity = item.requiredAmount && packAmount && item.requiredAmount.unit === packAmount.unit
+        ? Math.max(1, Math.ceil(item.requiredAmount.amount / packAmount.amount)) : 1;
+      const quantity = manualQuantity || calculatedQuantity;
+      return {
+        ...item,
+        quantity,
+        requiredLabel: formatRequired(item.requiredAmount),
+        quantityCalculated: manualQuantity === null && calculatedQuantity > 1,
+        subtotalCents: item.priceCents === null ? null : item.priceCents * quantity
+      };
+    });
     const purchases = items.filter((item) => !item.owned);
     return {
       items,
@@ -121,5 +178,5 @@
     return JSON.stringify({ ...state, version: 1, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

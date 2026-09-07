@@ -62,6 +62,22 @@ test('includes additional ingredients and multiplies whole package counts', () =
   assert.equal(shopping.summary(cart), '구매 합계 28,51€');
 });
 
+test('derives sufficient package counts from recipe weights and sums weekly needs', () => {
+  const weightedMeal = {
+    store: 'Netto', sale: ['닭고기'], missing: [],
+    requiredAmounts: { '닭고기': { amount: 1300, unit: 'g' } }
+  };
+  const oneMeal = shopping.basket([weightedMeal], { catalog: fixtureCatalog });
+  assert.equal(oneMeal.items[0].quantity, 2);
+  assert.equal(oneMeal.items[0].subtotalCents, 1598);
+  assert.equal(oneMeal.items[0].requiredLabel, '1.3 kg 필요');
+  const twoMeals = shopping.basket([weightedMeal, weightedMeal], { catalog: fixtureCatalog });
+  assert.equal(twoMeals.items[0].quantity, 3);
+  assert.equal(twoMeals.items[0].subtotalCents, 2397);
+  const overridden = shopping.basket([weightedMeal], { catalog: fixtureCatalog, quantities: { 'Netto:닭고기': 4 } });
+  assert.equal(overridden.items[0].quantity, 4);
+});
+
 test('merges shared ingredients once across meals and normalizes cooked rice to rice', () => {
   const cart = shopping.basket([rice, rice, { store: 'Netto', sale: ['토마토'], missing: ['밥', '쌀'] }], { catalog: fixtureCatalog });
   assert.equal(cart.items.length, 8);
@@ -108,6 +124,19 @@ test('accepts euro comma/dot decimals and rejects invalid currency and fractiona
   }
 });
 
+test('classifies recipe ingredients against the active store offer catalog', () => {
+  const classified = shopping.classifyIngredients({
+    sale: ['돼지고기', '김치'],
+    missing: ['마늘', '김치', '밥']
+  }, {
+    '돼지고기': { priceCents: 349 },
+    '마늘': { priceCents: 129 },
+    '쌀': { priceCents: 199 }
+  });
+  assert.deepEqual([...classified.sale], ['돼지고기', '마늘', '쌀']);
+  assert.deepEqual([...classified.missing], ['김치']);
+});
+
 test('generated catalog covers five postcodes and points to the exact row in the new CSV', () => {
   const source = parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv', import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(sourceCatalog).sort(), ['40468', '40474', '44369', '52062', '52064']);
@@ -146,17 +175,47 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.doesNotMatch(html, /1인분|\bcost:/);
     assert.match(html, /52062 · Aachen · Netto/);
     assert.match(html, /52064 · Aachen · EDEKA/);
-    assert.match(html, /meal-planner-recipe-data\.js\?v=20260907-r2/);
-    assert.match(html, /meal-package-prices\.js\?v=20260907-r2/);
-    assert.match(html, /meal-shopping\.js\?v=20260907-r2/);
+    assert.match(html, /ontology-recipe-details\.js\?v=20260907-r3/);
+    assert.match(html, /meal-planner-recipe-data\.js\?v=20260907-r3/);
+    assert.match(html, /meal-package-prices\.js\?v=20260907-r3/);
+    assert.match(html, /meal-shopping\.js\?v=20260907-r3/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
+    vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);
     vm.runInContext(fs.readFileSync(new URL(path + 'meal-planner-recipe-data.js', root), 'utf8'), recipes);
     assert.equal(recipes.window.expandedMealExtras.length, 60);
     assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === 'Netto').length, 30);
     assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === 'EDEKA').length, 30);
-    for (const meal of recipes.window.expandedMealExtras) assert.equal('cost' in meal, false);
+    for (const meal of recipes.window.expandedMealExtras) {
+      assert.equal('cost' in meal, false);
+      assert.equal(meal.id, meal.store.toLowerCase() + '-recipe-' + meal.sourceRecipeId);
+      assert.ok(meal.detailIngredients.length >= 4, meal.title);
+      assert.ok(meal.steps.length >= 5, meal.title);
+      assert.match(meal.sourceUrl, /^https:\/\/www\.10000recipe\.com\/recipe\/\d+$/);
+      assert.ok(meal.sourceTitle.length > 0);
+      assert.equal(meal.sourceCorpus, '01ontology DB · recipe-full (01ontology-open 연동)');
+      assert.ok(meal.sourceAuthor.length > 0);
+      assert.ok(Number.isFinite(meal.time) && meal.time > 0);
+    }
   }
+});
+
+test('ontology detail source exposes 30 verified recipe templates', () => {
+  const source = vm.createContext({ window: {} });
+  vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), source);
+  assert.equal(source.window.ontologyRecipeDetails.length, 30);
+  assert.equal(new Set(source.window.ontologyRecipeDetails.map((recipe) => recipe.sourceRecipeId)).size, 30);
+  for (const recipe of source.window.ontologyRecipeDetails) {
+    assert.ok(recipe.detailIngredients.length >= 4, recipe.title);
+    assert.ok(recipe.steps.length >= 5, recipe.title);
+    assert.match(recipe.sourceUrl, new RegExp('/recipe/' + recipe.sourceRecipeId + '$'));
+  }
+  const bySourceId = Object.fromEntries(source.window.ontologyRecipeDetails.map((recipe) => [recipe.sourceRecipeId, recipe]));
+  assert.equal(bySourceId['6842456'].requiredAmounts['닭고기'].amount, 300);
+  assert.equal(bySourceId['6842456'].requiredAmounts['닭고기'].unit, 'g');
+  assert.ok(bySourceId['1480748'].sale.includes('쌀'));
+  assert.ok(bySourceId['7022427'].sale.includes('모짜렐라치즈'));
+  assert.match(bySourceId['7022427'].detailIngredients.at(-1), /수량 미표기/);
 });
 
 test('shopping detail resolves the active area profile before rendering its source', () => {
@@ -165,6 +224,9 @@ test('shopping detail resolves the active area profile before rendering its sour
   assert.ok(renderShopping);
   assert.match(renderShopping[1], /const profile = profiles\[activeArea\];/);
   assert.match(renderShopping[1], /profile\.source/);
+  assert.match(html, /id="recipeAmounts"/);
+  assert.match(html, /id="recipeSource"/);
+  assert.match(html, /id="recipeProvenance"/);
 });
 
 test('adds only missing ingredients and does not duplicate shared ingredients on repeated adds', () => {

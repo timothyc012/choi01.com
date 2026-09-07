@@ -453,6 +453,10 @@
       .detail-block h4 { margin: 0 0 10px; font-size: 13px; }
       .ingredient-list, .step-list { margin: 0; padding-left: 20px; color: var(--muted); font-size: 14px; line-height: 1.7; }
       .ingredient-list li strong { color: var(--ink); }
+      .recipe-meta { margin-bottom: 18px; color: var(--green); font-size: 12px; font-weight: 650; }
+      .recipe-amounts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 20px; }
+      .recipe-source { display: grid; gap: 8px; margin-top: 20px; padding: 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--green-wash); color: var(--muted); font-size: 11px; line-height: 1.55; }
+      .recipe-source a { width: fit-content; color: var(--green); font-size: 12px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
       [hidden] { display: none !important; }
       #todayCost, #totalCost { font-size: 24px; overflow-wrap: anywhere; }
       .grocery-panel { padding: 20px; }
@@ -541,6 +545,7 @@
         .meal-card-title { white-space: normal; }
         .menu-bottom { align-items: end; }
         .menu-actions { flex-direction: column; }
+        .recipe-amounts { grid-template-columns: 1fr; }
       }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
@@ -661,7 +666,7 @@
             </header>
             <div class="week-head"><span>요일</span><span id="planColumnLabel">저녁</span></div>
             <div id="weekGrid"></div>
-            <p class="footer-note" style="padding:0 20px 18px">목요일이 오늘입니다. 선택한 오늘 메뉴는 이 칸에 자동으로 들어갑니다.</p>
+            <p class="footer-note" id="todayPlanNote" style="padding:0 20px 18px"></p>
           </article>
 
           <aside class="panel" id="library">
@@ -723,14 +728,21 @@
         <p class="detail-lede" id="detailIntro"></p>
         <div class="detail-block">
           <h4 id="shoppingTitle">구매할 재료</h4>
-          <p class="footer-note">재료별 판매 포장 1개가 기본입니다. 필요한 양에 맞게 포장 수를 조절하세요. ‘집에 있음’을 체크하면 구매금액에서 빠집니다. 밥은 쌀로 모아 계산합니다.</p>
+          <p class="footer-note">원문 중량과 판매 포장량을 비교할 수 있으면 필요한 포장 수를 자동 계산합니다. 단위가 없으면 1포장을 기본으로 두며 직접 조절할 수 있습니다. ‘집에 있음’을 체크하면 구매금액에서 빠집니다.</p>
           <p class="footer-note" id="shoppingSource"></p>
           <ul class="shopping-items" id="detailIngredients"></ul>
           <div class="shopping-total" role="status" aria-live="polite"><span id="shoppingTotalLabel"></span><strong id="shoppingTotal"></strong><p id="shoppingNote"></p></div>
         </div>
         <div class="detail-block" id="recipeStepsBlock">
-          <h4>조리 순서</h4>
+          <p class="recipe-meta" id="recipeMeta"></p>
+          <h4>원문 기준 재료</h4>
+          <ul class="ingredient-list recipe-amounts" id="recipeAmounts"></ul>
+          <h4 style="margin-top:22px">자세한 조리 순서</h4>
           <ol class="step-list" id="detailSteps"></ol>
+          <div class="recipe-source">
+            <span id="recipeProvenance"></span>
+            <a id="recipeSource" target="_blank" rel="noreferrer">만개의레시피 원문 보기 ↗</a>
+          </div>
         </div>
         <div class="detail-actions">
           <button class="button button-primary" id="addShoppingItems">없는 재료만 장보기 목록에 추가</button>
@@ -742,9 +754,10 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="./meal-planner-recipe-data.js?v=20260907-r2"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=20260907-r2"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=20260907-r2"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=20260907-r3"></script>
+    <script src="./meal-planner-recipe-data.js?v=20260907-r3"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=20260907-r3"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=20260907-r3"></script>
     <script>
       const meals = (window.expandedMealExtras || []).slice();
 
@@ -753,19 +766,16 @@
         { id:"thu", label:"목" }, { id:"fri", label:"금" }, { id:"sat", label:"토" }, { id:"sun", label:"일" }
       ];
       const profiles = window.mealOfferMeta.profiles;
-      const autoPlans = {
-        Netto:{ mon:"netto-fresh-chicken", tue:"netto-chicken-potato", wed:"netto-mince-tomato-pasta", thu:"netto-pork-schnitzel", fri:"netto-chicken-mushroom-zucchini", sat:"netto-tomato-cheese-pasta", sun:null },
-        EDEKA:{ mon:"edeka-chicken-tomato", tue:"edeka-turkey-apple", wed:"edeka-chicken-fruit-salad", thu:"edeka-grape-protein-roll", fri:"edeka-butter-tomato-toast", sat:"edeka-peach-yogurt", sun:null }
-      };
+      const todayDay = days[(new Date().getDay() + 6) % 7];
       const labels = Object.fromEntries(Object.entries(profiles).map(([area, profile]) => [area, profile.label]));
       const areaPaths = Object.fromEntries(Object.entries(window.mealOfferMeta.areas).map(([area, meta]) => [area, meta.path]));
       const pathArea = Object.keys(areaPaths).find((code) => location.pathname.toUpperCase().includes("/" + areaPaths[code] + "/"));
       let activeArea = pathArea || "44369";
       let activeStore = profiles[activeArea].chain;
       let mealMoment = "저녁";
-      let plan = { ...autoPlans[activeStore] };
+      let plan = {};
       let activeFilter = "all";
-      let targetDay = "thu";
+      let targetDay = todayDay.id;
       let recommendationIndex = 0;
       let selectedMeal = null;
       let acceptedMeal = null;
@@ -789,6 +799,19 @@
       let detailReturnFocus = null;
       const catalog = window.mealPackagePricesByArea?.[activeArea] || window.mealPackagePrices;
       const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+      meals.filter((item) => item.store === activeStore).forEach((item) => {
+        Object.assign(item, shopping.classifyIngredients(item, catalog[item.store] || {}));
+      });
+      plan = createAutoPlan();
+      try {
+        const savedPlan = JSON.parse(localStorage.getItem("choi01-today-meal-plan"));
+        const validPlan = savedPlan?.activeArea === activeArea && savedPlan.plan
+          && days.every((day) => Object.hasOwn(savedPlan.plan, day.id)
+            && (savedPlan.plan[day.id] === null || mealById(savedPlan.plan[day.id])?.store === activeStore));
+        if (validPlan) plan = Object.fromEntries(days.map((day) => [day.id, savedPlan.plan[day.id]]));
+        if (["점심", "저녁"].includes(savedPlan?.mealMoment)) mealMoment = savedPlan.mealMoment;
+      } catch { /* Missing or outdated saved plans fall back to current recommendations. */ }
+      byId("todayPlanNote").textContent = todayDay.label + "요일이 오늘입니다. 선택한 오늘 메뉴는 이 칸에 자동으로 들어갑니다.";
       function basketFor(items, scope) {
         return shopping.basket(items, { catalog, pantry: shoppingState.pantry, prices: shoppingState.prices, quantities: shoppingState.quantities[scope] || {} });
       }
@@ -804,7 +827,7 @@
         const cart = mealBasket(currentRecommendation());
         byId("todayCostLabel").textContent = cart.unknownCount ? "가격 확인된 재료 소계" : "재료 구매 합계";
         byId("todayCost").textContent = shopping.amount(cart);
-        byId("todayCostNote").textContent = costNote(cart) + " 기본: 재료별 1포장.";
+        byId("todayCostNote").textContent = costNote(cart) + " 중량을 비교할 수 있는 재료는 필요한 포장 수를 자동 계산하고, 나머지는 1포장을 기본으로 둡니다.";
         const weekCart = planBasket();
         byId("totalCostLabel").textContent = weekCart.unknownCount ? "이번 주 확인된 재료 소계" : "이번 주 장보기 합계";
         byId("totalCost").textContent = shopping.amount(weekCart);
@@ -816,6 +839,10 @@
       }
       function activeMeals() {
         return meals.filter((item) => item.store === activeStore).sort((a, b) => scoreMeal(b) - scoreMeal(a));
+      }
+      function createAutoPlan() {
+        const choices = activeMeals().slice(0, days.length);
+        return Object.fromEntries(days.map((day, index) => [day.id, choices[index]?.id || null]));
       }
       function showToast(message) {
         const toast = byId("toast");
@@ -845,14 +872,14 @@
         byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment + " · 1순위";
         byId("todayTitle").textContent = item.title;
-        byId("todayReason").textContent = "할인 재료 " + item.sale.length + "개를 활용하고, 추가 구매는 " + item.missing.length + "개입니다. " + item.time + "분이면 완성할 수 있어 오늘의 첫 선택으로 추천합니다.";
+        byId("todayReason").textContent = "할인 재료 " + item.sale.length + "개를 활용하고, 할인 외 레시피 재료는 " + item.missing.length + "개입니다. " + item.time + "분이면 완성할 수 있어 오늘의 첫 선택으로 추천합니다.";
         byId("todayTime").textContent = item.time + "분";
         renderCostSummary();
         byId("todayMatch").textContent = item.sale.length + "개";
         byId("todayIngredients").innerHTML = item.sale.map((name) => '<span class="ingredient-chip">' + name + '</span>').join("");
         byId("whyList").innerHTML =
           '<div class="why-item"><span class="why-index">01</span><div><b>할인 재료를 많이 씁니다</b><span>' + item.sale.join(" · ") + '</span></div></div>' +
-          '<div class="why-item"><span class="why-index">02</span><div><b>추가 구매가 적습니다</b><span>' + (item.missing.length ? item.missing.join(" · ") : "추가 구매 없음") + '</span></div></div>' +
+          '<div class="why-item"><span class="why-index">02</span><div><b>할인 외 재료를 확인합니다</b><span>' + (item.missing.length ? item.missing.join(" · ") : "할인 외 재료 없음") + '</span></div></div>' +
           '<div class="why-item"><span class="why-index">03</span><div><b>오늘 만들 수 있는 시간입니다</b><span>조리 ' + item.time + '분</span></div></div>';
         const pool = activeMeals();
         const alternatives = [pool[(recommendationIndex + 1) % pool.length], pool[(recommendationIndex + 2) % pool.length]];
@@ -867,8 +894,8 @@
         byId("planColumnLabel").textContent = mealMoment;
         byId("weekGrid").innerHTML = days.map((day) => {
           const item = plan[day.id] ? mealById(plan[day.id]) : null;
-          const todayClass = day.id === "thu" ? " today-row" : "";
-          const dayNote = day.id === "thu" ? "<small>오늘</small>" : "";
+          const todayClass = day.id === todayDay.id ? " today-row" : "";
+          const dayNote = day.id === todayDay.id ? "<small>오늘</small>" : "";
           return '<div class="week-row' + todayClass + '"><div class="day">' + day.label + dayNote + '</div><div class="slot" data-day="' + day.id + '" tabindex="0" aria-label="' + day.label + '요일 ' + mealMoment + ' 메뉴 칸">' +
             (item
               ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + shopping.summary(mealBasket(item)) + '</span><span>' + item.store + '</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
@@ -917,19 +944,19 @@
         const query = byId("menuSearch").value.trim().toLowerCase();
         const pool = activeMeals();
         const visible = pool.filter((item) => {
-          const matchesFilter = activeFilter === "all" || item.filter.includes(activeFilter);
-          const matchesQuery = !query || item.title.toLowerCase().includes(query) || item.sale.join(" ").toLowerCase().includes(query);
+          const matchesFilter = activeFilter === "all" || (activeFilter === "quick" ? item.time <= 20 : item.filter.includes(activeFilter));
+          const matchesQuery = !query || [item.title, ...item.sale, ...item.missing, ...item.detailIngredients].join(" ").toLowerCase().includes(query);
           return matchesFilter && matchesQuery;
         });
         const profile = profiles[activeArea];
         byId("menuCount").textContent = pool.length;
         byId("offerCount").textContent = profile.offerCount;
         byId("offerSummary").textContent = profile.offerSummary;
-        byId("menuCountNote").textContent = "할인 활용 · 시간 · 추가 구매 순으로 추천";
+        byId("menuCountNote").textContent = "할인 활용 · 시간 · 할인 외 재료 순으로 추천";
         byId("menuList").innerHTML = visible.length ? visible.map((item) =>
           '<article class="menu-item' + (selectedMeal?.id === item.id ? " selected" : "") + '" data-id="' + item.id + '" tabindex="0" draggable="true">' +
           '<div class="menu-top"><h4 class="menu-title">' + item.title + '</h4><span class="match">' + item.sale.length + '개 할인재료</span></div>' +
-          '<p class="menu-sub">사용: ' + item.sale.join(" · ") + '<br>추가: ' + item.missing.join(" · ") + '</p>' +
+          '<p class="menu-sub">할인: ' + (item.sale.join(" · ") || "해당 없음") + '<br>할인 외: ' + (item.missing.join(" · ") || "없음") + '</p>' +
           '<div class="tag-row"><span class="tag tag-source">' + item.store + '</span>' + item.tags.map((tag) => '<span class="tag">' + tag + '</span>').join("") + '</div>' +
           '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
           '</article>'
@@ -968,8 +995,13 @@
         shoppingScope = "meal:" + selectedMeal.id;
         byId("detailKicker").textContent = "RECIPE · SHOPPING";
         byId("detailTitle").textContent = selectedMeal.title;
-        byId("detailIntro").textContent = selectedMeal.store + " · 조리 " + selectedMeal.time + "분";
-        byId("detailSteps").innerHTML = selectedMeal.steps.map((step) => "<li>" + step + "</li>").join("");
+        byId("detailIntro").textContent = selectedMeal.store + " 할인 재료와 연결한 recipe-full 레시피입니다.";
+        byId("recipeMeta").textContent = [selectedMeal.servingsText, "조리 " + selectedMeal.time + "분", selectedMeal.difficultyText].filter(Boolean).join(" · ");
+        byId("recipeAmounts").innerHTML = selectedMeal.detailIngredients.map((item) => "<li>" + escapeHtml(item) + "</li>").join("");
+        byId("detailSteps").innerHTML = selectedMeal.steps.map((step) => "<li>" + escapeHtml(step) + "</li>").join("");
+        byId("recipeProvenance").textContent = "출처: " + selectedMeal.sourceCorpus + " · 원문: " + selectedMeal.sourceTitle + " · 작성자: " + selectedMeal.sourceAuthor + " · 조리법은 원문 단계를 바탕으로 정리했습니다.";
+        byId("recipeSource").href = selectedMeal.sourceUrl;
+        byId("recipeSource").setAttribute("aria-label", selectedMeal.sourceTitle + " 만개의레시피 원문 보기");
         setRecipeVisibility(true);
         renderShopping();
         showDetail();
@@ -994,13 +1026,13 @@
       function renderShopping() {
         const profile = profiles[activeArea];
         const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
-        byId("shoppingSource").innerHTML = '<a href="' + escapeHtml(profile.source) + '">새 행사 데이터 ' + escapeHtml(profile.period) + '</a> 기준입니다. ' + escapeHtml(profile.branch) + '의 행사 포장 가격을 연결했으며, 현재 매장 가격은 다를 수 있습니다. 수량과 가격을 직접 수정할 수 있습니다.';
+        byId("shoppingSource").innerHTML = '<a href="' + escapeHtml(profile.source) + '">새 행사 데이터 ' + escapeHtml(profile.period) + '</a> 기준입니다. ' + escapeHtml(profile.branch) + '의 행사 포장 가격을 연결했습니다. 원문 중량과 포장량을 비교할 수 있는 재료는 필요한 포장 수를 자동 계산하며, 현재 매장 가격은 다를 수 있습니다.';
         byId("detailIngredients").innerHTML = cart.items.length ? cart.items.map((item, index) => {
           const price = item.priceCents === null ? "" : (item.priceCents / 100).toFixed(2).replace(".", ",");
           const disabled = item.owned ? " disabled" : "";
           return '<li class="shopping-item' + (item.owned ? ' owned' : '') + '">' +
             '<div class="shopping-item-head"><strong>' + escapeHtml(item.name) + '</strong><label><input type="checkbox" data-shopping-index="' + index + '" data-shopping-field="owned" aria-label="' + escapeHtml(item.name) + ' 집에 있음"' + (item.owned ? ' checked' : '') + '> 집에 있음</label></div>' +
-            '<small>' + escapeHtml(item.product ? item.product + ' · ' + item.pack : item.pack) + '</small>' +
+            '<small>' + escapeHtml(item.product ? item.product + ' · ' + item.pack : item.pack) + (item.requiredLabel ? ' · ' + escapeHtml(item.requiredLabel) : '') + (item.quantityCalculated ? ' · ' + item.quantity + '포장 자동 계산' : '') + '</small>' +
             '<div class="shopping-controls"><label>포장 수<input type="number" min="1" max="999" step="1" value="' + item.quantity + '" data-shopping-index="' + index + '" data-shopping-field="quantity" aria-label="' + escapeHtml(item.name) + ' 구매 포장 수"' + disabled + '></label>' +
             '<label>포장 가격 (€)<input type="text" inputmode="decimal" value="' + price + '" placeholder="가격 미확인" data-shopping-index="' + index + '" data-shopping-field="price" aria-label="' + escapeHtml(item.name) + ' 포장 가격"' + disabled + '></label>' +
             '<strong>' + (item.owned ? '구매 제외' : item.subtotalCents === null ? '가격 미확인' : shopping.euro(item.subtotalCents)) + '</strong></div>' +
@@ -1012,7 +1044,7 @@
         byId("shoppingTitle").textContent = "구매할 재료 · " + cart.purchaseCount + "종";
         byId("shoppingTotalLabel").textContent = cart.unknownCount ? "가격 확인된 재료 소계" : "구매할 재료 총액";
         byId("shoppingTotal").textContent = shopping.amount(cart);
-        byId("shoppingNote").textContent = costNote(cart) + (shoppingScope === "week" ? " 공통 재료는 한 번만 담았습니다. 여러 끼에 필요한 포장 수로 조절해주세요." : "");
+        byId("shoppingNote").textContent = costNote(cart) + (shoppingScope === "week" ? " 공통 재료의 중량은 여러 끼분을 합산해 포장 수를 계산했습니다." : "");
       }
       function updateShoppingInput(event) {
         const input = event.target;
@@ -1078,7 +1110,7 @@
       });
       function acceptMeal(item) {
         acceptedMeal = item;
-        plan.thu = item.id;
+        plan[todayDay.id] = item.id;
         byId("acceptedText").textContent = "오늘 " + mealMoment + "은 ‘" + item.title + "’로 정했습니다.";
         byId("acceptedBanner").classList.add("show");
         renderPlan();
@@ -1103,7 +1135,7 @@
         renderPlan();
       }));
       byId("autoPlan").addEventListener("click", () => {
-        plan = { ...autoPlans[activeStore] };
+        plan = createAutoPlan();
         renderPlan();
         showToast("할인 활용과 메뉴 다양성을 기준으로 이번 주를 채웠습니다");
       });
@@ -1202,6 +1234,7 @@
         byId("groceryTitle").focus({ preventScroll: true });
       });
 
+      document.querySelectorAll("[data-moment]").forEach((button) => button.classList.toggle("active", button.dataset.moment === mealMoment));
       renderToday();
       renderPlan();
       renderMenu();
