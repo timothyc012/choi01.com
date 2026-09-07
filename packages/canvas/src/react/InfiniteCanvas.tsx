@@ -582,6 +582,9 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
       tabIndex={0}
       className="invoicex-canvas absolute inset-0 overflow-hidden touch-none select-none focus:outline-none"
       style={{
+        userSelect: 'none',
+        WebkitUserSelect: 'none',
+        WebkitTouchCallout: 'none',
         cursor,
         background: isDarkMode ? CANVAS_UI_COLORS.canvasDark : CANVAS_UI_COLORS.canvasLight,
         backgroundImage: `radial-gradient(${gridColor} 1px, transparent 1px)`,
