@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import type {
   CSSProperties,
   Dispatch,
@@ -42,6 +43,77 @@ interface CanvasShapeRendererOptions {
 interface CanvasShapeRenderer {
   renderEditor: (extra: string, style?: CSSProperties) => ReactElement;
   renderShapeBody: (shape: CanvasShape) => ReactNode;
+}
+
+interface CardTypeLabelProps {
+  category: string | undefined;
+  onCommit: (category: string) => void;
+}
+
+/** Ink gestures belong to the canvas, including those that start on labels. */
+function canvasOwnsInk(element: Element): boolean {
+  const canvas = element.closest('[data-canvas-board-id]');
+  return canvas?.getAttribute('data-canvas-pen-mode') === 'true'
+    || ['draw', 'highlighter', 'eraser'].includes(canvas?.getAttribute('data-canvas-active-tool') ?? '');
+}
+
+/**
+ * The [ TYPE ] bracket of a card. A single tap opens it for editing; blur or
+ * Enter commits, normalised to uppercase like the inspector field.
+ *
+ * Keep the label non-editable until intentionally activated, so idle cards
+ * do not expose text-input targets to native handwriting recognition.
+ */
+function CardTypeLabel({ category, onCommit }: CardTypeLabelProps) {
+  const [editing, setEditing] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (editing) ref.current?.focus();
+  }, [editing]);
+  return (
+    <div
+      // Remount on each transition so React's text replaces whatever was
+      // typed, even when the normalised category did not change.
+      key={editing ? 'edit' : 'view'}
+      ref={ref}
+      data-canvas-card-type
+      role={editing ? 'textbox' : 'button'}
+      aria-label="카드 유형 편집"
+      tabIndex={0}
+      className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 outline-none"
+      contentEditable={editing}
+      suppressContentEditableWarning
+      onPointerDown={e => {
+        // The very first Pencil press must reach the canvas to enable pen mode.
+        if (e.pointerType === 'pen' || canvasOwnsInk(e.currentTarget)) return;
+        e.stopPropagation();
+      }}
+      onDoubleClick={e => e.stopPropagation()}
+      onClick={e => {
+        if (editing || canvasOwnsInk(e.currentTarget)) return;
+        setEditing(true);
+      }}
+      onBlur={e => {
+        if (!editing) return;
+        const raw = (e.currentTarget.textContent || '').replace(/^\[\s*|\s*\]$/g, '').trim();
+        onCommit(raw.toUpperCase() || 'ENTITY');
+        setEditing(false);
+      }}
+      onKeyDown={e => {
+        if (!editing && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!canvasOwnsInk(e.currentTarget)) setEditing(true);
+        } else if (editing && e.key === 'Enter') {
+          e.preventDefault();
+          e.stopPropagation();
+          e.currentTarget.blur();
+        }
+      }}
+    >
+      [ {category || 'ENTITY'} ]
+    </div>
+  );
 }
 
 export function createCanvasShapeRenderer({
@@ -144,30 +216,14 @@ export function createCanvasShapeRenderer({
             boxShadow: isGlass ? CANVAS_UI_COLORS.glassShadow : CANVAS_UI_COLORS.cardShadow,
           }}
         >
-          {/*
-            Type label is contenteditable so clicking on the [ ENTITY ] bracket
-            lets the user rename it directly, without hunting for a form field.
-            Blur/Enter commits, and the value is normalised to uppercase in the
-            same shape as manual entry from the inspector.
-          */}
-          <div
-            className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2 outline-none"
-            contentEditable
-            suppressContentEditableWarning
-            onPointerDown={e => e.stopPropagation()}
-            onDoubleClick={e => e.stopPropagation()}
-            onBlur={e => {
-              const raw = (e.currentTarget.textContent || '').replace(/^\[\s*|\s*\]$/g, '').trim();
-              const next = raw.toUpperCase() || 'ENTITY';
+          {/* Tap the [ ENTITY ] bracket to rename the type in place. */}
+          <CardTypeLabel
+            category={s.category}
+            onCommit={next => {
               setShapes(prev => prev.map(x => (x.id === s.id ? { ...x, category: next } : x)));
               onDirty();
             }}
-            onKeyDown={e => {
-              if (e.key === 'Enter') { e.preventDefault(); (e.currentTarget as HTMLElement).blur(); }
-            }}
-          >
-            [ {s.category || 'ENTITY'} ]
-          </div>
+          />
           {isEditing
             ? renderEditor('flex-1 font-medium', { color: s.textColor ?? CANVAS_UI_COLORS.white, fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) })
             : <div data-canvas-text-view key="canvas-view" className="canvas-rich-text flex-1 font-medium break-words overflow-hidden" style={{ color: s.textColor ?? CANVAS_UI_COLORS.white, fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }} dangerouslySetInnerHTML={{ __html: html }} />}
