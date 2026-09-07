@@ -12,6 +12,8 @@ import {
   type InfiniteCanvasHandle, type CanvasTool, type CanvasColorKey, type CanvasSelectionInfo, type CanvasShape,
 } from 'chois-canvas/react';
 import { parseCanvasSnapshot } from 'chois-canvas/core';
+import { PenDebugOverlay } from './PenDebugOverlay';
+import { isPenDebugEnabled } from './penDebug';
 import { DiagramComposer } from './diagram/DiagramComposer';
 import { DiagramSourceDrawer } from './diagram/DiagramSourceDrawer';
 import { MermaidDiagram } from './diagram/MermaidDiagram';
@@ -262,6 +264,7 @@ export const GuestCanvasPage: React.FC = () => {
       </header>
 
       <div className="gc-stage">
+        {isPenDebugEnabled(window.location.search) && <PenDebugOverlay />}
         <StrokeCanvas
           ref={canvasRef}
           boardIdentity="guest"
