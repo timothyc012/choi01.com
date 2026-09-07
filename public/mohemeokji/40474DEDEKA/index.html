@@ -568,6 +568,8 @@
               <option value="44369">44369 · Dortmund · Netto</option>
               <option value="40468">40468 · Düsseldorf · Netto</option>
               <option value="40474">40474 · Düsseldorf · EDEKA</option>
+              <option value="52062">52062 · Aachen · Netto</option>
+              <option value="52064">52064 · Aachen · EDEKA</option>
             </select>
           </label>
         </div>
@@ -584,7 +586,7 @@
         </p>
         <div class="status-line" aria-live="polite">
           <span class="status-dot" aria-hidden="true"></span>
-          <span id="sourceStatus">Netto CSV · 44369 Dortmund · 음식 재료 연결됨</span>
+          <span id="sourceStatus">새 행사 데이터 · 44369 Dortmund · 음식 재료 연결됨</span>
           <span class="status-check" id="sourceCheck">· 저장된 포장 가격 기준</span>
         </div>
 
@@ -744,46 +746,22 @@
     <script src="/mohemeokji/meal-package-prices.js"></script>
     <script src="/mohemeokji/meal-shopping.js"></script>
     <script>
-      const meals = [
-        { id:"rice", store:"Netto", cuisine:"korean", title:"닭고기 파프리카·토마토 볶음 + 밥", time:20, tags:["고단백"], filter:["korean","quick"], sale:["닭고기","파프리카","토마토","양파"], missing:["쌀","마늘","간장","기름"], steps:["밥을 안치고 닭고기·파프리카·토마토·양파를 썹니다.","마늘과 양파를 볶은 뒤 닭고기를 속까지 익힙니다.","파프리카와 토마토, 간장·후추를 넣고 밥과 함께 담습니다."] },
-        { id:"tray", store:"Netto", cuisine:"western", title:"바질 토마토 닭고기 구이 + 감자", time:25, tags:["한 팬","고단백"], filter:["western","onepan"], sale:["닭고기","토마토","양파","감자"], missing:["허브","올리브유"], steps:["감자를 한입 크기로 잘라 먼저 반쯤 익힙니다.","닭고기·토마토·양파·감자를 허브와 기름에 버무립니다.","190°C에서 닭고기가 충분히 익을 때까지 구워냅니다."] },
-        { id:"pepper-pork", store:"Netto", cuisine:"asian", title:"돼지고기 고추잡채 + 밥", time:30, tags:["채소 듬뿍"], filter:["asian"], sale:["돼지고기","파프리카","버섯","양파"], missing:["밥","굴소스","간장"], steps:["돼지고기·파프리카·양파·버섯을 길쭉하게 썹니다.","고기를 먼저 센불에 볶아 덜어둡니다.","채소를 빠르게 볶고 고기와 소스를 되넣어 밥과 냅니다."] },
-        { id:"tomato-egg", store:"Netto", cuisine:"asian", title:"토마토 달걀볶음 + 닭고기", time:15, tags:["한 팬","빠른 메뉴"], filter:["asian","quick","onepan"], sale:["닭고기","토마토","양파"], missing:["달걀","밥"], steps:["달걀을 몽글하게 익혀 덜어둡니다.","닭고기와 양파를 익힌 뒤 토마토를 넣습니다.","달걀을 되넣고 가볍게 섞어 밥과 냅니다."] },
-        { id:"pasta", store:"Netto", cuisine:"western", title:"채소 파스타 + 치즈", time:20, tags:["채식"], filter:["western","quick","vegetarian"], sale:["파프리카","토마토","치즈"], missing:["파스타","마늘","올리브유"], steps:["파스타를 삶고 면수를 남깁니다.","팬에 마늘과 채소를 볶습니다.","파스타와 면수를 섞고 치즈를 올립니다."] },
-        { id:"tomato-toast", store:"Netto", cuisine:"western", title:"토마토 파프리카 오픈 토스트", time:12, tags:["간단식","채식"], filter:["western","quick","vegetarian"], sale:["토마토","파프리카","토스트"], missing:["치즈"], steps:["토마토와 파프리카를 얇게 썹니다.","빵에 채소와 치즈를 올립니다.","팬이나 오븐에서 치즈가 녹을 때까지 굽습니다."] },
-        { id:"dakdoritang", store:"EDEKA", cuisine:"korean", title:"얼큰 닭볶음탕", time:45, tags:["한 냄비","주말"], filter:["korean","onepan"], sale:["닭고기","감자","주키니","당근","대파"], missing:["고추장","간장","마늘"], steps:["닭고기와 감자·주키니·당근을 큼직하게 썹니다.","냄비에 닭고기와 양념을 넣고 끓입니다.","채소를 넣고 국물이 걸쭉해질 때까지 익힌 뒤 대파를 올립니다."] },
-        { id:"salmon-salad", store:"EDEKA", cuisine:"western", title:"레몬 연어 스테이크 + 웜 샐러드", time:25, tags:["고단백","가벼운"], filter:["western"], sale:["연어","양상추","오이","토마토","레몬"], missing:["올리브유","허브"], steps:["연어에 후추와 레몬즙을 뿌립니다.","팬에서 껍질 쪽부터 노릇하게 굽습니다.","양상추·오이·토마토와 따뜻하게 담습니다."] },
-        { id:"shrimp-pasta", store:"EDEKA", cuisine:"western", title:"레몬 갈릭 새우 오일 파스타", time:20, tags:["한 팬"], filter:["western","quick","onepan"], sale:["새우","파스타","레몬"], missing:["마늘","올리브유"], steps:["파스타를 삶아 면수를 남깁니다.","팬에 마늘과 새우를 볶고 레몬즙을 넣습니다.","파스타와 면수를 넣어 윤기 나게 버무립니다."] },
-        { id:"ragu", store:"EDEKA", cuisine:"western", title:"토마토 다짐육 라구 파스타", time:35, tags:["가족식","든든한"], filter:["western"], sale:["다진고기","파스타","토마토","당근","양파"], missing:["토마토페이스트","허브"], steps:["양파와 당근을 잘게 썰어 볶습니다.","다진고기를 갈색이 될 때까지 익힙니다.","토마토와 소스를 끓여 삶은 파스타에 올립니다."] },
-        { id:"zucchini-pancake", store:"EDEKA", cuisine:"korean", title:"애호박전 + 파간장", time:20, tags:["채식"], filter:["korean","quick","vegetarian"], sale:["주키니","대파"], missing:["달걀","부침가루"], steps:["주키니를 얇게 썰어 소금을 살짝 뿌립니다.","달걀과 부침가루를 입혀 노릇하게 부칩니다.","대파를 넣은 간장을 곁들입니다."] },
-        { id:"mushroom-carbonara", store:"EDEKA", cuisine:"western", title:"버섯 베이컨 크림 파스타", time:25, tags:["한 팬","든든한"], filter:["western","onepan"], sale:["베이컨","버섯","파스타","치즈"], missing:["달걀","후추"], steps:["파스타를 삶아 면수를 남깁니다.","베이컨과 버섯을 볶습니다.","파스타·치즈·면수를 섞어 크리미하게 마무리합니다."] },
-        { id:"fish-tray", store:"EDEKA", cuisine:"western", title:"버터 송어 구이 + 웨지감자", time:25, tags:["독일식","가벼운"], filter:["western"], sale:["송어","감자","레몬","버터"], missing:["밀가루","허브"], steps:["감자를 삶거나 웨지 모양으로 굽습니다.","송어에 밀가루를 얇게 묻혀 버터에 굽습니다.","레몬과 허브를 올려 감자와 냅니다."] },
-        { id:"tomato-egg-edeka", store:"EDEKA", cuisine:"asian", title:"토마토 달걀 볶음 + 밥", time:15, tags:["빠른 메뉴","채식"], filter:["asian","quick","vegetarian"], sale:["토마토","대파"], missing:["달걀","밥"], steps:["달걀을 몽글하게 익혀 덜어둡니다.","대파와 토마토를 센불에 볶습니다.","달걀을 되넣고 간을 맞춰 밥과 냅니다."] },
-        { id:"avocado-chicken", store:"EDEKA", cuisine:"western", title:"치킨 아보카도 웜 샐러드", time:18, tags:["고단백","가벼운"], filter:["western","quick"], sale:["닭고기","아보카도","양상추","토마토","레몬"], missing:["올리브유","후추"], steps:["닭고기를 한입 크기로 잘라 굽습니다.","양상추·토마토·아보카도를 담습니다.","따뜻한 닭고기를 올리고 레몬 드레싱을 뿌립니다."] },
-        { id:"potato-quark", store:"EDEKA", cuisine:"western", title:"허브 쿼크 감자", time:18, tags:["독일식","초간단"], filter:["western","quick","vegetarian"], sale:["감자","허브 쿼크","대파"], missing:["소금"], steps:["감자를 껍질째 삶습니다.","허브 쿼크에 대파를 섞습니다.","따뜻한 감자를 갈라 쿼크를 곁들입니다."] },
-        { id:"pesto-pasta", store:"EDEKA", cuisine:"western", title:"바질 페스토 파스타", time:15, tags:["채식","초간단"], filter:["western","quick","vegetarian"], sale:["파스타","페스토"], missing:["토마토"], steps:["파스타를 삶아 면수를 남깁니다.","불을 끄고 페스토와 면수를 섞습니다.","토마토를 곁들여 냅니다."] },
-        { id:"cheese-toast", store:"EDEKA", cuisine:"western", title:"치즈 토마토 그릴 토스트", time:10, tags:["간단식","채식"], filter:["western","quick","vegetarian"], sale:["치즈","토스트","토마토"], missing:["버터"], steps:["빵에 버터를 얇게 바릅니다.","치즈와 토마토를 올려 굽습니다.","후추를 뿌려 따뜻하게 냅니다."] },
-        { id:"blueberry-yogurt", store:"EDEKA", cuisine:"western", title:"블루베리 요거트 오버나이트 오트", time:5, tags:["아침","채식"], filter:["western","quick","vegetarian"], sale:["블루베리","요거트"], missing:["오트밀"], steps:["요거트와 오트밀을 컵에 섞습니다.","블루베리를 올려 냉장 보관합니다.","차갑게 바로 먹습니다."] }
-      ];
-      meals.push.apply(meals, window.expandedMealExtras || []);
+      const meals = (window.expandedMealExtras || []).slice();
 
       const days = [
         { id:"mon", label:"월" }, { id:"tue", label:"화" }, { id:"wed", label:"수" },
         { id:"thu", label:"목" }, { id:"fri", label:"금" }, { id:"sat", label:"토" }, { id:"sun", label:"일" }
       ];
-      const profiles = {
-        Netto:{ offerCount:"5종", offerSummary:"닭고기 · 파프리카 · 토마토 · 감자", label:"Netto CSV" },
-        EDEKA:{ offerCount:"80행", offerSummary:"주키니 · 연어 · 새우 · 파스타 · 과일", label:"EDEKA CSV" }
-      };
+      const profiles = window.mealOfferMeta.profiles;
       const autoPlans = {
-        Netto:{ mon:"rice", tue:"pepper-pork", wed:"tray", thu:"tomato-egg", fri:"pasta", sat:"tomato-toast", sun:null },
-        EDEKA:{ mon:"dakdoritang", tue:"salmon-salad", wed:"ragu", thu:"shrimp-pasta", fri:"zucchini-pancake", sat:"fish-tray", sun:null }
+        Netto:{ mon:"netto-fresh-chicken", tue:"netto-chicken-potato", wed:"netto-mince-tomato-pasta", thu:"netto-pork-schnitzel", fri:"netto-chicken-mushroom-zucchini", sat:"netto-tomato-cheese-pasta", sun:null },
+        EDEKA:{ mon:"edeka-chicken-tomato", tue:"edeka-turkey-apple", wed:"edeka-chicken-fruit-salad", thu:"edeka-grape-protein-roll", fri:"edeka-butter-tomato-toast", sat:"edeka-peach-yogurt", sun:null }
       };
-      const labels = { "44369":"44369 Dortmund", "40468":"40468 Düsseldorf", "40474":"40474 Düsseldorf" };
-      const areaPaths = { "44369":"44369DONETTO", "40468":"40468DNETTO", "40474":"40474DEDEKA" };
+      const labels = Object.fromEntries(Object.entries(profiles).map(([area, profile]) => [area, profile.label]));
+      const areaPaths = Object.fromEntries(Object.entries(window.mealOfferMeta.areas).map(([area, meta]) => [area, meta.path]));
       const pathArea = Object.keys(areaPaths).find((code) => location.pathname.toUpperCase().includes("/" + areaPaths[code] + "/"));
       let activeArea = pathArea || "44369";
-      let activeStore = activeArea === "40474" ? "EDEKA" : "Netto";
+      let activeStore = profiles[activeArea].chain;
       let mealMoment = "저녁";
       let plan = { ...autoPlans[activeStore] };
       let activeFilter = "all";
@@ -809,7 +787,7 @@
       }
       let shoppingScope = null;
       let detailReturnFocus = null;
-      const catalog = window.mealPackagePrices;
+      const catalog = window.mealPackagePricesByArea?.[activeArea] || window.mealPackagePrices;
       const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
       function basketFor(items, scope) {
         return shopping.basket(items, { catalog, pantry: shoppingState.pantry, prices: shoppingState.prices, quantities: shoppingState.quantities[scope] || {} });
@@ -833,7 +811,8 @@
         byId("totalCostNote").textContent = costNote(weekCart) + " 공통 재료는 한 번만 담습니다. 목록에서 필요한 포장 수를 확인하세요.";
       }
       function scoreMeal(item) {
-        return item.sale.length * 20 - item.missing.length * 7 - item.time * .35;
+        const breakfastPenalty = mealMoment === "저녁" && item.tags.includes("아침") ? 28 : 0;
+        return item.sale.length * 20 - item.missing.length * 7 - item.time * .35 - breakfastPenalty;
       }
       function activeMeals() {
         return meals.filter((item) => item.store === activeStore).sort((a, b) => scoreMeal(b) - scoreMeal(a));
@@ -860,10 +839,10 @@
         const item = currentRecommendation();
         if (!item) return;
         selectedMeal = item;
-        const profile = profiles[activeStore];
+        const profile = profiles[activeArea];
         byId("areaSelect").value = activeArea;
-        byId("sourceStatus").textContent = profile.label + " · " + labels[activeArea] + " · 음식 재료 연결됨";
-        byId("sourceCheck").textContent = activeStore === "EDEKA" ? "· 포장 가격 입력 필요" : "· 저장된 KW36 가격 · 현재 매장 가격 확인 필요";
+        byId("sourceStatus").textContent = profile.label + " · 음식 재료 연결됨";
+        byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment + " · 1순위";
         byId("todayTitle").textContent = item.title;
         byId("todayReason").textContent = "할인 재료 " + item.sale.length + "개를 활용하고, 추가 구매는 " + item.missing.length + "개입니다. " + item.time + "분이면 완성할 수 있어 오늘의 첫 선택으로 추천합니다.";
@@ -942,7 +921,7 @@
           const matchesQuery = !query || item.title.toLowerCase().includes(query) || item.sale.join(" ").toLowerCase().includes(query);
           return matchesFilter && matchesQuery;
         });
-        const profile = profiles[activeStore];
+        const profile = profiles[activeArea];
         byId("menuCount").textContent = pool.length;
         byId("offerCount").textContent = profile.offerCount;
         byId("offerSummary").textContent = profile.offerSummary;
@@ -1013,10 +992,9 @@
         else byId("todayShopping").focus();
       }
       function renderShopping() {
+        const profile = profiles[activeArea];
         const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
-        byId("shoppingSource").innerHTML = activeStore === "Netto"
-          ? '<a href="/netto/netto_40468_vs_44369_kw36.csv">저장된 Netto KW36 포장 가격</a> 기준이며, 현재 매장 가격은 다를 수 있습니다. 수량과 가격을 직접 수정할 수 있습니다.'
-          : 'EDEKA 포장 가격 자료가 없습니다. 구매할 상품의 포장 가격을 입력해주세요.';
+        byId("shoppingSource").innerHTML = '<a href="' + escapeHtml(profile.source) + '">새 행사 데이터 ' + escapeHtml(profile.period) + '</a> 기준입니다. ' + escapeHtml(profile.branch) + '의 행사 포장 가격을 연결했으며, 현재 매장 가격은 다를 수 있습니다. 수량과 가격을 직접 수정할 수 있습니다.';
         byId("detailIngredients").innerHTML = cart.items.length ? cart.items.map((item, index) => {
           const price = item.priceCents === null ? "" : (item.priceCents / 100).toFixed(2).replace(".", ",");
           const disabled = item.owned ? " disabled" : "";
@@ -1026,7 +1004,7 @@
             '<div class="shopping-controls"><label>포장 수<input type="number" min="1" max="999" step="1" value="' + item.quantity + '" data-shopping-index="' + index + '" data-shopping-field="quantity" aria-label="' + escapeHtml(item.name) + ' 구매 포장 수"' + disabled + '></label>' +
             '<label>포장 가격 (€)<input type="text" inputmode="decimal" value="' + price + '" placeholder="가격 미확인" data-shopping-index="' + index + '" data-shopping-field="price" aria-label="' + escapeHtml(item.name) + ' 포장 가격"' + disabled + '></label>' +
             '<strong>' + (item.owned ? '구매 제외' : item.subtotalCents === null ? '가격 미확인' : shopping.euro(item.subtotalCents)) + '</strong></div>' +
-            '<small>' + (item.customPrice ? '직접 입력한 가격' : item.source ? '저장된 KW36 가격' : '포장 크기와 가격을 확인해주세요') + '</small></li>';
+            '<small>' + (item.customPrice ? '직접 입력한 가격' : item.source ? '새 행사 데이터 가격' : '포장 크기와 가격을 확인해주세요') + '</small></li>';
         }).join("") : '<li class="footer-note">식단표에 메뉴를 넣으면 구매할 재료가 여기에 표시됩니다.</li>';
         renderShoppingSummary(cart);
       }

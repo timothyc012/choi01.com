@@ -9,6 +9,7 @@ Choi01 Lab — public project hub plus a guest canvas memo board.
 | `index.html`, `styles.css`, `script.js` | Static hub homepage (design system in `DESIGN.md`) |
 | `canvas/index.html` + `src/` | Guest canvas memo board (React island at `/canvas/`) |
 | `packages/canvas/` | Vendored copy of [`chois-canvas`](https://github.com/timothyc012/chois-canvas) |
+| `public/mohemeokji/` + `public/offers/` | Weekly supermarket offers, recipe pages, and shopping checklist |
 
 ## Guest canvas
 
