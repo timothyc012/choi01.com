@@ -3,6 +3,8 @@
 All six HTML entry pages share `meal-shopping.js`, `meal-package-prices.js`, and
 the 07.09.2026 recipe data. They cover the existing Düsseldorf/Dortmund routes
 plus `52062NETTO` and `52064EDEKA` in Aachen.
+Each representative store now has 30 current-week recipes across Korean,
+Asian, Western, vegetarian, quick, and breakfast categories.
 Keep the entry pages and their recipe-data copies identical; the regression
 test checks this until the pages have a shared rendering pipeline.
 

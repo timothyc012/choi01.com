@@ -152,7 +152,9 @@ test('all six entry pages are identical and use current recipes without portion 
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL(path + 'meal-planner-recipe-data.js', root), 'utf8'), recipes);
-    assert.equal(recipes.window.expandedMealExtras.length, 24);
+    assert.equal(recipes.window.expandedMealExtras.length, 60);
+    assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === 'Netto').length, 30);
+    assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === 'EDEKA').length, 30);
     for (const meal of recipes.window.expandedMealExtras) assert.equal('cost' in meal, false);
   }
 });
