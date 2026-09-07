@@ -51,6 +51,15 @@ body {
   flex-direction: column;
   height: 100dvh;
   overflow: hidden;
+  /* iPadOS WebKit turns a fast Apple Pencil tap-drag into a text-selection
+     gesture. The canvas is already unselectable, so WebKit grabbed the nearest
+     selectable content instead: the bottom-left zoom controls, which then
+     showed selection handles and the copy/translate callout mid-stroke.
+     Nothing on this page needs selectable text; inputs and the canvas text
+     editor are unaffected by user-select. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   background: var(--gc-bg);
   color: var(--gc-text);
   transition: background 200ms ease, color 200ms ease;
