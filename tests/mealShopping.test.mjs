@@ -146,6 +146,9 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.doesNotMatch(html, /1인분|\bcost:/);
     assert.match(html, /52062 · Aachen · Netto/);
     assert.match(html, /52064 · Aachen · EDEKA/);
+    assert.match(html, /meal-planner-recipe-data\.js\?v=20260907/);
+    assert.match(html, /meal-package-prices\.js\?v=20260907/);
+    assert.match(html, /meal-shopping\.js\?v=20260907/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL(path + 'meal-planner-recipe-data.js', root), 'utf8'), recipes);
