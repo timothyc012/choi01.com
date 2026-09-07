@@ -173,6 +173,7 @@ export function useCanvasEditorState({
   editingIdRef.current = editingId;
   const setIsPenMode = useCallback((active: boolean) => {
     penModeRef.current = active;
+    if (active && typeof window !== 'undefined') window.getSelection()?.removeAllRanges();
     setPenModeState(active);
   }, []);
   // Pen and highlighter keep their own colours, separate from the note/shape

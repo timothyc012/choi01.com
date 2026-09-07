@@ -137,9 +137,18 @@ export function useCanvasPointerDown({
       if (e.target instanceof Element && e.target.closest('[role="textbox"], [data-canvas-inspector]')) return;
       placeTextualShape(e.clientX, e.clientY);
     };
+    const preventNativeSelection = (event: Event) => {
+      if (!penModeRef.current) return;
+      event.preventDefault();
+      window.getSelection()?.removeAllRanges();
+    };
     window.addEventListener('click', onClick, true);
-    return () => window.removeEventListener('click', onClick, true);
-  });
+    document.addEventListener('selectstart', preventNativeSelection, true);
+    return () => {
+      window.removeEventListener('click', onClick, true);
+      document.removeEventListener('selectstart', preventNativeSelection, true);
+    };
+  }, [containerRef, penModeRef]);
 
   const onPointerDown = (e: ReactPointerEvent) => {
     let activeTool = toolRef.current;

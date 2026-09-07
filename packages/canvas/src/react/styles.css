@@ -11,6 +11,8 @@
   overflow: hidden;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   outline: none;
   --canvas-slate-50: #f8fafc;
   --canvas-slate-100: #f1f5f9;
@@ -113,7 +115,7 @@
 .invoicex-canvas .whitespace-pre-wrap { white-space: pre-wrap; }
 .invoicex-canvas .break-words { overflow-wrap: break-word; }
 .invoicex-canvas .touch-none { touch-action: none; }
-.invoicex-canvas .select-none { user-select: none; }
+.invoicex-canvas .select-none { user-select: none; -webkit-user-select: none; }
 .invoicex-canvas .pointer-events-none { pointer-events: none; }
 .invoicex-canvas .cursor-pointer { cursor: pointer; }
 .invoicex-canvas .origin-top-left { transform-origin: top left; }
