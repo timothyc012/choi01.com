@@ -1,6 +1,5 @@
-/* Purchase costs use whole selling units, never recipe portions.
-   A basket starts with one pack per distinct ingredient because the recipe
-   cards do not contain measured quantities. Users can adjust pack counts. */
+/* Purchase costs use selling units. Comparable measured requirements are
+   summed; ambiguous or incomplete quantities require a manual check. */
 (function () {
   const normalize = (name) => name === "밥" ? "쌀" : name;
   const keyFor = (store, name) => store + ":" + normalize(name);
@@ -28,14 +27,38 @@
     };
   }
 
+  function currentCatalog(catalog, date) {
+    return Object.fromEntries(Object.entries(catalog).map(([store, offers]) => [store,
+      Object.fromEntries(Object.entries(offers).filter(([,offer]) => offer.validFrom && offer.validThrough && offer.validFrom <= date && date <= offer.validThrough))
+    ]));
+  }
+
+  function restorePlans(serialized, {area, store, days, meals}) {
+    const restored = {};
+    try {
+      const data = JSON.parse(serialized);
+      if (!data || data.activeArea !== area || (data.activeStore && data.activeStore !== store)) return restored;
+      const plans = data.plans || { [data.mealMoment]: data.plan };
+      for (const moment of ['점심','저녁']) {
+        const plan = plans[moment];
+        if (plan && days.every((day) => Object.hasOwn(plan,day) && (plan[day] === null || meals.some((m) => m.id === plan[day] && m.store === store)))) {
+          restored[moment] = Object.fromEntries(days.map((day) => [day,plan[day]]));
+        }
+      }
+    } catch { /* Invalid saved plans are ignored. */ }
+    return restored;
+  }
+
   function metricAmount(value) {
     const text = String(value || "").trim().replace(",", ".");
+    if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
     const bundle = text.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     const match = bundle || text.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     if (!match) return null;
     const factor = bundle ? Number(match[1]) : 1;
     const amount = Number(bundle ? match[2] : match[1]) * factor;
     const unit = (bundle ? match[3] : match[2]).toLowerCase();
+    if (!(amount > 0)) return null;
     if (unit === "kg") return { amount: amount * 1000, unit: "g" };
     if (unit === "l") return { amount: amount * 1000, unit: "ml" };
     return { amount, unit };
@@ -53,12 +76,17 @@
     const { catalog = {}, pantry = new Set(), prices = {}, quantities = {} } = options;
     const ingredients = new Map();
     for (const meal of meals.filter(Boolean)) {
+      const seenInMeal = new Set();
       for (const originalName of [...meal.sale, ...meal.missing]) {
         const name = normalize(originalName);
         const key = keyFor(meal.store, name);
-        const required = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name] || null;
+        if (seenInMeal.has(key)) continue;
+        seenInMeal.add(key);
+        const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name];
+        const required = candidate && Number.isFinite(candidate.amount) && candidate.amount > 0 && ['g', 'ml'].includes(candidate.unit) ? candidate : null;
         const existing = ingredients.get(key);
         if (existing) {
+          existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
           if (required && (!existing.requiredAmount || existing.requiredAmount.unit === required.unit)) {
             existing.requiredAmount = {
               amount: (existing.requiredAmount?.amount || 0) + required.amount,
@@ -74,7 +102,8 @@
           key, name, store: meal.store, pack: offer?.pack || "구매 단위 직접 확인",
           product: offer?.product || "", source: offer?.source || "",
           customPrice: Object.hasOwn(prices, key),
-          priceCents, owned: pantry.has(key), requiredAmount: required ? { ...required } : null
+          priceCents, owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
+          requirementComplete: Boolean(required)
         });
       }
     }
@@ -82,14 +111,16 @@
       const manualQuantity = Number.isSafeInteger(quantities[item.key]) && quantities[item.key] > 0 && quantities[item.key] <= 999
         ? quantities[item.key] : null;
       const packAmount = metricAmount(item.pack);
-      const calculatedQuantity = item.requiredAmount && packAmount && item.requiredAmount.unit === packAmount.unit
+      const canCalculate = item.requirementComplete && packAmount && item.requiredAmount.unit === packAmount.unit;
+      const calculatedQuantity = canCalculate
         ? Math.max(1, Math.ceil(item.requiredAmount.amount / packAmount.amount)) : 1;
       const quantity = manualQuantity || calculatedQuantity;
       return {
         ...item,
         quantity,
         requiredLabel: formatRequired(item.requiredAmount),
-        quantityCalculated: manualQuantity === null && calculatedQuantity > 1,
+        quantityCalculated: manualQuantity === null && Boolean(canCalculate),
+        quantityNeedsCheck: manualQuantity === null && !canCalculate,
         subtotalCents: item.priceCents === null ? null : item.priceCents * quantity
       };
     });
@@ -98,6 +129,7 @@
       items,
       totalCents: purchases.reduce((sum, item) => sum + (item.subtotalCents ?? 0), 0),
       unknownCount: purchases.filter((item) => item.priceCents === null).length,
+      quantityCheckCount: purchases.filter((item) => item.quantityNeedsCheck).length,
       purchaseCount: purchases.length
     };
   }
@@ -143,7 +175,7 @@
     };
   }
 
-  function restoreState(serialized) {
+  function restoreState(serialized, snapshot = null) {
     const state = { pantry: new Set(), prices: {}, quantities: {}, list: [] };
     try {
       const saved = JSON.parse(serialized);
@@ -173,12 +205,22 @@
         }).map(({ key, name, store, pack, quantity, priceCents, completed }) => ({ key, name, store, pack, quantity, priceCents, completed }));
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
+    if (snapshot && serialized) {
+      try {
+        const saved = JSON.parse(serialized);
+        if (saved?.snapshot !== snapshot) {
+          state.prices = {};
+          state.quantities = {};
+          state.list = state.list.map((item) => ({ ...item, priceCents: null, pack: '지난 자료 · 판매 단위 재확인' }));
+        }
+      } catch { /* Already restored as empty above. */ }
+    }
     return state;
   }
 
-  function serializeState(state) {
-    return JSON.stringify({ ...state, version: 1, pantry: [...state.pantry] });
+  function serializeState(state, snapshot = null) {
+    return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

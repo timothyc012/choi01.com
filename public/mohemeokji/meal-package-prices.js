@@ -1,4 +1,4 @@
-/* Generated from supermarket_food_offers_2026-09-07.csv. Prices are sale package prices, not recipe portions. */
+/* Generated from supermarket_food_offers_2026-09-07.csv. Prices are sale selling-unit prices. */
 window.mealPackagePricesByArea = {
   "40468": {
     "Netto": {
@@ -11,8 +11,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g | 9.48 / kg | zart und mager",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 196
       },
       "돼지고기": {
@@ -24,8 +28,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 6.98 / kg | aus der Oberschale",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 250
       },
       "다진고기": {
@@ -37,8 +45,12 @@ window.mealPackagePricesByArea = {
         "detail": "800 g | 6.86 / kg | aus 50 % Schwein und 50 % Rind",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 185
       },
       "소고기": {
@@ -50,8 +62,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 12.98 / kg | zart und saftig",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 249
       },
       "토마토": {
@@ -63,8 +79,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Niederlande, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 231
       },
       "버섯": {
@@ -76,8 +96,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g Schale | 4.23 / kg | Polen, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 234
       },
       "감자": {
@@ -89,8 +113,12 @@ window.mealPackagePricesByArea = {
         "detail": "2,5 kg Netz | 1.- / kg | Deutschland, Unsere Besten versch. Kocheigenschaften",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 193
       },
       "당근": {
@@ -102,8 +130,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg Beutel | Deutschland, Kl. II",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 180
       },
       "주키니": {
@@ -115,8 +147,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g Bund | 2.98 / kg | Deutschland, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 247
       },
       "양상추": {
@@ -128,8 +164,12 @@ window.mealPackagePricesByArea = {
         "detail": "Stück | Deutschland, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 237
       },
       "레몬": {
@@ -141,8 +181,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g Netz | 3.58 / kg | Spanien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 243
       },
       "바나나": {
@@ -154,8 +198,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Costa Rica / Panama",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 194
       },
       "사과": {
@@ -167,8 +215,12 @@ window.mealPackagePricesByArea = {
         "detail": "2 kg Beutel | 0.75 / kg | Italien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 230
       },
       "포도": {
@@ -180,8 +232,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g Schale | 5.55 / kg | Spanien, Kl. I; Sorte: Sable Seedless, Kernlos",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 241
       },
       "요거트": {
@@ -193,22 +249,13 @@ window.mealPackagePricesByArea = {
         "detail": "113 g – 150 g | 2.20 - 2.92 / kg | gekühlt, versch. Sorten",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 190
-      },
-      "치즈": {
-        "ingredient": "치즈",
-        "product": "GAZI Grill- und Pfannenkäse",
-        "priceCents": 199,
-        "appPriceCents": null,
-        "pack": "200 g",
-        "detail": "200 g | 9.95 / kg | gekühlt, versch. Sorten",
-        "category": "Payback-Angebote",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 214
       },
       "버터": {
         "ingredient": "버터",
@@ -219,8 +266,12 @@ window.mealPackagePricesByArea = {
         "detail": "250 g | 3.96 / kg | gekühlt, versch. Sorten",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 177
       },
       "파스타": {
@@ -232,8 +283,12 @@ window.mealPackagePricesByArea = {
         "detail": "5 x 500 g | 1.60 / kg | versch. Ausformungen Einzelpreis: 1.89 (3.78 / kg)",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 189
       },
       "쌀": {
@@ -245,8 +300,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 3.98 / kg",
         "category": "Preis-Kracher",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 297
       },
       "빵": {
@@ -258,8 +317,12 @@ window.mealPackagePricesByArea = {
         "detail": "750 g | 3.32 / kg | Gilt nur in Filialen mit Backautomat!",
         "category": "Backstube",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 288
       },
       "마늘": {
@@ -271,8 +334,12 @@ window.mealPackagePricesByArea = {
         "detail": "150 g Netz | 8.60 / kg | Argentinien / Spanien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 245
       }
     }
@@ -288,8 +355,12 @@ window.mealPackagePricesByArea = {
         "detail": "je 100 g",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 350
       },
       "칠면조": {
@@ -301,8 +372,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg Packung",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 353
       },
       "토마토": {
@@ -314,8 +389,12 @@ window.mealPackagePricesByArea = {
         "detail": "Klasse II | 250 g Schale | 7.96 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 355
       },
       "파프리카": {
@@ -327,8 +406,12 @@ window.mealPackagePricesByArea = {
         "detail": "Klasse I | 500 g Packung | 2.98 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 363
       },
       "바나나": {
@@ -340,8 +423,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Ecuador",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 358
       },
       "블루베리": {
@@ -353,8 +440,12 @@ window.mealPackagePricesByArea = {
         "detail": "Klasse II | 125 g Packung | 15.92 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 356
       },
       "사과": {
@@ -366,8 +457,12 @@ window.mealPackagePricesByArea = {
         "detail": "Klasse II | 2 kg Beutel | 0.75 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 361
       },
       "포도": {
@@ -379,8 +474,12 @@ window.mealPackagePricesByArea = {
         "detail": "kernlos, Klasse I | 500 g Schale | 3.98 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 359
       },
       "버터": {
@@ -392,8 +491,12 @@ window.mealPackagePricesByArea = {
         "detail": "mildgesäuert | 250 g Packung | 4.44 / kg",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 368
       },
       "빵": {
@@ -405,8 +508,12 @@ window.mealPackagePricesByArea = {
         "detail": "300 g Packung | 4.97 / kg",
         "category": "Backstube",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/073475/prospekte/",
+        "conditions": "",
         "sourceRow": 366
       }
     }
@@ -422,8 +529,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g | 9.48 / kg | zart und mager",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 21
       },
       "돼지고기": {
@@ -435,8 +546,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 6.98 / kg | aus der Oberschale",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 75
       },
       "다진고기": {
@@ -448,8 +563,12 @@ window.mealPackagePricesByArea = {
         "detail": "800 g | 6.86 / kg | aus 50% Schwein und 50% Rind",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 10
       },
       "소고기": {
@@ -461,8 +580,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 12.98 / kg | zart und saftig",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 74
       },
       "토마토": {
@@ -474,8 +597,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Niederlande, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 56
       },
       "버섯": {
@@ -487,8 +614,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g Schale | 4.23 / kg | Polen, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 59
       },
       "감자": {
@@ -500,8 +631,12 @@ window.mealPackagePricesByArea = {
         "detail": "2,5 kg Netz | 1.- / kg | Deutschland, Unsere Besten versch. Kocheigenschaften",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 18
       },
       "당근": {
@@ -513,8 +648,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg Beutel | Deutschland, Kl. II",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 5
       },
       "주키니": {
@@ -526,8 +665,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g Bund | 2.98 / kg | Deutschland, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 72
       },
       "양상추": {
@@ -539,8 +682,12 @@ window.mealPackagePricesByArea = {
         "detail": "Stück | Deutschland, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 62
       },
       "레몬": {
@@ -552,8 +699,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g Netz | 3.58 / kg | Spanien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 68
       },
       "바나나": {
@@ -565,8 +716,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Costa Rica / Panama",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 19
       },
       "사과": {
@@ -578,8 +733,12 @@ window.mealPackagePricesByArea = {
         "detail": "2 kg Beutel | 0.75 / kg | Italien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 55
       },
       "포도": {
@@ -591,8 +750,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g Schale | 5.55 / kg | Spanien, Kl. I; Sorte: Sable Seedless, Kernlos",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 66
       },
       "요거트": {
@@ -604,22 +767,13 @@ window.mealPackagePricesByArea = {
         "detail": "113 g – 150 g | 2.20 - 2.92 / kg | gekühlt, versch. Sorten",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 15
-      },
-      "치즈": {
-        "ingredient": "치즈",
-        "product": "GAZI Grill- und Pfannenkäse",
-        "priceCents": 199,
-        "appPriceCents": null,
-        "pack": "200 g",
-        "detail": "200 g | 9.95 / kg | gekühlt, versch. Sorten",
-        "category": "Payback-Angebote",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Rahmer Str. 8, 44369 Dortmund",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 39
       },
       "버터": {
         "ingredient": "버터",
@@ -630,8 +784,12 @@ window.mealPackagePricesByArea = {
         "detail": "250 g | 3.96 / kg | gekühlt, versch. Sorten",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 2
       },
       "파스타": {
@@ -643,8 +801,12 @@ window.mealPackagePricesByArea = {
         "detail": "5 x 500 g | 1.60 / kg | versch. Ausformungen Einzelpreis: 1.89 (3.78 / kg)",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 14
       },
       "쌀": {
@@ -656,8 +818,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 3.98 / kg",
         "category": "Preis-Kracher",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 122
       },
       "빵": {
@@ -669,8 +835,12 @@ window.mealPackagePricesByArea = {
         "detail": "750 g | 3.32 / kg | Gilt nur in Filialen mit Backautomat!",
         "category": "Backstube",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 113
       },
       "마늘": {
@@ -682,8 +852,12 @@ window.mealPackagePricesByArea = {
         "detail": "150 g Netz | 8.60 / kg | Argentinien / Spanien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 70
       }
     },
@@ -697,8 +871,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Becher",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Aspeystraße 75, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/aldi-nord-prospekt-07-09-2026-alpenschmaus-zum-spitzenpreis/",
+        "conditions": "",
         "sourceRow": 739
       }
     },
@@ -712,8 +890,12 @@ window.mealPackagePricesByArea = {
         "detail": "je 1 kg",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 807
       },
       "연어": {
@@ -725,9 +907,30 @@ window.mealPackagePricesByArea = {
         "detail": "mit Haut, 8 x 125 g",
         "category": "Fisch",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 815
+      },
+      "훈제연어": {
+        "ingredient": "훈제연어",
+        "product": "Norwegischer Räucherlachs",
+        "priceCents": 569,
+        "appPriceCents": null,
+        "pack": "in Scheiben, gekühlt, 300 g",
+        "detail": "in Scheiben, gekühlt, 300 g | 18.97 / kg",
+        "category": "Fisch",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
+        "sourceRow": 788
       },
       "주키니": {
         "ingredient": "주키니",
@@ -738,8 +941,12 @@ window.mealPackagePricesByArea = {
         "detail": "lose, Ursprung Deutschland/Spanien, Klasse I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 746
       },
       "오이": {
@@ -751,8 +958,12 @@ window.mealPackagePricesByArea = {
         "detail": "Ursprung Spanien/Deutschland, 750 g | 3.32 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 749
       },
       "요거트": {
@@ -764,22 +975,13 @@ window.mealPackagePricesByArea = {
         "detail": "gekühlt, 4 x 150 g | 2.98 / kg",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 821
-      },
-      "치즈": {
-        "ingredient": "치즈",
-        "product": "Géramont Weichkäse",
-        "priceCents": 229,
-        "appPriceCents": null,
-        "pack": "versch. Sorten, gekühlt, je 150/200 g",
-        "detail": "versch. Sorten, gekühlt, je 150/200 g",
-        "category": "Kühlregal & Tiefkühlung",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Huckarder Allee 27, 44369 Dortmund",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 783
       },
       "버터": {
         "ingredient": "버터",
@@ -790,8 +992,12 @@ window.mealPackagePricesByArea = {
         "detail": "gekühlt, 250 g | 10.76 / kg",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 830
       },
       "파스타": {
@@ -803,22 +1009,13 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 1.18 / kg",
         "category": "Kochen & Backen",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 757
-      },
-      "빵": {
-        "ingredient": "빵",
-        "product": "Weltmeisterbrötchen",
-        "priceCents": 78,
-        "appPriceCents": null,
-        "pack": "je 3 Stück, 3 für 2",
-        "detail": "je 3 Stück, 3 für 2",
-        "category": "Backstube",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Huckarder Allee 27, 44369 Dortmund",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 803
       }
     },
     "REWE": {
@@ -831,8 +1028,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Varziner Str. 7-17, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/rewe-prospekt-07-09-2026-blumig-und-fruchtig-durch-die-neue-woche/",
+        "conditions": "",
         "sourceRow": 716
       },
       "바나나": {
@@ -844,8 +1045,12 @@ window.mealPackagePricesByArea = {
         "detail": "je 1 kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Varziner Str. 7-17, 44369 Dortmund",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/rewe-prospekt-07-09-2026-blumig-und-fruchtig-durch-die-neue-woche/",
+        "conditions": "",
         "sourceRow": 711
       }
     }
@@ -861,8 +1066,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g | 9.48 / kg | zart und mager",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 388
       },
       "돼지고기": {
@@ -874,8 +1083,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 6.98 / kg | aus der Oberschale",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 442
       },
       "다진고기": {
@@ -887,8 +1100,12 @@ window.mealPackagePricesByArea = {
         "detail": "800 g | 6.86 / kg | aus 50 % Schwein und 50 % Rind",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 377
       },
       "소고기": {
@@ -900,8 +1117,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 12.98 / kg | zart und saftig",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 441
       },
       "토마토": {
@@ -913,8 +1134,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Niederlande, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 423
       },
       "버섯": {
@@ -926,8 +1151,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g Schale | 4.23 / kg | Polen, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 426
       },
       "감자": {
@@ -939,8 +1168,12 @@ window.mealPackagePricesByArea = {
         "detail": "2,5 kg Netz | 1.- / kg | Deutschland, Unsere Besten versch. Kocheigenschaften",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 385
       },
       "당근": {
@@ -952,8 +1185,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg Beutel | Deutschland, Kl. II",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 372
       },
       "주키니": {
@@ -965,8 +1202,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g Bund | 2.98 / kg | Deutschland, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 439
       },
       "양상추": {
@@ -978,8 +1219,12 @@ window.mealPackagePricesByArea = {
         "detail": "Stück | Deutschland, Kl. I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 429
       },
       "레몬": {
@@ -991,8 +1236,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g Netz | 3.58 / kg | Spanien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 435
       },
       "바나나": {
@@ -1004,8 +1253,12 @@ window.mealPackagePricesByArea = {
         "detail": "1 kg | Costa Rica / Panama",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 386
       },
       "사과": {
@@ -1017,8 +1270,12 @@ window.mealPackagePricesByArea = {
         "detail": "2 kg Beutel | 0.75 / kg | Deutschland, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 422
       },
       "포도": {
@@ -1030,8 +1287,12 @@ window.mealPackagePricesByArea = {
         "detail": "400 g Schale | 5.55 / kg | Spanien, Kl. I; Sorte: Sable Seedless, Kernlos",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 433
       },
       "요거트": {
@@ -1043,22 +1304,13 @@ window.mealPackagePricesByArea = {
         "detail": "113 g – 150 g | 2.20 - 2.92 / kg | gekühlt, versch. Sorten",
         "category": "Spar-Angebote",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 382
-      },
-      "치즈": {
-        "ingredient": "치즈",
-        "product": "GAZI Grill- und Pfannenkäse",
-        "priceCents": 199,
-        "appPriceCents": null,
-        "pack": "200 g",
-        "detail": "200 g | 9.95 / kg | gekühlt, versch. Sorten",
-        "category": "Payback-Angebote",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Peterstr. 50, 52062 Aachen",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 406
       },
       "버터": {
         "ingredient": "버터",
@@ -1069,8 +1321,12 @@ window.mealPackagePricesByArea = {
         "detail": "250 g | 3.96 / kg | gekühlt, versch. Sorten",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 369
       },
       "파스타": {
@@ -1082,8 +1338,12 @@ window.mealPackagePricesByArea = {
         "detail": "5 x 500 g | 1.60 / kg | versch. Ausformungen Einzelpreis: 1.89 (3.78 / kg)",
         "category": "Knüller der Woche",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 381
       },
       "쌀": {
@@ -1095,8 +1355,12 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 3.98 / kg",
         "category": "Preis-Kracher",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 489
       },
       "빵": {
@@ -1108,8 +1372,12 @@ window.mealPackagePricesByArea = {
         "detail": "750 g | 3.32 / kg | Gilt nur in Filialen mit Backautomat!",
         "category": "Backstube",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 480
       },
       "마늘": {
@@ -1121,8 +1389,12 @@ window.mealPackagePricesByArea = {
         "detail": "150 g Netz | 8.60 / kg | Argentinien / Spanien, Kl. II",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Peterstr. 50, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
         "sourceRow": 437
       }
     },
@@ -1136,8 +1408,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-13.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-13",
         "branch": "Markt 29-31, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/rewe-prospekt-07-09-2026-blumig-und-fruchtig-durch-die-neue-woche/",
+        "conditions": "",
         "sourceRow": 559
       },
       "바나나": {
@@ -1149,8 +1425,12 @@ window.mealPackagePricesByArea = {
         "detail": "je 1 kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-13.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-13",
         "branch": "Markt 29-31, 52062 Aachen",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/rewe-prospekt-07-09-2026-blumig-und-fruchtig-durch-die-neue-woche/",
+        "conditions": "",
         "sourceRow": 554
       }
     }
@@ -1166,8 +1446,12 @@ window.mealPackagePricesByArea = {
         "detail": "je 100 g",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/edeka-prospekt-07-09-2026-auf-einen-blick/",
+        "conditions": "",
         "sourceRow": 580
       },
       "돼지고기": {
@@ -1179,8 +1463,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/edeka-prospekt-07-09-2026-auf-einen-blick/",
+        "conditions": "",
         "sourceRow": 578
       },
       "소고기": {
@@ -1192,8 +1480,12 @@ window.mealPackagePricesByArea = {
         "detail": "deutsches Jungbullenfleisch, je 100 g",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.edeka.de/maerkte/071409/",
+        "conditions": "",
         "sourceRow": 570
       },
       "복숭아": {
@@ -1205,8 +1497,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/edeka-prospekt-07-09-2026-auf-einen-blick/",
+        "conditions": "",
         "sourceRow": 572
       },
       "사과": {
@@ -1218,8 +1514,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/edeka-prospekt-07-09-2026-auf-einen-blick/",
+        "conditions": "",
         "sourceRow": 574
       },
       "포도": {
@@ -1231,8 +1531,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/edeka-prospekt-07-09-2026-auf-einen-blick/",
+        "conditions": "",
         "sourceRow": 575
       },
       "요거트": {
@@ -1244,8 +1548,12 @@ window.mealPackagePricesByArea = {
         "detail": "je Becher",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/edeka-prospekt-07-09-2026-auf-einen-blick/",
+        "conditions": "",
         "sourceRow": 591
       }
     },
@@ -1259,8 +1567,12 @@ window.mealPackagePricesByArea = {
         "detail": "Meine Metzgerei, 1,5 kg",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/aldi-sued-prospekt-07-09-2026-so-einfach-geht-sparen/",
+        "conditions": "",
         "sourceRow": 705
       },
       "연어": {
@@ -1272,8 +1584,12 @@ window.mealPackagePricesByArea = {
         "detail": "300 g | 14.97 / kg",
         "category": "Fisch",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.aldi-sued.de/angebote",
+        "conditions": "",
         "sourceRow": 709
       },
       "송어": {
@@ -1285,22 +1601,30 @@ window.mealPackagePricesByArea = {
         "detail": "je Packung",
         "category": "Fisch",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.kaufda.de/insights/aldi-sued-prospekt-07-09-2026-so-einfach-geht-sparen/",
+        "conditions": "",
         "sourceRow": 703
       },
       "치즈": {
         "ingredient": "치즈",
-        "product": "Körniger Frischkäse",
-        "priceCents": 119,
+        "product": "Schmelzkäsescheiben",
+        "priceCents": 149,
         "appPriceCents": null,
         "pack": "MILSANI",
         "detail": "MILSANI",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 691
+        "evidenceUrl": "https://www.kaufda.de/insights/aldi-sued-prospekt-07-09-2026-so-einfach-geht-sparen/",
+        "conditions": "",
+        "sourceRow": 693
       }
     },
     "Lidl": {
@@ -1313,8 +1637,12 @@ window.mealPackagePricesByArea = {
         "detail": "je 1 kg",
         "category": "Fleisch & Wurst",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 662
       },
       "연어": {
@@ -1326,9 +1654,30 @@ window.mealPackagePricesByArea = {
         "detail": "mit Haut, 8 x 125 g",
         "category": "Fisch",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 670
+      },
+      "훈제연어": {
+        "ingredient": "훈제연어",
+        "product": "Norwegischer Räucherlachs",
+        "priceCents": 569,
+        "appPriceCents": null,
+        "pack": "in Scheiben, gekühlt, 300 g",
+        "detail": "in Scheiben, gekühlt, 300 g | 18.97 / kg",
+        "category": "Fisch",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
+        "sourceRow": 643
       },
       "주키니": {
         "ingredient": "주키니",
@@ -1339,8 +1688,12 @@ window.mealPackagePricesByArea = {
         "detail": "lose, Ursprung Deutschland/Spanien, Klasse I",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 601
       },
       "오이": {
@@ -1352,8 +1705,12 @@ window.mealPackagePricesByArea = {
         "detail": "Ursprung Spanien/Deutschland, 750 g | 3.32 / kg",
         "category": "Obst & Gemüse",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 604
       },
       "요거트": {
@@ -1365,22 +1722,13 @@ window.mealPackagePricesByArea = {
         "detail": "gekühlt, 4 x 150 g | 2.98 / kg",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 676
-      },
-      "치즈": {
-        "ingredient": "치즈",
-        "product": "Géramont Weichkäse",
-        "priceCents": 229,
-        "appPriceCents": null,
-        "pack": "versch. Sorten, gekühlt, je 150/200 g",
-        "detail": "versch. Sorten, gekühlt, je 150/200 g",
-        "category": "Kühlregal & Tiefkühlung",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 638
       },
       "버터": {
         "ingredient": "버터",
@@ -1391,8 +1739,12 @@ window.mealPackagePricesByArea = {
         "detail": "gekühlt, 250 g | 10.76 / kg",
         "category": "Kühlregal & Tiefkühlung",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 685
       },
       "파스타": {
@@ -1404,30 +1756,22 @@ window.mealPackagePricesByArea = {
         "detail": "500 g | 1.18 / kg",
         "category": "Kochen & Backen",
         "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
         "sourceRow": 612
-      },
-      "빵": {
-        "ingredient": "빵",
-        "product": "Weltmeisterbrötchen",
-        "priceCents": 78,
-        "appPriceCents": null,
-        "pack": "je 3 Stück, 3 für 2",
-        "detail": "je 3 Stück, 3 für 2",
-        "category": "Backstube",
-        "period": "07.09.2026-12.09.2026",
-        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
-        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-        "sourceRow": 658
       }
     }
   }
 };
-window.mealPackagePrices = window.mealPackagePricesByArea['44369'];
+window.mealPackagePrices = window.mealPackagePricesByArea["40468"];
 window.mealOfferMeta = {
   "source": "/offers/supermarket_food_offers_2026-09-07.csv",
-  "collectedAt": "unknown-date",
+  "snapshotId": "616d940c8532cde3739f1af850afcdeffbf5352e0492cb5d9d8dd64c3e3d5eb3",
+  "collectedAt": "2026-09-07 19:45 Europe/Berlin",
   "profiles": {
     "40468": {
       "Netto": {
@@ -1475,7 +1819,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 44369 · Dortmund",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "offerCount": "90행",
-        "offerSummary": "다진고기 · 연어 · 주키니 · 오이 · 요거트 · 07.09.2026-12.09.2026",
+        "offerSummary": "다진고기 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1533,7 +1877,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 52064 · Aachen",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "offerCount": "90행",
-        "offerSummary": "다진고기 · 연어 · 주키니 · 오이 · 요거트 · 07.09.2026-12.09.2026",
+        "offerSummary": "다진고기 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }

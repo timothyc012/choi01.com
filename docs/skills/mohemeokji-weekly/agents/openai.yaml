@@ -1,0 +1,4 @@
+interface:
+  display_name: "모해먹지 주간 갱신"
+  short_description: "할인 CSV와 recipe-full을 검증해 모해먹지 주간 데이터를 갱신"
+  default_prompt: "Use $mohemeokji-weekly to validate this week's supermarket CSV, update 모해먹지 recipes and offers, and verify the site."

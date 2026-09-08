@@ -761,10 +761,10 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="/mohemeokji/ontology-recipe-details.js?v=20260907-r4"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=20260907-r4"></script>
-    <script src="./meal-planner-recipe-data.js?v=20260907-r4"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=20260907-r4"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=44d05cdbc305"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=44d05cdbc305"></script>
+    <script src="./meal-planner-recipe-data.js?v=44d05cdbc305"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=44d05cdbc305"></script>
     <script>
       const meals = (window.expandedMealExtras || []).slice();
 
@@ -780,12 +780,13 @@
       const pathSegments = location.pathname.toUpperCase().split("/").filter(Boolean);
       const pathArea = Object.keys(areas).find((code) => pathSegments.includes(areas[code].path));
       const requestedArea = locationParams.get("postcode");
-      let activeArea = Object.hasOwn(areas, requestedArea) ? requestedArea : pathArea || "44369";
+      let activeArea = Object.hasOwn(areas, requestedArea) ? requestedArea : pathArea || (Object.hasOwn(areas, '44369') ? '44369' : Object.keys(areas)[0]);
       const requestedStore = locationParams.get("store");
       let activeStore = storesByArea[activeArea].includes(requestedStore) ? requestedStore : areas[activeArea].chain;
       const profile = profiles[activeArea][activeStore];
       let mealMoment = "저녁";
       let plan = {};
+      let plans = {};
       let activeFilter = "all";
       let targetDay = todayDay.id;
       let recommendationIndex = 0;
@@ -797,12 +798,16 @@
       const shopping = window.MealShopping;
       const shoppingStorageKey = "choi01-shopping-v1:" + activeArea + ":" + activeStore;
       const planStorageKey = "choi01-today-meal-plan:" + activeArea + ":" + activeStore;
+      const snapshot = window.mealOfferMeta.snapshotId || window.mealOfferMeta.source;
       let savedShopping = null;
-      try { savedShopping = localStorage.getItem(shoppingStorageKey); } catch {}
-      const shoppingState = shopping.restoreState(savedShopping);
+      try {
+        savedShopping = localStorage.getItem(shoppingStorageKey);
+        if (!savedShopping && activeStore === areas[activeArea].chain) savedShopping = localStorage.getItem("choi01-shopping-v1:" + activeArea);
+      } catch {}
+      const shoppingState = shopping.restoreState(savedShopping, snapshot);
       function saveShopping() {
         try {
-          localStorage.setItem(shoppingStorageKey, shopping.serializeState(shoppingState));
+          localStorage.setItem(shoppingStorageKey, shopping.serializeState(shoppingState, snapshot));
           byId("grocerySaveState").textContent = "목록과 체크 상태는 이 브라우저에 자동으로 저장됩니다.";
         } catch {
           byId("grocerySaveState").textContent = "브라우저 저장을 사용할 수 없어 현재 화면에서만 유지됩니다.";
@@ -810,8 +815,10 @@
       }
       let shoppingScope = null;
       let detailReturnFocus = null;
-      const catalog = window.mealPackagePricesByArea?.[activeArea] || window.mealPackagePrices;
+      const dateInBerlin = new Intl.DateTimeFormat('en-CA', {timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      const catalog = shopping.currentCatalog(window.mealPackagePricesByArea[activeArea], dateInBerlin);
       const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+      byId("postcodeSelect").innerHTML = Object.entries(areas).map(([area, meta]) => '<option value="' + area + '">' + escapeHtml(meta.label) + '</option>').join('');
       byId("postcodeSelect").value = activeArea;
       byId("storeSelect").innerHTML = storesByArea[activeArea].map((store) => '<option value="' + escapeHtml(store) + '">' + escapeHtml(store) + '</option>').join("");
       byId("storeSelect").value = activeStore;
@@ -819,16 +826,15 @@
         Object.assign(item, shopping.classifyIngredients(item, catalog[item.store] || {}));
       });
       plan = createAutoPlan();
+      plans = { "점심": {...plan}, "저녁": {...plan} };
       try {
-        const savedPlan = JSON.parse(localStorage.getItem(planStorageKey));
-        const validPlan = savedPlan?.activeArea === activeArea && savedPlan?.activeStore === activeStore && savedPlan.plan
-          && days.every((day) => Object.hasOwn(savedPlan.plan, day.id)
-            && (savedPlan.plan[day.id] === null || mealById(savedPlan.plan[day.id])?.store === activeStore));
-        if (validPlan) {
-          plan = Object.fromEntries(days.map((day) => [day.id, savedPlan.plan[day.id]]));
-          if (["점심", "저녁"].includes(savedPlan.mealMoment)) mealMoment = savedPlan.mealMoment;
-        }
+        const serialized = localStorage.getItem(planStorageKey) || localStorage.getItem('choi01-today-meal-plan');
+        const restored = shopping.restorePlans(serialized, {area:activeArea,store:activeStore,days:days.map((day)=>day.id),meals});
+        Object.assign(plans,restored);
+        const previousMoment = JSON.parse(serialized)?.mealMoment;
+        if (restored[previousMoment]) mealMoment = previousMoment;
       } catch { /* Missing or outdated saved plans fall back to current recommendations. */ }
+      plan = plans[mealMoment];
       byId("todayPlanNote").textContent = todayDay.label + "요일이 오늘입니다. 선택한 오늘 메뉴는 이 칸에 자동으로 들어갑니다.";
       function basketFor(items, scope) {
         return shopping.basket(items, { catalog, pantry: shoppingState.pantry, prices: shoppingState.prices, quantities: shoppingState.quantities[scope] || {} });
@@ -837,15 +843,16 @@
       const planMeals = () => Object.values(plan).map(mealById).filter(Boolean);
       const planBasket = () => basketFor(planMeals(), "week");
       function costNote(cart) {
-        return cart.unknownCount
+        const prices = cart.unknownCount
           ? "미확인 " + cart.unknownCount + "종은 아직 합계에 포함되지 않았습니다. 가격을 입력하거나 집에 있는 재료를 제외하세요."
           : "구매할 재료의 포장 가격 × 구매 수량 합계입니다.";
+        return prices + (cart.quantityCheckCount ? " 수량 확인 필요 " + cart.quantityCheckCount + "종은 기본 1판매단위로 계산했습니다." : '');
       }
       function renderCostSummary() {
         const cart = mealBasket(currentRecommendation());
         byId("todayCostLabel").textContent = cart.unknownCount ? "가격 확인된 재료 소계" : "재료 구매 합계";
         byId("todayCost").textContent = shopping.amount(cart);
-        byId("todayCostNote").textContent = costNote(cart) + " 중량을 비교할 수 있는 재료는 필요한 포장 수를 자동 계산하고, 나머지는 1포장을 기본으로 둡니다.";
+        byId("todayCostNote").textContent = costNote(cart);
         const weekCart = planBasket();
         byId("totalCostLabel").textContent = weekCart.unknownCount ? "이번 주 확인된 재료 소계" : "이번 주 장보기 합계";
         byId("totalCost").textContent = shopping.amount(weekCart);
@@ -884,11 +891,11 @@
         const item = currentRecommendation();
         if (!item) return;
         selectedMeal = item;
-        byId("sourceStatus").textContent = profile.label + " · 음식 재료 연결됨";
+        byId("sourceStatus").textContent = profile.label + (Object.keys(catalog[activeStore]).length ? " · 행사 재료 연결됨" : " · 오늘 유효한 행사 가격 없음");
         byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment + " · 1순위";
         byId("todayTitle").textContent = item.title;
-        byId("todayReason").textContent = "할인 재료 " + item.sale.length + "개를 활용하고, 할인 외 레시피 재료는 " + item.missing.length + "개입니다. " + item.time + "분이면 완성할 수 있어 오늘의 첫 선택으로 추천합니다.";
+        byId("todayReason").textContent = "할인 재료 " + item.sale.length + "개를 활용하고, 할인 외 레시피 재료는 " + item.missing.length + "개입니다. 조리 시간은 " + (item.timeBasis === 'estimate' ? '예상 ' : '원문 표시 ') + item.time + "분입니다. 숙성·재우기와 제품 상태는 레시피 안내를 확인하세요.";
         byId("todayTime").textContent = item.time + "분";
         renderCostSummary();
         byId("todayMatch").textContent = item.sale.length + "개";
@@ -1010,8 +1017,8 @@
         shoppingScope = "meal:" + selectedMeal.id;
         byId("detailKicker").textContent = "RECIPE · SHOPPING";
         byId("detailTitle").textContent = selectedMeal.title;
-        byId("detailIntro").textContent = selectedMeal.store + " 할인 재료와 연결한 recipe-full 레시피입니다.";
-        byId("recipeMeta").textContent = [selectedMeal.servingsText, "조리 " + selectedMeal.time + "분", selectedMeal.difficultyText].filter(Boolean).join(" · ");
+        byId("detailIntro").textContent = selectedMeal.recipeNote || "원문 재료와 조리 순서를 바탕으로 정리했습니다. 수량이 비어 있는 재료는 직접 확인하세요.";
+        byId("recipeMeta").textContent = [selectedMeal.servingsText, (selectedMeal.timeBasis === 'estimate' ? "예상 " : "원문 시간 ") + selectedMeal.time + "분", selectedMeal.difficultyText].filter(Boolean).join(" · ");
         byId("recipeAmounts").innerHTML = selectedMeal.detailIngredients.map((item) => "<li>" + escapeHtml(item) + "</li>").join("");
         byId("detailSteps").innerHTML = selectedMeal.steps.map((step) => "<li>" + escapeHtml(step) + "</li>").join("");
         byId("recipeProvenance").textContent = "출처: " + selectedMeal.sourceCorpus + " · 원문: " + selectedMeal.sourceTitle + " · 작성자: " + selectedMeal.sourceAuthor + " · 조리법은 원문 단계를 바탕으로 정리했습니다.";
@@ -1046,9 +1053,9 @@
           const disabled = item.owned ? " disabled" : "";
           return '<li class="shopping-item' + (item.owned ? ' owned' : '') + '">' +
             '<div class="shopping-item-head"><strong>' + escapeHtml(item.name) + '</strong><label><input type="checkbox" data-shopping-index="' + index + '" data-shopping-field="owned" aria-label="' + escapeHtml(item.name) + ' 집에 있음"' + (item.owned ? ' checked' : '') + '> 집에 있음</label></div>' +
-            '<small>' + escapeHtml(item.product ? item.product + ' · ' + item.pack : item.pack) + (item.requiredLabel ? ' · ' + escapeHtml(item.requiredLabel) : '') + (item.quantityCalculated ? ' · ' + item.quantity + '포장 자동 계산' : '') + '</small>' +
-            '<div class="shopping-controls"><label>포장 수<input type="number" min="1" max="999" step="1" value="' + item.quantity + '" data-shopping-index="' + index + '" data-shopping-field="quantity" aria-label="' + escapeHtml(item.name) + ' 구매 포장 수"' + disabled + '></label>' +
-            '<label>포장 가격 (€)<input type="text" inputmode="decimal" value="' + price + '" placeholder="가격 미확인" data-shopping-index="' + index + '" data-shopping-field="price" aria-label="' + escapeHtml(item.name) + ' 포장 가격"' + disabled + '></label>' +
+            '<small>' + escapeHtml(item.product ? item.product + ' · ' + item.pack : item.pack) + (item.requiredLabel ? ' · ' + escapeHtml(item.requiredLabel) : '') + (item.quantityCalculated ? ' · ' + item.quantity + '판매 단위 자동 계산' : '') + '</small>' +
+            '<div class="shopping-controls"><label>단위 수<input type="number" min="1" max="999" step="1" value="' + item.quantity + '" data-shopping-index="' + index + '" data-shopping-field="quantity" aria-label="' + escapeHtml(item.name) + ' 구매 단위 수"' + disabled + '></label>' +
+            '<label>단위 가격 (€)<input type="text" inputmode="decimal" value="' + price + '" placeholder="가격 미확인" data-shopping-index="' + index + '" data-shopping-field="price" aria-label="' + escapeHtml(item.name) + ' 판매 단위 가격"' + disabled + '></label>' +
             '<strong>' + (item.owned ? '구매 제외' : item.subtotalCents === null ? '가격 미확인' : shopping.euro(item.subtotalCents)) + '</strong></div>' +
             '<small>' + (item.customPrice ? '직접 입력한 가격' : item.source ? '새 행사 데이터 가격' : '포장 크기와 가격을 확인해주세요') + '</small></li>';
         }).join("") : '<li class="footer-note">식단표에 메뉴를 넣으면 구매할 재료가 여기에 표시됩니다.</li>';
@@ -1142,7 +1149,9 @@
       byId("manualPick").addEventListener("click", () => moveTo("library"));
       byId("openAcceptedRecipe").addEventListener("click", () => acceptedMeal && openDetail(acceptedMeal.id));
       document.querySelectorAll("[data-moment]").forEach((button) => button.addEventListener("click", () => {
+        plans[mealMoment] = {...plan};
         mealMoment = button.dataset.moment;
+        plan = {...plans[mealMoment]};
         document.querySelectorAll("[data-moment]").forEach((item) => item.classList.toggle("active", item === button));
         byId("acceptedBanner").classList.remove("show");
         renderToday();
@@ -1159,9 +1168,15 @@
         showToast("식단표를 비웠습니다");
       });
       byId("savePlan").addEventListener("click", () => {
-        localStorage.setItem(planStorageKey, JSON.stringify({ plan, mealMoment, activeArea, activeStore }));
-        showToast("이 브라우저에 식단을 저장했습니다");
+        if (saveCurrentPlans()) showToast("이 브라우저에 식단을 저장했습니다");
       });
+      function saveCurrentPlans() {
+        plans[mealMoment] = {...plan};
+        try {
+          localStorage.setItem(planStorageKey, JSON.stringify({ plans, mealMoment, activeArea, activeStore }));
+          return true;
+        } catch { showToast('이 브라우저에서 식단을 저장할 수 없습니다'); return false; }
+      }
       function openWeeklyShopping() {
         shoppingScope = "week";
         byId("detailKicker").textContent = "WEEKLY SHOPPING";
@@ -1193,6 +1208,7 @@
         showToast(days.find((day) => day.id === dayId).label + "요일 " + mealMoment + "에 넣었습니다");
       });
       function openLocation(postcode, store) {
+        saveCurrentPlans();
         const params = new URLSearchParams({ postcode, store });
         window.location.href = "/mohemeokji/?" + params.toString();
       }

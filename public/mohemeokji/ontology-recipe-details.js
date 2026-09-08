@@ -1,8 +1,5 @@
-/*
-  Source metadata and ingredient quantities come from the 01ontology DB
-  recipe-full corpus as used by 01ontology-open. Cooking instructions are
-  concise paraphrases of the source steps rather than copied source text.
-*/
+/* Source identities and ingredient labels: recipe-full export. Instructions are paraphrases.
+   sourceTimeText preserves source values; timeBasis distinguishes source times from estimates. */
 window.ontologyRecipeDetails = [
   {
     "sourceRecipeId": "7007791",
@@ -12,11 +9,11 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "닭가슴살 토마토볶음",
     "servingsText": "2인분",
-    "time": 10,
+    "time": 5,
     "difficultyText": "아무나",
     "cuisine": "korean",
     "sale": [
-      "닭고기",
+      "익힌 닭가슴살",
       "양파",
       "토마토",
       "고추",
@@ -30,25 +27,28 @@ window.ontologyRecipeDetails = [
       "방울토마토 4개",
       "모닝고추 1개",
       "들기름 1/2T (+1t)",
-      "소금 1꼬집"
+      "소금 1꼬집",
+      "원문은 이미 익혀 간이 된 닭가슴살을 사용합니다. 생닭으로 대체하는 조리법이 아닙니다."
     ],
     "steps": [
-      "양파는 얇게 채 썰고 방울토마토는 반으로, 고추는 송송 썬다.",
-      "중불로 달군 팬에 들기름 1/2큰술을 두르고 양파를 투명해질 때까지 3분 볶는다.",
-      "한입 크기로 썬 닭가슴살을 넣고 겉면이 살짝 노릇해질 때까지 볶는다.",
-      "방울토마토와 고추를 넣어 토마토 껍질이 살짝 주름질 때까지만 익힌다.",
-      "소금으로 간을 확인하고 불을 끈 뒤 들기름 1작은술을 둘러 마무리한다."
+      "양파는 채 썰고, 익힌 닭가슴살은 얇게 썬다. 방울토마토와 모닝고추도 먹기 좋게 썬다.",
+      "팬에 들기름 1/2T를 두르고 양파를 충분히 볶는다.",
+      "소금으로 살짝 간한 뒤 익힌 닭가슴살을 넣어 겉면에 색이 나도록 데운다.",
+      "토마토와 모닝고추를 넣고 볶은 뒤 맛을 본다. 닭가슴살에 간이 되어 있으므로 소금은 필요한 만큼만 더한다.",
+      "들기름 1t를 둘러 마무리한다."
     ],
     "tags": [
       "한 팬",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
     "filters": [
-      "quick",
-      "onepan"
+      "quick"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "5분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "원문은 이미 익혀 간이 된 닭가슴살을 사용합니다. 생닭으로 대체하는 조리법이 아닙니다."
   },
   {
     "sourceRecipeId": "6842456",
@@ -92,19 +92,18 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "한 팬",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
-    "filters": [
-      "quick",
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "닭고기": {
         "amount": 300,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6967405",
@@ -114,11 +113,11 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "닭가슴살 감자채볶음",
     "servingsText": "3인분",
-    "time": 20,
+    "time": 5,
     "difficultyText": "초급",
     "cuisine": "korean",
     "sale": [
-      "닭고기",
+      "블랙페퍼 닭가슴살",
       "양파",
       "감자",
       "마늘",
@@ -134,30 +133,33 @@ window.ontologyRecipeDetails = [
       "다진마늘 1T",
       "통깨 1T",
       "식용유 적당량 (원문 조리 단계, 수량 미표기)",
-      "블랙페퍼 적당량 (원문 조리 단계, 수량 미표기)"
+      "블랙페퍼 적당량 (원문 조리 단계, 수량 미표기)",
+      "원문은 간이 된 블랙페퍼 닭가슴살을 사용합니다. 제품의 가열 안내를 확인하세요."
     ],
     "steps": [
-      "감자와 양파는 4mm 굵기로 채 썰고 닭가슴살도 비슷한 길이로 썬다.",
-      "감자채를 찬물에 한 번 헹군 뒤 물기를 완전히 닦는다.",
-      "중불 팬에 기름을 넉넉히 두르고 감자를 펼쳐 가장자리가 노릇해질 때까지 익힌다.",
-      "양파와 닭가슴살을 넣고 닭고기가 완전히 익을 때까지 볶는다.",
-      "다진 마늘을 넣어 1분 더 볶고 통깨와 후추로 마무리한다."
+      "감자와 양파는 가늘게 채 썰고 블랙페퍼 닭가슴살도 비슷한 굵기로 썬다.",
+      "팬에 식용유를 넉넉히 두르고 감자와 양파를 고루 볶는다.",
+      "감자가 노릇해지면 닭가슴살을 넣어 함께 볶고 제품의 가열 안내를 따른다.",
+      "다진 마늘을 넣어 골고루 섞는다.",
+      "통깨를 뿌리고 맛을 본다. 이미 간이 된 제품이므로 추가 간은 필요한 경우에만 한다."
     ],
     "tags": [
       "밥반찬",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
     "filters": [
-      "quick",
-      "onepan"
+      "quick"
     ],
     "requiredAmounts": {
-      "닭고기": {
+      "블랙페퍼 닭가슴살": {
         "amount": 130,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "5분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "원문은 간이 된 블랙페퍼 닭가슴살을 사용합니다. 제품의 가열 안내를 확인하세요."
   },
   {
     "sourceRecipeId": "6856968",
@@ -179,7 +181,9 @@ window.ontologyRecipeDetails = [
       "양파",
       "고구마",
       "마늘",
-      "후추"
+      "후추",
+      "식용유",
+      "쌀"
     ],
     "missing": [],
     "detailIngredients": [
@@ -192,29 +196,31 @@ window.ontologyRecipeDetails = [
       "고구마 1개",
       "다진마늘 1",
       "후추 약간",
-      "물 800ml"
+      "물 800ml",
+      "식용유 약간 (원문 조리 단계, 양 미표기)",
+      "밥 (카레라이스 곁들임, 양 직접 확인)"
     ],
     "steps": [
-      "채소와 햄을 1.5cm 크기로 깍둑썰고 닭가슴살캔은 국물을 뺀다.",
-      "냄비에 기름을 두르고 마늘·양파·당근·고구마·햄을 중불에서 4분 볶는다.",
-      "물 800ml를 붓고 끓으면 중약불로 줄여 채소가 부드러워질 때까지 익힌다.",
-      "불을 약하게 줄이고 카레가루를 조금씩 넣어 덩어리 없이 푼다.",
-      "닭가슴살과 애호박을 넣고 5분 더 끓여 농도와 간을 맞춘다."
+      "애호박·당근·양파·고구마와 햄을 작게 깍둑썰고, 닭가슴살캔은 국물을 버린다.",
+      "기름을 조금 두른 팬에 채소·햄·다진 마늘·후추를 넣어 볶는다.",
+      "물 800ml를 붓고 채소가 익을 때까지 끓인다.",
+      "카레가루를 넣어 덩어리가 남지 않도록 푼다.",
+      "닭가슴살캔을 넣고 함께 끓여 마무리한다. 준비한 밥과 곁들인다."
     ],
     "tags": [
       "한 냄비",
-      "가족식",
-      "01ontology"
+      "가족식"
     ],
-    "filters": [
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "리챔": {
         "amount": 120,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "3526900",
@@ -268,22 +274,25 @@ window.ontologyRecipeDetails = [
       "올리고당"
     ],
     "steps": [
-      "닭가슴살을 2cm 크기로 썰어 마늘·소금·후추·참기름에 30분 재운다.",
-      "양파·대파·고추는 잘게 다지고 간장·맛술·굴소스·식초·설탕·물을 섞는다.",
-      "밑간한 닭에 녹말가루와 달걀흰자를 넣어 고루 코팅한다.",
-      "170°C 기름에서 닭을 익힌 뒤 잠시 식히고 190°C에서 짧게 한 번 더 튀긴다.",
-      "팬에 마늘과 다진 채소를 볶다가 소스를 넣어 1분 끓인다.",
-      "튀긴 닭을 넣고 소스가 얇게 묻을 정도로 빠르게 버무려 바로 낸다."
+      "닭가슴살을 한입 크기로 썰어 다진 마늘 1/2T·고운 소금 1/2T·참기름 2/3T·후추 소량으로 밑간한다. 냉장고에서 30분~1시간 재운다.",
+      "양파 1/3개·대파 1/2개·청양고추 3개와 마른 홍고추를 잘게 자른다.",
+      "재운 닭에 녹말가루 5~6T와 달걀흰자 1개를 넣고 버무린다.",
+      "튀김용 기름을 중불로 데운 뒤 중약불에서 닭을 노릇하게 튀긴다. 한 김 식힌 후 센불에서 다시 짧게 튀겨 속까지 익힌다.",
+      "다른 팬에 식용유 1.5T와 다진 마늘 1/2T를 넣고 볶다가 손질한 채소를 넣는다.",
+      "불을 잠시 끄고 물 3T·간장 2T·맛술 2T·굴소스 1T·식초 2T·설탕 1T·올리고당 2T를 넣는다. 중불에서 약 1분 끓인다.",
+      "튀긴 닭을 소스에 빠르게 버무려 바로 낸다."
     ],
     "tags": [
       "중식",
-      "특식",
-      "01ontology"
+      "특식"
     ],
     "filters": [
       "asian"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": null,
+    "timeBasis": "estimate",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6871908",
@@ -297,7 +306,7 @@ window.ontologyRecipeDetails = [
     "difficultyText": "초급",
     "cuisine": "western",
     "sale": [
-      "닭고기",
+      "닭가슴살캔",
       "또띠아",
       "모짜렐라치즈",
       "양파",
@@ -317,7 +326,8 @@ window.ontologyRecipeDetails = [
       "옥수수통조림 2큰술",
       "소금 약간",
       "후추 약간",
-      "토마토 소스 3큰술"
+      "토마토 소스 3큰술",
+      "닭가슴살캔을 사용하는 레시피입니다. 생닭 가격을 연결하지 않습니다."
     ],
     "steps": [
       "양파와 파프리카를 5mm 크기로 잘게 썬다.",
@@ -328,13 +338,16 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "간단식",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
     "filters": [
       "quick"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "닭가슴살캔을 사용하는 레시피입니다. 생닭 가격을 연결하지 않습니다."
   },
   {
     "sourceRecipeId": "5056237",
@@ -359,7 +372,8 @@ window.ontologyRecipeDetails = [
       "핫소스",
       "소금",
       "후추",
-      "맛술"
+      "맛술",
+      "씨겨자"
     ],
     "missing": [],
     "detailIngredients": [
@@ -377,30 +391,30 @@ window.ontologyRecipeDetails = [
       "씨겨자",
       "소금 약간 (원문 조리 단계, 수량 미표기)",
       "후추 약간 (원문 조리 단계, 수량 미표기)",
-      "청주 약간 (원문 조리 단계, 수량 미표기)"
+      "청주 약간 (원문 조리 단계, 수량 미표기)",
+      "씨겨자 (원문 첫 번째 롤 소스, 양 미표기)"
     ],
     "steps": [
-      "닭가슴살을 길게 썰어 소금·후추로 밑간하고 파프리카도 채 썬다.",
-      "팬에 닭가슴살을 앞뒤로 노릇하게 굽고 키친타월에서 잠시 식힌다.",
-      "또띠아를 마른 팬에서 앞뒤로 20초씩 데운다.",
-      "마요네즈와 머스터드를 섞어 또띠아에 얇게 바른다.",
-      "물기를 제거한 잎채소·치즈·파프리카·피클·닭고기를 중앙에 올린다.",
-      "양옆을 접고 아래에서 단단히 말아 이음매가 아래로 가게 둔 뒤 반으로 자른다."
+      "닭가슴살을 길게 썰어 소금·후추·청주로 밑간하고 파프리카도 채 썬다.",
+      "팬에서 닭가슴살을 앞뒤로 구워 속까지 익힌 뒤 기름기를 뺀다.",
+      "또띠아 2장을 팬에서 앞뒤로 살짝 데우고 잎채소의 물기를 없앤다.",
+      "첫 번째 롤에는 마요네즈와 씨겨자를 섞어 바르고 잎채소·닭·파프리카·피클을 올려 돌돌 만다.",
+      "두 번째 롤에는 치즈와 머스터드를 올리고 잎채소·파프리카·닭을 담은 뒤 핫소스를 뿌려 만다."
     ],
     "tags": [
       "도시락",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
-    "filters": [
-      "quick"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "닭고기": {
         "amount": 200,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6988653",
@@ -410,7 +424,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "닭가슴살 오일 파스타",
     "servingsText": "1인분",
-    "time": 15,
+    "time": 10,
     "difficultyText": "아무나",
     "cuisine": "western",
     "sale": [
@@ -447,13 +461,15 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "파스타",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
     "filters": [
       "quick"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "10분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "1633372",
@@ -478,7 +494,8 @@ window.ontologyRecipeDetails = [
       "굴소스",
       "설탕",
       "참기름",
-      "통깨"
+      "통깨",
+      "식용유"
     ],
     "missing": [],
     "detailIngredients": [
@@ -494,26 +511,28 @@ window.ontologyRecipeDetails = [
       "굴소스 1큰술",
       "설탕 1/2큰술",
       "참기름 조금",
-      "통깨 조금"
+      "통깨 조금",
+      "식용유 (원문 조리 단계, 양 미표기)"
     ],
     "steps": [
-      "닭가슴살을 길게 썰어 소금·후추·맛술로 10분 밑간한다.",
-      "양파와 파프리카는 닭과 비슷한 굵기로 채 썰고 부추는 5cm로 자른다.",
-      "간장·굴소스·설탕을 섞어 소스를 준비한다.",
-      "센불로 달군 팬에 닭가슴살을 넣고 겉면이 익도록 볶는다.",
-      "양파와 파프리카를 넣어 2분 볶은 뒤 소스를 둘러 빠르게 섞는다.",
-      "부추를 넣자마자 불을 끄고 참기름과 통깨로 마무리한다."
+      "닭가슴살을 길게 썰어 후추·소금·미림으로 밑간한다.",
+      "양파·파프리카는 채 썰고 부추는 먹기 좋은 길이로 자른다.",
+      "간장·굴소스·설탕을 섞어 양념을 준비한다.",
+      "팬에 식용유를 두르고 닭가슴살을 볶아 속까지 익힌다.",
+      "양파와 파프리카를 넣고 양념을 부어 함께 볶는다.",
+      "부추를 넣어 짧게 섞고 참기름과 통깨로 마무리한다."
     ],
     "tags": [
       "중식풍",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
     "filters": [
-      "asian",
-      "onepan"
+      "asian"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7015342",
@@ -523,7 +542,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "새콤달콤 닭가슴살 냉채",
     "servingsText": "2인분",
-    "time": 25,
+    "time": 20,
     "difficultyText": "아무나",
     "cuisine": "asian",
     "sale": [
@@ -558,15 +577,14 @@ window.ontologyRecipeDetails = [
     "steps": [
       "오이·당근·양배추를 얇게 채 썰고 크래미는 결대로 찢는다.",
       "닭가슴살을 끓는 물에 넣어 약 18분 삶고 중심까지 익었는지 확인한다.",
-      "간장·식초·설탕·겨자·마늘·검은깨를 섞어 냉채 소스를 만든다.",
+      "간장·식초·설탕·알룰로스 1큰술·겨자·마늘·검은깨를 섞어 냉채 소스를 만든다.",
       "삶은 닭은 한 김 식힌 뒤 결대로 가늘게 찢는다.",
       "큰 볼에 채소·크래미·닭을 담고 소스를 절반부터 넣어가며 버무린다.",
       "간을 확인한 뒤 검은깨를 뿌리고 차갑게 내면 된다."
     ],
     "tags": [
       "냉채",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
     "filters": [
       "quick"
@@ -584,7 +602,10 @@ window.ontologyRecipeDetails = [
         "amount": 30,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "20분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6905374",
@@ -632,12 +653,9 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "한 냄비",
-      "밥도둑",
-      "01ontology"
+      "밥도둑"
     ],
-    "filters": [
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "돼지고기": {
         "amount": 400,
@@ -647,7 +665,10 @@ window.ontologyRecipeDetails = [
         "amount": 1200,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "60분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "3301330",
@@ -694,21 +715,18 @@ window.ontologyRecipeDetails = [
       "다진 마늘 1큰술"
     ],
     "steps": [
-      "대파는 어슷 썰고 버섯은 짧게 데쳐 물기를 짠다.",
-      "돼지고기를 한입 크기로 썰고 사과는 곱게 갈아 연육 재료로 준비한다.",
-      "고추장·고춧가루·간장·맛술·마늘·갈은 사과를 섞어 양념을 만든다.",
-      "고기·버섯·대파를 양념에 버무려 냉장고에서 30분 재운다.",
-      "센불로 달군 팬에 고기를 펼쳐 볶다가 국물이 생기면 계속 졸인다.",
-      "고기가 완전히 익고 양념에 윤기가 돌면 통깨를 뿌려 낸다."
+      "느타리버섯은 짧게 데쳐 물기를 빼고 대파는 어슷 썬다.",
+      "돼지고기는 먹기 좋게 썰고 참다래와 사과는 갈아 둔다.",
+      "고추장·고춧가루·진간장·매실액·맛술·올리고당·다진 마늘과 간 과일로 양념을 만든다.",
+      "고기·버섯·대파에 양념을 고루 버무려 재운다.",
+      "기름을 두른 팬에 양념한 고기를 펼쳐 볶고 고기가 속까지 익도록 조리한다.",
+      "양념이 잘 배면 통깨를 뿌려 낸다."
     ],
     "tags": [
       "매콤한 한식",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
-    "filters": [
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "돼지고기 앞다리살": {
         "amount": 790,
@@ -718,7 +736,10 @@ window.ontologyRecipeDetails = [
         "amount": 280,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "60분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "5207993",
@@ -728,7 +749,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "돼지고기 오븐구이",
     "servingsText": "2인분",
-    "time": 40,
+    "time": 75,
     "difficultyText": "초급",
     "cuisine": "western",
     "sale": [
@@ -758,17 +779,20 @@ window.ontologyRecipeDetails = [
       "머스터드·와인·간장·설탕·소금·후추를 섞어 고기에 고루 바른다.",
       "월계수잎을 얹고 냉장고에서 최소 30분 재운다.",
       "고기를 포일로 단단히 감싸고 물을 조금 부은 오븐 팬에 올린다.",
-      "200°C 오븐에서 약 30분 익힌다.",
+      "원문은 예열 없이 200°C 오븐에서 약 30분 익힌다. 고기 두께에 따라 속까지 익는 시간을 확인한다.",
       "포일을 벗기고 180°C에서 5~10분 더 구워 겉면을 노릇하게 만든다.",
       "오븐에서 꺼내 5분 휴지한 뒤 결 반대 방향으로 썬다."
     ],
     "tags": [
       "오븐",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
     "filters": [],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "30분",
+    "timeBasis": "estimate",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "원문 시간 표시는 30분이지만 재우기·굽기·휴지를 합쳐 약 75분을 예상합니다. 고기 무게가 없어 실제 소요시간은 달라집니다."
   },
   {
     "sourceRecipeId": "6903216",
@@ -817,25 +841,25 @@ window.ontologyRecipeDetails = [
     ],
     "steps": [
       "양파는 채 썰고 버섯은 얇게, 토마토는 큼직하게 썬다.",
-      "돼지고기에 양파·고추장·간장·고춧가루·마늘·맛술을 넣어 버무린다.",
+      "돼지고기에 양파·고추장·간장·고춧가루·마늘·맛술·후추·올리고당을 넣어 버무린다.",
       "중강불로 예열한 팬에서 돼지고기를 거의 익을 때까지 볶는다.",
-      "토마토·버섯·토마토소스·물 1/2컵을 넣고 중약불에서 7~8분 졸인다.",
+      "토마토·버섯·토마토소스·물 1/2종이컵을 넣고 중약불에서 7~8분 졸인다.",
       "치즈와 다진 고추를 올리고 뚜껑을 덮어 약불에서 치즈가 녹을 때까지 익힌다."
     ],
     "tags": [
       "퓨전",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
-    "filters": [
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "돼지고기 앞다리살": {
         "amount": 200,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6976533",
@@ -845,7 +869,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "돼지고기 생강구이",
     "servingsText": "2인분",
-    "time": 25,
+    "time": 30,
     "difficultyText": "아무나",
     "cuisine": "asian",
     "sale": [
@@ -869,17 +893,16 @@ window.ontologyRecipeDetails = [
       "식용유 1큰술"
     ],
     "steps": [
-      "돼지고기에 맛술과 생강즙을 넣어 10분 재운다.",
+      "돼지고기에 맛술·생강즙·식용유를 넣어 10분 재운다.",
       "간장·간 생강·맛술·설탕·식용유를 섞어 양념장을 만든다.",
       "센불로 충분히 달군 팬에서 고기 양면을 노릇하게 굽는다.",
       "고기가 거의 익으면 양념장을 붓고 센불에서 빠르게 졸인다.",
       "소스가 고기에 윤기 있게 붙고 고기가 완전히 익으면 불을 끈다.",
-      "채 썬 양배추와 토마토를 곁들여 바로 낸다."
+      "완성된 고기를 접시에 담는다. 양배추·토마토 곁들임은 선택 사항이며 장보기 목록에 포함하지 않았다."
     ],
     "tags": [
       "일본식",
-      "고단백",
-      "01ontology"
+      "고단백"
     ],
     "filters": [
       "asian"
@@ -889,7 +912,10 @@ window.ontologyRecipeDetails = [
         "amount": 500,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7044610",
@@ -951,21 +977,18 @@ window.ontologyRecipeDetails = [
     ],
     "steps": [
       "압력솥에 돼지고기·대파·월계수잎·물 1L를 넣고 압력이 오른 뒤 중불에서 20분 익힌다.",
-      "압력을 완전히 뺀 뒤 고기를 건져 결대로 찢고 육수는 체에 거른다.",
-      "시래기는 씻어 자르고 고춧가루·된장·고추장·액젓·마늘·들기름에 무친다.",
-      "큰 냄비에 시래기·감자·고기를 담고 육수를 재료가 잠기도록 붓는다.",
+      "압력솥 제조사의 안내에 따라 압력을 완전히 뺀 뒤 고기를 건져 결대로 찢고 육수는 체에 거른다.",
+      "시래기는 씻어 자르고 고춧가루 3T·된장 2T·고추장 1T·액젓 2T·마늘 1T·들기름 1T에 무친다.",
+      "큰 냄비에 시래기·감자·고기를 담고 육수를 붓고 부족하면 물을 추가해 재료가 잠기게 한다.",
       "센불에서 끓으면 뚜껑을 덮고 중불로 20분 끓인다.",
-      "대파와 고추·들깨가루를 넣고 3분 더 끓인 뒤 소금으로 간한다.",
+      "대파와 고추·들깨가루 3T를 넣고 3분 더 끓인 뒤 소금으로 간한다.",
       "깻잎을 넣고 한소끔 끓여 향을 살린다."
     ],
     "tags": [
       "국물요리",
-      "주말",
-      "01ontology"
+      "주말"
     ],
-    "filters": [
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "돼지고기 사태": {
         "amount": 600,
@@ -975,7 +998,11 @@ window.ontologyRecipeDetails = [
         "amount": 200,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "PT30H-1710M",
+    "timeBasis": "estimate",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "원문 시간 필드가 잘못되어 60분은 예상값입니다. 압력 해제 시간은 별도이며 사용하는 압력솥의 안내를 따르세요."
   },
   {
     "sourceRecipeId": "1480748",
@@ -985,7 +1012,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "소고기 감자볶음 덮밥",
     "servingsText": "2인분",
-    "time": 45,
+    "time": 60,
     "difficultyText": "초급",
     "cuisine": "asian",
     "sale": [
@@ -1031,26 +1058,27 @@ window.ontologyRecipeDetails = [
     "steps": [
       "소고기를 청주·후추·마늘에 버무려 10분 밑간한다.",
       "감자는 1cm 두께로, 양파는 채 썰고 대파와 고추는 어슷 썬다.",
-      "달군 냄비에 소고기를 볶다가 겉면이 익으면 감자를 넣는다.",
+      "달군 냄비에 식용유를 두르고 소고기를 볶다가 겉면이 익으면 감자를 넣는다.",
       "물 2컵을 붓고 끓으면 양파와 간장·고춧가루·물엿·마늘을 넣는다.",
-      "중불에서 국물이 절반 이하로 줄고 감자가 익을 때까지 졸인다.",
+      "중불에서 국물이 처음의 1/2~2/3 정도로 줄고 감자가 익을 때까지 졸인다.",
       "불린 당면·대파·고추를 넣어 2~3분 익힌 뒤 밥 위에 올린다."
     ],
     "tags": [
       "덮밥",
-      "든든한",
-      "01ontology"
+      "든든한"
     ],
     "filters": [
-      "asian",
-      "onepan"
+      "asian"
     ],
     "requiredAmounts": {
       "불고기용 소고기": {
         "amount": 300,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "60분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7054761",
@@ -1093,26 +1121,27 @@ window.ontologyRecipeDetails = [
     "steps": [
       "돼지고기에 감자전분을 넣어 고루 버무린다.",
       "파프리카·고추·양파는 모두 같은 굵기로 채 썬다.",
-      "연기가 날 정도로 달군 팬에서 고기를 센불로 볶아 따로 덜어둔다.",
+      "잘 달군 팬에서 고기를 센불로 볶아 따로 덜어둔다.",
       "같은 팬에 식용유·고추기름·마늘을 넣고 채소를 2분 볶는다.",
       "고기·간장·굴소스·후추를 넣어 센불에서 빠르게 섞고 간을 맞춘다.",
-      "참기름을 소량 두르고 꽃빵이나 밥과 함께 낸다."
+      "접시에 담아 낸다. 참기름이나 찐 꽃빵 곁들임은 선택 사항이며 장보기 목록에 포함하지 않았다."
     ],
     "tags": [
       "중식",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
     "filters": [
-      "asian",
-      "onepan"
+      "asian"
     ],
     "requiredAmounts": {
       "잡채용 돼지고기": {
         "amount": 300,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7025476",
@@ -1122,7 +1151,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "치즈 오븐 토마토 파스타",
     "servingsText": "2인분",
-    "time": 35,
+    "time": 30,
     "difficultyText": "초급",
     "cuisine": "western",
     "sale": [
@@ -1158,8 +1187,7 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "오븐",
-      "파스타",
-      "01ontology"
+      "파스타"
     ],
     "filters": [],
     "requiredAmounts": {
@@ -1167,7 +1195,10 @@ window.ontologyRecipeDetails = [
         "amount": 150,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6918204",
@@ -1217,13 +1248,13 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "채소 파스타",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
-    "filters": [
-      "onepan"
-    ],
-    "requiredAmounts": {}
+    "filters": [],
+    "requiredAmounts": {},
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6608766",
@@ -1238,7 +1269,7 @@ window.ontologyRecipeDetails = [
     "cuisine": "western",
     "sale": [
       "파스타",
-      "소시지",
+      "속을 꺼낼 수 있는 수제 소시지",
       "토마토소스",
       "바질",
       "올리브유"
@@ -1252,7 +1283,7 @@ window.ontologyRecipeDetails = [
       "올리브유 1T"
     ],
     "steps": [
-      "파스타를 삶을 소금물을 먼저 끓인다.",
+      "파스타를 삶을 물을 먼저 끓인다.",
       "소시지 속을 꺼내 같은 크기의 미트볼로 빚는다.",
       "중불 팬에 올리브유를 두르고 미트볼 겉면을 굴려가며 노릇하게 굽는다.",
       "토마토소스를 붓고 뚜껑을 덮어 미트볼 중심까지 익도록 5~7분 끓인다.",
@@ -1261,8 +1292,7 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "파스타",
-      "든든한",
-      "01ontology"
+      "든든한"
     ],
     "filters": [],
     "requiredAmounts": {
@@ -1274,7 +1304,10 @@ window.ontologyRecipeDetails = [
         "amount": 250,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6920555",
@@ -1301,7 +1334,8 @@ window.ontologyRecipeDetails = [
       "소금",
       "파마산치즈",
       "허브",
-      "설탕"
+      "설탕",
+      "후추"
     ],
     "missing": [],
     "detailIngredients": [
@@ -1319,31 +1353,30 @@ window.ontologyRecipeDetails = [
       "소금 1t",
       "파마산치즈가루 1t",
       "파슬리 1t",
-      "설탕 1t"
+      "설탕 1t",
+      "후추 1t (원문 조리 단계)"
     ],
     "steps": [
       "끓는 소금물에 파스타를 8분 삶고 면수를 한 컵 남긴다.",
       "마늘과 올리브는 편 썰고 버섯과 양파는 채 썬다.",
       "팬에 올리브유·마늘·건고추를 넣고 약불에서 마늘이 연한 금색이 되게 익힌다.",
-      "버섯·양파·올리브를 넣고 중강불에서 수분이 줄 때까지 볶는다.",
+      "버섯·양파·올리브에 맛술 1T·올리고당 1T·설탕 1t·파마산치즈가루 1t·소금 1t·후추 1t·바질가루 1t를 넣어 볶는다.",
       "면과 면수 3큰술을 넣고 팬을 흔들어 오일과 물이 걸쭉하게 섞이도록 한다.",
       "소금·후추·바질로 간하고 파마산치즈와 파슬리를 뿌린다."
     ],
     "tags": [
-      "채식",
-      "파스타",
-      "01ontology"
+      "파스타"
     ],
-    "filters": [
-      "vegetarian",
-      "onepan"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "파스타": {
         "amount": 150,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7022427",
@@ -1389,18 +1422,14 @@ window.ontologyRecipeDetails = [
       "감자를 1.5cm 크기로 썰어 소금물에서 15분 정도 반쯤 익힌다.",
       "냄비에 버터를 녹이고 밀가루를 넣어 약불에서 2분 볶아 루를 만든다.",
       "우유와 생크림을 조금씩 부으며 저어 덩어리 없는 소스를 만든다.",
-      "소금·후추로 간하고 양파·마늘·버섯 등 준비한 채소를 넣는다.",
-      "그라탕 용기에 감자와 소스를 번갈아 담고 포일을 덮어 180°C에서 20분 굽는다.",
+      "소금·후추로 간하고 양파·마늘·버섯 등 준비한 채소와 딜을 넣는다.",
+      "그라탕 용기에 감자와 소스를 번갈아 담고 포일을 덮어 예열한 180°C 오븐에서 20분 굽는다.",
       "포일을 벗기고 치즈를 올려 190°C에서 15~20분 더 구운 뒤 5분 식힌다."
     ],
     "tags": [
-      "오븐",
-      "채식",
-      "01ontology"
+      "오븐"
     ],
-    "filters": [
-      "vegetarian"
-    ],
+    "filters": [],
     "requiredAmounts": {
       "감자": {
         "amount": 150,
@@ -1418,7 +1447,10 @@ window.ontologyRecipeDetails = [
         "amount": 20,
         "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "60분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6280691",
@@ -1436,7 +1468,8 @@ window.ontologyRecipeDetails = [
       "베이컨",
       "소금",
       "후추",
-      "밀가루/부침가루"
+      "밀가루/부침가루",
+      "식용유"
     ],
     "missing": [],
     "detailIngredients": [
@@ -1444,24 +1477,24 @@ window.ontologyRecipeDetails = [
       "베이컨",
       "소금 약간",
       "후추 약간",
-      "밀가루나부침가루"
+      "밀가루나부침가루",
+      "식용유 (팬 조리를 위한 추가 재료, 양 직접 확인)"
     ],
     "steps": [
       "감자는 가늘게 채 썰고 물기를 손이나 면포로 단단히 짠다.",
       "베이컨도 가늘게 썰어 감자와 섞는다.",
-      "소금·후추와 밀가루를 소량 넣어 감자끼리 겨우 붙는 정도로 버무린다.",
+      "소금·후추로 간하고 섞는다. 모양을 잡기 위한 밀가루나 부침가루는 필요하면 조금 넣는다.",
       "중불 팬에 기름을 두르고 반죽을 얇고 단단하게 눌러 펼친다.",
       "밑면이 짙은 금색이 되면 접시를 이용해 뒤집고 반대쪽도 바삭하게 굽는다."
     ],
     "tags": [
-      "독일식",
-      "채식 선택",
-      "01ontology"
+      "독일식"
     ],
-    "filters": [
-      "onepan"
-    ],
-    "requiredAmounts": {}
+    "filters": [],
+    "requiredAmounts": {},
+    "sourceTimeText": null,
+    "timeBasis": "estimate",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6943215",
@@ -1499,18 +1532,16 @@ window.ontologyRecipeDetails = [
       "블렌더에 감자·양파·우유를 넣고 곱게 간다.",
       "냄비로 옮겨 중불에서 저어가며 데우고 우유로 원하는 농도를 맞춘다.",
       "끓기 시작하면 약불로 줄이고 치킨스톡과 소금으로 간한다.",
-      "후추나 치즈를 뿌리고 구운 빵과 함께 낸다."
+      "후추로 마무리한다. 치즈와 구운 빵 곁들임은 선택 사항이며 장보기 목록에 포함하지 않았다."
     ],
     "tags": [
-      "수프",
-      "채식",
-      "01ontology"
+      "수프"
     ],
-    "filters": [
-      "vegetarian",
-      "onepan"
-    ],
-    "requiredAmounts": {}
+    "filters": [],
+    "requiredAmounts": {},
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7036199",
@@ -1555,13 +1586,13 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "전",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
-    "filters": [
-      "onepan"
-    ],
-    "requiredAmounts": {}
+    "filters": [],
+    "requiredAmounts": {},
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "7039038",
@@ -1571,11 +1602,11 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "새우젓 애호박볶음",
     "servingsText": "4인분",
-    "time": 25,
+    "time": 15,
     "difficultyText": "아무나",
     "cuisine": "korean",
     "sale": [
-      "주키니",
+      "애호박",
       "소금",
       "양파",
       "대파",
@@ -1602,23 +1633,18 @@ window.ontologyRecipeDetails = [
       "애호박을 5mm 반달 모양으로 썰어 소금을 뿌리고 15분 절인 뒤 물기를 짠다.",
       "양파는 채 썰고 대파와 홍고추는 잘게 썬다.",
       "중불 팬에 기름을 두르고 마늘과 대파를 30초 볶아 향을 낸다.",
-      "양파와 애호박을 넣고 센불에서 2분 볶는다.",
+      "양파와 애호박을 넣고 중불에서 약 2분 볶는다.",
       "새우젓과 물 4큰술을 넣고 약불로 줄여 2~3분 익힌다.",
       "간을 확인하고 불을 끈 뒤 홍고추와 통깨를 넣는다."
     ],
     "tags": [
       "밑반찬",
-      "한 팬",
-      "01ontology"
+      "한 팬"
     ],
     "filters": [
-      "onepan"
+      "quick"
     ],
     "requiredAmounts": {
-      "주키니": {
-        "amount": 350,
-        "unit": "g"
-      },
       "양파": {
         "amount": 150,
         "unit": "g"
@@ -1630,8 +1656,16 @@ window.ontologyRecipeDetails = [
       "고추": {
         "amount": 12,
         "unit": "g"
+      },
+      "애호박": {
+        "amount": 350,
+        "unit": "g"
       }
-    }
+    },
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "원문 재료는 애호박입니다. 주키니와 동일한 재료로 취급하지 않습니다."
   },
   {
     "sourceRecipeId": "7061001",
@@ -1670,14 +1704,16 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "아침",
-      "채식",
-      "01ontology"
+      "채식"
     ],
     "filters": [
-      "quick",
-      "vegetarian"
+      "vegetarian",
+      "quick"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "5분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   },
   {
     "sourceRecipeId": "6959935",
@@ -1687,7 +1723,7 @@ window.ontologyRecipeDetails = [
     "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
     "title": "프랑스식 당근 라페",
     "servingsText": "2인분",
-    "time": 30,
+    "time": 210,
     "difficultyText": "초급",
     "cuisine": "western",
     "sale": [
@@ -1716,14 +1752,16 @@ window.ontologyRecipeDetails = [
     ],
     "tags": [
       "샐러드",
-      "채식",
-      "01ontology"
+      "채식"
     ],
     "filters": [
-      "quick",
       "vegetarian"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "30분",
+    "timeBasis": "estimate",
+    "sourceCheckedAt": "2026-09-08",
+    "recipeNote": "준비 약 30분 + 냉장 숙성 최소 3시간. 바로 먹는 30분 메뉴가 아닙니다."
   },
   {
     "sourceRecipeId": "6875048",
@@ -1763,14 +1801,14 @@ window.ontologyRecipeDetails = [
       "샌드위치 메이커나 약불 팬에서 양면이 노릇하고 치즈가 녹을 때까지 굽는다."
     ],
     "tags": [
-      "간단식",
-      "채식",
-      "01ontology"
+      "간단식"
     ],
     "filters": [
-      "quick",
-      "vegetarian"
+      "quick"
     ],
-    "requiredAmounts": {}
+    "requiredAmounts": {},
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "sourceCheckedAt": "2026-09-08"
   }
 ];

@@ -5,8 +5,8 @@ the 07.09.2026 recipe data. Existing postcode/store paths remain valid, while
 the page presents a postcode selector followed by the supermarkets found under
 that postcode in the CSV. Each selected supermarket has 30 recipes across
 Korean, Asian, Western, vegetarian, quick, and breakfast categories.
-Keep the entry pages and their recipe-data copies identical; the regression
-test checks this until the pages have a shared rendering pipeline.
+Run `node scripts/sync-meal-pages.mjs` after changing shared assets or the
+canonical HTML. It synchronizes legacy entry pages and content-hashed asset URLs.
 
 Prices are whole selling-unit prices, represented as integer euro cents.
 The catalog links every postcode/store record to its exact row in
@@ -21,8 +21,9 @@ change package counts, and exclude ingredients they already own. Price and
 pantry changes apply across the current page; package counts belong to each
 recipe basket or the weekly basket. These settings and the shopping checklist
 are saved in localStorage per postcode and supermarket, with validation when
-restored. Storage
-failures leave the page usable and show that changes cannot be saved.
+restored. Lunch and dinner plans are independent. When the CSV snapshot changes,
+pantry/checks persist but old manual prices and unit overrides are invalidated.
+Storage failures leave the page usable and show that changes cannot be saved.
 
 Use the recipe or weekly drawer to add missing ingredients to the checklist.
 Owned ingredients are excluded and removed from an existing checklist. Repeated
@@ -41,3 +42,15 @@ recommendation ranking.
 
 Run `node scripts/generate-meal-offers.mjs public/offers/supermarket_food_offers_2026-09-07.csv public/mohemeokji/meal-package-prices.js` to refresh the catalog, then
 `node --test tests/mealShopping.test.mjs` from the repository root.
+
+For a new weekly CSV, run the non-publishing preflight first:
+`node scripts/prepare-meal-week.mjs INPUT.csv --week-start YYYY-MM-DD --output-dir NEW_DIRECTORY`.
+Review the resulting audit before replacing published files. Invalid rows fail
+before writing. Conditional offers are archived but excluded from automatic totals.
+Current prices are filtered by each item's validity dates in Europe/Berlin.
+
+The selected static recipe catalog is not a live search over the entire ontology.
+Source timing metadata and estimated ready-to-eat times are identified separately.
+See the maintained [weekly skill](../../docs/skills/mohemeokji-weekly/SKILL.md) and
+[2026-09-08 audit](../../docs/mohemeokji-audit-2026-09-08.md) for source requirements,
+tested behavior, collection prompt and remaining feature limits.
