@@ -2,8 +2,8 @@
 window.mealPackagePricesByArea = {
   "40468": {
     "Netto": {
-      "닭고기": {
-        "ingredient": "닭고기",
+      "닭안심": {
+        "ingredient": "닭안심",
         "product": "Hähnchen-Innenfilet",
         "priceCents": 379,
         "appPriceCents": null,
@@ -520,8 +520,8 @@ window.mealPackagePricesByArea = {
   },
   "44369": {
     "Netto": {
-      "닭고기": {
-        "ingredient": "닭고기",
+      "닭안심": {
+        "ingredient": "닭안심",
         "product": "Hähnchen-Innenfilet",
         "priceCents": 379,
         "appPriceCents": null,
@@ -1057,8 +1057,8 @@ window.mealPackagePricesByArea = {
   },
   "52062": {
     "Netto": {
-      "닭고기": {
-        "ingredient": "닭고기",
+      "닭안심": {
+        "ingredient": "닭안심",
         "product": "Hähnchen-Innenfilet",
         "priceCents": 379,
         "appPriceCents": null,
@@ -1779,7 +1779,7 @@ window.mealOfferMeta = {
         "label": "Netto · 40468 · Düsseldorf",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "offerCount": "173행",
-        "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭안심 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }
@@ -1801,7 +1801,7 @@ window.mealOfferMeta = {
         "label": "Netto · 44369 · Dortmund",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "offerCount": "175행",
-        "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭안심 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1839,7 +1839,7 @@ window.mealOfferMeta = {
         "label": "Netto · 52062 · Aachen",
         "branch": "Peterstr. 50, 52062 Aachen",
         "offerCount": "174행",
-        "offerSummary": "닭고기 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭안심 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },

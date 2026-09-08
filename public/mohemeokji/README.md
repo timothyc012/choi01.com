@@ -51,6 +51,22 @@ Current prices are filtered by each item's validity dates in Europe/Berlin.
 
 The selected static recipe catalog is not a live search over the entire ontology.
 Source timing metadata and estimated ready-to-eat times are identified separately.
+Recommendations use `meal-recommendations.js` and editorial
+`recommendationProfile` fields (named primary ingredients, family, cooking method,
+and main/side/breakfast role). Primary-ingredient discounts outweigh incidental
+seasoning or vegetable matches. Automatic weekly selection prefers at most two
+of one family and avoids consecutive repeats when another family is available;
+it relaxes that constraint only when the remaining pool cannot satisfy it.
+Sides and breakfast snacks remain in the manual library, outside automatic meals.
+
+`먹었어요` records one source recipe per date and lunch/dinner slot for 14 days.
+The browser-local history is shared across stores using source IDs; selecting
+or planning a recipe alone does not record consumption. Today's record can be
+cancelled in its recipe drawer. No earlier meals are inferred. Saved plans are
+preserved; the auto-plan button applies the new recommendation policy.
+Netto's `Hähnchen-Innenfilet` uses the distinct `닭안심` offer key. Breast recipes
+show it only as a substitution candidate and do not auto-price it as breast.
+
 See the maintained [weekly skill](../../docs/skills/mohemeokji-weekly/SKILL.md) and
 [2026-09-08 audit](../../docs/mohemeokji-audit-2026-09-08.md) for source requirements,
 tested behavior, collection prompt and remaining feature limits.

@@ -17,6 +17,7 @@ For every selected dish: align shopping identities with both the ingredient tabl
 5. Routing: existing paths with/without slash, valid/invalid query combinations, a postcode with one chain, a newly added postcode. One chain's source/period/prices must never be attributed to another.
 6. Real browser: desktop and explicitly set 390px mobile viewport; open detail, pantry checkbox, add/check/uncheck groceries; store selection updates products/prices; restored state survives reload. Capture screenshots and console logs. Use a local static server for mutable QA so no real user checklist is changed.
 7. Deploy: stage only related files, confirm remote commit, compare deployed HTML plus all changed script hashes, then a read-only production smoke test. Report any locked-screen or access failure honestly.
+8. Recommendations: chicken-canned curry cannot outrank discounted-main alternatives just because rice/garlic/carrot match. Check week family counts and adjacency; side dishes stay out of automatic meals even when all mains have eaten history. Selecting a meal must not create eaten history. Clicking `먹었어요` must change subsequent ranking, persist across store changes, allow cancelling today's entry, and expire after 14 days. Distinguish breast from tenderloin in both the visible offer explanation and basket.
 
 ## Scope gaps to surface
 

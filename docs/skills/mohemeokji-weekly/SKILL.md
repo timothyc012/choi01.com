@@ -37,6 +37,8 @@ Use actual source recipe IDs, titles, authors, quantities, ordered steps and URL
 
 Preserve source quantity labels. Missing quantities remain missing. Preserve `sourceTimeText`; mark editorial duration estimates through `timeBasis`. Account for marinating/resting/chilling and ingredient preparation state. Paraphrase instructions accurately; do not paste source images or long verbatim instructions. Include essential ingredients used only in steps, with their source-step provenance. Label optional accompaniments as optional. Do not invent temperatures to make instructions look detailed. Dietary flags require evidence from all ingredients and the actual product.
 
+Every selected recipe also needs editorial `recommendationProfile`: `primaryIngredients` (exact ingredient keys that define the dish), `family`, `method`, and `kind` (`main`, `side`, `breakfast`). Do not classify chicken curry's rice/garlic as its defining discounted protein. `meal-recommendations.js` prioritizes main-ingredient offers, varies family/method, keeps sides out of automatic meals, and demotes explicitly recorded eaten recipes for 14 days across stores. Never infer consumption from a plan or reset eaten history during a CSV update. `Hähnchen-Innenfilet` is a separate `닭안심` offer; breast recipes may show a candidate note but must not automatically charge that price as an exact breast match.
+
 ## Apply and verify
 
 After evidence review, copy the dated CSV to `public/offers/` and regenerate:
@@ -45,7 +47,7 @@ After evidence review, copy the dated CSV to `public/offers/` and regenerate:
 node scripts/generate-meal-offers.mjs public/offers/INPUT.csv public/mohemeokji/meal-package-prices.js
 node scripts/sync-meal-pages.mjs
 node scripts/sync-meal-pages.mjs --check
-node --test tests/mealShopping.test.mjs tests/mealWeekly.test.mjs tests/mealWeekPreflight.test.mjs
+node --test tests/mealShopping.test.mjs tests/mealWeekly.test.mjs tests/mealWeekPreflight.test.mjs tests/mealRecommendations.test.mjs
 npm test
 npm run build
 npm run typecheck

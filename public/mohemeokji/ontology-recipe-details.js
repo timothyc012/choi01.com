@@ -48,7 +48,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "5분",
     "timeBasis": "source",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "원문은 이미 익혀 간이 된 닭가슴살을 사용합니다. 생닭으로 대체하는 조리법이 아닙니다."
+    "recipeNote": "원문은 이미 익혀 간이 된 닭가슴살을 사용합니다. 생닭으로 대체하는 조리법이 아닙니다.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "익힌 닭가슴살"
+      ],
+      "family": "chicken",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6842456",
@@ -103,7 +111,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭고기"
+      ],
+      "family": "chicken",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6967405",
@@ -159,7 +175,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "5분",
     "timeBasis": "source",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "원문은 간이 된 블랙페퍼 닭가슴살을 사용합니다. 제품의 가열 안내를 확인하세요."
+    "recipeNote": "원문은 간이 된 블랙페퍼 닭가슴살을 사용합니다. 제품의 가열 안내를 확인하세요.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "블랙페퍼 닭가슴살"
+      ],
+      "family": "chicken",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6856968",
@@ -220,7 +244,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭가슴살캔"
+      ],
+      "family": "chicken",
+      "method": "curry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "3526900",
@@ -292,7 +324,15 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": null,
     "timeBasis": "estimate",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭고기"
+      ],
+      "family": "chicken",
+      "method": "fried",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6871908",
@@ -347,7 +387,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "15분",
     "timeBasis": "source",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "닭가슴살캔을 사용하는 레시피입니다. 생닭 가격을 연결하지 않습니다."
+    "recipeNote": "닭가슴살캔을 사용하는 레시피입니다. 생닭 가격을 연결하지 않습니다.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭가슴살캔"
+      ],
+      "family": "chicken",
+      "method": "wrap",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "5056237",
@@ -414,7 +462,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭고기"
+      ],
+      "family": "chicken",
+      "method": "wrap",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6988653",
@@ -469,7 +525,15 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "10분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭고기"
+      ],
+      "family": "chicken",
+      "method": "pasta",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "1633372",
@@ -532,7 +596,15 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭고기"
+      ],
+      "family": "chicken",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "7015342",
@@ -605,7 +677,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "20분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭고기"
+      ],
+      "family": "chicken",
+      "method": "salad",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6905374",
@@ -668,7 +748,16 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "60분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "돼지고기",
+        "김치"
+      ],
+      "family": "pork",
+      "method": "stew",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "3301330",
@@ -739,7 +828,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "60분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "돼지고기 앞다리살"
+      ],
+      "family": "pork",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "5207993",
@@ -792,7 +889,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "30분",
     "timeBasis": "estimate",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "원문 시간 표시는 30분이지만 재우기·굽기·휴지를 합쳐 약 75분을 예상합니다. 고기 무게가 없어 실제 소요시간은 달라집니다."
+    "recipeNote": "원문 시간 표시는 30분이지만 재우기·굽기·휴지를 합쳐 약 75분을 예상합니다. 고기 무게가 없어 실제 소요시간은 달라집니다.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "보쌈용 돼지고기/삼겹살"
+      ],
+      "family": "pork",
+      "method": "baked",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6903216",
@@ -859,7 +964,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "돼지고기 앞다리살"
+      ],
+      "family": "pork",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6976533",
@@ -915,7 +1028,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "돼지고기"
+      ],
+      "family": "pork",
+      "method": "grilled",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "7044610",
@@ -1002,7 +1123,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "PT30H-1710M",
     "timeBasis": "estimate",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "원문 시간 필드가 잘못되어 60분은 예상값입니다. 압력 해제 시간은 별도이며 사용하는 압력솥의 안내를 따르세요."
+    "recipeNote": "원문 시간 필드가 잘못되어 60분은 예상값입니다. 압력 해제 시간은 별도이며 사용하는 압력솥의 안내를 따르세요.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "돼지고기 사태"
+      ],
+      "family": "pork",
+      "method": "stew",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "1480748",
@@ -1078,7 +1207,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "60분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "불고기용 소고기"
+      ],
+      "family": "beef",
+      "method": "rice-bowl",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "7054761",
@@ -1141,7 +1278,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "잡채용 돼지고기"
+      ],
+      "family": "pork",
+      "method": "stirfry",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "7025476",
@@ -1198,7 +1343,16 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "파스타",
+        "모짜렐라치즈"
+      ],
+      "family": "pasta",
+      "method": "baked",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6918204",
@@ -1254,7 +1408,16 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "파스타",
+        "토마토"
+      ],
+      "family": "pasta",
+      "method": "pasta",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6608766",
@@ -1307,7 +1470,16 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "속을 꺼낼 수 있는 수제 소시지",
+        "파스타"
+      ],
+      "family": "sausage",
+      "method": "pasta",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6920555",
@@ -1376,7 +1548,16 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "파스타",
+        "버섯"
+      ],
+      "family": "pasta",
+      "method": "pasta",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "7022427",
@@ -1450,7 +1631,15 @@ window.ontologyRecipeDetails = [
     },
     "sourceTimeText": "60분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "감자"
+      ],
+      "family": "potato",
+      "method": "baked",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "6280691",
@@ -1494,7 +1683,15 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": null,
     "timeBasis": "estimate",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "감자"
+      ],
+      "family": "potato",
+      "method": "pancake",
+      "kind": "side"
+    }
   },
   {
     "sourceRecipeId": "6943215",
@@ -1541,7 +1738,15 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "감자"
+      ],
+      "family": "potato",
+      "method": "soup",
+      "kind": "side"
+    }
   },
   {
     "sourceRecipeId": "7036199",
@@ -1592,7 +1797,16 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "30분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "새우",
+        "주키니"
+      ],
+      "family": "seafood",
+      "method": "pancake",
+      "kind": "main"
+    }
   },
   {
     "sourceRecipeId": "7039038",
@@ -1665,7 +1879,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "15분",
     "timeBasis": "source",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "원문 재료는 애호박입니다. 주키니와 동일한 재료로 취급하지 않습니다."
+    "recipeNote": "원문 재료는 애호박입니다. 주키니와 동일한 재료로 취급하지 않습니다.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "애호박"
+      ],
+      "family": "zucchini",
+      "method": "stirfry",
+      "kind": "side"
+    }
   },
   {
     "sourceRecipeId": "7061001",
@@ -1713,7 +1935,16 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "5분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "복숭아",
+        "포도"
+      ],
+      "family": "fruit",
+      "method": "cold",
+      "kind": "breakfast"
+    }
   },
   {
     "sourceRecipeId": "6959935",
@@ -1761,7 +1992,15 @@ window.ontologyRecipeDetails = [
     "sourceTimeText": "30분",
     "timeBasis": "estimate",
     "sourceCheckedAt": "2026-09-08",
-    "recipeNote": "준비 약 30분 + 냉장 숙성 최소 3시간. 바로 먹는 30분 메뉴가 아닙니다."
+    "recipeNote": "준비 약 30분 + 냉장 숙성 최소 3시간. 바로 먹는 30분 메뉴가 아닙니다.",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "당근"
+      ],
+      "family": "carrot",
+      "method": "salad",
+      "kind": "side"
+    }
   },
   {
     "sourceRecipeId": "6875048",
@@ -1809,6 +2048,15 @@ window.ontologyRecipeDetails = [
     "requiredAmounts": {},
     "sourceTimeText": "15분",
     "timeBasis": "source",
-    "sourceCheckedAt": "2026-09-08"
+    "sourceCheckedAt": "2026-09-08",
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "토마토",
+        "모짜렐라치즈"
+      ],
+      "family": "toast",
+      "method": "toast",
+      "kind": "main"
+    }
   }
 ];

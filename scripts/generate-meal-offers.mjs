@@ -48,7 +48,8 @@ const legacyAreas = {
 };
 
 const rules = {
-  '닭고기': [/^Hähnchen-Innenfilet$/i, /^Hähnchenbrustfilet$/i],
+  '닭고기': [/^Hähnchenbrustfilet$/i],
+  '닭안심': [/^Hähnchen-Innenfilet$/i],
   '돼지고기': [/^Schweine-Schnitzel$/i, /^Schweinefilet lang$/i, /^Schweine-Rücken$/i, /^Schweine-Nackensteaks$/i],
   '다진고기': [/^Hackfleisch gemischt$/i, /Hackfleisch/i, /Hackbraten/i],
   '소고기': [/^Gulasch vom Rind$/i, /^Rib-Eye-Steak$/i, /^Entrecôte$/i, /Beef Burger/i, /Rinder-Burger/i],
@@ -151,7 +152,7 @@ export function generateCatalog(rows, sourcePublicPath) {
           && cents(row['행사가격']) !== null && (!conditions || /^(없음|none|unconditional)$/i.test(conditions))
           && (!row['최소구매수량'] || Number(row['최소구매수량']) === 1)
           && !/3\s*für\s*2|\d\s*\+\s*\d|ab\s*\d+\s*(stück|pack)/i.test(row['상품정보'])
-          && !(['닭고기','돼지고기','연어'].includes(ingredient) && /가열완료|훈제|통조림/.test(row['상품상태'] || ''));
+        && !(['닭고기','닭안심','돼지고기','연어'].includes(ingredient) && /가열완료|훈제|통조림/.test(row['상품상태'] || ''));
       });
       if (found) return found;
     }
