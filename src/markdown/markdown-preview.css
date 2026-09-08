@@ -16,6 +16,10 @@
   --mp-red: #a43d45;
   --mp-amber: #9a6a12;
   --mp-amber-soft: rgba(154, 106, 18, 0.10);
+  /* Reading measure for rendered markdown. Kept in sync with the standalone
+     .html export in exportHtmlDocument.ts, so a download looks like what the
+     preview showed. */
+  --mp-measure: 880px;
 }
 
 .mp-root.dark {
@@ -303,10 +307,15 @@ body {
 
 /* ---------- Rendered markdown ---------- */
 
-/* No width cap: the preview fills its pane. A capped, left-aligned column left
-   all the slack on one side, which reads as a broken layout rather than as a
-   reading measure — and the pane is already the constraint in split view. */
+/* A reading measure, centred. Capped but left-aligned was the bug: the slack
+   all piled up on one side and read as a broken layout. Centred, a narrow pane
+   still fills edge to edge and only a genuinely wide one gets margins — and it
+   gets them on both sides, which is what a measure is supposed to look like.
+   880px is wider than a prose-only column on purpose: tables and diagrams live
+   here too. */
 .mp-markdown {
+  max-width: var(--mp-measure);
+  margin: 0 auto;
   font-size: 16px;
   line-height: 1.72;
 }

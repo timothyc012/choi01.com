@@ -12,7 +12,7 @@ const EXPORT_STYLESHEET = `
   body {
     margin: 0 auto;
     padding: 48px 24px 96px;
-    max-width: 760px;
+    max-width: 880px;
     font-family: Aptos, "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
     font-size: 16px;
     line-height: 1.7;
@@ -30,10 +30,13 @@ const EXPORT_STYLESHEET = `
   pre { padding: 16px; overflow-x: auto; border: 1px solid #dfe7e2; border-radius: 8px; background: #fbfcfb; }
   pre code { background: none; padding: 0; }
   blockquote { padding-left: 16px; border-left: 3px solid #dfe7e2; color: #4f5a55; }
-  table { border-collapse: collapse; width: 100%; }
+  table { display: block; width: max-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
   th, td { padding: 8px 12px; border: 1px solid #dfe7e2; text-align: left; }
   th { background: #f4f7f5; }
   img { max-width: 100%; }
+  /* Mermaid writes its own width/height onto the SVG; without this a wide
+     diagram runs off the page in the downloaded file. */
+  svg { max-width: 100%; height: auto; }
   hr { height: 1px; border: 0; background: #dfe7e2; margin: 2em 0; }
   @media (prefers-color-scheme: dark) {
     body { color: #e8ede9; background: #131c19; }
