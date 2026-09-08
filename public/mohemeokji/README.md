@@ -3,8 +3,9 @@
 All six HTML entry pages share `meal-shopping.js`, `meal-package-prices.js`, and
 the 07.09.2026 recipe data. Existing postcode/store paths remain valid, while
 the page presents a postcode selector followed by the supermarkets found under
-that postcode in the CSV. Each selected supermarket has 30 recipes across
-Korean, Asian, Western, vegetarian, quick, and breakfast categories.
+that postcode in the CSV. The source archive currently contains 43 recipes.
+Each supermarket shows only dishes whose defining ingredients have a current
+offer in that postcode/store, so menu membership and counts vary by location.
 Run `node scripts/sync-meal-pages.mjs` after changing shared assets or the
 canonical HTML. It synchronizes legacy entry pages and content-hashed asset URLs.
 
@@ -53,11 +54,17 @@ The selected static recipe catalog is not a live search over the entire ontology
 Source timing metadata and estimated ready-to-eat times are identified separately.
 Recommendations use `meal-recommendations.js` and editorial
 `recommendationProfile` fields (named primary ingredients, family, cooking method,
-and main/side/breakfast role). Primary-ingredient discounts outweigh incidental
-seasoning or vegetable matches. Automatic weekly selection prefers at most two
+and main/side/breakfast role). A current primary-ingredient offer is required for
+visible menus and automatic meals; incidental garlic or carrot matches cannot
+qualify an unrelated dish. Automatic weekly selection prefers at most two
 of one family and avoids consecutive repeats when another family is available;
 it relaxes that constraint only when the remaining pool cannot satisfy it.
-Sides and breakfast snacks remain in the manual library, outside automatic meals.
+Eligible sides and breakfast snacks remain in the manual library, outside automatic
+meals. A short main-meal pool leaves days empty; snack-only stores show an explicit
+no-main-meal state. Stores with the same offers can legitimately share menus.
+`createMealRecipes(store)` creates the selected store's source archive. Saved plans
+resolve against that archive, including dishes no longer discounted, which are
+labelled as having no current primary-ingredient offer.
 
 `먹었어요` records one source recipe per date and lunch/dinner slot for 14 days.
 The browser-local history is shared across stores using source IDs; selecting
@@ -65,7 +72,14 @@ or planning a recipe alone does not record consumption. Today's record can be
 cancelled in its recipe drawer. No earlier meals are inferred. Saved plans are
 preserved; the auto-plan button applies the new recommendation policy.
 Netto's `Hähnchen-Innenfilet` uses the distinct `닭안심` offer key. Breast recipes
-show it only as a substitution candidate and do not auto-price it as breast.
+do not qualify through tenderloin. The new tenderloin recipes use their actual
+source cut. A recipe combining equal weights of pork and beef mince can use an
+explicit 50/50 mixed offer; pure pork mince uses the separate `돼지다짐육` key.
+
+After verifying the configured ontology database and tenant, selected source
+recipes can be exported without DB writes using `scripts/export-meal-recipes.sql`
+with psql's `recipe_ids` variable. The 13 additions were compared with the live
+`recipe-full` export on 2026-09-08, including quantities and ordered source steps.
 
 See the maintained [weekly skill](../../docs/skills/mohemeokji-weekly/SKILL.md) and
 [2026-09-08 audit](../../docs/mohemeokji-audit-2026-09-08.md) for source requirements,

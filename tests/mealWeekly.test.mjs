@@ -42,3 +42,13 @@ test('explicit selling basis overrides descriptive marketing text', () => {
   assert.equal(packageCatalog['10115'].Lidl['파스타'].pack, '500 g');
   assert.equal(packageCatalog['10115'].Lidl['파스타'].evidenceUrl, 'https://www.lidl.de/');
 });
+
+test('mince recipes distinguish pure pork, verified equal pork/beef blends and prepared products', () => {
+  const catalog = (product) => generateCatalog([row(product)], '/offers/next.csv').packageCatalog['10115'].Lidl;
+  assert.ok(catalog({상품명:'METZGERFRISCH Frisches Schweine-Hackfleisch'})['돼지다짐육']);
+  assert.equal(catalog({상품명:'METZGERFRISCH Frisches Schweine-Hackfleisch'})['다진고기'],undefined);
+  assert.ok(catalog({상품명:'Hackfleisch gemischt',상품정보:'500 g | 50% Schwein, 50% Rind'})['다진고기']);
+  assert.equal(catalog({상품명:'Hackfleisch gemischt',상품정보:'500 g | 70% Schwein, 30% Rind'})['다진고기'],undefined);
+  assert.equal(catalog({상품명:'Schweine-Hackfleisch',상품상태:'가열완료'})['돼지다짐육'],undefined);
+  assert.equal(catalog({상품명:'Schweine-Hackfleisch Röllchen'})['돼지다짐육'],undefined);
+});

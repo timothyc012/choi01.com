@@ -881,8 +881,8 @@ window.mealPackagePricesByArea = {
       }
     },
     "Lidl": {
-      "다진고기": {
-        "ingredient": "다진고기",
+      "돼지다짐육": {
+        "ingredient": "돼지다짐육",
         "product": "METZGERFRISCH Frisches Schweine-Hackfleisch",
         "priceCents": 399,
         "appPriceCents": null,
@@ -1628,8 +1628,8 @@ window.mealPackagePricesByArea = {
       }
     },
     "Lidl": {
-      "다진고기": {
-        "ingredient": "다진고기",
+      "돼지다짐육": {
+        "ingredient": "돼지다짐육",
         "product": "METZGERFRISCH Frisches Schweine-Hackfleisch",
         "priceCents": 399,
         "appPriceCents": null,
@@ -1819,7 +1819,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 44369 · Dortmund",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "offerCount": "90행",
-        "offerSummary": "다진고기 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
+        "offerSummary": "돼지다짐육 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1877,7 +1877,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 52064 · Aachen",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "offerCount": "90행",
-        "offerSummary": "다진고기 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
+        "offerSummary": "돼지다짐육 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }

@@ -568,7 +568,7 @@
           <nav class="nav-links" aria-label="식사 메뉴">
             <a href="#today">오늘 추천</a>
             <a href="#week">이번 주</a>
-            <a href="#library">메뉴 보관함</a>
+            <a href="#library">할인 메뉴</a>
             <a href="#groceries">장보기</a>
           </nav>
           <div class="location-picker" aria-label="장보기 지역과 마트">
@@ -683,8 +683,8 @@
             <header class="panel-header">
               <div>
                 <p class="panel-kicker mono">02 · MENU LIBRARY</p>
-                <h3>메뉴 보관함</h3>
-                <p class="panel-copy">다양성은 여기에 두고, 카드를 식단표 칸으로 끌어다 놓을 수 있습니다.</p>
+                <h3>이 마트 할인 메뉴</h3>
+                <p class="panel-copy">주재료 할인이 있는 메뉴만 모았습니다. 마트에 따라 목록과 개수가 달라집니다.</p>
               </div>
             </header>
             <div class="menu-controls">
@@ -767,13 +767,13 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="/mohemeokji/ontology-recipe-details.js?v=ac3f463bc9d6"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=ac3f463bc9d6"></script>
-    <script src="./meal-planner-recipe-data.js?v=ac3f463bc9d6"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=ac3f463bc9d6"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=ac3f463bc9d6"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=78e6e6e95d2a"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=78e6e6e95d2a"></script>
+    <script src="./meal-planner-recipe-data.js?v=78e6e6e95d2a"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=78e6e6e95d2a"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=78e6e6e95d2a"></script>
     <script>
-      const meals = (window.expandedMealExtras || []).slice();
+      const meals = [];
 
       const days = [
         { id:"mon", label:"월" }, { id:"tue", label:"화" }, { id:"wed", label:"수" },
@@ -790,6 +790,7 @@
       let activeArea = Object.hasOwn(areas, requestedArea) ? requestedArea : pathArea || (Object.hasOwn(areas, '44369') ? '44369' : Object.keys(areas)[0]);
       const requestedStore = locationParams.get("store");
       let activeStore = storesByArea[activeArea].includes(requestedStore) ? requestedStore : areas[activeArea].chain;
+      meals.push(...window.createMealRecipes(activeStore));
       const profile = profiles[activeArea][activeStore];
       let mealMoment = "저녁";
       let plan = {};
@@ -864,15 +865,15 @@
         const recommended = currentRecommendation();
         const cart = recommended ? mealBasket(recommended) : basketFor([], 'week');
         byId("todayCostLabel").textContent = cart.unknownCount ? "가격 확인된 재료 소계" : "재료 구매 합계";
-        byId("todayCost").textContent = shopping.amount(cart);
-        byId("todayCostNote").textContent = costNote(cart);
+        byId("todayCost").textContent = recommended ? shopping.amount(cart) : '—';
+        byId("todayCostNote").textContent = recommended ? costNote(cart) : '할인 주재료와 연결되는 식사 메뉴가 없습니다.';
         const weekCart = planBasket();
         byId("totalCostLabel").textContent = weekCart.unknownCount ? "이번 주 확인된 재료 소계" : "이번 주 장보기 합계";
         byId("totalCost").textContent = shopping.amount(weekCart);
         byId("totalCostNote").textContent = costNote(weekCart) + " 공통 재료는 한 번만 담습니다. 목록에서 필요한 포장 수를 확인하세요.";
       }
       function recommendationOptions() {
-        return {catalog:catalog[activeStore],history:mealHistory,date:dateInBerlin,moment:mealMoment};
+        return {catalog:catalog[activeStore],history:mealHistory,date:dateInBerlin,moment:mealMoment,requireMainOffer:true};
       }
       function activeMeals() {
         return recommendations.sequence(meals.filter((item) => item.store === activeStore),recommendationOptions());
@@ -914,16 +915,25 @@
       }
       function renderToday() {
         const item = currentRecommendation();
+        byId("sourceStatus").textContent = profile.label + (Object.keys(catalog[activeStore]).length ? " · 행사 재료 연결됨" : " · 오늘 유효한 행사 가격 없음");
+        byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
+        byId("decisionLabel").textContent = "오늘의 " + mealMoment;
+        renderHistoryStatus();
         ['acceptToday','todayShopping','nextRecommendation'].forEach((id)=>{ byId(id).disabled = !item; });
         if (!item) {
-          byId('todayTitle').textContent='추천할 식사 메뉴가 없습니다';
-          byId('todayReason').textContent='메뉴 보관함에서 직접 선택할 수 있습니다.';
+          byId('todayTitle').textContent='할인 주재료와 맞는 식사 메뉴가 없습니다';
+          byId('todayReason').textContent=activeMeals().length ? '현재 연결된 간단식·반찬은 아래 할인 메뉴에서 확인할 수 있습니다.' : '이 지점의 행사자료와 원문 레시피를 더 확보해야 합니다.';
+          byId('todayPrimaryOffer').textContent='다른 마트를 선택하거나 행사자료가 갱신된 뒤 확인해주세요.';
+          byId('todayTime').textContent='—';
+          byId('todayMatch').textContent='0개';
+          byId('todayIngredients').innerHTML='';
+          byId('whyList').innerHTML='<p class="panel-copy">일치하는 할인 메뉴가 없을 때는 다른 매장의 메뉴로 채우지 않습니다.</p>';
+          byId('alternativeList').innerHTML='';
+          renderCostSummary();
           renderMenu();
           return;
         }
         if (!byId('detailDrawer').classList.contains('open')) selectedMeal = item;
-        byId("sourceStatus").textContent = profile.label + (Object.keys(catalog[activeStore]).length ? " · 행사 재료 연결됨" : " · 오늘 유효한 행사 가격 없음");
-        byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment + " · 1순위";
         byId("todayTitle").textContent = item.title;
         const info=offerInfo(item);
@@ -941,7 +951,8 @@
           '<div class="why-item"><span class="why-index">03</span><div><b>반복을 줄여 추천합니다</b><span>같은 주재료·조리 방식과 최근 먹은 기록을 함께 봅니다.</span></div></div>';
         const pool = suggestedMeals();
         const recommendationIndex=pool.findIndex((entry)=>entry.id===item.id);
-        const alternatives = [pool[(recommendationIndex + 1) % pool.length], pool[(recommendationIndex + 2) % pool.length]].filter(Boolean);
+        const alternatives = [...pool.slice(recommendationIndex + 1), ...pool.slice(0, recommendationIndex + 1)].filter((alt)=>alt.id!==item.id).slice(0,2);
+        byId('nextRecommendation').disabled = !alternatives.length;
         byId("alternativeList").innerHTML = alternatives.map((alt) => '<button class="alternative-button" type="button" data-alternative="' + alt.id + '">' + alt.title + ' · ' + alt.time + '분</button>').join("");
         document.querySelectorAll("[data-alternative]").forEach((button) => button.addEventListener("click", () => {
           recommendationId = button.dataset.alternative;
@@ -957,7 +968,7 @@
           const dayNote = day.id === todayDay.id ? "<small>오늘</small>" : "";
           return '<div class="week-row' + todayClass + '"><div class="day">' + day.label + dayNote + '</div><div class="slot" data-day="' + day.id + '" tabindex="0" aria-label="' + day.label + '요일 ' + mealMoment + ' 메뉴 칸">' +
             (item
-              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + shopping.summary(mealBasket(item)) + '</span><span>' + item.store + '</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
+              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + shopping.summary(mealBasket(item)) + '</span><span>' + item.store + '</span>' + (offerInfo(item).mainOffers.length ? '' : '<span>저장한 메뉴 · 현재 주재료 할인 없음</span>') + '</div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
               : '<div class="slot-empty"><span>' + mealMoment + ' 메뉴를 넣어보세요</span><button class="pick-slot" data-day="' + day.id + '">메뉴 고르기</button></div>') +
             '</div></div>';
         }).join("");
@@ -1018,7 +1029,7 @@
           '<div class="tag-row"><span class="tag tag-source">' + item.store + '</span>' + item.tags.map((tag) => '<span class="tag">' + tag + '</span>').join("") + '</div>' +
           '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
           '</article>'
-        ).join("") : '<p class="panel-copy" style="padding:0 20px 20px">찾는 메뉴가 없습니다.</p>';
+        ).join("") : '<p class="panel-copy" style="padding:0 20px 20px">조건에 맞는 할인 메뉴가 없습니다. 다른 필터나 마트를 선택해주세요.</p>';
         document.querySelectorAll(".menu-item").forEach((card) => {
           card.addEventListener("click", (event) => { if (!event.target.closest("button")) openDetail(card.dataset.id); });
           card.addEventListener("keydown", (event) => { if (event.key === "Enter") openDetail(card.dataset.id); });
@@ -1201,7 +1212,7 @@
       byId("autoPlan").addEventListener("click", () => {
         plan = createAutoPlan();
         renderPlan();
-        showToast("할인 활용과 메뉴 다양성을 기준으로 이번 주를 채웠습니다");
+        showToast('이 마트의 할인 메뉴 '+Object.values(plan).filter(Boolean).length+'개로 식단을 구성했습니다');
       });
       byId('markEaten').addEventListener('click',()=>{
         if (!selectedMeal) return;

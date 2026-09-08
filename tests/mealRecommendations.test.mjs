@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import {generateCatalog,parseCsv} from '../scripts/generate-meal-offers.mjs';
 const context=vm.createContext({window:{}});
 const root=new URL('../public/mohemeokji/',import.meta.url);
 for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) {
@@ -10,6 +11,7 @@ for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-plan
 const engine=context.window.MealRecommendations;
 const meal=(id, primary, family, extra={})=>({id,sourceRecipeId:id,title:id,time:20,tags:[],sale:primary,missing:[],recommendationProfile:{primaryIngredients:primary,family,method:'stirfry'},...extra});
 const price={priceCents:100,pack:'500 g'};
+const fixtureCatalog=generateCatalog(parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv',import.meta.url),'utf8')),'/offers/supermarket_food_offers_2026-09-07.csv').packageCatalog;
 
 test('each source recipe has explicit editorial main-ingredient and variety metadata',()=>{
   for(const recipe of context.window.ontologyRecipeDetails){
@@ -54,6 +56,36 @@ test('limited pools remain usable without fabricating seven recipes',()=>{
   assert.equal(engine.sequence([one],{catalog:{},history:[],date:'2026-09-08'},7).length,1);
 });
 
+test('store menu membership requires a current main-ingredient offer, not incidental matches',()=>{
+  const chicken=meal('chicken',['닭고기'],'chicken',{sale:['닭고기','마늘'],missing:[]});
+  const salmon=meal('salmon',['연어'],'salmon');
+  const noodles=meal('noodles',['파스타'],'pasta');
+  assert.deepEqual([...engine.available([chicken,salmon,noodles],{catalog:{연어:price,마늘:price}})].map(m=>m.id),['salmon']);
+  assert.equal(engine.sequence([chicken],{catalog:{마늘:price},date:'2026-09-08',requireMainOffer:true},7).length,0);
+  assert.equal(engine.current([chicken],{catalog:{마늘:price},date:'2026-09-08',requireMainOffer:true}),null);
+});
+
+test('weekly fixture generates genuinely different store sets and keeps side-only shortages honest',()=>{
+  const options=store=>({catalog:context.window.MealShopping.currentCatalog(fixtureCatalog['44369'],'2026-09-08')[store],requireMainOffer:true,date:'2026-09-08'});
+  const menus=store=>engine.available(context.window.createMealRecipes(store),options(store));
+  const netto=menus('Netto'),lidl=menus('Lidl'),rewe=menus('REWE'),aldi=menus('ALDI Nord');
+  assert.ok(netto.some(r=>r.sourceRecipeId==='6965953'));
+  assert.ok(!lidl.some(r=>r.sourceRecipeId==='6965953'));
+  assert.ok(lidl.some(r=>r.sourceRecipeId==='6831097'));
+  assert.ok(!netto.some(r=>r.sourceRecipeId==='6831097'));
+  assert.ok(lidl.some(r=>r.sourceRecipeId==='1973163'));
+  assert.ok(!netto.some(r=>r.sourceRecipeId==='1973163'));
+  assert.ok(netto.some(r=>r.sourceRecipeId==='1483080'));
+  assert.ok(!lidl.some(r=>r.sourceRecipeId==='1483080'));
+  assert.ok(rewe.some(r=>r.sourceRecipeId==='7032812'));
+  assert.deepEqual(aldi.map(r=>r.sourceRecipeId).join(','),'6700719');
+  assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,2);
+  for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
+    assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
+  }
+});
+
 test('automatic lunch/dinner does not fill a meal slot with a side dish or breakfast snack',()=>{
   const main=meal('main',['닭고기'],'chicken');
   const side=meal('side',['당근'],'carrot',{recommendationProfile:{primaryIngredients:['당근'],family:'carrot',method:'salad',kind:'side'}});
@@ -68,10 +100,10 @@ test('automatic lunch/dinner does not fill a meal slot with a side dish or break
 });
 
 test('actual 44369 Netto top recommendation has a discounted main and never maps canned breast to tenderloin',()=>{
-  const catalog=context.window.mealPackagePricesByArea['44369'].Netto;
+  const catalog=fixtureCatalog['44369'].Netto;
   assert.ok(catalog['닭안심']);
   assert.equal(catalog['닭고기'],undefined);
-  const pool=context.window.expandedMealExtras.filter(m=>m.store==='Netto');
+  const pool=context.window.createMealRecipes('Netto');
   const result=engine.sequence(pool,{catalog,history:[],date:'2026-09-08',mealOnly:true},7);
   assert.notEqual(result[0].sourceRecipeId,'6856968');
   assert.ok(engine.explain(result[0],catalog).mainOffers.length>0);

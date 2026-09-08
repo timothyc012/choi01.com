@@ -6,6 +6,8 @@ Inspect the configured `01ontology-open` project's `packs/recipe/README.md`, obj
 
 The 2026-09-08 audit compared the 30 website recipes against the earlier `recipe-full` export and spot-checked original web pages. A URL ending in a recipe ID proves identity linkage, not instruction fidelity or product suitability. Keep source-author/title/ID, servings, difficulty, ingredient labels, ordered cooking steps, source time, and extraction timestamp. Do not assert all metadata was externally verified when only an export was compared.
 
+Later that day, 13 source-backed recipes were added for tenderloin, salmon, mince, banana and yogurt coverage, bringing the archive to 43. They were compared with a fresh read-only DB export, not all re-fetched from the original website. After checking the configured database and tenant, export selected IDs with `psql -X -qAt -v ON_ERROR_STOP=1 -v recipe_ids=ID,ID -d VERIFIED_DATABASE -f scripts/export-meal-recipes.sql`. Do not assume source snippets, catalogue size or a minimum step count proves completeness.
+
 For every selected dish: align shopping identities with both the ingredient table and required steps; separate optional additions; carry gram/ml quantities only when unambiguous; preserve cooked/canned qualifiers. Keep source time separate from estimated ready-to-eat time. Show resting/marinating/chilling instructions. If source instructions are missing, don't invent a three-line recipe: use another source-complete record or link with a clear unavailable-detail state.
 
 ## Test scenarios
@@ -18,6 +20,7 @@ For every selected dish: align shopping identities with both the ingredient tabl
 6. Real browser: desktop and explicitly set 390px mobile viewport; open detail, pantry checkbox, add/check/uncheck groceries; store selection updates products/prices; restored state survives reload. Capture screenshots and console logs. Use a local static server for mutable QA so no real user checklist is changed.
 7. Deploy: stage only related files, confirm remote commit, compare deployed HTML plus all changed script hashes, then a read-only production smoke test. Report any locked-screen or access failure honestly.
 8. Recommendations: chicken-canned curry cannot outrank discounted-main alternatives just because rice/garlic/carrot match. Check week family counts and adjacency; side dishes stay out of automatic meals even when all mains have eaten history. Selecting a meal must not create eaten history. Clicking `먹었어요` must change subsequent ranking, persist across store changes, allow cancelling today's entry, and expire after 14 days. Distinguish breast from tenderloin in both the visible offer explanation and basket.
+9. Store membership: compare eligible source IDs, not just first-card order. Every visible/automatic recipe needs a currently valid defining ingredient in that store. For the pinned September 7 CSV, 44369 Netto has 21, Lidl 11, REWE 5 and ALDI Nord 1 eligible menus; REWE has two automatic mains, ALDI Nord none. Next week's counts must follow its actual data. Verify no duplicate/self alternative buttons in small pools, truthful empty-state prices/buttons, and saved recipes remain accessible with a no-current-discount label when excluded from the new list.
 
 ## Scope gaps to surface
 

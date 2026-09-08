@@ -2058,5 +2058,855 @@ window.ontologyRecipeDetails = [
       "method": "toast",
       "kind": "main"
     }
+  },
+  {
+    "sourceRecipeId": "1396425",
+    "sourceUrl": "https://www.10000recipe.com/recipe/1396425",
+    "sourceTitle": "과일 요거트 샐러드",
+    "sourceAuthor": "유자차",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "과일 요거트 샐러드",
+    "servingsText": "1인분",
+    "time": 15,
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": [
+      "수박",
+      "복숭아",
+      "자두",
+      "바나나",
+      "플레인요거트"
+    ],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": [
+      "수박",
+      "복숭아",
+      "자두",
+      "바나나",
+      "플레인요구르트"
+    ],
+    "steps": [
+      "수박·복숭아·자두·바나나를 준비해 껍질과 씨 등 먹지 않는 부분을 손질한다.",
+      "과일을 한입 크기로 자른다.",
+      "볼에 플레인요거트를 담고 손질한 과일을 올린다. 원문에 재료량이 없어 먹을 양에 맞게 조절한다."
+    ],
+    "tags": [
+      "간단식"
+    ],
+    "filters": [
+      "quick"
+    ],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "복숭아",
+        "바나나",
+        "플레인요거트"
+      ],
+      "family": "fruit",
+      "method": "salad",
+      "kind": "breakfast"
+    },
+    "sourceStepCount": 3,
+    "recipeNote": "간단식으로 분류합니다. 원문에 과일과 요거트의 양이 없어 필요한 판매 수량은 직접 확인해야 합니다."
+  },
+  {
+    "sourceRecipeId": "1483080",
+    "sourceUrl": "https://www.10000recipe.com/recipe/1483080",
+    "sourceTitle": "미트볼 스파게티",
+    "sourceAuthor": "메기맹이",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "미트볼 스파게티",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": [
+      "파스타",
+      "다진고기",
+      "양파",
+      "마늘",
+      "후추",
+      "소금",
+      "토마토소스",
+      "식용유"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "다진고기": {
+        "amount": 300,
+        "unit": "g"
+      }
+    },
+    "detailIngredients": [
+      "스파게티면 2인분",
+      "돼지고기 다짐육 150g",
+      "소고기 다짐육 150g",
+      "양파 1/4개",
+      "다진마늘 1큰술",
+      "후추 약간",
+      "소금 약간",
+      "스파게티소스",
+      "식용유 (원문 조리 단계, 양 미표기)"
+    ],
+    "steps": [
+      "돼지고기 다짐육 150g과 소고기 다짐육 150g에 다진 양파·마늘·소금·후추를 넣는다.",
+      "찰기가 생길 때까지 충분히 치댄 후 한입 크기의 미트볼로 빚는다.",
+      "기름을 두른 팬에서 미트볼을 굴려가며 겉만 타지 않게 굽는다.",
+      "소금을 넣은 끓는 물에 스파게티를 원문 기준 약 8분 삶는다.",
+      "미트볼에 스파게티소스를 넣어 섞고 고기 속까지 익힌다.",
+      "면을 소스와 고루 섞어 담는다. 파마산치즈와 파슬리 토핑은 선택 사항이다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "다진고기"
+      ],
+      "family": "mixed-meat",
+      "method": "meatballs-pasta",
+      "kind": "main"
+    },
+    "sourceStepCount": 6,
+    "recipeNote": "원문은 돼지고기·소고기 다짐육을 각 150g 사용합니다. 할인 연결은 돼지 50%·소 50%가 확인된 혼합다짐육에 한하며, 두 고기의 합계 300g을 계산합니다."
+  },
+  {
+    "sourceRecipeId": "1749496",
+    "sourceUrl": "https://www.10000recipe.com/recipe/1749496",
+    "sourceTitle": "바나나 계란구이",
+    "sourceAuthor": "핑크엔젤",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "바나나 계란구이",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": [
+      "브로콜리",
+      "바나나",
+      "달걀",
+      "우유",
+      "소금",
+      "설탕/올리고당",
+      "식용유"
+    ],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": [
+      "브로콜리",
+      "바나나 1개",
+      "계란 2개",
+      "우유 2T",
+      "소금",
+      "설탕 (또는올리고당)",
+      "식용유 (원문 조리 단계, 소량)"
+    ],
+    "steps": [
+      "바나나는 양끝을 제거하고 동그랗게 썬다.",
+      "브로콜리를 짧게 데쳐 잘게 다진다.",
+      "달걀 2개에 우유 2T를 섞고 소금과 설탕 또는 올리고당으로 간한다.",
+      "달걀물에 브로콜리와 바나나를 섞는다.",
+      "기름을 얇게 바른 팬에 반죽을 나누어 넣고 뒤집어가며 달걀 반죽이 충분히 익도록 굽는다."
+    ],
+    "tags": [
+      "간단식"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "바나나"
+      ],
+      "family": "banana",
+      "method": "egg-pancake",
+      "kind": "breakfast"
+    },
+    "sourceStepCount": 4
+  },
+  {
+    "sourceRecipeId": "1973163",
+    "sourceUrl": "https://www.10000recipe.com/recipe/1973163",
+    "sourceTitle": "돼지고기 미트볼 조림",
+    "sourceAuthor": "예쁜포비",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "돼지고기 미트볼 조림",
+    "servingsText": "2인분",
+    "time": 60,
+    "sourceTimeText": "60분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "korean",
+    "sale": [
+      "돼지다짐육",
+      "당근",
+      "고추",
+      "양파",
+      "달걀",
+      "빵가루",
+      "소금",
+      "후추",
+      "포도씨유",
+      "케첩",
+      "고추장",
+      "스위트칠리소스",
+      "올리고당"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "돼지다짐육": {
+        "amount": 350,
+        "unit": "g"
+      },
+      "당근": {
+        "amount": 50,
+        "unit": "g"
+      }
+    },
+    "detailIngredients": [
+      "다진 돼지고기 350g",
+      "당근 50g",
+      "풋고추 1개",
+      "양파 1개",
+      "달걀 1개",
+      "빵가루 1/2컵",
+      "소금 1/2 작은술",
+      "후추 1/3작은술",
+      "포도씨유 5큰술",
+      "토마토 케첩 1.5큰술",
+      "고추장 1큰술",
+      "스위트 칠리소스 1큰술",
+      "올리고당 2/3큰술",
+      "물 1/2컵"
+    ],
+    "steps": [
+      "양파·당근·풋고추를 잘게 다지고 돼지다짐육 350g을 준비한다.",
+      "포도씨유를 조금 두른 팬에서 양파를 볶은 뒤 고기·당근·고추·달걀·빵가루·소금·후추와 충분히 치댄다.",
+      "지름 약 2cm의 미트볼을 빚고 기름을 넉넉히 두른 팬에서 약불로 굴려가며 속까지 익힌다.",
+      "케첩 1.5큰술·고추장 1큰술·스위트칠리소스 1큰술·올리고당 2/3큰술을 섞는다.",
+      "팬에 익힌 미트볼과 소스·물 1/2컵을 넣고 소스가 자작하게 남을 때까지 졸인다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "돼지다짐육"
+      ],
+      "family": "pork",
+      "method": "meatballs",
+      "kind": "main"
+    },
+    "sourceStepCount": 5
+  },
+  {
+    "sourceRecipeId": "4741814",
+    "sourceUrl": "https://www.10000recipe.com/recipe/4741814",
+    "sourceTitle": "연어스테이크",
+    "sourceAuthor": "서현마미",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "연어스테이크",
+    "servingsText": "1인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": [
+      "연어",
+      "빵가루",
+      "파슬리",
+      "소금",
+      "후추",
+      "올리브유",
+      "크림치즈",
+      "플레인요거트",
+      "양파",
+      "케이퍼",
+      "레몬",
+      "아가베시럽"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "크림치즈": {
+        "amount": 25,
+        "unit": "g"
+      },
+      "플레인요거트": {
+        "amount": 50,
+        "unit": "g"
+      }
+    },
+    "detailIngredients": [
+      "연어 1조각",
+      "빵가루 3Ts",
+      "파슬리가루 1/2Ts",
+      "굵은소금",
+      "후춧가루 약간",
+      "올리브오일 1/2Ts",
+      "크림치즈 25g",
+      "플레인요구르트 50g",
+      "곱게 다진 양파 2Ts",
+      "케이퍼 20~25알",
+      "레몬즙 1Ts",
+      "아가베시럽 1/3Ts",
+      "소금 2꼬집",
+      "후춧가루 약간"
+    ],
+    "steps": [
+      "연어에 소금과 후추로 밑간한 뒤 표면에 생긴 물기를 키친타월로 닦는다.",
+      "빵가루 3Ts에 파슬리 1/2Ts와 올리브유 1/2Ts를 섞어 촉촉하게 만든다.",
+      "크림치즈를 부드럽게 풀어 플레인요거트·레몬즙·아가베시럽·소금·후추와 섞고 다진 양파와 케이퍼를 넣는다. 소스는 차갑게 보관한다.",
+      "연어 앞뒤에 허브 빵가루를 골고루 묻힌다.",
+      "에어프라이어를 180°C로 약 3분 예열하고 연어를 굽는다. 원문은 6~7분을 제시하며, 두께와 기기에 따라 속까지 익도록 시간을 조절한다.",
+      "익힌 연어를 담고 요거트 소스를 곁들인다. 베이비채소·딸기 장식은 선택 사항이다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "연어"
+      ],
+      "family": "salmon",
+      "method": "air-fryer",
+      "kind": "main"
+    },
+    "sourceStepCount": 6
+  },
+  {
+    "sourceRecipeId": "6700719",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6700719",
+    "sourceTitle": "시금치요거트",
+    "sourceAuthor": "하나둘셋모카",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "시금치요거트",
+    "servingsText": "1인분",
+    "time": 10,
+    "sourceTimeText": "10분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": [
+      "시금치",
+      "요거트"
+    ],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": [
+      "시금치",
+      "요거트"
+    ],
+    "steps": [
+      "시금치를 씻어 데친 후 물기를 짠다.",
+      "요거트와 데친 시금치를 믹서에 넣고 곱게 간다.",
+      "컵에 담아 낸다. 원문에 재료별 양이 없어 농도와 구매량을 직접 조절한다."
+    ],
+    "tags": [
+      "간단식"
+    ],
+    "filters": [
+      "quick"
+    ],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "요거트"
+      ],
+      "family": "yogurt",
+      "method": "smoothie",
+      "kind": "breakfast"
+    },
+    "sourceStepCount": 3,
+    "recipeNote": "간단한 음료 레시피입니다. 원문은 시금치·요거트 두 재료와 3단계이며 분량을 명시하지 않습니다."
+  },
+  {
+    "sourceRecipeId": "6831097",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6831097",
+    "sourceTitle": "연어 간장조림",
+    "sourceAuthor": "나비효과s키친",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "연어 간장조림",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "asian",
+    "sale": [
+      "연어",
+      "맛술",
+      "소금",
+      "후추",
+      "간장",
+      "올리고당",
+      "참기름",
+      "마늘",
+      "양파",
+      "쪽파",
+      "카놀라유"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "연어": {
+        "amount": 200,
+        "unit": "g"
+      }
+    },
+    "detailIngredients": [
+      "연어 200g",
+      "정종",
+      "소금",
+      "후추",
+      "간장 1.5T",
+      "올리고당 1T",
+      "물 100ml",
+      "참기름",
+      "마늘",
+      "양파 1/2개",
+      "쪽파",
+      "카놀라유 (원문 조리 단계, 양 미표기)"
+    ],
+    "steps": [
+      "연어 200g을 먹기 좋은 크기로 나누고 소금·후추·정종 1/2스푼으로 밑간한다.",
+      "간장 1.5T·올리고당 1T·물 100ml에 참기름·다진 마늘·다진 양파를 섞어 양념한다.",
+      "카놀라유를 두른 팬에서 편 썬 마늘을 볶아 향을 낸다.",
+      "중불에서 연어 한 면을 익히고 뒤집은 뒤 양념 절반과 채 썬 양파 일부를 넣는다.",
+      "양념이 끓고 약 1분 뒤 다시 뒤집어 남은 양념을 넣고 연어 속까지 익힌다.",
+      "접시에 담아 얇게 썬 양파와 쪽파를 올린다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "연어"
+      ],
+      "family": "salmon",
+      "method": "braise",
+      "kind": "main"
+    },
+    "sourceStepCount": 7
+  },
+  {
+    "sourceRecipeId": "6831408",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6831408",
+    "sourceTitle": "훈제연어롤",
+    "sourceAuthor": "어진이",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "훈제연어롤",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": [
+      "훈제연어",
+      "치커리",
+      "무순",
+      "케이퍼",
+      "양파",
+      "마요네즈",
+      "머스터드",
+      "파슬리",
+      "후추"
+    ],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": [
+      "훈제연어",
+      "치커리",
+      "무순",
+      "케이퍼",
+      "양파",
+      "마요네즈",
+      "머스타드소스",
+      "파슬리가루",
+      "후추",
+      "다진양파"
+    ],
+    "steps": [
+      "치커리와 무순을 씻고 물기를 뺀다.",
+      "양파 일부는 가늘게 썰고 소스에 넣을 나머지는 잘게 다진다.",
+      "마요네즈와 머스터드에 다진 양파·파슬리·후추를 섞는다. 훈제연어 제품에 동봉 소스가 있다면 함께 사용한다.",
+      "훈제연어를 펴고 양파·무순·치커리·케이퍼를 올린다.",
+      "내용물이 흐트러지지 않게 말고 준비한 소스와 함께 담는다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "훈제연어"
+      ],
+      "family": "salmon",
+      "method": "cold-roll",
+      "kind": "main"
+    },
+    "sourceStepCount": 3,
+    "recipeNote": "원문에 인분 표시는 있지만 재료별 양은 없습니다. 훈제연어와 소스의 제품 안내를 확인하세요."
+  },
+  {
+    "sourceRecipeId": "6910345",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6910345",
+    "sourceTitle": "허니갈릭 연어",
+    "sourceAuthor": "제줌마",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "허니갈릭 연어",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": [
+      "연어",
+      "소금",
+      "후추",
+      "올리브유",
+      "간장",
+      "꿀",
+      "옥수수전분",
+      "마늘"
+    ],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": [
+      "연어 3덩이",
+      "소금 1꼬집",
+      "후추 1꼬집",
+      "올리브오일 2T (혹은 식용유)",
+      "물 5T",
+      "간장 5T",
+      "꿀 3T",
+      "옥수수 전분 2T",
+      "다진 마늘 (원문 조리 단계, 양 미표기)"
+    ],
+    "steps": [
+      "연어에 소금과 후추를 뿌려 밑간한다.",
+      "팬에 올리브유를 두르고 중불에서 연어 양면을 익힌 후 따뜻하게 보관한다.",
+      "팬에 다진 마늘을 넣어 약 30초 볶는다.",
+      "물 5T·간장 5T·꿀 3T를 넣어 섞는다.",
+      "옥수수전분을 물에 풀어 소스에 조금씩 넣고 농도를 맞춘다. 전분물을 만드는 물의 양은 원문에 적혀 있지 않다.",
+      "소스가 끓으면 익힌 연어를 넣고 양념을 끼얹으며 졸인다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "연어"
+      ],
+      "family": "salmon",
+      "method": "pan-grilled",
+      "kind": "main"
+    },
+    "sourceStepCount": 11
+  },
+  {
+    "sourceRecipeId": "6955759",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6955759",
+    "sourceTitle": "닭안심냉채",
+    "sourceAuthor": "서정's맘",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "닭안심냉채",
+    "servingsText": "4인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "korean",
+    "sale": [
+      "닭안심",
+      "양파",
+      "당근",
+      "파프리카",
+      "오이",
+      "간장",
+      "겨자",
+      "2배식초",
+      "레몬",
+      "마늘",
+      "설탕",
+      "매실청",
+      "소금"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "닭안심": {
+        "amount": 300,
+        "unit": "g"
+      }
+    },
+    "detailIngredients": [
+      "닭안심 300g",
+      "양파 1/2개",
+      "당근 1/5개",
+      "파프리카빨강 1/4개",
+      "파프리카노랑 1/4개",
+      "오이 1/2 개",
+      "간장 2T",
+      "연겨자 3T",
+      "2배식초 3T",
+      "레몬즙 3T",
+      "마늘 1T",
+      "설탕 3T",
+      "매실청 3T",
+      "소금 1꼬집"
+    ],
+    "steps": [
+      "끓는 물에 닭안심을 넣고 다시 끓어오르면 저어가며 원문 기준 10분 더 삶는다. 크기에 따라 속까지 익었는지 확인한다.",
+      "익힌 닭안심을 식히고 먹기 좋게 나눈다.",
+      "양파·당근·오이·빨강과 노랑 파프리카를 약 5cm 길이로 채 썬다.",
+      "간장 2T·연겨자 3T·2배식초 3T·레몬즙 3T·마늘 1T·설탕 3T·매실청 3T·소금 1꼬집을 섞는다.",
+      "접시에 닭안심과 채소를 담고 각자 먹을 만큼 덜어 소스를 취향에 맞게 곁들인다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭안심"
+      ],
+      "family": "chicken",
+      "method": "salad",
+      "kind": "main"
+    },
+    "sourceStepCount": 5
+  },
+  {
+    "sourceRecipeId": "6965953",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6965953",
+    "sourceTitle": "닭안심 간장조림",
+    "sourceAuthor": "요리조이",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "닭안심 간장조림",
+    "servingsText": "4인분",
+    "time": 15,
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "korean",
+    "sale": [
+      "닭안심",
+      "양배추",
+      "양파",
+      "당근",
+      "대파",
+      "고추",
+      "참기름",
+      "맛술",
+      "마늘",
+      "설탕",
+      "매실액",
+      "굴소스",
+      "간장",
+      "물엿",
+      "후추",
+      "통깨"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "닭안심": {
+        "amount": 800,
+        "unit": "g"
+      },
+      "맛술": {
+        "amount": 100,
+        "unit": "ml"
+      }
+    },
+    "detailIngredients": [
+      "닭안심살 800g",
+      "양배추 1장",
+      "양파 1/4개",
+      "당근 3T",
+      "대파 1/2개",
+      "매운고추 2개",
+      "참기름 2.5T",
+      "미향 100ml",
+      "다진마늘 1T",
+      "원당 2T (또는 설탕)",
+      "홍 매실액 1T",
+      "굴소스 1T",
+      "진간장 5T",
+      "물엿 2T",
+      "후춧가루 톡톡",
+      "통깨 적당량"
+    ],
+    "steps": [
+      "마늘 1T·설탕 2T·굴소스 1T·간장 5T·물엿 2T를 섞어 양념을 준비한다. 원문의 매실액은 양념에 곁들여 맛을 조절한다.",
+      "양배추와 일부 양파는 채 썰어 접시에 깔고, 남은 양파·당근·대파·고추는 작게 썬다.",
+      "팬에 참기름 2T를 두르고 중불에서 닭안심을 앞뒤로 익힌다.",
+      "미향 100ml를 넣어 익힌 뒤 닭안심을 건져 물기가 줄어들도록 볶는다.",
+      "썰어 둔 채소와 양념을 넣고 닭안심 양면에 양념이 배도록 졸인다.",
+      "고추를 넣어 뒤적이며 고기 속까지 익힌 후, 접시에 담아 후추·남은 참기름·통깨로 마무리한다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [
+      "quick"
+    ],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭안심"
+      ],
+      "family": "chicken",
+      "method": "braise",
+      "kind": "main"
+    },
+    "sourceStepCount": 13
+  },
+  {
+    "sourceRecipeId": "6970683",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6970683",
+    "sourceTitle": "닭안심살 볶음밥",
+    "sourceAuthor": "요리조이",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "닭안심살 볶음밥",
+    "servingsText": "3인분",
+    "time": 15,
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "korean",
+    "sale": [
+      "닭안심",
+      "당근",
+      "양파",
+      "느타리버섯",
+      "양배추",
+      "쌀",
+      "맛술",
+      "간장",
+      "생강",
+      "고추기름",
+      "후추",
+      "통깨"
+    ],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": [
+      "닭안심살 7개",
+      "당근 1/2T",
+      "양파 1/2개",
+      "맛타리버섯 1덩어리",
+      "양배추 1조각",
+      "밥 3공기",
+      "미향 1T",
+      "진간장 4T",
+      "다진생강 1/5T",
+      "고추기름 1T",
+      "후춧가루 톡톡",
+      "통깨 1T"
+    ],
+    "steps": [
+      "해동한 닭안심을 작게 썰어 미향 1T·간장 1T·다진 생강 1/5T로 밑간한다.",
+      "양파·버섯·당근·양배추를 작게 썬다.",
+      "팬에서 채소를 볶다가 밑간한 닭안심을 넣고 고기가 익도록 볶는다.",
+      "간장 2T와 고추기름 1T를 넣어 골고루 섞는다.",
+      "밥 3공기를 넣고 남은 간장 1T는 밥의 양과 간을 보며 더한다.",
+      "센불에서 고슬고슬하게 볶은 후 불을 끄고 후추와 통깨를 넣어 섞는다. 참기름·올리브유 마무리는 선택 사항이다."
+    ],
+    "tags": [
+      "할인 주재료"
+    ],
+    "filters": [
+      "quick"
+    ],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "닭안심"
+      ],
+      "family": "chicken",
+      "method": "rice-bowl",
+      "kind": "main"
+    },
+    "sourceStepCount": 10,
+    "recipeNote": "밥은 구매 목록에서 쌀로 묶습니다. 닭안심 개당 무게와 쌀 필요 중량은 원문에 없어 판매 수량을 직접 확인해야 합니다."
+  },
+  {
+    "sourceRecipeId": "7032812",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7032812",
+    "sourceTitle": "바나나 팬케이크",
+    "sourceAuthor": "숨숨집",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "바나나 팬케이크",
+    "servingsText": "2인분",
+    "time": 15,
+    "sourceTimeText": "15분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": [
+      "핫케이크믹스",
+      "우유",
+      "달걀",
+      "바나나",
+      "식용유"
+    ],
+    "missing": [],
+    "requiredAmounts": {
+      "우유": {
+        "amount": 270,
+        "unit": "ml"
+      }
+    },
+    "detailIngredients": [
+      "핫케이크믹스 1봉 (500g)",
+      "우유 270ml",
+      "계란 2개",
+      "바나나 2개",
+      "식용유 (원문 조리 단계, 소량)"
+    ],
+    "steps": [
+      "우유 270ml와 달걀 2개를 골고루 푼다.",
+      "부드러운 반죽을 원하면 달걀물을 체에 한 번 내린다.",
+      "핫케이크믹스 500g에 달걀물을 부어 섞는다.",
+      "바나나 2개를 약 1cm 두께로 썰어 반죽에 넣는다.",
+      "약불로 예열한 팬에 기름을 조금 바르고 반죽 묻힌 바나나를 올린다.",
+      "양면이 노릇하고 반죽 속까지 익도록 굽는다. 블루베리·시럽·슈가파우더 장식은 선택 사항이다."
+    ],
+    "tags": [
+      "간단식"
+    ],
+    "filters": [
+      "quick"
+    ],
+    "recommendationProfile": {
+      "primaryIngredients": [
+        "바나나"
+      ],
+      "family": "banana",
+      "method": "pancake",
+      "kind": "breakfast"
+    },
+    "sourceStepCount": 9
   }
 ];

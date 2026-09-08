@@ -39,6 +39,10 @@ Preserve source quantity labels. Missing quantities remain missing. Preserve `so
 
 Every selected recipe also needs editorial `recommendationProfile`: `primaryIngredients` (exact ingredient keys that define the dish), `family`, `method`, and `kind` (`main`, `side`, `breakfast`). Do not classify chicken curry's rice/garlic as its defining discounted protein. `meal-recommendations.js` prioritizes main-ingredient offers, varies family/method, keeps sides out of automatic meals, and demotes explicitly recorded eaten recipes for 14 days across stores. Never infer consumption from a plan or reset eaten history during a CSV update. `Hähnchen-Innenfilet` is a separate `닭안심` offer; breast recipes may show a candidate note but must not automatically charge that price as an exact breast match.
 
+Visible menus and automatic meals require a **currently valid primary-ingredient offer for the selected postcode/store** (`requireMainOffer`). Sorting a shared full library differently is insufficient. `createMealRecipes(store)` builds a source archive for saved-plan restoration, not the visible menu list. Keep old saved dishes accessible and label those without a current primary offer. Never force seven meals when fewer qualify; snack-only coverage needs an explicit empty main-meal state. Identical valid offers may legitimately produce overlapping lists. Report each store's eligible menu count and automatic-main count, then seek source-backed recipes for uncovered sale ingredients.
+
+Use `scripts/export-meal-recipes.sql` for read-only source export after verifying the database/tenant. Pass selected source IDs through psql's `recipe_ids` variable. Compare source labels, quantities, metadata and ordered instructions before adding records. Preserve naturally short, complete recipes; do not pad a two-ingredient snack to an arbitrary five steps. Distinguish plain from flavored yogurt and pure pork mince from verified 50/50 pork/beef blends.
+
 ## Apply and verify
 
 After evidence review, copy the dated CSV to `public/offers/` and regenerate:

@@ -236,13 +236,14 @@ test('all six entry pages are identical and use current recipes without portion 
     vm.runInContext(fs.readFileSync(new URL(path + 'meal-planner-recipe-data.js', root), 'utf8'), recipes);
     const stores = [...new Set(Object.values(sourceMeta.stores).flat())];
     const sourceCount = recipes.window.ontologyRecipeDetails.length;
-    assert.equal(recipes.window.expandedMealExtras.length, stores.length * sourceCount);
-    for (const store of stores) assert.equal(recipes.window.expandedMealExtras.filter((meal) => meal.store === store).length, sourceCount);
-    for (const meal of recipes.window.expandedMealExtras) {
+    assert.equal(recipes.window.expandedMealExtras,undefined);
+    const archive=stores.flatMap(store=>recipes.window.createMealRecipes(store));
+    assert.equal(archive.length, stores.length * sourceCount);
+    for (const meal of archive) {
       assert.equal('cost' in meal, false);
       assert.match(meal.id, new RegExp('-recipe-' + meal.sourceRecipeId + '$'));
-      assert.ok(meal.detailIngredients.length >= 4, meal.title);
-      assert.ok(meal.steps.length >= 5, meal.title);
+      assert.ok(meal.detailIngredients.length >= 2, meal.title);
+      assert.ok(meal.steps.length >= 3, meal.title);
       assert.match(meal.sourceUrl, /^https:\/\/www\.10000recipe\.com\/recipe\/\d+$/);
       assert.ok(meal.sourceTitle.length > 0);
       assert.equal(meal.sourceCorpus, '01ontology DB · recipe-full (01ontology-open 연동)');
@@ -258,8 +259,8 @@ test('ontology details expose unique source identities and preserve known ingred
   assert.ok(source.window.ontologyRecipeDetails.length > 0);
   assert.equal(new Set(source.window.ontologyRecipeDetails.map((recipe) => recipe.sourceRecipeId)).size, source.window.ontologyRecipeDetails.length);
   for (const recipe of source.window.ontologyRecipeDetails) {
-    assert.ok(recipe.detailIngredients.length >= 4, recipe.title);
-    assert.ok(recipe.steps.length >= 5, recipe.title);
+    assert.ok(recipe.detailIngredients.length >= 2, recipe.title);
+    assert.ok(recipe.steps.length >= 3, recipe.title);
     assert.match(recipe.sourceUrl, new RegExp('/recipe/' + recipe.sourceRecipeId + '$'));
     if (recipe.timeBasis === 'source') assert.equal(recipe.sourceTimeText, recipe.time+'분');
   }

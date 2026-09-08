@@ -58,11 +58,17 @@
   }
 
   function rank(meals, options) {
-    return meals.slice().sort((a,b)=>score(b,options)-score(a,options) || identity(a).localeCompare(identity(b)));
+    const eligible=options.requireMainOffer ? available(meals,options) : meals;
+    return eligible.slice().sort((a,b)=>score(b,options)-score(a,options) || identity(a).localeCompare(identity(b)));
+  }
+
+  function available(meals, {catalog = {}}) {
+    return meals.filter((meal)=>explain(meal,catalog).mainOffers.length>0);
   }
 
   function sequence(meals, options, count = meals.length) {
-    const eligible = options.mealOnly ? meals.filter((meal)=>!['side','breakfast'].includes(profile(meal).kind)) : meals;
+    const matched = options.requireMainOffer ? available(meals,options) : meals;
+    const eligible = options.mealOnly ? matched.filter((meal)=>!['side','breakfast'].includes(profile(meal).kind)) : matched;
     const remaining = [...new Map(eligible.map((meal)=>[identity(meal),meal])).values()];
     const result = [], families = new Map(), methods = new Map();
     while (remaining.length && result.length < count) {
@@ -88,5 +94,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {rank,sequence,current,explain,restoreHistory,recordMeal};
+  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal};
 }());
