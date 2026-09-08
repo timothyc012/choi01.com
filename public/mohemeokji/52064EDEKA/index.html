@@ -421,6 +421,8 @@
       .menu-top { display: flex; justify-content: space-between; gap: 12px; }
       .menu-title { margin: 0; font-size: 14px; line-height: 1.3; }
       .match { color: var(--green); white-space: nowrap; font-size: 11px; font-weight: 700; }
+      .menu-offer { margin: 8px 0 0; padding-top: 7px; border-top: 1px solid var(--border-soft); color: var(--ink); font-size: 10px; line-height: 1.45; }
+      .menu-offer b { color: var(--green); }
       .menu-sub { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
       .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
       .tag { padding: 4px 7px; border-radius: 4px; background: var(--surface-strong); color: var(--muted); font-size: 10px; }
@@ -767,11 +769,11 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="/mohemeokji/ontology-recipe-details.js?v=78e6e6e95d2a"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=78e6e6e95d2a"></script>
-    <script src="./meal-planner-recipe-data.js?v=78e6e6e95d2a"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=78e6e6e95d2a"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=78e6e6e95d2a"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=706d817fb518"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=706d817fb518"></script>
+    <script src="./meal-planner-recipe-data.js?v=706d817fb518"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=706d817fb518"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=706d817fb518"></script>
     <script>
       const meals = [];
 
@@ -830,6 +832,10 @@
       const dateInBerlin = new Intl.DateTimeFormat('en-CA', {timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
       try { mealHistory = recommendations.restoreHistory(localStorage.getItem(historyStorageKey),dateInBerlin); } catch { historySaved = false; }
       const catalog = shopping.currentCatalog(window.mealPackagePricesByArea[activeArea], dateInBerlin);
+      const offerFrequency = Object.values(catalog).reduce((counts,storeCatalog)=>{
+        Object.keys(storeCatalog).forEach((name)=>{ counts[name]=(counts[name]||0)+1; });
+        return counts;
+      },{});
       const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
       byId("postcodeSelect").innerHTML = Object.entries(areas).map(([area, meta]) => '<option value="' + area + '">' + escapeHtml(meta.label) + '</option>').join('');
       byId("postcodeSelect").value = activeArea;
@@ -873,7 +879,7 @@
         byId("totalCostNote").textContent = costNote(weekCart) + " 공통 재료는 한 번만 담습니다. 목록에서 필요한 포장 수를 확인하세요.";
       }
       function recommendationOptions() {
-        return {catalog:catalog[activeStore],history:mealHistory,date:dateInBerlin,moment:mealMoment,requireMainOffer:true};
+        return {catalog:catalog[activeStore],offerFrequency,history:mealHistory,date:dateInBerlin,moment:mealMoment,requireMainOffer:true};
       }
       function activeMeals() {
         return recommendations.sequence(meals.filter((item) => item.store === activeStore),recommendationOptions());
@@ -891,6 +897,9 @@
         const offers=info.mainOffers.map((offer)=>offer.name+' · '+offer.product+' '+offer.pack+' '+shopping.euro(offer.priceCents));
         return (offers.length ? '주재료 할인: '+offers.join(' / ') : '주재료 할인 없음: '+info.mainIngredients.join(' · '))
           + (info.substitutionNotes.length ? ' '+info.substitutionNotes.join(' ') : '');
+      }
+      function linkedOfferText(item) {
+        return offerInfo(item).mainOffers.map((offer)=>offer.product+' · '+offer.pack+' · '+shopping.euro(offer.priceCents)).join(' / ');
       }
       function renderHistoryStatus() {
         byId('recentMealSummary').textContent = mealHistory.length ? '최근 14일 '+mealHistory.length+'끼의 먹은 기록을 반영합니다.' : '먹은 기록이 아직 없어요. 실제로 먹은 메뉴의 ‘먹었어요’를 눌러주세요.';
@@ -916,7 +925,7 @@
       function renderToday() {
         const item = currentRecommendation();
         byId("sourceStatus").textContent = profile.label + (Object.keys(catalog[activeStore]).length ? " · 행사 재료 연결됨" : " · 오늘 유효한 행사 가격 없음");
-        byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 지점 가격 기준";
+        byId("sourceCheck").textContent = "· " + profile.period + " · " + profile.offerCount + " · 수집된 지점·지역 자료 기준";
         byId("decisionLabel").textContent = "오늘의 " + mealMoment;
         renderHistoryStatus();
         ['acceptToday','todayShopping','nextRecommendation'].forEach((id)=>{ byId(id).disabled = !item; });
@@ -1021,10 +1030,14 @@
         byId("menuCount").textContent = pool.length;
         byId("offerCount").textContent = profile.offerCount;
         byId("offerSummary").textContent = profile.offerSummary;
-        byId("menuCountNote").textContent = "주재료 할인 · 메뉴 다양성 · 최근 먹은 기록 반영";
+        const linkedIngredients=new Set(pool.flatMap((item)=>offerInfo(item).mainOffers.map((offer)=>offer.name)));
+        const unlinkedIngredients=Object.keys(catalog[activeStore]).filter((name)=>!linkedIngredients.has(name));
+        byId("menuCountNote").textContent = "할인 재료 " + Object.keys(catalog[activeStore]).length + "종 중 " + linkedIngredients.size + "종이 메뉴에 연결됨"
+          + (unlinkedIngredients.length ? " · 미연결 " + unlinkedIngredients.slice(0,4).join(" · ") + (unlinkedIngredients.length>4 ? " 외 " + (unlinkedIngredients.length-4) + "종" : "") : "");
         byId("menuList").innerHTML = visible.length ? visible.map((item) =>
           '<article class="menu-item' + (selectedMeal?.id === item.id ? " selected" : "") + '" data-id="' + item.id + '" tabindex="0" draggable="true">' +
           '<div class="menu-top"><h4 class="menu-title">' + item.title + '</h4><span class="match">주재료 할인 ' + offerInfo(item).mainOffers.length + '종</span></div>' +
+          '<p class="menu-offer"><b>이 마트 행사상품</b><br>' + escapeHtml(linkedOfferText(item)) + '</p>' +
           '<p class="menu-sub">할인: ' + (item.sale.join(" · ") || "해당 없음") + '<br>할인 외: ' + (item.missing.join(" · ") || "없음") + '</p>' +
           '<div class="tag-row"><span class="tag tag-source">' + item.store + '</span>' + item.tags.map((tag) => '<span class="tag">' + tag + '</span>').join("") + '</div>' +
           '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
@@ -1096,7 +1109,7 @@
       }
       function renderShopping() {
         const cart = shoppingScope === "week" ? planBasket() : mealBasket(selectedMeal);
-        byId("shoppingSource").innerHTML = '<a href="' + escapeHtml(profile.source) + '">새 행사 데이터 ' + escapeHtml(profile.period) + '</a> 기준입니다. ' + escapeHtml(profile.branch) + '의 행사 포장 가격을 연결했습니다. 원문 중량과 포장량을 비교할 수 있는 재료는 필요한 포장 수를 자동 계산하며, 현재 매장 가격은 다를 수 있습니다.';
+        byId("shoppingSource").innerHTML = '<a href="' + escapeHtml(profile.source) + '">새 행사 데이터 ' + escapeHtml(profile.period) + '</a> 기준입니다. ' + escapeHtml(profile.branch) + '에 연결된 수집 자료의 행사 포장 가격을 사용합니다. 원문 중량과 포장량을 비교할 수 있는 재료는 필요한 포장 수를 자동 계산하며, 현재 매장 가격은 다를 수 있습니다.';
         byId("detailIngredients").innerHTML = cart.items.length ? cart.items.map((item, index) => {
           const price = item.priceCents === null ? "" : (item.priceCents / 100).toFixed(2).replace(".", ",");
           const disabled = item.owned ? " disabled" : "";

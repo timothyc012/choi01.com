@@ -31,6 +31,14 @@ test('discounted named main ingredient beats incidental vegetable and seasoning 
   assert.equal(engine.explain(curry,{당근:price,마늘:price}).mainOffers.length,0);
 });
 
+test('the lead recommendation favors an offer that is distinctive to the selected store',()=>{
+  const common=meal('common',['닭가슴살'],'chicken');
+  const distinctive=meal('distinctive',['소고기등심'],'beef');
+  const catalog={닭가슴살:price,소고기등심:price};
+  const ranked=engine.rank([common,distinctive],{catalog,date:'2026-09-08',offerFrequency:{닭가슴살:3,소고기등심:1}});
+  assert.equal(ranked[0].id,'distinctive');
+});
+
 test('a varied week does not repeat source IDs, exceed two per family, or place families consecutively when alternatives exist',()=>{
   const pool=Array.from({length:12},(_,i)=>meal('c'+i,['닭고기'],'chicken'));
   pool.push(...Array.from({length:3},(_,i)=>meal('p'+i,['감자'],'potato')),...Array.from({length:3},(_,i)=>meal('n'+i,['파스타'],'pasta')),meal('v',['당근'],'carrot'));
@@ -80,10 +88,24 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   assert.ok(rewe.some(r=>r.sourceRecipeId==='7032812'));
   assert.deepEqual(aldi.map(r=>r.sourceRecipeId).join(','),'6700719');
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
-  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,2);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,3);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
     assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
   }
+});
+
+test('EDEKA menus come from its exact offer products and include store-specific DB recipe matches',()=>{
+  const options=(postcode,store)=>({catalog:context.window.MealShopping.currentCatalog(fixtureCatalog[postcode],'2026-09-08')[store],requireMainOffer:true,date:'2026-09-08'});
+  const menus=(postcode,store)=>engine.available(context.window.createMealRecipes(store),options(postcode,store));
+  const duesseldorf=menus('40474','EDEKA'),aachen=menus('52064','EDEKA'),aldi=menus('52064','ALDI SÜD');
+  assert.ok(duesseldorf.some(r=>r.sourceRecipeId==='7015227'));
+  assert.ok(!aachen.some(r=>r.sourceRecipeId==='7015227'));
+  assert.ok(aachen.some(r=>r.sourceRecipeId==='7020528'));
+  assert.ok(aachen.some(r=>r.sourceRecipeId==='7030595'));
+  assert.ok(!duesseldorf.some(r=>r.sourceRecipeId==='7020528'));
+  assert.ok(aldi.some(r=>r.sourceRecipeId==='7021280'));
+  assert.ok(!aachen.some(r=>r.sourceRecipeId==='7021280'));
+  assert.notDeepEqual(duesseldorf.map(r=>r.sourceRecipeId),aachen.map(r=>r.sourceRecipeId));
 });
 
 test('automatic lunch/dinner does not fill a meal slot with a side dish or breakfast snack',()=>{
@@ -102,7 +124,7 @@ test('automatic lunch/dinner does not fill a meal slot with a side dish or break
 test('actual 44369 Netto top recommendation has a discounted main and never maps canned breast to tenderloin',()=>{
   const catalog=fixtureCatalog['44369'].Netto;
   assert.ok(catalog['닭안심']);
-  assert.equal(catalog['닭고기'],undefined);
+  assert.equal(catalog['닭가슴살'],undefined);
   const pool=context.window.createMealRecipes('Netto');
   const result=engine.sequence(pool,{catalog,history:[],date:'2026-09-08',mealOnly:true},7);
   assert.notEqual(result[0].sourceRecipeId,'6856968');

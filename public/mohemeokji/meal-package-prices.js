@@ -19,8 +19,25 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 196
       },
-      "돼지고기": {
-        "ingredient": "돼지고기",
+      "돼지등심": {
+        "ingredient": "돼지등심",
+        "product": "Schweine-Rücken",
+        "priceCents": 399,
+        "appPriceCents": null,
+        "pack": "pro kg",
+        "detail": "pro kg | ohne Knochen, vakuumverpackt, ca. 2 kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
+        "sourceRow": 252
+      },
+      "돼지뒷다리살": {
+        "ingredient": "돼지뒷다리살",
         "product": "Schweine-Schnitzel",
         "priceCents": 349,
         "appPriceCents": null,
@@ -346,8 +363,8 @@ window.mealPackagePricesByArea = {
   },
   "40474": {
     "EDEKA": {
-      "닭고기": {
-        "ingredient": "닭고기",
+      "닭가슴살": {
+        "ingredient": "닭가슴살",
         "product": "Hähnchenbrustfilet",
         "priceCents": 99,
         "appPriceCents": null,
@@ -363,8 +380,8 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 350
       },
-      "칠면조": {
-        "ingredient": "칠면조",
+      "칠면조가슴살": {
+        "ingredient": "칠면조가슴살",
         "product": "Putenbrustfilet Teilstück",
         "priceCents": 969,
         "appPriceCents": null,
@@ -537,8 +554,25 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 21
       },
-      "돼지고기": {
-        "ingredient": "돼지고기",
+      "돼지등심": {
+        "ingredient": "돼지등심",
+        "product": "Schweine-Rücken",
+        "priceCents": 399,
+        "appPriceCents": null,
+        "pack": "pro kg",
+        "detail": "pro kg | ohne Knochen, vakuumverpackt, ca. 2 kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Rahmer Str. 8, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
+        "sourceRow": 77
+      },
+      "돼지뒷다리살": {
+        "ingredient": "돼지뒷다리살",
         "product": "Schweine-Schnitzel",
         "priceCents": 349,
         "appPriceCents": null,
@@ -881,6 +915,23 @@ window.mealPackagePricesByArea = {
       }
     },
     "Lidl": {
+      "닭가슴살": {
+        "ingredient": "닭가슴살",
+        "product": "METZGERFRISCH Frische Hähnchenbrustfilets",
+        "priceCents": 519,
+        "appPriceCents": null,
+        "pack": "Teilstücke, 600 g",
+        "detail": "Teilstücke, 600 g | 8.65 / kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Huckarder Allee 27, 44369 Dortmund",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
+        "sourceRow": 817
+      },
       "돼지다짐육": {
         "ingredient": "돼지다짐육",
         "product": "METZGERFRISCH Frisches Schweine-Hackfleisch",
@@ -1019,8 +1070,8 @@ window.mealPackagePricesByArea = {
       }
     },
     "REWE": {
-      "돼지고기": {
-        "ingredient": "돼지고기",
+      "돼지목살": {
+        "ingredient": "돼지목살",
         "product": "Schweine-Nackensteaks",
         "priceCents": 699,
         "appPriceCents": null,
@@ -1074,8 +1125,25 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 388
       },
-      "돼지고기": {
-        "ingredient": "돼지고기",
+      "돼지등심": {
+        "ingredient": "돼지등심",
+        "product": "Schweine-Rücken",
+        "priceCents": 399,
+        "appPriceCents": null,
+        "pack": "pro kg",
+        "detail": "pro kg | ohne Knochen, vakuumverpackt, ca. 2 kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Peterstr. 50, 52062 Aachen",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.netto-online.de/filialangebote",
+        "conditions": "",
+        "sourceRow": 444
+      },
+      "돼지뒷다리살": {
+        "ingredient": "돼지뒷다리살",
         "product": "Schweine-Schnitzel",
         "priceCents": 349,
         "appPriceCents": null,
@@ -1399,8 +1467,8 @@ window.mealPackagePricesByArea = {
       }
     },
     "REWE": {
-      "돼지고기": {
-        "ingredient": "돼지고기",
+      "돼지목살": {
+        "ingredient": "돼지목살",
         "product": "Schweine-Nackensteaks",
         "priceCents": 699,
         "appPriceCents": null,
@@ -1437,8 +1505,8 @@ window.mealPackagePricesByArea = {
   },
   "52064": {
     "EDEKA": {
-      "닭고기": {
-        "ingredient": "닭고기",
+      "닭가슴살": {
+        "ingredient": "닭가슴살",
         "product": "Hähnchenbrustfilet",
         "priceCents": 111,
         "appPriceCents": null,
@@ -1454,8 +1522,8 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 580
       },
-      "돼지고기": {
-        "ingredient": "돼지고기",
+      "돼지안심": {
+        "ingredient": "돼지안심",
         "product": "Schweinefilet lang",
         "priceCents": 899,
         "appPriceCents": null,
@@ -1471,8 +1539,8 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 578
       },
-      "소고기": {
-        "ingredient": "소고기",
+      "소고기등심": {
+        "ingredient": "소고기등심",
         "product": "Rib-Eye-Steak",
         "priceCents": 277,
         "appPriceCents": null,
@@ -1558,8 +1626,8 @@ window.mealPackagePricesByArea = {
       }
     },
     "ALDI SÜD": {
-      "닭고기": {
-        "ingredient": "닭고기",
+      "닭가슴살": {
+        "ingredient": "닭가슴살",
         "product": "Hähnchenbrustfilet",
         "priceCents": 1299,
         "appPriceCents": null,
@@ -1609,8 +1677,8 @@ window.mealPackagePricesByArea = {
         "conditions": "",
         "sourceRow": 703
       },
-      "치즈": {
-        "ingredient": "치즈",
+      "슬라이스치즈": {
+        "ingredient": "슬라이스치즈",
         "product": "Schmelzkäsescheiben",
         "priceCents": 149,
         "appPriceCents": null,
@@ -1628,6 +1696,23 @@ window.mealPackagePricesByArea = {
       }
     },
     "Lidl": {
+      "닭가슴살": {
+        "ingredient": "닭가슴살",
+        "product": "METZGERFRISCH Frische Hähnchenbrustfilets",
+        "priceCents": 519,
+        "appPriceCents": null,
+        "pack": "Teilstücke, 600 g",
+        "detail": "Teilstücke, 600 g | 8.65 / kg",
+        "category": "Fleisch & Wurst",
+        "period": "07.09.2026-12.09.2026",
+        "validFrom": "2026-09-07",
+        "validThrough": "2026-09-12",
+        "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
+        "source": "/offers/supermarket_food_offers_2026-09-07.csv",
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-07-09-2026-12-09-2026-878d64/ar/0?_ab=1&lf=HHZ",
+        "conditions": "",
+        "sourceRow": 672
+      },
       "돼지다짐육": {
         "ingredient": "돼지다짐육",
         "product": "METZGERFRISCH Frisches Schweine-Hackfleisch",
@@ -1779,7 +1864,7 @@ window.mealOfferMeta = {
         "label": "Netto · 40468 · Düsseldorf",
         "branch": "Unterrather Str. 108, 40468 Düsseldorf (40474 최근접)",
         "offerCount": "173행",
-        "offerSummary": "닭안심 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭안심 · 돼지등심 · 돼지뒷다리살 · 다진고기 · 소고기 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }
@@ -1790,7 +1875,7 @@ window.mealOfferMeta = {
         "label": "EDEKA · 40474 · Düsseldorf",
         "branch": "EDEKA Shariat, Kaiserswerther Straße 270, 40474 Düsseldorf",
         "offerCount": "19행",
-        "offerSummary": "닭고기 · 칠면조 · 토마토 · 파프리카 · 바나나 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭가슴살 · 칠면조가슴살 · 토마토 · 파프리카 · 바나나 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }
@@ -1801,7 +1886,7 @@ window.mealOfferMeta = {
         "label": "Netto · 44369 · Dortmund",
         "branch": "Rahmer Str. 8, 44369 Dortmund",
         "offerCount": "175행",
-        "offerSummary": "닭안심 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭안심 · 돼지등심 · 돼지뒷다리살 · 다진고기 · 소고기 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1819,7 +1904,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 44369 · Dortmund",
         "branch": "Huckarder Allee 27, 44369 Dortmund",
         "offerCount": "90행",
-        "offerSummary": "돼지다짐육 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭가슴살 · 돼지다짐육 · 연어 · 훈제연어 · 주키니 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1828,7 +1913,7 @@ window.mealOfferMeta = {
         "label": "REWE · 44369 · Dortmund",
         "branch": "Varziner Str. 7-17, 44369 Dortmund",
         "offerCount": "21행",
-        "offerSummary": "돼지고기 · 바나나 · 07.09.2026-12.09.2026",
+        "offerSummary": "돼지목살 · 바나나 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }
@@ -1839,7 +1924,7 @@ window.mealOfferMeta = {
         "label": "Netto · 52062 · Aachen",
         "branch": "Peterstr. 50, 52062 Aachen",
         "offerCount": "174행",
-        "offerSummary": "닭안심 · 돼지고기 · 다진고기 · 소고기 · 토마토 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭안심 · 돼지등심 · 돼지뒷다리살 · 다진고기 · 소고기 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1848,7 +1933,7 @@ window.mealOfferMeta = {
         "label": "REWE · 52062 · Aachen",
         "branch": "Markt 29-31, 52062 Aachen",
         "offerCount": "27행",
-        "offerSummary": "돼지고기 · 바나나 · 07.09.2026-13.09.2026",
+        "offerSummary": "돼지목살 · 바나나 · 07.09.2026-13.09.2026",
         "period": "07.09.2026-13.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }
@@ -1859,7 +1944,7 @@ window.mealOfferMeta = {
         "label": "EDEKA · 52064 · Aachen",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 최근접)",
         "offerCount": "26행",
-        "offerSummary": "닭고기 · 돼지고기 · 소고기 · 복숭아 · 사과 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭가슴살 · 돼지안심 · 소고기등심 · 복숭아 · 사과 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1868,7 +1953,7 @@ window.mealOfferMeta = {
         "label": "ALDI SÜD · 52064 · Aachen",
         "branch": "Schillerstraße 20, 52064 Aachen (52062 최근접)",
         "offerCount": "24행",
-        "offerSummary": "닭고기 · 연어 · 송어 · 치즈 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭가슴살 · 연어 · 송어 · 슬라이스치즈 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       },
@@ -1877,7 +1962,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 52064 · Aachen",
         "branch": "Eynattener Straße 26, 52064 Aachen (52062 최근접)",
         "offerCount": "90행",
-        "offerSummary": "돼지다짐육 · 연어 · 훈제연어 · 주키니 · 오이 · 07.09.2026-12.09.2026",
+        "offerSummary": "닭가슴살 · 돼지다짐육 · 연어 · 훈제연어 · 주키니 · 07.09.2026-12.09.2026",
         "period": "07.09.2026-12.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-07.csv"
       }

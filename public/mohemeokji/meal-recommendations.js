@@ -39,21 +39,22 @@
     const mainOffers = mainIngredients.filter((name)=>Object.hasOwn(catalog,name)).map((name)=>({name,product:catalog[name].product || name,pack:catalog[name].pack || '',priceCents:catalog[name].priceCents}));
     const secondaryOffers = names.filter((name)=>!mainIngredients.includes(name) && Object.hasOwn(catalog,name));
     const substitutionNotes = [];
-    if (mainIngredients.includes('닭고기') && meal.detailIngredients?.some((label)=>label.includes('닭가슴살')) && !catalog['닭고기'] && catalog['닭안심']) {
+    if (mainIngredients.includes('닭가슴살') && meal.detailIngredients?.some((label)=>label.includes('닭가슴살')) && !catalog['닭가슴살'] && catalog['닭안심']) {
       substitutionNotes.push('이번 행사 상품은 닭안심('+catalog['닭안심'].product+')입니다. 원문 닭가슴살과 부위가 달라 대체 후보로만 안내하며, 구매 합계에는 자동 연결하지 않습니다.');
     }
     return {mainIngredients,mainOffers,secondaryOffers,substitutionNotes};
   }
 
-  function score(meal, {catalog = {}, history = [], date, moment = '저녁'}) {
+  function score(meal, {catalog = {}, history = [], date, moment = '저녁', offerFrequency = {}}) {
     const info = explain(meal,catalog), meta = profile(meal);
     const recent = restoreHistory(JSON.stringify(history),date);
     const sameDish = recent.some((row)=>row.sourceRecipeId === identity(meal));
     const familyRecent = recent.slice(0,2).filter((row)=>row.family === meta.family).length;
     const mainCoverage = info.mainIngredients.length ? info.mainOffers.length / info.mainIngredients.length : 0;
+    const storeSpecificity = info.mainOffers.reduce((sum,offer)=>sum+12/Math.max(1,offerFrequency[offer.name]||1),0);
     const breakfast = meal.tags.includes('아침') && ['점심','저녁'].includes(moment) ? 140 : 0;
     const side = meta.kind === 'side' ? 140 : 0;
-    return mainCoverage*100 + Math.min(info.secondaryOffers.length,3)*3 - Math.min(meal.time/15,15)
+    return mainCoverage*100 + storeSpecificity + Math.min(info.secondaryOffers.length,3)*3 - Math.min(meal.time/15,15)
       - breakfast - side - (sameDish ? 160 : 0) - familyRecent*18;
   }
 

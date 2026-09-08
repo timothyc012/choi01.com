@@ -52,3 +52,24 @@ test('mince recipes distinguish pure pork, verified equal pork/beef blends and p
   assert.equal(catalog({상품명:'Schweine-Hackfleisch',상품상태:'가열완료'})['돼지다짐육'],undefined);
   assert.equal(catalog({상품명:'Schweine-Hackfleisch Röllchen'})['돼지다짐육'],undefined);
 });
+
+test('raw meat and processed cheese offers keep their exact recipe ingredient identity', () => {
+  const rows = [
+    row({상품명:'Hähnchenbrustfilet'}),
+    row({상품명:'Schweinefilet lang'}),
+    row({상품명:'Schweine-Nackensteaks'}),
+    row({상품명:'Schweine-Rücken'}),
+    row({상품명:'Schweine-Schnitzel',상품정보:'500 g | aus der Oberschale'}),
+    row({상품명:'Rib-Eye-Steak'}),
+    row({상품명:'Schmelzkäsescheiben'}),
+  ];
+  const catalog = generateCatalog(rows,'/offers/next.csv').packageCatalog['10115'].Lidl;
+  assert.ok(catalog['닭가슴살']);
+  assert.ok(catalog['돼지안심']);
+  assert.ok(catalog['돼지목살']);
+  assert.ok(catalog['돼지등심']);
+  assert.ok(catalog['돼지뒷다리살']);
+  assert.ok(catalog['소고기등심']);
+  assert.ok(catalog['슬라이스치즈']);
+  for (const broad of ['닭고기','돼지고기','소고기','치즈']) assert.equal(catalog[broad],undefined);
+});

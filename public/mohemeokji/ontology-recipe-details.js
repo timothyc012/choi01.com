@@ -70,7 +70,7 @@ window.ontologyRecipeDetails = [
     "difficultyText": "초급",
     "cuisine": "asian",
     "sale": [
-      "닭고기",
+      "닭가슴살",
       "버섯",
       "올리브유",
       "간장",
@@ -104,7 +104,7 @@ window.ontologyRecipeDetails = [
     ],
     "filters": [],
     "requiredAmounts": {
-      "닭고기": {
+      "닭가슴살": {
         "amount": 300,
         "unit": "g"
       }
@@ -114,7 +114,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "닭고기"
+        "닭가슴살"
       ],
       "family": "chicken",
       "method": "stirfry",
@@ -266,7 +266,7 @@ window.ontologyRecipeDetails = [
     "difficultyText": null,
     "cuisine": "asian",
     "sale": [
-      "닭고기",
+      "닭가슴살",
       "양파",
       "대파",
       "고추",
@@ -327,7 +327,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "닭고기"
+        "닭가슴살"
       ],
       "family": "chicken",
       "method": "fried",
@@ -410,7 +410,7 @@ window.ontologyRecipeDetails = [
     "cuisine": "western",
     "sale": [
       "또띠아",
-      "닭고기",
+      "닭가슴살",
       "잎채소",
       "치즈",
       "파프리카",
@@ -455,7 +455,7 @@ window.ontologyRecipeDetails = [
     ],
     "filters": [],
     "requiredAmounts": {
-      "닭고기": {
+      "닭가슴살": {
         "amount": 200,
         "unit": "g"
       }
@@ -465,7 +465,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "닭고기"
+        "닭가슴살"
       ],
       "family": "chicken",
       "method": "wrap",
@@ -487,7 +487,7 @@ window.ontologyRecipeDetails = [
       "파스타",
       "대파",
       "고추",
-      "닭고기",
+      "닭가슴살",
       "올리브유",
       "소금",
       "마늘",
@@ -528,7 +528,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "닭고기"
+        "닭가슴살"
       ],
       "family": "chicken",
       "method": "pasta",
@@ -547,7 +547,7 @@ window.ontologyRecipeDetails = [
     "difficultyText": "초급",
     "cuisine": "asian",
     "sale": [
-      "닭고기",
+      "닭가슴살",
       "양파",
       "파프리카",
       "부추",
@@ -599,7 +599,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "닭고기"
+        "닭가슴살"
       ],
       "family": "chicken",
       "method": "stirfry",
@@ -618,7 +618,7 @@ window.ontologyRecipeDetails = [
     "difficultyText": "아무나",
     "cuisine": "asian",
     "sale": [
-      "닭고기",
+      "닭가슴살",
       "크래미",
       "오이",
       "양배추",
@@ -662,7 +662,7 @@ window.ontologyRecipeDetails = [
       "quick"
     ],
     "requiredAmounts": {
-      "닭고기": {
+      "닭가슴살": {
         "amount": 145,
         "unit": "g"
       },
@@ -680,7 +680,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "닭고기"
+        "닭가슴살"
       ],
       "family": "chicken",
       "method": "salad",
@@ -986,7 +986,7 @@ window.ontologyRecipeDetails = [
     "difficultyText": "아무나",
     "cuisine": "asian",
     "sale": [
-      "돼지고기",
+      "돼지목살",
       "맛술",
       "생강",
       "식용유",
@@ -995,7 +995,7 @@ window.ontologyRecipeDetails = [
     ],
     "missing": [],
     "detailIngredients": [
-      "돼지고기 500g",
+      "돼지고기 목살 500g (원문 조리 단계에서 목살 사용)",
       "맛술 3큰술",
       "생강즙 2작은술",
       "식용유 1큰술",
@@ -1021,7 +1021,7 @@ window.ontologyRecipeDetails = [
       "asian"
     ],
     "requiredAmounts": {
-      "돼지고기": {
+      "돼지목살": {
         "amount": 500,
         "unit": "g"
       }
@@ -1031,7 +1031,7 @@ window.ontologyRecipeDetails = [
     "sourceCheckedAt": "2026-09-08",
     "recommendationProfile": {
       "primaryIngredients": [
-        "돼지고기"
+        "돼지목살"
       ],
       "family": "pork",
       "method": "grilled",
@@ -2908,5 +2908,277 @@ window.ontologyRecipeDetails = [
       "kind": "breakfast"
     },
     "sourceStepCount": 9
+  },
+  {
+    "sourceRecipeId": "7015227",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7015227",
+    "sourceTitle": "바나나 블루베리 주스 냉동 블루베리 스무디 만들기",
+    "sourceAuthor": "효땡",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "바나나 블루베리 스무디",
+    "servingsText": "1인분",
+    "time": 10,
+    "sourceTimeText": "10분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": ["블루베리", "바나나", "우유"],
+    "missing": [],
+    "requiredAmounts": {"우유":{"amount":150,"unit":"ml"}},
+    "detailIngredients": ["블루베리 40알", "바나나 2개", "우유 150ml"],
+    "steps": [
+      "바나나는 껍질을 벗겨 약 2cm 두께로 썬다.",
+      "블루베리는 물에 가볍게 헹군 뒤 물기를 빼고 바나나와 함께 용기에 담는다.",
+      "우유 150ml를 붓고 믹서나 핸드블렌더로 곱게 간다."
+    ],
+    "tags": ["간단식", "아침"],
+    "filters": ["quick"],
+    "recommendationProfile": {"primaryIngredients":["블루베리", "바나나"],"family":"fruit","method":"blend","kind":"breakfast"},
+    "sourceStepCount": 3
+  },
+  {
+    "sourceRecipeId": "7071800",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7071800",
+    "sourceTitle": "감자·사과·계란으로 부드러운 에그 모닝빵.",
+    "sourceAuthor": "스마일집밥",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "사과 에그 모닝빵",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": ["모닝빵", "감자", "달걀", "사과", "마요네즈", "홀그레인 머스터드", "꿀", "소금", "후추", "딸기잼"],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": ["모닝빵 (수량 미표기)", "감자 1개", "계란 2개", "사과 1/2쪽", "마요네즈 2~2.5큰술", "홀그레인 머스타드 소스 1티스푼", "꿀 1/2스푼", "소금 약간", "후추 약간", "딸기쨈 (선택)"],
+    "steps": [
+      "감자는 껍질을 벗겨 삶고 젓가락이 쉽게 들어가면 물을 버린 뒤 곱게 으깬다.",
+      "계란은 완숙으로 삶아 흰자를 잘게 다지고 노른자는 체에 내려 부드럽게 만든다.",
+      "사과는 껍질을 벗겨 작은 크기로 썬다.",
+      "감자·계란·사과에 마요네즈·홀그레인 머스터드·꿀·소금·후추를 넣어 섞고 간을 확인한다.",
+      "모닝빵을 갈라 속을 채운다. 딸기잼은 원문에서 선택 재료다."
+    ],
+    "tags": ["간단식", "아침"],
+    "filters": [],
+    "recommendationProfile": {"primaryIngredients":["사과"],"family":"fruit-sandwich","method":"assemble","kind":"breakfast"},
+    "sourceStepCount": 6
+  },
+  {
+    "sourceRecipeId": "7020528",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7020528",
+    "sourceTitle": "장조림 돼지안심장조림 돼지고기 간장조림 만들기",
+    "sourceAuthor": "춤추는루나",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "돼지안심 장조림",
+    "servingsText": "4인분",
+    "time": 60,
+    "sourceTimeText": "60분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "korean",
+    "sale": ["돼지안심", "고추", "대파", "마늘", "된장", "생강", "통후추", "간장", "맛술", "설탕", "물엿"],
+    "missing": [],
+    "requiredAmounts": {"돼지안심":{"amount":500,"unit":"g"}},
+    "detailIngredients": ["돼지 안심 500g", "청양고추 2개", "대파 1대", "마늘 5~8쪽", "된장 1T", "생강가루 약간 (또는 다진 생강)", "통후추 약간", "물 500ml", "간장 7T", "맛술 3T", "설탕 1T", "물엿 1T", "물 400ml"],
+    "steps": [
+      "돼지안심의 겉지방을 정리하고 큼직하게 썬다. 대파와 청양고추도 먹기 좋은 크기로 준비한다.",
+      "냄비에 돼지안심·대파·마늘·생강·된장·통후추와 물 500ml를 넣고 된장을 푼 뒤 약 15분 삶는다.",
+      "삶은 고기를 건져 한 김 식힌 다음 결을 따라 찢는다.",
+      "간장 7T·맛술 3T·설탕 1T·물엿 1T·물 400ml를 끓인다.",
+      "조림장이 끓으면 찢은 안심을 넣고 센불에서 원하는 간이 밸 때까지 졸인다.",
+      "청양고추를 넣고 한 번 더 끓인다. 아이용이라면 원문 안내대로 고추를 생략할 수 있다."
+    ],
+    "tags": ["밥반찬", "고단백"],
+    "filters": [],
+    "recommendationProfile": {"primaryIngredients":["돼지안심"],"family":"pork","method":"braise","kind":"main"},
+    "sourceStepCount": 9
+  },
+  {
+    "sourceRecipeId": "7030595",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7030595",
+    "sourceTitle": "찹스테이크 (소고기등심요리 찹스테이크소스만들기)",
+    "sourceAuthor": "ariel1007",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "소고기 등심 찹스테이크",
+    "servingsText": "3인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": ["소고기등심", "양파", "표고버섯", "파프리카", "마늘", "버터", "파슬리", "소금", "후추", "올리브유", "돈까스소스", "굴소스", "케첩", "발사믹식초", "올리고당"],
+    "missing": [],
+    "requiredAmounts": {"소고기등심":{"amount":300,"unit":"g"},"버터":{"amount":10,"unit":"g"}},
+    "detailIngredients": ["소고기 등심 300g", "양파 2/3개", "표고버섯 2개", "노랑·빨강 파프리카 각 1/3개", "통마늘 10개", "버터 10g", "파슬리가루 약간", "소금 3꼬집", "통후추 약간", "올리브오일 1스푼", "돈까스소스 2스푼", "굴소스 1스푼", "케첩 0.7스푼", "발사믹식초 0.7스푼", "올리고당 0.3스푼"],
+    "steps": [
+      "등심을 한입 크기로 썰어 올리브유·소금·후추와 버무리고 약 10분 재운다.",
+      "양파·파프리카·표고버섯은 고기와 비슷한 크기로, 마늘은 편으로 썬다.",
+      "돈까스소스·굴소스·케첩·발사믹식초·올리고당·후추를 섞어 소스를 만든다.",
+      "센불로 달군 팬에서 등심 겉면을 빠르게 굽고 잠시 덜어둔다.",
+      "같은 팬에 버터를 녹여 마늘을 볶고, 손질한 채소에 소금과 후추를 넣어 익힌다.",
+      "고기와 소스를 넣고 중불에서 재료에 소스가 고루 묻도록 짧게 볶는다.",
+      "접시에 담고 파슬리가루를 뿌린다."
+    ],
+    "tags": ["한 팬", "고단백"],
+    "filters": [],
+    "recommendationProfile": {"primaryIngredients":["소고기등심"],"family":"beef","method":"stirfry","kind":"main"},
+    "sourceStepCount": 13
+  },
+  {
+    "sourceRecipeId": "7021280",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7021280",
+    "sourceTitle": "계란 치즈 오믈렛 만드는법 브런치 계란요리 슬라이스치즈 토마토살사소스 계란오믈렛 레시피",
+    "sourceAuthor": "슈퍼파워",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "슬라이스치즈 오믈렛",
+    "servingsText": "2인분",
+    "time": 5,
+    "sourceTimeText": "5분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": ["달걀", "후추", "소금", "우유", "슬라이스치즈", "버터", "토마토살사소스"],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": ["계란 3알", "후추 적당량", "소금 적당량", "우유 2T", "슬라이스치즈 1장 (또는 2장)", "버터 적당량", "토마토살사소스 적당량"],
+    "steps": [
+      "계란 3알에 소금·후추·우유 2T를 넣고 한 방향으로 고루 푼다.",
+      "팬에 버터를 녹이고 계란물을 붓는다.",
+      "계란 가장자리가 익기 시작하면 슬라이스치즈 1~2장을 올린다.",
+      "계란말이처럼 말아 속까지 익히고 접시에 담는다.",
+      "미리 준비한 토마토 살사소스를 원문 안내대로 곁들인다."
+    ],
+    "tags": ["브런치", "간단식"],
+    "filters": ["quick"],
+    "recommendationProfile": {"primaryIngredients":["슬라이스치즈"],"family":"egg","method":"omelet","kind":"breakfast"},
+    "sourceStepCount": 7
+  },
+  {
+    "sourceRecipeId": "7057231",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7057231",
+    "sourceTitle": "계란토마토피자",
+    "sourceAuthor": "푸른바다",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "계란 토마토 피자",
+    "servingsText": "1인분",
+    "time": 10,
+    "sourceTimeText": "10분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": ["토마토", "달걀", "토마토소스", "바질", "파슬리", "채소", "파마산치즈", "식용유", "후추"],
+    "missing": [],
+    "requiredAmounts": {"토마토소스":{"amount":100,"unit":"g"}},
+    "detailIngredients": ["토마토 1개", "계란 2개", "토마토소스 100g", "바질 적당량", "파슬리가루 약간", "채소 약간 (상추 등)", "파마산치즈가루 (수량 미표기)", "식용유 (수량 미표기)", "후추 (수량 미표기)"],
+    "steps": [
+      "채소는 씻어 큼직하게 썰고 토마토는 약 5mm 두께로 썬 뒤 4등분한다.",
+      "계란에 소금을 조금 넣어 풀고, 기름을 두른 팬에서 약불로 익힌다.",
+      "가장자리가 익기 시작하면 토마토소스·채소·토마토·바질을 차례로 올린다.",
+      "파마산치즈가루와 후추를 뿌리고 뚜껑을 덮어 가장 약한 불에서 원문 기준 약 6분 익힌다.",
+      "계란이 완전히 익었는지 확인한 뒤 접시에 옮긴다."
+    ],
+    "tags": ["한 팬", "간단식"],
+    "filters": ["quick"],
+    "recommendationProfile": {"primaryIngredients":["토마토"],"family":"egg","method":"pan-bake","kind":"main"},
+    "sourceStepCount": 5
+  },
+  {
+    "sourceRecipeId": "6940608",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6940608",
+    "sourceTitle": "초간단 파프리카 콘치즈 - 상콤달콤느끼 야식으로 최고~",
+    "sourceAuthor": "DailyDailyCook",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "파프리카 콘치즈",
+    "servingsText": "2인분",
+    "time": 20,
+    "sourceTimeText": "20분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "western",
+    "sale": ["옥수수", "파프리카", "양파", "버터", "마요네즈", "모짜렐라치즈", "소금", "후추"],
+    "missing": [],
+    "requiredAmounts": {"버터":{"amount":25,"unit":"g"}},
+    "detailIngredients": ["옥수수 1캔", "파프리카 1/4개", "양파 1/4개", "버터 25g", "마요네즈 3T", "모짜렐라치즈 양껏", "소금 약간", "후추 약간"],
+    "steps": [
+      "옥수수는 물기를 빼고 양파와 파프리카는 옥수수알 크기로 썬다.",
+      "옥수수·양파·파프리카·마요네즈를 고루 섞는다.",
+      "달군 팬에 버터를 녹이고 섞은 재료를 넓게 편 뒤 치즈를 올린다.",
+      "팬 뚜껑을 덮어 치즈가 완전히 녹을 때까지 익힌다."
+    ],
+    "tags": ["간단식", "반찬"],
+    "filters": ["quick"],
+    "recommendationProfile": {"primaryIngredients":["파프리카"],"family":"vegetable","method":"pan-bake","kind":"side"},
+    "sourceStepCount": 4
+  },
+  {
+    "sourceRecipeId": "6846033",
+    "sourceUrl": "https://www.10000recipe.com/recipe/6846033",
+    "sourceTitle": "냉이 목살 볶음밥",
+    "sourceAuthor": "오늘의요리",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "냉이 목살 볶음밥",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "아무나",
+    "cuisine": "korean",
+    "sale": ["쌀", "냉이", "돼지목살", "고추", "대파", "청주", "굴소스", "소금", "후추", "식용유", "참기름"],
+    "missing": [],
+    "requiredAmounts": {"돼지목살":{"amount":200,"unit":"g"},"냉이":{"amount":70,"unit":"g"}},
+    "detailIngredients": ["밥 2공기", "냉이 70g", "돼지목살 200g", "홍고추 1개", "대파 10cm", "청주 1큰술", "굴소스 1.5큰술", "소금 약간", "후춧가루 약간", "식용유 1큰술", "참기름 2큰술"],
+    "steps": [
+      "대파와 홍고추는 어슷 썰고 목살은 작은 한입 크기로 자른다.",
+      "냉이는 손질해 끓는 물에 약 10초 데친 뒤 물기를 빼고 1cm 길이로 썬다.",
+      "중불 팬에 식용유를 두르고 대파와 홍고추를 볶다가 향이 나면 목살·후추·소금·청주를 넣는다.",
+      "목살이 속까지 익고 겉이 노릇해지면 냉이와 굴소스를 넣어 볶는다.",
+      "밥 2공기와 참기름을 넣고 고루 섞어 볶는다."
+    ],
+    "tags": ["한 팬", "한 그릇"],
+    "filters": [],
+    "recommendationProfile": {"primaryIngredients":["돼지목살"],"family":"pork-rice","method":"stirfry","kind":"main"},
+    "sourceStepCount": 4
+  },
+  {
+    "sourceRecipeId": "7050889",
+    "sourceUrl": "https://www.10000recipe.com/recipe/7050889",
+    "sourceTitle": "간단하고 맛있는 목살스테이크",
+    "sourceAuthor": "로로식탁",
+    "sourceCorpus": "01ontology DB · recipe-full (01ontology-open 연동)",
+    "sourceCheckedAt": "2026-09-08",
+    "title": "목살 스테이크",
+    "servingsText": "2인분",
+    "time": 30,
+    "sourceTimeText": "30분",
+    "timeBasis": "source",
+    "difficultyText": "초급",
+    "cuisine": "western",
+    "sale": ["돼지목살", "마늘", "아스파라거스", "버터", "소금", "후추", "아보카도오일", "케첩", "간장", "설탕", "식초"],
+    "missing": [],
+    "requiredAmounts": {},
+    "detailIngredients": ["돼지고기 목살 300~400g", "통마늘 10개", "아스파라거스 1개", "버터 1T (원문은 갈릭기버터 사용)", "소금 약간", "후추 약간", "아보카도기름 적당량", "케찹 2T", "진간장 1T", "설탕 1T", "식초 1T", "물 1/3종이컵"],
+    "steps": [
+      "목살의 표면 수분과 핏물을 닦고 소금과 후추로 밑간한다.",
+      "팬에 아보카도오일과 통마늘을 넣어 마늘 향을 낸 뒤 약불에서 목살을 천천히 굽는다.",
+      "고기와 마늘을 잠시 덜고 팬의 기름을 닦은 다음 버터와 목살을 넣어 한 번 더 노릇하게 굽는다.",
+      "아스파라거스와 구운 마늘을 넣어 함께 익힌다.",
+      "설탕·간장·케첩·식초를 섞어 팬에 붓고 물을 조금씩 더해 원하는 농도로 맞춘다.",
+      "목살을 소스에 넣어 속까지 완전히 익히며 졸인 뒤 접시에 담는다."
+    ],
+    "tags": ["한 팬", "고단백"],
+    "filters": [],
+    "recipeNote": "원문 목살 수량은 300~400g 범위라 자동 포장 수 계산에 사용하지 않았습니다.",
+    "recommendationProfile": {"primaryIngredients":["돼지목살"],"family":"pork","method":"steak","kind":"main"},
+    "sourceStepCount": 10
   }
 ];

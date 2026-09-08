@@ -226,6 +226,10 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.match(html, /52064 · Aachen/);
     assert.match(html, /id="postcodeSelect"/);
     assert.match(html, /id="storeSelect"/);
+    assert.match(html, /이 마트 행사상품/);
+    assert.match(html, /linkedOfferText/);
+    assert.match(html, /할인 재료.*메뉴에 연결됨/);
+    assert.match(html, /수집된 지점·지역 자료 기준/);
     for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-shopping']) {
       assert.ok(html.includes(asset + '.js?v='));
     }
@@ -265,8 +269,9 @@ test('ontology details expose unique source identities and preserve known ingred
     if (recipe.timeBasis === 'source') assert.equal(recipe.sourceTimeText, recipe.time+'분');
   }
   const bySourceId = Object.fromEntries(source.window.ontologyRecipeDetails.map((recipe) => [recipe.sourceRecipeId, recipe]));
-  assert.equal(bySourceId['6842456'].requiredAmounts['닭고기'].amount, 300);
-  assert.equal(bySourceId['6842456'].requiredAmounts['닭고기'].unit, 'g');
+  assert.equal(bySourceId['6842456'].requiredAmounts['닭가슴살'].amount, 300);
+  assert.equal(bySourceId['6842456'].requiredAmounts['닭가슴살'].unit, 'g');
+  assert.deepEqual([...bySourceId['6842456'].recommendationProfile.primaryIngredients],['닭가슴살']);
   assert.ok(bySourceId['1480748'].sale.includes('쌀'));
   assert.ok(bySourceId['7022427'].sale.includes('모짜렐라치즈'));
   assert.match(bySourceId['7022427'].detailIngredients.at(-1), /수량 미표기/);
@@ -275,6 +280,15 @@ test('ontology details expose unique source identities and preserve known ingred
   assert.ok(bySourceId['6871908'].sale.includes('닭가슴살캔'));
   assert.ok(!bySourceId['6943215'].filters.includes('vegetarian'));
   assert.ok(bySourceId['6959935'].time >= 180);
+  const currentAdditions=['7015227','7071800','7020528','7030595','7021280','7057231','6940608','6846033','7050889'];
+  for(const id of currentAdditions) {
+    assert.equal(bySourceId[id].sourceCheckedAt,'2026-09-08');
+    assert.ok(Number.isInteger(bySourceId[id].sourceStepCount) && bySourceId[id].sourceStepCount>=3,id);
+  }
+  assert.deepEqual([...bySourceId['7020528'].recommendationProfile.primaryIngredients],['돼지안심']);
+  assert.deepEqual([...bySourceId['7030595'].recommendationProfile.primaryIngredients],['소고기등심']);
+  assert.deepEqual([...bySourceId['7021280'].recommendationProfile.primaryIngredients],['슬라이스치즈']);
+  assert.deepEqual([...bySourceId['6846033'].recommendationProfile.primaryIngredients],['돼지목살']);
 });
 
 test('shopping detail resolves the active area profile before rendering its source', () => {

@@ -48,13 +48,17 @@ const legacyAreas = {
 };
 
 const rules = {
-  '닭고기': [/^Hähnchenbrustfilet$/i],
+  '닭가슴살': [/(?:^|\s)Hähnchenbrustfilets?$/i],
   '닭안심': [/^Hähnchen-Innenfilet$/i],
-  '돼지고기': [/^Schweine-Schnitzel$/i, /^Schweinefilet lang$/i, /^Schweine-Rücken$/i, /^Schweine-Nackensteaks$/i],
+  '돼지안심': [/^Schweinefilet lang$/i],
+  '돼지목살': [/^Schweine-Nackensteaks$/i],
+  '돼지등심': [/^Schweine-Rücken$/i],
+  '돼지뒷다리살': [/^Schweine-Schnitzel$/i],
   '다진고기': [/^Hackfleisch gemischt$/i],
   '돼지다짐육': [/(?:^|\s)Schweine-Hackfleisch$/i],
-  '소고기': [/^Gulasch vom Rind$/i, /^Rib-Eye-Steak$/i, /^Entrecôte$/i, /Beef Burger/i, /Rinder-Burger/i],
-  '칠면조': [/^Putenbrustfilet/i, /^Puten-Hacksteaks/i],
+  '소고기': [/^Gulasch vom Rind$/i],
+  '소고기등심': [/^Rib-Eye-Steak$/i, /^Entrecôte$/i],
+  '칠면조가슴살': [/^Putenbrustfilet/i],
   '연어': [/Lachsfilet/i],
   '훈제연어': [/Räucherlachs/i],
   '송어': [/Forelle/i, /Lachsforellen-Filetseite/i],
@@ -78,7 +82,8 @@ const rules = {
   '사과': [/Äpfel/i, /^Apfel(?:$|\s|,)/i],
   '포도': [/Trauben/i, /Traube/i],
   '요거트': [/Joghurt/i, /^Skyr/i, /^Speisequark/i, /^Quark/i],
-  '치즈': [/Gouda/i, /Käsescheiben/i],
+  '치즈': [/Gouda/i],
+  '슬라이스치즈': [/Schmelzkäsescheiben/i],
   '모짜렐라치즈': [/Mozzarella/i],
   '체다치즈': [/Cheddar/i],
   '파마산치즈': [/Parmesan/i],
@@ -153,8 +158,9 @@ export function generateCatalog(rows, sourcePublicPath) {
           && cents(row['행사가격']) !== null && (!conditions || /^(없음|none|unconditional)$/i.test(conditions))
           && (!row['최소구매수량'] || Number(row['최소구매수량']) === 1)
           && (ingredient !== '다진고기' || /50\s*%\s*Schwein.*50\s*%\s*Rind/i.test(row['상품정보']))
+          && (ingredient !== '돼지뒷다리살' || /Oberschale/i.test(row['상품정보']))
           && !/3\s*für\s*2|\d\s*\+\s*\d|ab\s*\d+\s*(stück|pack)/i.test(row['상품정보'])
-          && !(['닭고기','닭안심','돼지고기','다진고기','돼지다짐육','연어'].includes(ingredient) && /가열완료|훈제|통조림/.test(row['상품상태'] || ''));
+          && !(['닭가슴살','닭안심','돼지안심','돼지목살','돼지등심','돼지뒷다리살','다진고기','돼지다짐육','소고기등심','연어'].includes(ingredient) && /가열완료|훈제|통조림/.test(row['상품상태'] || ''));
       });
       if (found) return found;
     }
