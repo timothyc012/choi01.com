@@ -303,8 +303,10 @@ body {
 
 /* ---------- Rendered markdown ---------- */
 
+/* No width cap: the preview fills its pane. A capped, left-aligned column left
+   all the slack on one side, which reads as a broken layout rather than as a
+   reading measure — and the pane is already the constraint in split view. */
 .mp-markdown {
-  max-width: 760px;
   font-size: 16px;
   line-height: 1.72;
 }
