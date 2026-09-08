@@ -294,7 +294,10 @@ test('ontology details expose unique source identities and preserve known ingred
 });
 
 test('shopping detail resolves the active area profile before rendering its source', () => {
-  const html = fs.readFileSync(new URL('index.html', root), 'utf8');
+  // Normalise line endings first: on a Windows checkout core.autocrlf hands
+  // back CRLF, and the multi-line pattern below is about the shape of the
+  // source, not about how git happened to write it to disk.
+  const html = fs.readFileSync(new URL('index.html', root), 'utf8').replace(/\r\n/g, '\n');
   const renderShopping = html.match(/function renderShopping\(\) \{([\s\S]*?)\n      \}\n      function renderShoppingSummary/);
   assert.ok(renderShopping);
   assert.match(html, /const profile = profiles\[activeArea\]\[activeStore\];/);
