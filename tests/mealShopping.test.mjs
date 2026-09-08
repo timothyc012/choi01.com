@@ -226,8 +226,10 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.match(html, /52064 · Aachen/);
     assert.match(html, /id="postcodeSelect"/);
     assert.match(html, /id="storeSelect"/);
-    assert.match(html, /이 마트 행사상품/);
+    assert.match(html, /할인상품 독어 원문명/);
     assert.match(html, /linkedOfferText/);
+    assert.match(html, /id="offerDirectoryList"/);
+    assert.match(html, /lang="de"/);
     assert.match(html, /할인 재료.*메뉴에 연결됨/);
     assert.match(html, /수집된 지점·지역 자료 기준/);
     for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-shopping']) {

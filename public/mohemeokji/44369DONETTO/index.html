@@ -297,6 +297,19 @@
       .stat span { color: var(--muted); font-size: 12px; }
       .stat strong { display: block; margin-top: 5px; font-size: 23px; letter-spacing: -.03em; }
       .stat small { display: block; margin-top: 3px; color: var(--faint); font-size: 11px; }
+      .offer-directory { margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--canvas); }
+      .offer-directory summary { min-height: 44px; display: flex; align-items: center; padding: 0 14px; color: var(--green); cursor: pointer; font-size: 13px; font-weight: 700; }
+      .offer-directory summary::-webkit-details-marker { display: none; }
+      .offer-directory summary::marker { content: ""; }
+      .offer-directory summary::after { width: 7px; height: 7px; margin-left: auto; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; content: ""; transform: rotate(45deg); }
+      .offer-directory[open] summary::after { transform: rotate(225deg); }
+      .offer-original-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); margin: 0; padding: 0; border-top: 1px solid var(--border-soft); list-style: none; }
+      .offer-original-list li { min-width: 0; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
+      .offer-original-list li:nth-child(odd) { border-right: 1px solid var(--border-soft); }
+      .offer-original-list strong, .offer-original-list span, .offer-original-list small { display: block; overflow-wrap: anywhere; }
+      .offer-original-list strong { color: var(--muted); font-size: 11px; }
+      .offer-original-list span { margin-top: 3px; color: var(--ink); font-size: 13px; font-weight: 650; }
+      .offer-original-list small { margin-top: 2px; color: var(--faint); font-size: 10px; }
       .workspace {
         display: grid;
         grid-template-columns: minmax(0, 1.06fr) minmax(350px, .94fr);
@@ -543,6 +556,8 @@
         .stat { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 10px; }
         .stat strong { margin: 0; }
         .stat small { grid-column: 1 / -1; }
+        .offer-original-list { grid-template-columns: 1fr; }
+        .offer-original-list li:nth-child(odd) { border-right: 0; }
         .panel-header { display: block; }
         .week-head, .week-row { grid-template-columns: 60px 1fr; }
         .week-head { padding-left: 14px; }
@@ -665,6 +680,10 @@
           <article class="stat"><span>이번 주 할인자료</span><strong id="offerCount"></strong><small id="offerSummary"></small></article>
           <article class="stat"><span id="totalCostLabel">이번 주 장보기 합계</span><strong id="totalCost"></strong><small id="totalCostNote"></small></article>
         </div>
+        <details class="offer-directory">
+          <summary id="offerDirectorySummary">레시피에 연결된 할인상품 독어 원문명 전체 보기</summary>
+          <ul class="offer-original-list" id="offerDirectoryList"></ul>
+        </details>
 
         <div class="workspace">
           <article class="panel">
@@ -894,12 +913,23 @@
       function offerInfo(item) { return recommendations.explain(item,catalog[activeStore]); }
       function primaryOfferText(item) {
         const info=offerInfo(item);
-        const offers=info.mainOffers.map((offer)=>offer.name+' · '+offer.product+' '+offer.pack+' '+shopping.euro(offer.priceCents));
-        return (offers.length ? '주재료 할인: '+offers.join(' / ') : '주재료 할인 없음: '+info.mainIngredients.join(' · '))
+        const offers=info.mainOffers.map((offer)=>offer.name+' / '+offer.product+' · '+offer.pack+' · '+shopping.euro(offer.priceCents));
+        return (offers.length ? '할인 주재료(한국어 / 독어 원문명): '+offers.join(' / ') : '주재료 할인 없음: '+info.mainIngredients.join(' · '))
           + (info.substitutionNotes.length ? ' '+info.substitutionNotes.join(' ') : '');
       }
       function linkedOfferText(item) {
-        return offerInfo(item).mainOffers.map((offer)=>offer.product+' · '+offer.pack+' · '+shopping.euro(offer.priceCents)).join(' / ');
+        return offerInfo(item).mainOffers.map((offer)=>offer.name+' / '+offer.product+' · '+offer.pack+' · '+shopping.euro(offer.priceCents)).join(' / ');
+      }
+      function renderOfferDirectory() {
+        const offers=Object.entries(catalog[activeStore]);
+        const germanNames=[...new Set(offers.map(([,offer])=>offer.product))];
+        byId("offerSummary").textContent = germanNames.length
+          ? "연결 상품 독어 원문명: " + germanNames.slice(0,2).join(" · ") + (germanNames.length>2 ? " 외 " + (germanNames.length-2) + "종" : "")
+          : "현재 유효한 독어 상품 원문명이 없습니다.";
+        byId("offerDirectorySummary").textContent = activeStore + " 레시피 연결 할인상품 독어 원문명 " + offers.length + "종 전체 보기";
+        byId("offerDirectoryList").innerHTML = offers.map(([name,offer])=>
+          '<li><strong>' + escapeHtml(name) + '</strong><span lang="de">' + escapeHtml(offer.product) + '</span><small>' + escapeHtml(offer.pack) + ' · ' + shopping.euro(offer.priceCents) + '</small></li>'
+        ).join("");
       }
       function renderHistoryStatus() {
         byId('recentMealSummary').textContent = mealHistory.length ? '최근 14일 '+mealHistory.length+'끼의 먹은 기록을 반영합니다.' : '먹은 기록이 아직 없어요. 실제로 먹은 메뉴의 ‘먹었어요’를 눌러주세요.';
@@ -1029,7 +1059,7 @@
         });
         byId("menuCount").textContent = pool.length;
         byId("offerCount").textContent = profile.offerCount;
-        byId("offerSummary").textContent = profile.offerSummary;
+        renderOfferDirectory();
         const linkedIngredients=new Set(pool.flatMap((item)=>offerInfo(item).mainOffers.map((offer)=>offer.name)));
         const unlinkedIngredients=Object.keys(catalog[activeStore]).filter((name)=>!linkedIngredients.has(name));
         byId("menuCountNote").textContent = "할인 재료 " + Object.keys(catalog[activeStore]).length + "종 중 " + linkedIngredients.size + "종이 메뉴에 연결됨"
@@ -1037,7 +1067,7 @@
         byId("menuList").innerHTML = visible.length ? visible.map((item) =>
           '<article class="menu-item' + (selectedMeal?.id === item.id ? " selected" : "") + '" data-id="' + item.id + '" tabindex="0" draggable="true">' +
           '<div class="menu-top"><h4 class="menu-title">' + item.title + '</h4><span class="match">주재료 할인 ' + offerInfo(item).mainOffers.length + '종</span></div>' +
-          '<p class="menu-offer"><b>이 마트 행사상품</b><br>' + escapeHtml(linkedOfferText(item)) + '</p>' +
+          '<p class="menu-offer"><b>할인상품 독어 원문명</b><br>' + escapeHtml(linkedOfferText(item)) + '</p>' +
           '<p class="menu-sub">할인: ' + (item.sale.join(" · ") || "해당 없음") + '<br>할인 외: ' + (item.missing.join(" · ") || "없음") + '</p>' +
           '<div class="tag-row"><span class="tag tag-source">' + item.store + '</span>' + item.tags.map((tag) => '<span class="tag">' + tag + '</span>').join("") + '</div>' +
           '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +

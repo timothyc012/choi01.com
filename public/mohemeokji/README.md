@@ -89,8 +89,10 @@ Weekly refreshes now make the offer-to-recipe lookup explicit:
 The read-only report groups exact offer products and `recipe-full` candidates by
 postcode/store. It is a review queue, not permission to publish candidates without
 checking cut, preparation state, quantities and ordered source steps. Menu cards
-show the exact matched product, selling unit and price. When several stores really
-discount the same ingredient, recipes can overlap; the lead recommendation favors
+show the Korean ingredient with the verbatim German product name, selling unit and
+price. The weekly summary has an expandable directory of every linked offer name,
+with German names marked `lang="de"`. When several stores really discount the same
+ingredient, recipes can overlap; the lead recommendation favors
 an eligible offer that is less common among the stores available in that postcode.
 
 See the maintained [weekly skill](../../docs/skills/mohemeokji-weekly/SKILL.md) and
