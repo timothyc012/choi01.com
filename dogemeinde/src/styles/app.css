@@ -51,6 +51,25 @@ a { color: inherit; text-decoration: none; }
 }
 .topbar .crumbs { display: flex; align-items: center; gap: var(--sp-2); font-size: 13px; color: var(--tx-1); }
 .topbar .crumbs b { color: var(--tx-0); font-weight: 600; }
+.topbar .crumbs .crumb-home {
+  display: inline-flex;
+  align-items: center;
+  color: var(--tx-1);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: var(--r-sm);
+  padding: 2px 4px;
+  margin-left: -4px;
+  transition: color var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+.topbar .crumbs .crumb-home:hover {
+  color: var(--tx-0);
+  background: var(--bg-2);
+}
+.topbar .crumbs .crumb-sep {
+  color: var(--tx-3);
+  margin: 0 1px;
+}
 .topbar .spacer { flex: 1; }
 
 .sidebar {
@@ -62,8 +81,19 @@ a { color: inherit; text-decoration: none; }
   min-height: 0;
 }
 .sidebar .brand {
-  display: flex; align-items: center; gap: var(--sp-2);
-  padding: 14px var(--sp-4) 10px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0 var(--sp-4);
+  height: 52px;
+  border-bottom: 1px solid var(--line-soft);
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+  transition: background var(--fast) var(--ease);
+}
+.sidebar .brand:hover {
+  background: var(--bg-1);
 }
 .sidebar .brand .mark {
   width: 22px; height: 22px; border-radius: 6px;
@@ -71,6 +101,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent-ink);
   display: grid; place-items: center;
   font-weight: 700; font-size: 13px;
+  flex-shrink: 0;
 }
 .sidebar .brand .name { font-weight: 650; font-size: 14px; }
 .sidebar .brand .name span { color: var(--tx-2); font-weight: 400; }

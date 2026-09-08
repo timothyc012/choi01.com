@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { supabase } from './supabase';
-import { Login } from './components/Login';
 import { CashBook } from './views/CashBook';
 import { Calendar } from './views/Calendar';
 import { Memo } from './views/Memo';
@@ -12,7 +11,16 @@ function TopBar({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="topbar">
       <div className="crumbs">
-        <b style={{ color: 'var(--accent)', marginRight: '4px' }}>●</b>
+        <a
+          href="https://choi01.com"
+          className="crumb-home"
+          title="choi01.com 메인으로 돌아가기"
+          aria-label="choi01 메인으로 돌아가기"
+        >
+          <span style={{ color: 'var(--accent)', marginRight: '6px' }}>●</span>
+          <span>choi01</span>
+        </a>
+        <span className="crumb-sep">/</span>
         <b>DoGemeinde</b>
       </div>
       <div className="spacer" />
@@ -34,8 +42,17 @@ function Sidebar() {
   ];
 
   return (
-    <div className="sidebar" style={{ padding: '16px 8px' }}>
-      <div className="nav">
+    <div className="sidebar">
+      <a
+        href="https://choi01.com"
+        className="brand"
+        title="choi01.com 메인으로 돌아가기"
+        aria-label="choi01 메인으로 돌아가기"
+      >
+        <span className="mark">01</span>
+        <span className="name">choi01 <span>/ dogemeinde</span></span>
+      </a>
+      <div className="nav" style={{ padding: '8px' }}>
         {tabs.map((tab) => (
           <Link
             key={tab.path}
@@ -51,7 +68,7 @@ function Sidebar() {
 }
 
 export default function App() {
-  const [session, setSession] = useState<any>(null);
+  const [_session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

@@ -218,10 +218,10 @@ export const GuestCanvasPage: React.FC = () => {
           <a className="gc-home-link" href="/" title="Choi01 Lab 홈으로">
             <ArrowLeft className="gc-icon" />
           </a>
-          <span className="gc-brand">
+          <a className="gc-brand" href="/" title="Choi01 Lab 홈으로">
             <span className="gc-brand-mark">01</span>
             캔버스 메모보드
-          </span>
+          </a>
           <span className="gc-ephemeral-badge" title="이 페이지는 서버에 아무것도 저장하지 않습니다">
             저장되지 않음 · 파일로 보관
           </span>
