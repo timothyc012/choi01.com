@@ -24,8 +24,15 @@ after(async () => {
   await server.close();
 });
 
+/** The document as one HTML string — what the old single-blob output was. */
+function htmlOf(source) {
+  return renderMarkdown(source).blocks
+    .map(block => (block.kind === 'html' ? block.html : block.fallbackHtml))
+    .join('\n');
+}
+
 it('renders GFM: headings, tables, task lists, strikethrough, fenced code', () => {
-  const { html } = renderMarkdown([
+  const html = htmlOf([
     '# Title',
     '',
     '| a | b |',
@@ -51,9 +58,9 @@ it('renders GFM: headings, tables, task lists, strikethrough, fenced code', () =
 });
 
 it('strips script tags and inline event handlers from raw HTML', () => {
-  const { html, removed } = renderMarkdown(
-    '<script>alert(1)</script>\n\n<img src=x onerror="alert(2)">\n\n<p onclick="alert(3)">hi</p>',
-  );
+  const source = '<script>alert(1)</script>\n\n<img src=x onerror="alert(2)">\n\n<p onclick="alert(3)">hi</p>';
+  const html = htmlOf(source);
+  const { removed } = renderMarkdown(source);
 
   assert.doesNotMatch(html, /<script/i);
   assert.doesNotMatch(html, /onerror/i);
@@ -63,7 +70,7 @@ it('strips script tags and inline event handlers from raw HTML', () => {
 });
 
 it('drops javascript: and data:text/html links', () => {
-  const { html } = renderMarkdown(
+  const html = htmlOf(
     '[a](javascript:alert(1))\n\n[b](data:text/html;base64,PHNjcmlwdD4=)\n\n[c](https://example.com)',
   );
 
@@ -73,7 +80,7 @@ it('drops javascript: and data:text/html links', () => {
 });
 
 it('opens external links in a new tab without leaking the referrer, and leaves anchors in place', () => {
-  const { html } = renderMarkdown('[out](https://example.com)\n\n[in](#section)');
+  const html = htmlOf('[out](https://example.com)\n\n[in](#section)');
 
   assert.match(html, /<a[^>]*href="https:\/\/example\.com"[^>]*target="_blank"[^>]*>/);
   assert.match(html, /rel="noreferrer noopener"/);
@@ -81,7 +88,7 @@ it('opens external links in a new tab without leaking the referrer, and leaves a
 });
 
 it('gives headings stable, collision-free ids', () => {
-  const { html } = renderMarkdown('## Setup\n\n## Setup\n\n## 한글 제목');
+  const html = htmlOf('## Setup\n\n## Setup\n\n## 한글 제목');
 
   assert.match(html, /<h2 id="setup">/);
   assert.match(html, /<h2 id="setup-1">/);
@@ -89,18 +96,60 @@ it('gives headings stable, collision-free ids', () => {
 });
 
 it('refuses <style> and <form> so pasted markdown cannot restyle or fake the page chrome', () => {
-  const { html } = renderMarkdown('<style>body{display:none}</style>\n\n<form action="/x"><input name="pw"></form>');
+  const html = htmlOf('<style>body{display:none}</style>\n\n<form action="/x"><input name="pw"></form>');
 
   assert.doesNotMatch(html, /<style/i);
   assert.doesNotMatch(html, /<form/i);
 });
 
 it('escapes markdown-authored HTML entities rather than executing them', () => {
-  const { html } = renderMarkdown('`<script>alert(1)</script>`');
+  const html = htmlOf('`<script>alert(1)</script>`');
 
   assert.match(html, /<code>&lt;script&gt;/);
 });
 
 it('returns an empty string for empty input', () => {
-  assert.equal(renderMarkdown('').html, '');
+  assert.deepEqual(renderMarkdown('').blocks, []);
+});
+
+it('lifts a top-level ```mermaid fence into its own block, source intact', () => {
+  const { blocks } = renderMarkdown('# 제목\n\n```mermaid\npie title 배분\n    "A" : 1\n```\n\n끝.');
+
+  assert.deepEqual(blocks.map(block => block.kind), ['html', 'mermaid', 'html']);
+  assert.equal(blocks[1].source, 'pie title 배분\n    "A" : 1');
+  assert.match(blocks[0].html, /<h1[^>]*>제목<\/h1>/);
+  assert.match(blocks[2].html, /끝\./);
+});
+
+it('keeps the diagram source out of the HTML path entirely', () => {
+  const { blocks } = renderMarkdown('```mermaid\nflowchart LR\n    A --> B\n```');
+
+  assert.equal(blocks.length, 1);
+  assert.equal(blocks[0].kind, 'mermaid');
+  // The raw source is handed to Mermaid, never HTML-escaped or sanitised first.
+  assert.equal(blocks[0].source, 'flowchart LR\n    A --> B');
+  // ...and the fallback shown before Mermaid loads is a plain code block.
+  assert.match(blocks[0].fallbackHtml, /<pre><code class="language-mermaid">/);
+});
+
+it('accepts an info string with extra words after the language', () => {
+  const { blocks } = renderMarkdown('```mermaid title=diagram\npie\n```');
+
+  assert.equal(blocks[0].kind, 'mermaid');
+});
+
+it('leaves a nested mermaid fence as an ordinary code block', () => {
+  const { blocks } = renderMarkdown('- 항목\n\n  ```mermaid\n  pie\n  ```');
+
+  assert.deepEqual(blocks.map(block => block.kind), ['html']);
+  assert.match(blocks[0].html, /<code class="language-mermaid">/);
+});
+
+it('reports removals from every segment, not just the last one', () => {
+  const { removed } = renderMarkdown(
+    '<img src=x onerror="alert(1)">\n\n```mermaid\npie\n```\n\n<p onclick="alert(2)">hi</p>',
+  );
+
+  assert.ok(removed.some(entry => /onerror/i.test(entry)), removed.join(', '));
+  assert.ok(removed.some(entry => /onclick/i.test(entry)), removed.join(', '));
 });

@@ -309,7 +309,41 @@ body {
   line-height: 1.72;
 }
 
-.mp-markdown > :first-child { margin-top: 0; }
+/* The preview is a run of segments (html chunks and diagrams) rather than one
+   innerHTML blob, so the wrappers dissolve into the flow and the real elements
+   keep their normal sibling spacing. */
+.mp-block { display: contents; }
+.mp-markdown > :first-child,
+.mp-markdown > .mp-block:first-child > :first-child { margin-top: 0; }
+
+.mp-diagram {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1em;
+  padding: 20px 16px;
+  overflow-x: auto;
+  border: 1px solid var(--mp-border);
+  border-radius: 8px;
+  background: var(--mp-surface-soft);
+}
+
+.mp-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mp-diagram-error {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--mp-amber-soft);
+  color: var(--mp-amber);
+  font-size: 13px;
+  font-weight: 600;
+}
 
 .mp-markdown h1,
 .mp-markdown h2,

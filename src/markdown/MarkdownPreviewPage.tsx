@@ -4,7 +4,8 @@ import {
   Copy, Check, Download, FileCode, RotateCcw,
   ArrowDownUp, ShieldAlert, Sun, Moon,
 } from 'lucide-react';
-import { renderMarkdown, type MarkdownRenderResult } from './renderMarkdown';
+import { renderMarkdown, type MarkdownBlock, type MarkdownRenderResult } from './renderMarkdown';
+import { renderMermaid, type MermaidResult } from './renderMermaid';
 import { buildHtmlDocument } from './exportHtmlDocument';
 
 const DRAFT_KEY = 'choi01:markdown-preview:draft';
@@ -45,6 +46,25 @@ const SAMPLE_DOCUMENT = [
   'export function greet(name: string): string {',
   '  return `안녕하세요, ${name}`;',
   '}',
+  '```',
+  '',
+  '### 다이어그램',
+  '',
+  '세 칸따옴표 뒤에 `mermaid`를 쓰면 그대로 그려줍니다.',
+  '',
+  '```mermaid',
+  'pie showData',
+  '    title 예상 환급액 배분 (단위: EUR)',
+  '    "회사 귀속" : 25410',
+  '    "2023 보육료" : 1450',
+  '    "2024 보육료" : 1890',
+  '```',
+  '',
+  '```mermaid',
+  'flowchart LR',
+  '    A[마크다운 입력] --> B{코드펜스?}',
+  '    B -- mermaid --> C[다이어그램으로 렌더링]',
+  '    B -- 그 외 --> D[코드 블록으로 표시]',
   '```',
   '',
   '> 인용문은 이렇게 보입니다.',
@@ -90,6 +110,32 @@ function countWords(source: string): number {
 }
 
 /**
+ * One ```mermaid fence. While Mermaid is still loading it shows the fence as
+ * code, so the block never blinks out of the document; a diagram that will not
+ * parse says so and keeps its source visible for fixing.
+ */
+function MermaidBlock({ block, result }: {
+  block: Extract<MarkdownBlock, { kind: 'mermaid' }>;
+  result: MermaidResult | undefined;
+}) {
+  if (result?.status === 'ready') {
+    // Mermaid runs at securityLevel 'strict', which sanitises its own output.
+    return <figure className="mp-diagram" dangerouslySetInnerHTML={{ __html: result.svg }} />;
+  }
+  return (
+    <div className="mp-block">
+      {result?.status === 'error' && (
+        <p className="mp-diagram-error">
+          <ShieldAlert className="mp-icon" />
+          {result.message}
+        </p>
+      )}
+      <div dangerouslySetInnerHTML={{ __html: block.fallbackHtml }} />
+    </div>
+  );
+}
+
+/**
  * Live markdown preview.
  *
  * Unlike the guest canvas next door, this page *does* keep a localStorage
@@ -107,6 +153,7 @@ export function MarkdownPreviewPage() {
   );
   const [scrollSync, setScrollSync] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [diagrams, setDiagrams] = useState<ReadonlyMap<string, MermaidResult>>(new Map());
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -126,12 +173,42 @@ export function MarkdownPreviewPage() {
     return () => window.clearTimeout(timer);
   }, [source]);
 
+  // Diagrams are drawn after the markdown pass, in one batch per document, and
+  // redrawn when the theme flips so their palette follows the page.
+  useEffect(() => {
+    const pending = rendered.blocks.filter(block => block.kind === 'mermaid');
+    if (pending.length === 0) {
+      setDiagrams(previous => (previous.size === 0 ? previous : new Map()));
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      const drawn = await Promise.all(pending.map(async block =>
+        [block.key, await renderMermaid(block.source, isDarkMode ? 'dark' : 'light')] as const,
+      ));
+      if (!cancelled) setDiagrams(new Map(drawn));
+    })();
+    return () => { cancelled = true; };
+  }, [rendered.blocks, isDarkMode]);
+
   useEffect(() => {
     const query = window.matchMedia(NARROW_QUERY);
     const onChange = (event: MediaQueryListEvent) => setIsNarrow(event.matches);
     query.addEventListener('change', onChange);
     return () => query.removeEventListener('change', onChange);
   }, []);
+
+  /**
+   * What "copy HTML" and the .html download hand over. A drawn diagram travels
+   * as its SVG so the exported file shows what the preview showed; one that has
+   * not drawn (or failed) falls back to its original code fence rather than
+   * vanishing from the document.
+   */
+  const documentHtml = useMemo(() => rendered.blocks.map(block => {
+    if (block.kind === 'html') return block.html;
+    const drawn = diagrams.get(block.key);
+    return drawn?.status === 'ready' ? drawn.svg : block.fallbackHtml;
+  }).join('\n'), [rendered.blocks, diagrams]);
 
   const stats = useMemo(() => ({
     characters: source.length,
@@ -149,20 +226,20 @@ export function MarkdownPreviewPage() {
   const handleDownloadHtml = useCallback(() => {
     const name = documentName(source);
     downloadBlob(
-      new Blob([buildHtmlDocument(name, rendered.html)], { type: 'text/html;charset=utf-8' }),
+      new Blob([buildHtmlDocument(name, documentHtml)], { type: 'text/html;charset=utf-8' }),
       `${name}.html`,
     );
-  }, [rendered.html, source]);
+  }, [documentHtml, source]);
 
   const handleCopyHtml = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(rendered.html);
+      await navigator.clipboard.writeText(documentHtml);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1600);
     } catch {
       // Clipboard denied (permissions, insecure context) — the download still works.
     }
-  }, [rendered.html]);
+  }, [documentHtml]);
 
   const handleReset = useCallback(() => {
     if (!window.confirm('작성한 내용을 지우고 예시 문서로 되돌릴까요?')) return;
@@ -327,8 +404,14 @@ export function MarkdownPreviewPage() {
             tabIndex={0}
             aria-label="변환 결과"
           >
-            {/* Safe by construction: renderMarkdown puts every string through DOMPurify. */}
-            <div className="mp-markdown" dangerouslySetInnerHTML={{ __html: rendered.html }} />
+            <div className="mp-markdown">
+              {rendered.blocks.map(block => block.kind === 'html'
+                ? (
+                  // Safe by construction: renderMarkdown puts every string through DOMPurify.
+                  <div key={block.key} className="mp-block" dangerouslySetInnerHTML={{ __html: block.html }} />
+                )
+                : <MermaidBlock key={block.key} block={block} result={diagrams.get(block.key)} />)}
+            </div>
           </div>
         </section>
       </main>

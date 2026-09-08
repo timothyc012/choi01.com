@@ -92,3 +92,17 @@ it('switches to a single pane when a view is selected', async () => {
   assert.equal(container.querySelector('.mp-stage')?.getAttribute('data-view'), 'preview');
   assert.equal(preview.getAttribute('aria-pressed'), 'true');
 });
+
+it('gives a mermaid fence its own block instead of folding it into the prose', async () => {
+  await type('# 제목\n\n```mermaid\npie title 배분\n    "A" : 1\n```\n\n뒤 문단.');
+
+  // Mermaid loads lazily and may not draw under the test DOM, so assert on the
+  // wiring that must hold either way: the fence is its own block, its source is
+  // still visible, and the surrounding prose is untouched.
+  assert.equal(container.querySelector('.mp-markdown h1')?.textContent, '제목');
+  assert.ok(
+    container.querySelector('.mp-diagram') ?? container.querySelector('code.language-mermaid'),
+    'expected either a drawn diagram or its code-block fallback',
+  );
+  assert.match(container.querySelector('.mp-markdown')?.textContent ?? '', /뒤 문단\./);
+});

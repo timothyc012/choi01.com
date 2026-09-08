@@ -9,13 +9,30 @@
  * Never render marked's output directly, and never make the sanitize step
  * conditional. tests/renderMarkdown.test.mjs pins both facts.
  */
-import { Marked } from 'marked';
+import { Marked, type Token } from 'marked';
 import DOMPurify from 'dompurify';
 import type { Config, DOMPurify as DOMPurifyApi } from 'dompurify';
 
+/**
+ * The document as an ordered run of segments.
+ *
+ * A ```mermaid fence is kept out of the HTML path entirely rather than being
+ * rendered and then re-parsed out of the DOM: the diagram source stays a plain
+ * string until Mermaid itself draws it, so nothing about it is ever eligible to
+ * be treated as markup here.
+ */
+export type MarkdownBlock =
+  | { readonly kind: 'html'; readonly key: string; readonly html: string }
+  | {
+      readonly kind: 'mermaid';
+      readonly key: string;
+      readonly source: string;
+      /** Shown when Mermaid is unavailable or the diagram does not parse. */
+      readonly fallbackHtml: string;
+    };
+
 export interface MarkdownRenderResult {
-  /** Sanitised HTML, safe for dangerouslySetInnerHTML. */
-  readonly html: string;
+  readonly blocks: readonly MarkdownBlock[];
   /**
    * Human-readable names of what the sanitiser stripped, deduped. Shown in the
    * UI so a surprising preview reads as "this was removed" instead of "this is
@@ -108,11 +125,56 @@ function describeRemoval(entry: unknown): string {
   return element ? `<${element}>` : 'unknown';
 }
 
+function isMermaidFence(token: { type: string; lang?: string }): boolean {
+  // marked keeps the whole info string, so ```mermaid and ```mermaid title=x
+  // both land here; only the language word decides.
+  return token.type === 'code' && (token.lang ?? '').trim().split(/\s+/)[0] === 'mermaid';
+}
+
+/**
+ * Splits at the top level of the token stream, so a ```mermaid fence nested
+ * inside a list or a blockquote stays an ordinary code block. Lifting those out
+ * would tear them from their container, and a diagram is a block-level thing
+ * anyway.
+ */
 export function renderMarkdown(source: string): MarkdownRenderResult {
   const purify = getPurifier();
   slugCounts = new Map();
-  const rawHtml = marked.parse(source, { async: false });
-  const html = purify.sanitize(rawHtml, SANITIZE_CONFIG);
-  const removed = [...new Set(purify.removed.map(describeRemoval))];
-  return { html, removed };
+
+  const tokens = marked.lexer(source);
+  const blocks: MarkdownBlock[] = [];
+  const removals: string[] = [];
+  let pending: Token[] = [];
+
+  // `purify.removed` is reset at the top of every sanitize() call, so a
+  // multi-segment document has to accumulate as it goes — otherwise the notice
+  // would only ever describe the last segment.
+  const sanitize = (html: string): string => {
+    const clean = purify.sanitize(html, SANITIZE_CONFIG);
+    removals.push(...purify.removed.map(describeRemoval));
+    return clean;
+  };
+
+  const flushHtml = () => {
+    if (pending.length === 0) return;
+    blocks.push({ kind: 'html', key: `html-${blocks.length}`, html: sanitize(marked.parser(pending)) });
+    pending = [];
+  };
+
+  for (const token of tokens) {
+    if (!isMermaidFence(token)) {
+      pending.push(token);
+      continue;
+    }
+    flushHtml();
+    blocks.push({
+      kind: 'mermaid',
+      key: `mermaid-${blocks.length}`,
+      source: 'text' in token ? token.text : '',
+      fallbackHtml: sanitize(marked.parser([token])),
+    });
+  }
+  flushHtml();
+
+  return { blocks, removed: [...new Set(removals)] };
 }
