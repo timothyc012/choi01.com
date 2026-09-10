@@ -1,23 +1,22 @@
--- Run with psql -X -qAt -v ON_ERROR_STOP=1 -v recipe_ids=ID,ID ...
--- Read-only export; tenant and DB must be verified before running.
 BEGIN READ ONLY;
-SET LOCAL statement_timeout = '30s';
+SET LOCAL statement_timeout = '60s';
 
-WITH recipes AS (
+WITH selected_ids AS (
+  SELECT jsonb_array_elements_text(:'recipe_ids_json'::jsonb) AS recipe_id
+), recipes AS (
   SELECT r.*
-  FROM individuals r
-  WHERE r.tenant_id = 'recipe-full'
-    AND r.class_name = 'https://01ontology.org/pack/recipe#Recipe'
-    AND r.external_id = ANY(string_to_array(:'recipe_ids', ','))
+  FROM selected_ids selected
+  JOIN individuals r
+    ON r.external_id = selected.recipe_id
+   AND r.tenant_id = :'tenant'
+   AND r.class_name = 'https://01ontology.org/pack/recipe#Recipe'
 )
 SELECT jsonb_build_object(
-  'externalId', r.external_id,
   'recipeId', r.external_id,
+  'sourceRecipeId', r.external_id,
   'title', r.label,
   'sourceUrl', source_page.source_url,
   'author', author.label,
-  'profile', serving.profile,
-  'sourceServingText', serving.servings_text,
   'rating', rating.value,
   'ratingNumber', CASE
     WHEN btrim(rating.value) ~ '^(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)$'
@@ -25,6 +24,7 @@ SELECT jsonb_build_object(
     ELSE NULL
   END,
   'reviewCount', review.value_integer,
+  'sourceServingText', serving.servings_text,
   'ingredients', COALESCE(ingredients.items, '[]'::jsonb),
   'steps', COALESCE(steps.items, '[]'::jsonb)
 )
@@ -40,13 +40,12 @@ LEFT JOIN LATERAL (
   LIMIT 1
 ) review ON true
 LEFT JOIN LATERAL (
-  SELECT
-    jsonb_object_agg(p.key, p.value) AS profile,
-    max(p.value) FILTER (WHERE p.key = 'servingsText') AS servings_text
+  SELECT p.value AS servings_text
   FROM triples t
-  JOIN properties p ON p.individual_id = t.object_id
+  JOIN properties p ON p.individual_id = t.object_id AND p.key = 'servingsText'
   WHERE t.subject_id = r.id
     AND t.relation = 'https://01ontology.org/pack/recipe#hasServingProfile'
+  LIMIT 1
 ) serving ON true
 LEFT JOIN LATERAL (
   SELECT p.value AS source_url
