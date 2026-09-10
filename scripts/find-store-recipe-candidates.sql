@@ -4,12 +4,17 @@ SET LOCAL statement_timeout = '60s';
 WITH search_spec AS (
   SELECT
     COALESCE(item->>'identityId', item->>'key') AS identity_id,
+    COALESCE(item->>'identityKey', item->>'identityId', item->>'key') AS identity_key,
+    item->'identity' AS identity,
+    COALESCE((item->>'labelEligible')::boolean, true) AS label_eligible,
     ARRAY(SELECT jsonb_array_elements_text(item->'ingredientLabels')) AS ingredient_labels,
     ARRAY(SELECT jsonb_array_elements_text(item->'titleTerms')) AS title_terms
   FROM jsonb_array_elements(:'search_spec_json'::jsonb) AS item
 ), matched_recipes AS (
   SELECT DISTINCT
     spec.identity_id,
+    spec.identity_key,
+    spec.identity,
     spec.title_terms,
     r.id AS internal_recipe_id,
     r.external_id AS recipe_id,
@@ -31,9 +36,12 @@ WITH search_spec AS (
    AND r.tenant_id = :'tenant'
    AND r.class_name = 'https://01ontology.org/pack/recipe#Recipe'
    AND r.external_id IS NOT NULL
+  WHERE spec.label_eligible
 ), candidate_base AS (
   SELECT
     matched.identity_id,
+    matched.identity_key,
+    matched.identity,
     matched.internal_recipe_id,
     matched.recipe_id,
     matched.title,
@@ -106,16 +114,17 @@ WITH search_spec AS (
       AND t.relation = 'https://01ontology.org/pack/recipe#hasIngredientQuantity'
   ) ingredient_counts ON true
   GROUP BY
-    matched.identity_id, matched.internal_recipe_id, matched.recipe_id, matched.title,
+    matched.identity_id, matched.identity_key, matched.identity,
+    matched.internal_recipe_id, matched.recipe_id, matched.title,
     rating.value, review.value_integer, step_count.value_integer, serving.servings_text,
     source_page.source_url, author.label, ingredient_counts.ingredient_count,
     ingredient_counts.measured_ingredient_count
 ), ranked AS (
   SELECT
     candidate_base.*,
-    count(*) OVER (PARTITION BY identity_id) AS identity_total,
+    count(*) OVER (PARTITION BY identity_key) AS identity_total,
     row_number() OVER (
-      PARTITION BY identity_id
+      PARTITION BY identity_key
       ORDER BY
         title_evidence DESC,
         review_count DESC NULLS LAST,
@@ -126,6 +135,8 @@ WITH search_spec AS (
 )
 SELECT jsonb_build_object(
   'identityId', identity_id,
+  'identityKey', identity_key,
+  'identity', identity,
   'identityTotal', identity_total,
   'recipeId', recipe_id,
   'sourceRecipeId', recipe_id,
@@ -144,6 +155,6 @@ SELECT jsonb_build_object(
 )
 FROM ranked
 WHERE candidate_rank <= :'candidate_limit'::int
-ORDER BY identity_id, candidate_rank;
+ORDER BY identity_key, candidate_rank;
 
 COMMIT;

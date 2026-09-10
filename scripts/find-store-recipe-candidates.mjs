@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {generateCatalog,parseCsv} from './generate-meal-offers.mjs';
+import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
 
 export const recipeSearchSpec = {
   '닭가슴살': {ingredientLabels:['닭가슴살'],titleTerms:['닭가슴살']},
@@ -36,8 +37,8 @@ export const recipeSearchSpec = {
 
 const identityFields=['ingredientId','species','cut','processingState','form','composition'];
 
-function identityKey(identity) {
-  return identityFields.map((field)=>identity?.[field]||'').join('\u001f');
+export function offerIdentityKey(identity) {
+  return canonicalJson(Object.fromEntries(identityFields.map((field)=>[field,identity?.[field]??null])));
 }
 
 function ingredientLabel(ingredient) {
@@ -97,18 +98,21 @@ export function normalizeCandidateExport(candidate) {
   };
 }
 
-export function matchCandidate(candidate,offer) {
+export function matchCandidate(candidate,offer,{allowLabelFallback=false}={}) {
   const ingredientId=offer?.identity?.ingredientId;
   const spec=recipeSearchSpec[ingredientId]??recipeSearchSpec[offer?.ingredient]??(ingredientId?{ingredientLabels:[ingredientId],titleTerms:[ingredientId]}:null);
   if(!offer?.offerId||!spec||identityFields.some((field)=>!offer.identity?.[field])) return null;
-  const structuredIdentities=candidate.ingredientIdentities??candidate.identities;
+  const structuredIdentities=candidate.ingredientIdentities??candidate.identities??(candidate.identity?[candidate.identity]:null);
   let ingredient;
   if(Array.isArray(structuredIdentities)&&structuredIdentities.length) {
-    const exact=structuredIdentities.find((identity)=>identityKey(identity)===identityKey(offer.identity));
+    const exact=structuredIdentities.find((identity)=>offerIdentityKey(identity)===offerIdentityKey(offer.identity));
     if(!exact) return null;
     ingredient=exact.ingredientLabel??exact.ingredientId;
   } else {
     const labels=(candidate.ingredients||candidate.matchedIngredientLabels||[]).map(ingredientLabel).filter(Boolean);
+    const trustedIdentityKeys=candidate.identityKeys??(candidate.identityKey?[candidate.identityKey]:null);
+    if(trustedIdentityKeys&&!trustedIdentityKeys.includes(offerIdentityKey(offer.identity))) return null;
+    if(!trustedIdentityKeys&&!allowLabelFallback) return null;
     ingredient=labels.find((label)=>spec.ingredientLabels.includes(label));
   }
   if(!ingredient) return null;
@@ -127,6 +131,7 @@ function recipeSearchSpecForOffer(offer) {
   if(!offer?.offerId||!spec||identityFields.some((field)=>!offer.identity?.[field])) return null;
   return {
     identityId:offer.identity.ingredientId,
+    identityKey:offerIdentityKey(offer.identity),
     identity:offer.identity,
     ingredientLabels:spec.ingredientLabels,
     titleTerms:spec.titleTerms,
@@ -138,10 +143,17 @@ export function searchRequestForOffers(offers) {
   for(const offer of offers) {
     const spec=recipeSearchSpecForOffer(offer);
     if(!spec) continue;
-    const key=identityKey(offer.identity);
+    const key=offerIdentityKey(offer.identity);
     if(!byIdentity.has(key)) byIdentity.set(key,spec);
   }
-  return [...byIdentity.values()].sort((left,right)=>left.identityId.localeCompare(right.identityId));
+  const specs=[...byIdentity.values()];
+  for(const spec of specs) {
+    spec.labelEligible=!specs.some((other)=>
+      other.identityKey!==spec.identityKey
+      && other.ingredientLabels.some((label)=>spec.ingredientLabels.includes(label))
+    );
+  }
+  return specs.sort((left,right)=>left.identityKey.localeCompare(right.identityKey));
 }
 
 export function searchRequestForCatalog(packageCatalog) {
@@ -199,15 +211,17 @@ export async function discoverStoreRecipeCandidates({offers,db,tenant,perIdentit
   const identityStats={};
   const overflow={};
   const zeroCandidateIdentities=[];
+  const selectedIdentityKeysByRecipe=new Map();
   const identityResults=searchSpec.map((spec)=>{
-    const identityOffers=offers.filter((offer)=>identityKey(offer.identity)===identityKey(spec.identity));
+    const identityOffers=offers.filter((offer)=>offerIdentityKey(offer.identity)===spec.identityKey);
     const eligible=metadata.filter((candidate)=>{
-      if(candidate.identityId&&candidate.identityId!==spec.identityId) return false;
-      return Boolean(matchCandidate(candidate,identityOffers[0]));
+      if(candidate.identityKey&&candidate.identityKey!==spec.identityKey) return false;
+      if(!candidate.identityKey&&!spec.labelEligible) return false;
+      if(!candidate.identityKey&&candidate.identityId&&candidate.identityId!==spec.identityId) return false;
+      return Boolean(matchCandidate(candidate,identityOffers[0],{allowLabelFallback:spec.labelEligible}));
     }).sort(candidateOrder);
     const reportedTotal=eligible.reduce((total,candidate)=>Math.max(total,Number(candidate.identityTotal)||0),0);
     const total=Math.max(reportedTotal,eligible.length);
-    if(total===0) zeroCandidateIdentities.push(spec.identityId);
     return {spec,total,eligible:eligible.slice(0,perIdentityLimit),returned:0};
   });
 
@@ -220,14 +234,17 @@ export async function discoverStoreRecipeCandidates({offers,db,tenant,perIdentit
       if(!selectedByRecipe.has(recipeId)&&selectedByRecipe.size>=totalLimit) continue;
       result.returned++;
       if(!selectedByRecipe.has(recipeId)) selectedByRecipe.set(recipeId,candidate);
+      if(!selectedIdentityKeysByRecipe.has(recipeId)) selectedIdentityKeysByRecipe.set(recipeId,new Set());
+      selectedIdentityKeysByRecipe.get(recipeId).add(result.spec.identityKey);
     }
   }
 
   for(const result of identityResults) {
-    const {identityId}=result.spec;
+    const {identityKey}=result.spec;
     const stats={total:result.total,returned:result.returned,omitted:result.total-result.returned};
-    identityStats[identityId]=stats;
-    if(stats.omitted>0) overflow[identityId]=stats;
+    identityStats[identityKey]=stats;
+    if(result.total===0) zeroCandidateIdentities.push(identityKey);
+    if(stats.omitted>0) overflow[identityKey]=stats;
   }
 
   const recipeIds=[...selectedByRecipe.keys()];
@@ -238,7 +255,7 @@ export async function discoverStoreRecipeCandidates({offers,db,tenant,perIdentit
   }
   const candidates=recipeIds.map((recipeId)=>{
     const candidate=normalizeCandidateExport({...selectedByRecipe.get(recipeId),...factsById.get(recipeId)});
-    candidate.matches=offers.map((offer)=>matchCandidate(candidate,offer)).filter(Boolean);
+    candidate.matches=offers.map((offer)=>matchCandidate({...candidate,identityKeys:[...selectedIdentityKeysByRecipe.get(recipeId)]},offer)).filter(Boolean);
     return candidate;
   });
   return {candidates,identityStats,overflow,zeroCandidateIdentities};

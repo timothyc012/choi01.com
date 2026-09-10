@@ -4,7 +4,9 @@ import {
   buildStoreCandidateReport,
   discoverStoreRecipeCandidates,
   matchCandidate,
+  offerIdentityKey,
   searchRequestForCatalog,
+  searchRequestForOffers,
 } from '../scripts/find-store-recipe-candidates.mjs';
 
 const rawChickenOffer = {
@@ -18,6 +20,7 @@ const rawChickenOffer = {
     composition: 'chicken',
   },
 };
+const rawChickenIdentityKey=offerIdentityKey(rawChickenOffer.identity);
 
 test('candidate lookup is driven by exact offer keys and remains grouped by store',()=>{
   const packageCatalog={
@@ -48,6 +51,7 @@ test('a title mention alone does not qualify a candidate', () => {
 test('an exact ingredient identity qualifies every matching offer and title terms only add evidence', () => {
   const candidate = {
     recipeId: 'recipe-exact',
+    identityKey:rawChickenIdentityKey,
     title: '촉촉한 닭 요리',
     ingredients: [{ ingredient: '닭가슴살', quantity: '300g' }],
   };
@@ -71,13 +75,41 @@ test('structured candidate identity must match every canonical identity field', 
   assert.equal(matchCandidate({title:'닭 요리',ingredientIdentities:[exact]},{offerId:'incomplete',identity:{ingredientId:'닭가슴살'}}),null);
 });
 
+test('label-only DB metadata cannot qualify two variants that share an ingredient ID', async () => {
+  const smokedChickenOffer={
+    ...rawChickenOffer,
+    offerId:'offer-smoked-chicken',
+    identity:{...rawChickenOffer.identity,processingState:'smoked'},
+  };
+  const metadata=[{
+    identityId:'닭가슴살',
+    identityTotal:1,
+    recipeId:'label-only-chicken',
+    title:'닭 요리',
+    matchedIngredientLabels:['닭가슴살'],
+  }];
+  const db={
+    async findCandidateMetadata(){return metadata;},
+    async exportCandidateFacts(){return [{...metadata[0],ingredients:[{ingredient:'닭가슴살'}]}];},
+  };
+
+  assert.equal(matchCandidate(metadata[0],rawChickenOffer),null);
+  assert.equal(matchCandidate(metadata[0],smokedChickenOffer),null);
+  const specs=searchRequestForOffers([rawChickenOffer,smokedChickenOffer]);
+  assert.equal(new Set(specs.map((spec)=>spec.identityKey)).size,2);
+  const result=await discoverStoreRecipeCandidates({offers:[rawChickenOffer,smokedChickenOffer],db,tenant:'recipe-full'});
+  assert.deepEqual(result.candidates,[]);
+  assert.equal(Object.keys(result.identityStats).length,2);
+  assert.ok(Object.values(result.identityStats).every((stats)=>stats.total===0));
+});
+
 test('canonical identities without aliases still match the identical recipe ingredient label', () => {
   const onionOffer={
     offerId:'offer-onion',
     ingredient:'양파',
     identity:{ingredientId:'양파',species:'plant',cut:'onion',processingState:'fresh',form:'whole',composition:'onion'},
   };
-  assert.equal(matchCandidate({title:'카레',ingredients:[{ingredient:'양파'}]},onionOffer)?.relation,'exact-ingredient');
+  assert.equal(matchCandidate({title:'카레',identityKey:offerIdentityKey(onionOffer.identity),ingredients:[{ingredient:'양파'}]},onionOffer)?.relation,'exact-ingredient');
   assert.equal(matchCandidate({title:'양파 카레',ingredients:[{ingredient:'감자'}]},onionOffer),null);
 });
 
@@ -117,7 +149,7 @@ test('per-identity overflow is recorded instead of silently truncating', async (
     totalLimit: 5000,
   });
 
-  assert.deepEqual(result.overflow['닭가슴살'], { total: 501, returned: 500, omitted: 1 });
+  assert.deepEqual(result.overflow[rawChickenIdentityKey], { total: 501, returned: 500, omitted: 1 });
   assert.equal(result.candidates.length, 500);
   assert.deepEqual(result.candidates[0].matches.map((match) => match.offerId), ['offer-chicken']);
 });
@@ -134,8 +166,8 @@ test('the weekly cap takes candidates fairly across identities instead of starvi
   };
   const result=await discoverStoreRecipeCandidates({offers:[rawChickenOffer,onionOffer],db,tenant:'recipe-full',perIdentityLimit:3,totalLimit:2});
 
-  assert.equal(result.identityStats['닭가슴살'].returned,1);
-  assert.equal(result.identityStats['양파'].returned,1);
+  assert.equal(result.identityStats[rawChickenIdentityKey].returned,1);
+  assert.equal(result.identityStats[offerIdentityKey(onionOffer.identity)].returned,1);
 });
 
 test('discovery fails when the full-fact export omits a selected recipe', async () => {
