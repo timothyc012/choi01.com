@@ -243,6 +243,7 @@
       const archivedMealCache=new Map();
       const weeklyUnavailableIds=new Set();
       let selectedMeal=null;
+      let selectedPlanTarget=null;
       let recommendationIndex=0;
       let detailRequestVersion=0;
       let detailReturnFocus=null;
@@ -354,6 +355,7 @@
           if(!button)return;
           if(button.dataset.pickSlot) {
             mealMoment=button.dataset.pickMoment;
+            selectedPlanTarget={moment:mealMoment,day:button.dataset.pickSlot};
             document.querySelectorAll('[data-moment]').forEach((control)=>control.classList.toggle('active',control.dataset.moment===mealMoment));
             byId('menuSearch').focus();
             byId('library').scrollIntoView({behavior:'smooth'});
@@ -361,6 +363,7 @@
             return;
           }
           if(button.dataset.replaceSlot) {
+          selectedPlanTarget=null;
           const moment=button.dataset.replaceMoment,day=button.dataset.replaceSlot,slot=plans[moment][day];
           const pool=modePool();
           const currentIndex=pool.findIndex((meal)=>meal.id===slot.recipeId);
@@ -370,6 +373,7 @@
           plans[moment][day]=shopping.replaceAutoSlot(slot,next?.id||null);
           byId('planStatus').textContent=next?'다음 후보로 바꿨습니다.':'이 조건에서 남은 다음 후보가 없어 메뉴 칸을 비워두었습니다.';
           } else {
+            selectedPlanTarget=null;
             plans[button.dataset.clearMoment][button.dataset.clearSlot]=shopping.clearPlanSlot();
             byId('planStatus').textContent='선택한 메뉴 칸을 직접 비웠습니다.';
           }
@@ -381,6 +385,14 @@
         renderPlan();bindDetailTriggers();bindPlanActions();
       }
 
+      function takePlanDestination() {
+        const requested=selectedPlanTarget;
+        selectedPlanTarget=null;
+        const moment=requested?.moment||mealMoment;
+        const day=requested?.day||days.find(([dayId])=>!plans[moment][dayId].recipeId)?.[0]||todayId;
+        return {moment,day};
+      }
+
       function bindMenuActions() {
         const list=byId('menuList');
         if(list.dataset.menuActionsBound==='true')return;
@@ -390,10 +402,10 @@
           if(!button)return;
           const meal=mealById(button.dataset.addMenu);
           if(!meal)return;
-          const day=days.find(([dayId])=>!plans[mealMoment][dayId])?.[0]||todayId;
-          plans[mealMoment][day]=shopping.normalizePlanSlot(meal.id,'manual');
+          const {moment,day}=takePlanDestination();
+          plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
           savePlans();renderPlanAndBind();
-          byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+mealMoment+'에 넣었습니다.';
+          byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+moment+'에 넣었습니다.';
         });
       }
 
@@ -569,7 +581,7 @@
       byId('shoppingList').addEventListener('click',()=>{document.querySelector('[data-context-target="shop"]')?.click();byId('groceries').scrollIntoView({behavior:'smooth'});});
       byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{const result=await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent=result.unavailableCount?'검증하지 못한 메뉴 '+result.unavailableCount+'개를 제외하고 확인된 재료를 저장했습니다.':'계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';document.querySelector('[data-context-target="shop"]')?.click();byId('groceries').scrollIntoView({behavior:'smooth'});}finally{button.disabled=false;}});
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
-      byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
+      byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){const {moment,day}=takePlanDestination();plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
       byId('markEaten').disabled=true;
       byId('markEaten').title='먹은 기록은 새 추천 화면에서 다시 연결됩니다.';

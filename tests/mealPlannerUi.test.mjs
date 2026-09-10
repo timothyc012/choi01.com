@@ -17,6 +17,7 @@ test('canonical and direct pages expose the same Plan and Shop workspace contrac
     assert.equal([...document.querySelectorAll('.filter')].every((button)=>button.hasAttribute('aria-pressed')),true,route);
     assert.ok(document.querySelector('[data-context="plan"]'),route);
     assert.ok(document.querySelector('[data-context="shop"]'),route);
+    assert.equal(document.querySelector('#week')?.dataset.mobileView,'week',route);
     assert.ok(document.querySelector('#pantryEditor'),route);
     assert.equal(document.querySelectorAll('script[data-workspace-controller]').length,1,route);
   }
@@ -40,6 +41,18 @@ test('workspace navigation changes the visible task and preserves page state',()
   const document=dom.window.document;
   const search=document.getElementById('menuSearch');
   search.value='닭가슴살';
+  document.querySelector('[data-mobile-target="recipes"]').click();
+  assert.equal(document.getElementById('today').hidden,false);
+  assert.equal(document.getElementById('week').hidden,true);
+  assert.equal(document.getElementById('groceries').hidden,true);
+  document.querySelector('[data-mobile-target="week"]').click();
+  assert.equal(document.getElementById('today').hidden,true);
+  assert.equal(document.getElementById('week').hidden,false);
+  assert.equal(document.getElementById('groceries').hidden,true);
+  document.querySelector('[data-mobile-target="shop"]').click();
+  assert.equal(document.getElementById('today').hidden,true);
+  assert.equal(document.getElementById('week').hidden,true);
+  assert.equal(document.getElementById('groceries').hidden,false);
   document.querySelector('[data-context-target="shop"]').click();
   assert.equal(document.body.dataset.activeContext,'shop');
   assert.equal(document.querySelector('[data-context="plan"]').hidden,true);

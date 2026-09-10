@@ -530,6 +530,14 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   resolveSlowFail();
   await new Promise((resolve)=>setTimeout(resolve,50));
   assert.equal(dom.window.document.getElementById('detailDrawer').classList.contains('open'),false);
+  dom.window.document.getElementById('clearPlan').click();
+  const chosenTarget=dom.window.document.querySelector('[data-pick-slot="sun"][data-pick-moment="저녁"]');
+  assert.ok(chosenTarget);
+  chosenTarget.click();
+  const chosenRecipe=dom.window.document.querySelector('[data-add-menu]').dataset.addMenu;
+  dom.window.document.querySelector('[data-add-menu]').click();
+  assert.equal(runtime.plans.저녁.sun.recipeId,chosenRecipe);
+  assert.equal(runtime.plans.저녁.mon.recipeId,null);
   const disabledDom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only'});
   Object.defineProperty(disabledDom.window,'crypto',{value:crypto.webcrypto});
   Object.defineProperty(disabledDom.window,'localStorage',{value:{getItem(){throw new Error('denied');},setItem(){throw new Error('quota');}}});
