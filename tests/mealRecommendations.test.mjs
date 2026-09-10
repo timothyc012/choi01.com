@@ -182,6 +182,14 @@ test('all recommendation modes retain exact main-offer, main-meal, and store gat
   }
 });
 
+test('selected-branch automatic candidates require exact branch provenance',()=>{
+  const branchless=meal('branchless',['닭고기'],'chicken',{store:'Netto'});
+  const exact=meal('exact',['닭고기'],'chicken',{store:'Netto',branchId:'branch-a'});
+  const context={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',branchId:'branch-a',mealOnly:true};
+  assert.equal(engine.evaluateRecipeForMode(branchless,context,'balanced').eligible,false);
+  assert.equal(engine.evaluateRecipeForMode(exact,context,'balanced').eligible,true);
+});
+
 test('preference corruption falls back safely and valid values round trip',()=>{
   assert.deepEqual(JSON.parse(JSON.stringify(engine.restorePreferences('{broken'))),{mode:'balanced',targetServings:2});
   assert.deepEqual(JSON.parse(JSON.stringify(engine.restorePreferences(JSON.stringify({mode:'medical',targetServings:0})))),{mode:'balanced',targetServings:2});

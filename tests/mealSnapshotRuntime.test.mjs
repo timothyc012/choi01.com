@@ -287,16 +287,23 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
     'neuemarkt-recipe-bad':{sourceRecipeId:'7000001',title:'깨진 보관 메뉴',detailPath:badArchivedPath,detailSha256:'2'.repeat(64),area:'99999',store:'NeueMarkt',branchId:'branch-b',snapshotId:'snapshot-old'}
   }}));
   dom.window.localStorage.setItem('choi01-today-meal-plan:99999:NeueMarkt:branch-b','{malformed');
+  dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'diet',targetServings:2}));
   for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   const inline=[...dom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent;
   dom.window.eval(inline);
   const runtime=await dom.window.mealSnapshotReady;
   assert.equal(runtime.status,'ready');
-  const plansBeforeMode=JSON.parse(JSON.stringify(runtime.plans));
   const modeRadios=[...dom.window.document.querySelectorAll('input[name="recommendationMode"]')];
   assert.deepEqual(modeRadios.map((input)=>input.value),['balanced','value','nutrition','diet']);
   assert.equal(modeRadios.every((input)=>input.type==='radio'),true);
   assert.equal(dom.window.document.getElementById('targetServings').options.length,6);
+  assert.equal(modeRadios.find((input)=>input.value==='diet').checked,true);
+  assert.equal(Object.values(runtime.plans).flatMap((plan)=>Object.values(plan)).filter((slot)=>slot.origin==='auto').every((slot)=>slot.recipeId===null),true);
+  assert.equal(runtime.plans.저녁.mon.recipeId,'neuemarkt-recipe-8000001');
+  assert.match(dom.window.document.getElementById('modeReadiness').textContent,/영양 근거/);
+  modeRadios.find((input)=>input.value==='balanced').click();
+  assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'balanced');
+  const plansBeforeMode=JSON.parse(JSON.stringify(runtime.plans));
   const manualBeforeMode=runtime.plans.저녁.mon.recipeId;
   modeRadios.find((input)=>input.value==='diet').click();
   assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'diet');
@@ -350,6 +357,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.deepEqual(calls,[
     '/mohemeokji/data/current.json','/mohemeokji/data/'+manifestPath,'/mohemeokji/data/'+locationPath
   ]);
+  runtime.plans.저녁.thu={recipeId:'neuemarkt-recipe-9000001',origin:'auto',dismissedRecipeIds:[]};
   for(const plan of Object.values(runtime.plans)) for(const slot of Object.values(plan)) {
     if(!['neuemarkt-recipe-9000001','neuemarkt-recipe-8000001'].includes(slot.recipeId)) slot.recipeId=null;
     else slot.origin='auto';

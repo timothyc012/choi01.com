@@ -236,7 +236,7 @@
       let plans=shopping.refreshAutoPlans(restored.plans,autoPlans);
       for(const plan of Object.values(plans)) {
         const manualIds=new Set(Object.values(plan).filter((slot)=>slot.origin==='manual'&&slot.recipeId).map((slot)=>slot.recipeId));
-        const candidates=meals.filter((meal)=>!manualIds.has(meal.id));
+        const candidates=modePool().filter((meal)=>!manualIds.has(meal.id));
         let candidateIndex=0;
         for(const [day] of days) if(plan[day].origin==='auto') plan[day]=shopping.normalizePlanSlot({recipeId:candidates[candidateIndex++]?.id||null,origin:'auto',dismissedRecipeIds:plan[day].dismissedRecipeIds},'auto');
       }
