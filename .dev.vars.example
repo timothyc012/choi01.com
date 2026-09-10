@@ -1,0 +1,4 @@
+# Local Wrangler-only identity. `npm run dev` serves only Vite and therefore
+# stays in guest mode; use `wrangler pages dev` to exercise Functions.
+DEV_USER_EMAIL=owner@example.test
+ALLOWED_EMAILS=owner@example.test

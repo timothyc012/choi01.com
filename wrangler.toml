@@ -1,0 +1,20 @@
+# Cloudflare Pages configuration for choi01.com.
+# Pages reads this file on deploy: the D1 binding and the Access variables
+# below reach the functions under functions/ without dashboard settings.
+
+name = "choi01-com"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "choi01-canvas"
+database_id = "db5e1261-786f-44aa-9c96-9659b8de75fd"
+migrations_dir = "migrations"
+
+# Set these in the Cloudflare Pages production environment. Do not commit
+# actual personal email addresses or Access values here.
+#
+# ACCESS_TEAM_DOMAIN = "<team>.cloudflareaccess.com"
+# ACCESS_AUD = "<Access application audience tag>"
+# ALLOWED_EMAILS = "owner@example.com,second-owner@example.com"
