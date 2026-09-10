@@ -319,15 +319,17 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
     '/mohemeokji/data/current.json','/mohemeokji/data/'+manifestPath,'/mohemeokji/data/'+locationPath
   ]);
   for(const plan of Object.values(runtime.plans)) for(const slot of Object.values(plan)) {
-    if(slot.recipeId!=='neuemarkt-recipe-9000001') slot.recipeId=null;
+    if(!['neuemarkt-recipe-9000001','neuemarkt-recipe-8000001'].includes(slot.recipeId)) slot.recipeId=null;
     else slot.origin='auto';
   }
+  runtime.plans.저녁.mon.origin='manual';
   assert.equal(Object.values(runtime.plans).flatMap((plan)=>Object.values(plan)).length,14);
   assert.equal(runtime.weeklyPlanMeals().length,2);
   dom.window.HTMLElement.prototype.scrollIntoView=()=>{};
   dom.window.document.getElementById('prepareShopping').click();
-  await new Promise((resolve)=>setTimeout(resolve,0));
+  await new Promise((resolve)=>setTimeout(resolve,50));
   assert.match(dom.window.document.getElementById('groceryPending').textContent,/올리브유.*가격 미확인/);
+  assert.match(dom.window.document.getElementById('groceryPending').textContent,/감자.*가격 미확인/);
   assert.equal(dom.window.document.querySelectorAll('[data-grocery-key="NeueMarkt:닭가슴살"]').length,1);
   assert.equal(dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭 가슴살"]'),null);
   dom.window.document.querySelectorAll('[data-grocery-remove]').forEach((button)=>button.click());
@@ -340,7 +342,6 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
   assert.match(dom.window.document.getElementById('shoppingSource').textContent,/example.com|할인 근거/);
   assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'5,99€');
-  assert.equal(calls.at(-1),'/mohemeokji/data/'+detailPath);
   assert.equal(calls.filter((url)=>url===('/mohemeokji/data/'+detailPath)).length,1);
   dom.window.document.getElementById('addShoppingItems').click();
   let grocery=dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭가슴살"]');
@@ -402,6 +403,14 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   await new Promise((resolve)=>setTimeout(resolve,50));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
   assert.equal(dom.window.document.getElementById('addShoppingItems').disabled,false);
+  const invalidBeforeSuccess=runtime.requestDetail('neuemarkt-recipe-cross',true);
+  await runtime.openDetail('neuemarkt-recipe-9000001');
+  await invalidBeforeSuccess;
+  assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
+  const invalidBeforeClose=runtime.requestDetail('neuemarkt-recipe-cross',true);
+  dom.window.document.getElementById('closeDetail').click();
+  await invalidBeforeClose;
+  assert.equal(dom.window.document.getElementById('detailDrawer').classList.contains('open'),false);
   dom.window.document.querySelector('[data-id="neuemarkt-recipe-9000004"]').click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   dom.window.document.getElementById('closeDetail').click();

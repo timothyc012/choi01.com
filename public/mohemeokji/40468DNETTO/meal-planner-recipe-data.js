@@ -216,6 +216,8 @@
       let mealMoment=['점심','저녁'].includes(savedPlanData.mealMoment)?savedPlanData.mealMoment:'저녁';
       const detailCache=new Map();
       const archivedDetails=savedPlanData.archivedDetails&&typeof savedPlanData.archivedDetails==='object'&&!Array.isArray(savedPlanData.archivedDetails)?{...savedPlanData.archivedDetails}:{};
+      const archivedMealCache=new Map();
+      const weeklyUnavailableIds=new Set();
       let selectedMeal=null;
       let recommendationIndex=0;
       let detailRequestVersion=0;
@@ -229,7 +231,12 @@
         }
       };
       const savePlans=()=>{archiveManualDetails();return storage.set(planStorageKey,shopping.serializePlansV2(plans,{mealMoment,activeArea,activeStore,activeBranchId:activeBranch.branchId,snapshotId:manifest.snapshotId,archivedDetails}));};
-      const weeklyPlanMeals=()=>Object.values(plans).flatMap((plan)=>Object.values(plan)).map((slot)=>mealById(slot.recipeId)).filter(Boolean);
+      const weeklyPlanMeals=()=>Object.values(plans).flatMap((plan)=>Object.values(plan)).map((slot)=>{
+        if(weeklyUnavailableIds.has(slot.recipeId))return null;
+        const meal=mealById(slot.recipeId),archived=archivedDetails[slot.recipeId];
+        const useArchived=slot.origin==='manual'&&archiveInScope(archived)&&(!meal||archived.detailSha256!==meal.detailSha256);
+        return useArchived?archivedMealCache.get(slot.recipeId)||null:meal;
+      }).filter(Boolean);
       const basketFor=(items)=>shopping.basket(items,{catalog,pantry:shoppingState.pantry,prices:shoppingState.prices,quantities:shoppingState.quantities.week||{}});
       const weekBasket=()=>basketFor(weeklyPlanMeals());
       const currentMeal=()=>meals[recommendationIndex]||null;
@@ -314,14 +321,25 @@
 
       async function hydratePlannedMeals() {
         const plannedSlots=Object.values(plans).flatMap((plan)=>Object.values(plan)).filter((slot)=>slot.recipeId);
-        const unresolved=plannedSlots.some((slot)=>{
+        weeklyUnavailableIds.clear();
+        const work=new Map();
+        for(const slot of plannedSlots) {
           const meal=mealById(slot.recipeId),archived=archivedDetails[slot.recipeId];
-          return !meal||(slot.origin==='manual'&&archiveInScope(archived)&&archived.detailSha256!==meal.detailSha256);
-        });
-        if(unresolved)throw new Error('A planned manual recipe detail belongs to another snapshot');
-        const unique=[...new Map(plannedSlots.map((slot)=>mealById(slot.recipeId)).map((meal)=>[meal.id,meal])).values()];
-        await Promise.all(unique.map(async(meal)=>hydrateMeal(meal,await detailFor(meal,true))));
-        return unique;
+          const useArchived=slot.origin==='manual'&&archiveInScope(archived)&&(!meal||archived.detailSha256!==meal.detailSha256);
+          const reference=useArchived?archived:meal;
+          if(!reference) { weeklyUnavailableIds.add(slot.recipeId); continue; }
+          work.set(reference.detailPath+'|'+reference.detailSha256,{slot,meal,reference,useArchived});
+        }
+        await Promise.all([...work.values()].map(async(entry)=>{
+          try {
+            const detail=await detailFor(entry.reference,!entry.useArchived);
+            if(entry.useArchived) {
+              const archivedMeal=hydrateMeal({id:entry.slot.recipeId,store:activeStore,sale:[],missing:[],requiredAmounts:{},matchedOffers:[]},detail);
+              archivedMealCache.set(entry.slot.recipeId,archivedMeal);
+            } else hydrateMeal(entry.meal,detail);
+          } catch { weeklyUnavailableIds.add(entry.slot.recipeId); }
+        }));
+        return {unavailableCount:weeklyUnavailableIds.size};
       }
 
       function renderDetailShopping() {
@@ -337,37 +355,41 @@
 
       async function openDetail(id,useArchived=false) {
         const requestVersion=++detailRequestVersion;
-        const meal=mealById(id);
-        const archived=archivedDetails[id];
-        if(useArchived&&!archiveInScope(archived)) throw new Error('Archived recipe detail scope mismatch');
-        if(!meal&&(!archived||!archiveInScope(archived))) throw new Error('Archived recipe detail unavailable');
-        const reference=useArchived||!meal?archived:meal;
-        let detail;
-        try { detail=await detailFor(reference,reference===meal); }
-        catch(error) { if(requestVersion!==detailRequestVersion)return null; throw error; }
-        const baseMeal=reference===meal?meal:{id,store:activeStore,sale:[],missing:[],requiredAmounts:{},matchedOffers:[]};
-        const hydrated=hydrateMeal(baseMeal,detail);
-        if(requestVersion!==detailRequestVersion)return hydrated;
-        selectedMeal=hydrated;
-        byId('detailTitle').textContent=selectedMeal.title;
-        byId('detailIntro').textContent='검증된 원문 정보를 바탕으로 정리한 상세입니다.';
-        byId('recipeAmounts').innerHTML=(detail.detailIngredients||[]).map((item)=>'<li>'+escapeHtml(item)+'</li>').join('');
-        byId('detailSteps').innerHTML=(detail.steps||[]).map((step)=>'<li>'+escapeHtml(step)+'</li>').join('');
-        byId('recipeSource').href=detail.sourceUrl||'#';
-        byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
-        byId('addShoppingItems').disabled=false;
-        byId('eatFromDetail').disabled=false;
-        byId('addFromDetail').disabled=!meal;
-        renderDetailShopping();
-        byId('detailDrawer').classList.add('open');
-        return selectedMeal;
+        try {
+          const meal=mealById(id);
+          const archived=archivedDetails[id];
+          if(useArchived&&!archiveInScope(archived)) throw new Error('Archived recipe detail scope mismatch');
+          if(!meal&&(!archived||!archiveInScope(archived))) throw new Error('Archived recipe detail unavailable');
+          const reference=useArchived||!meal?archived:meal;
+          const detail=await detailFor(reference,reference===meal);
+          const baseMeal=reference===meal?meal:{id,store:activeStore,sale:[],missing:[],requiredAmounts:{},matchedOffers:[]};
+          const hydrated=hydrateMeal(baseMeal,detail);
+          if(requestVersion!==detailRequestVersion)return hydrated;
+          selectedMeal=hydrated;
+          byId('detailTitle').textContent=selectedMeal.title;
+          byId('detailIntro').textContent='검증된 원문 정보를 바탕으로 정리한 상세입니다.';
+          byId('recipeAmounts').innerHTML=(detail.detailIngredients||[]).map((item)=>'<li>'+escapeHtml(item)+'</li>').join('');
+          byId('detailSteps').innerHTML=(detail.steps||[]).map((step)=>'<li>'+escapeHtml(step)+'</li>').join('');
+          byId('recipeSource').href=detail.sourceUrl||'#';
+          byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
+          byId('addShoppingItems').disabled=false;
+          byId('eatFromDetail').disabled=false;
+          byId('addFromDetail').disabled=!meal;
+          renderDetailShopping();
+          byId('detailDrawer').classList.add('open');
+          return selectedMeal;
+        } catch(error) {
+          if(requestVersion!==detailRequestVersion)return null;
+          error.detailRequestVersion=requestVersion;
+          throw error;
+        }
       }
 
       function bindDetailTriggers() {
         document.querySelectorAll('.detail-trigger').forEach((element)=>{
           if(element.dataset.detailBound==='true')return;
           element.dataset.detailBound='true';
-          element.addEventListener('click',()=>{openDetail(element.dataset.id,element.dataset.archived==='true').catch(showDetailError);});
+          element.addEventListener('click',()=>{requestDetail(element.dataset.id,element.dataset.archived==='true');});
         });
       }
 
@@ -379,6 +401,8 @@
         for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
         byId('detailDrawer').classList.add('open');
       }
+
+      const requestDetail=(id,useArchived=false)=>openDetail(id,useArchived).catch((error)=>{if(error.detailRequestVersion===detailRequestVersion)showDetailError(error);return null;});
 
       function closeDetail() {
         detailRequestVersion+=1;
@@ -396,11 +420,11 @@
       const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlan();bindDetailTriggers();};
       const acceptCurrent=()=>acceptMeal(currentMeal());
       byId('acceptToday').addEventListener('click',acceptCurrent);
-      byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)openDetail(meal.id).catch(showDetailError);});
+      byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)requestDetail(meal.id);});
       byId('nextRecommendation').addEventListener('click',()=>{if(meals.length<2)return;recommendationIndex=(recommendationIndex+1)%meals.length;renderToday();});
       byId('manualPick').addEventListener('click',()=>byId('library').scrollIntoView({behavior:'smooth'}));
       byId('shoppingList').addEventListener('click',()=>byId('groceries').scrollIntoView({behavior:'smooth'}));
-      byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent='계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';byId('groceries').scrollIntoView({behavior:'smooth'});}catch{byId('grocerySaveState').textContent='일부 레시피 상세를 검증하지 못해 주간 목록을 추가하지 않았습니다.';}finally{button.disabled=false;}});
+      byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{const result=await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent=result.unavailableCount?'검증하지 못한 메뉴 '+result.unavailableCount+'개를 제외하고 확인된 재료를 저장했습니다.':'계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';byId('groceries').scrollIntoView({behavior:'smooth'});}finally{button.disabled=false;}});
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
       byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlan();bindDetailTriggers();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
@@ -431,7 +455,7 @@
         shoppingState.list=shoppingState.list.filter((item)=>item.key!==button.dataset.groceryRemove);
         saveShopping();renderGroceries();
       });
-      const runtime={status:location.coverage?.sparse?'sparse':'ready',manifest,location,recipes:meals,plans,shoppingState,shoppingStorageKey,planStorageKey,weeklyPlanMeals,weekBasket,openDetail,saveShopping,savePlans};
+      const runtime={status:location.coverage?.sparse?'sparse':'ready',manifest,location,recipes:meals,plans,shoppingState,shoppingStorageKey,planStorageKey,weeklyPlanMeals,weekBasket,openDetail,requestDetail,saveShopping,savePlans};
       window.mealSnapshotRuntime=runtime;
       document.dispatchEvent(new CustomEvent('meal-snapshot-ready',{detail:runtime}));
       return runtime;
