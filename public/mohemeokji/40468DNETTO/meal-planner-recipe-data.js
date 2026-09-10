@@ -212,15 +212,22 @@
         return {...meal,requiredAmounts:Object.fromEntries(Object.entries(meal.requiredAmounts||{}).map(([name,value])=>[name,{...value,amount:value.amount*scale}]))};
       };
       const modeBasket=(meal)=>{
-        const cart=shopping.basket([scaledMeal(meal)],{catalog,pantry:shoppingState.pantry,prices:shoppingState.prices,quantities:shoppingState.quantities.week||{}});
-        if(Number.isFinite(meal.sourceServings)&&meal.sourceServings>0)return cart;
-        return {...cart,costStatus:cart.costStatus==='unknown'?'unknown':'partial',quantityCheckKeys:[...new Set([...cart.quantityCheckKeys,'recipe:'+meal.id+':source-servings'])]};
+        const facts=meal.basketFacts;
+        if(facts?.sourceCoverage==='complete'&&facts.targetServings===preferences.targetServings)return facts;
+        return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['recipe:'+meal.id+':full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable'};
       };
-      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate});
+      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate});
       const modePool=()=>recommendations.rankForMode(meals,recommendationContext(),preferences.mode);
-      const buildAutoPlans=()=>{
+      const buildAutoPlans=(currentPlans=null)=>{
+        const usedRecipeIds=new Set(Object.values(currentPlans||{}).flatMap((plan)=>Object.values(plan||{})).filter((slot)=>slot?.origin==='manual'&&slot.recipeId).map((slot)=>slot.recipeId));
         const pool=modePool();
-        return Object.fromEntries(['점심','저녁'].map((moment)=>[moment,Object.fromEntries(days.map(([day],index)=>[day,shopping.normalizePlanSlot({recipeId:pool[index]?.id||null,origin:'auto',dismissedRecipeIds:[]},'auto')]))]));
+        return Object.fromEntries(['점심','저녁'].map((moment)=>[moment,Object.fromEntries(days.map(([day])=>{
+          const current=currentPlans?.[moment]?.[day];
+          const next=current?.origin==='manual'?null:recommendations.nextCandidate(pool,{dismissedRecipeIds:current?.dismissedRecipeIds||[],usedRecipeIds:[...usedRecipeIds],mode:preferences.mode,context:recommendationContext()});
+          const recipeId=next?.id||null;
+          if(recipeId)usedRecipeIds.add(recipeId);
+          return [day,shopping.normalizePlanSlot({recipeId,origin:'auto',dismissedRecipeIds:current?.dismissedRecipeIds||[]},'auto')];
+        }))]));
       };
       let autoPlans=buildAutoPlans();
       const branchPlan=storage.get(planStorageKey);
@@ -233,13 +240,8 @@
       const savedPlan=branchMatches?branchPlan:(acceptedScopedPlan||acceptedGlobalPlan);
       const savedPlanData=safeJson(savedPlan)||{};
       const restored=shopping.restorePlansV2(savedPlan,{area:activeArea,store:activeStore,branchId:activeBranch.branchId,snapshotId:manifest.snapshotId,days:days.map(([day])=>day),moments:['점심','저녁'],availableRecipeIds:meals.map((meal)=>meal.id),autoPlans});
+      autoPlans=buildAutoPlans(restored.plans);
       let plans=shopping.refreshAutoPlans(restored.plans,autoPlans);
-      for(const plan of Object.values(plans)) {
-        const manualIds=new Set(Object.values(plan).filter((slot)=>slot.origin==='manual'&&slot.recipeId).map((slot)=>slot.recipeId));
-        const candidates=modePool().filter((meal)=>!manualIds.has(meal.id));
-        let candidateIndex=0;
-        for(const [day] of days) if(plan[day].origin==='auto') plan[day]=shopping.normalizePlanSlot({recipeId:candidates[candidateIndex++]?.id||null,origin:'auto',dismissedRecipeIds:plan[day].dismissedRecipeIds},'auto');
-      }
       let mealMoment=['점심','저녁'].includes(savedPlanData.mealMoment)?savedPlanData.mealMoment:'저녁';
       const detailCache=new Map();
       const archivedDetails=savedPlanData.archivedDetails&&typeof savedPlanData.archivedDetails==='object'&&!Array.isArray(savedPlanData.archivedDetails)?{...savedPlanData.archivedDetails}:{};
@@ -320,7 +322,13 @@
       }
 
       function bindPlanActions() {
-        document.querySelectorAll('[data-replace-slot]').forEach((button)=>button.addEventListener('click',()=>{
+        const grid=byId('weekGrid');
+        if(grid.dataset.planActionsBound==='true')return;
+        grid.dataset.planActionsBound='true';
+        grid.addEventListener('click',(event)=>{
+          const button=event.target.closest('[data-replace-slot],[data-clear-slot]');
+          if(!button)return;
+          if(button.dataset.replaceSlot) {
           const moment=button.dataset.replaceMoment,day=button.dataset.replaceSlot,slot=plans[moment][day];
           const pool=modePool();
           const currentIndex=pool.findIndex((meal)=>meal.id===slot.recipeId);
@@ -329,13 +337,16 @@
           const next=recommendations.nextCandidate(rotated,{dismissedRecipeIds:[...slot.dismissedRecipeIds,slot.recipeId].filter(Boolean),usedRecipeIds,mode:preferences.mode,context:recommendationContext()});
           plans[moment][day]=shopping.replaceAutoSlot(slot,next?.id||null);
           byId('planStatus').textContent=next?'다음 후보로 바꿨습니다.':'이 조건에서 남은 다음 후보가 없어 메뉴 칸을 비워두었습니다.';
-          savePlans();renderPlan();bindDetailTriggers();bindPlanActions();
-        }));
-        document.querySelectorAll('[data-clear-slot]').forEach((button)=>button.addEventListener('click',()=>{
-          plans[button.dataset.clearMoment][button.dataset.clearSlot]=shopping.clearPlanSlot();
-          byId('planStatus').textContent='선택한 메뉴 칸을 직접 비웠습니다.';
-          savePlans();renderPlan();bindDetailTriggers();bindPlanActions();
-        }));
+          } else {
+            plans[button.dataset.clearMoment][button.dataset.clearSlot]=shopping.clearPlanSlot();
+            byId('planStatus').textContent='선택한 메뉴 칸을 직접 비웠습니다.';
+          }
+          savePlans();renderPlanAndBind();
+        });
+      }
+
+      function renderPlanAndBind() {
+        renderPlan();bindDetailTriggers();bindPlanActions();
       }
 
       function renderGroceries() {
@@ -463,25 +474,27 @@
 
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{input.checked=input.value===preferences.mode;});
       byId('targetServings').value=String(preferences.targetServings);
-      renderToday();renderPlan();renderMenu();renderGroceries();bindDetailTriggers();bindPlanActions();
+      renderToday();renderPlanAndBind();renderMenu();renderGroceries();
       byId('sourceStatus').textContent=location.coverage?.sparse?activeArea+' · '+activeStore+' · 승인 메뉴 준비 중':activeArea+' · '+activeStore+' · 검증 메뉴 '+meals.length+'개';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
       byId('sourceStatus').dataset.snapshotState=location.coverage?.sparse?'sparse':'ready';
       byId('savePlan').addEventListener('click',savePlans);
       const refreshForPreferences=()=>{
-        autoPlans=buildAutoPlans();
+        closeDetail();selectedMeal=null;
+        for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
+        autoPlans=buildAutoPlans(plans);
         const refreshed=shopping.refreshAutoPlans(plans,autoPlans);
         for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];
-        recommendationIndex=0;selectedMeal=null;
+        recommendationIndex=0;
         storage.set(preferenceStorageKey,recommendations.serializePreferences(preferences));
-        renderToday();renderPlan();bindDetailTriggers();bindPlanActions();savePlans();
+        renderToday();renderPlanAndBind();savePlans();
       };
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>input.addEventListener('change',()=>{if(input.checked){preferences.mode=input.value;refreshForPreferences();}}));
       byId('targetServings').addEventListener('change',(event)=>{preferences.targetServings=Number(event.target.value);refreshForPreferences();});
-      byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans();const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlan();bindDetailTriggers();bindPlanActions();});
-      byId('clearPlan').addEventListener('click',()=>{plans[mealMoment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlan();bindPlanActions();});
-      document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;renderToday();renderPlan();bindDetailTriggers();}));
-      const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlan();bindDetailTriggers();};
+      byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();savePlans();});
+      byId('clearPlan').addEventListener('click',()=>{plans[mealMoment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});
+      document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;renderToday();renderPlanAndBind();}));
+      const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();};
       const acceptCurrent=()=>acceptMeal(currentMeal());
       byId('acceptToday').addEventListener('click',acceptCurrent);
       byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)requestDetail(meal.id);});
@@ -490,7 +503,7 @@
       byId('shoppingList').addEventListener('click',()=>byId('groceries').scrollIntoView({behavior:'smooth'}));
       byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{const result=await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent=result.unavailableCount?'검증하지 못한 메뉴 '+result.unavailableCount+'개를 제외하고 확인된 재료를 저장했습니다.':'계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';byId('groceries').scrollIntoView({behavior:'smooth'});}finally{button.disabled=false;}});
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
-      byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlan();bindDetailTriggers();}});
+      byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
       byId('markEaten').disabled=true;
       byId('markEaten').title='먹은 기록은 새 추천 화면에서 다시 연결됩니다.';
@@ -503,7 +516,7 @@
         if(!input)return;
         if(input.checked){shoppingState.pantry.add(input.dataset.shoppingKey);shoppingState.list=shoppingState.list.filter((item)=>item.key!==input.dataset.shoppingKey);}
         else shoppingState.pantry.delete(input.dataset.shoppingKey);
-        saveShopping();renderDetailShopping();renderGroceries();renderPlan();bindDetailTriggers();
+        saveShopping();renderDetailShopping();renderGroceries();renderPlanAndBind();
       });
       byId('groceries').addEventListener('change',(event)=>{
         const input=event.target.closest('[data-grocery-key]');

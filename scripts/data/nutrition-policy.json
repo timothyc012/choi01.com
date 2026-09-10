@@ -10,5 +10,15 @@
     "fiberGrams",
     "sodiumMg"
   ],
+  "modes": {
+    "nutrition": {
+      "weights": {"kcal": 20, "proteinGrams": 30, "fiberGrams": 30, "sodiumMg": 20},
+      "directions": {"kcal": "lower", "proteinGrams": "higher", "fiberGrams": "higher", "sodiumMg": "lower"}
+    },
+    "diet": {
+      "weights": {"kcal": 40, "proteinGrams": 30, "fiberGrams": 20, "sodiumMg": 10},
+      "directions": {"kcal": "lower", "proteinGrams": "higher", "fiberGrams": "higher", "sodiumMg": "lower"}
+    }
+  },
   "incompleteEvidenceBehavior": "exclude_from_nutrition_and_diet_modes"
 }

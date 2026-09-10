@@ -218,7 +218,7 @@
     const knownSubtotalCents = purchases.reduce((sum, item) => sum + (item.subtotalCents ?? 0), 0);
     const costStatus = unknownItemKeys.length === purchases.length && purchases.length > 0
       ? 'unknown' : (unknownItemKeys.length || quantityCheckKeys.length ? 'partial' : 'complete');
-    const comparableSavings = costStatus === 'complete' && purchases.every((item) => item.normalPriceCents !== null);
+    const comparableSavings = costStatus === 'complete' && purchases.length > 0 && purchases.every((item) => item.normalPriceCents !== null);
     return {
       items,
       totalCents: knownSubtotalCents,

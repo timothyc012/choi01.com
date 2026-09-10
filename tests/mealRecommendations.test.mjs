@@ -13,6 +13,7 @@ const engine=context.window.MealRecommendations;
 const meal=(id, primary, family, extra={})=>({id,sourceRecipeId:id,title:id,time:20,tags:[],sale:primary,missing:[],recommendationProfile:{primaryIngredients:primary,family,method:'stirfry'},...extra});
 const price={priceCents:100,pack:'500 g'};
 const fixtureCatalog=generateCatalog(parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv',import.meta.url),'utf8')),'/offers/supermarket_food_offers_2026-09-07.csv').packageCatalog;
+const rankingPolicy=JSON.parse(fs.readFileSync(new URL('../scripts/data/nutrition-policy.json',import.meta.url),'utf8'));
 
 test('each source recipe has explicit editorial main-ingredient and variety metadata',()=>{
   for(const recipe of context.window.ontologyRecipeDetails){
@@ -148,6 +149,15 @@ test('value mode rejects unknown package prices and quantities instead of rankin
   assert.equal(engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true,basketFor:()=>unknownQuantity},'value').eligible,false);
 });
 
+test('value mode rejects a complete-labelled basket whose known subtotal is absent or invalid',()=>{
+  const candidate=meal('invalid-subtotal',['닭고기'],'chicken',{store:'Netto'});
+  for(const knownSubtotalCents of [null,undefined,-1,1.5,'0']) {
+    const basket={costStatus:'complete',knownSubtotalCents,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
+    assert.equal(basketReadiness(basket).ready,false,String(knownSubtotalCents));
+    assert.equal(engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true,basketFor:()=>basket},'value').eligible,false,String(knownSubtotalCents));
+  }
+});
+
 test('a complete basket remains value-ready when same-product normal price is unavailable',()=>{
   const candidate=meal('complete',['닭고기'],'chicken',{store:'Netto'});
   const complete={costStatus:'complete',knownSubtotalCents:799,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
@@ -156,6 +166,16 @@ test('a complete basket remains value-ready when same-product normal price is un
   assert.equal(result.readiness.cost,'complete');
   assert.equal(result.readiness.savings,'unavailable');
   assert.equal(result.scoreComponents.knownSubtotalCents,799);
+});
+
+test('snapshot value mode requires compiler-proven full basket coverage, not priced primary ingredients alone',()=>{
+  const primaryOnly=meal('primary-only',['닭고기'],'chicken',{store:'Netto',sourceServings:2,requiredAmounts:{닭고기:{amount:300,unit:'g'}}});
+  const calculatedPrimary={costStatus:'complete',knownSubtotalCents:799,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
+  const context={catalog:{닭고기:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:()=>calculatedPrimary};
+  assert.equal(engine.evaluateRecipeForMode(primaryOnly,context,'value').eligible,false);
+  const proven={...primaryOnly,basketFacts:{...calculatedPrimary,sourceCoverage:'complete',targetServings:2}};
+  assert.equal(engine.evaluateRecipeForMode(proven,context,'value').eligible,true);
+  assert.equal(engine.evaluateRecipeForMode({...proven,basketFacts:{...proven.basketFacts,targetServings:4}},context,'value').eligible,false);
 });
 
 test('nutrition and diet reject recipes without complete sourced serving nutrients',()=>{
@@ -213,4 +233,32 @@ test('ready modes order by transparent cost and nutrient facts while keeping div
   const light=meal('light',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal:300,proteinGrams:20,fiberGrams:4,sodiumMg:250}}});
   assert.equal(engine.rankForMode([light,protein],base,'nutrition')[0].id,'protein');
   assert.equal(engine.rankForMode([protein,light],base,'diet')[0].id,'light');
+});
+
+test('nutrition policy weights every complete nutrient dimension and explains the active policy',()=>{
+  assert.deepEqual(rankingPolicy.modes.nutrition.weights,{kcal:20,proteinGrams:30,fiberGrams:30,sodiumMg:20});
+  assert.deepEqual(rankingPolicy.modes.diet.weights,{kcal:40,proteinGrams:30,fiberGrams:20,sodiumMg:10});
+  const recipe=(id,perServing)=>meal(id,['닭고기'],id,{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing}});
+  const baseFacts={kcal:400,proteinGrams:20,fiberGrams:4,sodiumMg:300};
+  const context={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true,rankingPolicy};
+  for(const [mode,field,better,worse] of [
+    ['nutrition','kcal',300,500],['nutrition','proteinGrams',30,10],['nutrition','fiberGrams',8,2],['nutrition','sodiumMg',200,500],
+    ['diet','kcal',300,500],['diet','proteinGrams',30,10],['diet','fiberGrams',8,2],['diet','sodiumMg',200,500]
+  ]) {
+    const worseRecipe=recipe('a-worse-'+mode+'-'+field,{...baseFacts,[field]:worse});
+    const betterRecipe=recipe('z-better-'+mode+'-'+field,{...baseFacts,[field]:better});
+    assert.equal(engine.rankForMode([worseRecipe,betterRecipe],context,mode)[0].id,betterRecipe.id,mode+' '+field);
+  }
+  const explained=engine.evaluateRecipeForMode(recipe('explained',baseFacts),context,'nutrition');
+  assert.ok(explained.reasons.some((reason)=>reason.includes('열량 20%')&&reason.includes('단백질 30%')&&reason.includes('식이섬유 30%')&&reason.includes('나트륨 20%')));
+});
+
+test('fourteen-slot sequencing keeps the family cap until exhausted and records relaxation',()=>{
+  const pool=[];
+  for(const family of ['a','b','c','d','e'])for(let index=0;index<3;index++)pool.push(meal(family+index,['닭고기'],family,{store:'Netto'}));
+  const result=engine.sequence(pool,{catalog:{닭고기:price},date:'2026-09-08'},14);
+  const firstTen=result.slice(0,10);
+  for(const family of ['a','b','c','d','e'])assert.ok(firstTen.filter((candidate)=>candidate.recommendationProfile.family===family).length<=2);
+  for(let index=1;index<result.length;index++)assert.notEqual(result[index].recommendationProfile.family,result[index-1].recommendationProfile.family);
+  assert.ok(result.relaxations.some((entry)=>entry.code==='family-cap'&&entry.at>=10));
 });

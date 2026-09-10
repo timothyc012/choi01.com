@@ -8,6 +8,10 @@
   const identity = (meal) => meal.sourceRecipeId || meal.id;
   const profile = (meal) => meal.recommendationProfile || {primaryIngredients:[],family:identity(meal),method:'unknown'};
   const modes = new Set(['balanced','value','nutrition','diet']);
+  const defaultRankingPolicy={modes:{
+    nutrition:{weights:{kcal:20,proteinGrams:30,fiberGrams:30,sodiumMg:20},directions:{kcal:'lower',proteinGrams:'higher',fiberGrams:'higher',sodiumMg:'lower'}},
+    diet:{weights:{kcal:40,proteinGrams:30,fiberGrams:20,sodiumMg:10},directions:{kcal:'lower',proteinGrams:'higher',fiberGrams:'higher',sodiumMg:'lower'}}
+  }};
 
   function restorePreferences(serialized) {
     try {
@@ -97,8 +101,9 @@
   function costReadiness(cart) {
     const unknown=Array.isArray(cart?.unknownItemKeys)?cart.unknownItemKeys:[];
     const quantity=Array.isArray(cart?.quantityCheckKeys)?cart.quantityCheckKeys:[];
-    const ready=cart?.costStatus==='complete'&&!unknown.length&&!quantity.length;
-    return {ready,status:['complete','partial','unknown'].includes(cart?.costStatus)?cart.costStatus:'unknown',knownSubtotalCents:Number.isSafeInteger(cart?.knownSubtotalCents)?cart.knownSubtotalCents:0,savingsStatus:cart?.savingsStatus==='complete'?'complete':'unavailable'};
+    const subtotalValid=Number.isSafeInteger(cart?.knownSubtotalCents)&&cart.knownSubtotalCents>=0;
+    const ready=subtotalValid&&cart?.costStatus==='complete'&&!unknown.length&&!quantity.length;
+    return {ready,status:subtotalValid&&['complete','partial','unknown'].includes(cart?.costStatus)?cart.costStatus:'unknown',knownSubtotalCents:subtotalValid?cart.knownSubtotalCents:null,savingsStatus:cart?.savingsStatus==='complete'?'complete':'unavailable'};
   }
 
   function evaluateRecipeForMode(meal, context={}, mode='balanced') {
@@ -114,6 +119,7 @@
     const readiness={cost:'unknown',savings:'unavailable',nutrition:'unknown'};
     const scoreComponents={qualityScore:Number.isFinite(meal?.qualityScore)?meal.qualityScore:null};
     if(selectedMode==='value') {
+      if(context.requireCompilerBasketFacts&&(meal?.basketFacts?.sourceCoverage!=='complete'||meal.basketFacts.targetServings!==context.targetServings)) { eligible=false; reasons.push('선택한 인분 수의 전체 재료 범위가 검증된 구매 바구니 자료가 없습니다.'); }
       const cost=costReadiness(typeof context.basketFor==='function'?context.basketFor(meal,context.targetServings||2):meal?.basketFacts);
       readiness.cost=cost.status;readiness.savings=cost.savingsStatus;scoreComponents.knownSubtotalCents=cost.knownSubtotalCents;
       if(!cost.ready) { eligible=false; reasons.push('가격 또는 필요한 포장 수량이 모두 확인되지 않았습니다.'); }
@@ -121,7 +127,11 @@
     } else if(selectedMode==='nutrition'||selectedMode==='diet') {
       const nutrient=nutritionReadiness(meal);readiness.nutrition=nutrient.status;
       if(!nutrient.ready) { eligible=false; reasons.push('원문 인분 수와 영양 근거가 완전하지 않습니다.'); }
-      else Object.assign(scoreComponents,nutrient.facts);
+      else {
+        Object.assign(scoreComponents,nutrient.facts);
+        const weights=(context.rankingPolicy||defaultRankingPolicy).modes[selectedMode].weights;
+        reasons.push('1인분 근거: '+nutrient.facts.kcal+' kcal · 단백질 '+nutrient.facts.proteinGrams+' g · 식이섬유 '+nutrient.facts.fiberGrams+' g · 나트륨 '+nutrient.facts.sodiumMg+' mg · 정책 가중치 열량 '+weights.kcal+'%·단백질 '+weights.proteinGrams+'%·식이섬유 '+weights.fiberGrams+'%·나트륨 '+weights.sodiumMg+'%');
+      }
     } else reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
     return {eligible,readiness,scoreComponents,reasons};
   }
@@ -129,13 +139,22 @@
   function rankForMode(pool, context={}, mode='balanced') {
     const eligible=(pool||[]).filter((meal)=>evaluateRecipeForMode(meal,context,mode).eligible);
     const facts=(meal)=>evaluateRecipeForMode(meal,context,mode).scoreComponents;
-    const compare=mode==='value'
-      ? (a,b)=>facts(a).knownSubtotalCents-facts(b).knownSubtotalCents
-      : mode==='nutrition'
-        ? (a,b)=>(facts(b).proteinGrams-facts(a).proteinGrams)||(facts(b).fiberGrams-facts(a).fiberGrams)||(facts(a).sodiumMg-facts(b).sodiumMg)
-        : mode==='diet'
-          ? (a,b)=>(facts(a).kcal-facts(b).kcal)||(facts(b).proteinGrams-facts(a).proteinGrams)
-          : null;
+    let compare=null;
+    if(mode==='value') compare=(a,b)=>facts(a).knownSubtotalCents-facts(b).knownSubtotalCents;
+    if(mode==='nutrition'||mode==='diet') {
+      const policy=(context.rankingPolicy||defaultRankingPolicy).modes[mode];
+      const fields=Object.keys(policy.weights);
+      const ranges=Object.fromEntries(fields.map((field)=>{
+        const values=eligible.map((meal)=>facts(meal)[field]);
+        return [field,{min:Math.min(...values),max:Math.max(...values)}];
+      }));
+      const weighted=(meal)=>fields.reduce((sum,field)=>{
+        const {min,max}=ranges[field],value=facts(meal)[field];
+        const normalized=max===min?0.5:(policy.directions[field]==='lower'?(max-value)/(max-min):(value-min)/(max-min));
+        return sum+normalized*policy.weights[field];
+      },0);
+      compare=(a,b)=>weighted(b)-weighted(a);
+    }
     return sequence(eligible,{...context,compare},eligible.length);
   }
 
@@ -148,11 +167,14 @@
     const matched = options.requireMainOffer ? available(meals,options) : meals;
     const eligible = options.mealOnly ? matched.filter((meal)=>!['side','breakfast'].includes(profile(meal).kind)) : matched;
     const remaining = [...new Map(eligible.map((meal)=>[identity(meal),meal])).values()];
-    const result = [], families = new Map(), methods = new Map();
+    const result = [], families = new Map(), methods = new Map(), relaxations=[];
     while (remaining.length && result.length < count) {
       // Relax the family cap only if no remaining family can satisfy it.
-      let candidates = result.length < 7 ? remaining.filter((meal)=>(families.get(profile(meal).family)||0)<2) : remaining;
-      if (!candidates.length) candidates = remaining;
+      let candidates = remaining.filter((meal)=>(families.get(profile(meal).family)||0)<2);
+      if (!candidates.length) {
+        relaxations.push({code:'family-cap',at:result.length});
+        candidates = remaining;
+      }
       const lastFamily = result.length ? profile(result.at(-1)).family : null;
       const alternatives = candidates.filter((meal)=>profile(meal).family !== lastFamily);
       if (alternatives.length) candidates = alternatives;
@@ -164,6 +186,7 @@
       methods.set(meta.method,(methods.get(meta.method)||0)+1);
       remaining.splice(remaining.indexOf(selected),1);
     }
+    result.relaxations=relaxations;
     return result;
   }
 

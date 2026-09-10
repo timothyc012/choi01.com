@@ -251,6 +251,20 @@ test('basket exposes complete, partial, and unknown cost facts without calling g
   assert.equal(unknown.knownSubtotalCents,0);
 });
 
+test('empty and all-pantry baskets keep savings unavailable without same-product normal-price evidence',()=>{
+  const empty=shopping.basket([],{catalog:fixtureCatalog});
+  assert.equal(empty.costStatus,'complete');
+  assert.equal(empty.savingsStatus,'unavailable');
+  assert.equal(empty.savingsCents,null);
+  const stocked=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{닭고기:{amount:300,unit:'g'}}}],{
+    catalog:fixtureCatalog,
+    pantry:new Set(['Netto:닭고기'])
+  });
+  assert.equal(stocked.purchaseCount,0);
+  assert.equal(stocked.savingsStatus,'unavailable');
+  assert.equal(stocked.savingsCents,null);
+});
+
 test('mode and serving refresh replaces auto slots only',()=>{
   const plans={저녁:{
     mon:{recipeId:'auto-old',origin:'auto',dismissedRecipeIds:['dismissed']},

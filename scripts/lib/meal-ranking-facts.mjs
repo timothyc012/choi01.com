@@ -1,3 +1,7 @@
+import fs from 'node:fs';
+
+export const nutritionPolicy = JSON.parse(fs.readFileSync(new URL('../data/nutrition-policy.json', import.meta.url), 'utf8'));
+
 const asKeys = (value) => Array.isArray(value)
   ? [...new Set(value.filter((entry) => typeof entry === 'string' && entry))]
   : [];
@@ -5,13 +9,13 @@ const asKeys = (value) => Array.isArray(value)
 export function basketReadiness(basket = {}) {
   const unknownItemKeys = asKeys(basket.unknownItemKeys);
   const quantityCheckKeys = asKeys(basket.quantityCheckKeys);
-  const knownSubtotalCents = Number.isSafeInteger(basket.knownSubtotalCents) && basket.knownSubtotalCents >= 0
-    ? basket.knownSubtotalCents : 0;
-  const status = ['complete', 'partial', 'unknown'].includes(basket.costStatus)
+  const subtotalValid = Number.isSafeInteger(basket.knownSubtotalCents) && basket.knownSubtotalCents >= 0;
+  const knownSubtotalCents = subtotalValid ? basket.knownSubtotalCents : null;
+  const status = subtotalValid && ['complete', 'partial', 'unknown'].includes(basket.costStatus)
     ? basket.costStatus
-    : (unknownItemKeys.length || quantityCheckKeys.length ? 'unknown' : 'complete');
+    : 'unknown';
   return {
-    ready: status === 'complete' && !unknownItemKeys.length && !quantityCheckKeys.length,
+    ready: subtotalValid && status === 'complete' && !unknownItemKeys.length && !quantityCheckKeys.length,
     status,
     knownSubtotalCents,
     unknownItemKeys,
