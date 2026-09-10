@@ -225,6 +225,13 @@ test('snapshot rollover clears stale dismissals while preserving manual slots',(
   assert.deepEqual([...restored.plans.저녁.tue.dismissedRecipeIds],[]);
 });
 
+test('a current snapshot treats a saved v2 plan without snapshot identity as changed',()=>{
+  const saved=JSON.stringify({version:2,plans:{저녁:{mon:{recipeId:'old-auto',origin:'auto',dismissedRecipeIds:['old-dismissal']}}}});
+  const restored=shopping.restorePlansV2(saved,{snapshotId:'snapshot-current',days:['mon'],moments:['저녁'],availableRecipeIds:['old-auto'],autoPlans:{저녁:{mon:'new-auto'}}});
+  assert.equal(restored.snapshotChanged,true);
+  assert.deepEqual([...restored.plans.저녁.mon.dismissedRecipeIds],[]);
+});
+
 test('v2 slot normalization keeps the 20 most recent unique dismissed recipes',()=>{
   const ids=Array.from({length:22},(_,index)=>'recipe-'+index).concat(['recipe-5','recipe-21']);
   const slot=shopping.normalizePlanSlot({recipeId:'current',origin:'auto',dismissedRecipeIds:ids});

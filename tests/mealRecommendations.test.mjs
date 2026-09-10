@@ -6,7 +6,7 @@ import {generateCatalog,parseCsv} from '../scripts/generate-meal-offers.mjs';
 import {basketReadiness,nutritionReadiness} from '../scripts/lib/meal-ranking-facts.mjs';
 const context=vm.createContext({window:{}});
 const root=new URL('../public/mohemeokji/',import.meta.url);
-for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) {
+for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) {
   vm.runInContext(fs.readFileSync(new URL(f,root),'utf8'),context);
 }
 const engine=context.window.MealRecommendations;
@@ -14,6 +14,14 @@ const meal=(id, primary, family, extra={})=>({id,sourceRecipeId:id,title:id,time
 const price={priceCents:100,pack:'500 g'};
 const fixtureCatalog=generateCatalog(parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv',import.meta.url),'utf8')),'/offers/supermarket_food_offers_2026-09-07.csv').packageCatalog;
 const rankingPolicy=JSON.parse(fs.readFileSync(new URL('../scripts/data/nutrition-policy.json',import.meta.url),'utf8'));
+
+test('browser recommendation policy artifact matches the versioned source',()=>{
+  const browserPath=new URL('../public/mohemeokji/meal-nutrition-policy.js',import.meta.url);
+  assert.equal(fs.existsSync(browserPath),true);
+  const policyContext=vm.createContext({window:{}});
+  vm.runInContext(fs.readFileSync(browserPath,'utf8'),policyContext);
+  assert.deepEqual(JSON.parse(JSON.stringify(policyContext.window.mealNutritionPolicy)),rankingPolicy);
+});
 
 test('each source recipe has explicit editorial main-ingredient and variety metadata',()=>{
   for(const recipe of context.window.ontologyRecipeDetails){
@@ -178,6 +186,18 @@ test('snapshot value mode requires compiler-proven full basket coverage, not pri
   assert.equal(engine.evaluateRecipeForMode({...proven,basketFacts:{...proven.basketFacts,targetServings:4}},context,'value').eligible,false);
 });
 
+test('value ranking applies pantry ownership only through compiler-proven per-item basket facts',()=>{
+  const shopping=context.window.MealShopping;
+  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',targetServings:2,items:[{key,priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true}],savingsStatus:'unavailable'});
+  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',basketFacts:basketFacts('Netto:닭고기',150)});
+  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',basketFacts:basketFacts('Netto:당근',100)});
+  const pantry=new Set(['Netto:닭고기']);
+  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)};
+  assert.equal(engine.rankForMode([vegetable,chicken],options,'value')[0].id,'chicken-value');
+  const aggregateOnly={...chicken,basketFacts:{sourceCoverage:'complete',targetServings:2,costStatus:'complete',knownSubtotalCents:150,unknownItemKeys:[],quantityCheckKeys:[]}};
+  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)},'value').eligible,false);
+});
+
 test('nutrition and diet reject recipes without complete sourced serving nutrients',()=>{
   const candidate=meal('nutrition-partial',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{source:'verified',sourceServings:2,perServing:{kcal:400,proteinGrams:30}}});
   assert.equal(nutritionReadiness(candidate).ready,false);
@@ -253,6 +273,19 @@ test('nutrition policy weights every complete nutrient dimension and explains th
   assert.ok(explained.reasons.some((reason)=>reason.includes('열량 20%')&&reason.includes('단백질 30%')&&reason.includes('식이섬유 30%')&&reason.includes('나트륨 20%')));
 });
 
+test('runtime scoring and explanation consume the injected browser policy',()=>{
+  const injected=JSON.parse(JSON.stringify(rankingPolicy));
+  injected.modes.nutrition.weights={kcal:100,proteinGrams:0,fiberGrams:0,sodiumMg:0};
+  const runtimeContext=vm.createContext({window:{mealNutritionPolicy:injected}});
+  vm.runInContext(fs.readFileSync(new URL('meal-recommendations.js',root),'utf8'),runtimeContext);
+  const runtime=runtimeContext.window.MealRecommendations;
+  const candidate=(id,kcal,protein)=>meal(id,['닭고기'],id,{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal,proteinGrams:protein,fiberGrams:5,sodiumMg:300}}});
+  const highProtein=candidate('a-high-protein',600,60),lowKcal=candidate('z-low-kcal',250,10);
+  const options={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  assert.equal(runtime.rankForMode([highProtein,lowKcal],options,'nutrition')[0].id,'z-low-kcal');
+  assert.ok(runtime.evaluateRecipeForMode(lowKcal,options,'nutrition').reasons.some((reason)=>reason.includes('열량 100%')&&reason.includes('단백질 0%')));
+});
+
 test('fourteen-slot sequencing keeps the family cap until exhausted and records relaxation',()=>{
   const pool=[];
   for(const family of ['a','b','c','d','e'])for(let index=0;index<3;index++)pool.push(meal(family+index,['닭고기'],family,{store:'Netto'}));
@@ -261,4 +294,23 @@ test('fourteen-slot sequencing keeps the family cap until exhausted and records 
   for(const family of ['a','b','c','d','e'])assert.ok(firstTen.filter((candidate)=>candidate.recommendationProfile.family===family).length<=2);
   for(let index=1;index<result.length;index++)assert.notEqual(result[index].recommendationProfile.family,result[index-1].recommendationProfile.family);
   assert.ok(result.relaxations.some((entry)=>entry.code==='family-cap'&&entry.at>=10));
+});
+
+test('auto slot planning is day-major, includes manual diversity, and reports limited coverage',()=>{
+  const slot=(recipeId=null,origin='auto',dismissedRecipeIds=[])=>({recipeId,origin,dismissedRecipeIds});
+  const days=['mon','tue','wed','thu','fri','sat','sun'];
+  const emptyPlans={점심:Object.fromEntries(days.map((day)=>[day,slot()])),저녁:Object.fromEntries(days.map((day)=>[day,slot()]))};
+  const candidates=[meal('chicken-a',['닭고기'],'chicken',{store:'Netto'}),meal('chicken-b',['닭고기'],'chicken',{store:'Netto'}),meal('beef-a',['소고기'],'beef',{store:'Netto'}),meal('fish-a',['연어'],'fish',{store:'Netto'})];
+  const context={catalog:{닭고기:price,소고기:price,연어:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  const chronological=engine.planAutoSlots(candidates,{plans:emptyPlans,days,moments:['점심','저녁'],mode:'balanced',context});
+  const mondayLunch=chronological.plans.점심.mon.recipeId,mondayDinner=chronological.plans.저녁.mon.recipeId;
+  assert.notEqual(candidates.find((candidate)=>candidate.id===mondayLunch).recommendationProfile.family,candidates.find((candidate)=>candidate.id===mondayDinner).recommendationProfile.family);
+  const manualPlans=JSON.parse(JSON.stringify(emptyPlans));
+  manualPlans.점심.mon=slot('manual-chicken-a','manual');
+  manualPlans.저녁.mon=slot('manual-chicken-b','manual');
+  const manualPool=[meal('manual-chicken-a',['닭고기'],'chicken',{store:'Netto'}),meal('manual-chicken-b',['닭고기'],'chicken',{store:'Netto'}),meal('third-chicken',['닭고기'],'chicken',{store:'Netto'}),meal('beef',['소고기'],'beef',{store:'Netto'}),meal('fish',['연어'],'fish',{store:'Netto'})];
+  const seeded=engine.planAutoSlots(manualPool,{plans:manualPlans,days,moments:['점심','저녁'],mode:'balanced',context});
+  assert.notEqual(seeded.plans.점심.tue.recipeId,'third-chicken');
+  const limited=engine.planAutoSlots(candidates.slice(0,2),{plans:emptyPlans,days,moments:['점심','저녁'],mode:'balanced',context});
+  assert.deepEqual(JSON.parse(JSON.stringify(limited.coverage)),{eligible:2,filled:2,totalSlots:14,limited:true});
 });

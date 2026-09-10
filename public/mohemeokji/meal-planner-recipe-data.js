@@ -213,21 +213,16 @@
       };
       const modeBasket=(meal)=>{
         const facts=meal.basketFacts;
-        if(facts?.sourceCoverage==='complete'&&facts.targetServings===preferences.targetServings)return facts;
+        if(facts?.sourceCoverage==='complete'&&facts.targetServings===preferences.targetServings)return shopping.marginalBasketFacts(facts,shoppingState.pantry);
         return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['recipe:'+meal.id+':full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable'};
       };
       const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate});
       const modePool=()=>recommendations.rankForMode(meals,recommendationContext(),preferences.mode);
+      let autoCoverage={eligible:0,filled:0,totalSlots:14,limited:true};
       const buildAutoPlans=(currentPlans=null)=>{
-        const usedRecipeIds=new Set(Object.values(currentPlans||{}).flatMap((plan)=>Object.values(plan||{})).filter((slot)=>slot?.origin==='manual'&&slot.recipeId).map((slot)=>slot.recipeId));
-        const pool=modePool();
-        return Object.fromEntries(['점심','저녁'].map((moment)=>[moment,Object.fromEntries(days.map(([day])=>{
-          const current=currentPlans?.[moment]?.[day];
-          const next=current?.origin==='manual'?null:recommendations.nextCandidate(pool,{dismissedRecipeIds:current?.dismissedRecipeIds||[],usedRecipeIds:[...usedRecipeIds],mode:preferences.mode,context:recommendationContext()});
-          const recipeId=next?.id||null;
-          if(recipeId)usedRecipeIds.add(recipeId);
-          return [day,shopping.normalizePlanSlot({recipeId,origin:'auto',dismissedRecipeIds:current?.dismissedRecipeIds||[]},'auto')];
-        }))]));
+        const planned=recommendations.planAutoSlots(meals,{plans:currentPlans||{},days:days.map(([day])=>day),moments:['점심','저녁'],mode:preferences.mode,context:recommendationContext()});
+        autoCoverage=planned.coverage;
+        return planned.plans;
       };
       let autoPlans=buildAutoPlans();
       const branchPlan=storage.get(planStorageKey);
@@ -347,6 +342,11 @@
 
       function renderPlanAndBind() {
         renderPlan();bindDetailTriggers();bindPlanActions();
+      }
+
+      function showPlanCoverage() {
+        const label={balanced:'균형',value:'가성비',nutrition:'영양',diet:'다이어트'}[preferences.mode];
+        byId('planStatus').textContent=label+' 후보 '+autoCoverage.eligible+'개 · 자동 식단 '+autoCoverage.filled+'칸'+(autoCoverage.limited?' · 나머지는 조건에 맞는 후보가 부족해 비워둡니다.':'');
       }
 
       function renderGroceries() {
@@ -474,7 +474,7 @@
 
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{input.checked=input.value===preferences.mode;});
       byId('targetServings').value=String(preferences.targetServings);
-      renderToday();renderPlanAndBind();renderMenu();renderGroceries();
+      renderToday();renderPlanAndBind();showPlanCoverage();renderMenu();renderGroceries();
       byId('sourceStatus').textContent=location.coverage?.sparse?activeArea+' · '+activeStore+' · 승인 메뉴 준비 중':activeArea+' · '+activeStore+' · 검증 메뉴 '+meals.length+'개';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
       byId('sourceStatus').dataset.snapshotState=location.coverage?.sparse?'sparse':'ready';
@@ -487,11 +487,11 @@
         for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];
         recommendationIndex=0;
         storage.set(preferenceStorageKey,recommendations.serializePreferences(preferences));
-        renderToday();renderPlanAndBind();savePlans();
+        renderToday();renderPlanAndBind();showPlanCoverage();savePlans();
       };
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>input.addEventListener('change',()=>{if(input.checked){preferences.mode=input.value;refreshForPreferences();}}));
       byId('targetServings').addEventListener('change',(event)=>{preferences.targetServings=Number(event.target.value);refreshForPreferences();});
-      byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();savePlans();});
+      byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();showPlanCoverage();savePlans();});
       byId('clearPlan').addEventListener('click',()=>{plans[mealMoment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});
       document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;renderToday();renderPlanAndBind();}));
       const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();};

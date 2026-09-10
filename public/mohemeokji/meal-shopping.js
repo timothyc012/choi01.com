@@ -90,7 +90,7 @@
     ));
     if(scopeMismatch) saved=null;
     const isV2 = saved?.version === 2 && saved.plans && typeof saved.plans === 'object' && !Array.isArray(saved.plans);
-    const snapshotChanged=Boolean(isV2&&saved.snapshotId&&context.snapshotId&&saved.snapshotId!==context.snapshotId);
+    const snapshotChanged=Boolean(isV2&&context.snapshotId&&saved.snapshotId!==context.snapshotId);
     const legacyPlans = saved?.plans || (saved?.plan && saved?.mealMoment ? { [saved.mealMoment]: saved.plan } : {});
     const sourcePlans = isV2 ? saved.plans : legacyPlans;
     const fallbackPlans = context.autoPlans && typeof context.autoPlans === 'object' ? context.autoPlans : {};
@@ -246,6 +246,17 @@
     return {recipeId:null,origin:'manual',dismissedRecipeIds:[]};
   }
 
+  function marginalBasketFacts(facts, pantry = new Set()) {
+    if(facts?.sourceCoverage!=='complete'||!Number.isInteger(facts.targetServings)||facts.targetServings<1||!Array.isArray(facts.items)||!facts.items.length) {
+      return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+    }
+    const valid=facts.items.every((item)=>typeof item?.key==='string'&&item.key&&Number.isSafeInteger(item.priceCents)&&item.priceCents>=0&&Number.isSafeInteger(item.quantity)&&item.quantity>0&&item.quantityComplete===true&&item.subtotalCents===item.priceCents*item.quantity);
+    if(!valid)return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+    const purchases=facts.items.filter((item)=>!pantry.has(item.key));
+    const comparable=purchases.length>0&&purchases.every((item)=>Number.isSafeInteger(item.normalPriceCents)&&item.normalPriceCents>=item.priceCents);
+    return {sourceCoverage:'complete',targetServings:facts.targetServings,costStatus:'complete',knownSubtotalCents:purchases.reduce((sum,item)=>sum+item.subtotalCents,0),unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:comparable?'complete':'unavailable',savingsCents:comparable?purchases.reduce((sum,item)=>sum+(item.normalPriceCents-item.priceCents)*item.quantity,0):null};
+  }
+
   function amount(cart) {
     if (cart.unknownCount === cart.purchaseCount && cart.unknownCount > 0) return "가격 확인 필요";
     return euro(cart.totalCents);
@@ -336,5 +347,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

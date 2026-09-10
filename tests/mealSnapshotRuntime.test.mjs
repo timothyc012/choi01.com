@@ -288,7 +288,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   }}));
   dom.window.localStorage.setItem('choi01-today-meal-plan:99999:NeueMarkt:branch-b','{malformed');
   dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'diet',targetServings:2}));
-  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   const inline=[...dom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent;
   dom.window.eval(inline);
   const runtime=await dom.window.mealSnapshotReady;
@@ -303,6 +303,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.getElementById('modeReadiness').textContent,/영양 근거/);
   modeRadios.find((input)=>input.value==='balanced').click();
   assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'balanced');
+  assert.match(dom.window.document.getElementById('planStatus').textContent,/후보 4개.*자동 식단 3칸/);
   const balancedAutoIds=Object.values(runtime.plans).flatMap((plan)=>Object.values(plan)).filter((slot)=>slot.origin==='auto'&&slot.recipeId).map((slot)=>slot.recipeId);
   assert.equal(new Set(balancedAutoIds).size,balancedAutoIds.length);
   const plansBeforeMode=JSON.parse(JSON.stringify(runtime.plans));
@@ -500,7 +501,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   Object.defineProperty(disabledDom.window,'localStorage',{value:{getItem(){throw new Error('denied');},setItem(){throw new Error('quota');}}});
   disabledDom.window.TextEncoder=TextEncoder;disabledDom.window.TextDecoder=TextDecoder;
   disabledDom.window.fetch=async(url)=>bodies.has(url)?response(bodies.get(url)):response('',false);
-  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) disabledDom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) disabledDom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   disabledDom.window.eval([...disabledDom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent);
   assert.equal((await disabledDom.window.mealSnapshotReady).status,'ready');
   disabledDom.window.close();
@@ -510,7 +511,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   reloadDom.window.TextEncoder=TextEncoder;reloadDom.window.TextDecoder=TextDecoder;
   reloadDom.window.fetch=async(url)=>bodies.has(url)?response(bodies.get(url)):response('',false);
   reloadDom.window.localStorage.setItem(runtime.shoppingStorageKey,savedAfterCheck);
-  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) reloadDom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) reloadDom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   reloadDom.window.eval([...reloadDom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent);
   await reloadDom.window.mealSnapshotReady;
   assert.match(reloadDom.window.document.getElementById('groceryCompleted').textContent,/닭가슴살/);
