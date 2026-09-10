@@ -123,6 +123,13 @@ test('does not borrow another store price or call unknown prices zero euros', ()
   assert.equal(mixed.unknownCount, 10);
 });
 
+test('snapshot meals price against their concrete offer instead of another same-identity product',()=>{
+  const first={store:'EDEKA',sale:['소고기등심'],missing:[],offerCatalog:{소고기등심:{offerId:'rib',product:'Rib-Eye',pack:'300 g',priceCents:699}}};
+  const second={store:'EDEKA',sale:['소고기등심'],missing:[],offerCatalog:{소고기등심:{offerId:'entrecote',product:'Entrecôte',pack:'300 g',priceCents:799}}};
+  assert.equal(shopping.basket([first],{catalog:{EDEKA:{}}}).items[0].priceCents,699);
+  assert.equal(shopping.basket([second],{catalog:{EDEKA:{}}}).items[0].priceCents,799);
+});
+
 test('clearing a price keeps it unknown, explicit zero is valid, empty basket is zero', () => {
   const cart = shopping.basket([rice], { catalog: fixtureCatalog, prices: { 'Netto:닭고기': null, 'Netto:쌀': 0 } });
   assert.equal(cart.unknownCount, 3);
@@ -177,6 +184,16 @@ test('legacy recipe choices and explicit empty slots migrate to manual v2 slots'
     mon:{recipeId:'known',origin:'manual',dismissedRecipeIds:[]},
     tue:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
   }});
+});
+
+test('legacy global plans never cross postcode, store, or branch scope',()=>{
+  const serialized=JSON.stringify({activeArea:'44369',activeStore:'Netto',activeBranchId:'branch-a',plans:{저녁:{mon:'netto-only'}}});
+  const autoPlans={저녁:{mon:{recipeId:'edeka-auto',origin:'auto',dismissedRecipeIds:[]}}};
+  const restored=shopping.restorePlansV2(serialized,{area:'52064',store:'EDEKA',branchId:'branch-b',days:['mon'],moments:['저녁'],availableRecipeIds:['edeka-auto'],autoPlans});
+  assert.equal(restored.plans.저녁.mon.recipeId,'edeka-auto');
+  assert.equal(restored.plans.저녁.mon.origin,'auto');
+  assert.equal(restored.migrated,false);
+  assert.deepEqual([...restored.stale],[]);
 });
 
 test('snapshot refresh replaces auto slots only and retains unavailable manual recipes',()=>{

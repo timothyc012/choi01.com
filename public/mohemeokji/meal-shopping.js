@@ -83,6 +83,12 @@
     const available = new Set(checksAvailability ? context.availableRecipeIds.map(String) : []);
     let saved = null;
     try { saved = JSON.parse(serialized); } catch { /* Missing or corrupt state uses auto defaults. */ }
+    const scopeMismatch=Boolean(saved&&(
+      (saved.activeArea&&context.area&&saved.activeArea!==context.area)
+      ||(saved.activeStore&&context.store&&saved.activeStore!==context.store)
+      ||(saved.activeBranchId&&context.branchId&&saved.activeBranchId!==context.branchId)
+    ));
+    if(scopeMismatch) saved=null;
     const isV2 = saved?.version === 2 && saved.plans && typeof saved.plans === 'object' && !Array.isArray(saved.plans);
     const legacyPlans = saved?.plans || (saved?.plan && saved?.mealMoment ? { [saved.mealMoment]: saved.plan } : {});
     const sourcePlans = isV2 ? saved.plans : legacyPlans;
@@ -173,7 +179,7 @@
           }
           continue;
         }
-        const offer = catalog[meal.store]?.[name];
+        const offer = meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
         const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
         const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
         ingredients.set(key, {
@@ -253,12 +259,14 @@
     };
   }
 
-  function restoreState(serialized, snapshot = null) {
+  function restoreState(serialized, snapshot = null, options = {}) {
     const state = { pantry: new Set(), prices: {}, quantities: {}, list: [] };
     try {
       const saved = JSON.parse(serialized);
       if (!saved || saved.version !== 1) return state;
-      const availableStores = [...new Set(Object.values(window.mealOfferMeta?.stores || {}).flat())];
+      const availableStores = Array.isArray(options.stores) && options.stores.length
+        ? [...new Set(options.stores.filter((store)=>typeof store==='string'&&store))]
+        : [...new Set(Object.values(window.mealOfferMeta?.stores || {}).flat())];
       const validStore = (store) => (availableStores.length ? availableStores : ["Netto", "EDEKA"]).includes(store);
       const validKey = (key) => typeof key === "string" && key.includes(":") && validStore(key.slice(0, key.indexOf(":"))) && key.slice(key.indexOf(":") + 1).length > 0;
       const validPrice = (value) => value === null || (Number.isSafeInteger(value) && value >= 0 && value <= 100000000);
