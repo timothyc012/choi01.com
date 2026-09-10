@@ -73,3 +73,14 @@ test('raw meat and processed cheese offers keep their exact recipe ingredient id
   assert.ok(catalog['슬라이스치즈']);
   for (const broad of ['닭고기','돼지고기','소고기','치즈']) assert.equal(catalog[broad],undefined);
 });
+
+test('keeps all identity-resolved offers while retaining one preferred pricing offer for legacy totals', () => {
+  const generated = generateCatalog([
+    row({ 상품명: 'Schweinefilet lang', 상품정보: '500 g' }),
+    row({ 상품명: 'Schweinefilet lang', 상품정보: '750 g', 가격적용단위: '750 g', 행사가격: '6.99' })
+  ], '/offers/next.csv');
+
+  assert.equal(generated.offersByIdentity.length, 2);
+  assert.notEqual(generated.offersByIdentity[0].offerId, generated.offersByIdentity[1].offerId);
+  assert.equal(generated.packageCatalog['10115'].Lidl['돼지안심'].preferredPricingOfferId, generated.offersByIdentity[0].offerId);
+});
