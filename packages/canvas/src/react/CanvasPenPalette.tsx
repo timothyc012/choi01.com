@@ -1,12 +1,16 @@
 import React from 'react';
 import { CANVAS_COLORS, CANVAS_COLOR_KEYS } from '../core/index.ts';
-import type { CanvasColorKey, CanvasStrokeWidth } from '../core/index.ts';
+import type { CanvasColorKey, CanvasInkStyle, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasTool } from './InfiniteCanvas';
 
 interface CanvasPenPaletteProps {
   tool: CanvasTool;
   activeColor: CanvasColorKey;
   drawStrokeWidth: CanvasStrokeWidth;
+  drawInkStyle: CanvasInkStyle;
+  objectSnapEnabled: boolean;
+  onSelectInkStyle: (style: CanvasInkStyle) => void;
+  onSelectObjectSnap: (enabled: boolean) => void;
   isDarkMode: boolean;
   onSelectColor: (color: CanvasColorKey) => void;
   onSelectStrokeWidth: (width: CanvasStrokeWidth) => void;
@@ -18,17 +22,38 @@ export function CanvasPenPalette({
   tool,
   activeColor,
   drawStrokeWidth,
+  drawInkStyle,
+  objectSnapEnabled,
+  onSelectInkStyle,
+  onSelectObjectSnap,
   isDarkMode,
   onSelectColor,
   onSelectStrokeWidth,
 }: CanvasPenPaletteProps) {
-  if (tool !== 'draw' && tool !== 'highlighter') return null;
+  const isDrawing = tool === 'draw' || tool === 'highlighter';
+  const settingClass = `rounded-lg px-2 py-1 text-xs font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
+    isDarkMode ? 'hover:bg-slate-800 text-slate-300' : 'hover:bg-slate-100 text-slate-700'
+  }`;
+  const snapControl = (
+    <button
+      type="button"
+      aria-label="개체 정렬"
+      aria-pressed={objectSnapEnabled}
+      title="개체 이동 시 주변 개체에 자동 정렬"
+      className={settingClass}
+      style={{ minHeight: 28, whiteSpace: 'nowrap' }}
+      onClick={() => onSelectObjectSnap(!objectSnapEnabled)}
+    >개체 정렬 {objectSnapEnabled ? '켬' : '끔'}</button>
+  );
+  if (!isDrawing) return null;
 
   const isHighlighter = tool === 'highlighter';
 
   return (
     <div
       data-canvas-pen-palette="true"
+      aria-label={isHighlighter ? '형광펜 설정' : '펜 설정'}
+      style={{ left: '50%', transform: 'translateX(-50%)', width: 340, maxWidth: 'calc(100% - 32px)', boxSizing: 'border-box', justifyContent: 'center' }}
       className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 pointer-events-auto flex flex-wrap items-center gap-2 px-3 py-2 rounded-2xl border shadow-xl backdrop-blur-md ${
         isDarkMode
           ? 'bg-slate-900/90 border-slate-700 text-slate-200 shadow-slate-950/40'
@@ -37,13 +62,7 @@ export function CanvasPenPalette({
       onPointerDown={e => e.stopPropagation()}
       onClick={e => e.stopPropagation()}
     >
-      <div className="flex items-center gap-1.5 pr-2 border-r border-slate-300/40 dark:border-slate-700/60">
-        <span className="text-[11px] font-bold tracking-wide opacity-75">
-          {isHighlighter ? '형광펜' : '펜 색상'}
-        </span>
-      </div>
-
-      <div className="flex items-center gap-1.5" role="radiogroup" aria-label="펜 색상 선택">
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }} role="radiogroup" aria-label="펜 색상 선택">
         {CANVAS_COLOR_KEYS.map(key => {
           const colorDef = CANVAS_COLORS[key];
           const isSelected = activeColor === key;
@@ -74,7 +93,7 @@ export function CanvasPenPalette({
         })}
       </div>
 
-      <div className="flex items-center gap-1 pl-2 border-l border-slate-300/40 dark:border-slate-700/60">
+      <div className="flex items-center gap-1">
         <span className={`mr-1 text-xs font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>두께</span>
         {STROKE_WIDTHS.map(w => {
           const isSelected = drawStrokeWidth === w;
@@ -84,6 +103,7 @@ export function CanvasPenPalette({
               type="button"
               title={`두께 ${w}px`}
               aria-label={`두께 ${w}px`}
+              aria-pressed={isSelected}
               onClick={() => onSelectStrokeWidth(w)}
               className={`w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-semibold transition-colors ${
                 isSelected
@@ -101,6 +121,21 @@ export function CanvasPenPalette({
           );
         })}
       </div>
+      <div role="group" aria-label="새 획 보정" style={{ display: 'flex', gap: 2 }}>
+        {(['raw', 'smoothed'] as const).map(style => (
+          <button
+            key={style}
+            type="button"
+            aria-label={style === 'raw' ? '보정 끔' : '보정 켬'}
+            aria-pressed={drawInkStyle === style}
+            title="새로 그리는 획에 적용"
+            onClick={() => onSelectInkStyle(style)}
+            className={settingClass}
+            style={{ minHeight: 28, whiteSpace: 'nowrap', ...(drawInkStyle === style ? { background: '#2563eb', color: '#ffffff' } : {}) }}
+          >{style === 'raw' ? '보정 끔' : '보정 켬'}</button>
+        ))}
+      </div>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>{snapControl}</div>
     </div>
   );
 }

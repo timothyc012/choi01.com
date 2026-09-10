@@ -6,7 +6,7 @@ import type {
   SetStateAction,
 } from 'react';
 import { SHAPE_TOOLS } from '../core/index.ts';
-import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
+import type { CanvasColorKey, CanvasInkStyle, CanvasShapeType, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import {
   hasDirectTouchInput,
@@ -50,6 +50,7 @@ interface PointerDownOptions {
   activeColorRef: RefObject<CanvasColorKey>;
   drawColorRef: RefObject<CanvasColorKey>;
   drawStrokeWidth: CanvasStrokeWidth;
+  drawInkStyle: CanvasInkStyle;
   camera: Camera;
   shapes: CanvasShape[];
   selected: Set<string>;
@@ -96,6 +97,7 @@ export function useCanvasPointerDown({
   activeColorRef,
   drawColorRef,
   drawStrokeWidth,
+  drawInkStyle,
   camera,
   shapes,
   selected,
@@ -273,6 +275,7 @@ export function useCanvasPointerDown({
         points: [[p.x, p.y]],
         color: drawColorRef.current,
         strokeWidth: drawStrokeWidth,
+        inkStyle: drawInkStyle,
         drawMode: activeTool === 'highlighter' ? 'highlighter' : 'pen',
       };
       // The stroke stays out of React state until the pen lifts: every

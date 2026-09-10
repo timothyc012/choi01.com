@@ -1,5 +1,5 @@
 import type { Dispatch, PointerEvent as ReactPointerEvent, RefObject, SetStateAction } from 'react';
-import type { CanvasColorKey, CanvasShapeType, CanvasStrokeWidth } from '../core/index.js';
+import type { CanvasColorKey, CanvasInkStyle, CanvasShapeType, CanvasStrokeWidth } from '../core/index.js';
 import type { CanvasShape, CanvasTool } from './InfiniteCanvas';
 import type { SnapResult } from './canvasGeometry';
 import { type PointerDownHandlers } from './useCanvasPointerDown';
@@ -18,6 +18,8 @@ interface PointerInteractionOptions {
     activeColorRef: RefObject<CanvasColorKey>;
     drawColorRef: RefObject<CanvasColorKey>;
     drawStrokeWidth: CanvasStrokeWidth;
+    drawInkStyle: CanvasInkStyle;
+    objectSnapEnabled: boolean;
     camera: Camera;
     shapes: CanvasShape[];
     selected: Set<string>;
@@ -56,5 +58,5 @@ export interface PointerInteractionHandlers extends PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
 }
 /** Composes pointer-start and global drag lifecycle handlers. */
-export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch, setIsPenMode, }: PointerInteractionOptions): PointerInteractionHandlers;
+export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, drawInkStyle, objectSnapEnabled, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch, setIsPenMode, }: PointerInteractionOptions): PointerInteractionHandlers;
 //# sourceMappingURL=useCanvasPointerInteractions.d.ts.map

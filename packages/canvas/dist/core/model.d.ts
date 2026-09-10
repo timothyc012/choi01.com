@@ -8,6 +8,7 @@ export type CanvasFontKey = 'sans' | 'serif' | 'mono' | 'gothic' | 'korean' | 'c
 export type CanvasTextAlign = 'left' | 'center' | 'right';
 export type CanvasStrokeWidth = 2 | 4 | 6 | 8;
 export type CanvasDrawMode = 'pen' | 'highlighter';
+export type CanvasInkStyle = 'raw' | 'smoothed';
 export type OrthogonalVariant = 'elbow' | 'reverse' | 'u' | 'zigzag';
 export type CanvasShapeType = 'note' | 'card' | 'text' | 'arrow' | 'draw' | 'image' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
 export type CanvasSimpleShapeType = 'note' | 'card' | 'text' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
@@ -88,6 +89,8 @@ export interface CanvasDrawShape extends CanvasShapeBase {
     readonly points: readonly (readonly [number, number])[];
     readonly strokeWidth?: CanvasStrokeWidth;
     readonly drawMode?: CanvasDrawMode;
+    /** Omitted on legacy strokes, which retain their smoothed appearance. */
+    readonly inkStyle?: CanvasInkStyle;
 }
 export interface CanvasImageShape extends CanvasShapeBase {
     readonly type: 'image';

@@ -17,11 +17,11 @@ import {
   safeAssetUrl,
   shapeHtml,
   shapePlainText,
-  strokePath,
 } from './canvasGeometry';
 import { orthogonalEndAngle, pathMidpoint, segmentAngle, toPath } from './canvasRouting';
 import { fontStackForShape } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
+import { effectiveStroke, shapeStrokeRendering } from './canvasShapeStyle';
 
 /** Builds a bounded, sanitized SVG snapshot suitable for download or rasterization. */
 export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string | null {
@@ -72,10 +72,10 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
 
     const ink = s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink;
     if (s.type === 'draw' && s.points) {
-      const drawMode = s.drawMode ?? 'pen';
-      const sw = s.strokeWidth ?? 3;
-      const opacity = drawMode === 'highlighter' ? ' stroke-opacity="0.35"' : '';
-      return `<path d="${strokePath(s.points)}" fill="none" stroke="${ink}" stroke-width="${sw}"${opacity} stroke-linecap="round" stroke-linejoin="round"/>`;
+      const rendering = shapeStrokeRendering(s);
+      const color = escapeHtml(effectiveStroke(s));
+      const opacity = rendering.opacity === 1 ? '' : ` stroke-opacity="${rendering.opacity}" fill-opacity="${rendering.opacity}"`;
+      return `<path d="${rendering.d}" fill="${rendering.filled ? color : 'none'}" stroke="${rendering.filled ? 'none' : color}" stroke-width="${rendering.width}"${opacity} stroke-linecap="round" stroke-linejoin="round"/>`;
     }
     if (s.type === 'arrow') {
       const g = arrowGeometry(s, new Map(all.map(x => [x.id, x])), all);

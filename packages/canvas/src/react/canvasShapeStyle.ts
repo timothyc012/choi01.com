@@ -168,6 +168,54 @@ export function shapeOutlinePath(s: CanvasShape): string {
   return d;
 }
 
+/** Straight segments preserve the sampled centerline without a smoothing pass. */
+export function rawStrokePath(points: [number, number][]): string {
+  return points.map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ');
+}
+
+interface StrokeRendering {
+  d: string;
+  filled: boolean;
+  width: number;
+  opacity: number;
+}
+
+const strokeRenderingCache = new WeakMap<CanvasShape, StrokeRendering>();
+
+/** Geometry and document-unit width shared by the live, SVG and export surfaces. */
+export function strokeRendering(s: CanvasShape, zoom = 1): StrokeRendering {
+  if (s.type !== 'draw') return { d: '', filled: false, width: 0, opacity: 1 };
+  const points = s.points ?? [];
+  const width = s.strokeWidth ?? 3;
+  const mode = s.drawMode ?? 'pen';
+  const opacity = mode === 'highlighter' ? 0.35 : 1;
+  // Keep old single-point snapshots' screen-sized cap unchanged. New styles
+  // use a true document-sized circle, including the wider highlighter dot.
+  if (s.inkStyle === undefined && points.length === 1) {
+    return { d: strokePath(points), filled: false, width: width / zoom, opacity };
+  }
+  const isRaw = s.inkStyle === 'raw';
+  const isDot = points.length > 0 && (points.length === 1 || (isRaw && points.every(([x, y]) => x === points[0][0] && y === points[0][1])));
+  const rendering = {
+    d: isDot ? freehandOutlinePath([points[0]], width, mode)
+      : isRaw ? rawStrokePath(points) : freehandOutlinePath(points, width, mode),
+    filled: isDot || !isRaw,
+    width: mode === 'highlighter' ? width * 2.5 : width,
+    opacity,
+  };
+  return rendering;
+}
+
+/** Cache only immutable committed shapes; active strokes mutate as samples arrive. */
+export function shapeStrokeRendering(s: CanvasShape, zoom = 1): StrokeRendering {
+  if (s.type !== 'draw' || (s.inkStyle === undefined && s.points?.length === 1)) return strokeRendering(s, zoom);
+  const cached = strokeRenderingCache.get(s);
+  if (cached) return cached;
+  const rendering = strokeRendering(s);
+  strokeRenderingCache.set(s, rendering);
+  return rendering;
+}
+
 export function escapeHtml(s: string): string {
   return s.replace(/[&<>\"]/g, ch => ch === '&' ? '&amp;' : ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : '&quot;');
 }

@@ -49,6 +49,7 @@ import { createCanvasShapeRenderer } from './CanvasShapeRenderer';
 import { type Interaction } from './useCanvasPointerInteractions';
 import { useCanvasViewport } from './useCanvasViewport';
 import { useCanvasTextEditing } from './useCanvasTextEditing';
+import { useCanvasPreferences, type CanvasPreferenceOptions } from './useCanvasPreferences';
 import { useCanvasEditorState } from './useCanvasEditorState';
 import { useCanvasViewInteractions } from './useCanvasViewInteractions';
 import { useCanvasSelectionActions } from './useCanvasSelectionActions';
@@ -194,7 +195,7 @@ export interface InfiniteCanvasHandle {
   loadSnapshot: (snapshot: unknown) => void;
 }
 
-interface InfiniteCanvasProps {
+interface InfiniteCanvasProps extends CanvasPreferenceOptions {
   /** Stable identity used to reset local interaction state on board changes. */
   boardIdentity?: string;
   isDarkMode: boolean;
@@ -228,8 +229,13 @@ function uid(prefix = 's'): string {
 
 export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(function InfiniteCanvas(
   { boardIdentity = 'standalone', isDarkMode, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, drawStrokeWidth: propDrawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
-    shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram }, ref
+    shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram,
+    drawInkStyle: propDrawInkStyle, onDrawInkStyleChange, objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange }, ref
 ) {
+  const { drawInkStyle, objectSnapEnabled, selectInkStyle, selectObjectSnap } = useCanvasPreferences({
+    drawInkStyle: propDrawInkStyle, onDrawInkStyleChange,
+    objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange,
+  });
   const [drawStrokeWidth, setDrawStrokeWidth] = React.useState<CanvasStrokeWidth>(propDrawStrokeWidth);
   React.useEffect(() => setDrawStrokeWidth(propDrawStrokeWidth), [propDrawStrokeWidth]);
   const {
@@ -394,6 +400,8 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     setDrawColor,
     setActiveColor,
     drawStrokeWidth,
+    drawInkStyle,
+    objectSnapEnabled,
     setSelectedStrokeWidth,
     camera,
     shapes,
@@ -611,7 +619,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         camera={camera}
         interaction={interaction}
         eraserPos={eraserPos}
-        guides={guides}
+        guides={objectSnapEnabled ? guides : []}
         marquee={marquee}
         strokeColorOf={strokeColorOf}
       />
@@ -673,6 +681,10 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         tool={tool}
         activeColor={drawColor}
         drawStrokeWidth={drawStrokeWidth}
+        drawInkStyle={drawInkStyle}
+        objectSnapEnabled={objectSnapEnabled}
+        onSelectInkStyle={selectInkStyle}
+        onSelectObjectSnap={selectObjectSnap}
         isDarkMode={isDarkMode}
         onSelectColor={selectPenColor}
         onSelectStrokeWidth={selectPenStrokeWidth}

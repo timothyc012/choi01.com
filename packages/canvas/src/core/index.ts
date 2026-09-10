@@ -17,6 +17,7 @@ export type {
   CanvasDrawShape,
   CanvasFontKey,
   CanvasImageShape,
+  CanvasInkStyle,
   CanvasRectShape,
   CanvasSelectionInfo,
   CanvasShape,

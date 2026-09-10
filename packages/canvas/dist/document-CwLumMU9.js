@@ -12,14 +12,14 @@ const r = {
   maxHtmlDepth: 256,
   maxTextLength: 1e5,
   maxShortStringLength: 512
-}, pe = [
+}, me = [
   "rect",
   "ellipse",
   "triangle",
   "diamond",
   "hexagon",
   "star"
-], me = {
+], we = {
   sans: { label: "고딕", stack: 'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif' },
   serif: { label: "명조", stack: 'ui-serif, "AppleMyungjo", "Noto Serif KR", "Noto Serif", "Batang", "Times New Roman", serif' },
   mono: { label: "모노", stack: 'ui-monospace, "SFMono-Regular", "JetBrains Mono", "D2Coding", "Consolas", "Courier New", monospace' },
@@ -39,7 +39,7 @@ const r = {
   brand: { bg: "#e6f0ff", border: "#003087", text: "#003087", label: "브랜드" },
   red: { bg: "#fecaca", border: "#ef4444", text: "#991b1b", label: "빨강" },
   ink: { bg: "#1e293b", border: "#0f172a", text: "#f8fafc", label: "먹" }
-}, we = Object.keys($);
+}, ve = Object.keys($);
 function A(e) {
   var t, o;
   const a = e ?? ((o = (t = globalThis.crypto) == null ? void 0 : t.randomUUID) == null ? void 0 : o.call(t));
@@ -188,14 +188,14 @@ function H(e) {
 function L(e) {
   return e.replace(/[&<>\"]/g, (a) => a === "&" ? "&amp;" : a === "<" ? "&lt;" : a === ">" ? "&gt;" : "&quot;");
 }
-function ve(e = {}) {
+function ge(e = {}) {
   return {
     id: e.id ?? "local-document",
     version: 1,
     shapes: [...e.shapes ?? []]
   };
 }
-function ge(e, a) {
+function be(e, a) {
   switch (a.type) {
     case "createShapes":
       return { ...e, shapes: [...e.shapes, ...a.shapes] };
@@ -216,21 +216,21 @@ function ge(e, a) {
       };
     }
     default:
-      return ue(a);
+      return pe(a);
   }
 }
-function be(e, a) {
+function Se(e, a) {
   return {
     version: "canvas-v1",
     shapes: [...e.shapes],
     camera: { ...a }
   };
 }
-function Se(e) {
+function Ce(e) {
   if (!p(e)) throw new n("Canvas shape must be an object.");
   return D(e);
 }
-function Ce(e) {
+function ye(e) {
   if (!p(e))
     throw new n("Canvas snapshot must be an object.");
   if (e.version !== "canvas-v1")
@@ -261,17 +261,18 @@ function D(e) {
     throw new n("Canvas shape ID must be a non-empty string.");
   if (a.length > r.maxShortStringLength)
     throw new n("Canvas shape ID is too long.");
-  if (typeof t != "string" || !se.has(t))
+  if (typeof t != "string" || !ie.has(t))
     throw new n(`Unsupported canvas shape type: ${String(t)}.`);
   const o = h(e, "x", "shape", r.coordinate), s = h(e, "y", "shape", r.coordinate), l = h(e, "w", "shape", r.coordinate), i = h(e, "h", "shape", r.coordinate), c = k(e, a, o, s, l, i);
-  if (t === "draw") {
+  if (t !== "draw" && u(e, "inkStyle", t), t === "draw") {
     if (!Array.isArray(e.points)) throw new n("Draw shapes require points.");
     return m(e), {
       ...c,
       type: "draw",
       points: K(e.points),
       strokeWidth: g(e),
-      drawMode: ae(e)
+      drawMode: ae(e),
+      inkStyle: oe(e)
     };
   }
   if (t === "arrow")
@@ -282,17 +283,17 @@ function D(e) {
       fromId: x(e, "fromId"),
       toId: x(e, "toId"),
       bend: S(e, "bend", r.coordinate),
-      routing: oe(e, "routing"),
-      orthogonalVariant: ne(e, "orthogonalVariant"),
-      orthogonalWaypoints: re(e, "orthogonalWaypoints"),
+      routing: ne(e, "routing"),
+      orthogonalVariant: re(e, "orthogonalVariant"),
+      orthogonalWaypoints: se(e, "orthogonalWaypoints"),
       arrowStart: O(e, "arrowStart"),
       arrowEnd: O(e, "arrowEnd")
     };
   if (t === "image")
     return u(e, "strokeWidth", t), u(e, "drawMode", t), m(e), { ...c, type: "image" };
-  if (!de(t))
+  if (!he(t))
     throw new n(`Unsupported canvas shape type: ${t}.`);
-  return u(e, "drawMode", t), m(e), he(t) ? { ...c, type: t, strokeWidth: g(e) } : (u(e, "strokeWidth", t), { ...c, type: t });
+  return u(e, "drawMode", t), m(e), fe(t) ? { ...c, type: t, strokeWidth: g(e) } : (u(e, "strokeWidth", t), { ...c, type: t });
 }
 function k(e, a, t, o, s, l) {
   return {
@@ -394,7 +395,7 @@ function x(e, a) {
 function X(e, a) {
   const t = e[a];
   if (t !== void 0) {
-    if (typeof t != "string" || !fe(t))
+    if (typeof t != "string" || !ue(t))
       throw new n(`Canvas shape ${a} is not a supported color.`);
     return t;
   }
@@ -446,6 +447,14 @@ function ae(e) {
     return a;
   }
 }
+function oe(e) {
+  const a = e.inkStyle;
+  if (a !== void 0) {
+    if (a !== "raw" && a !== "smoothed")
+      throw new n("Canvas inkStyle must be raw or smoothed.");
+    return a;
+  }
+}
 function u(e, a, t) {
   if (Object.prototype.hasOwnProperty.call(e, a))
     throw new n(`Canvas shape ${a} is not supported on ${t}.`);
@@ -454,7 +463,7 @@ function m(e) {
   if (Object.prototype.hasOwnProperty.call(e, "pressure"))
     throw new n("Canvas shapes do not support pressure data.");
 }
-function oe(e, a) {
+function ne(e, a) {
   const t = e[a];
   if (t !== void 0) {
     if (t !== "straight" && t !== "curved" && t !== "orthogonal")
@@ -462,7 +471,7 @@ function oe(e, a) {
     return t;
   }
 }
-function ne(e, a) {
+function re(e, a) {
   const t = e[a];
   if (t !== void 0) {
     if (t !== "elbow" && t !== "reverse" && t !== "u" && t !== "zigzag")
@@ -470,7 +479,7 @@ function ne(e, a) {
     return t;
   }
 }
-function re(e, a) {
+function se(e, a) {
   const t = e[a];
   if (t !== void 0) {
     if (!Array.isArray(t) || t.length > 100)
@@ -493,7 +502,7 @@ function O(e, a) {
 function p(e) {
   return typeof e == "object" && e !== null;
 }
-const se = /* @__PURE__ */ new Set([
+const ie = /* @__PURE__ */ new Set([
   "note",
   "card",
   "text",
@@ -507,7 +516,7 @@ const se = /* @__PURE__ */ new Set([
   "diamond",
   "hexagon",
   "star"
-]), ie = /* @__PURE__ */ new Set([
+]), le = /* @__PURE__ */ new Set([
   "note",
   "card",
   "text",
@@ -518,7 +527,7 @@ const se = /* @__PURE__ */ new Set([
   "diamond",
   "hexagon",
   "star"
-]), le = /* @__PURE__ */ new Set([
+]), ce = /* @__PURE__ */ new Set([
   "frame",
   "rect",
   "ellipse",
@@ -526,10 +535,7 @@ const se = /* @__PURE__ */ new Set([
   "diamond",
   "hexagon",
   "star"
-]), ce = /* @__PURE__ */ new Set(["yellow", "pink", "purple", "blue", "green", "peach", "grey", "brand", "ink", "red"]);
-function de(e) {
-  return ie.has(e);
-}
+]), de = /* @__PURE__ */ new Set(["yellow", "pink", "purple", "blue", "green", "peach", "grey", "brand", "ink", "red"]);
 function he(e) {
   return le.has(e);
 }
@@ -537,23 +543,26 @@ function fe(e) {
   return ce.has(e);
 }
 function ue(e) {
+  return de.has(e);
+}
+function pe(e) {
   throw new n(`Unhandled canvas command: ${String(e)}.`);
 }
 export {
   n as C,
-  pe as S,
+  me as S,
   $ as a,
-  we as b,
-  me as c,
+  ve as b,
+  we as c,
   r as d,
-  ge as e,
-  ve as f,
+  be as e,
+  ge as f,
   A as g,
-  Ce as h,
+  ye as h,
   R as i,
-  be as j,
+  Se as j,
   U as k,
-  Se as p,
+  Ce as p,
   W as s,
   I as v
 };

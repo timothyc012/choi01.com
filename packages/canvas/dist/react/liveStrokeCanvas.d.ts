@@ -12,17 +12,17 @@
  *     painted until the committed shape appears, so there is no blink between
  *     lifting the pen and the SVG shape rendering.
  *
- * Geometry comes from the same `freehandOutlinePoints` the SVG layer uses, so
- * the handoff from overlay to committed shape is invisible.
+ * Geometry uses the same stroke renderer as committed SVG and export.
  */
 import type { CanvasShape } from './InfiniteCanvas';
 import type { Camera } from './canvasPointerTypes';
+import { type CanvasInkStyle } from '../core/index.js';
 /**
  * Append samples to a live stroke, dropping any that land on top of the
- * previous one. The threshold is in page units so it stays a fixed visual
- * distance at every zoom level.
+ * previous one. Raw ink only drops exact duplicates; smoothed ink retains
+ * its existing screen-space threshold and interpolation.
  */
-export declare function appendDistinctLivePoints(points: [number, number][], samples: readonly [number, number][], zoom: number): void;
+export declare function appendDistinctLivePoints(points: [number, number][], samples: readonly [number, number][], zoom: number, inkStyle?: CanvasInkStyle): void;
 /**
  * Freeze a finished stroke: copy its points and fit the bounding box around
  * every one of them, so hit-testing and marquee selection match the ink.

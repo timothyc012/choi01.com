@@ -26,6 +26,7 @@ declare global {
 }
 
 type PointerMoveOptions = Pick<PointerLifecycleOptions,
+  | 'objectSnapEnabled'
   | 'containerRef'
   | 'pointers'
   | 'interactionRef'
@@ -44,6 +45,7 @@ type PointerMoveOptions = Pick<PointerLifecycleOptions,
 
 /** Binds pointer movement and applies the active drag/gesture to editor state. */
 export function useCanvasPointerMove({
+  objectSnapEnabled,
   containerRef,
   pointers,
   interactionRef,
@@ -230,20 +232,24 @@ export function useCanvasPointerMove({
 
         // Snap against shapes that aren't being dragged.
         const movingIds = interaction.origin;
-        const movedBox = (() => {
-          let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-          movingIds.forEach(origin => {
-            const b = bounds({ ...origin, x: origin.x + dx, y: origin.y + dy });
-            minX = Math.min(minX, b.minX); minY = Math.min(minY, b.minY);
-            maxX = Math.max(maxX, b.maxX); maxY = Math.max(maxY, b.maxY);
-          });
-          return { minX, minY, maxX, maxY };
-        })();
-        const others = shapesRef.current.filter(s => !movingIds.has(s.id));
-        const snap = computeSnap(movedBox, others, cam.z);
-        dx += snap.dx;
-        dy += snap.dy;
-        setGuides(snap.guides);
+        if (objectSnapEnabled) {
+          const movedBox = (() => {
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            movingIds.forEach(origin => {
+              const b = bounds({ ...origin, x: origin.x + dx, y: origin.y + dy });
+              minX = Math.min(minX, b.minX); minY = Math.min(minY, b.minY);
+              maxX = Math.max(maxX, b.maxX); maxY = Math.max(maxY, b.maxY);
+            });
+            return { minX, minY, maxX, maxY };
+          })();
+          const others = shapesRef.current.filter(s => !movingIds.has(s.id));
+          const snap = computeSnap(movedBox, others, cam.z);
+          dx += snap.dx;
+          dy += snap.dy;
+          setGuides(snap.guides);
+        } else {
+          setGuides([]);
+        }
 
         setShapes(prev => prev.map(s => {
           const origin = movingIds.get(s.id);
@@ -310,7 +316,7 @@ export function useCanvasPointerMove({
     };
   }, [
     applyInteraction, cameraRef, containerRef, drawing, expandToGroups,
-    interactionRef, pointers,
+    interactionRef, objectSnapEnabled, pointers,
     selectNow, shapesRef, toPage,
   ]);
 }
