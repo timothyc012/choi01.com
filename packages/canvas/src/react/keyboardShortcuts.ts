@@ -1,4 +1,4 @@
-export type CanvasShortcutTool = 'select' | 'draw' | 'text' | 'frame';
+export type CanvasShortcutTool = 'select' | 'lasso' | 'draw' | 'text' | 'frame';
 
 export interface CanvasShortcutEvent {
   readonly key: string;
@@ -25,6 +25,8 @@ export function toolShortcutFromKeyboardEvent(event: CanvasShortcutEvent): Canva
   switch (event.code) {
     case 'KeyV':
       return 'select';
+    case 'KeyL':
+      return 'lasso';
     case 'KeyP':
       return 'draw';
     case 'KeyT':

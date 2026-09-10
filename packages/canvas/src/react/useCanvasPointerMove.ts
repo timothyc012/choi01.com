@@ -226,6 +226,20 @@ export function useCanvasPointerMove({
         return;
       }
 
+      if (interaction.kind === 'lasso') {
+        const threshold = 2 / Math.max(cam.z, 0.1);
+        let nextPoints = interaction.points;
+        for (const sample of pointerSamples(e)) {
+          const next = toPage(sample.clientX, sample.clientY);
+          const previous = nextPoints[nextPoints.length - 1];
+          if (!previous || Math.hypot(next.x - previous.x, next.y - previous.y) >= threshold) {
+            nextPoints = [...nextPoints, next];
+          }
+        }
+        if (nextPoints !== interaction.points) applyInteraction({ ...interaction, points: nextPoints });
+        return;
+      }
+
       if (interaction.kind === 'move') {
         let dx = p.x - interaction.startX;
         let dy = p.y - interaction.startY;

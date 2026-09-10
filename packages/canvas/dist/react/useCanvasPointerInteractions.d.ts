@@ -13,6 +13,7 @@ interface PointerInteractionOptions {
     editingIdRef: RefObject<string | null>;
     cameraRef: RefObject<Camera>;
     shapesRef: RefObject<CanvasShape[]>;
+    selectedRef: RefObject<Set<string>>;
     toolRef: RefObject<CanvasTool>;
     penModeRef: RefObject<boolean>;
     activeColorRef: RefObject<CanvasColorKey>;
@@ -58,5 +59,5 @@ export interface PointerInteractionHandlers extends PointerDownHandlers {
     onPointerDown: (event: ReactPointerEvent) => void;
 }
 /** Composes pointer-start and global drag lifecycle handlers. */
-export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, drawInkStyle, objectSnapEnabled, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch, setIsPenMode, }: PointerInteractionOptions): PointerInteractionHandlers;
+export declare function useCanvasPointerInteractions({ containerRef, editorRef, pointers, interactionRef, editingIdRef, cameraRef, shapesRef, selectedRef, toolRef, penModeRef, activeColorRef, drawColorRef, drawStrokeWidth, drawInkStyle, objectSnapEnabled, camera, shapes, selected, isSpaceDown, textualTypes, setCamera, setShapes, setEditingId, setEraserPos, setGuides, setAnnouncement, applyInteraction, selectNow, beginHistory, endHistory, cancelHistory, commit, onToolChange, expandToGroups, toPage, createId, liveStrokeCanvasRef, activeDrawRef, pendingDrawsRef, queuedDrawIdsRef, commitDrawBatch, setIsPenMode, }: PointerInteractionOptions): PointerInteractionHandlers;
 //# sourceMappingURL=useCanvasPointerInteractions.d.ts.map

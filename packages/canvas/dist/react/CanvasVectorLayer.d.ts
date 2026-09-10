@@ -24,6 +24,12 @@ interface Marquee {
     curX: number;
     curY: number;
 }
+interface Lasso {
+    points: readonly {
+        x: number;
+        y: number;
+    }[];
+}
 interface CanvasVectorLayerProps {
     visiblePaintOrder: CanvasShape[];
     selected: Set<string>;
@@ -37,9 +43,10 @@ interface CanvasVectorLayerProps {
     } | null;
     guides: Guide[];
     marquee: Marquee | null;
+    lasso: Lasso | null;
     strokeColorOf: (shape: CanvasShape) => string;
 }
 /** SVG-only scene for freehand strokes, connectors and transient guides. */
-export declare function CanvasVectorLayer({ visiblePaintOrder, selected, shapeById, allShapes, camera, interaction, eraserPos, guides, marquee, strokeColorOf, }: CanvasVectorLayerProps): React.JSX.Element;
+export declare function CanvasVectorLayer({ visiblePaintOrder, selected, shapeById, allShapes, camera, interaction, eraserPos, guides, marquee, lasso, strokeColorOf, }: CanvasVectorLayerProps): React.JSX.Element;
 export {};
 //# sourceMappingURL=CanvasVectorLayer.d.ts.map

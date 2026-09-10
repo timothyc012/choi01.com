@@ -77,6 +77,7 @@ export type CanvasUnoutlinedShapeType = 'note' | 'card' | 'text';
 
 export type CanvasTool =
   | 'select'
+  | 'lasso'
   | 'hand'
   | 'note'
   | 'card'

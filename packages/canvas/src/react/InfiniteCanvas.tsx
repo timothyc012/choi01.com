@@ -191,6 +191,8 @@ export interface InfiniteCanvasHandle {
   autoLayout: () => void;
   exportSvg: () => string | null;
   exportPng: () => Promise<Blob | null>;
+  exportSvgForSelection: () => string | null;
+  exportPngForSelection: () => Promise<Blob | null>;
   getSnapshot: () => CanvasSnapshot;
   loadSnapshot: (snapshot: unknown) => void;
 }
@@ -230,11 +232,13 @@ function uid(prefix = 's'): string {
 export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasProps>(function InfiniteCanvas(
   { boardIdentity = 'standalone', isDarkMode, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, drawStrokeWidth: propDrawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
     shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram,
-    drawInkStyle: propDrawInkStyle, onDrawInkStyleChange, objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange }, ref
+    drawInkStyle: propDrawInkStyle, onDrawInkStyleChange, objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange,
+    showGrid: propShowGrid, onShowGridChange }, ref
 ) {
-  const { drawInkStyle, objectSnapEnabled, selectInkStyle, selectObjectSnap } = useCanvasPreferences({
+  const { drawInkStyle, objectSnapEnabled, showGrid, selectInkStyle, selectObjectSnap } = useCanvasPreferences({
     drawInkStyle: propDrawInkStyle, onDrawInkStyleChange,
     objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange,
+    showGrid: propShowGrid, onShowGridChange,
   });
   const [drawStrokeWidth, setDrawStrokeWidth] = React.useState<CanvasStrokeWidth>(propDrawStrokeWidth);
   React.useEffect(() => setDrawStrokeWidth(propDrawStrokeWidth), [propDrawStrokeWidth]);
@@ -536,6 +540,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
   });
 
   const marquee = interaction.kind === 'marquee' ? interaction : null;
+  const lasso = interaction.kind === 'lasso' ? interaction : null;
 
   const exitPenMode = React.useCallback(() => {
     pointers.current.clear();
@@ -595,7 +600,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         WebkitTouchCallout: 'none',
         cursor,
         background: isDarkMode ? CANVAS_UI_COLORS.canvasDark : CANVAS_UI_COLORS.canvasLight,
-        backgroundImage: `radial-gradient(${gridColor} 1px, transparent 1px)`,
+        backgroundImage: showGrid ? `radial-gradient(${gridColor} 1px, transparent 1px)` : 'none',
         backgroundSize: `${gridSize}px ${gridSize}px`,
         backgroundPosition: `${-camera.x * camera.z}px ${-camera.y * camera.z}px`,
       }}
@@ -621,6 +626,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         eraserPos={eraserPos}
         guides={objectSnapEnabled ? guides : []}
         marquee={marquee}
+        lasso={lasso}
         strokeColorOf={strokeColorOf}
       />
 

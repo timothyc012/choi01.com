@@ -16,6 +16,7 @@ type VectorInteraction = { kind: string; fromId?: string; toX?: number; toY?: nu
 interface Guide { x1: number; y1: number; x2: number; y2: number }
 
 interface Marquee { startX: number; startY: number; curX: number; curY: number }
+interface Lasso { points: readonly { x: number; y: number }[] }
 
 interface CanvasVectorLayerProps {
   visiblePaintOrder: CanvasShape[];
@@ -27,6 +28,7 @@ interface CanvasVectorLayerProps {
   eraserPos: { x: number; y: number } | null;
   guides: Guide[];
   marquee: Marquee | null;
+  lasso: Lasso | null;
   strokeColorOf: (shape: CanvasShape) => string;
 }
 
@@ -35,7 +37,7 @@ const ERASER_RADIUS = 14;
 /** SVG-only scene for freehand strokes, connectors and transient guides. */
 export function CanvasVectorLayer({
   visiblePaintOrder, selected, shapeById, allShapes, camera, interaction,
-  eraserPos, guides, marquee, strokeColorOf,
+  eraserPos, guides, marquee, lasso, strokeColorOf,
 }: CanvasVectorLayerProps) {
   return (
     <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
@@ -134,6 +136,17 @@ export function CanvasVectorLayer({
         {eraserPos && <circle cx={eraserPos.x} cy={eraserPos.y} r={ERASER_RADIUS / camera.z} fill={CANVAS_UI_COLORS.roseSoft} stroke={CANVAS_UI_COLORS.rose} strokeWidth={1 / camera.z} />}
         {guides.map((guide, index) => <line key={`guide-${index}`} x1={guide.x1} y1={guide.y1} x2={guide.x2} y2={guide.y2} stroke={CANVAS_UI_COLORS.pink} strokeWidth={1 / camera.z} strokeDasharray={`${4 / camera.z} ${4 / camera.z}`} />)}
         {marquee && <rect x={Math.min(marquee.startX, marquee.curX)} y={Math.min(marquee.startY, marquee.curY)} width={Math.abs(marquee.curX - marquee.startX)} height={Math.abs(marquee.curY - marquee.startY)} fill={CANVAS_UI_COLORS.marqueeFill} stroke={CANVAS_UI_COLORS.blue} strokeWidth={1 / camera.z} />}
+        {lasso && lasso.points.length > 1 && (
+          <polygon
+            data-canvas-lasso="true"
+            points={lasso.points.map(point => `${point.x},${point.y}`).join(' ')}
+            fill={CANVAS_UI_COLORS.marqueeFill}
+            stroke={CANVAS_UI_COLORS.blue}
+            strokeWidth={1.5 / camera.z}
+            strokeDasharray={`${5 / camera.z} ${4 / camera.z}`}
+            strokeLinejoin="round"
+          />
+        )}
       </g>
     </svg>
   );

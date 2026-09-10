@@ -39,6 +39,28 @@ export function centreOf(s: CanvasShape) {
   return { x: s.x + s.w / 2, y: s.y + s.h / 2 };
 }
 
+/** A boundary counts as inside so a precisely drawn lasso does not skip its edge. */
+export function pointInPolygon(
+  point: { x: number; y: number },
+  polygon: readonly { x: number; y: number }[],
+): boolean {
+  if (polygon.length < 3) return false;
+  let inside = false;
+  for (let index = 0, previous = polygon.length - 1; index < polygon.length; previous = index++) {
+    const currentPoint = polygon[index];
+    const previousPoint = polygon[previous];
+    if (!currentPoint || !previousPoint) continue;
+    if (distanceToSegment(point.x, point.y, currentPoint.x, currentPoint.y, previousPoint.x, previousPoint.y) <= 1e-9) {
+      return true;
+    }
+    const crosses = (currentPoint.y > point.y) !== (previousPoint.y > point.y);
+    if (crosses && point.x < ((previousPoint.x - currentPoint.x) * (point.y - currentPoint.y)) / (previousPoint.y - currentPoint.y) + currentPoint.x) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
 export function bounds(s: CanvasShape): BoundingBox {
   const r = s.rotation ?? 0;
   const b = rawBounds(s);

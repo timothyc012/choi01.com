@@ -18,6 +18,14 @@ export declare function centreOf(s: CanvasShape): {
     x: number;
     y: number;
 };
+/** A boundary counts as inside so a precisely drawn lasso does not skip its edge. */
+export declare function pointInPolygon(point: {
+    x: number;
+    y: number;
+}, polygon: readonly {
+    x: number;
+    y: number;
+}[]): boolean;
 export declare function bounds(s: CanvasShape): BoundingBox;
 export declare function toLocal(s: CanvasShape, px: number, py: number): {
     x: number;

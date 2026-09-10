@@ -14,7 +14,7 @@ export type CanvasShapeType = 'note' | 'card' | 'text' | 'arrow' | 'draw' | 'ima
 export type CanvasSimpleShapeType = 'note' | 'card' | 'text' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
 export type CanvasOutlinedShapeType = 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
 export type CanvasUnoutlinedShapeType = 'note' | 'card' | 'text';
-export type CanvasTool = 'select' | 'hand' | 'note' | 'card' | 'text' | 'arrow' | 'draw' | 'eraser' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
+export type CanvasTool = 'select' | 'lasso' | 'hand' | 'note' | 'card' | 'text' | 'arrow' | 'draw' | 'eraser' | 'frame' | 'rect' | 'ellipse' | 'triangle' | 'diamond' | 'hexagon' | 'star';
 /**
  * Resource limits applied at every untrusted snapshot/collaboration boundary.
  * They are deliberately generous for normal boards while keeping malformed

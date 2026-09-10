@@ -1,4 +1,4 @@
-export type CanvasShortcutTool = 'select' | 'draw' | 'text' | 'frame';
+export type CanvasShortcutTool = 'select' | 'lasso' | 'draw' | 'text' | 'frame';
 export interface CanvasShortcutEvent {
     readonly key: string;
     readonly code: string;

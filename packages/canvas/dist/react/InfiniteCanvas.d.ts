@@ -82,6 +82,8 @@ export interface InfiniteCanvasHandle {
     autoLayout: () => void;
     exportSvg: () => string | null;
     exportPng: () => Promise<Blob | null>;
+    exportSvgForSelection: () => string | null;
+    exportPngForSelection: () => Promise<Blob | null>;
     getSnapshot: () => CanvasSnapshot;
     loadSnapshot: (snapshot: unknown) => void;
 }

@@ -3,7 +3,7 @@ import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
 import type { CanvasColorKey, CanvasStrokeWidth, CanvasTool } from '../core/index.ts';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
 import { bounds, sanitizeShapeForCanvas } from './canvasGeometry';
-import { buildCanvasSvg, exportCanvasPng } from './canvasExport';
+import { buildCanvasSvg, buildSelectionCanvasSvg, exportCanvasPng } from './canvasExport';
 import { autoLayoutCanvas } from './canvasAutoLayout';
 import { loadCanvasSnapshot } from './canvasSnapshot';
 import type { CanvasSelectionActions } from './useCanvasSelectionActions';
@@ -13,10 +13,18 @@ type Camera = CanvasSnapshot['camera'];
 const isDrawTool = (tool: CanvasTool | 'highlighter') => tool === 'draw' || tool === 'highlighter';
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
 
+/** Additional export methods exposed once the host provides its selection ref. */
+export interface CanvasSelectionExportHandle {
+  exportSvgForSelection: () => string | null;
+  exportPngForSelection: () => Promise<Blob | null>;
+}
+
 interface UseCanvasImperativeHandleOptions {
   ref: ForwardedRef<InfiniteCanvasHandle>;
   containerRef: RefObject<HTMLDivElement | null>;
   shapesRef: RefObject<CanvasShape[]>;
+  /** Optional during the transition for hosts that have not wired selection export yet. */
+  selectedRef?: RefObject<Set<string>>;
   cameraRef: RefObject<Camera>;
   toolRef: RefObject<CanvasTool | 'highlighter'>;
   activeColorRef: RefObject<CanvasColorKey>;
@@ -48,6 +56,7 @@ export function useCanvasImperativeHandle({
   ref,
   containerRef,
   shapesRef,
+  selectedRef,
   cameraRef,
   toolRef,
   activeColorRef,
@@ -92,6 +101,11 @@ export function useCanvasImperativeHandle({
   }, [commit, createId, onToolChange, selectNow, setAnnouncement, viewportCentre]);
 
   const buildSvg = useCallback(() => buildCanvasSvg(shapesRef.current, isDarkMode), [isDarkMode, shapesRef]);
+  const buildSelectionSvg = useCallback(() => buildSelectionCanvasSvg(
+    shapesRef.current,
+    selectedRef?.current ?? new Set<string>(),
+    isDarkMode,
+  ), [isDarkMode, selectedRef, shapesRef]);
 
   useImperativeHandle(ref, () => ({
     addNote: (color) => {
@@ -216,6 +230,8 @@ export function useCanvasImperativeHandle({
     autoLayout: () => autoLayoutCanvas(shapesRef.current, commit, () => setAnnouncement('자동 배치 완료')),
     exportSvg: buildSvg,
     exportPng: () => exportCanvasPng(buildSvg),
+    exportSvgForSelection: buildSelectionSvg,
+    exportPngForSelection: () => exportCanvasPng(buildSelectionSvg),
     getSnapshot: () => ({ version: 'canvas-v1', shapes: shapesRef.current, camera: cameraRef.current }),
     loadSnapshot: snapshot => loadCanvasSnapshot(snapshot, {
       controlled,
@@ -227,7 +243,7 @@ export function useCanvasImperativeHandle({
       setEditingId,
     }),
   }), [
-    addAtCentre, buildSvg, commit, createId, isDarkMode, maxZoom, minZoom, onDirty,
+    addAtCentre, buildSvg, buildSelectionSvg, commit, createId, isDarkMode, maxZoom, minZoom, onDirty,
     onToolChange, selectionActions, selectNow, setCamera, setEditingId, setLocalShapes,
     setSelectedStrokeWidth, setShapes, setAnnouncement, viewportCentre, controlled,
   ]);

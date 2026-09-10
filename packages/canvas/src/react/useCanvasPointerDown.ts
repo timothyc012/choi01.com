@@ -45,6 +45,7 @@ interface PointerDownOptions {
   editingIdRef: RefObject<string | null>;
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
+  selectedRef: RefObject<Set<string>>;
   toolRef: RefObject<CanvasTool>;
   penModeRef: RefObject<boolean>;
   activeColorRef: RefObject<CanvasColorKey>;
@@ -92,6 +93,7 @@ export function useCanvasPointerDown({
   editingIdRef,
   cameraRef,
   shapesRef,
+  selectedRef,
   toolRef,
   penModeRef,
   activeColorRef,
@@ -258,6 +260,7 @@ export function useCanvasPointerDown({
     if (e.button !== 0) return;
 
     const p = toPage(e.clientX, e.clientY);
+    const currentSelected = selectedRef.current;
     if (!isEditorPointer) {
       setEditingId(null);
       editorRef.current?.blur();
@@ -289,7 +292,7 @@ export function useCanvasPointerDown({
     if (activeTool === 'arrow' || activeTool === 'frame' || SHAPE_TOOLS.includes(activeTool)) {
       // The `tool` narrowing is opaque to TS inside SHAPE_TOOLS.includes(), so
       // cast to the concrete shape-type union for the polygon path.
-      const shapeType = activeTool as Exclude<typeof activeTool, 'select' | 'draw' | 'highlighter' | 'eraser' | 'note' | 'card' | 'text' | 'image'>;
+      const shapeType = activeTool as Exclude<typeof activeTool, 'select' | 'lasso' | 'draw' | 'highlighter' | 'eraser' | 'note' | 'card' | 'text' | 'image'>;
       const created: CanvasShape = activeTool === 'arrow'
         ? { id: uid(), type: 'arrow', x: p.x, y: p.y, w: 0, h: 0, color: activeColorRef.current }
         : activeTool === 'frame'
@@ -308,6 +311,19 @@ export function useCanvasPointerDown({
       beginHistory();
       setShapes(prev => eraseAt(prev, p.x, p.y, ERASER_RADIUS, camera.z));
       applyInteraction({ kind: 'erasing', lastX: p.x, lastY: p.y });
+      return;
+    }
+
+    // Lasso deliberately owns its own gesture: use Select for ordinary
+    // click-and-drag movement, and Lasso when you want to encircle a group.
+    if (activeTool === 'lasso') {
+      lastClickRef.current = null;
+      applyInteraction({
+        kind: 'lasso',
+        points: [{ x: p.x, y: p.y }],
+        baseSelection: [...currentSelected],
+        additive: e.shiftKey,
+      });
       return;
     }
 
@@ -339,7 +355,7 @@ export function useCanvasPointerDown({
       const editOnReleaseId = isRepeatClick ? hit.id : undefined;
       lastClickRef.current = isRepeatClick ? null : { id: hit.id, time: now };
 
-      const base = e.shiftKey ? new Set(selected).add(hit.id) : (selected.has(hit.id) ? selected : new Set([hit.id]));
+      const base = e.shiftKey ? new Set(currentSelected).add(hit.id) : (currentSelected.has(hit.id) ? currentSelected : new Set([hit.id]));
       const nextSelected = expandToGroups(base);
       selectNow(nextSelected);
 

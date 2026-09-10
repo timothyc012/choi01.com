@@ -36,6 +36,11 @@ export type Interaction = {
     screenStartX: number;
     screenStartY: number;
 } | {
+    kind: 'lasso';
+    points: PointerPosition[];
+    baseSelection: string[];
+    additive: boolean;
+} | {
     kind: 'move';
     startX: number;
     startY: number;

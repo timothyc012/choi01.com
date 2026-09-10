@@ -26,6 +26,7 @@ interface PointerInteractionOptions {
   editingIdRef: RefObject<string | null>;
   cameraRef: RefObject<Camera>;
   shapesRef: RefObject<CanvasShape[]>;
+  selectedRef: RefObject<Set<string>>;
   toolRef: RefObject<CanvasTool>;
   penModeRef: RefObject<boolean>;
   activeColorRef: RefObject<CanvasColorKey>;
@@ -75,6 +76,7 @@ export function useCanvasPointerInteractions({
   editingIdRef,
   cameraRef,
   shapesRef,
+  selectedRef,
   toolRef,
   penModeRef,
   activeColorRef,
@@ -124,6 +126,7 @@ export function useCanvasPointerInteractions({
     editingIdRef,
     cameraRef,
     shapesRef,
+    selectedRef,
     toolRef,
     penModeRef,
     activeColorRef,
