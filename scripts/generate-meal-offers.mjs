@@ -304,8 +304,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const output = process.argv[3];
   if (!input || !output) throw new Error('Usage: node scripts/generate-meal-offers.mjs INPUT.csv OUTPUT.js');
   const rows = parseCsv(fs.readFileSync(input, 'utf8'));
-  const { packageCatalog, meta } = generateCatalog(rows, '/offers/' + path.basename(input));
-  const generated = `/* Generated from ${path.basename(input)}. Prices are sale selling-unit prices. */\nwindow.mealPackagePricesByArea = ${JSON.stringify(packageCatalog, null, 2)};\nwindow.mealPackagePrices = window.mealPackagePricesByArea[${JSON.stringify(Object.keys(meta.areas)[0])}];\nwindow.mealOfferMeta = ${JSON.stringify(meta, null, 2)};\n`;
+  const { packageCatalog, offersByIdentity, meta } = generateCatalog(rows, '/offers/' + path.basename(input));
+  const generated = `/* Generated from ${path.basename(input)}. Prices are sale selling-unit prices. */\nwindow.mealPackagePricesByArea = ${JSON.stringify(packageCatalog, null, 2)};\nwindow.mealPackagePrices = window.mealPackagePricesByArea[${JSON.stringify(Object.keys(meta.areas)[0])}];\nwindow.mealOffersByIdentity = ${JSON.stringify(offersByIdentity, null, 2)};\nwindow.mealOfferMeta = ${JSON.stringify(meta, null, 2)};\n`;
   fs.writeFileSync(output, generated);
   console.log(`generated ${output}: ${Object.keys(packageCatalog).length} areas, ${rows.length} source rows`);
 }

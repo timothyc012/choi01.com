@@ -62,7 +62,9 @@ export function validateSnapshot(snapshot) {
     if (offer.priceCents !== undefined && (!Number.isInteger(offer.priceCents) || offer.priceCents < 0)) errors.push(`${prefix}.priceCents must be non-negative cents`);
     if (offer.normalPriceCents !== undefined && offer.normalPriceCents !== null && (!Number.isInteger(offer.normalPriceCents) || offer.normalPriceCents < 0)) errors.push(`${prefix}.normalPriceCents must be non-negative cents or null`);
     if (offer.autoPriceEligible !== undefined && typeof offer.autoPriceEligible !== 'boolean') errors.push(`${prefix}.autoPriceEligible must be boolean`);
-    if (offer.identity && typeof offer.identity === 'object' && !Array.isArray(offer.identity)) {
+    if (!offer.identity || typeof offer.identity !== 'object' || Array.isArray(offer.identity)) {
+      errors.push(`${prefix}.identity must be an object`);
+    } else {
       for (const field of requiredIdentityFields) if (!nonEmptyString(offer.identity[field])) errors.push(`${prefix}.identity.${field} is required`);
     }
   }

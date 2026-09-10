@@ -42,3 +42,12 @@ test('validates a snapshot with exact offer identity and rejects incomplete offe
     errors: ['offers[0].identity.processingState is required']
   });
 });
+
+test('rejects null and scalar offer identities', () => {
+  const snapshot = { schemaVersion: 1, snapshotId: 'b'.repeat(64), offers: [offer] };
+  for (const identity of [null, '돼지안심']) {
+    const invalid = structuredClone(snapshot);
+    invalid.offers[0].identity = identity;
+    assert.equal(validateSnapshot(invalid).valid, false);
+  }
+});
