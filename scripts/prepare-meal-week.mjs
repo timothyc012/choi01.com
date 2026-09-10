@@ -65,6 +65,11 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     const source='/offers/'+path.basename(input);
     const {packageCatalog,offersByIdentity,meta}=generateCatalog(rows,source);
     report.matchedIngredients=Object.fromEntries(Object.entries(packageCatalog).flatMap(([area,stores])=>Object.entries(stores).map(([store,offers])=>[area+'/'+store,Object.keys(offers).length])));
+    report.snapshotCompile={
+      registry:'data/mohemeokji/recipe-publication-registry.json',
+      policyVersion:'selection-v1',
+      requiresReadOnlyRecipeFull:true,
+    };
     fs.mkdirSync(output,{recursive:true});
     fs.copyFileSync(input,path.join(output,path.basename(input)));
     fs.writeFileSync(path.join(output,'meal-package-prices.js'), 'window.mealPackagePricesByArea = '+JSON.stringify(packageCatalog,null,2)+';\nwindow.mealOffersByIdentity = '+JSON.stringify(offersByIdentity,null,2)+';\nwindow.mealOfferMeta = '+JSON.stringify(meta,null,2)+';\n');

@@ -26,10 +26,20 @@ On success this creates an untouched CSV copy, generated catalog and `audit.json
 After verifying the configured recipe database and tenant, create the store-specific recipe review queue from the same CSV:
 
 ```sh
-node scripts/find-store-recipe-candidates.mjs INPUT.csv --output NEW_STAGING_DIRECTORY/recipe-candidates.json --database VERIFIED_DATABASE --limit 5
+node scripts/find-store-recipe-candidates.mjs INPUT.csv --output NEW_STAGING_DIRECTORY/recipe-candidates.json --database VERIFIED_DATABASE --tenant recipe-full --limit 500 --total-limit 5000
 ```
 
 This is the required bridge from store offer research to `recipe-full`. It groups each exact product and its source row with candidate recipes under the actual postcode/store. It runs a read-only transaction. Treat zero-candidate offers as an explicit coverage gap. The output is a review queue, not an auto-publish artifact: select and export source records only after checking that the ingredient is defining, the raw/cooked form and cut match, and the recipe has usable quantities and steps.
+
+After reviewing or updating `data/mohemeokji/recipe-publication-registry.json`, compile the immutable public snapshot into a new empty directory:
+
+```sh
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir NEW_SNAPSHOT_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json
+```
+
+The compiler selects separately for every postcode, chain, and branch. It publishes at most 48 recipes per location, keeps sparse and zero-candidate locations explicit, and writes `current.json`, the immutable manifest, location shards, recipe index, content-hashed recipe details, coverage, and a metadata-only review queue. It runs an internal twin build and stops if the bytes differ. Validate the result with `validateMealSnapshotDirectory`; do not move `current.json` into production if validation fails.
+
+Registry approval is tied to `sourceRecipeId`, current `sourceContentHash`, and `transformVersion`. An existing recipe ID or broad ingredient overlap is not approval. When source ingredients or instructions change, the old hash becomes stale and the recipe remains in the review queue until its Korean paraphrase is reviewed again. The public output may contain the approved Korean paraphrase, but never raw source instructions, source images, HTML, or unapproved text.
 
 Generator data shape: `mealPackagePricesByArea[postcode][store][ingredient]`; `mealOfferMeta.profiles[postcode][store]`; `stores[postcode]`; `areas[postcode]`. New postcode selectors are generated at runtime. Legacy routes remain valid. Current UI has one branch per postcode/chain: if two branches appear, stop that combination and implement/select an explicit branch rather than blending prices. The parser intentionally fails closed here.
 
