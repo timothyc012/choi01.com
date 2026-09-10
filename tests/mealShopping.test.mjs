@@ -214,6 +214,17 @@ test('snapshot refresh replaces auto slots only and retains unavailable manual r
   assert.deepEqual(JSON.parse(JSON.stringify(sparse.stale)),[{moment:'저녁',day:'tue',recipeId:'removed-manual'}]);
 });
 
+test('snapshot rollover clears stale dismissals while preserving manual slots',()=>{
+  const saved=JSON.stringify({version:2,snapshotId:'snapshot-old',plans:{저녁:{
+    mon:{recipeId:'manual-choice',origin:'manual',dismissedRecipeIds:['old-dismissal']},
+    tue:{recipeId:'old-auto',origin:'auto',dismissedRecipeIds:['old-dismissal']}
+  }}});
+  const restored=shopping.restorePlansV2(saved,{snapshotId:'snapshot-new',days:['mon','tue'],moments:['저녁'],availableRecipeIds:['manual-choice'],autoPlans:{저녁:{mon:null,tue:'new-auto'}}});
+  assert.equal(restored.plans.저녁.mon.recipeId,'manual-choice');
+  assert.deepEqual([...restored.plans.저녁.mon.dismissedRecipeIds],[]);
+  assert.deepEqual([...restored.plans.저녁.tue.dismissedRecipeIds],[]);
+});
+
 test('v2 slot normalization keeps the 20 most recent unique dismissed recipes',()=>{
   const ids=Array.from({length:22},(_,index)=>'recipe-'+index).concat(['recipe-5','recipe-21']);
   const slot=shopping.normalizePlanSlot({recipeId:'current',origin:'auto',dismissedRecipeIds:ids});

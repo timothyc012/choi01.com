@@ -116,6 +116,11 @@
   async function loadRecipeDetail(location, sourceRecipeId, fetcher = window.fetch.bind(window)) {
     const reference = location?.recipes?.find((recipe) => recipe.sourceRecipeId === String(sourceRecipeId));
     if (!reference) throw unavailable('recipe detail missing');
+    return loadRecipeDetailReference(reference,fetcher);
+  }
+
+  async function loadRecipeDetailReference(reference,fetcher = window.fetch.bind(window)) {
+    if(!reference||typeof reference.sourceRecipeId!=='string') throw unavailable('recipe detail missing');
     const path = artifactPath(reference.detailPath);
     const bytes = await fetchBytes(path, fetcher);
     await verify(bytes, reference.detailSha256, 'recipe detail');
@@ -126,5 +131,5 @@
     return detail;
   }
 
-  window.MealDataLoader = {loadCurrentSnapshot, loadLocationSnapshot, loadRecipeDetail};
+  window.MealDataLoader = {loadCurrentSnapshot, loadLocationSnapshot, loadRecipeDetail, loadRecipeDetailReference};
 }());

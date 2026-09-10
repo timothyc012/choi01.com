@@ -90,6 +90,7 @@
     ));
     if(scopeMismatch) saved=null;
     const isV2 = saved?.version === 2 && saved.plans && typeof saved.plans === 'object' && !Array.isArray(saved.plans);
+    const snapshotChanged=Boolean(isV2&&saved.snapshotId&&context.snapshotId&&saved.snapshotId!==context.snapshotId);
     const legacyPlans = saved?.plans || (saved?.plan && saved?.mealMoment ? { [saved.mealMoment]: saved.plan } : {});
     const sourcePlans = isV2 ? saved.plans : legacyPlans;
     const fallbackPlans = context.autoPlans && typeof context.autoPlans === 'object' ? context.autoPlans : {};
@@ -104,13 +105,14 @@
         const value = hasSaved ? sourcePlans[moment][day] : fallbackPlans?.[moment]?.[day];
         const origin = hasSaved ? 'manual' : 'auto';
         const slot = normalizePlanSlot(value, origin);
+        if(snapshotChanged) slot.dismissedRecipeIds=[];
         plans[moment][day] = slot;
         if (slot.origin === 'manual' && slot.recipeId && checksAvailability && !available.has(slot.recipeId)) {
           stale.push({moment, day, recipeId: slot.recipeId});
         }
       }
     }
-    return {plans, migrated:Boolean(saved && !isV2), stale};
+    return {plans, migrated:Boolean(saved && !isV2), stale, snapshotChanged};
   }
 
   function refreshAutoPlans(plans, replacements = {}) {

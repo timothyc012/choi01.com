@@ -126,6 +126,17 @@ test('fails closed when a selected location or opened detail does not match its 
   await assert.rejects(loader.loadRecipeDetail(location,'7000001',detailMismatch.fetcher),/hash/i);
 });
 
+test('loads a retained manual recipe through its saved hash-pinned detail reference',async()=>{
+  const loader=loadRuntime();
+  const body=JSON.stringify({schemaVersion:1,sourceRecipeId:'8000001',title:'지난주 수동 메뉴'});
+  const path='snapshots/2026-08-31/old-snapshot/recipes/8000001.hash.json';
+  const calls=[];
+  const fetcher=async(url)=>{calls.push(url);return url==='/mohemeokji/data/'+path?response(body):response('',false);};
+  const detail=await loader.loadRecipeDetailReference({sourceRecipeId:'8000001',detailPath:path,detailSha256:sha256(body)},fetcher);
+  assert.equal(detail.title,'지난주 수동 메뉴');
+  assert.deepEqual(calls,['/mohemeokji/data/'+path]);
+});
+
 test('returns an explicit sparse location without requesting legacy or another store', async () => {
   const loader = loadRuntime();
   const sparsePath='snapshots/2026-09-07/snapshot-a/locations/52064-edeka-branch-a.json';
@@ -171,15 +182,40 @@ test('legacy recipes are enabled only by the explicit snapshot query and snapsho
     {offerId:'offer-rib',identity:{ingredientId:'소고기등심'},productDe:'Rib-Eye',pack:'300 g',priceCents:699},
     {offerId:'offer-entrecote',identity:{ingredientId:'소고기등심'},productDe:'Entrecôte',pack:'300 g',priceCents:799}
   ],recipes:[
-    {sourceRecipeId:'1',offerIds:['offer-rib'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
-    {sourceRecipeId:'2',offerIds:['offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}}
+    {sourceRecipeId:'1',offerIds:['offer-rib','offer-entrecote'],preferredPricingOfferId:'offer-rib',primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
+    {sourceRecipeId:'2',offerIds:['offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
+    {sourceRecipeId:'3',offerIds:['offer-rib','offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}}
   ]};
   const duplicateCatalog=api.offerCatalogFromSnapshot(duplicateLocation);
   const duplicateRecipes=api.fromSnapshotLocation(duplicateLocation);
   assert.deepEqual(Object.keys(duplicateCatalog.offersById).sort(),['offer-entrecote','offer-rib']);
-  assert.equal(duplicateCatalog['소고기등심'],undefined);
-  assert.equal(duplicateRecipes[0].matchedOffers[0].productDe,'Rib-Eye');
+  assert.equal(duplicateCatalog['소고기등심'].offerId,'offer-entrecote');
+  assert.equal(duplicateRecipes[0].matchedOffers.length,2);
+  assert.equal(duplicateRecipes[0].offerCatalog['소고기등심'].offerId,'offer-rib');
   assert.equal(duplicateRecipes[1].matchedOffers[0].productDe,'Entrecôte');
+  assert.equal(duplicateRecipes[2].offerCatalog['소고기등심'].offerId,'offer-entrecote');
+});
+
+test('manifest-only selection maps every direct route and chooses the first branch deterministically',()=>{
+  const {api}=loadRecipeData();
+  const locations=[
+    {postcode:'40468',store:'Netto',branchId:'branch-a'},
+    {postcode:'40474',store:'EDEKA',branchId:'branch-a'},
+    {postcode:'44369',store:'Netto',branchId:'branch-b'},
+    {postcode:'44369',store:'Netto',branchId:'branch-a'},
+    {postcode:'52062',store:'Netto',branchId:'branch-a'},
+    {postcode:'52064',store:'EDEKA',branchId:'branch-a'}
+  ];
+  for(const [pathname,postcode,store] of [
+    ['/mohemeokji/40468DNETTO/','40468','Netto'],['/mohemeokji/40474DEDEKA/','40474','EDEKA'],
+    ['/mohemeokji/44369DONETTO/','44369','Netto'],['/mohemeokji/52062NETTO/','52062','Netto'],
+    ['/mohemeokji/52064EDEKA/','52064','EDEKA']
+  ]) {
+    const selected=api.selectSnapshotLocation(locations,new URLSearchParams(),pathname);
+    assert.equal(selected.activeArea,postcode,pathname);
+    assert.equal(selected.activeStore,store,pathname);
+  }
+  assert.equal(api.selectSnapshotLocation(locations,new URLSearchParams(),'/mohemeokji/44369DONETTO/').activeBranch.branchId,'branch-a');
 });
 
 test('non-legacy bootstrap uses snapshot-only location and branch, rerenders summaries, rolls shopping state, and lazily opens detail', async () => {
@@ -190,8 +226,9 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   });
   const locationPath='snapshots/2026-09-07/snapshot-new/locations/99999-neuemarkt-branch-b.json';
   const offer={offerId:'offer-new',chain:'NeueMarkt',branchId:'branch-b',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,validFrom:'2026-09-07',validThrough:'2026-09-13'};
-  const reference={sourceRecipeId:'9000001',detailPath,detailSha256:sha256(detail),offerIds:['offer-new'],primaryIngredientIds:['닭가슴살'],recommendationProfile:{primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'},qualityScore:0.9};
-  const locationBody=JSON.stringify({schemaVersion:1,snapshotId:'snapshot-new',weekStart:'2026-09-07',id:'99999-neuemarkt-branch-b',postcode:'99999',store:'NeueMarkt',branch:'Second branch',branchId:'branch-b',offers:[offer],coverage:{sparse:false},warnings:[],recipes:[reference]});
+  const sameIdentityAlternative={...offer,offerId:'offer-other',productDe:'Hähnchenbrust Innenfilet',priceCents:799};
+  const reference={sourceRecipeId:'9000001',detailPath,detailSha256:sha256(detail),offerIds:['offer-new','offer-other'],preferredPricingOfferId:'offer-new',primaryIngredientIds:['닭가슴살'],recommendationProfile:{primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'},qualityScore:0.9};
+  const locationBody=JSON.stringify({schemaVersion:1,snapshotId:'snapshot-new',weekStart:'2026-09-07',id:'99999-neuemarkt-branch-b',postcode:'99999',store:'NeueMarkt',branch:'Second branch',branchId:'branch-b',offers:[offer,sameIdentityAlternative],coverage:{sparse:false},warnings:[],recipes:[reference]});
   const otherLocationPath='snapshots/2026-09-07/snapshot-new/locations/99999-neuemarkt-branch-a.json';
   const support={
     coveragePath:'snapshots/2026-09-07/snapshot-new/coverage.json',
@@ -208,9 +245,11 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
     {id:'99999-neuemarkt-branch-b',postcode:'99999',store:'NeueMarkt',branch:'Second branch',branchId:'branch-b',path:locationPath,recipeCount:1}
   ]});
   const currentBody=JSON.stringify({schemaVersion:1,snapshotId:'snapshot-new',weekStart:'2026-09-07',manifestPath,manifestSha256:sha256(manifestBody)});
+  const archivedDetailPath='snapshots/2026-08-31/snapshot-old/recipes/8000001.hash.json';
+  const archivedDetail=JSON.stringify({schemaVersion:1,sourceRecipeId:'8000001',title:'지난주 수동 메뉴',detailIngredients:['감자 2개'],steps:['씻는다.','익힌다.','담는다.']});
   const bodies=new Map([
     ['/mohemeokji/data/current.json',currentBody],['/mohemeokji/data/'+manifestPath,manifestBody],
-    ['/mohemeokji/data/'+locationPath,locationBody],['/mohemeokji/data/'+detailPath,detail]
+    ['/mohemeokji/data/'+locationPath,locationBody],['/mohemeokji/data/'+detailPath,detail],['/mohemeokji/data/'+archivedDetailPath,archivedDetail]
   ]);
   const calls=[];
   const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only',pretendToBeVisual:true});
@@ -220,7 +259,9 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.TextDecoder=TextDecoder;
   dom.window.fetch=async(url)=>{calls.push(url);return bodies.has(url)?response(bodies.get(url)):response('',false);};
   dom.window.scrollTo=()=>{};
-  dom.window.localStorage.setItem('choi01-shopping-v1:99999:NeueMarkt:branch-b',JSON.stringify({version:1,snapshot:'snapshot-old',pantry:['NeueMarkt:소금'],prices:{'NeueMarkt:닭가슴살':123},quantities:{week:{'NeueMarkt:닭가슴살':2}},list:[{key:'NeueMarkt:후추',name:'후추',store:'NeueMarkt',pack:'1통',quantity:1,priceCents:199,completed:true}]}));
+  dom.window.localStorage.setItem('choi01-shopping-v1:99999:NeueMarkt',JSON.stringify({version:1,snapshot:'snapshot-old',pantry:['NeueMarkt:소금'],prices:{'NeueMarkt:닭가슴살':123},quantities:{week:{'NeueMarkt:닭가슴살':2}},list:[{key:'NeueMarkt:후추',name:'후추',store:'NeueMarkt',pack:'1통',quantity:1,priceCents:199,completed:true}]}));
+  dom.window.localStorage.setItem('choi01-today-meal-plan:99999:NeueMarkt',JSON.stringify({version:2,snapshotId:'snapshot-old',activeArea:'99999',activeStore:'NeueMarkt',plans:{저녁:{mon:{recipeId:'neuemarkt-recipe-8000001',origin:'manual',dismissedRecipeIds:['old-dismissal']}}},archivedDetails:{'neuemarkt-recipe-8000001':{sourceRecipeId:'8000001',title:'지난주 수동 메뉴',detailPath:archivedDetailPath,detailSha256:sha256(archivedDetail)}}}));
+  dom.window.localStorage.setItem('choi01-today-meal-plan:99999:NeueMarkt:branch-b','{malformed');
   for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   const inline=[...dom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent;
   dom.window.eval(inline);
@@ -232,18 +273,41 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.getElementById('branchSelect').value,'branch-b');
   assert.equal(dom.window.document.getElementById('menuCount').textContent,'1');
   assert.match(dom.window.document.getElementById('menuList').textContent,/닭가슴살/);
+  assert.match(dom.window.document.getElementById('menuList').textContent,/Hähnchenbrustfilet.*Hähnchenbrust Innenfilet/);
   assert.match(dom.window.document.getElementById('weekGrid').textContent,/닭가슴살/);
   assert.equal(dom.window.document.getElementById('totalCost').textContent,'5,99€');
+  assert.equal(runtime.weekBasket().items[0].product,'Hähnchenbrustfilet');
+  assert.equal(runtime.weekBasket().items[0].priceCents,599);
   assert.equal(runtime.shoppingState.prices['NeueMarkt:닭가슴살'],undefined);
   assert.equal(runtime.shoppingState.pantry.has('NeueMarkt:소금'),true);
   assert.equal(runtime.shoppingState.list[0].completed,true);
   assert.equal(runtime.shoppingState.list[0].priceCents,null);
+  assert.equal(runtime.plans.저녁.mon.recipeId,'neuemarkt-recipe-8000001');
+  assert.deepEqual([...runtime.plans.저녁.mon.dismissedRecipeIds],[]);
+  assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-today-meal-plan:99999:NeueMarkt:branch-b')).version,2);
+  assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-shopping-v1:99999:NeueMarkt:branch-b')).pantry[0],'NeueMarkt:소금');
   assert.deepEqual(calls,[
     '/mohemeokji/data/current.json','/mohemeokji/data/'+manifestPath,'/mohemeokji/data/'+locationPath
   ]);
-  await runtime.openDetail('neuemarkt-recipe-9000001');
+  dom.window.document.getElementById('acceptToday').click();
+  assert.ok(Object.values(runtime.plans.저녁).filter((slot)=>slot.origin==='manual').length>=1);
+  assert.equal(dom.window.document.getElementById('markEaten').disabled,true);
+  dom.window.document.getElementById('todayShopping').click();
+  await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
   assert.equal(calls.at(-1),'/mohemeokji/data/'+detailPath);
   assert.equal(calls.filter((url)=>url===('/mohemeokji/data/'+detailPath)).length,1);
+  await runtime.openDetail('neuemarkt-recipe-8000001');
+  assert.equal(dom.window.document.getElementById('detailTitle').textContent,'지난주 수동 메뉴');
+  assert.equal(calls.at(-1),'/mohemeokji/data/'+archivedDetailPath);
+  const disabledDom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only'});
+  Object.defineProperty(disabledDom.window,'crypto',{value:crypto.webcrypto});
+  Object.defineProperty(disabledDom.window,'localStorage',{value:{getItem(){throw new Error('denied');},setItem(){throw new Error('quota');}}});
+  disabledDom.window.TextEncoder=TextEncoder;disabledDom.window.TextDecoder=TextDecoder;
+  disabledDom.window.fetch=async(url)=>bodies.has(url)?response(bodies.get(url)):response('',false);
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) disabledDom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  disabledDom.window.eval([...disabledDom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent);
+  assert.equal((await disabledDom.window.mealSnapshotReady).status,'ready');
+  disabledDom.window.close();
   dom.window.close();
 });
