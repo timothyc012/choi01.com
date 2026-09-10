@@ -218,6 +218,7 @@
       const archivedDetails=savedPlanData.archivedDetails&&typeof savedPlanData.archivedDetails==='object'&&!Array.isArray(savedPlanData.archivedDetails)?{...savedPlanData.archivedDetails}:{};
       let selectedMeal=null;
       let recommendationIndex=0;
+      let detailRequestVersion=0;
 
       const saveShopping=()=>storage.set(shoppingStorageKey,shopping.serializeState(shoppingState,manifest.snapshotId));
       const archiveManualDetails=()=>{
@@ -294,6 +295,35 @@
         return String(label||'').trim().split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
       }
 
+      function hydrateMeal(meal,detail) {
+        const compact=(value)=>String(value).replace(/\s+/g,'');
+        const ingredientNames=(detail.detailIngredients||[]).map(ingredientName).filter(Boolean).map((name)=>meal.sale.find((primary)=>compact(primary)===compact(name))||name);
+        Object.assign(meal,detail,{title:detail.title||meal.title});
+        meal.missing=[...new Set([...(meal.missing||[]),...ingredientNames.filter((name)=>!meal.sale.includes(name))])];
+        return meal;
+      }
+
+      async function detailFor(reference,isCurrent) {
+        const cacheKey=reference.detailPath+'|'+reference.detailSha256;
+        if(!detailCache.has(cacheKey)) {
+          const pending=(isCurrent?loader.loadRecipeDetail(location,reference.sourceRecipeId):loader.loadRecipeDetailReference(reference)).catch((error)=>{detailCache.delete(cacheKey);throw error;});
+          detailCache.set(cacheKey,pending);
+        }
+        return detailCache.get(cacheKey);
+      }
+
+      async function hydratePlannedMeals() {
+        const plannedSlots=Object.values(plans[mealMoment]).filter((slot)=>slot.recipeId);
+        const unresolved=plannedSlots.some((slot)=>{
+          const meal=mealById(slot.recipeId),archived=archivedDetails[slot.recipeId];
+          return !meal||(slot.origin==='manual'&&archiveInScope(archived)&&archived.detailSha256!==meal.detailSha256);
+        });
+        if(unresolved)throw new Error('A planned manual recipe detail belongs to another snapshot');
+        const unique=[...new Map(plannedSlots.map((slot)=>mealById(slot.recipeId)).map((meal)=>[meal.id,meal])).values()];
+        await Promise.all(unique.map(async(meal)=>hydrateMeal(meal,await detailFor(meal,true))));
+        return unique;
+      }
+
       function renderDetailShopping() {
         const cart=selectedMeal?basketFor([selectedMeal]):basketFor([]);
         byId('detailIngredients').innerHTML=cart.items.length?cart.items.map((item)=>'<li class="shopping-item'+(item.owned?' owned':'')+'"><div class="shopping-item-head"><strong>'+escapeHtml(item.name)+'</strong><label><input type="checkbox" data-shopping-key="'+escapeHtml(item.key)+'" data-shopping-field="owned"'+(item.owned?' checked':'')+'> 집에 있음</label></div><small>'+escapeHtml((item.product?item.product+' · ':'')+item.pack)+'</small><div class="shopping-controls"><strong>'+(item.owned?'구매 제외':item.subtotalCents===null?'가격 미확인':shopping.euro(item.subtotalCents))+'</strong></div></li>').join(''):'<li class="footer-note">구매할 재료가 없습니다.</li>';
@@ -306,28 +336,25 @@
       }
 
       async function openDetail(id,useArchived=false) {
+        const requestVersion=++detailRequestVersion;
         const meal=mealById(id);
         const archived=archivedDetails[id];
         if(useArchived&&!archiveInScope(archived)) throw new Error('Archived recipe detail scope mismatch');
         if(!meal&&(!archived||!archiveInScope(archived))) throw new Error('Archived recipe detail unavailable');
         const reference=useArchived||!meal?archived:meal;
-        const sourceRecipeId=reference.sourceRecipeId;
-        const cacheKey=reference.detailPath+'|'+reference.detailSha256;
-        let detail=detailCache.get(cacheKey);
-        if(!detail) {
-          detail=reference===meal?await loader.loadRecipeDetail(location,sourceRecipeId):await loader.loadRecipeDetailReference(reference);
-          detailCache.set(cacheKey,detail);
-        }
+        const detail=await detailFor(reference,reference===meal);
         const baseMeal=reference===meal?meal:{id,store:activeStore,sale:[],missing:[],requiredAmounts:{},matchedOffers:[]};
-        selectedMeal={...baseMeal,...detail,title:detail.title||baseMeal.title||archived.title};
-        const ingredientNames=(detail.detailIngredients||[]).map(ingredientName).filter(Boolean);
-        selectedMeal.missing=[...new Set([...(selectedMeal.missing||[]),...ingredientNames.filter((name)=>!selectedMeal.sale.includes(name))])];
+        const hydrated=hydrateMeal(baseMeal,detail);
+        if(requestVersion!==detailRequestVersion)return hydrated;
+        selectedMeal=hydrated;
         byId('detailTitle').textContent=selectedMeal.title;
         byId('detailIntro').textContent='검증된 원문 정보를 바탕으로 정리한 상세입니다.';
         byId('recipeAmounts').innerHTML=(detail.detailIngredients||[]).map((item)=>'<li>'+escapeHtml(item)+'</li>').join('');
         byId('detailSteps').innerHTML=(detail.steps||[]).map((step)=>'<li>'+escapeHtml(step)+'</li>').join('');
         byId('recipeSource').href=detail.sourceUrl||'#';
         byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
+        byId('addShoppingItems').disabled=false;
+        byId('eatFromDetail').disabled=false;
         byId('addFromDetail').disabled=!meal;
         renderDetailShopping();
         byId('detailDrawer').classList.add('open');
@@ -338,8 +365,17 @@
         document.querySelectorAll('.detail-trigger').forEach((element)=>{
           if(element.dataset.detailBound==='true')return;
           element.dataset.detailBound='true';
-          element.addEventListener('click',()=>{openDetail(element.dataset.id,element.dataset.archived==='true').catch(()=>{byId('detailTitle').textContent='레시피 상세를 열 수 없습니다';byId('detailIntro').textContent='저장된 상세의 지점 또는 해시를 검증하지 못했습니다.';byId('detailDrawer').classList.add('open');});});
+          element.addEventListener('click',()=>{openDetail(element.dataset.id,element.dataset.archived==='true').catch(showDetailError);});
         });
+      }
+
+      function showDetailError() {
+        detailRequestVersion+=1;
+        selectedMeal=null;
+        byId('detailTitle').textContent='레시피 상세를 열 수 없습니다';
+        byId('detailIntro').textContent='저장된 상세의 지점 또는 해시를 검증하지 못했습니다.';
+        for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
+        byId('detailDrawer').classList.add('open');
       }
 
       renderToday();renderPlan();renderMenu();renderGroceries();bindDetailTriggers();
@@ -353,11 +389,11 @@
       const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlan();bindDetailTriggers();};
       const acceptCurrent=()=>acceptMeal(currentMeal());
       byId('acceptToday').addEventListener('click',acceptCurrent);
-      byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)openDetail(meal.id).catch(()=>{byId('detailIntro').textContent='레시피 상세를 검증할 수 없어 열지 않았습니다.';});});
+      byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)openDetail(meal.id).catch(showDetailError);});
       byId('nextRecommendation').addEventListener('click',()=>{if(meals.length<2)return;recommendationIndex=(recommendationIndex+1)%meals.length;renderToday();});
       byId('manualPick').addEventListener('click',()=>byId('library').scrollIntoView({behavior:'smooth'}));
       byId('shoppingList').addEventListener('click',()=>byId('groceries').scrollIntoView({behavior:'smooth'}));
-      byId('prepareShopping').addEventListener('click',()=>{shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('groceries').scrollIntoView({behavior:'smooth'});});
+      byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent='계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';byId('groceries').scrollIntoView({behavior:'smooth'});}catch{byId('grocerySaveState').textContent='일부 레시피 상세를 검증하지 못해 주간 목록을 추가하지 않았습니다.';}finally{button.disabled=false;}});
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
       byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlan();bindDetailTriggers();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
