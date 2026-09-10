@@ -114,6 +114,21 @@ test('validator rejects unsafe, missing-hash recipe details even when container 
   assert.ok(validation.errors.some((error)=>error.includes('detailPath')||error.includes('detailSha256')));
 });
 
+test('validator rejects a recomputed manifest that silently omits all locations',async(t)=>{
+  const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-missing-locations-'));
+  t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));
+  const data=fixture();
+  await compileMealWeek({outputDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const snapshot=readSnapshot(outputDir);
+  const removedLocationPath=snapshot.manifest.locations[0].path;
+  snapshot.manifest.locations=[];
+  delete snapshot.manifest.fileHashes[removedLocationPath];
+  rewriteManifest(snapshot);
+  const validation=validateMealSnapshotDirectory(outputDir);
+  assert.equal(validation.valid,false);
+  assert.ok(validation.errors.some((error)=>error.includes('locations')||error.includes('unlisted output file')));
+});
+
 test('zero-candidate stores stay empty with explicit coverage instead of cross-store backfill',async(t)=>{
   const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-empty-'));
   t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));

@@ -22,6 +22,15 @@ function findForbiddenKey(value,trail='') {
   return null;
 }
 
+function outputFiles(root,current='',result=[]) {
+  for(const entry of fs.readdirSync(path.join(root,current),{withFileTypes:true})) {
+    const relative=path.join(current,entry.name);
+    if(entry.isDirectory()) outputFiles(root,relative,result);
+    else result.push(relative.split(path.sep).join('/'));
+  }
+  return result;
+}
+
 export function validateMealSnapshotDirectory(outputDir) {
   const errors=[];
   const currentPath=path.join(outputDir,'current.json');
@@ -66,6 +75,8 @@ export function validateMealSnapshotDirectory(outputDir) {
     return true;
   };
   for(const field of ['coveragePath','recipeIndexPath','reviewQueuePath']) declare(field,manifest[field]);
+  const coverage=parsedArtifacts.get(manifest.coveragePath);
+  if(!coverage||!Array.isArray(coverage.locations)) errors.push('coveragePath does not contain location coverage');
   const recipeIndex=declare('recipeIndexPath',manifest.recipeIndexPath)?parsedArtifacts.get(manifest.recipeIndexPath):null;
   if(!recipeIndex||!Array.isArray(recipeIndex.recipes)) errors.push('recipeIndexPath does not contain a recipe index');
   const recipesById=new Map();
@@ -80,7 +91,8 @@ export function validateMealSnapshotDirectory(outputDir) {
     }
   }
   const locationKeys=new Set();
-  for(const [locationIndex,location] of (manifest.locations||[]).entries()) {
+  if(!Array.isArray(manifest.locations)||manifest.locations.length===0) errors.push('manifest.locations must be a non-empty array');
+  for(const [locationIndex,location] of (Array.isArray(manifest.locations)?manifest.locations:[]).entries()) {
     const prefix=`locations[${locationIndex}]`;
     const key=[location.postcode,location.store,location.branchId].join('|');
     if(locationKeys.has(key)) errors.push('duplicate location boundary: '+key);
@@ -99,6 +111,10 @@ export function validateMealSnapshotDirectory(outputDir) {
       if(!indexed||indexed.path!==recipeRef.detailPath||indexed.sha256!==recipeRef.detailSha256) errors.push(`${refPrefix} must match the recipe index`);
     }
   }
+  const coverageLocationKeys=new Set((coverage?.locations||[]).map((location)=>[location.postcode,location.store,location.branchId].join('|')));
+  if(locationKeys.size!==coverageLocationKeys.size||[...locationKeys].some((key)=>!coverageLocationKeys.has(key))) errors.push('manifest.locations must match coverage locations');
   for(const relative of Object.keys(manifest.fileHashes||{})) if(!reachable.has(relative)) errors.push('hash table contains an unreachable artifact: '+relative);
+  const allowedFiles=new Set(['current.json',current.manifestPath,...Object.keys(manifest.fileHashes||{})]);
+  for(const relative of outputFiles(outputDir)) if(!allowedFiles.has(relative)) errors.push('unlisted output file: '+relative);
   return {valid:errors.length===0,errors};
 }
