@@ -62,6 +62,7 @@
         font-weight: 700;
         letter-spacing: .03em;
       }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
       .topbar {
         position: sticky;
         top: 0;
@@ -103,8 +104,23 @@
         font-size: 13px;
         font-weight: 650;
       }
-      main { padding: 52px 0 80px; }
+      main { padding: 28px 0 88px; }
       section { scroll-margin-top: 90px; }
+      .workspace-toolbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+        padding: 22px 0 18px;
+        border-bottom: 1px solid var(--border);
+      }
+      .workspace-toolbar h1 { font-size: clamp(34px, 5vw, 54px); }
+      .workspace-toolbar .lede { margin-top: 10px; font-size: 14px; }
+      .workspace-context-nav { display: flex; gap: 4px; padding: 4px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+      .workspace-context-nav button { min-height: 40px; padding: 0 18px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); font-weight: 700; }
+      .workspace-context-nav button[aria-pressed="true"] { background: var(--ink-soft); color: #fff; }
+      .source-bar { padding-bottom: 4px; }
+      .mobile-task-nav { display: none; }
       .eyebrow { margin: 0 0 12px; color: var(--green); text-transform: uppercase; }
       h1 {
         margin: 0;
@@ -316,9 +332,18 @@
       .offer-original-list strong { color: var(--muted); font-size: 11px; }
       .offer-original-list span { margin-top: 3px; color: var(--ink); font-size: 13px; font-weight: 650; }
       .offer-original-list small { margin-top: 2px; color: var(--faint); font-size: 10px; }
-      .workspace {
+      .pantry-editor { margin-bottom: 12px; border: 1px solid var(--border); background: var(--canvas); }
+      .pantry-editor summary { min-height: 44px; display: flex; align-items: center; padding: 0 14px; cursor: pointer; color: var(--ink-soft); font-size: 13px; font-weight: 700; }
+      .pantry-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0; margin: 0; padding: 0; border-top: 1px solid var(--border-soft); list-style: none; }
+      .pantry-list li { min-width: 0; border-bottom: 1px solid var(--border-soft); }
+      .pantry-list label { min-height: 52px; display: flex; align-items: center; gap: 10px; padding: 8px 14px; cursor: pointer; }
+      .pantry-list input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--green); }
+      .pantry-list span, .pantry-list small { display: block; overflow-wrap: anywhere; }
+      .pantry-list span { font-size: 12px; font-weight: 650; }
+      .pantry-list small { margin-top: 2px; color: var(--muted); font-size: 10px; }
+      .workspace, .planning-desk {
         display: grid;
-        grid-template-columns: minmax(0, 1.06fr) minmax(350px, .94fr);
+        grid-template-columns: minmax(300px, .78fr) minmax(0, 1fr);
         gap: 16px;
         align-items: start;
       }
@@ -339,25 +364,25 @@
       .panel-kicker { margin: 0 0 6px; color: var(--blue); text-transform: uppercase; }
       .panel-header h3 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
       .panel-copy { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-      .week-head {
+      .week-head, .week-row {
         display: grid;
-        grid-template-columns: 74px 1fr;
+        grid-template-columns: 74px minmax(0, 1fr) minmax(0, 1fr);
+      }
+      .week-head {
         padding: 11px 20px;
         border-bottom: 1px solid var(--border-soft);
         color: var(--faint);
         font-size: 12px;
       }
       .week-row {
-        display: grid;
-        grid-template-columns: 74px 1fr;
-        min-height: 84px;
+        min-height: 88px;
         border-bottom: 1px solid var(--border-soft);
       }
       .week-row.today-row { background: rgba(238, 245, 251, .38); }
       .week-row:last-child { border-bottom: 0; }
       .day { padding: 17px 10px 10px 20px; color: var(--muted); font-size: 13px; font-weight: 650; }
       .day small { display: block; margin-top: 3px; color: var(--blue); font-size: 9px; }
-      .slot { padding: 10px 20px 10px 0; }
+      .slot { min-width: 0; padding: 10px; border-left: 1px solid var(--border-soft); }
       .slot.drop-target {
         border-radius: var(--radius);
         background: var(--blue-wash);
@@ -379,7 +404,7 @@
       }
       .slot-empty button { border: 0; background: transparent; color: var(--green); font-weight: 650; }
       .meal-card {
-        min-height: 62px;
+        min-height: 68px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -392,7 +417,7 @@
       .meal-card-main { min-width: 0; }
       .meal-card-title { overflow: hidden; font-size: 13px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
       .meal-card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; color: var(--muted); font-size: 11px; }
-      .meal-card-actions { display: flex; gap: 4px; }
+      .meal-card-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: 4px; }
       .icon-button {
         width: 30px;
         height: 30px;
@@ -430,8 +455,8 @@
       .menu-list { display: grid; gap: 9px; max-height: 665px; overflow: auto; padding: 0 20px 20px; }
       .menu-item {
         padding: 13px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
+        border: 0;
+        border-bottom: 1px solid var(--border);
         background: var(--canvas);
         transition: border-color 160ms ease, background 160ms ease;
       }
@@ -442,6 +467,8 @@
       .match { color: var(--green); white-space: nowrap; font-size: 11px; font-weight: 700; }
       .menu-offer { margin: 8px 0 0; padding-top: 7px; border-top: 1px solid var(--border-soft); color: var(--ink); font-size: 10px; line-height: 1.45; }
       .menu-offer b { color: var(--green); }
+      .menu-facts { display: grid; gap: 3px; margin: 8px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
+      .menu-facts span { overflow-wrap: anywhere; }
       .menu-sub { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
       .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
       .tag { padding: 4px 7px; border-radius: 4px; background: var(--surface-strong); color: var(--muted); font-size: 10px; }
@@ -531,12 +558,40 @@
       .toast.show { opacity: 1; transform: translateY(0); }
       .footer-note { margin: 15px 0 0; color: var(--faint); font-size: 11px; line-height: 1.5; }
 
-      @media (max-width: 900px) {
+      @media (max-width: 1023px) {
         .nav-links { display: none; }
-        .decision-grid, .workspace { grid-template-columns: 1fr; }
+        .decision-grid, .workspace, .planning-desk { grid-template-columns: 1fr; }
         .why-card { min-height: 340px; }
         .menu-list { max-height: none; }
         .section-head { align-items: start; }
+      }
+      @media (max-width: 767px) {
+        body { padding-bottom: 68px; }
+        .workspace-toolbar { grid-template-columns: 1fr; }
+        .workspace-context-nav { display: none; }
+        .mobile-task-nav {
+          position: fixed;
+          inset: auto 0 0;
+          z-index: 35;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          border-top: 1px solid var(--border);
+          background: rgba(255,255,255,.97);
+        }
+        .mobile-task-nav button { min-height: 56px; border: 0; background: transparent; color: var(--muted); font-weight: 700; }
+        .mobile-task-nav button[aria-current="page"] { color: var(--green); box-shadow: inset 0 3px var(--green); }
+        .week-head, .week-row { grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr); }
+        .week-head { padding-inline: 8px; }
+        .day { padding-inline: 8px 4px; }
+        .slot { padding: 6px; }
+        .meal-card { display: grid; align-content: space-between; padding: 8px; }
+        .meal-card-title { font-size: 12px; }
+        .meal-card-meta { display: grid; gap: 2px; }
+        .meal-card-actions { justify-content: start; }
+        .meal-card-actions button { min-width: 44px; min-height: 44px; }
+        .grocery-item .icon-button { width: 44px; height: 44px; }
+        .slot-empty { min-height: 80px; display: grid; align-content: center; padding: 8px; }
+        .slot-empty button { min-height: 44px; text-align: left; }
       }
       @media (max-width: 560px) {
         .shell { width: calc(100% - 28px); }
@@ -563,12 +618,12 @@
         .stat strong { margin: 0; }
         .stat small { grid-column: 1 / -1; }
         .offer-original-list { grid-template-columns: 1fr; }
+        .pantry-list { grid-template-columns: 1fr; }
         .offer-original-list li:nth-child(odd) { border-right: 0; }
         .panel-header { display: block; }
-        .week-head, .week-row { grid-template-columns: 60px 1fr; }
-        .week-head { padding-left: 14px; }
-        .day { padding-left: 14px; }
-        .slot { padding-right: 14px; }
+        .week-head, .week-row { grid-template-columns: 46px minmax(0, 1fr) minmax(0, 1fr); }
+        .week-head { padding-left: 8px; }
+        .day { padding-left: 8px; }
         .meal-card-title { white-space: normal; }
         .menu-bottom { align-items: end; }
         .menu-actions { flex-direction: column; }
@@ -616,21 +671,27 @@
     </header>
 
     <main class="shell">
-      <section id="today" data-screen-label="01 Today decision" aria-labelledby="pageTitle">
-        <p class="eyebrow mono">TODAY · ONE GOOD DECISION</p>
-        <h1 id="pageTitle">모해먹지?</h1>
-        <p class="lede">
-          할인 재료와 조리 시간을 함께 보고 오늘의 한 가지를 먼저 추천합니다.
-          마음에 들지 않으면 바로 다음 선택지를 보여드려요.
-        </p>
+      <header class="workspace-toolbar">
+        <div>
+          <p class="eyebrow mono">MEAL DESK · VERIFIED WEEK</p>
+          <h1 id="pageTitle">모해먹지?</h1>
+          <p class="lede">이 지점의 할인상품으로 메뉴를 고르고, 14끼 식단과 없는 재료 장보기를 한 화면에서 이어갑니다.</p>
+        </div>
+        <nav class="workspace-context-nav" aria-label="작업 영역">
+          <button type="button" data-context-target="plan" aria-pressed="true">식단 계획</button>
+          <button type="button" data-context-target="shop" aria-pressed="false">장보기</button>
+        </nav>
+      </header>
+      <div id="planWorkspace" data-context="plan">
+      <section class="source-bar" aria-label="선택한 할인자료와 추천 설정">
         <div class="status-line" aria-live="polite">
           <span class="status-dot" aria-hidden="true"></span>
           <span id="sourceStatus">새 행사 데이터 · 44369 Dortmund · 음식 재료 연결됨</span>
           <span class="status-check" id="sourceCheck">· 저장된 포장 가격 기준</span>
         </div>
         <div class="goal-controls" aria-label="추천 설정">
-          <fieldset id="recommendationModes">
-            <legend>추천 기준</legend>
+          <fieldset id="recommendationModes" role="radiogroup" aria-labelledby="recommendationModeLegend">
+            <legend id="recommendationModeLegend">추천 기준</legend>
             <label><input type="radio" name="recommendationMode" value="balanced" checked> 균형</label>
             <label><input type="radio" name="recommendationMode" value="value"> 가성비</label>
             <label><input type="radio" name="recommendationMode" value="nutrition"> 영양</label>
@@ -643,6 +704,9 @@
           </select>
           <p class="goal-readiness" id="modeReadiness" role="status" aria-live="polite">균형 모드는 현재 지점의 검증된 할인상품 연결을 기준으로 추천합니다.</p>
         </div>
+      </section>
+
+      <section id="today" data-mobile-view="recipes" data-screen-label="01 Today decision" aria-labelledby="todayTitle">
 
         <div class="decision-grid">
           <article class="decision-card">
@@ -708,29 +772,19 @@
           <summary id="offerDirectorySummary">레시피에 연결된 할인상품 독어 원문명 전체 보기</summary>
           <ul class="offer-original-list" id="offerDirectoryList"></ul>
         </details>
+        <details class="pantry-editor" id="pantryEditor">
+          <summary>집에 있는 할인 재료 표시</summary>
+          <p class="panel-copy" style="padding:0 14px">체크한 재료는 장보기 목록과 가성비 구매 합계에서 바로 빠집니다.</p>
+          <ul class="pantry-list" id="pantryList" aria-label="집에 있는 재료"></ul>
+        </details>
 
-        <div class="workspace">
-          <article class="panel">
+        <div class="planning-desk">
+          <aside class="panel recipe-ledger" id="library">
             <header class="panel-header">
               <div>
-                <p class="panel-kicker mono">01 · MY WEEK</p>
-                <h3>나의 식단표</h3>
-                <p class="panel-copy">자동으로 채운 뒤 메뉴를 삭제하거나 직접 바꿀 수 있습니다.</p>
-              </div>
-              <button class="button button-small button-quiet" id="shoppingList">장보기 목록 보기</button>
-            </header>
-            <div class="week-head"><span>요일</span><span id="planColumnLabel">저녁</span></div>
-            <div id="weekGrid"></div>
-            <p class="footer-note" id="planStatus" role="status" aria-live="polite" style="padding:0 20px"></p>
-            <p class="footer-note" id="todayPlanNote" style="padding:0 20px 18px"></p>
-          </article>
-
-          <aside class="panel" id="library">
-            <header class="panel-header">
-              <div>
-                <p class="panel-kicker mono">02 · MENU LIBRARY</p>
+                <p class="panel-kicker mono">01 · RECIPE LEDGER</p>
                 <h3>이 마트 할인 메뉴</h3>
-                <p class="panel-copy">주재료 할인이 있는 메뉴만 모았습니다. 마트에 따라 목록과 개수가 달라집니다.</p>
+                <p class="panel-copy">할인상품 원문, 포장 가격, 근거 상태를 확인하고 식단에 넣으세요.</p>
               </div>
             </header>
             <div class="menu-controls">
@@ -739,19 +793,36 @@
                 <input class="search" id="menuSearch" type="search" placeholder="요리명이나 재료 검색" />
               </label>
               <div class="filters" aria-label="메뉴 필터">
-                <button class="filter active" data-filter="all">전체</button>
-                <button class="filter" data-filter="korean">한식</button>
-                <button class="filter" data-filter="asian">중식·아시아</button>
-                <button class="filter" data-filter="western">양식</button>
-                <button class="filter" data-filter="quick">20분 안</button>
-                <button class="filter" data-filter="vegetarian">채식</button>
+                <button class="filter active" data-filter="all" aria-pressed="true">전체</button>
+                <button class="filter" data-filter="korean" aria-pressed="false">한식</button>
+                <button class="filter" data-filter="asian" aria-pressed="false">중식·아시아</button>
+                <button class="filter" data-filter="western" aria-pressed="false">양식</button>
+                <button class="filter" data-filter="quick" aria-pressed="false">20분 안</button>
+                <button class="filter" data-filter="vegetarian" aria-pressed="false">채식</button>
               </div>
             </div>
             <div class="menu-list" id="menuList"></div>
           </aside>
+
+          <article class="panel week-planner">
+            <header class="panel-header">
+              <div>
+                <p class="panel-kicker mono">01 · MY WEEK</p>
+                <h3>나의 식단표</h3>
+                <p class="panel-copy">자동으로 채운 뒤 메뉴를 삭제하거나 직접 바꿀 수 있습니다.</p>
+              </div>
+              <button class="button button-small button-quiet" id="shoppingList">장보기 목록 보기</button>
+            </header>
+            <div class="week-head"><span>요일</span><span>점심</span><span>저녁</span></div>
+            <div id="weekGrid"></div>
+            <p class="footer-note" id="planStatus" role="status" aria-live="polite" style="padding:0 20px"></p>
+            <p class="footer-note" id="todayPlanNote" style="padding:0 20px 18px"></p>
+          </article>
+
         </div>
       </section>
-      <section id="groceries" aria-labelledby="groceryTitle">
+      </div>
+      <section id="groceries" data-context="shop" data-mobile-view="shop" aria-labelledby="groceryTitle" hidden>
         <div class="section-head">
           <div>
             <p class="panel-kicker mono">SHOPPING CHECKLIST</p>
@@ -767,7 +838,7 @@
           </div>
           <p class="panel-copy" id="groceryEmpty">아직 장보기 목록이 비어 있어요. 메뉴의 ‘구매할 재료와 가격 보기’에서 없는 재료를 추가해보세요.</p>
           <ul class="grocery-list" id="groceryPending" aria-label="아직 구매하지 않은 재료"></ul>
-          <details id="groceryCompletedSection" open hidden>
+          <details id="groceryCompletedSection" hidden>
             <summary id="groceryCompletedLabel">구매 완료</summary>
             <ul class="grocery-list" id="groceryCompleted" aria-label="구매 완료한 재료"></ul>
           </details>
@@ -775,6 +846,12 @@
         </article>
       </section>
     </main>
+
+    <nav class="mobile-task-nav" aria-label="모바일 작업">
+      <button type="button" data-mobile-target="recipes" aria-current="page">메뉴</button>
+      <button type="button" data-mobile-target="week">식단</button>
+      <button type="button" data-mobile-target="shop">장보기</button>
+    </nav>
 
     <div class="detail-drawer" id="detailDrawer" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
       <aside class="detail">
@@ -813,16 +890,42 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+    <script data-workspace-controller>
+      (() => {
+        const contextButtons=[...document.querySelectorAll('[data-context-target]')];
+        const mobileButtons=[...document.querySelectorAll('[data-mobile-target]')];
+        const showContext=(context,{resetPlanViews=true}={})=>{
+          document.body.dataset.activeContext=context;
+          document.querySelectorAll('[data-context]').forEach((region)=>{region.hidden=region.dataset.context!==context;});
+          contextButtons.forEach((button)=>button.setAttribute('aria-pressed',String(button.dataset.contextTarget===context)));
+          if(context==='plan'&&resetPlanViews)document.querySelectorAll('#planWorkspace [data-mobile-view]').forEach((region)=>{region.hidden=false;});
+        };
+        const showMobile=(view)=>{
+          document.body.dataset.mobileView=view;
+          showContext(view==='shop'?'shop':'plan',{resetPlanViews:false});
+          document.querySelectorAll('#planWorkspace [data-mobile-view]').forEach((region)=>{region.hidden=region.dataset.mobileView!==view;});
+          mobileButtons.forEach((button)=>button.setAttribute('aria-current',button.dataset.mobileTarget===view?'page':'false'));
+        };
+        contextButtons.forEach((button)=>button.addEventListener('click',()=>showContext(button.dataset.contextTarget)));
+        mobileButtons.forEach((button)=>button.addEventListener('click',()=>showMobile(button.dataset.mobileTarget)));
+        document.querySelectorAll('.filter').forEach((button)=>button.addEventListener('click',()=>{
+          if(button.disabled)return;
+          document.querySelectorAll('.filter').forEach((item)=>item.setAttribute('aria-pressed',String(item===button)));
+        }));
+        showContext('plan');
+        document.body.dataset.mobileView='recipes';
+      })();
+    </script>
     <script>
       if (new URLSearchParams(location.search).get('snapshot') === 'legacy') {
-        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=0fcd5ed88045"><\/script><script src="/mohemeokji/meal-package-prices.js?v=0fcd5ed88045"><\/script>');
+        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=5a9eeae4b437"><\/script><script src="/mohemeokji/meal-package-prices.js?v=5a9eeae4b437"><\/script>');
       }
     </script>
-    <script src="./meal-planner-recipe-data.js?v=0fcd5ed88045"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=0fcd5ed88045"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=0fcd5ed88045"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=0fcd5ed88045"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=0fcd5ed88045"></script>
+    <script src="./meal-planner-recipe-data.js?v=5a9eeae4b437"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=5a9eeae4b437"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=5a9eeae4b437"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=5a9eeae4b437"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=5a9eeae4b437"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
@@ -1050,30 +1153,47 @@
         renderMenu();
       }
       function renderPlan() {
-        byId("planColumnLabel").textContent = mealMoment;
+        plans[mealMoment] = {...plan};
+        plansV2[mealMoment] = {...planSlots};
+        const dayNames={mon:'월요일',tue:'화요일',wed:'수요일',thu:'목요일',fri:'금요일',sat:'토요일',sun:'일요일'};
+        const slotBody=(day,moment)=>{
+          const slot=plansV2[moment]?.[day.id] || shopping.normalizePlanSlot(null,'manual');
+          const savedRecipeId=slot.recipeId;
+          const item=savedRecipeId?mealById(savedRecipeId):null;
+          if(item) return '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">'+escapeHtml(item.title)+'</div><div class="meal-card-meta"><span>'+item.time+'분</span><span>'+escapeHtml(item.store)+'</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="'+escapeHtml(item.id)+'" aria-label="'+escapeHtml(item.title)+' 레시피 보기">↗</button><button class="icon-button legacy-replace-slot" data-day="'+day.id+'" data-replace-moment="'+moment+'" aria-label="'+dayNames[day.id]+' '+moment+' 다음 후보 보기" title="다음 후보 보기">×</button><button class="button button-small button-quiet legacy-clear-slot" data-day="'+day.id+'" data-clear-moment="'+moment+'">비우기</button></div></div>';
+          if(savedRecipeId) return '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">저장한 메뉴</div><div class="meal-card-meta"><span>현재 자료에서 상세를 찾을 수 없습니다</span></div></div><div class="meal-card-actions"><button class="button button-small button-quiet legacy-clear-slot" data-day="'+day.id+'" data-clear-moment="'+moment+'">비우기</button></div></div>';
+          return '<div class="slot-empty"><span>'+moment+' 메뉴 없음</span><button class="pick-slot" data-day="'+day.id+'" data-pick-moment="'+moment+'">메뉴 고르기</button></div>';
+        };
         byId("weekGrid").innerHTML = days.map((day) => {
-          const savedRecipeId = plan[day.id];
-          const item = savedRecipeId ? mealById(savedRecipeId) : null;
           const todayClass = day.id === todayDay.id ? " today-row" : "";
           const dayNote = day.id === todayDay.id ? "<small>오늘</small>" : "";
-          return '<div class="week-row' + todayClass + '"><div class="day">' + day.label + dayNote + '</div><div class="slot" data-day="' + day.id + '" tabindex="0" aria-label="' + day.label + '요일 ' + mealMoment + ' 메뉴 칸">' +
-            (item
-              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + shopping.summary(mealBasket(item)) + '</span><span>' + item.store + '</span>' + (offerInfo(item).mainOffers.length ? '' : '<span>저장한 메뉴 · 현재 주재료 할인 없음</span>') + '</div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
-              : savedRecipeId
-                ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">저장한 메뉴</div><div class="meal-card-meta"><span>현재 스냅샷에서 상세를 찾을 수 없습니다</span><span>선택은 그대로 보관됩니다</span></div></div><div class="meal-card-actions"><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 저장 메뉴 삭제">×</button></div></div>'
-              : '<div class="slot-empty"><span>' + mealMoment + ' 메뉴를 넣어보세요</span><button class="pick-slot" data-day="' + day.id + '">메뉴 고르기</button></div>') +
-            '</div></div>';
+          return '<div class="week-row'+todayClass+'"><div class="day">'+day.label+dayNote+'</div><div class="slot" data-day="'+day.id+'" data-moment-slot="점심" aria-label="'+dayNames[day.id]+' 점심 메뉴 칸">'+slotBody(day,'점심')+'</div><div class="slot" data-day="'+day.id+'" data-moment-slot="저녁" aria-label="'+dayNames[day.id]+' 저녁 메뉴 칸">'+slotBody(day,'저녁')+'</div></div>';
         }).join("");
         document.querySelectorAll(".pick-slot").forEach((button) => button.addEventListener("click", () => {
           targetDay = button.dataset.day;
+          mealMoment = button.dataset.pickMoment;
+          plan = {...plans[mealMoment]};
+          planSlots = {...plansV2[mealMoment]};
           moveTo("library");
           window.setTimeout(() => byId("menuSearch").focus(), 350);
           showToast(days.find((day) => day.id === targetDay).label + "요일 " + mealMoment + " 메뉴를 고르고 있습니다");
         }));
-        document.querySelectorAll(".remove-slot").forEach((button) => button.addEventListener("click", () => {
-          setPlanSlot(button.dataset.day,null,'manual');
+        document.querySelectorAll(".legacy-clear-slot").forEach((button) => button.addEventListener("click", () => {
+          plansV2[button.dataset.clearMoment][button.dataset.day]=shopping.clearPlanSlot();
+          plans[button.dataset.clearMoment][button.dataset.day]=null;
+          if(button.dataset.clearMoment===mealMoment){planSlots={...plansV2[mealMoment]};plan={...plans[mealMoment]};}
           renderPlan();
-          showToast("식단표에서 메뉴를 뺐습니다");
+          showToast("메뉴 칸을 비웠습니다");
+        }));
+        document.querySelectorAll(".legacy-replace-slot").forEach((button) => button.addEventListener("click", () => {
+          const moment=button.dataset.replaceMoment,day=button.dataset.day,current=plansV2[moment][day];
+          const used=new Set(Object.values(plansV2).flatMap((row)=>Object.values(row)).map((slot)=>slot.recipeId).filter(Boolean));
+          const next=activeMeals().find((meal)=>!used.has(meal.id)&&!current.dismissedRecipeIds.includes(meal.id));
+          plansV2[moment][day]=shopping.replaceAutoSlot(current,next?.id||null);
+          plans[moment][day]=next?.id||null;
+          if(moment===mealMoment){planSlots={...plansV2[moment]};plan={...plans[moment]};}
+          byId('planStatus').textContent=next?'다음 후보로 바꿨습니다.':'이 자료에서 남은 다음 후보가 없습니다.';
+          renderPlan();
         }));
         document.querySelectorAll(".detail-trigger").forEach((button) => button.addEventListener("click", () => openDetail(button.dataset.id)));
         document.querySelectorAll(".slot").forEach((slot) => {
@@ -1093,7 +1213,10 @@
               showToast("현재 지역의 메뉴만 넣을 수 있습니다");
               return;
             }
-            setPlanSlot(slot.dataset.day,item.id,'manual');
+            const moment=slot.dataset.momentSlot;
+            plansV2[moment][slot.dataset.day]=shopping.normalizePlanSlot(item.id,'manual');
+            plans[moment][slot.dataset.day]=item.id;
+            if(moment===mealMoment){planSlots={...plansV2[moment]};plan={...plans[moment]};}
             targetDay = slot.dataset.day;
             renderPlan();
             renderMenu();

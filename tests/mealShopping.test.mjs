@@ -300,6 +300,14 @@ test('X replacement records a bounded dismissal and clear is a distinct manual e
   assert.deepEqual(JSON.parse(JSON.stringify(cleared)),{recipeId:null,origin:'manual',dismissedRecipeIds:[]});
 });
 
+test('shopping list rows keep purchase facts needed by the aisle view',()=>{
+  const cart=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{'닭고기':{amount:300,unit:'g'}}}],{catalog:fixtureCatalog});
+  const [listed]=shopping.addToList([],cart);
+  assert.equal(listed.pack,'1 kg');
+  assert.equal(listed.priceCents,799);
+  assert.equal(listed.completed,false);
+});
+
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {
   const source = readCsv(fs.readFileSync(new URL('../public' + sourceMeta.source, import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(sourceCatalog).sort(), [...new Set(source.map(r=>r['우편번호']))].sort());

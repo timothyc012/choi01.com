@@ -245,6 +245,11 @@
       let selectedMeal=null;
       let recommendationIndex=0;
       let detailRequestVersion=0;
+      let detailReturnFocus=null;
+      const stateNotices=[];
+      if(branchPlan!==null&&!branchPlanData)stateNotices.push('손상된 저장 식단은 안전하게 건너뛰었습니다.');
+      if(restored.snapshotChanged)stateNotices.push('새 할인 주차에 맞춰 자동 식단만 갱신했습니다.');
+      if(restored.stale.length)stateNotices.push('이전 주 수동 메뉴 '+restored.stale.length+'개는 선택을 보존했습니다.');
 
       const saveShopping=()=>storage.set(shoppingStorageKey,shopping.serializeState(shoppingState,manifest.snapshotId));
       const archiveManualDetails=()=>{
@@ -270,22 +275,37 @@
       savePlans();
 
       function renderPlan() {
-        byId('planColumnLabel').textContent=mealMoment;
-        byId('weekGrid').innerHTML=days.map(([day,label])=>{
-          const slot=plans[mealMoment][day];
+        const dayNames={mon:'월요일',tue:'화요일',wed:'수요일',thu:'목요일',fri:'금요일',sat:'토요일',sun:'일요일'};
+        const slotBody=(moment,day,label)=>{
+          const slot=plans[moment][day];
           const meal=mealById(slot.recipeId);
           const archived=archivedDetails[slot.recipeId];
           const useArchived=slot.origin==='manual'&&archiveInScope(archived)&&(!meal||archived.detailSha256!==meal.detailSha256);
           const body=meal&&!useArchived
-            ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">'+escapeHtml(meal.title)+'</div><div class="meal-card-meta"><span>상세에서 시간 확인</span><span>'+escapeHtml(activeStore)+'</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="'+escapeHtml(meal.id)+'" aria-label="'+escapeHtml(meal.title)+' 레시피 보기">↗</button><button class="icon-button" data-replace-slot="'+day+'" data-replace-moment="'+mealMoment+'" aria-label="'+label+'요일 '+mealMoment+' 다음 후보 보기">×</button><button class="button button-small button-quiet" data-clear-slot="'+day+'" data-clear-moment="'+mealMoment+'">비우기</button></div></div>'
+            ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">'+escapeHtml(meal.title)+'</div><div class="meal-card-meta"><span>'+escapeHtml(activeStore)+'</span><span>'+escapeHtml(meal.matchedOffers[0]?.pack||'포장 확인 필요')+'</span></div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="'+escapeHtml(meal.id)+'" aria-label="'+escapeHtml(meal.title)+' 레시피 보기">↗</button><button class="icon-button" data-replace-slot="'+day+'" data-replace-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 다음 후보 보기" title="다음 후보 보기">×</button><button class="button button-small button-quiet" data-clear-slot="'+day+'" data-clear-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 비우기">비우기</button></div></div>'
             : slot.recipeId
-              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">'+escapeHtml(archived?.title||'저장한 메뉴')+'</div><div class="meal-card-meta"><span>현재 스냅샷 외 수동 선택</span></div></div><div class="meal-card-actions">'+(useArchived?'<button class="icon-button detail-trigger" data-id="'+escapeHtml(slot.recipeId)+'" data-archived="true" aria-label="보관된 상세 열기">↗</button>':'<span>'+(archived?'상세 복구 범위 불일치':'상세 복구 정보 없음')+'</span>')+'<button class="icon-button" data-replace-slot="'+day+'" data-replace-moment="'+mealMoment+'" aria-label="'+label+'요일 '+mealMoment+' 다음 후보 보기">×</button><button class="button button-small button-quiet" data-clear-slot="'+day+'" data-clear-moment="'+mealMoment+'">비우기</button></div></div>'
-              : '<div class="slot-empty"><span>'+mealMoment+' 메뉴 없음</span>'+(slot.origin==='auto'?'<button class="button button-small button-quiet" data-clear-slot="'+day+'" data-clear-moment="'+mealMoment+'">비우기로 고정</button>':'')+'</div>';
-          return '<div class="week-row"><div class="day">'+label+'</div><div class="slot" data-day="'+day+'">'+body+'</div></div>';
+              ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">'+escapeHtml(archived?.title||'저장한 메뉴')+'</div><div class="meal-card-meta"><span>이전 주 수동 메뉴</span><span>'+(archived?'보관 근거 있음':'상세 근거 없음')+'</span></div></div><div class="meal-card-actions">'+(useArchived?'<button class="icon-button detail-trigger" data-id="'+escapeHtml(slot.recipeId)+'" data-archived="true" aria-label="보관된 상세 열기">↗</button>':'')+'<button class="icon-button" data-replace-slot="'+day+'" data-replace-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 다음 후보 보기" title="다음 후보 보기">×</button><button class="button button-small button-quiet" data-clear-slot="'+day+'" data-clear-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 비우기">비우기</button></div></div>'
+              : '<div class="slot-empty"><span>'+moment+' 메뉴 없음</span><button class="button button-small button-quiet" data-pick-slot="'+day+'" data-pick-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 메뉴 고르기">메뉴 고르기</button></div>';
+          return '<div class="slot" data-day="'+day+'" data-moment-slot="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 메뉴 칸">'+body+'</div>';
+        };
+        byId('weekGrid').innerHTML=days.map(([day,label])=>{
+          return '<div class="week-row"><div class="day"><span aria-hidden="true">'+label+'</span><span class="sr-only">'+dayNames[day]+'</span></div>'+slotBody('점심',day,label)+slotBody('저녁',day,label)+'</div>';
         }).join('');
         const cart=weekBasket();
         byId('totalCost').textContent=shopping.amount(cart);
         byId('totalCostNote').textContent=shopping.summary(cart)+' · 상세 수량은 레시피를 열어 확인하세요.';
+      }
+
+      function renderPantry() {
+        const offers=new Map();
+        for(const offer of location.offers) {
+          const name=offer.identity?.ingredientId;
+          if(typeof name==='string'&&name&&!offers.has(name))offers.set(name,offer);
+        }
+        byId('pantryList').innerHTML=offers.size?[...offers].map(([name,offer])=>{
+          const key=shopping.keyFor(activeStore,name);
+          return '<li><label><input type="checkbox" data-pantry-key="'+escapeHtml(key)+'"'+(shoppingState.pantry.has(key)?' checked':'')+'><span>'+escapeHtml(name)+'<small lang="de">'+escapeHtml(offer.productDe||'독어 상품명 미확인')+' · '+escapeHtml(offer.pack||'포장 미확인')+' · '+(Number.isSafeInteger(offer.priceCents)?shopping.euro(offer.priceCents):'가격 미확인')+'</small></span></label></li>';
+        }).join(''):'<li class="panel-copy" style="padding:14px">이 지점에서 확인된 할인 재료가 없습니다.</li>';
       }
 
       function renderMenu() {
@@ -294,7 +314,16 @@
         byId('menuCount').textContent=String(meals.length);
         byId('offerCount').textContent=location.offers.length+'종';
         byId('menuCountNote').textContent=location.coverage?.sparse?'승인된 메뉴가 부족한 지점입니다.':'선택한 지점 스냅샷만 표시합니다.';
-        byId('menuList').innerHTML=visible.length?visible.map((meal)=>'<article class="menu-item detail-trigger" data-id="'+escapeHtml(meal.id)+'" tabindex="0"><div class="menu-top"><h4 class="menu-title">'+escapeHtml(meal.title)+'</h4><span class="match">검증 후보</span></div><p class="menu-sub">할인 주재료: '+escapeHtml(meal.sale.join(' · ')||'상세 확인')+'</p><p class="menu-offer"><b>연결된 독어 상품</b><br>'+escapeHtml(meal.matchedOffers.map((offer)=>offer.productDe).join(' · '))+'</p><div class="menu-bottom"><span class="menu-price">조리 시간·전체 재료는 상세에서 확인</span></div></article>').join(''):'<p class="panel-copy">조건에 맞는 검증 메뉴가 없습니다.</p>';
+        byId('menuList').innerHTML=visible.length?visible.map((meal)=>{
+          const evaluation=recommendations.evaluateRecipeForMode(meal,recommendationContext(),preferences.mode);
+          const offer=meal.matchedOffers[0];
+          const offerNames=meal.matchedOffers.length?meal.matchedOffers.map((entry)=>entry.productDe).join(' · '):'독어 상품명 미확인';
+          const cost=modeBasket(meal);
+          const nutrition=meal.nutritionFacts?.status==='complete'?'영양 근거 완전':'영양 근거 미확인';
+          const costLabel=cost.costStatus==='complete'?'구매비 근거 완전':cost.costStatus==='partial'?'구매비 일부 확인':'구매비 근거 미확인';
+          const evidence=offer?.evidenceUrl?'할인 근거 연결됨':'할인 근거 주소 미확인';
+          return '<article class="menu-item" data-id="'+escapeHtml(meal.id)+'"><div class="menu-top"><h4 class="menu-title">'+escapeHtml(meal.title)+'</h4><span class="match">'+(evaluation.eligible?'현재 기준 적합':'근거 확인 필요')+'</span></div><p class="menu-sub">'+escapeHtml(evaluation.reasons[0]||'추천 근거를 확인 중입니다.')+'</p><p class="menu-offer"><b>연결된 독어 상품</b><br><span lang="de">'+escapeHtml(offerNames)+'</span></p><div class="menu-facts"><span>'+escapeHtml(offer?.pack||'포장 미확인')+' · '+(Number.isSafeInteger(offer?.priceCents)?shopping.euro(offer.priceCents):'가격 미확인')+'</span><span>'+escapeHtml(activeBranch.branch||activeBranch.branchId)+' · '+escapeHtml(manifest.weekStart)+'</span><span>'+evidence+' · '+costLabel+' · '+nutrition+'</span></div><div class="menu-bottom"><span class="menu-price">'+escapeHtml(meal.sale.join(' · ')||'주재료 확인 필요')+'</span><div class="menu-actions"><button class="button button-small detail-trigger" data-id="'+escapeHtml(meal.id)+'">레시피 보기</button><button class="button button-small" data-add-menu="'+escapeHtml(meal.id)+'">식단에 넣기</button></div></div></article>';
+        }).join(''):'<p class="panel-copy" role="status">검색 조건에 맞는 검증 메뉴가 없습니다. 다른 매장 메뉴를 대신 표시하지 않습니다.</p>';
         byId('offerDirectorySummary').textContent=activeStore+' 할인상품 독어 원문명 '+location.offers.length+'종';
         byId('offerDirectoryList').innerHTML=location.offers.map((offer)=>'<li><strong>'+escapeHtml(offer.identity.ingredientId)+'</strong><span lang="de">'+escapeHtml(offer.productDe)+'</span><small>'+escapeHtml(offer.pack)+' · '+shopping.euro(offer.priceCents)+'</small></li>').join('');
       }
@@ -321,8 +350,16 @@
         if(grid.dataset.planActionsBound==='true')return;
         grid.dataset.planActionsBound='true';
         grid.addEventListener('click',(event)=>{
-          const button=event.target.closest('[data-replace-slot],[data-clear-slot]');
+          const button=event.target.closest('[data-replace-slot],[data-clear-slot],[data-pick-slot]');
           if(!button)return;
+          if(button.dataset.pickSlot) {
+            mealMoment=button.dataset.pickMoment;
+            document.querySelectorAll('[data-moment]').forEach((control)=>control.classList.toggle('active',control.dataset.moment===mealMoment));
+            byId('menuSearch').focus();
+            byId('library').scrollIntoView({behavior:'smooth'});
+            byId('planStatus').textContent=(button.getAttribute('aria-label')||'메뉴 칸')+'에 넣을 메뉴를 고르세요.';
+            return;
+          }
           if(button.dataset.replaceSlot) {
           const moment=button.dataset.replaceMoment,day=button.dataset.replaceSlot,slot=plans[moment][day];
           const pool=modePool();
@@ -344,9 +381,25 @@
         renderPlan();bindDetailTriggers();bindPlanActions();
       }
 
+      function bindMenuActions() {
+        const list=byId('menuList');
+        if(list.dataset.menuActionsBound==='true')return;
+        list.dataset.menuActionsBound='true';
+        list.addEventListener('click',(event)=>{
+          const button=event.target.closest('[data-add-menu]');
+          if(!button)return;
+          const meal=mealById(button.dataset.addMenu);
+          if(!meal)return;
+          const day=days.find(([dayId])=>!plans[mealMoment][dayId])?.[0]||todayId;
+          plans[mealMoment][day]=shopping.normalizePlanSlot(meal.id,'manual');
+          savePlans();renderPlanAndBind();
+          byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+mealMoment+'에 넣었습니다.';
+        });
+      }
+
       function showPlanCoverage() {
         const label={balanced:'균형',value:'가성비',nutrition:'영양',diet:'다이어트'}[preferences.mode];
-        byId('planStatus').textContent=label+' 후보 '+autoCoverage.eligible+'개 · 자동 식단 '+autoCoverage.filled+'칸'+(autoCoverage.limited?' · 나머지는 조건에 맞는 후보가 부족해 비워둡니다.':'');
+        byId('planStatus').textContent=label+' 후보 '+autoCoverage.eligible+'개 · 자동 식단 '+autoCoverage.filled+'칸'+(autoCoverage.limited?' · 나머지는 조건에 맞는 후보가 부족해 비워둡니다.':'')+(stateNotices.length?' · '+stateNotices.join(' '):'');
       }
 
       function renderGroceries() {
@@ -354,7 +407,12 @@
         byId('groceryProgress').textContent=shoppingState.list.length?'구매 완료 '+progress.completedCount+' / '+shoppingState.list.length+'종 · 남은 재료 '+progress.remainingCount+'종':'구매할 재료를 추가해주세요';
         byId('groceryCost').textContent=shoppingState.list.length?'남은 구매금액 · '+shopping.summary(progress):'';
         byId('groceryEmpty').hidden=shoppingState.list.length>0;
-        const row=(item)=>'<li class="grocery-item'+(item.completed?' completed':'')+'"><label class="grocery-check"><input type="checkbox" data-grocery-key="'+escapeHtml(item.key)+'"'+(item.completed?' checked':'')+'><span><strong>'+escapeHtml(item.name)+'</strong><small>'+escapeHtml(item.store+' · '+item.pack+' × '+item.quantity)+'</small></span></label><span class="grocery-item-cost">'+(item.priceCents===null?'가격 미확인':shopping.euro(item.priceCents*item.quantity))+'</span><button class="icon-button" data-grocery-remove="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 장보기 목록에서 삭제">×</button></li>';
+        const row=(item)=>{
+          const offer=catalog[item.store]?.[item.name];
+          const product=offer?.product||item.product||'독어 상품명 미확인';
+          const source=offer?.source||item.source;
+          return '<li class="grocery-item'+(item.completed?' completed':'')+'"><label class="grocery-check"><input type="checkbox" data-grocery-key="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 구매 완료"'+(item.completed?' checked':'')+'><span><strong>'+escapeHtml(item.name)+'</strong><small lang="de">'+escapeHtml(product)+'</small><small>'+escapeHtml(item.store+' · '+item.pack+' × '+item.quantity)+' · '+(source?'할인 근거 연결됨':'가격·근거 확인 필요')+'</small></span></label><span class="grocery-item-cost">'+(item.priceCents===null?'가격 미확인':shopping.euro(item.priceCents*item.quantity))+'</span><button class="icon-button" data-grocery-remove="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 장보기 목록에서 삭제">×</button></li>';
+        };
         byId('groceryPending').innerHTML=shoppingState.list.filter((item)=>!item.completed).map(row).join('');
         byId('groceryCompleted').innerHTML=shoppingState.list.filter((item)=>item.completed).map(row).join('');
         byId('groceryCompletedSection').hidden=progress.completedCount===0;
@@ -440,6 +498,7 @@
           byId('addFromDetail').disabled=!meal;
           renderDetailShopping();
           byId('detailDrawer').classList.add('open');
+          byId('closeDetail').focus();
           return selectedMeal;
         } catch(error) {
           if(requestVersion!==detailRequestVersion)return null;
@@ -463,21 +522,28 @@
         byId('detailIntro').textContent='저장된 상세의 지점 또는 해시를 검증하지 못했습니다.';
         for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
         byId('detailDrawer').classList.add('open');
+        byId('closeDetail').focus();
       }
 
-      const requestDetail=(id,useArchived=false)=>openDetail(id,useArchived).catch((error)=>{if(error.detailRequestVersion===detailRequestVersion)showDetailError(error);return null;});
+      const requestDetail=(id,useArchived=false)=>{
+        detailReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+        return openDetail(id,useArchived).catch((error)=>{if(error.detailRequestVersion===detailRequestVersion)showDetailError(error);return null;});
+      };
 
       function closeDetail() {
         detailRequestVersion+=1;
         byId('detailDrawer').classList.remove('open');
+        if(detailReturnFocus?.isConnected)detailReturnFocus.focus();
       }
 
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{input.checked=input.value===preferences.mode;});
       byId('targetServings').value=String(preferences.targetServings);
-      renderToday();renderPlanAndBind();showPlanCoverage();renderMenu();renderGroceries();
+      renderToday();renderPlanAndBind();renderPantry();showPlanCoverage();renderMenu();bindDetailTriggers();bindMenuActions();renderGroceries();
       byId('sourceStatus').textContent=location.coverage?.sparse?activeArea+' · '+activeStore+' · 승인 메뉴 준비 중':activeArea+' · '+activeStore+' · 검증 메뉴 '+meals.length+'개';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
       byId('sourceStatus').dataset.snapshotState=location.coverage?.sparse?'sparse':'ready';
+      const lastOfferDay=location.offers.map((offer)=>offer.validThrough).filter(Boolean).sort().at(-1);
+      if(lastOfferDay&&lastOfferDay<berlinDate){byId('sourceStatus').dataset.snapshotState='expired';byId('sourceCheck').textContent+=' · 행사기간 종료, 가격 재확인 필요';}
       byId('savePlan').addEventListener('click',savePlans);
       const refreshForPreferences=()=>{
         closeDetail();selectedMeal=null;
@@ -492,25 +558,34 @@
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>input.addEventListener('change',()=>{if(input.checked){preferences.mode=input.value;refreshForPreferences();}}));
       byId('targetServings').addEventListener('change',(event)=>{preferences.targetServings=Number(event.target.value);refreshForPreferences();});
       byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();showPlanCoverage();savePlans();});
-      byId('clearPlan').addEventListener('click',()=>{plans[mealMoment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});
+      byId('clearPlan').addEventListener('click',()=>{for(const moment of ['점심','저녁'])plans[moment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});
       document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;renderToday();renderPlanAndBind();}));
       const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();};
       const acceptCurrent=()=>acceptMeal(currentMeal());
       byId('acceptToday').addEventListener('click',acceptCurrent);
       byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)requestDetail(meal.id);});
       byId('nextRecommendation').addEventListener('click',()=>{const pool=modePool();if(pool.length<2)return;recommendationIndex=(recommendationIndex+1)%pool.length;renderToday();});
-      byId('manualPick').addEventListener('click',()=>byId('library').scrollIntoView({behavior:'smooth'}));
-      byId('shoppingList').addEventListener('click',()=>byId('groceries').scrollIntoView({behavior:'smooth'}));
-      byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{const result=await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent=result.unavailableCount?'검증하지 못한 메뉴 '+result.unavailableCount+'개를 제외하고 확인된 재료를 저장했습니다.':'계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';byId('groceries').scrollIntoView({behavior:'smooth'});}finally{button.disabled=false;}});
+      byId('manualPick').addEventListener('click',()=>{document.querySelector('[data-mobile-target="recipes"]')?.click();byId('library').scrollIntoView({behavior:'smooth'});});
+      byId('shoppingList').addEventListener('click',()=>{document.querySelector('[data-context-target="shop"]')?.click();byId('groceries').scrollIntoView({behavior:'smooth'});});
+      byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{const result=await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent=result.unavailableCount?'검증하지 못한 메뉴 '+result.unavailableCount+'개를 제외하고 확인된 재료를 저장했습니다.':'계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';document.querySelector('[data-context-target="shop"]')?.click();byId('groceries').scrollIntoView({behavior:'smooth'});}finally{button.disabled=false;}});
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
       byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
       byId('markEaten').disabled=true;
       byId('markEaten').title='먹은 기록은 새 추천 화면에서 다시 연결됩니다.';
-      document.querySelectorAll('.filter:not([data-filter="all"])').forEach((button)=>{button.disabled=true;button.title='상세를 연 뒤 확인할 수 있습니다.';});
-      byId('menuSearch').addEventListener('input',()=>{renderMenu();bindDetailTriggers();});
+      document.querySelectorAll('.filter:not([data-filter="all"])').forEach((button)=>{button.hidden=true;});
+      byId('menuSearch').addEventListener('input',()=>{renderMenu();bindDetailTriggers();bindMenuActions();});
       byId('closeDetail').addEventListener('click',closeDetail);
       byId('closeDetailSecondary').addEventListener('click',closeDetail);
+      byId('detailDrawer').addEventListener('keydown',(event)=>{
+        if(event.key==='Escape'){event.preventDefault();closeDetail();return;}
+        if(event.key!=='Tab')return;
+        const focusable=[...byId('detailDrawer').querySelectorAll('button:not([disabled]), input:not([disabled]), a[href]')].filter((element)=>!element.hidden);
+        if(!focusable.length)return;
+        const first=focusable[0],last=focusable.at(-1);
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+      });
       byId('detailIngredients').addEventListener('change',(event)=>{
         const input=event.target.closest('[data-shopping-field="owned"]');
         if(!input)return;
@@ -523,6 +598,19 @@
           recommendationIndex=0;renderToday();savePlans();
         }
         saveShopping();renderDetailShopping();renderGroceries();renderPlanAndBind();showPlanCoverage();
+      });
+      byId('pantryList').addEventListener('change',(event)=>{
+        const input=event.target.closest('[data-pantry-key]');
+        if(!input)return;
+        if(input.checked){shoppingState.pantry.add(input.dataset.pantryKey);shoppingState.list=shoppingState.list.filter((item)=>item.key!==input.dataset.pantryKey);}
+        else shoppingState.pantry.delete(input.dataset.pantryKey);
+        if(preferences.mode==='value'){
+          autoPlans=buildAutoPlans(plans);
+          const refreshed=shopping.refreshAutoPlans(plans,autoPlans);
+          for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];
+          recommendationIndex=0;
+        }
+        saveShopping();savePlans();renderToday();renderPlanAndBind();renderGroceries();showPlanCoverage();
       });
       byId('groceries').addEventListener('change',(event)=>{
         const input=event.target.closest('[data-grocery-key]');
@@ -545,6 +633,12 @@
     } catch(error) {
       byId('sourceStatus').textContent='이번 주 검증 자료를 불러올 수 없습니다';
       byId('sourceStatus').dataset.snapshotState='unavailable';
+      byId('sourceCheck').textContent='· 다른 매장 자료로 대체하지 않았습니다';
+      byId('todayTitle').textContent='메뉴 자료를 불러오지 못했습니다';
+      byId('todayReason').textContent='잠시 뒤 다시 시도하거나 지난 자료 보기를 명시적으로 선택해주세요.';
+      byId('menuList').innerHTML='<p class="panel-copy" role="alert">선택한 지점의 메뉴를 표시할 수 없습니다.</p>';
+      byId('weekGrid').innerHTML='<p class="panel-copy" role="alert" style="padding:16px">식단은 불러오지 못한 자료로 자동 채우지 않습니다.</p>';
+      byId('pantryList').innerHTML='<li class="panel-copy" style="padding:14px">할인 재료를 확인할 수 없습니다.</li>';
       const runtime={status:'unavailable',error};
       window.mealSnapshotRuntime=runtime;
       return runtime;
