@@ -19,8 +19,14 @@ export interface CanvasAuth {
 }
 
 interface MeResponse {
-  email: string;
-  logoutUrl: string;
+  email?: string;
+  logoutUrl?: string;
+}
+
+export function authNoticeForStatus(status: number): string | null {
+  return status === 403
+    ? '이 Google 계정은 이 캔버스에 접근할 권한이 없습니다. 허용된 Google 계정으로 다시 로그인해 주세요.'
+    : null;
 }
 
 /**
@@ -46,12 +52,16 @@ export function useCanvasAuth(): CanvasAuth {
           return;
         }
         setConfigured(true);
+        const me = (await res.json().catch(() => ({}))) as MeResponse;
         if (res.ok) {
-          const me = (await res.json()) as MeResponse;
+          if (!me.email) throw new Error('missing authenticated email');
           setUser({ id: me.email, email: me.email, name: null, avatarUrl: null });
-          setLogoutUrl(me.logoutUrl);
+          if (me.logoutUrl) setLogoutUrl(me.logoutUrl);
+          setNotice(null);
         } else {
           setUser(null);
+          if (me.logoutUrl) setLogoutUrl(me.logoutUrl);
+          setNotice(authNoticeForStatus(res.status));
         }
       } catch {
         if (active) setConfigured(false);

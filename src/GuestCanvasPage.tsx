@@ -251,7 +251,6 @@ export const GuestCanvasPage: React.FC = () => {
         </div>
 
         <div className="gc-header-right">
-          {auth.notice && <span className="gc-save-status is-warn" role="status">{auth.notice}</span>}
           <AuthControls auth={auth} persistence={persistence} />
           {auth.configured && !auth.loading && <div className="gc-header-divider" />}
           <button type="button" className="gc-button" onClick={() => importInputRef.current?.click()} title="내려받았던 .json 작업 파일 불러오기 (Ctrl+O)">
@@ -288,6 +287,8 @@ export const GuestCanvasPage: React.FC = () => {
           </button>
         </div>
       </header>
+
+      {auth.notice && <div className="gc-auth-notice" role="alert">{auth.notice}</div>}
 
       <div className="gc-stage">
         {isPenDebugEnabled(window.location.search) && <PenDebugOverlay />}

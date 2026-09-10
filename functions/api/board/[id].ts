@@ -1,13 +1,16 @@
 import { parseCanvasSnapshot } from 'chois-canvas/core';
-import { identityFromRequest, type IdentityEnv } from '../../_lib/identity';
+import { authorizationFromRequest, type IdentityEnv } from '../../_lib/identity';
 import { updateBoard } from '../../_lib/boardRepo';
 import { error, json } from '../../_lib/http';
 
 type Env = IdentityEnv & { DB: D1Database };
 
 export const onRequestPut: PagesFunction<Env> = async ({ request, env, params }) => {
-  const identity = await identityFromRequest(request, env);
-  if (!identity) return error(401, 'not logged in');
+  const authorization = await authorizationFromRequest(request, env);
+  if (authorization.kind !== 'authenticated') {
+    return error(authorization.kind === 'forbidden' ? 403 : 401, authorization.kind === 'forbidden' ? 'not allowed' : 'not logged in');
+  }
+  const { identity } = authorization;
   const id = typeof params.id === 'string' ? params.id : '';
   if (!id) return error(400, 'missing board id');
 

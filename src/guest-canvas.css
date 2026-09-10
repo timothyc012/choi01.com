@@ -185,6 +185,25 @@ body {
   background: color-mix(in srgb, var(--gc-amber) 7%, var(--gc-surface));
 }
 
+.gc-auth-notice {
+  position: fixed;
+  z-index: 60;
+  top: 64px;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  transform: translateX(-50%);
+  padding: 9px 12px;
+  border: 1px solid color-mix(in srgb, var(--gc-amber) 42%, var(--gc-border));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--gc-amber) 10%, var(--gc-surface));
+  box-shadow: var(--gc-shadow);
+  color: var(--gc-amber);
+  font-size: 13px;
+  font-weight: 650;
+  text-align: center;
+}
+
 .gc-avatar {
   width: 26px;
   height: 26px;

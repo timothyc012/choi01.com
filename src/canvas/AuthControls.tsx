@@ -28,10 +28,16 @@ export const AuthControls: React.FC<Props> = ({ auth, persistence }) => {
   if (!auth.configured || auth.loading) return null;
 
   if (!auth.user) {
+    const switchAccount = auth.notice !== null;
     return (
-      <button type="button" className="gc-button gc-button-primary" onClick={() => void auth.signIn()} title="Google 계정으로 로그인하면 작업이 자동으로 저장됩니다">
+      <button
+        type="button"
+        className="gc-button gc-button-primary"
+        onClick={() => void (switchAccount ? auth.signOut() : auth.signIn())}
+        title={switchAccount ? '로그아웃 후 허용된 Google 계정으로 다시 로그인합니다' : 'Google 계정으로 로그인하면 작업이 자동으로 저장됩니다'}
+      >
         <LogIn className="gc-icon" />
-        <span>Google로 로그인</span>
+        <span>{switchAccount ? '다른 계정으로 로그인' : 'Google로 로그인'}</span>
       </button>
     );
   }

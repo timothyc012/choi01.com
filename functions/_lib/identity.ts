@@ -14,6 +14,11 @@ export interface IdentityEnv {
   DEV_USER_EMAIL?: string;
 }
 
+export type Authorization =
+  | { readonly kind: 'authenticated'; readonly identity: Identity }
+  | { readonly kind: 'unauthenticated' }
+  | { readonly kind: 'forbidden' };
+
 const jwksCache = new Map<string, ReturnType<typeof createRemoteJWKSet>>();
 
 function jwksFor(teamDomain: string) {
@@ -60,24 +65,40 @@ export function isAllowedEmail(email: string, env: Pick<IdentityEnv, 'ACCESS_TEA
  * header. Either is verified against the team's public keys and the
  * application's AUD tag; header values are never trusted on their own.
  */
-export async function identityFromRequest(request: Request, env: IdentityEnv): Promise<Identity | null> {
+/**
+ * Distinguishes a missing/invalid Access session from an account that passed
+ * Access authentication but is not on this board's exact server allowlist.
+ */
+export async function authorizationFromRequest(request: Request, env: IdentityEnv): Promise<Authorization> {
   if (env.DEV_USER_EMAIL && !env.ACCESS_TEAM_DOMAIN) {
     const email = normalizedEmail(env.DEV_USER_EMAIL);
-    return email && isAllowedEmail(email, env) ? { email } : null;
+    if (!email) return { kind: 'unauthenticated' };
+    return isAllowedEmail(email, env)
+      ? { kind: 'authenticated', identity: { email } }
+      : { kind: 'forbidden' };
   }
   const token = request.headers.get('Cf-Access-Jwt-Assertion')
     ?? readCookie(request.headers.get('Cookie'), 'CF_Authorization');
-  if (!token || !env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return null;
+  if (!token || !env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return { kind: 'unauthenticated' };
   try {
     const { payload } = await jwtVerify(token, jwksFor(env.ACCESS_TEAM_DOMAIN), {
       issuer: `https://${env.ACCESS_TEAM_DOMAIN}`,
       audience: env.ACCESS_AUD,
     });
     const email = typeof payload.email === 'string' ? normalizedEmail(payload.email) : null;
-    return email && isAllowedEmail(email, env) ? { email } : null;
+    if (!email) return { kind: 'unauthenticated' };
+    return isAllowedEmail(email, env)
+      ? { kind: 'authenticated', identity: { email } }
+      : { kind: 'forbidden' };
   } catch {
-    return null;
+    return { kind: 'unauthenticated' };
   }
+}
+
+/** Compatibility helper for callers that only need the authenticated identity. */
+export async function identityFromRequest(request: Request, env: IdentityEnv): Promise<Identity | null> {
+  const authorization = await authorizationFromRequest(request, env);
+  return authorization.kind === 'authenticated' ? authorization.identity : null;
 }
 
 export function logoutUrl(env: IdentityEnv, returnTo: string): string | null {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { identityFromRequest, isAllowedEmail } from '../functions/_lib/identity.ts';
+import { authorizationFromRequest, identityFromRequest, isAllowedEmail } from '../functions/_lib/identity.ts';
 
 const request = new Request('https://choi01.com/api/me');
 
@@ -24,4 +24,13 @@ test('local development identity is accepted when its email matches the allowlis
 
 test('an Access deployment fails closed when its email allowlist is missing', () => {
   assert.equal(isAllowedEmail('owner@example.com', { ACCESS_TEAM_DOMAIN: 'team.cloudflareaccess.com' }), false);
+});
+
+test('reports a verified but unallowlisted development identity as forbidden', async () => {
+  const authorization = await authorizationFromRequest(request, {
+    DEV_USER_EMAIL: 'owner@example.com',
+    ALLOWED_EMAILS: 'other@example.com',
+  });
+
+  assert.deepEqual(authorization, { kind: 'forbidden' });
 });
