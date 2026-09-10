@@ -516,7 +516,13 @@
         if(!input)return;
         if(input.checked){shoppingState.pantry.add(input.dataset.shoppingKey);shoppingState.list=shoppingState.list.filter((item)=>item.key!==input.dataset.shoppingKey);}
         else shoppingState.pantry.delete(input.dataset.shoppingKey);
-        saveShopping();renderDetailShopping();renderGroceries();renderPlanAndBind();
+        if(preferences.mode==='value') {
+          autoPlans=buildAutoPlans(plans);
+          const refreshed=shopping.refreshAutoPlans(plans,autoPlans);
+          for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];
+          recommendationIndex=0;renderToday();savePlans();
+        }
+        saveShopping();renderDetailShopping();renderGroceries();renderPlanAndBind();showPlanCoverage();
       });
       byId('groceries').addEventListener('change',(event)=>{
         const input=event.target.closest('[data-grocery-key]');

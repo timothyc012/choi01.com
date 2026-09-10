@@ -136,6 +136,7 @@
 
   function rankForMode(pool, context={}, mode='balanced') {
     const eligible=(pool||[]).filter((meal)=>evaluateRecipeForMode(meal,context,mode).eligible);
+    if(!eligible.length)return [];
     const facts=(meal)=>evaluateRecipeForMode(meal,context,mode).scoreComponents;
     let compare=null;
     if(mode==='value') compare=(a,b)=>facts(a).knownSubtotalCents-facts(b).knownSubtotalCents;

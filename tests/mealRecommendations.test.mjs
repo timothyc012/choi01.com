@@ -286,6 +286,18 @@ test('runtime scoring and explanation consume the injected browser policy',()=>{
   assert.ok(runtime.evaluateRecipeForMode(lowKcal,options,'nutrition').reasons.some((reason)=>reason.includes('열량 100%')&&reason.includes('단백질 0%')));
 });
 
+test('missing browser policy fails complete nutrition ranking closed without throwing',()=>{
+  const runtimeContext=vm.createContext({window:{}});
+  vm.runInContext(fs.readFileSync(new URL('meal-recommendations.js',root),'utf8'),runtimeContext);
+  const runtime=runtimeContext.window.MealRecommendations;
+  const complete=meal('complete-no-policy',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal:300,proteinGrams:25,fiberGrams:5,sodiumMg:250}}});
+  const options={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  const evaluation=runtime.evaluateRecipeForMode(complete,options,'nutrition');
+  assert.equal(evaluation.eligible,false);
+  assert.ok(evaluation.reasons.some((reason)=>reason.includes('정책 자료')));
+  assert.deepEqual(JSON.parse(JSON.stringify(runtime.rankForMode([complete],options,'nutrition'))),[]);
+});
+
 test('fourteen-slot sequencing keeps the family cap until exhausted and records relaxation',()=>{
   const pool=[];
   for(const family of ['a','b','c','d','e'])for(let index=0;index<3;index++)pool.push(meal(family+index,['닭고기'],family,{store:'Netto'}));
