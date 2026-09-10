@@ -77,6 +77,8 @@ function registryMap(registry) {
 function sourceGate(candidate,storeOffers,registryEntry) {
   const sourceRecipeId=String(candidate.sourceRecipeId??candidate.recipeId??'');
   if(!sourceRecipeId||!text(candidate.sourceUrl)) return 'missing-source';
+  if(!text(candidate.title)) return 'missing-source-title';
+  if(!text(candidate.author)) return 'missing-source-author';
   if(!Array.isArray(candidate.ingredients)||candidate.ingredients.length<2) return 'incomplete-ingredients';
   if(!Array.isArray(candidate.steps)||candidate.steps.length<3) return 'incomplete-steps';
   if(!candidate.steps.every((step,index)=>Number(step.ordinal)===index+1&&text(step.instruction))) return 'noncontiguous-steps';

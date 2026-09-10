@@ -79,6 +79,21 @@ test('selection rejects stale and unapproved paraphrases',()=>{
   ]);
 });
 
+test('selection holds candidates with a missing source title or author for review',()=>{
+  const noTitle={...candidate('no-title'),title:'   '};
+  const noAuthor={...candidate('no-author'),author:null};
+  const selected=selectStoreRecipes({
+    store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},
+    offers:[offer('offer-chicken',chickenIdentity)],
+    candidates:[noTitle,noAuthor],
+    registry:registryFor([approved(noTitle),approved(noAuthor)]),
+  });
+  assert.deepEqual(selected.recipes,[]);
+  assert.deepEqual(selected.coverage.heldForReview.map((entry)=>[entry.recipeId,entry.reason]),[
+    ['no-author','missing-source-author'],['no-title','missing-source-title'],
+  ]);
+});
+
 test('a recipe ID alone is not a publication-registry approval key',()=>{
   const recipe=candidate('id-only');
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:{recipes:{'id-only':approved(recipe)}}});

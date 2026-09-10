@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -9,6 +10,26 @@ import {sourceContentHash} from '../scripts/lib/select-store-recipes.mjs';
 import {validateMealSnapshotDirectory} from '../scripts/lib/validate-meal-snapshot.mjs';
 
 const identity={ingredientId:'닭가슴살',species:'chicken',cut:'breast',processingState:'raw',form:'fillet',composition:'chicken'};
+const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
+
+function rewriteJson(file,value) {
+  const bytes=Buffer.from(JSON.stringify(value,null,2)+'\n');
+  fs.writeFileSync(file,bytes);
+  return sha256(bytes);
+}
+
+function readSnapshot(outputDir) {
+  const currentPath=path.join(outputDir,'current.json');
+  const current=JSON.parse(fs.readFileSync(currentPath,'utf8'));
+  const manifestPath=path.join(outputDir,current.manifestPath);
+  const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+  return {currentPath,current,manifestPath,manifest};
+}
+
+function rewriteManifest({currentPath,current,manifestPath,manifest}) {
+  current.manifestSha256=rewriteJson(manifestPath,manifest);
+  rewriteJson(currentPath,current);
+}
 
 function fixture() {
   const offer={offerId:'offer-a',postcode:'52064',chain:'EDEKA',branchId:'branch-a',sourceRow:2,evidenceUrl:'https://example.com/offer',validFrom:'2026-09-07',validThrough:'2026-09-13',productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,normalPriceCents:null,conditions:'',autoPriceEligible:true,identity};
@@ -60,6 +81,37 @@ test('current pointer resolves an immutable manifest and every listed artifact h
   assert.match(current.manifestPath,/^snapshots\/2026-09-07\/[a-f0-9]{64}\/manifest\.json$/);
   assert.match(current.manifestSha256,/^[a-f0-9]{64}$/);
   assert.equal(validateMealSnapshotDirectory(outputDir).valid,true);
+});
+
+test('validator rejects an unsafe or unhashed declared manifest artifact path',async(t)=>{
+  const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-unsafe-manifest-'));
+  t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));
+  const data=fixture();
+  await compileMealWeek({outputDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const snapshot=readSnapshot(outputDir);
+  snapshot.manifest.coveragePath='../outside-coverage.json';
+  rewriteManifest(snapshot);
+  const validation=validateMealSnapshotDirectory(outputDir);
+  assert.equal(validation.valid,false);
+  assert.ok(validation.errors.some((error)=>error.includes('coveragePath')));
+});
+
+test('validator rejects unsafe, missing-hash recipe details even when container hashes are recomputed',async(t)=>{
+  const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-unsafe-detail-'));
+  t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));
+  const data=fixture();
+  await compileMealWeek({outputDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const snapshot=readSnapshot(outputDir);
+  const locationRef=snapshot.manifest.locations[0];
+  const locationPath=path.join(outputDir,locationRef.path);
+  const location=JSON.parse(fs.readFileSync(locationPath,'utf8'));
+  location.recipes[0].detailPath='../outside-recipe.json';
+  delete location.recipes[0].detailSha256;
+  snapshot.manifest.fileHashes[locationRef.path]=rewriteJson(locationPath,location);
+  rewriteManifest(snapshot);
+  const validation=validateMealSnapshotDirectory(outputDir);
+  assert.equal(validation.valid,false);
+  assert.ok(validation.errors.some((error)=>error.includes('detailPath')||error.includes('detailSha256')));
 });
 
 test('zero-candidate stores stay empty with explicit coverage instead of cross-store backfill',async(t)=>{
