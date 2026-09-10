@@ -184,11 +184,13 @@
         const offer = meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
         const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
         const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
+        const normalPrice = offer?.normalPriceCents;
         ingredients.set(key, {
           key, name, store: meal.store, pack: offer?.pack || "구매 단위 직접 확인",
           product: offer?.product || "", source: offer?.source || "",
           customPrice: Object.hasOwn(prices, key),
-          priceCents, owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
+          priceCents, normalPriceCents: Number.isSafeInteger(normalPrice) && normalPrice >= priceCents ? normalPrice : null,
+          owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
           requirementComplete: Boolean(required)
         });
       }
@@ -211,13 +213,37 @@
       };
     });
     const purchases = items.filter((item) => !item.owned);
+    const unknownItemKeys = purchases.filter((item) => item.subtotalCents === null).map((item) => item.key);
+    const quantityCheckKeys = purchases.filter((item) => item.quantityNeedsCheck).map((item) => item.key);
+    const knownSubtotalCents = purchases.reduce((sum, item) => sum + (item.subtotalCents ?? 0), 0);
+    const costStatus = unknownItemKeys.length === purchases.length && purchases.length > 0
+      ? 'unknown' : (unknownItemKeys.length || quantityCheckKeys.length ? 'partial' : 'complete');
+    const comparableSavings = costStatus === 'complete' && purchases.every((item) => item.normalPriceCents !== null);
     return {
       items,
-      totalCents: purchases.reduce((sum, item) => sum + (item.subtotalCents ?? 0), 0),
-      unknownCount: purchases.filter((item) => item.priceCents === null).length,
-      quantityCheckCount: purchases.filter((item) => item.quantityNeedsCheck).length,
+      totalCents: knownSubtotalCents,
+      knownSubtotalCents,
+      unknownItemKeys,
+      quantityCheckKeys,
+      costStatus,
+      savingsStatus: comparableSavings ? 'complete' : 'unavailable',
+      savingsCents: comparableSavings
+        ? purchases.reduce((sum, item) => sum + ((item.normalPriceCents - item.priceCents) * item.quantity), 0)
+        : null,
+      unknownCount: unknownItemKeys.length,
+      quantityCheckCount: quantityCheckKeys.length,
       purchaseCount: purchases.length
     };
+  }
+
+  function replaceAutoSlot(value, nextRecipeId) {
+    const current = normalizePlanSlot(value, 'auto');
+    const dismissed = recentUniqueRecipeIds([...current.dismissedRecipeIds, current.recipeId].filter(Boolean));
+    return {recipeId:typeof nextRecipeId === 'string' && nextRecipeId ? nextRecipeId : null,origin:'auto',dismissedRecipeIds:dismissed};
+  }
+
+  function clearPlanSlot() {
+    return {recipeId:null,origin:'manual',dismissedRecipeIds:[]};
   }
 
   function amount(cart) {
@@ -310,5 +336,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

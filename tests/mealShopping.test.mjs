@@ -233,6 +233,52 @@ test('v2 slot normalization keeps the 20 most recent unique dismissed recipes',(
   assert.deepEqual([...slot.dismissedRecipeIds].slice(-2),['recipe-5','recipe-21']);
 });
 
+test('basket exposes complete, partial, and unknown cost facts without calling gaps zero',()=>{
+  const completeMeal={store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{닭고기:{amount:300,unit:'g'}}};
+  const complete=shopping.basket([completeMeal],{catalog:fixtureCatalog});
+  assert.equal(complete.costStatus,'complete');
+  assert.equal(complete.knownSubtotalCents,799);
+  assert.deepEqual([...complete.unknownItemKeys],[]);
+  assert.deepEqual([...complete.quantityCheckKeys],[]);
+  assert.equal(complete.savingsStatus,'unavailable');
+  const partial=shopping.basket([rice],{catalog:fixtureCatalog});
+  assert.equal(partial.costStatus,'partial');
+  assert.equal(partial.knownSubtotalCents,1584);
+  assert.ok(partial.unknownItemKeys.includes('Netto:간장'));
+  assert.ok(partial.quantityCheckKeys.includes('Netto:닭고기'));
+  const unknown=shopping.basket([{store:'EDEKA',sale:['연어'],missing:[],requiredAmounts:{연어:{amount:200,unit:'g'}}}],{catalog:{}});
+  assert.equal(unknown.costStatus,'unknown');
+  assert.equal(unknown.knownSubtotalCents,0);
+});
+
+test('mode and serving refresh replaces auto slots only',()=>{
+  const plans={저녁:{
+    mon:{recipeId:'auto-old',origin:'auto',dismissedRecipeIds:['dismissed']},
+    tue:{recipeId:'manual-choice',origin:'manual',dismissedRecipeIds:[]},
+    wed:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
+  }};
+  const refreshed=shopping.refreshAutoPlans(plans,{저녁:{mon:'auto-new',tue:'wrong',wed:'wrong'}});
+  assert.equal(refreshed.저녁.mon.recipeId,'auto-new');
+  assert.equal(refreshed.저녁.mon.origin,'auto');
+  assert.equal(refreshed.저녁.tue.recipeId,'manual-choice');
+  assert.equal(refreshed.저녁.wed.recipeId,null);
+});
+
+test('X replacement records a bounded dismissal and clear is a distinct manual empty',()=>{
+  const current={recipeId:'current',origin:'auto',dismissedRecipeIds:Array.from({length:20},(_,index)=>'old-'+index)};
+  const replaced=shopping.replaceAutoSlot(current,'next');
+  assert.equal(replaced.recipeId,'next');
+  assert.equal(replaced.origin,'auto');
+  assert.equal(replaced.dismissedRecipeIds.length,20);
+  assert.equal(replaced.dismissedRecipeIds.at(-1),'current');
+  assert.equal(replaced.dismissedRecipeIds.includes('old-0'),false);
+  const exhausted=shopping.replaceAutoSlot(replaced,null);
+  assert.equal(exhausted.recipeId,null);
+  assert.equal(exhausted.origin,'auto');
+  const cleared=shopping.clearPlanSlot(replaced);
+  assert.deepEqual(JSON.parse(JSON.stringify(cleared)),{recipeId:null,origin:'manual',dismissedRecipeIds:[]});
+});
+
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {
   const source = readCsv(fs.readFileSync(new URL('../public' + sourceMeta.source, import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(sourceCatalog).sort(), [...new Set(source.map(r=>r['우편번호']))].sort());

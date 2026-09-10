@@ -7,6 +7,24 @@
   };
   const identity = (meal) => meal.sourceRecipeId || meal.id;
   const profile = (meal) => meal.recommendationProfile || {primaryIngredients:[],family:identity(meal),method:'unknown'};
+  const modes = new Set(['balanced','value','nutrition','diet']);
+
+  function restorePreferences(serialized) {
+    try {
+      const value=JSON.parse(serialized);
+      if(value&&modes.has(value.mode)&&Number.isInteger(value.targetServings)&&value.targetServings>=1&&value.targetServings<=6) {
+        return {mode:value.mode,targetServings:value.targetServings};
+      }
+    } catch { /* Corrupt preferences use safe defaults. */ }
+    return {mode:'balanced',targetServings:2};
+  }
+
+  function serializePreferences(value={}) {
+    return JSON.stringify({
+      mode:modes.has(value.mode)?value.mode:'balanced',
+      targetServings:Number.isInteger(value.targetServings)&&value.targetServings>=1&&value.targetServings<=6?value.targetServings:2
+    });
+  }
 
   function restoreHistory(serialized, date) {
     const today = dayNumber(date);
@@ -67,6 +85,65 @@
     return meals.filter((meal)=>explain(meal,catalog).mainOffers.length>0);
   }
 
+  function nutritionReadiness(meal) {
+    const facts=meal?.nutritionFacts,perServing=facts?.perServing;
+    const fields=['kcal','proteinGrams','fiberGrams','sodiumMg'];
+    const ready=facts?.status==='complete'&&typeof facts.source==='string'&&facts.source.trim()
+      &&Number.isFinite(facts.sourceServings)&&facts.sourceServings>0
+      &&perServing&&fields.every((field)=>Number.isFinite(perServing[field])&&perServing[field]>=0);
+    return {ready:Boolean(ready),status:ready?'complete':'unknown',facts:ready?perServing:null};
+  }
+
+  function costReadiness(cart) {
+    const unknown=Array.isArray(cart?.unknownItemKeys)?cart.unknownItemKeys:[];
+    const quantity=Array.isArray(cart?.quantityCheckKeys)?cart.quantityCheckKeys:[];
+    const ready=cart?.costStatus==='complete'&&!unknown.length&&!quantity.length;
+    return {ready,status:['complete','partial','unknown'].includes(cart?.costStatus)?cart.costStatus:'unknown',knownSubtotalCents:Number.isSafeInteger(cart?.knownSubtotalCents)?cart.knownSubtotalCents:0,savingsStatus:cart?.savingsStatus==='complete'?'complete':'unavailable'};
+  }
+
+  function evaluateRecipeForMode(meal, context={}, mode='balanced') {
+    const selectedMode=modes.has(mode)?mode:'balanced';
+    const reasons=[];
+    let eligible=Boolean(meal&&typeof identity(meal)==='string'&&identity(meal));
+    if(!eligible) reasons.push('출처 레시피 식별자가 없습니다.');
+    if(context.store&&meal?.store!==context.store) { eligible=false; reasons.push('선택한 마트의 메뉴가 아닙니다.'); }
+    if(context.branchId&&meal?.branchId&&meal.branchId!==context.branchId) { eligible=false; reasons.push('선택한 지점의 메뉴가 아닙니다.'); }
+    if(context.mealOnly&&['side','breakfast'].includes(profile(meal||{}).kind)) { eligible=false; reasons.push('점심·저녁 자동 추천용 주식 메뉴가 아닙니다.'); }
+    if(context.requireMainOffer&&explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length===0) { eligible=false; reasons.push('현재 지점의 정확한 주재료 할인과 연결되지 않습니다.'); }
+    if(typeof context.offerIds?.has==='function'&&!((meal?.offerIds||[]).some((offerId)=>context.offerIds.has(offerId)))) { eligible=false; reasons.push('현재 지점의 할인상품 ID와 일치하지 않습니다.'); }
+    const readiness={cost:'unknown',savings:'unavailable',nutrition:'unknown'};
+    const scoreComponents={qualityScore:Number.isFinite(meal?.qualityScore)?meal.qualityScore:null};
+    if(selectedMode==='value') {
+      const cost=costReadiness(typeof context.basketFor==='function'?context.basketFor(meal,context.targetServings||2):meal?.basketFacts);
+      readiness.cost=cost.status;readiness.savings=cost.savingsStatus;scoreComponents.knownSubtotalCents=cost.knownSubtotalCents;
+      if(!cost.ready) { eligible=false; reasons.push('가격 또는 필요한 포장 수량이 모두 확인되지 않았습니다.'); }
+      else reasons.push('확인된 구매 합계 '+cost.knownSubtotalCents+'센트 기준입니다.');
+    } else if(selectedMode==='nutrition'||selectedMode==='diet') {
+      const nutrient=nutritionReadiness(meal);readiness.nutrition=nutrient.status;
+      if(!nutrient.ready) { eligible=false; reasons.push('원문 인분 수와 영양 근거가 완전하지 않습니다.'); }
+      else Object.assign(scoreComponents,nutrient.facts);
+    } else reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
+    return {eligible,readiness,scoreComponents,reasons};
+  }
+
+  function rankForMode(pool, context={}, mode='balanced') {
+    const eligible=(pool||[]).filter((meal)=>evaluateRecipeForMode(meal,context,mode).eligible);
+    const facts=(meal)=>evaluateRecipeForMode(meal,context,mode).scoreComponents;
+    const compare=mode==='value'
+      ? (a,b)=>facts(a).knownSubtotalCents-facts(b).knownSubtotalCents
+      : mode==='nutrition'
+        ? (a,b)=>(facts(b).proteinGrams-facts(a).proteinGrams)||(facts(b).fiberGrams-facts(a).fiberGrams)||(facts(a).sodiumMg-facts(b).sodiumMg)
+        : mode==='diet'
+          ? (a,b)=>(facts(a).kcal-facts(b).kcal)||(facts(b).proteinGrams-facts(a).proteinGrams)
+          : null;
+    return sequence(eligible,{...context,compare},eligible.length);
+  }
+
+  function nextCandidate(pool, {dismissedRecipeIds=[],usedRecipeIds=[],mode='balanced',context={}}={}) {
+    const excluded=new Set([...dismissedRecipeIds,...usedRecipeIds]);
+    return (pool||[]).find((meal)=>!excluded.has(identity(meal))&&!excluded.has(meal.id)&&evaluateRecipeForMode(meal,context,mode).eligible)||null;
+  }
+
   function sequence(meals, options, count = meals.length) {
     const matched = options.requireMainOffer ? available(meals,options) : meals;
     const eligible = options.mealOnly ? matched.filter((meal)=>!['side','breakfast'].includes(profile(meal).kind)) : matched;
@@ -80,7 +157,7 @@
       const alternatives = candidates.filter((meal)=>profile(meal).family !== lastFamily);
       if (alternatives.length) candidates = alternatives;
       const adjusted = (meal)=>score(meal,options) - (families.get(profile(meal).family)||0)*25 - (methods.get(profile(meal).method)||0)*12;
-      const selected = candidates.slice().sort((a,b)=>adjusted(b)-adjusted(a) || identity(a).localeCompare(identity(b)))[0];
+      const selected = candidates.slice().sort((a,b)=>(typeof options.compare==='function'?options.compare(a,b):0) || adjusted(b)-adjusted(a) || identity(a).localeCompare(identity(b)))[0];
       result.push(selected);
       const meta = profile(selected);
       families.set(meta.family,(families.get(meta.family)||0)+1);
@@ -95,5 +172,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal};
+  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate};
 }());

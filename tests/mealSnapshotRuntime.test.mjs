@@ -173,11 +173,12 @@ test('legacy recipes are enabled only by the explicit snapshot query and snapsho
   assert.equal('steps' in summaries[0],false);
   assert.equal('detailIngredients' in summaries[0],false);
   const catalog=api.offerCatalogFromSnapshot({offers:[{
-    offerId:'offer-a',chain:'EDEKA',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,
+    offerId:'offer-a',chain:'EDEKA',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,normalPriceCents:799,
     validFrom:'2026-09-07',validThrough:'2026-09-13',evidenceUrl:'https://example.com/offer'
   }]});
   assert.equal(catalog['닭가슴살'].product,'Hähnchenbrustfilet');
   assert.equal(catalog['닭가슴살'].priceCents,599);
+  assert.equal(catalog['닭가슴살'].normalPriceCents,799);
   const duplicateLocation={store:'EDEKA',offers:[
     {offerId:'offer-rib',identity:{ingredientId:'소고기등심'},productDe:'Rib-Eye',pack:'300 g',priceCents:699},
     {offerId:'offer-entrecote',identity:{ingredientId:'소고기등심'},productDe:'Entrecôte',pack:'300 g',priceCents:799}
@@ -291,6 +292,35 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.eval(inline);
   const runtime=await dom.window.mealSnapshotReady;
   assert.equal(runtime.status,'ready');
+  const plansBeforeMode=JSON.parse(JSON.stringify(runtime.plans));
+  const modeRadios=[...dom.window.document.querySelectorAll('input[name="recommendationMode"]')];
+  assert.deepEqual(modeRadios.map((input)=>input.value),['balanced','value','nutrition','diet']);
+  assert.equal(modeRadios.every((input)=>input.type==='radio'),true);
+  assert.equal(dom.window.document.getElementById('targetServings').options.length,6);
+  const manualBeforeMode=runtime.plans.저녁.mon.recipeId;
+  modeRadios.find((input)=>input.value==='diet').click();
+  assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'diet');
+  assert.equal(runtime.plans.저녁.mon.recipeId,manualBeforeMode);
+  assert.match(dom.window.document.getElementById('modeReadiness').textContent,/영양 근거/);
+  modeRadios.find((input)=>input.value==='balanced').click();
+  assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'balanced');
+  const replaceButton=[...dom.window.document.querySelectorAll('[data-replace-slot]')].find((button)=>runtime.plans[button.dataset.replaceMoment][button.dataset.replaceSlot].origin==='auto');
+  assert.ok(replaceButton);
+  const replaceMoment=replaceButton.dataset.replaceMoment;
+  const replaceDay=replaceButton.dataset.replaceSlot;
+  const beforeReplace=runtime.plans[replaceMoment][replaceDay].recipeId;
+  replaceButton.click();
+  assert.equal(runtime.plans[replaceMoment][replaceDay].origin,'auto');
+  assert.ok(runtime.plans[replaceMoment][replaceDay].dismissedRecipeIds.includes(beforeReplace));
+  assert.notEqual(runtime.plans[replaceMoment][replaceDay].recipeId,beforeReplace);
+  if(runtime.plans[replaceMoment][replaceDay].recipeId===null)assert.match(dom.window.document.getElementById('planStatus').textContent,/남은 다음 후보/);
+  const clearButton=dom.window.document.querySelector('[data-clear-slot]');
+  assert.ok(clearButton);
+  const servings=dom.window.document.getElementById('targetServings');
+  servings.value='4';servings.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+  assert.equal(JSON.parse(dom.window.localStorage.getItem('choi01-recommendation-preferences-v1')).targetServings,4);
+  assert.equal(runtime.plans.저녁.mon.recipeId,manualBeforeMode);
+  for(const moment of Object.keys(plansBeforeMode))runtime.plans[moment]=plansBeforeMode[moment];
   assert.equal(runtime.location.postcode,'99999');
   assert.equal(runtime.location.branchId,'branch-b');
   assert.equal(dom.window.document.getElementById('postcodeSelect').value,'99999');
@@ -304,6 +334,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   search.value='닭가슴살';search.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
   assert.match(dom.window.document.getElementById('menuList').textContent,/닭가슴살 활용/);
   assert.match(dom.window.document.getElementById('weekGrid').textContent,/닭가슴살/);
+  const activeClear=dom.window.document.querySelector('[data-clear-slot]');
+  assert.match(activeClear.textContent,/비우기/);
   assert.equal(dom.window.document.getElementById('totalCost').textContent,'5,99€');
   assert.equal(runtime.weekBasket().items[0].product,'Hähnchenbrustfilet');
   assert.equal(runtime.weekBasket().items[0].priceCents,599);

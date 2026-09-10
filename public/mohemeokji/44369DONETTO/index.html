@@ -165,6 +165,12 @@
         font-size: 12px;
       }
       .meal-toggle button.active { background: var(--ink-soft); color: #fff; }
+      .goal-controls { display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; margin:18px 0 22px; padding:14px 16px; border:1px solid var(--border); border-radius:12px; background:var(--canvas); }
+      .goal-controls fieldset { display:flex; flex-wrap:wrap; gap:10px; margin:0; padding:0; border:0; }
+      .goal-controls legend { margin:0 12px 0 0; font-weight:700; float:left; }
+      .goal-controls label { display:flex; gap:6px; align-items:center; font-size:13px; }
+      .goal-controls select { min-height:36px; }
+      .goal-readiness { flex-basis:100%; margin:0; color:var(--faint); font-size:12px; }
       .decision-card h2 {
         max-width: 720px;
         margin: 30px 0 0;
@@ -622,6 +628,21 @@
           <span id="sourceStatus">새 행사 데이터 · 44369 Dortmund · 음식 재료 연결됨</span>
           <span class="status-check" id="sourceCheck">· 저장된 포장 가격 기준</span>
         </div>
+        <div class="goal-controls" aria-label="추천 설정">
+          <fieldset id="recommendationModes">
+            <legend>추천 기준</legend>
+            <label><input type="radio" name="recommendationMode" value="balanced" checked> 균형</label>
+            <label><input type="radio" name="recommendationMode" value="value"> 가성비</label>
+            <label><input type="radio" name="recommendationMode" value="nutrition"> 영양</label>
+            <label><input type="radio" name="recommendationMode" value="diet"> 다이어트</label>
+          </fieldset>
+          <label for="targetServings">몇 인분</label>
+          <select id="targetServings" aria-label="추천 인분 수">
+            <option value="1">1명</option><option value="2" selected>2인분</option><option value="3">3인분</option>
+            <option value="4">4인분</option><option value="5">5인분</option><option value="6">6인분</option>
+          </select>
+          <p class="goal-readiness" id="modeReadiness" role="status" aria-live="polite">균형 모드는 현재 지점의 검증된 할인상품 연결을 기준으로 추천합니다.</p>
+        </div>
 
         <div class="decision-grid">
           <article class="decision-card">
@@ -700,6 +721,7 @@
             </header>
             <div class="week-head"><span>요일</span><span id="planColumnLabel">저녁</span></div>
             <div id="weekGrid"></div>
+            <p class="footer-note" id="planStatus" role="status" aria-live="polite" style="padding:0 20px"></p>
             <p class="footer-note" id="todayPlanNote" style="padding:0 20px 18px"></p>
           </article>
 
@@ -793,18 +815,20 @@
 
     <script>
       if (new URLSearchParams(location.search).get('snapshot') === 'legacy') {
-        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=252eb5d00613"><\/script><script src="/mohemeokji/meal-package-prices.js?v=252eb5d00613"><\/script>');
+        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=755f9d628e04"><\/script><script src="/mohemeokji/meal-package-prices.js?v=755f9d628e04"><\/script>');
       }
     </script>
-    <script src="./meal-planner-recipe-data.js?v=252eb5d00613"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=252eb5d00613"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=252eb5d00613"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=252eb5d00613"></script>
+    <script src="./meal-planner-recipe-data.js?v=755f9d628e04"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=755f9d628e04"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=755f9d628e04"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=755f9d628e04"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
         window.mealSnapshotReady = window.MealRecipeData.startSnapshotApp();
       } else {
+      document.querySelectorAll('input[name="recommendationMode"], #targetServings').forEach((control)=>{control.disabled=true;});
+      document.getElementById('modeReadiness').textContent='이전 자료 보기에서는 추천 기준 변경을 사용할 수 없습니다.';
       const meals = [];
 
       const days = [

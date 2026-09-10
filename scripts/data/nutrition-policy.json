@@ -1,0 +1,14 @@
+{
+  "version": "1",
+  "effectiveDate": "2026-09-10",
+  "scope": "Recommendation readiness only. This policy defines required evidence fields and does not define dietary or medical targets.",
+  "source": "recipe-full publication records with cited nutrient provenance",
+  "nonClinical": true,
+  "requiredPerServingFields": [
+    "kcal",
+    "proteinGrams",
+    "fiberGrams",
+    "sodiumMg"
+  ],
+  "incompleteEvidenceBehavior": "exclude_from_nutrition_and_diet_modes"
+}
