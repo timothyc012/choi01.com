@@ -12,13 +12,12 @@
  *     painted until the committed shape appears, so there is no blink between
  *     lifting the pen and the SVG shape rendering.
  *
- * Geometry comes from the same `freehandOutlinePoints` the SVG layer uses, so
- * the handoff from overlay to committed shape is invisible.
+ * Geometry uses the same stroke renderer as committed SVG and export.
  */
 import type { CanvasShape } from './InfiniteCanvas';
 import type { Camera } from './canvasPointerTypes';
-import { CANVAS_COLORS, CANVAS_LIMITS } from '../core/index.ts';
-import { freehandDotRadius, freehandOutlinePath, freehandOutlinePoints } from './canvasShapeStyle';
+import { CANVAS_LIMITS, type CanvasInkStyle } from '../core/index.ts';
+import { effectiveStroke, freehandDotRadius, freehandOutlinePoints, strokeRendering } from './canvasShapeStyle';
 
 function screenPoint(point: [number, number], camera: Camera): [number, number] {
   return [(point[0] - camera.x) * camera.z, (point[1] - camera.y) * camera.z];
@@ -26,14 +25,25 @@ function screenPoint(point: [number, number], camera: Camera): [number, number] 
 
 /**
  * Append samples to a live stroke, dropping any that land on top of the
- * previous one. The threshold is in page units so it stays a fixed visual
- * distance at every zoom level.
+ * previous one. Raw ink only drops exact duplicates; smoothed ink retains
+ * its existing screen-space threshold and interpolation.
  */
 export function appendDistinctLivePoints(
   points: [number, number][],
   samples: readonly [number, number][],
   zoom: number,
+  inkStyle?: CanvasInkStyle,
 ): void {
+  if (inkStyle === 'raw') {
+    let last = points[points.length - 1];
+    for (const sample of samples) {
+      if (points.length >= CANVAS_LIMITS.maxDrawPoints) return;
+      if (last && sample[0] === last[0] && sample[1] === last[1]) continue;
+      points.push(sample);
+      last = sample;
+    }
+    return;
+  }
   const safeZoom = Math.max(zoom, 0.1);
   const threshold = 0.05 / safeZoom;
   // WebKit only exposed coalesced PointerEvent samples relatively recently,
@@ -99,14 +109,14 @@ function drawStroke(
   if (points.length === 0) return;
   const strokeWidth = shape.strokeWidth ?? 3;
   const mode = shape.drawMode ?? 'pen';
-  const color = shape.color ? CANVAS_COLORS[shape.color].border : '#2563eb';
+  const color = effectiveStroke(shape);
 
   context.save();
   context.globalAlpha = mode === 'highlighter' ? 0.35 : 1;
   context.fillStyle = color;
 
   // A tap leaves a dot; perfect-freehand returns nothing for a single point.
-  if (points.length === 1) {
+  if (points.length === 1 && shape.inkStyle === undefined) {
     const [x, y] = screenPoint(points[0], camera);
     context.beginPath();
     context.arc(x, y, Math.max(freehandDotRadius(strokeWidth, mode) * camera.z, 0.5), 0, Math.PI * 2);
@@ -115,11 +125,43 @@ function drawStroke(
     return;
   }
 
-  const pathData = typeof Path2D === 'function' ? freehandOutlinePath(points, strokeWidth, mode) : '';
-  if (pathData && typeof Path2D === 'function') {
+  if (typeof Path2D === 'function') {
+    const rendering = strokeRendering(shape);
     context.scale(camera.z, camera.z);
     context.translate(-camera.x, -camera.y);
-    context.fill(new Path2D(pathData));
+    const path = new Path2D(rendering.d);
+    if (rendering.filled) context.fill(path);
+    else {
+      context.strokeStyle = color;
+      context.lineWidth = rendering.width;
+      context.lineCap = 'round';
+      context.lineJoin = 'round';
+      context.stroke(path);
+    }
+    context.restore();
+    return;
+  }
+  if (points.length === 1 || (shape.inkStyle === 'raw' && points.every(([x, y]) => x === points[0][0] && y === points[0][1]))) {
+    const [x, y] = screenPoint(points[0], camera);
+    context.beginPath();
+    context.arc(x, y, freehandDotRadius(strokeWidth, mode) * camera.z, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+    return;
+  }
+  if (shape.inkStyle === 'raw') {
+    context.beginPath();
+    const [x, y] = screenPoint(points[0], camera);
+    context.moveTo(x, y);
+    for (let i = 1; i < points.length; i++) {
+      const [nextX, nextY] = screenPoint(points[i], camera);
+      context.lineTo(nextX, nextY);
+    }
+    context.strokeStyle = color;
+    context.lineWidth = freehandDotRadius(strokeWidth, mode) * 2 * camera.z;
+    context.lineCap = 'round';
+    context.lineJoin = 'round';
+    context.stroke();
     context.restore();
     return;
   }

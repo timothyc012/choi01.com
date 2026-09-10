@@ -6,6 +6,7 @@ import {
   type CanvasArrowShape,
   type CanvasColorKey,
   type CanvasDrawMode,
+  type CanvasInkStyle,
   type CanvasDocument,
   type CanvasShapeBase,
   type CanvasShape,
@@ -144,6 +145,7 @@ function parseShape(input: unknown): CanvasShape {
   const w = readBoundedNumber(input, 'w', 'shape', CANVAS_LIMITS.coordinate);
   const h = readBoundedNumber(input, 'h', 'shape', CANVAS_LIMITS.coordinate);
   const common = parseCommonShape(input, id, x, y, w, h);
+  if (type !== 'draw') rejectUnexpectedStyleField(input, 'inkStyle', type);
   if (type === 'draw') {
     if (!Array.isArray(input.points)) throw new CanvasValidationError('Draw shapes require points.');
     rejectRawPressure(input);
@@ -153,6 +155,7 @@ function parseShape(input: unknown): CanvasShape {
       points: parsePoints(input.points),
       strokeWidth: readOptionalStrokeWidth(input),
       drawMode: readOptionalDrawMode(input),
+      inkStyle: readOptionalInkStyle(input),
     };
   }
   if (type === 'arrow') {
@@ -380,7 +383,16 @@ function readOptionalDrawMode(input: Record<string, unknown>): CanvasDrawMode | 
   return value;
 }
 
-function rejectUnexpectedStyleField(input: Record<string, unknown>, key: 'strokeWidth' | 'drawMode', type: string): void {
+function readOptionalInkStyle(input: Record<string, unknown>): CanvasInkStyle | undefined {
+  const value = input.inkStyle;
+  if (value === undefined) return undefined;
+  if (value !== 'raw' && value !== 'smoothed') {
+    throw new CanvasValidationError('Canvas inkStyle must be raw or smoothed.');
+  }
+  return value;
+}
+
+function rejectUnexpectedStyleField(input: Record<string, unknown>, key: 'strokeWidth' | 'drawMode' | 'inkStyle', type: string): void {
   if (Object.prototype.hasOwnProperty.call(input, key)) {
     throw new CanvasValidationError(`Canvas shape ${key} is not supported on ${type}.`);
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CanvasColorKey, CanvasShape as DocumentCanvasShape, CanvasStrokeWidth, CanvasTool as CoreCanvasTool, OrthogonalVariant } from '../core/index.js';
+import { type CanvasPreferenceOptions } from './useCanvasPreferences';
 /**
  * Self-contained infinite canvas engine.
  *
@@ -84,7 +85,7 @@ export interface InfiniteCanvasHandle {
     getSnapshot: () => CanvasSnapshot;
     loadSnapshot: (snapshot: unknown) => void;
 }
-interface InfiniteCanvasProps {
+interface InfiniteCanvasProps extends CanvasPreferenceOptions {
     /** Stable identity used to reset local interaction state on board changes. */
     boardIdentity?: string;
     isDarkMode: boolean;

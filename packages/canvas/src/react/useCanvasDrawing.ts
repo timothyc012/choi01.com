@@ -41,7 +41,7 @@ export function useCanvasDrawing(options: DrawingOptions): CanvasDrawingHandlers
       const active = o.activeDrawRef.current;
       const points = pendingPoints.current.splice(0);
       if (active?.id === session.current?.shapeId && active?.points) {
-        appendDistinctLivePoints(active.points, points, o.cameraRef.current.z);
+        appendDistinctLivePoints(active.points, points, o.cameraRef.current.z, active.type === 'draw' ? active.inkStyle : undefined);
       }
     };
     const commitPending = () => {
@@ -63,7 +63,7 @@ export function useCanvasDrawing(options: DrawingOptions): CanvasDrawingHandlers
         // Cancellation/capture-loss coordinates are not new ink samples.
         if (event?.type === 'pointerup' && Number.isFinite(event.clientX) && Number.isFinite(event.clientY)) {
           const point = o.toPage(event.clientX, event.clientY);
-          appendDistinctLivePoints(active.points, [[point.x, point.y]], o.cameraRef.current.z);
+          appendDistinctLivePoints(active.points, [[point.x, point.y]], o.cameraRef.current.z, active.type === 'draw' ? active.inkStyle : undefined);
         }
         o.pendingDrawsRef.current.push(finalizeLiveStroke(active));
         o.activeDrawRef.current = null;

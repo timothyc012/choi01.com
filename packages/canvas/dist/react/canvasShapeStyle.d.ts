@@ -44,6 +44,18 @@ export declare function freehandOutlinePath(points: [number, number][], strokeWi
  * committed.
  */
 export declare function shapeOutlinePath(s: CanvasShape): string;
+/** Straight segments preserve the sampled centerline without a smoothing pass. */
+export declare function rawStrokePath(points: [number, number][]): string;
+interface StrokeRendering {
+    d: string;
+    filled: boolean;
+    width: number;
+    opacity: number;
+}
+/** Geometry and document-unit width shared by the live, SVG and export surfaces. */
+export declare function strokeRendering(s: CanvasShape, zoom?: number): StrokeRendering;
+/** Cache only immutable committed shapes; active strokes mutate as samples arrive. */
+export declare function shapeStrokeRendering(s: CanvasShape, zoom?: number): StrokeRendering;
 export declare function escapeHtml(s: string): string;
 type TextRun = {
     text: string;

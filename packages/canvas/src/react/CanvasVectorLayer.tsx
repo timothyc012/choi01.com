@@ -6,9 +6,8 @@ import {
   bounds,
   collectObstaclesForArrow,
   edgePoint,
-  strokePath,
 } from './canvasGeometry';
-import { shapeOutlinePath } from './canvasShapeStyle';
+import { shapeStrokeRendering } from './canvasShapeStyle';
 import { orthogonalEndAngle, orthogonalPathPoints, segmentAngle, toPath } from './canvasRouting';
 import { CANVAS_UI_COLORS } from './theme';
 
@@ -46,12 +45,7 @@ export function CanvasVectorLayer({
             const drawMode = s.drawMode ?? 'pen';
             const documentStrokeWidth = s.strokeWidth ?? 3;
             const color = selected.has(s.id) ? CANVAS_UI_COLORS.blue : strokeColorOf(s);
-            // perfect-freehand produces a filled polygon outline that gives
-            // variable-width, natural-looking strokes (thick on slow curves,
-            // thin on fast flicks). Cached against the shape, so an unrelated
-            // re-render does not rebuild it. Single points fall back to a
-            // simple stroke, which perfect-freehand cannot outline.
-            const outlineD = shapeOutlinePath(s);
+            const rendering = shapeStrokeRendering(s, camera.z);
             return (
               <path
                 key={s.id}
@@ -59,10 +53,11 @@ export function CanvasVectorLayer({
                 data-canvas-vector-shape-type="draw"
                 data-canvas-draw-mode={drawMode}
                 data-canvas-stroke-width={documentStrokeWidth}
-                d={outlineD || strokePath(s.points)}
-                fill={outlineD ? color : 'none'}
-                stroke={outlineD ? 'none' : color}
-                strokeWidth={documentStrokeWidth / camera.z}
+                data-canvas-ink-style={s.inkStyle ?? 'smoothed'}
+                d={rendering.d}
+                fill={rendering.filled ? color : 'none'}
+                stroke={rendering.filled ? 'none' : color}
+                strokeWidth={rendering.width}
                 strokeOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
                 fillOpacity={drawMode === 'highlighter' ? 0.35 : undefined}
                 strokeLinecap="round"

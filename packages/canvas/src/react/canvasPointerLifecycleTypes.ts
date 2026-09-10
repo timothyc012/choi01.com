@@ -6,6 +6,7 @@ import type { Camera, Interaction, PointerPosition } from './canvasPointerTypes'
 import type { CanvasDrawingHandlers } from './useCanvasDrawing';
 
 export interface PointerLifecycleOptions {
+  objectSnapEnabled: boolean;
   containerRef: RefObject<HTMLDivElement | null>;
   pointers: RefObject<Map<number, PointerPosition>>;
   interactionRef: RefObject<Interaction>;
