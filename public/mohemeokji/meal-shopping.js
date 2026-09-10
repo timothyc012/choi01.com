@@ -49,6 +49,84 @@
     return restored;
   }
 
+  function recentUniqueRecipeIds(values) {
+    if (!Array.isArray(values)) return [];
+    const seen = new Set();
+    const latest = [];
+    for (let index = values.length - 1; index >= 0; index -= 1) {
+      const value = values[index];
+      if (typeof value !== 'string' || !value || seen.has(value)) continue;
+      seen.add(value);
+      latest.unshift(value);
+    }
+    return latest.slice(-20);
+  }
+
+  function normalizePlanSlot(value, fallbackOrigin = 'manual') {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return {
+        recipeId: typeof value.recipeId === 'string' && value.recipeId ? value.recipeId : null,
+        origin: value.origin === 'auto' || value.origin === 'manual' ? value.origin : fallbackOrigin,
+        dismissedRecipeIds: recentUniqueRecipeIds(value.dismissedRecipeIds)
+      };
+    }
+    return {
+      recipeId: typeof value === 'string' && value ? value : null,
+      origin: fallbackOrigin,
+      dismissedRecipeIds: []
+    };
+  }
+
+  function restorePlansV2(serialized, context = {}) {
+    const days = Array.isArray(context.days) ? context.days : [];
+    const checksAvailability = Array.isArray(context.availableRecipeIds);
+    const available = new Set(checksAvailability ? context.availableRecipeIds.map(String) : []);
+    let saved = null;
+    try { saved = JSON.parse(serialized); } catch { /* Missing or corrupt state uses auto defaults. */ }
+    const isV2 = saved?.version === 2 && saved.plans && typeof saved.plans === 'object' && !Array.isArray(saved.plans);
+    const legacyPlans = saved?.plans || (saved?.plan && saved?.mealMoment ? { [saved.mealMoment]: saved.plan } : {});
+    const sourcePlans = isV2 ? saved.plans : legacyPlans;
+    const fallbackPlans = context.autoPlans && typeof context.autoPlans === 'object' ? context.autoPlans : {};
+    const moments = Array.isArray(context.moments) && context.moments.length
+      ? context.moments : [...new Set([...Object.keys(sourcePlans || {}), ...Object.keys(fallbackPlans)])];
+    const plans = {};
+    const stale = [];
+    for (const moment of moments) {
+      plans[moment] = {};
+      for (const day of days) {
+        const hasSaved = sourcePlans?.[moment] && Object.hasOwn(sourcePlans[moment], day);
+        const value = hasSaved ? sourcePlans[moment][day] : fallbackPlans?.[moment]?.[day];
+        const origin = hasSaved ? 'manual' : 'auto';
+        const slot = normalizePlanSlot(value, origin);
+        plans[moment][day] = slot;
+        if (slot.origin === 'manual' && slot.recipeId && checksAvailability && !available.has(slot.recipeId)) {
+          stale.push({moment, day, recipeId: slot.recipeId});
+        }
+      }
+    }
+    return {plans, migrated:Boolean(saved && !isV2), stale};
+  }
+
+  function refreshAutoPlans(plans, replacements = {}) {
+    return Object.fromEntries(Object.entries(plans || {}).map(([moment, plan]) => [moment,
+      Object.fromEntries(Object.entries(plan || {}).map(([day, value]) => {
+        const current = normalizePlanSlot(value);
+        if (current.origin === 'manual') return [day, current];
+        const replacement = normalizePlanSlot(replacements?.[moment]?.[day], 'auto');
+        replacement.origin = 'auto';
+        replacement.dismissedRecipeIds = current.dismissedRecipeIds.slice();
+        return [day, replacement];
+      }))
+    ]));
+  }
+
+  function serializePlansV2(plans, metadata = {}) {
+    const normalized = Object.fromEntries(Object.entries(plans || {}).map(([moment, plan]) => [moment,
+      Object.fromEntries(Object.entries(plan || {}).map(([day, slot]) => [day, normalizePlanSlot(slot)]))
+    ]));
+    return JSON.stringify({...metadata, version:2, plans:normalized});
+  }
+
   function metricAmount(value) {
     const text = String(value || "").trim().replace(",", ".");
     if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
@@ -222,5 +300,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

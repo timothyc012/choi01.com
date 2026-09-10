@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 const root = path.resolve('public/mohemeokji');
-const assets = ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js'];
+const assets = ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-data-loader.js','meal-shopping.js','meal-recommendations.js'];
 const version = crypto.createHash('sha256').update(assets.map((file)=>fs.readFileSync(path.join(root,file),'utf8')).join('\n')).digest('hex').slice(0,12);
 const canonical = fs.readFileSync(path.join(root,'index.html'),'utf8').replace(/(<script src="[^"?]+\.js)\?v=[^"]+("[^>]*>)/g, '$1?v='+version+'$2');
 const routes = fs.readdirSync(root,{withFileTypes:true}).filter((entry)=>entry.isDirectory() && fs.existsSync(path.join(root,entry.name,'index.html'))).map((entry)=>entry.name);

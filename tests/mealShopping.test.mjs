@@ -169,6 +169,42 @@ test('lunch and dinner plans restore independently and legacy plans stay in thei
   assert.equal(legacy.점심.mon,'lidl-a');assert.equal(legacy.저녁,undefined);
 });
 
+test('legacy recipe choices and explicit empty slots migrate to manual v2 slots',()=>{
+  const serialized=JSON.stringify({activeArea:'52064',activeStore:'EDEKA',plans:{저녁:{mon:'known',tue:null}}});
+  const restored=shopping.restorePlansV2(serialized,{days:['mon','tue'],moments:['저녁'],availableRecipeIds:['known']});
+  assert.equal(restored.migrated,true);
+  assert.deepEqual(JSON.parse(JSON.stringify(restored.plans)),{저녁:{
+    mon:{recipeId:'known',origin:'manual',dismissedRecipeIds:[]},
+    tue:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
+  }});
+});
+
+test('snapshot refresh replaces auto slots only and retains unavailable manual recipes',()=>{
+  const saved=JSON.stringify({version:2,plans:{저녁:{
+    mon:{recipeId:'old-auto',origin:'auto',dismissedRecipeIds:['dismissed']},
+    tue:{recipeId:'removed-manual',origin:'manual',dismissedRecipeIds:[]},
+    wed:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
+  }}});
+  const restored=shopping.restorePlansV2(saved,{days:['mon','tue','wed'],moments:['저녁'],availableRecipeIds:['new-auto']});
+  const refreshed=shopping.refreshAutoPlans(restored.plans,{저녁:{mon:'new-auto',tue:'wrong',wed:'wrong'}});
+  assert.equal(refreshed.저녁.mon.recipeId,'new-auto');
+  assert.equal(refreshed.저녁.mon.origin,'auto');
+  assert.deepEqual([...refreshed.저녁.mon.dismissedRecipeIds],['dismissed']);
+  assert.equal(refreshed.저녁.tue.recipeId,'removed-manual');
+  assert.equal(refreshed.저녁.wed.recipeId,null);
+  assert.deepEqual(JSON.parse(JSON.stringify(restored.stale)),[{moment:'저녁',day:'tue',recipeId:'removed-manual'}]);
+  const sparse=shopping.restorePlansV2(saved,{days:['mon','tue','wed'],moments:['저녁'],availableRecipeIds:[]});
+  assert.deepEqual(JSON.parse(JSON.stringify(sparse.stale)),[{moment:'저녁',day:'tue',recipeId:'removed-manual'}]);
+});
+
+test('v2 slot normalization keeps the 20 most recent unique dismissed recipes',()=>{
+  const ids=Array.from({length:22},(_,index)=>'recipe-'+index).concat(['recipe-5','recipe-21']);
+  const slot=shopping.normalizePlanSlot({recipeId:'current',origin:'auto',dismissedRecipeIds:ids});
+  assert.equal(slot.dismissedRecipeIds.length,20);
+  assert.equal(new Set(slot.dismissedRecipeIds).size,20);
+  assert.deepEqual([...slot.dismissedRecipeIds].slice(-2),['recipe-5','recipe-21']);
+});
+
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {
   const source = readCsv(fs.readFileSync(new URL('../public' + sourceMeta.source, import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(sourceCatalog).sort(), [...new Set(source.map(r=>r['우편번호']))].sort());
@@ -232,7 +268,7 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.match(html, /lang="de"/);
     assert.match(html, /할인 재료.*메뉴에 연결됨/);
     assert.match(html, /수집된 지점·지역 자료 기준/);
-    for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-shopping']) {
+    for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-data-loader', 'meal-shopping']) {
       assert.ok(html.includes(asset + '.js?v='));
     }
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);

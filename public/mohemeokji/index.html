@@ -788,11 +788,12 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="/mohemeokji/ontology-recipe-details.js?v=706d817fb518"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=706d817fb518"></script>
-    <script src="./meal-planner-recipe-data.js?v=706d817fb518"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=706d817fb518"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=706d817fb518"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=c27c9e99a4da"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=c27c9e99a4da"></script>
+    <script src="./meal-planner-recipe-data.js?v=c27c9e99a4da"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=c27c9e99a4da"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=c27c9e99a4da"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=c27c9e99a4da"></script>
     <script>
       const meals = [];
 
@@ -811,11 +812,14 @@
       let activeArea = Object.hasOwn(areas, requestedArea) ? requestedArea : pathArea || (Object.hasOwn(areas, '44369') ? '44369' : Object.keys(areas)[0]);
       const requestedStore = locationParams.get("store");
       let activeStore = storesByArea[activeArea].includes(requestedStore) ? requestedStore : areas[activeArea].chain;
-      meals.push(...window.createMealRecipes(activeStore));
+      const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
+      if (legacySnapshot) meals.push(...window.createMealRecipes(activeStore));
       const profile = profiles[activeArea][activeStore];
       let mealMoment = "저녁";
       let plan = {};
       let plans = {};
+      let planSlots = {};
+      let plansV2 = {};
       let activeFilter = "all";
       let targetDay = todayDay.id;
       let recommendationId = null;
@@ -850,7 +854,9 @@
       let detailReturnFocus = null;
       const dateInBerlin = new Intl.DateTimeFormat('en-CA', {timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
       try { mealHistory = recommendations.restoreHistory(localStorage.getItem(historyStorageKey),dateInBerlin); } catch { historySaved = false; }
-      const catalog = shopping.currentCatalog(window.mealPackagePricesByArea[activeArea], dateInBerlin);
+      const catalog = legacySnapshot
+        ? shopping.currentCatalog(window.mealPackagePricesByArea[activeArea], dateInBerlin)
+        : Object.fromEntries(storesByArea[activeArea].map((store) => [store,{}]));
       const offerFrequency = Object.values(catalog).reduce((counts,storeCatalog)=>{
         Object.keys(storeCatalog).forEach((name)=>{ counts[name]=(counts[name]||0)+1; });
         return counts;
@@ -863,16 +869,26 @@
       meals.filter((item) => item.store === activeStore).forEach((item) => {
         Object.assign(item, shopping.classifyIngredients(item, catalog[item.store] || {}));
       });
-      plan = createAutoPlan();
-      plans = { "점심": {...plan}, "저녁": {...plan} };
+      const autoPlanIds = createAutoPlan();
+      const autoPlanSlots = Object.fromEntries(Object.entries(autoPlanIds).map(([day,recipeId]) => [day,shopping.normalizePlanSlot({recipeId,origin:'auto',dismissedRecipeIds:[]},'auto')]));
+      const automaticPlans = { "점심": autoPlanSlots, "저녁": autoPlanSlots };
       try {
         const serialized = localStorage.getItem(planStorageKey) || localStorage.getItem('choi01-today-meal-plan');
-        const restored = shopping.restorePlans(serialized, {area:activeArea,store:activeStore,days:days.map((day)=>day.id),meals});
-        Object.assign(plans,restored);
+        const restored = shopping.restorePlansV2(serialized, {days:days.map((day)=>day.id),moments:['점심','저녁'],availableRecipeIds:meals.map((meal)=>meal.id),autoPlans:automaticPlans});
+        plansV2 = shopping.refreshAutoPlans(restored.plans,automaticPlans);
         const previousMoment = JSON.parse(serialized)?.mealMoment;
-        if (restored[previousMoment]) mealMoment = previousMoment;
+        if (plansV2[previousMoment]) mealMoment = previousMoment;
       } catch { /* Missing or outdated saved plans fall back to current recommendations. */ }
+      if (!Object.keys(plansV2).length) plansV2 = shopping.refreshAutoPlans(automaticPlans,automaticPlans);
+      const recipeIds = (slots) => Object.fromEntries(Object.entries(slots).map(([day,slot]) => [day,slot.recipeId]));
+      plans = Object.fromEntries(Object.entries(plansV2).map(([moment,slots]) => [moment,recipeIds(slots)]));
+      planSlots = plansV2[mealMoment];
       plan = plans[mealMoment];
+      function setPlanSlot(day,recipeId,origin='manual') {
+        const previous = planSlots[day] || shopping.normalizePlanSlot(null,origin);
+        planSlots[day] = shopping.normalizePlanSlot({recipeId,origin,dismissedRecipeIds:previous.dismissedRecipeIds},origin);
+        plan[day] = planSlots[day].recipeId;
+      }
       byId("todayPlanNote").textContent = todayDay.label + "요일이 오늘입니다. 선택한 오늘 메뉴는 이 칸에 자동으로 들어갑니다.";
       function basketFor(items, scope) {
         return shopping.basket(items, { catalog, pantry: shoppingState.pantry, prices: shoppingState.prices, quantities: shoppingState.quantities[scope] || {} });
@@ -1002,12 +1018,15 @@
       function renderPlan() {
         byId("planColumnLabel").textContent = mealMoment;
         byId("weekGrid").innerHTML = days.map((day) => {
-          const item = plan[day.id] ? mealById(plan[day.id]) : null;
+          const savedRecipeId = plan[day.id];
+          const item = savedRecipeId ? mealById(savedRecipeId) : null;
           const todayClass = day.id === todayDay.id ? " today-row" : "";
           const dayNote = day.id === todayDay.id ? "<small>오늘</small>" : "";
           return '<div class="week-row' + todayClass + '"><div class="day">' + day.label + dayNote + '</div><div class="slot" data-day="' + day.id + '" tabindex="0" aria-label="' + day.label + '요일 ' + mealMoment + ' 메뉴 칸">' +
             (item
               ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">' + item.title + '</div><div class="meal-card-meta"><span>' + item.time + '분</span><span>' + shopping.summary(mealBasket(item)) + '</span><span>' + item.store + '</span>' + (offerInfo(item).mainOffers.length ? '' : '<span>저장한 메뉴 · 현재 주재료 할인 없음</span>') + '</div></div><div class="meal-card-actions"><button class="icon-button detail-trigger" data-id="' + item.id + '" aria-label="' + item.title + ' 레시피 보기">↗</button><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 메뉴 삭제">×</button></div></div>'
+              : savedRecipeId
+                ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">저장한 메뉴</div><div class="meal-card-meta"><span>현재 스냅샷에서 상세를 찾을 수 없습니다</span><span>선택은 그대로 보관됩니다</span></div></div><div class="meal-card-actions"><button class="icon-button remove-slot" data-day="' + day.id + '" aria-label="' + day.label + '요일 저장 메뉴 삭제">×</button></div></div>'
               : '<div class="slot-empty"><span>' + mealMoment + ' 메뉴를 넣어보세요</span><button class="pick-slot" data-day="' + day.id + '">메뉴 고르기</button></div>') +
             '</div></div>';
         }).join("");
@@ -1018,7 +1037,7 @@
           showToast(days.find((day) => day.id === targetDay).label + "요일 " + mealMoment + " 메뉴를 고르고 있습니다");
         }));
         document.querySelectorAll(".remove-slot").forEach((button) => button.addEventListener("click", () => {
-          plan[button.dataset.day] = null;
+          setPlanSlot(button.dataset.day,null,'manual');
           renderPlan();
           showToast("식단표에서 메뉴를 뺐습니다");
         }));
@@ -1040,7 +1059,7 @@
               showToast("현재 지역의 메뉴만 넣을 수 있습니다");
               return;
             }
-            plan[slot.dataset.day] = item.id;
+            setPlanSlot(slot.dataset.day,item.id,'manual');
             targetDay = slot.dataset.day;
             renderPlan();
             renderMenu();
@@ -1095,7 +1114,7 @@
           event.stopPropagation();
           const empty = days.find((day) => !plan[day.id]);
           const dayId = empty ? empty.id : targetDay;
-          plan[dayId] = button.dataset.id;
+          setPlanSlot(dayId,button.dataset.id,'manual');
           targetDay = dayId;
           renderPlan();
           showToast(days.find((day) => day.id === dayId).label + "요일 " + mealMoment + "에 넣었습니다");
@@ -1223,7 +1242,7 @@
       });
       function acceptMeal(item) {
         acceptedMeal = item;
-        plan[todayDay.id] = item.id;
+        setPlanSlot(todayDay.id,item.id,'manual');
         byId("acceptedText").textContent = "오늘 " + mealMoment + "은 ‘" + item.title + "’로 정했습니다.";
         byId("acceptedBanner").classList.add("show");
         renderPlan();
@@ -1244,9 +1263,11 @@
       byId("openAcceptedRecipe").addEventListener("click", () => acceptedMeal && openDetail(acceptedMeal.id));
       document.querySelectorAll("[data-moment]").forEach((button) => button.addEventListener("click", () => {
         plans[mealMoment] = {...plan};
+        plansV2[mealMoment] = {...planSlots};
         mealMoment = button.dataset.moment;
         recommendationId = null;
         plan = {...plans[mealMoment]};
+        planSlots = {...plansV2[mealMoment]};
         document.querySelectorAll("[data-moment]").forEach((item) => item.classList.toggle("active", item === button));
         byId("acceptedBanner").classList.remove("show");
         renderToday();
@@ -1254,6 +1275,7 @@
       }));
       byId("autoPlan").addEventListener("click", () => {
         plan = createAutoPlan();
+        planSlots = Object.fromEntries(Object.entries(plan).map(([day,recipeId]) => [day,shopping.normalizePlanSlot({recipeId,origin:'auto',dismissedRecipeIds:[]},'auto')]));
         renderPlan();
         showToast('이 마트의 할인 메뉴 '+Object.values(plan).filter(Boolean).length+'개로 식단을 구성했습니다');
       });
@@ -1269,6 +1291,7 @@
       });
       byId("clearPlan").addEventListener("click", () => {
         plan = { mon:null, tue:null, wed:null, thu:null, fri:null, sat:null, sun:null };
+        planSlots = Object.fromEntries(days.map(({id}) => [id,shopping.normalizePlanSlot(null,'manual')]));
         renderPlan();
         showToast("식단표를 비웠습니다");
       });
@@ -1277,8 +1300,9 @@
       });
       function saveCurrentPlans() {
         plans[mealMoment] = {...plan};
+        plansV2[mealMoment] = {...planSlots};
         try {
-          localStorage.setItem(planStorageKey, JSON.stringify({ plans, mealMoment, activeArea, activeStore }));
+          localStorage.setItem(planStorageKey, shopping.serializePlansV2(plansV2,{mealMoment,activeArea,activeStore}));
           return true;
         } catch { showToast('이 브라우저에서 식단을 저장할 수 없습니다'); return false; }
       }
@@ -1307,7 +1331,7 @@
         if (!selectedMeal) return;
         const empty = days.find((day) => !plan[day.id]);
         const dayId = empty ? empty.id : targetDay;
-        plan[dayId] = selectedMeal.id;
+        setPlanSlot(dayId,selectedMeal.id,'manual');
         renderPlan();
         closeDetail();
         showToast(days.find((day) => day.id === dayId).label + "요일 " + mealMoment + "에 넣었습니다");
@@ -1315,6 +1339,7 @@
       function openLocation(postcode, store) {
         saveCurrentPlans();
         const params = new URLSearchParams({ postcode, store });
+        if (legacySnapshot) params.set('snapshot','legacy');
         window.location.href = "/mohemeokji/?" + params.toString();
       }
       byId("postcodeSelect").addEventListener("change", (event) => {
@@ -1376,6 +1401,33 @@
       renderPlan();
       renderMenu();
       renderGroceryList();
+      window.mealSnapshotReady = (async () => {
+        if (legacySnapshot) {
+          window.mealSnapshotRuntime = {status:'legacy'};
+          return window.mealSnapshotRuntime;
+        }
+        try {
+          const manifest = await window.MealDataLoader.loadCurrentSnapshot();
+          const matches = manifest.locations.filter((entry) => entry.postcode === activeArea && entry.store === activeStore);
+          if (matches.length !== 1) throw new Error(matches.length ? '선택한 마트 지점이 여러 개입니다.' : '선택한 마트 자료가 없습니다.');
+          const locationSnapshot = await window.MealDataLoader.loadLocationSnapshot(manifest,{postcode:activeArea,store:activeStore,branchId:matches[0].branchId});
+          const recipes = window.MealRecipeData.fromSnapshotLocation(locationSnapshot);
+          catalog[activeStore] = window.MealRecipeData.offerCatalogFromSnapshot(locationSnapshot);
+          window.mealSnapshotRuntime = {status:locationSnapshot.coverage?.sparse ? 'sparse' : 'ready',manifest,location:locationSnapshot,recipes};
+          byId('sourceStatus').textContent = locationSnapshot.coverage?.sparse
+            ? profile.label + ' · 검증된 이번 주 메뉴를 준비 중입니다'
+            : profile.label + ' · 검증 메뉴 ' + recipes.length + '개 스냅샷 로드됨';
+          byId('sourceStatus').dataset.snapshotState = window.mealSnapshotRuntime.status;
+          document.dispatchEvent(new CustomEvent('meal-snapshot-ready',{detail:window.mealSnapshotRuntime}));
+          return window.mealSnapshotRuntime;
+        } catch (error) {
+          meals.splice(0,meals.length);
+          window.mealSnapshotRuntime = {status:'unavailable',error};
+          byId('sourceStatus').textContent = profile.label + ' · 이번 주 검증 자료를 불러올 수 없습니다';
+          byId('sourceStatus').dataset.snapshotState = 'unavailable';
+          return window.mealSnapshotRuntime;
+        }
+      })();
     </script>
   </body>
 </html>

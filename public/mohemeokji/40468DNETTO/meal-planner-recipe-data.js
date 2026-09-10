@@ -16,4 +16,44 @@
     detailIngredients: detail.detailIngredients.slice(),
     steps: detail.steps.slice()
   }));
+
+  function legacyEnabled(search = window.location?.search || '') {
+    return new URLSearchParams(search).get('snapshot') === 'legacy';
+  }
+
+  function fromSnapshotLocation(location) {
+    return (location?.recipes || []).map((recipe) => ({
+      id: storeSlug(location.store) + '-recipe-' + recipe.sourceRecipeId,
+      sourceRecipeId: recipe.sourceRecipeId,
+      store: location.store,
+      offerIds: Array.isArray(recipe.offerIds) ? recipe.offerIds.slice() : [],
+      primaryIngredientIds: Array.isArray(recipe.primaryIngredientIds) ? recipe.primaryIngredientIds.slice() : [],
+      recommendationProfile: recipe.recommendationProfile || {},
+      qualityScore: recipe.qualityScore ?? null,
+      qualityFacts: recipe.qualityFacts || {},
+      detailPath: recipe.detailPath,
+      detailSha256: recipe.detailSha256
+    }));
+  }
+
+  function offerCatalogFromSnapshot(location) {
+    const grouped = new Map();
+    for (const offer of location?.offers || []) {
+      const ingredientId = offer?.identity?.ingredientId;
+      if (typeof ingredientId !== 'string' || !ingredientId) continue;
+      if (!grouped.has(ingredientId)) grouped.set(ingredientId,[]);
+      grouped.get(ingredientId).push(offer);
+    }
+    return Object.fromEntries([...grouped].filter(([,offers]) => offers.length === 1).map(([ingredientId,[offer]]) => [ingredientId,{
+      offerId:offer.offerId,
+      product:offer.productDe,
+      pack:offer.pack,
+      priceCents:offer.priceCents,
+      validFrom:offer.validFrom,
+      validThrough:offer.validThrough,
+      source:offer.evidenceUrl || ''
+    }]));
+  }
+
+  window.MealRecipeData = {legacyEnabled, fromSnapshotLocation, offerCatalogFromSnapshot};
 }());
