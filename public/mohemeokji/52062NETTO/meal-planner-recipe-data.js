@@ -229,9 +229,9 @@
         }
       };
       const savePlans=()=>{archiveManualDetails();return storage.set(planStorageKey,shopping.serializePlansV2(plans,{mealMoment,activeArea,activeStore,activeBranchId:activeBranch.branchId,snapshotId:manifest.snapshotId,archivedDetails}));};
-      const planMeals=()=>Object.values(plans[mealMoment]).map((slot)=>mealById(slot.recipeId)).filter(Boolean);
+      const weeklyPlanMeals=()=>Object.values(plans).flatMap((plan)=>Object.values(plan)).map((slot)=>mealById(slot.recipeId)).filter(Boolean);
       const basketFor=(items)=>shopping.basket(items,{catalog,pantry:shoppingState.pantry,prices:shoppingState.prices,quantities:shoppingState.quantities.week||{}});
-      const weekBasket=()=>basketFor(planMeals());
+      const weekBasket=()=>basketFor(weeklyPlanMeals());
       const currentMeal=()=>meals[recommendationIndex]||null;
       const todayId=days[(new Date().getDay()+6)%7][0];
       const archiveInScope=(reference)=>reference&&reference.area===activeArea&&reference.store===activeStore&&reference.branchId===activeBranch.branchId&&typeof reference.snapshotId==='string';
@@ -313,7 +313,7 @@
       }
 
       async function hydratePlannedMeals() {
-        const plannedSlots=Object.values(plans[mealMoment]).filter((slot)=>slot.recipeId);
+        const plannedSlots=Object.values(plans).flatMap((plan)=>Object.values(plan)).filter((slot)=>slot.recipeId);
         const unresolved=plannedSlots.some((slot)=>{
           const meal=mealById(slot.recipeId),archived=archivedDetails[slot.recipeId];
           return !meal||(slot.origin==='manual'&&archiveInScope(archived)&&archived.detailSha256!==meal.detailSha256);
@@ -342,7 +342,9 @@
         if(useArchived&&!archiveInScope(archived)) throw new Error('Archived recipe detail scope mismatch');
         if(!meal&&(!archived||!archiveInScope(archived))) throw new Error('Archived recipe detail unavailable');
         const reference=useArchived||!meal?archived:meal;
-        const detail=await detailFor(reference,reference===meal);
+        let detail;
+        try { detail=await detailFor(reference,reference===meal); }
+        catch(error) { if(requestVersion!==detailRequestVersion)return null; throw error; }
         const baseMeal=reference===meal?meal:{id,store:activeStore,sale:[],missing:[],requiredAmounts:{},matchedOffers:[]};
         const hydrated=hydrateMeal(baseMeal,detail);
         if(requestVersion!==detailRequestVersion)return hydrated;
@@ -378,6 +380,11 @@
         byId('detailDrawer').classList.add('open');
       }
 
+      function closeDetail() {
+        detailRequestVersion+=1;
+        byId('detailDrawer').classList.remove('open');
+      }
+
       renderToday();renderPlan();renderMenu();renderGroceries();bindDetailTriggers();
       byId('sourceStatus').textContent=location.coverage?.sparse?activeArea+' · '+activeStore+' · 승인 메뉴 준비 중':activeArea+' · '+activeStore+' · 검증 메뉴 '+meals.length+'개';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
@@ -401,8 +408,8 @@
       byId('markEaten').title='먹은 기록은 새 추천 화면에서 다시 연결됩니다.';
       document.querySelectorAll('.filter:not([data-filter="all"])').forEach((button)=>{button.disabled=true;button.title='상세를 연 뒤 확인할 수 있습니다.';});
       byId('menuSearch').addEventListener('input',()=>{renderMenu();bindDetailTriggers();});
-      byId('closeDetail').addEventListener('click',()=>byId('detailDrawer').classList.remove('open'));
-      byId('closeDetailSecondary').addEventListener('click',()=>byId('detailDrawer').classList.remove('open'));
+      byId('closeDetail').addEventListener('click',closeDetail);
+      byId('closeDetailSecondary').addEventListener('click',closeDetail);
       byId('detailIngredients').addEventListener('change',(event)=>{
         const input=event.target.closest('[data-shopping-field="owned"]');
         if(!input)return;
@@ -424,7 +431,7 @@
         shoppingState.list=shoppingState.list.filter((item)=>item.key!==button.dataset.groceryRemove);
         saveShopping();renderGroceries();
       });
-      const runtime={status:location.coverage?.sparse?'sparse':'ready',manifest,location,recipes:meals,plans,shoppingState,shoppingStorageKey,planStorageKey,weekBasket,openDetail,saveShopping,savePlans};
+      const runtime={status:location.coverage?.sparse?'sparse':'ready',manifest,location,recipes:meals,plans,shoppingState,shoppingStorageKey,planStorageKey,weeklyPlanMeals,weekBasket,openDetail,saveShopping,savePlans};
       window.mealSnapshotRuntime=runtime;
       document.dispatchEvent(new CustomEvent('meal-snapshot-ready',{detail:runtime}));
       return runtime;
