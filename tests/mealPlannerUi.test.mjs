@@ -35,10 +35,14 @@ test('workspace CSS provides a ruled ledger, 7 by 2 planner and narrow no-overfl
 test('workspace navigation changes the visible task and preserves page state',()=>{
   const html=fs.readFileSync(new URL('index.html',root),'utf8');
   const dom=new JSDOM(html,{url:'https://choi01.com/mohemeokji/',runScripts:'outside-only'});
+  dom.window.matchMedia=()=>({matches:true});
   const controller=[...dom.window.document.querySelectorAll('script[data-workspace-controller]')][0];
   assert.ok(controller,'workspace controller script is missing');
   dom.window.eval(controller.textContent);
   const document=dom.window.document;
+  assert.equal(document.getElementById('today').hidden,false);
+  assert.equal(document.getElementById('week').hidden,true);
+  assert.equal(document.getElementById('groceries').hidden,true);
   const search=document.getElementById('menuSearch');
   search.value='닭가슴살';
   document.querySelector('[data-mobile-target="recipes"]').click();
@@ -62,4 +66,23 @@ test('workspace navigation changes the visible task and preserves page state',()
   assert.equal(document.body.dataset.mobileView,'week');
   assert.equal(search.value,'닭가슴살');
   assert.equal(document.querySelector('[data-mobile-target="week"]').getAttribute('aria-current'),'page');
+});
+
+test('shopping anchor and hash deep link open the Shop context',()=>{
+  const html=fs.readFileSync(new URL('index.html',root),'utf8');
+  const create=(url)=>{
+    const dom=new JSDOM(html,{url,runScripts:'outside-only'});
+    dom.window.matchMedia=()=>({matches:true});
+    dom.window.eval(dom.window.document.querySelector('script[data-workspace-controller]').textContent);
+    return dom;
+  };
+  const linked=create('https://choi01.com/mohemeokji/#groceries');
+  assert.equal(linked.window.document.body.dataset.activeContext,'shop');
+  assert.equal(linked.window.document.getElementById('groceries').hidden,false);
+  linked.window.close();
+  const clicked=create('https://choi01.com/mohemeokji/');
+  clicked.window.document.querySelector('.nav-links a[href="#groceries"]').click();
+  assert.equal(clicked.window.document.body.dataset.activeContext,'shop');
+  assert.equal(clicked.window.document.getElementById('groceries').hidden,false);
+  clicked.window.close();
 });

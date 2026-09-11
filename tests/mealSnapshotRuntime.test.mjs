@@ -224,6 +224,24 @@ test('manifest-only selection maps every direct route and chooses the first bran
   assert.equal(api.acceptLegacyScopedPayload(exact,{area:'44369',store:'Netto',branchId:'branch-a',branchCount:2}),null);
 });
 
+test('unavailable snapshot disables inert controls and exposes retry and legacy recovery',async()=>{
+  const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/',runScripts:'outside-only'});
+  dom.window.MealDataLoader={loadCurrentSnapshot:async()=>{throw new Error('broken pointer');}};
+  dom.window.MealShopping={};
+  dom.window.MealRecommendations={};
+  dom.window.eval(fs.readFileSync(new URL('meal-planner-recipe-data.js',root),'utf8'));
+  const runtime=await dom.window.MealRecipeData.startSnapshotApp();
+  assert.equal(runtime.status,'unavailable');
+  for(const selector of ['#autoPlan','#clearPlan','#savePlan','#acceptToday','#nextRecommendation','#todayShopping','#prepareShopping','#targetServings','input[name="recommendationMode"]','#manualPick','#shoppingList','#markEaten','#eatFromDetail','#addFromDetail','#addShoppingItems','#menuSearch','.filter','[data-moment]','#postcodeSelect','#storeSelect','#branchSelect']) {
+    assert.equal(dom.window.document.querySelector(selector).disabled,true,selector);
+  }
+  const recovery=dom.window.document.getElementById('snapshotRecovery');
+  assert.equal(recovery.hidden,false);
+  assert.ok(recovery.querySelector('[data-retry-snapshot]'));
+  assert.match(recovery.querySelector('a').href,/snapshot=legacy/);
+  dom.window.close();
+});
+
 test('non-legacy bootstrap uses snapshot-only location and branch, rerenders summaries, rolls shopping state, and lazily opens detail', async () => {
   const detailPath='snapshots/2026-09-07/snapshot-new/recipes/9000001.detail.json';
   const detail=JSON.stringify({
@@ -290,6 +308,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'diet',targetServings:2}));
   for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   dom.window.eval(dom.window.document.querySelector('script[data-workspace-controller]').textContent);
+  dom.window.HTMLElement.prototype.scrollIntoView=()=>{};
   const inline=[...dom.window.document.querySelectorAll('script:not([src])')].at(-1).textContent;
   dom.window.eval(inline);
   const runtime=await dom.window.mealSnapshotReady;
@@ -305,10 +324,22 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.querySelector('[data-context="shop"]').hidden,false);
   dom.window.document.querySelector('[data-context-target="plan"]').click();
   assert.equal(JSON.stringify(runtime.plans),plansBeforeNavigation);
+  dom.window.document.getElementById('manualPick').click();
+  assert.equal(dom.window.document.getElementById('week').hidden,false);
   const modeRadios=[...dom.window.document.querySelectorAll('input[name="recommendationMode"]')];
   assert.deepEqual(modeRadios.map((input)=>input.value),['balanced','value','nutrition','diet']);
   assert.equal(modeRadios.every((input)=>input.type==='radio'),true);
   assert.equal(dom.window.document.getElementById('targetServings').options.length,6);
+  const lunchControl=dom.window.document.querySelector('[data-moment="점심"]');
+  const dinnerControl=dom.window.document.querySelector('[data-moment="저녁"]');
+  assert.equal(lunchControl.getAttribute('aria-pressed'),'false');
+  assert.equal(dinnerControl.getAttribute('aria-pressed'),'true');
+  lunchControl.click();
+  assert.equal(lunchControl.classList.contains('active'),true);
+  assert.equal(lunchControl.getAttribute('aria-pressed'),'true');
+  assert.equal(dinnerControl.classList.contains('active'),false);
+  assert.equal(dinnerControl.getAttribute('aria-pressed'),'false');
+  dinnerControl.click();
   assert.equal(modeRadios.find((input)=>input.value==='diet').checked,true);
   assert.equal(Object.values(runtime.plans).flatMap((plan)=>Object.values(plan)).filter((slot)=>slot.origin==='auto').every((slot)=>slot.recipeId===null),true);
   assert.equal(runtime.plans.저녁.mon.recipeId,'neuemarkt-recipe-8000001');
@@ -494,6 +525,12 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.getElementById('addShoppingItems').disabled,true);
   assert.equal(dom.window.document.getElementById('eatFromDetail').disabled,true);
   assert.match(dom.window.document.getElementById('detailIntro').textContent,/검증하지 못했습니다/);
+  assert.equal(dom.window.document.getElementById('detailIngredients').textContent,'');
+  assert.equal(dom.window.document.getElementById('detailSteps').textContent,'');
+  assert.equal(dom.window.document.getElementById('recipeAmounts').textContent,'');
+  assert.equal(dom.window.document.getElementById('recipeProvenance').textContent,'');
+  assert.equal(dom.window.document.getElementById('shoppingSource').textContent,'');
+  assert.equal(dom.window.document.getElementById('recipeSource').hasAttribute('href'),false);
   const staleModeDetail=runtime.requestDetail('neuemarkt-recipe-9000004');
   await new Promise((resolve)=>setTimeout(resolve,0));
   modeRadios.find((input)=>input.value==='diet').click();

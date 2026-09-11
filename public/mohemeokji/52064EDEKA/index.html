@@ -120,6 +120,7 @@
       .workspace-context-nav button { min-height: 40px; padding: 0 18px; border: 0; border-radius: 5px; background: transparent; color: var(--muted); font-weight: 700; }
       .workspace-context-nav button[aria-pressed="true"] { background: var(--ink-soft); color: #fff; }
       .source-bar { padding-bottom: 4px; }
+      .snapshot-recovery { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; padding: 12px 14px; border: 1px solid #dfb86e; background: var(--amber-wash); color: var(--ink-soft); }
       .mobile-task-nav { display: none; }
       .eyebrow { margin: 0 0 12px; color: var(--green); text-transform: uppercase; }
       h1 {
@@ -704,6 +705,11 @@
           </select>
           <p class="goal-readiness" id="modeReadiness" role="status" aria-live="polite">균형 모드는 현재 지점의 검증된 할인상품 연결을 기준으로 추천합니다.</p>
         </div>
+        <div class="snapshot-recovery" id="snapshotRecovery" role="alert" hidden>
+          <span>이번 주 자료를 열 수 없습니다.</span>
+          <button class="button button-small" type="button" id="retrySnapshot" data-retry-snapshot>다시 시도</button>
+          <a class="button button-small" href="?snapshot=legacy">지난 자료 보기</a>
+        </div>
       </section>
 
       <section id="today" data-mobile-view="recipes" data-screen-label="01 Today decision" aria-labelledby="todayTitle">
@@ -713,8 +719,8 @@
             <div class="decision-top">
               <span class="decision-label mono" id="decisionLabel">오늘의 저녁 · 1순위</span>
               <div class="meal-toggle" role="group" aria-label="식사 시간 선택">
-                <button type="button" data-moment="점심">점심</button>
-                <button class="active" type="button" data-moment="저녁">저녁</button>
+                <button type="button" data-moment="점심" aria-pressed="false">점심</button>
+                <button class="active" type="button" data-moment="저녁" aria-pressed="true">저녁</button>
               </div>
             </div>
             <h2 id="todayTitle"></h2>
@@ -894,6 +900,7 @@
       (() => {
         const contextButtons=[...document.querySelectorAll('[data-context-target]')];
         const mobileButtons=[...document.querySelectorAll('[data-mobile-target]')];
+        const isMobile=()=>window.matchMedia?.('(max-width: 767px)').matches===true;
         const showContext=(context,{resetPlanViews=true}={})=>{
           document.body.dataset.activeContext=context;
           document.querySelectorAll('[data-context]').forEach((region)=>{region.hidden=region.dataset.context!==context;});
@@ -903,7 +910,7 @@
         const showMobile=(view)=>{
           document.body.dataset.mobileView=view;
           showContext(view==='shop'?'shop':'plan',{resetPlanViews:false});
-          document.querySelectorAll('#planWorkspace [data-mobile-view]').forEach((region)=>{region.hidden=region.dataset.mobileView!==view;});
+          if(isMobile())document.querySelectorAll('#planWorkspace [data-mobile-view]').forEach((region)=>{region.hidden=region.dataset.mobileView!==view;});
           mobileButtons.forEach((button)=>button.setAttribute('aria-current',button.dataset.mobileTarget===view?'page':'false'));
         };
         contextButtons.forEach((button)=>button.addEventListener('click',()=>showContext(button.dataset.contextTarget)));
@@ -912,20 +919,24 @@
           if(button.disabled)return;
           document.querySelectorAll('.filter').forEach((item)=>item.setAttribute('aria-pressed',String(item===button)));
         }));
-        showContext('plan');
+        document.querySelectorAll('a[href="#groceries"]').forEach((link)=>link.addEventListener('click',(event)=>{event.preventDefault();showContext('shop');history.replaceState(null,'','#groceries');}));
+        window.addEventListener('hashchange',()=>showContext(location.hash==='#groceries'?'shop':'plan'));
         document.body.dataset.mobileView='recipes';
+        window.MealWorkspace={showContext,showMobile};
+        if(isMobile()&&location.hash!=='#groceries')showMobile('recipes');
+        else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
     <script>
       if (new URLSearchParams(location.search).get('snapshot') === 'legacy') {
-        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=889394c50aee"><\/script><script src="/mohemeokji/meal-package-prices.js?v=889394c50aee"><\/script>');
+        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=3f418ebe61ff"><\/script><script src="/mohemeokji/meal-package-prices.js?v=3f418ebe61ff"><\/script>');
       }
     </script>
-    <script src="./meal-planner-recipe-data.js?v=889394c50aee"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=889394c50aee"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=889394c50aee"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=889394c50aee"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=889394c50aee"></script>
+    <script src="./meal-planner-recipe-data.js?v=3f418ebe61ff"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=3f418ebe61ff"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=3f418ebe61ff"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=3f418ebe61ff"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=3f418ebe61ff"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
