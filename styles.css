@@ -12,6 +12,7 @@
   --color-blue: #2769b4;
   --color-amber: #9a6a12;
   --color-red: #a43d45;
+  --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
@@ -108,6 +109,7 @@ code {
 
 .brand,
 .nav-links,
+.nav-actions,
 .hero-actions,
 .link-row {
   display: flex;
@@ -138,6 +140,11 @@ code {
   font-weight: 520;
 }
 
+.nav-actions {
+  flex: none;
+  gap: var(--space-2);
+}
+
 .nav-action,
 .button {
   min-height: 44px;
@@ -152,6 +159,18 @@ code {
   padding: 0 var(--space-4);
   border: 1px solid var(--color-border);
   background: var(--color-canvas);
+  white-space: nowrap;
+}
+
+.nav-login {
+  border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-border));
+  color: var(--color-accent-strong);
+  background: color-mix(in srgb, var(--color-accent) 7%, var(--color-canvas));
+}
+
+.nav-login:hover {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-canvas));
 }
 
 .hero-section {
@@ -611,6 +630,18 @@ code {
 }
 
 @media (max-width: 620px) {
+  .nav-shell {
+    gap: var(--space-3);
+  }
+
+  .brand > span:last-child {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: var(--space-1);
+  }
+
   .nav-shell,
   .hero-section,
   .section,
@@ -643,8 +674,8 @@ code {
 
   .nav-action {
     width: auto;
-    min-width: 96px;
-    padding-inline: var(--space-4);
+    min-width: 0;
+    padding-inline: var(--space-3);
   }
 
   .tab-list {

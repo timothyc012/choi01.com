@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   MousePointer, Hand, StickyNote, RectangleHorizontal, Circle, Triangle, Diamond, Hexagon, Star,
   Frame, Type, GitCommit, PenTool, Eraser,
@@ -17,6 +17,10 @@ import { isPenDebugEnabled } from './penDebug';
 import { DiagramComposer } from './diagram/DiagramComposer';
 import { DiagramSourceDrawer } from './diagram/DiagramSourceDrawer';
 import { MermaidDiagram } from './diagram/MermaidDiagram';
+import { AuthControls } from './canvas/AuthControls';
+import { createCloudflareBoardClient } from './canvas/cloudflareBoardClient';
+import { useBoardPersistence } from './canvas/useBoardPersistence';
+import { useCanvasAuth } from './canvas/useCanvasAuth';
 
 type CanvasStrokeWidth = 2 | 4 | 6 | 8;
 type GuestCanvasTool = CanvasTool | 'highlighter';
@@ -100,7 +104,20 @@ export const GuestCanvasPage: React.FC = () => {
   const [showDiagramComposer, setShowDiagramComposer] = useState(false);
   const [openDiagramId, setOpenDiagramId] = useState<string | null>(null);
 
-  const markDirty = useCallback(() => setHasUnsavedChanges(true), []);
+  // Signed-in visitors get a server-backed board; everyone else keeps the
+  // ephemeral guest canvas described above. Without the /api functions (plain
+  // `vite dev`) the auth hook reports "not configured" and login stays hidden.
+  const auth = useCanvasAuth();
+  const boardClient = useMemo(() => (auth.configured ? createCloudflareBoardClient() : null), [auth.configured]);
+  const confirmReplace = useCallback((message: string) => window.confirm(message), []);
+  const persistence = useBoardPersistence({ client: boardClient, userId: auth.user?.id ?? null, canvasRef, confirmReplace });
+  const isPersisted = persistence.status !== 'off';
+  const { markDirty: markBoardDirty } = persistence;
+
+  const markDirty = useCallback(() => {
+    setHasUnsavedChanges(true);
+    markBoardDirty();
+  }, [markBoardDirty]);
 
   const handleSelectionChange = useCallback((info: CanvasSelectionInfo) => {
     setSelection(info);
@@ -196,17 +213,21 @@ export const GuestCanvasPage: React.FC = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [handleSaveToFile]);
 
-  // Leaving the page destroys the board — warn while there is unexported work.
+  // Leaving the page destroys a guest board — warn while there is unexported
+  // work. A signed-in board only warns while a save is still pending.
+  const pendingSave = isPersisted
+    ? persistence.status === 'dirty' || persistence.status === 'saving' || persistence.status === 'error' || persistence.status === 'conflict'
+    : hasUnsavedChanges;
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
+      if (pendingSave) {
         e.preventDefault();
         e.returnValue = '';
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [hasUnsavedChanges]);
+  }, [pendingSave]);
 
   const toolButtonClass = (tool: GuestCanvasTool, danger = false) =>
     `gc-tool${activeTool === tool ? (danger ? ' is-active-danger' : ' is-active') : ''}`;
@@ -222,12 +243,16 @@ export const GuestCanvasPage: React.FC = () => {
             <span className="gc-brand-mark">01</span>
             캔버스 메모보드
           </a>
-          <span className="gc-ephemeral-badge" title="이 페이지는 서버에 아무것도 저장하지 않습니다">
-            저장되지 않음 · 파일로 보관
-          </span>
+          {!isPersisted && (
+            <span className="gc-ephemeral-badge" title="이 페이지는 서버에 아무것도 저장하지 않습니다">
+              저장되지 않음 · 파일로 보관
+            </span>
+          )}
         </div>
 
         <div className="gc-header-right">
+          <AuthControls auth={auth} persistence={persistence} />
+          {auth.configured && !auth.loading && <div className="gc-header-divider" />}
           <button type="button" className="gc-button" onClick={() => importInputRef.current?.click()} title="내려받았던 .json 작업 파일 불러오기 (Ctrl+O)">
             <FolderOpen className="gc-icon" />
             <span>파일 열기</span>
@@ -262,6 +287,8 @@ export const GuestCanvasPage: React.FC = () => {
           </button>
         </div>
       </header>
+
+      {auth.notice && <div className="gc-auth-notice" role="alert">{auth.notice}</div>}
 
       <div className="gc-stage">
         {isPenDebugEnabled(window.location.search) && <PenDebugOverlay />}
@@ -483,7 +510,21 @@ export const GuestCanvasPage: React.FC = () => {
 
         <DiagramComposer open={showDiagramComposer} onClose={() => setShowDiagramComposer(false)} onCreate={handleCreateDiagram} />
 
-        {showNotice && (
+        {persistence.status === 'conflict' && (
+          <div className="gc-notice" role="alertdialog" aria-labelledby="gc-conflict-title">
+            <div className="gc-notice-title" id="gc-conflict-title">다른 기기에서 저장된 내용이 있습니다</div>
+            <p className="gc-notice-body">
+              지금 화면의 변경은 아직 저장되지 않았습니다. 다른 기기의 내용을 불러올지,
+              지금 화면의 내용으로 덮어쓸지 골라 주세요. 어느 쪽도 자동으로 덮어쓰지 않습니다.
+            </p>
+            <div className="gc-notice-actions">
+              <button type="button" className="gc-button gc-button-primary" onClick={() => void persistence.resolveConflict('reload')}>다른 기기 내용 불러오기</button>
+              <button type="button" className="gc-button" onClick={() => void persistence.resolveConflict('overwrite')}>내 것으로 덮어쓰기</button>
+            </div>
+          </div>
+        )}
+
+        {showNotice && !isPersisted && (
           <div className="gc-notice" role="status">
             <div className="gc-notice-title">이 캔버스는 저장되지 않습니다</div>
             <p className="gc-notice-body">
