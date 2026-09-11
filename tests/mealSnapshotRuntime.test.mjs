@@ -515,7 +515,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   detailOpener.focus();detailOpener.click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
-  assert.match(dom.window.document.getElementById('recipeMeta').textContent,/평점 4\.8 · 리뷰 1,234개/);
+  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'2인분');
+  assert.doesNotMatch(dom.window.document.getElementById('recipeMeta').textContent,/리뷰|평점/);
   assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
   assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);

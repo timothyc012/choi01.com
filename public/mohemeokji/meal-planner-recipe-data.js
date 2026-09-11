@@ -125,10 +125,9 @@
 
   function qualitySummary(meal) {
     const facts=meal?.qualityFacts||{};
-    const rating=Number.isFinite(facts.adjustedRating)?'평점 '+facts.adjustedRating.toFixed(1):'평점 근거 미확인';
     const completeness=facts.completeness===1?'원문 재료·조리 순서 확인':'원문 확인 범위 제한';
     const primary=(meal?.recommendationProfile?.primaryIngredients||meal?.sale||[]).join(' · ');
-    return [rating,completeness,primary?primary+' 할인 연결':'주재료 할인 연결 확인'].join(' · ');
+    return [completeness,primary?primary+' 할인 연결':'주재료 할인 연결 확인'].join(' · ');
   }
 
   function selectSnapshotLocation(sourceLocations,params=new URLSearchParams(),pathname='') {
@@ -575,11 +574,7 @@
           else byId('recipeSource').removeAttribute('href');
           byId('recipeSource').hidden=!sourceUrl;
           byId('recipeStepsBlock').hidden=false;
-          byId('recipeMeta').textContent=[
-            Number.isFinite(detail.ratingNumber)?'평점 '+Number(detail.ratingNumber).toFixed(1):null,
-            Number.isInteger(detail.reviewCount)?'리뷰 '+detail.reviewCount.toLocaleString('ko-KR')+'개':null,
-            detail.sourceServingText||null
-          ].filter(Boolean).join(' · ');
+          byId('recipeMeta').textContent=detail.sourceServingText||'원문 인분 미표기';
           byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
           byId('addShoppingItems').disabled=false;
           byId('eatFromDetail').disabled=false;
