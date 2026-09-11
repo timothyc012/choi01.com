@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-11T10:43:32.618Z",
+  "candidateInput": "/private/tmp/mohemeokji-current-candidates.json",
+  "database": "01ontology",
+  "tenant": "recipe-full",
+  "snapshotId": "8979a9c74f47b389b790ffd7d4f4db53a9222479c264bc8c9d342aa049fc76e8",
+  "reviewEvidenceSummary": {
+    "verified": 25,
+    "unverified": 56
+  },
+  "target": 120,
+  "selected": [],
+  "exclusionCounts": {
+    "already-registered": 84,
+    "review-unverified": 4916
+  },
+  "coverage": {
+    "40468|Netto|branch-656a4ec37f284593": {
+      "before": 71,
+      "added": 0
+    },
+    "40474|EDEKA|branch-88f36e45a90d6313": {
+      "before": 48,
+      "added": 0
+    },
+    "44369|ALDI Nord|branch-10ac6c7709c73c20": {
+      "before": 35,
+      "added": 0
+    },
+    "44369|Lidl|branch-d8f31999c14be277": {
+      "before": 43,
+      "added": 0
+    },
+    "44369|Netto|branch-32b0ad1ae3caebe2": {
+      "before": 71,
+      "added": 0
+    },
+    "44369|REWE|branch-b4aafe27fdd2daf8": {
+      "before": 37,
+      "added": 0
+    },
+    "52062|Netto|branch-a2c072e7e80baa97": {
+      "before": 71,
+      "added": 0
+    },
+    "52062|REWE|branch-12302cee41b08482": {
+      "before": 37,
+      "added": 0
+    },
+    "52064|ALDI SÜD|branch-5bd8a06bdb556d25": {
+      "before": 18,
+      "added": 0
+    },
+    "52064|EDEKA|branch-71cc2cd6e03fdd43": {
+      "before": 51,
+      "added": 0
+    },
+    "52064|Lidl|branch-435121bd6da0b6fa": {
+      "before": 43,
+      "added": 0
+    }
+  },
+  "decision": "review-evidence-gate"
+}
