@@ -49,6 +49,15 @@ test('the lead recommendation favors an offer that is distinctive to the selecte
   assert.equal(ranked[0].id,'distinctive');
 });
 
+test('balanced ranking uses verified source reviews without resurrecting DB counts',()=>{
+  const low=meal('low',['바나나'],'fruit',{reviewEvidence:{status:'verified',reviewCount:1,ratingValue:5}});
+  const high=meal('high',['닭안심'],'chicken',{reviewEvidence:{status:'verified',reviewCount:110,ratingValue:5}});
+  const unknown=meal('unknown',['사과'],'fruit',{reviewEvidence:{status:'unverified',reviewCount:null,ratingValue:null}});
+  const ranked=engine.rank([low,high,unknown],{catalog:{바나나:price,닭안심:price,사과:price},date:'2026-09-08'});
+  assert.equal(ranked[0].id,'high');
+  assert.ok(ranked.findIndex((meal)=>meal.id==='unknown')>ranked.findIndex((meal)=>meal.id==='low'));
+});
+
 test('a varied week does not repeat source IDs, exceed two per family, or place families consecutively when alternatives exist',()=>{
   const pool=Array.from({length:12},(_,i)=>meal('c'+i,['닭고기'],'chicken'));
   pool.push(...Array.from({length:3},(_,i)=>meal('p'+i,['감자'],'potato')),...Array.from({length:3},(_,i)=>meal('n'+i,['파스타'],'pasta')),meal('v',['당근'],'carrot'));

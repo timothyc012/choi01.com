@@ -168,6 +168,25 @@ test('selection rejects a recipe when the scoped offer matches only an incidenta
   assert.deepEqual(selected.coverage.heldForReview,[{recipeId:'incidental-lemon',reason:'no-primary-store-offer'}]);
 });
 
+test('selection holds a stale ontology profile that labels apple as primary for a pork dish',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  const appleOffer=offer('offer-apple',appleIdentity);
+  const recipe=candidate('stale-apple-pork',{identity:appleIdentity,offerId:'offer-apple'});
+  recipe.title='사과 돼지고기 스테이크';
+  recipe.ingredients=[
+    {ordinal:1,ingredient:'돼지고기 목살',quantity:'300g'},
+    {ordinal:2,ingredient:'사과',quantity:'1/2개'},
+  ];
+  recipe.steps=[{ordinal:1,instruction:'돼지고기 목살을 굽는다.'},{ordinal:2,instruction:'사과를 곁들인다.'},{ordinal:3,instruction:'접시에 담는다.'}];
+  recipe.recommendationProfile={primaryIngredients:['사과'],family:'pork',method:'grill',kind:'main'};
+  const selected=selectStoreRecipes({
+    store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},
+    offers:[appleOffer],candidates:[recipe],registry:registryFor([approved(recipe)]),
+  });
+  assert.deepEqual(selected.recipes,[]);
+  assert.deepEqual(selected.coverage.heldForReview,[{recipeId:'stale-apple-pork',reason:'stale-primary-profile'}]);
+});
+
 test('selection revalidates exact match identity and source label against the scoped offer',()=>{
   const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
   const recipe=candidate('forged-apple',{identity:appleIdentity,offerId:'offer-apple'});

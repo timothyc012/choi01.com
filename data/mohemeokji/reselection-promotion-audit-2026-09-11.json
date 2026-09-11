@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-11T11:19:01.420Z",
+  "reviewThreshold": 1,
+  "selected": [
+    {
+      "sourceRecipeId": "6959014",
+      "title": "등심콩나물볶음~어린이반찬/다이어트반찬",
+      "primaryIngredients": [
+        "돼지등심"
+      ],
+      "reviewCount": 1
+    },
+    {
+      "sourceRecipeId": "6881146",
+      "title": "대파 닭안심 조림",
+      "primaryIngredients": [
+        "닭안심"
+      ],
+      "reviewCount": 110
+    }
+  ],
+  "accepted": [
+    {
+      "sourceRecipeId": "6959014",
+      "reviewCount": 1,
+      "primaryIngredients": [
+        "돼지등심"
+      ]
+    },
+    {
+      "sourceRecipeId": "6881146",
+      "reviewCount": 110,
+      "primaryIngredients": [
+        "닭안심"
+      ]
+    }
+  ],
+  "held": [],
+  "exclusionCounts": {
+    "already-registered": 84,
+    "review-unverified": 4914
+  }
+}

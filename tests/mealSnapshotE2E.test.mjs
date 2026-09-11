@@ -282,16 +282,18 @@ test('real published output loads only the selected location before a detail is 
   assert.equal(calls.at(-1),`/mohemeokji/data/${location.recipes[0].detailPath}`);
 });
 
-test('real published bootstrap has no invalid prior snapshot chain',()=>{
+test('real published snapshot has a valid prior snapshot chain',()=>{
   const dataRoot=path.resolve(new URL('../public/mohemeokji/data/',import.meta.url).pathname);
   const current=JSON.parse(fs.readFileSync(path.join(dataRoot,'current.json'),'utf8'));
   const manifest=JSON.parse(fs.readFileSync(path.join(dataRoot,current.manifestPath),'utf8'));
-  assert.equal(manifest.previousSnapshot,undefined);
-  const report=verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'bootstrap'});
-  assert.deepEqual(report.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});
+  const report=manifest.previousSnapshot
+    ? verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'correction',previousManifestPath:manifest.previousSnapshot.manifestPath})
+    : verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'bootstrap'});
+  if(manifest.previousSnapshot) assert.equal(report.rollback.valid,true);
+  else assert.deepEqual(report.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});
   for(const reference of manifest.locations) {
     const location=JSON.parse(fs.readFileSync(path.join(dataRoot,reference.path),'utf8'));
     assert.equal(new Set(location.recipes.map((recipe)=>recipe.title)).size,location.recipes.length,reference.id);
   }
-  assert.equal(fs.readdirSync(path.join(dataRoot,'snapshots',manifest.weekStart)).length,1);
+  assert.ok(fs.readdirSync(path.join(dataRoot,'snapshots',manifest.weekStart)).length>=1);
 });

@@ -47,7 +47,7 @@ test('publication expansion excludes weak, incomplete, inexact and unquantified 
   const valid=candidate('valid');
   const result=selectPublicationExpansion({candidateReport:report([
     valid,
-    candidate('few-reviews',{reviews:99}),
+    candidate('few-reviews',{reviews:0}),
     {...candidate('no-author'),author:null},
     candidate('short-steps',{steps:2}),
     candidate('unquantified',{quantity:null}),
@@ -124,6 +124,33 @@ test('publication profile excludes an incidental exact offer from defining prima
   const locations=[{postcode:'52064',store:'EDEKA',branchId:'branch-52064-EDEKA',offers:[offer('offer-a'),offer('offer-garlic')].map((item,index)=>index?{...item,identity:garlicIdentity}:item)}];
   const selected=selectPublicationExpansion({candidateReport:report([source],locations),registry:{recipes:{}},target:1}).selected[0];
   assert.deepEqual(selected.recommendationProfile.primaryIngredients,['닭가슴살']);
+});
+
+test('publication gate rejects a later fruit match when an earlier pork ingredient is not on sale',()=>{
+  const appleOffer={...offer('offer-apple'),identity:{ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'},productDe:'Äpfel'};
+  const source=candidate('pork-apple',{title:'사과 돼지고기 스테이크'});
+  source.ingredients=[
+    {ordinal:1,label:'돼지고기 목살 300g',ingredient:'돼지고기 목살',quantity:'300g'},
+    {ordinal:2,label:'사과 1/2개',ingredient:'사과',quantity:'1/2개'},
+  ];
+  source.steps=[{ordinal:1,instruction:'고기를 굽는다.'},{ordinal:2,instruction:'사과를 곁들인다.'},{ordinal:3,instruction:'담아낸다.'}];
+  source.matches=[{offerId:'offer-apple',relation:'exact-ingredient',ingredientId:'사과',ingredientLabel:'사과',titleEvidence:true}];
+  const result=selectPublicationExpansion({candidateReport:report([source],[{postcode:'52064',store:'EDEKA',branchId:'branch-52064-EDEKA',offers:[appleOffer]}]),registry:{schemaVersion:1,recipes:{}},target:1});
+  assert.equal(result.selected.length,0);
+  assert.deepEqual(result.exclusions,[{sourceRecipeId:'pork-apple',reason:'incidental-exact-offer'}]);
+});
+
+test('publication gate keeps a later protein match when the title identifies it as the dish',()=>{
+  const porkOffer={...offer('offer-pork'),identity:{ingredientId:'돼지등심',species:'pork',cut:'loin',processingState:'raw',form:'whole',composition:'pork'},productDe:'Schweine-Rücken'};
+  const source=candidate('bean-pork',{title:'등심 콩나물볶음'});
+  source.ingredients=[
+    {ordinal:1,label:'콩나물 500g',ingredient:'콩나물',quantity:'500g'},
+    {ordinal:2,label:'돼지고기 등심 300g',ingredient:'돼지고기 등심',quantity:'300g'},
+  ];
+  source.steps=[{ordinal:1,instruction:'콩나물을 손질한다.'},{ordinal:2,instruction:'돼지고기 등심을 볶는다.'},{ordinal:3,instruction:'함께 담아낸다.'}];
+  source.matches=[{offerId:'offer-pork',relation:'exact-ingredient',ingredientId:'돼지등심',ingredientLabel:'돼지고기 등심',titleEvidence:true}];
+  const result=selectPublicationExpansion({candidateReport:report([source],[{postcode:'52064',store:'EDEKA',branchId:'branch-52064-EDEKA',offers:[porkOffer]}]),registry:{schemaVersion:1,recipes:{}},target:1});
+  assert.equal(result.selected[0].recommendationProfile.primaryIngredients[0],'돼지등심');
 });
 
 test('owner-authorized transform preserves source facts while producing fresh Korean action summaries',()=>{

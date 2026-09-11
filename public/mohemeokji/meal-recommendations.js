@@ -73,8 +73,13 @@
     const storeSpecificity = info.mainOffers.reduce((sum,offer)=>sum+12/Math.max(1,offerFrequency[offer.name]||1),0);
     const breakfast = meal.tags.includes('아침') && ['점심','저녁'].includes(moment) ? 140 : 0;
     const side = meta.kind === 'side' ? 140 : 0;
+    const review = meal?.reviewEvidence;
+    const verifiedReviews = review?.status === 'verified' && Number.isSafeInteger(review.reviewCount) && review.reviewCount > 0;
+    const reviewBoost = verifiedReviews
+      ? Math.min(30, Math.log1p(review.reviewCount) * 5) + (Number.isFinite(review.ratingValue) ? review.ratingValue : 0)
+      : 0;
     return mainCoverage*100 + storeSpecificity + Math.min(info.secondaryOffers.length,3)*3 - Math.min(meal.time/15,15)
-      - breakfast - side - (sameDish ? 160 : 0) - familyRecent*18;
+      + reviewBoost - breakfast - side - (sameDish ? 160 : 0) - familyRecent*18;
   }
 
   function rank(meals, options) {
