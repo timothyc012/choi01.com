@@ -325,6 +325,14 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   const neededButter=candidate('needed-butter');
   neededButter.steps[1].instruction='필요하면 버터를 넣어도 됩니다.';
   assert.deepEqual(unquantifiedActionIngredients(neededButter),[]);
+  const existingOliveChoice=candidate('6869787');
+  existingOliveChoice.ingredients.push({ordinal:4,label:'올리브오일 1큰술',ingredient:'올리브오일',quantity:'1큰술'});
+  existingOliveChoice.steps[1].instruction='달궈진 팬에 버터를 녹이고 고기를 굽습니다. 버터 대신 그냥 오일을 사용해도 좋아요.';
+  assert.deepEqual(unquantifiedActionIngredients(existingOliveChoice),[]);
+  const qualitativeChoice=candidate('6878699');
+  qualitativeChoice.ingredients.push({ordinal:4,label:'후추 톡톡',ingredient:'후추 톡톡',quantity:null});
+  qualitativeChoice.steps[1].instruction='팬에 버터 한 조각 또는 식용유 적당량을 넣고 스테이크를 굽습니다. 완성 후 후추를 살짝 뿌립니다.';
+  assert.deepEqual(unquantifiedActionIngredients(qualitativeChoice),['기름']);
   for(const phrase of ['식용유 또는 버터를 사용해 볶습니다','버터 또는 식용유를 사용해 볶습니다','식용유나 버터를 사용해 볶습니다']) {
     const choice=candidate('symmetric-'+phrase);
     choice.steps[1].instruction=phrase;
