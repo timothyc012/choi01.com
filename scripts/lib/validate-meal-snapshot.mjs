@@ -11,11 +11,21 @@ function safePath(root,relative) {
   return resolved.startsWith(path.resolve(root)+path.sep)?resolved:null;
 }
 
+function containsSymbolicLink(root,relative) {
+  let cursor=path.resolve(root);
+  for(const part of String(relative||'').split('/')) {
+    cursor=path.join(cursor,part);
+    if(fs.existsSync(cursor)&&fs.lstatSync(cursor).isSymbolicLink()) return true;
+  }
+  return false;
+}
+
 function findForbiddenKey(value,trail='') {
   if(!value||typeof value!=='object') return null;
+  if(Array.isArray(value)&&value.some((entry)=>entry&&typeof entry==='object'&&!Array.isArray(entry)&&'recipeId' in entry&&'reason' in entry&&'locationIds' in entry)) return `${trail||'root'} (review queue payload)`;
   for(const [key,child] of Object.entries(value)) {
     const current=trail?trail+'.'+key:key;
-    if(['instruction','instructionText','sourceImage','sourceImages','imageUrl','images','html'].includes(key)) return current;
+    if(['instruction','instructionText','sourceImage','sourceImages','imageUrl','images','html','reviewQueue','heldForReview','recipeCandidates','candidateReport'].includes(key)) return `${current}${/review|heldForReview|recipeCandidates|candidateReport/i.test(key)?' (review queue payload)':''}`;
     const nested=findForbiddenKey(child,current);
     if(nested) return nested;
   }
@@ -35,6 +45,7 @@ export function validateMealSnapshotDirectory(outputDir) {
   const errors=[];
   const currentPath=path.join(outputDir,'current.json');
   if(!fs.existsSync(currentPath)) return {valid:false,errors:['current.json is missing']};
+  if(fs.lstatSync(currentPath).isSymbolicLink()) return {valid:false,errors:['current.json must not be a symbolic link']};
   let current;
   try { current=JSON.parse(fs.readFileSync(currentPath,'utf8')); }
   catch { return {valid:false,errors:['current.json is invalid JSON']}; }
@@ -43,6 +54,7 @@ export function validateMealSnapshotDirectory(outputDir) {
   if(!digest.test(current.manifestSha256||'')) errors.push('current.manifestSha256 must be a SHA-256 digest');
   const manifestPath=safePath(outputDir,current.manifestPath);
   if(!manifestPath||!fs.existsSync(manifestPath)) errors.push('current.manifestPath is missing or unsafe');
+  else if(containsSymbolicLink(outputDir,current.manifestPath)) errors.push('current.manifestPath must not contain a symbolic link');
   if(errors.length) return {valid:false,errors};
   const manifestBytes=fs.readFileSync(manifestPath);
   if(sha256(manifestBytes)!==current.manifestSha256) errors.push('manifest hash does not match current pointer');
@@ -53,10 +65,48 @@ export function validateMealSnapshotDirectory(outputDir) {
   if(manifest.schemaVersion!==1) errors.push('manifest.schemaVersion must be 1');
   if(!manifest.fileHashes||typeof manifest.fileHashes!=='object'||Array.isArray(manifest.fileHashes)) errors.push('manifest.fileHashes must be an object');
   if('reviewQueuePath' in manifest||Object.keys(manifest.fileHashes||{}).some((relative)=>relative.includes('review-queue'))) errors.push('public snapshot must not contain a review queue');
+  if(!manifest.source||typeof manifest.source!=='object') errors.push('manifest source lineage is required');
+  else {
+    if(typeof manifest.source.inputLogicalName!=='string'||!manifest.source.inputLogicalName||path.basename(manifest.source.inputLogicalName)!==manifest.source.inputLogicalName) errors.push('manifest CSV lineage logical name is invalid');
+    if(!digest.test(manifest.source.csvSha256||'')) errors.push('manifest CSV lineage SHA-256 is invalid');
+    if(typeof manifest.source.database!=='string'||!manifest.source.database) errors.push('manifest database lineage is invalid');
+    if(manifest.source.tenant!==manifest.tenant) errors.push('manifest tenant lineage does not match');
+    if(!digest.test(manifest.source.discoverySha256||'')||manifest.source.discoveryAlgorithm!=='canonical-candidate-report-v1') errors.push('manifest discovery lineage is invalid');
+  }
+  const retainedFiles=new Set();
+  if(manifest.previousSnapshot!==undefined) {
+    const previous=manifest.previousSnapshot;
+    if(!previous||typeof previous!=='object'||previous.snapshotId===manifest.snapshotId) errors.push('previous snapshot must identify a different retained snapshot');
+    else if(!digest.test(previous.snapshotId||'')||!digest.test(previous.manifestSha256||'')) errors.push('previous snapshot pointer is invalid');
+    else {
+      const previousPath=safePath(outputDir,previous.manifestPath);
+      if(!previousPath||!fs.existsSync(previousPath)) errors.push('previous snapshot manifest is missing or unsafe');
+      else if(containsSymbolicLink(outputDir,previous.manifestPath)) errors.push('previous snapshot manifest must not contain a symbolic link');
+      else {
+        const previousBytes=fs.readFileSync(previousPath);
+        if(sha256(previousBytes)!==previous.manifestSha256) errors.push('previous snapshot manifest hash mismatch');
+        else {
+          try {
+            const previousManifest=JSON.parse(previousBytes.toString('utf8'));
+            if(previousManifest.snapshotId!==previous.snapshotId) errors.push('previous snapshotId does not match retained manifest');
+            retainedFiles.add(previous.manifestPath);
+            for(const [relative,expected] of Object.entries(previousManifest.fileHashes||{})) {
+              const target=safePath(outputDir,relative);
+              if(!target||!fs.existsSync(target)) errors.push('previous snapshot artifact is missing or unsafe: '+relative);
+              else if(containsSymbolicLink(outputDir,relative)) errors.push('previous snapshot artifact must not contain a symbolic link: '+relative);
+              else if(!digest.test(expected)||sha256(fs.readFileSync(target))!==expected) errors.push('previous snapshot artifact hash mismatch: '+relative);
+              retainedFiles.add(relative);
+            }
+          } catch { errors.push('previous snapshot manifest is invalid JSON'); }
+        }
+      }
+    }
+  }
   const parsedArtifacts=new Map();
   for(const [relative,expected] of Object.entries(manifest.fileHashes||{})) {
     const target=safePath(outputDir,relative);
     if(!target||!fs.existsSync(target)) { errors.push('listed artifact is missing or unsafe: '+relative); continue; }
+    if(containsSymbolicLink(outputDir,relative)) { errors.push('listed artifact must not contain a symbolic link: '+relative); continue; }
     if(!digest.test(expected)||sha256(fs.readFileSync(target))!==expected) errors.push('artifact hash mismatch: '+relative);
     if(relative.endsWith('.json')) {
       try {
@@ -102,6 +152,7 @@ export function validateMealSnapshotDirectory(outputDir) {
     const locationArtifact=locationDeclared?parsedArtifacts.get(location.path):null;
     if(!locationArtifact||!Array.isArray(locationArtifact.recipes)) { errors.push(`${prefix}.path does not contain a location snapshot`); continue; }
     if(locationArtifact.postcode!==location.postcode||locationArtifact.store!==location.store||locationArtifact.branchId!==location.branchId) errors.push(`${prefix}.path location boundary does not match manifest`);
+    for(const [offerIndex,offer] of (Array.isArray(locationArtifact.offers)?locationArtifact.offers:[]).entries()) if(offer.postcode!==location.postcode||offer.chain!==location.store||offer.branchId!==location.branchId) errors.push(`${prefix}.offers[${offerIndex}] offer boundary does not match owning location`);
     for(const [recipeIndexInLocation,recipeRef] of locationArtifact.recipes.entries()) {
       const refPrefix=`${prefix}.recipes[${recipeIndexInLocation}]`;
       if(!recipeRef||typeof recipeRef!=='object') { errors.push(`${refPrefix} must be an object`); continue; }
@@ -115,7 +166,7 @@ export function validateMealSnapshotDirectory(outputDir) {
   const coverageLocationKeys=new Set((coverage?.locations||[]).map((location)=>[location.postcode,location.store,location.branchId].join('|')));
   if(locationKeys.size!==coverageLocationKeys.size||[...locationKeys].some((key)=>!coverageLocationKeys.has(key))) errors.push('manifest.locations must match coverage locations');
   for(const relative of Object.keys(manifest.fileHashes||{})) if(!reachable.has(relative)) errors.push('hash table contains an unreachable artifact: '+relative);
-  const allowedFiles=new Set(['current.json',current.manifestPath,...Object.keys(manifest.fileHashes||{})]);
+  const allowedFiles=new Set(['current.json',current.manifestPath,...Object.keys(manifest.fileHashes||{}),...retainedFiles]);
   for(const relative of outputFiles(outputDir)) if(!allowedFiles.has(relative)) errors.push('unlisted output file: '+relative);
   return {valid:errors.length===0,errors};
 }

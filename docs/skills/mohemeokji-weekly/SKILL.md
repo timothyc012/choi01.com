@@ -42,10 +42,10 @@ The compiler selects separately for every postcode, chain, and branch. It publis
 ```sh
 node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_A --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_A.json
 node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_B --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_B.json
-node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B
+node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B --bootstrap
 ```
 
-The verifier checks the pointer and every artifact hash, exact location boundaries, coverage and recipe references, zero-candidate facts, four-mode readiness, lazy browser asset sets, and asset budgets. A mode with missing price or measured nutrient evidence must be reported unavailable; it cannot silently fall back to balanced. Do not move `current.json` into production if either compile, validation, twin comparison, or verifier fails.
+The verifier checks the pointer and every artifact hash, CSV and read-only discovery hashes, exact location and offer boundaries, coverage and recipe references, zero-candidate facts, four-mode readiness, lazy browser asset sets, symlinks, hidden review-queue payloads, and asset budgets. A mode with missing price or measured nutrient evidence must be reported unavailable; it cannot silently fall back to balanced. Do not move `current.json` into production if either compile, validation, twin comparison, or verifier fails.
 
 Registry approval is tied to `sourceRecipeId`, current `sourceContentHash`, and `transformVersion`. An existing recipe ID or broad ingredient overlap is not approval. When source ingredients or instructions change, the old hash becomes stale and the recipe remains in the review queue until its Korean paraphrase is reviewed again. The public output may contain the approved Korean paraphrase, but never raw source instructions, source images, HTML, or unapproved text.
 
@@ -88,13 +88,14 @@ The sync command copies canonical HTML/recipe wrapper to existing routes and cha
 
 Browser QA must use the available CUA browser tool against the real static paths. Vite may serve the homepage for `/mohemeokji/`; use the existing static preview or a temporary `python3 -m http.server PORT --bind 127.0.0.1 --directory public` and close it afterward. Capture `1280×900`, `390×844`, and `320×844` screenshots and console/network evidence. Cover all manifest locations and one complete store plus a sparse/zero store in depth: four modes, lunch and dinner, X replacement and explicit clear, Plan/Shop/mobile navigation, detail/source failure, pantry, checklist, reload, and saved-plan rollover. The initial load must request only `current.json`, the pinned manifest, and the selected location; details are lazy and the browser must not request CSV, review queue, or another location. Never claim mobile QA from one desktop screenshot. If CUA is unavailable or the Mac is locked, record the precise blocker and leave the release gate failed; do not substitute raw Playwright/CDP or bypass the lock.
 
-Promote only after the twin compile, verifier, full test/build/typecheck/sync checks, and CUA matrix pass. Retain the previous two immutable snapshot trees. Before switching `public/mohemeokji/data/current.json`, save and verify the prior pointer as a rollback target:
+Promote only after the twin compile, verifier, full test/build/typecheck/sync checks, and CUA matrix pass. The first release is an explicit bootstrap and records app-asset/git rollback because no earlier immutable snapshot exists. On later rollovers, retain the previous two immutable snapshot trees and declare the immediately previous manifest in the new manifest's `previousSnapshot` pointer. The retained path must be inside the same deployable data root and its snapshot ID must differ:
 
 ```sh
-node scripts/verify-meal-snapshot.mjs NEW_DATA_ROOT --twin TWIN_B --previous PREVIOUS_DATA_ROOT
+node scripts/verify-meal-snapshot.mjs NEW_DATA_ROOT --twin TWIN_B --bootstrap
+node scripts/verify-meal-snapshot.mjs NEW_DATA_ROOT --twin TWIN_B --rollover --previous snapshots/PREVIOUS_WEEK/PREVIOUS_ID/manifest.json
 ```
 
-After deployment, compare the deployed `current.json`, manifest, selected location, and changed app asset bytes with the committed files, then perform a read-only production smoke test. Rollback means restoring the verified previous pointer; do not delete or rewrite immutable snapshot files.
+An external directory or the current manifest itself is not rollover proof. After deployment, compare the deployed `current.json`, manifest, selected location, and changed app asset bytes with the committed files, then perform a read-only production smoke test. Rollback means restoring the verified retained pointer; do not delete or rewrite immutable snapshot files.
 
 Existing feature limits: pantry is scoped per postcode/store, and adding separate recipes to a checklist takes the larger pack count to avoid duplicate additions; weekly basket selection is the supported way to sum measured needs. Do not claim cross-store stock inventory, partial pantry quantities, serving scaling, a complete receipt total with unknown prices, live DB search or all grocery needs fulfilled.
 

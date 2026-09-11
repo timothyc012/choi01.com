@@ -11,9 +11,8 @@ import {verifyMealSnapshot} from '../scripts/verify-meal-snapshot.mjs';
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const json=(value)=>Buffer.from(JSON.stringify(value)+'\n');
 
-function writeFixture({locations=2,mutate}={}) {
+function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64)}={}) {
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-verify-'));
-  const snapshotId='a'.repeat(64);
   const snapshotRoot=`snapshots/2026-09-07/${snapshotId}`;
   const files=new Map();
   const manifestLocations=[];
@@ -46,7 +45,7 @@ function writeFixture({locations=2,mutate}={}) {
   files.set(coveragePath,json({schemaVersion:1,snapshotId,locations:coverageLocations,zeroCandidateIdentities:[],zeroCandidateOfferIds:[]}));
   files.set(recipeIndexPath,json({schemaVersion:1,snapshotId,recipes:recipeIndex}));
   const fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1',tenant:'recipe-full',locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
+  const manifest={schemaVersion:1,snapshotId,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1',tenant:'recipe-full',source:{inputLogicalName:'fixture.csv',csvSha256:'d'.repeat(64),database:'fixture-db',tenant:'recipe-full',discoverySha256:'e'.repeat(64),discoveryAlgorithm:'canonical-candidate-report-v1'},locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
   mutate?.({manifest,files,manifestLocations,coverageLocations,snapshotId,snapshotRoot});
   for(const [relative,bytes] of files) {
     const target=path.join(root,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);
@@ -90,6 +89,49 @@ test('rejects missing artifacts, cross-store offer borrowing, and oversized sele
   assert.throws(()=>verifyMealSnapshot({snapshotDir:oversized.root,assetBudgets:{locationBytes:10}}),/budget/i);
 });
 
+test('rejects a foreign offer row inside a location even when all container hashes are recomputed',()=>{
+  const foreign=writeFixture({mutate({manifest,files}){
+    const first=JSON.parse(files.get(manifest.locations[0].path));
+    first.offers[0].postcode=manifest.locations[1].postcode;
+    first.offers[0].chain=manifest.locations[1].store;
+    first.offers[0].branchId=manifest.locations[1].branchId;
+    files.set(manifest.locations[0].path,json(first));
+    manifest.fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
+  }});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:foreign.root}),/offer boundary/i);
+});
+
+test('rejects a review queue payload hidden under an arbitrary public key after rehashing',()=>{
+  const injected=writeFixture({mutate({manifest,files}){
+    const first=JSON.parse(files.get(manifest.locations[0].path));
+    first.releaseNotes=[{recipeId:'held-1',reason:'unapproved-paraphrase',locationIds:[first.id]}];
+    files.set(manifest.locations[0].path,json(first));
+    manifest.fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
+  }});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:injected.root}),/forbidden public.*review queue/i);
+});
+
+test('requires immutable CSV and DB discovery lineage digests',()=>{
+  const missing=writeFixture({mutate({manifest}){delete manifest.source.csvSha256;}});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:missing.root}),/csv.*lineage/i);
+  const invalid=writeFixture({mutate({manifest}){manifest.source.discoverySha256='not-a-digest';}});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:invalid.root}),/discovery.*lineage/i);
+});
+
+test('rejects a hashed artifact symlink that resolves outside the snapshot root',()=>{
+  const fixture=writeFixture({locations:1});
+  const manifest=JSON.parse(fs.readFileSync(path.join(fixture.root,fixture.manifestPath),'utf8'));
+  const index=JSON.parse(fs.readFileSync(path.join(fixture.root,manifest.recipeIndexPath),'utf8'));
+  const detailPath=path.join(fixture.root,index.recipes[0].path);
+  const externalDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-external-'));
+  const externalPath=path.join(externalDir,'detail.json');
+  fs.writeFileSync(externalPath,fs.readFileSync(detailPath));
+  fs.unlinkSync(detailPath);
+  fs.symlinkSync(externalPath,detailPath);
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:fixture.root}),/symbolic link/i);
+  fs.rmSync(externalDir,{recursive:true,force:true});
+});
+
 test('rejects source lineage that disagrees with the recipe index even when hashes are recomputed',()=>{
   const fixture=writeFixture({locations:1});
   const manifestPath=path.join(fixture.root,fixture.manifestPath);
@@ -130,6 +172,8 @@ test('checks every location and reports all four modes without inventing unavail
   assert.equal(report.errors.length,0);
   assert.equal(report.schema.valid,true);
   assert.equal(report.lineage.tenant,'recipe-full');
+  assert.equal(report.lineage.csvSha256,'d'.repeat(64));
+  assert.equal(report.lineage.dbExportSha256,'e'.repeat(64));
   for(const location of report.locations) {
     assert.equal(location.modeReadiness.balanced.eligible,1);
     assert.deepEqual(location.modeReadiness.value,{eligible:0,status:'unavailable',reason:'complete basket price evidence absent'});
@@ -142,12 +186,37 @@ test('checks every location and reports all four modes without inventing unavail
 
 test('validates a supplied previous snapshot as an independent rollback target',()=>{
   const current=writeFixture();
-  const previous=writeFixture();
+  const previous=writeFixture({snapshotId:'f'.repeat(64)});
   const report=verifyMealSnapshot({snapshotDir:current.root,previousSnapshotDir:previous.root});
   assert.equal(report.rollback.valid,true);
 
   fs.unlinkSync(path.join(previous.root,'current.json'));
   assert.throws(()=>verifyMealSnapshot({snapshotDir:current.root,previousSnapshotDir:previous.root}),/rollback/i);
+});
+
+test('release verification distinguishes explicit bootstrap from an in-tree rollover',()=>{
+  const bootstrap=writeFixture();
+  const bootstrapReport=verifyMealSnapshot({snapshotDir:bootstrap.root,releaseMode:'bootstrap'});
+  assert.deepEqual(bootstrapReport.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:bootstrap.root,releaseMode:'rollover',previousManifestPath:bootstrap.manifestPath}),/different from current/i);
+
+  const external=writeFixture({snapshotId:'f'.repeat(64)});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:bootstrap.root,releaseMode:'rollover',previousSnapshotDir:external.root}),/external.*release proof/i);
+
+  fs.cpSync(path.join(external.root,'snapshots'),path.join(bootstrap.root,'snapshots'),{recursive:true});
+  const externalCurrent=JSON.parse(fs.readFileSync(path.join(external.root,'current.json'),'utf8'));
+  const currentPath=path.join(bootstrap.root,'current.json');
+  const current=JSON.parse(fs.readFileSync(currentPath,'utf8'));
+  const manifestPath=path.join(bootstrap.root,current.manifestPath);
+  const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+  manifest.previousSnapshot={snapshotId:externalCurrent.snapshotId,manifestPath:externalCurrent.manifestPath,manifestSha256:externalCurrent.manifestSha256};
+  const manifestBytes=json(manifest);
+  fs.writeFileSync(manifestPath,manifestBytes);
+  current.manifestSha256=sha256(manifestBytes);
+  fs.writeFileSync(currentPath,json(current));
+  const rollover=verifyMealSnapshot({snapshotDir:bootstrap.root,releaseMode:'rollover',previousManifestPath:externalCurrent.manifestPath});
+  assert.equal(rollover.rollback.valid,true);
+  assert.equal(rollover.rollback.snapshotId,'f'.repeat(64));
 });
 
 test('real published output loads only the selected location before a detail is opened',async()=>{

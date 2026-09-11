@@ -45,7 +45,26 @@ function detailRecipe(recipe) {
   };
 }
 
-function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion}) {
+function discoveryProvenance(candidateReport) {
+  const candidates=[...(candidateReport.candidates||[])].sort((left,right)=>String(left.sourceRecipeId??left.recipeId).localeCompare(String(right.sourceRecipeId??right.recipeId)));
+  const locations=[...(candidateReport.locations||[])].map((location)=>({
+    postcode:location.postcode,store:location.store,branchId:location.branchId,
+    offers:[...(location.offers||[])].map((offer)=>({offerId:offer.offerId,recipeCandidateIds:[...(offer.recipeCandidateIds||[])].map(String).sort()})).sort((a,b)=>a.offerId.localeCompare(b.offerId)),
+  })).sort((a,b)=>[a.postcode,a.store,a.branchId].join('|').localeCompare([b.postcode,b.store,b.branchId].join('|')));
+  return {candidates,locations,identityStats:candidateReport.identityStats||{},overflow:candidateReport.overflow||{},zeroCandidateIdentities:[...(candidateReport.zeroCandidateIdentities||[])].sort(),zeroCandidateOfferIds:[...(candidateReport.zeroCandidateOfferIds||[])].sort()};
+}
+
+function sourceMetadata({candidateReport,csvPath,db,tenant}) {
+  const inputLogicalName=path.basename(csvPath||candidateReport.input||'');
+  const csvSha256=csvPath?sha256(fs.readFileSync(csvPath)):candidateReport.csvSha256;
+  const database=typeof candidateReport.database==='string'&&candidateReport.database?candidateReport.database:(typeof db==='string'?db:null);
+  if(!inputLogicalName||!digest(csvSha256)||!database||!tenant) throw new Error('Complete source lineage is required: input logical name, CSV SHA-256, database, and tenant');
+  return {inputLogicalName,csvSha256,database,tenant,discoverySha256:sha256(canonicalJson(discoveryProvenance(candidateReport))),discoveryAlgorithm:'canonical-candidate-report-v1'};
+}
+
+function digest(value) { return typeof value==='string'&&/^[a-f0-9]{64}$/.test(value); }
+
+function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source}) {
   const locations=[];
   const coverageLocations=[];
   const details=new Map();
@@ -87,7 +106,8 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   }
   const reviewQueueEntries=[...reviewQueue.values()].map((entry)=>({...entry,locationIds:[...new Set(entry.locationIds)].sort()}))
     .sort((a,b)=>[a.recipeId,a.reason].join('|').localeCompare([b.recipeId,b.reason].join('|')));
-  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,locations,coverageLocations};
+  const publicDetailHashes=Object.fromEntries([...details].sort(([a],[b])=>a.localeCompare(b)).map(([sourceRecipeId,detail])=>[sourceRecipeId,sha256(jsonBytes(detail))]));
+  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes};
   const snapshotId=sha256(canonicalJson(seed));
   const snapshotRoot=`snapshots/${weekStart}/${snapshotId}`;
   const files=new Map();
@@ -112,7 +132,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   files.set(recipeIndexPath,jsonBytes({schemaVersion:1,snapshotId,recipes:recipeIndex}));
   const manifestLocations=locations.map((location)=>({id:location.id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,path:`${snapshotRoot}/locations/${location.id}.json`,recipeCount:location.recipes.length}));
   const fileHashes=Object.fromEntries([...files].sort(([a],[b])=>a.localeCompare(b)).map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
+  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
   const manifestPath=`${snapshotRoot}/manifest.json`;
   const manifestBytes=jsonBytes(manifest);
   const current={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)};
@@ -174,7 +194,8 @@ export async function compileMealWeek(options) {
   const auditTarget=options.auditOutputPath?path.resolve(options.auditOutputPath):null;
   if(auditTarget&&(auditTarget===publicOutputDir||auditTarget.startsWith(publicOutputDir+path.sep))) throw new Error('Private audit output must be outside the public snapshot directory');
   if(auditTarget&&fs.existsSync(auditTarget)) throw new Error('Private audit output must not already exist: '+auditTarget);
-  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion};
+  const source=sourceMetadata({candidateReport,csvPath:options.csvPath,db,tenant});
+  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source};
   const first=buildFiles(input);
   const second=buildFiles(structuredClone(input));
   compareBuilds(first,second);

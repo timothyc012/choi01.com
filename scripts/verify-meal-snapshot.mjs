@@ -24,9 +24,19 @@ function safePath(root,relative) {
   return resolved.startsWith(path.resolve(root)+path.sep)?resolved:null;
 }
 
+function containsSymbolicLink(root,relative) {
+  let cursor=path.resolve(root);
+  for(const part of String(relative||'').split('/')) {
+    cursor=path.join(cursor,part);
+    if(fs.existsSync(cursor)&&fs.lstatSync(cursor).isSymbolicLink()) return true;
+  }
+  return false;
+}
+
 function readJson(root,relative,label,errors) {
   const target=safePath(root,relative);
   if(!target||!fs.existsSync(target)) { errors.push(`${label} is missing or unsafe: ${relative}`); return null; }
+  if(containsSymbolicLink(root,relative)) { errors.push(`${label} must not contain a symbolic link: ${relative}`); return null; }
   try { return JSON.parse(fs.readFileSync(target,'utf8')); }
   catch { errors.push(`${label} is invalid JSON: ${relative}`); return null; }
 }
@@ -100,6 +110,15 @@ function verifyOne(snapshotDir,assetBudgets) {
   if(!current.collectionTimestamp||current.collectionTimestamp!==manifest.collectionTimestamp) errors.push('source lineage collectionTimestamp is missing or inconsistent');
   if(typeof manifest.tenant!=='string'||!manifest.tenant) errors.push('source lineage tenant is missing');
   if(typeof manifest.policyVersion!=='string'||!manifest.policyVersion) errors.push('source lineage policyVersion is missing');
+  const source=manifest.source;
+  if(!source||typeof source!=='object') errors.push('source lineage is missing');
+  else {
+    if(typeof source.inputLogicalName!=='string'||!source.inputLogicalName||path.basename(source.inputLogicalName)!==source.inputLogicalName) errors.push('CSV lineage logical name is invalid');
+    if(!DIGEST.test(source.csvSha256||'')) errors.push('CSV lineage SHA-256 is invalid');
+    if(typeof source.database!=='string'||!source.database) errors.push('database lineage is invalid');
+    if(source.tenant!==manifest.tenant) errors.push('tenant lineage does not match manifest');
+    if(!DIGEST.test(source.discoverySha256||'')||source.discoveryAlgorithm!=='canonical-candidate-report-v1') errors.push('discovery lineage is invalid');
+  }
   const budgets={...DEFAULT_ASSET_BUDGETS,...assetBudgets};
   if(currentBytes>budgets.currentBytes) errors.push(`asset budget exceeded: current.json ${currentBytes} > ${budgets.currentBytes}`);
   if(manifestBytes>budgets.manifestBytes) errors.push(`asset budget exceeded: manifest ${manifestBytes} > ${budgets.manifestBytes}`);
@@ -128,6 +147,7 @@ function verifyOne(snapshotDir,assetBudgets) {
     if(!coverageEntry) errors.push(`coverage is missing location: ${reference.id}`);
     else if(coverageEntry.published!==location.recipes.length) errors.push(`coverage recipe count mismatch: ${reference.id}`);
     const offerIds=new Set((location.offers||[]).map((offer)=>offer.offerId));
+    for(const offer of location.offers||[]) if(offer.postcode!==reference.postcode||offer.chain!==reference.store||offer.branchId!==reference.branchId) errors.push(`offer boundary mismatch: ${reference.id} offer ${offer.offerId}`);
     for(const recipe of location.recipes||[]) {
       if(!(recipe.offerIds||[]).length) errors.push(`recipe has no exact store offer: ${reference.id} recipe ${recipe.sourceRecipeId}`);
       for(const offerId of recipe.offerIds||[]) if(!offerIds.has(offerId)) errors.push(`cross-store offer borrow: ${reference.id} recipe ${recipe.sourceRecipeId} offer ${offerId}`);
@@ -149,23 +169,51 @@ function verifyOne(snapshotDir,assetBudgets) {
   return {
     schema:{valid:schema.valid,errors:schema.errors},
     manifestHash:{expected:current.manifestSha256,actual:manifestTarget?sha256(fs.readFileSync(manifestTarget)):null,valid:manifestTarget?sha256(fs.readFileSync(manifestTarget))===current.manifestSha256:false},
-    lineage:{snapshotId:manifest.snapshotId,weekStart:manifest.weekStart,collectionTimestamp:manifest.collectionTimestamp,tenant:manifest.tenant,policyVersion:manifest.policyVersion,sourceRecordsChecked:indexedRecipes.size,csvSha256:manifest.source?.csvSha256||null,dbExportSha256:manifest.source?.dbExportSha256||null},
+    lineage:{snapshotId:manifest.snapshotId,weekStart:manifest.weekStart,collectionTimestamp:manifest.collectionTimestamp,tenant:manifest.tenant,database:source?.database||null,inputLogicalName:source?.inputLogicalName||null,policyVersion:manifest.policyVersion,sourceRecordsChecked:indexedRecipes.size,csvSha256:source?.csvSha256||null,dbExportSha256:source?.discoverySha256||null,discoveryAlgorithm:source?.discoveryAlgorithm||null},
     assetBudgets:budgets,assetSizes:{current:currentBytes,manifest:manifestBytes},
     zeroCandidateIdentities:coverage?.zeroCandidateIdentities||[],zeroCandidateOfferIds:coverage?.zeroCandidateOfferIds||[],
     locations,locationsChecked:locations.length,errors:[...new Set(errors)],warnings:[...new Set(warnings)],
   };
 }
 
-export function verifyMealSnapshot({snapshotDir,previousSnapshotDir=null,twinSnapshotDir=null,assetBudgets={}}) {
+export function verifyMealSnapshot({snapshotDir,previousSnapshotDir=null,previousManifestPath=null,releaseMode=null,twinSnapshotDir=null,assetBudgets={}}) {
   if(!snapshotDir) throw new Error('snapshotDir is required');
-  const report=verifyOne(snapshotDir,assetBudgets);
-  report.twoBuildComparison=twinSnapshotDir?compareTrees(path.resolve(snapshotDir),path.resolve(twinSnapshotDir)):{status:'not-provided'};
+  const root=path.resolve(snapshotDir);
+  const report=verifyOne(root,assetBudgets);
+  report.twoBuildComparison=twinSnapshotDir?compareTrees(root,path.resolve(twinSnapshotDir)):{status:'not-provided'};
   if(report.twoBuildComparison.status==='mismatch') report.errors.push(`twin build mismatch: ${report.twoBuildComparison.reason}`);
-  report.rollback={provided:Boolean(previousSnapshotDir),valid:null,snapshotId:null};
-  if(previousSnapshotDir) {
+  report.rollback={provided:false,valid:null,snapshotId:null};
+  if(releaseMode==='bootstrap') {
+    const current=JSON.parse(fs.readFileSync(path.join(root,'current.json'),'utf8'));
+    const manifest=JSON.parse(fs.readFileSync(path.join(root,current.manifestPath),'utf8'));
+    if(previousSnapshotDir||previousManifestPath||manifest.previousSnapshot) report.errors.push('bootstrap release must not claim a previous snapshot');
+    report.rollback={mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'};
+  } else if(releaseMode==='rollover') {
+    if(previousSnapshotDir) report.errors.push('external previous snapshot is not valid release proof');
+    const current=JSON.parse(fs.readFileSync(path.join(root,'current.json'),'utf8'));
+    const manifest=JSON.parse(fs.readFileSync(path.join(root,current.manifestPath),'utf8'));
+    if(previousManifestPath===current.manifestPath) report.errors.push('previous snapshot must be different from current snapshot');
+    const pointer=manifest.previousSnapshot;
+    if(!previousManifestPath||path.isAbsolute(previousManifestPath)||!safePath(root,previousManifestPath)) report.errors.push('rollover requires a retained previous manifest path inside the release data root');
+    else if(!pointer||pointer.manifestPath!==previousManifestPath) report.errors.push('rollover previous manifest does not match the retained pointer');
+    else {
+      const previous=readJson(root,previousManifestPath,'previous snapshot manifest',report.errors);
+      const bytesPath=safePath(root,previousManifestPath);
+      if(previous&&bytesPath) {
+        const actual=sha256(fs.readFileSync(bytesPath));
+        if(actual!==pointer.manifestSha256) report.errors.push('rollback manifest hash mismatch');
+        if(previous.snapshotId!==pointer.snapshotId||previous.snapshotId===manifest.snapshotId) report.errors.push('previous snapshot must be different from current snapshot');
+        report.rollback={mode:'rollover',provided:true,valid:report.errors.length===0,snapshotId:previous.snapshotId,manifestPath:previousManifestPath};
+      }
+    }
+  } else if(previousSnapshotDir) {
     const previous=verifyOne(previousSnapshotDir,assetBudgets);
-    report.rollback={provided:true,valid:previous.errors.length===0,snapshotId:previous.lineage?.snapshotId||null,errors:previous.errors};
+    const different=previous.lineage?.snapshotId!==report.lineage?.snapshotId;
+    report.rollback={provided:true,valid:previous.errors.length===0&&different,snapshotId:previous.lineage?.snapshotId||null,errors:previous.errors};
+    if(!different) report.errors.push('rollback snapshot must be different from current snapshot');
     if(!report.rollback.valid) report.errors.push('rollback snapshot is invalid: '+previous.errors.join('; '));
+  } else if(releaseMode!==null) {
+    report.errors.push('release mode must be bootstrap or rollover');
   }
   report.valid=report.errors.length===0;
   if(!report.valid) {
@@ -177,15 +225,17 @@ export function verifyMealSnapshot({snapshotDir,previousSnapshotDir=null,twinSna
 }
 
 function parseArgs(argv) {
-  const options={snapshotDir:null,previousSnapshotDir:null,twinSnapshotDir:null};
+  const options={snapshotDir:null,previousManifestPath:null,twinSnapshotDir:null,releaseMode:null};
   for(let index=0;index<argv.length;index++) {
     const value=argv[index];
     if(!options.snapshotDir&&!value.startsWith('--')) options.snapshotDir=value;
-    else if(value==='--previous') options.previousSnapshotDir=argv[++index];
+    else if(value==='--previous') options.previousManifestPath=argv[++index];
     else if(value==='--twin') options.twinSnapshotDir=argv[++index];
+    else if(value==='--bootstrap') options.releaseMode='bootstrap';
+    else if(value==='--rollover') options.releaseMode='rollover';
     else throw new Error('Unknown argument: '+value);
   }
-  if(!options.snapshotDir) throw new Error('Usage: node scripts/verify-meal-snapshot.mjs SNAPSHOT_DIR [--twin DIR] [--previous DIR]');
+  if(!options.snapshotDir||!options.releaseMode) throw new Error('Usage: node scripts/verify-meal-snapshot.mjs SNAPSHOT_DIR [--twin DIR] (--bootstrap | --rollover --previous RETAINED_MANIFEST.json)');
   return options;
 }
 

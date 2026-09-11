@@ -45,7 +45,7 @@ function fixture() {
     [['7000001',registryEntry.sourceContentHash,registryEntry.transformVersion].join('|')]:registryEntry,
   }};
   const candidateReport={
-    tenant:'recipe-full',locations:[{postcode:'52064',store:'EDEKA',branch:'Aachen',branchId:'branch-a',offers:[{...offer,recipeCandidateIds:['7000001']}]}],
+    input:'fixture.csv',csvSha256:'d'.repeat(64),database:'fixture-db',tenant:'recipe-full',locations:[{postcode:'52064',store:'EDEKA',branch:'Aachen',branchId:'branch-a',offers:[{...offer,recipeCandidateIds:['7000001']}]}],
     candidates:[candidate],zeroCandidateOfferIds:[],identityStats:{},overflow:{},zeroCandidateIdentities:[],
   };
   return {offer,candidate,registry,candidateReport};
@@ -69,9 +69,24 @@ test('compiled output is byte-identical, hash-valid, and contains no raw source 
   assert.equal(relativeFiles(a).some((file)=>file.includes('review-queue')),false);
   const published=readSnapshot(a);
   assert.equal('reviewQueuePath' in published.manifest,false);
+  assert.equal(published.manifest.source.inputLogicalName,'fixture.csv');
+  assert.equal(published.manifest.source.csvSha256,'d'.repeat(64));
+  assert.match(published.manifest.source.discoverySha256,/^[a-f0-9]{64}$/);
+  assert.equal(published.manifest.source.database,'fixture-db');
   const bytes=relativeFiles(a).map((file)=>fs.readFileSync(path.join(a,file),'utf8')).join('\n');
   assert.equal(bytes.includes('DO NOT PUBLISH RAW'),false);
   assert.equal(/sourceImage|imageUrl|"images"/.test(bytes),false);
+});
+
+test('approved paraphrase changes produce a new immutable snapshot identity',async(t)=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-paraphrase-identity-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const data=fixture();
+  const first=await compileMealWeek({outputDir:path.join(root,'a'),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const changed=structuredClone(data.registry);
+  Object.values(changed.recipes)[0].title='닭가슴살 팬 볶음';
+  const second=await compileMealWeek({outputDir:path.join(root,'b'),candidateReport:data.candidateReport,registry:changed,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  assert.notEqual(first.snapshotId,second.snapshotId);
 });
 
 test('writes held recipe IDs only to an explicitly separate private audit file',async(t)=>{

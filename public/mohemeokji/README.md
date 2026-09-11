@@ -52,7 +52,7 @@ Run `node scripts/generate-meal-offers.mjs public/offers/supermarket_food_offers
 정적 snapshot을 갱신할 때는 같은 CSV·DB·registry로 빈 디렉터리 두 곳에 컴파일한 뒤 전체 바이트를 비교합니다. 첫 빌드는 아래 검증을 통과해야 하며, 브라우저 QA 전에는 `current.json`을 전환하지 않습니다.
 
 ```sh
-node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B
+node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B --bootstrap
 node --test tests/mealSnapshotE2E.test.mjs
 npm test
 npm run build
@@ -61,7 +61,7 @@ node scripts/sync-meal-pages.mjs --check
 git diff --check
 ```
 
-검증 보고서는 manifest 및 모든 artifact hash, 지점 경계, coverage/recipe/detail 연결, 0건 후보, 네 가지 모드 준비 상태, 자산 크기와 selected-store 요청 집합을 검사합니다. 이전 배포가 있다면 `--previous PREVIOUS_DATA_ROOT`로 rollback pointer도 독립 검증하고 최근 두 snapshot을 보존합니다. CUA로 1280×900, 390×844, 320×844 화면·콘솔·네트워크 증거를 남기지 못하면 배포 준비 완료로 간주하지 않습니다.
+검증 보고서는 manifest 및 모든 artifact hash, CSV·DB discovery 계보 hash, 지점과 각 offer의 경계, coverage/recipe/detail 연결, symlink와 숨겨진 review queue, 0건 후보, 네 가지 모드 준비 상태, 자산 크기와 selected-store 요청 집합을 검사합니다. 첫 릴리스는 `--bootstrap`으로 app-asset/git rollback을 명시합니다. 이후에는 이전 두 snapshot을 같은 공개 data root에 보존하고 `--rollover --previous snapshots/.../manifest.json`으로 내부 pointer를 검증합니다. 외부 디렉터리나 현재 snapshot은 rollback 증거가 아닙니다. CUA로 1280×900, 390×844, 320×844 화면·콘솔·네트워크 증거를 남기지 못하면 배포 준비 완료로 간주하지 않습니다.
 
 For a new weekly CSV, run the non-publishing preflight first:
 `node scripts/prepare-meal-week.mjs INPUT.csv --week-start YYYY-MM-DD --output-dir NEW_DIRECTORY`.
