@@ -64,7 +64,45 @@ function sourceMetadata({candidateReport,csvPath,db,tenant}) {
 
 function digest(value) { return typeof value==='string'&&/^[a-f0-9]{64}$/.test(value); }
 
-function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source}) {
+function retainedSnapshot(previousManifestPath,nextWeekStart) {
+  if(!previousManifestPath) throw new Error('Rollover requires --previous-manifest');
+  const manifestFile=path.resolve(previousManifestPath);
+  let manifest;
+  try { manifest=JSON.parse(fs.readFileSync(manifestFile,'utf8')); }
+  catch { throw new Error('Previous snapshot manifest is missing or invalid'); }
+  if(!digest(manifest.snapshotId)||!/^\d{4}-\d{2}-\d{2}$/.test(manifest.weekStart||'')||manifest.weekStart>=nextWeekStart) throw new Error('Previous snapshot must be from an earlier week');
+  const relative=path.join('snapshots',manifest.weekStart,manifest.snapshotId,'manifest.json');
+  if(!manifestFile.endsWith(path.sep+relative)) throw new Error('Previous snapshot manifest path does not match its identity');
+  const root=manifestFile.slice(0,-relative.length-1);
+  const validation=validateMealSnapshotDirectory(root);
+  if(!validation.valid) throw new Error('Previous snapshot is invalid: '+validation.errors.join('; '));
+  const current=JSON.parse(fs.readFileSync(path.join(root,'current.json'),'utf8'));
+  if(current.manifestPath!==relative.split(path.sep).join('/')||current.snapshotId!==manifest.snapshotId||current.manifestSha256!==sha256(fs.readFileSync(manifestFile))) throw new Error('Previous snapshot must be the validated current pointer');
+  const files=new Map();
+  const seen=new Set();
+  const collect=(manifestPath,expectedHash,expectedId)=>{
+    if(seen.has(manifestPath)) throw new Error('Previous snapshot chain contains a cycle');
+    seen.add(manifestPath);
+    const target=path.join(root,manifestPath);
+    const bytes=fs.readFileSync(target);
+    if(sha256(bytes)!==expectedHash) throw new Error('Previous snapshot manifest hash mismatch');
+    const entry=JSON.parse(bytes.toString('utf8'));
+    if(entry.snapshotId!==expectedId) throw new Error('Previous snapshot identity mismatch');
+    files.set(manifestPath,bytes);
+    for(const [artifact,hash] of Object.entries(entry.fileHashes||{})) {
+      const artifactBytes=fs.readFileSync(path.join(root,artifact));
+      if(sha256(artifactBytes)!==hash) throw new Error('Previous snapshot artifact hash mismatch: '+artifact);
+      files.set(artifact,artifactBytes);
+    }
+    if(entry.previousSnapshot) collect(entry.previousSnapshot.manifestPath,entry.previousSnapshot.manifestSha256,entry.previousSnapshot.snapshotId);
+  };
+  const manifestPath=relative.split(path.sep).join('/');
+  const manifestSha256=sha256(fs.readFileSync(manifestFile));
+  collect(manifestPath,manifestSha256,manifest.snapshotId);
+  return {pointer:{snapshotId:manifest.snapshotId,manifestPath,manifestSha256},files};
+}
+
+function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source,previousSnapshot,retainedFiles}) {
   const locations=[];
   const coverageLocations=[];
   const details=new Map();
@@ -107,7 +145,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   const reviewQueueEntries=[...reviewQueue.values()].map((entry)=>({...entry,locationIds:[...new Set(entry.locationIds)].sort()}))
     .sort((a,b)=>[a.recipeId,a.reason].join('|').localeCompare([b.recipeId,b.reason].join('|')));
   const publicDetailHashes=Object.fromEntries([...details].sort(([a],[b])=>a.localeCompare(b)).map(([sourceRecipeId,detail])=>[sourceRecipeId,sha256(jsonBytes(detail))]));
-  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes};
+  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes,...(previousSnapshot?{previousSnapshot}:{})};
   const snapshotId=sha256(canonicalJson(seed));
   const snapshotRoot=`snapshots/${weekStart}/${snapshotId}`;
   const files=new Map();
@@ -132,16 +170,19 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   files.set(recipeIndexPath,jsonBytes({schemaVersion:1,snapshotId,recipes:recipeIndex}));
   const manifestLocations=locations.map((location)=>({id:location.id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,path:`${snapshotRoot}/locations/${location.id}.json`,recipeCount:location.recipes.length}));
   const fileHashes=Object.fromEntries([...files].sort(([a],[b])=>a.localeCompare(b)).map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
+  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes,...(previousSnapshot?{previousSnapshot}:{})};
   const manifestPath=`${snapshotRoot}/manifest.json`;
   const manifestBytes=jsonBytes(manifest);
   const current={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)};
-  return {snapshotId,manifest,current,manifestPath,manifestBytes,files,reviewQueueBytes:jsonBytes({schemaVersion:1,snapshotId,recipes:reviewQueueEntries})};
+  return {snapshotId,manifest,current,manifestPath,manifestBytes,files,retainedFiles:retainedFiles||new Map(),reviewQueueBytes:jsonBytes({schemaVersion:1,snapshotId,recipes:reviewQueueEntries})};
 }
 
 function compareBuilds(left,right) {
   if(left.manifestPath!==right.manifestPath||!left.manifestBytes.equals(right.manifestBytes)||jsonBytes(left.current).compare(jsonBytes(right.current))!==0) throw new Error('Deterministic twin build mismatch');
   if(!left.reviewQueueBytes.equals(right.reviewQueueBytes)) throw new Error('Deterministic private review queue mismatch');
+  const leftRetained=[...left.retainedFiles].sort(([a],[b])=>a.localeCompare(b));
+  const rightRetained=[...right.retainedFiles].sort(([a],[b])=>a.localeCompare(b));
+  if(leftRetained.length!==rightRetained.length||leftRetained.some(([name,bytes],index)=>name!==rightRetained[index][0]||!bytes.equals(rightRetained[index][1]))) throw new Error('Deterministic retained snapshot mismatch');
   const leftFiles=[...left.files].sort(([a],[b])=>a.localeCompare(b));
   const rightFiles=[...right.files].sort(([a],[b])=>a.localeCompare(b));
   if(leftFiles.length!==rightFiles.length) throw new Error('Deterministic twin build file count mismatch');
@@ -150,6 +191,9 @@ function compareBuilds(left,right) {
 
 function writeBuild(outputDir,build) {
   if(fs.existsSync(outputDir)&&fs.readdirSync(outputDir).length) throw new Error('Output directory must be empty: '+outputDir);
+  for(const [relative,bytes] of build.retainedFiles) {
+    const target=path.join(outputDir,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);
+  }
   for(const [relative,bytes] of build.files) {
     const target=path.join(outputDir,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);
   }
@@ -195,7 +239,11 @@ export async function compileMealWeek(options) {
   if(auditTarget&&(auditTarget===publicOutputDir||auditTarget.startsWith(publicOutputDir+path.sep))) throw new Error('Private audit output must be outside the public snapshot directory');
   if(auditTarget&&fs.existsSync(auditTarget)) throw new Error('Private audit output must not already exist: '+auditTarget);
   const source=sourceMetadata({candidateReport,csvPath:options.csvPath,db,tenant});
-  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source};
+  const releaseMode=options.releaseMode||'bootstrap';
+  if(!['bootstrap','rollover'].includes(releaseMode)) throw new Error('releaseMode must be bootstrap or rollover');
+  if(releaseMode==='bootstrap'&&options.previousManifestPath) throw new Error('Bootstrap must not include a previous manifest');
+  const previous=releaseMode==='rollover'?retainedSnapshot(options.previousManifestPath,weekStart):null;
+  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source,previousSnapshot:previous?.pointer||null,retainedFiles:previous?.files||new Map()};
   const first=buildFiles(input);
   const second=buildFiles(structuredClone(input));
   compareBuilds(first,second);
@@ -222,7 +270,7 @@ export async function compileMealWeek(options) {
 }
 
 function parseArgs(argv) {
-  const args={csvPath:null,outputDir:null,db:'01ontology',tenant:'recipe-full',policyVersion:'selection-v1',registryPath:null,weekStart:null,auditOutputPath:null};
+  const args={csvPath:null,outputDir:null,db:'01ontology',tenant:'recipe-full',policyVersion:'selection-v1',registryPath:null,weekStart:null,auditOutputPath:null,releaseMode:null,previousManifestPath:null};
   for(let index=0;index<argv.length;index++) {
     const value=argv[index];
     if(!args.csvPath&&!value.startsWith('--')) args.csvPath=value;
@@ -233,9 +281,13 @@ function parseArgs(argv) {
     else if(value==='--policy-version') args.policyVersion=argv[++index];
     else if(value==='--week-start') args.weekStart=argv[++index];
     else if(value==='--audit-output') args.auditOutputPath=argv[++index];
+    else if(value==='--bootstrap') args.releaseMode='bootstrap';
+    else if(value==='--rollover') args.releaseMode='rollover';
+    else if(value==='--previous-manifest') args.previousManifestPath=argv[++index];
     else throw new Error('Unknown argument: '+value);
   }
-  if(!args.csvPath||!args.outputDir||!args.registryPath) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json [--audit-output PRIVATE.json]');
+  if(!args.csvPath||!args.outputDir||!args.registryPath||!args.releaseMode) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json (--bootstrap | --rollover --previous-manifest MANIFEST.json) [--audit-output PRIVATE.json]');
+  if(args.releaseMode==='rollover'&&!args.previousManifestPath) throw new Error('--rollover requires --previous-manifest');
   return args;
 }
 

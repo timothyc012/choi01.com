@@ -8,6 +8,7 @@ import path from 'node:path';
 import {compileMealWeek} from '../scripts/compile-meal-week.mjs';
 import {sourceContentHash} from '../scripts/lib/select-store-recipes.mjs';
 import {validateMealSnapshotDirectory} from '../scripts/lib/validate-meal-snapshot.mjs';
+import {verifyMealSnapshot} from '../scripts/verify-meal-snapshot.mjs';
 
 const identity={ingredientId:'닭가슴살',species:'chicken',cut:'breast',processingState:'raw',form:'fillet',composition:'chicken'};
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
@@ -87,6 +88,27 @@ test('approved paraphrase changes produce a new immutable snapshot identity',asy
   Object.values(changed.recipes)[0].title='닭가슴살 팬 볶음';
   const second=await compileMealWeek({outputDir:path.join(root,'b'),candidateReport:data.candidateReport,registry:changed,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
   assert.notEqual(first.snapshotId,second.snapshotId);
+});
+
+test('compiler creates a verifier-ready rollover with the prior snapshot retained in-tree',async(t)=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-compiler-rollover-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const data=fixture();
+  const bootstrapDir=path.join(root,'bootstrap');
+  await compileMealWeek({outputDir:bootstrapDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const bootstrapCurrent=JSON.parse(fs.readFileSync(path.join(bootstrapDir,'current.json'),'utf8'));
+  const rolloverDir=path.join(root,'rollover');
+  const rollover=await compileMealWeek({outputDir:rolloverDir,releaseMode:'rollover',previousManifestPath:path.join(bootstrapDir,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-14',collectionTimestamp:'2026-09-13T09:00:00+02:00',policyVersion:'selection-v1'});
+  assert.equal(rollover.previousSnapshot.manifestPath,bootstrapCurrent.manifestPath);
+  assert.equal(fs.existsSync(path.join(rolloverDir,bootstrapCurrent.manifestPath)),true);
+  const report=verifyMealSnapshot({snapshotDir:rolloverDir,releaseMode:'rollover',previousManifestPath:bootstrapCurrent.manifestPath});
+  assert.equal(report.rollback.valid,true);
+
+  await assert.rejects(compileMealWeek({outputDir:path.join(root,'same-week'),releaseMode:'rollover',previousManifestPath:path.join(bootstrapDir,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T10:00:00+02:00',policyVersion:'selection-v1'}),/earlier week/i);
+  const corruptRoot=path.join(root,'corrupt');
+  fs.cpSync(bootstrapDir,corruptRoot,{recursive:true});
+  fs.appendFileSync(path.join(corruptRoot,bootstrapCurrent.manifestPath),'corrupt');
+  await assert.rejects(compileMealWeek({outputDir:path.join(root,'invalid'),releaseMode:'rollover',previousManifestPath:path.join(corruptRoot,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-14',collectionTimestamp:'2026-09-13T09:00:00+02:00',policyVersion:'selection-v1'}),/previous snapshot/i);
 });
 
 test('writes held recipe IDs only to an explicitly separate private audit file',async(t)=>{

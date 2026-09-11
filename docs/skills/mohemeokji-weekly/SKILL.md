@@ -34,16 +34,18 @@ This is the required bridge from store offer research to `recipe-full`. It group
 After reviewing or updating `data/mohemeokji/recipe-publication-registry.json`, compile the immutable public snapshot into a new empty directory:
 
 ```sh
-node scripts/compile-meal-week.mjs INPUT.csv --output-dir NEW_SNAPSHOT_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_REVIEW_QUEUE.json
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir NEW_SNAPSHOT_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_REVIEW_QUEUE.json --bootstrap
 ```
 
 The compiler selects separately for every postcode, chain, and branch. It publishes at most 48 recipes per location, keeps sparse and zero-candidate locations explicit, and writes `current.json`, the immutable manifest, location shards, recipe index, content-hashed recipe details, and coverage. The review queue is never part of the public manifest or public directory; request it only with `--audit-output` to a path outside the public snapshot root. The compiler rejects a private audit path nested under the public output. It runs an internal twin build and stops if the bytes differ. Run two complete database-backed compilations into separate new directories and verify their complete file trees:
 
 ```sh
-node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_A --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_A.json
-node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_B --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_B.json
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_A --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_A.json --bootstrap
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_B --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_B.json --bootstrap
 node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B --bootstrap
 ```
+
+After the bootstrap release, replace `--bootstrap` in both compiler commands with `--rollover --previous-manifest CURRENT_PUBLIC_DATA/snapshots/PREVIOUS_WEEK/PREVIOUS_ID/manifest.json`. The compiler validates that manifest through its current pointer, requires an earlier week, copies its hash-pinned tree into each new output, and writes the same `previousSnapshot` pointer into both new manifests. Do not assemble rollover metadata by hand.
 
 The verifier checks the pointer and every artifact hash, CSV and read-only discovery hashes, exact location and offer boundaries, coverage and recipe references, zero-candidate facts, four-mode readiness, lazy browser asset sets, symlinks, hidden review-queue payloads, and asset budgets. A mode with missing price or measured nutrient evidence must be reported unavailable; it cannot silently fall back to balanced. Do not move `current.json` into production if either compile, validation, twin comparison, or verifier fails.
 

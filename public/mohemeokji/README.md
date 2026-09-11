@@ -61,7 +61,7 @@ node scripts/sync-meal-pages.mjs --check
 git diff --check
 ```
 
-검증 보고서는 manifest 및 모든 artifact hash, CSV·DB discovery 계보 hash, 지점과 각 offer의 경계, coverage/recipe/detail 연결, symlink와 숨겨진 review queue, 0건 후보, 네 가지 모드 준비 상태, 자산 크기와 selected-store 요청 집합을 검사합니다. 첫 릴리스는 `--bootstrap`으로 app-asset/git rollback을 명시합니다. 이후에는 이전 두 snapshot을 같은 공개 data root에 보존하고 `--rollover --previous snapshots/.../manifest.json`으로 내부 pointer를 검증합니다. 외부 디렉터리나 현재 snapshot은 rollback 증거가 아닙니다. CUA로 1280×900, 390×844, 320×844 화면·콘솔·네트워크 증거를 남기지 못하면 배포 준비 완료로 간주하지 않습니다.
+검증 보고서는 manifest 및 모든 artifact hash, CSV·DB discovery 계보 hash, 지점과 각 offer의 경계, coverage/recipe/detail 연결, 알 수 없는 공개 필드, symlink와 숨겨진 review queue, 0건 후보, 네 가지 모드 준비 상태, 자산 크기와 selected-store 요청 집합을 검사합니다. 첫 릴리스 compiler/verifier는 `--bootstrap`으로 app-asset/git rollback을 명시합니다. 이후 compiler는 `--rollover --previous-manifest CURRENT_PUBLIC_DATA/snapshots/.../manifest.json`으로 검증된 이전 트리를 새 출력에 복사하고, verifier는 `--rollover --previous snapshots/.../manifest.json`으로 내부 pointer를 검사합니다. 외부 디렉터리나 현재 snapshot은 rollback 증거가 아닙니다. CUA로 1280×900, 390×844, 320×844 화면·콘솔·네트워크 증거를 남기지 못하면 배포 준비 완료로 간주하지 않습니다.
 
 For a new weekly CSV, run the non-publishing preflight first:
 `node scripts/prepare-meal-week.mjs INPUT.csv --week-start YYYY-MM-DD --output-dir NEW_DIRECTORY`.

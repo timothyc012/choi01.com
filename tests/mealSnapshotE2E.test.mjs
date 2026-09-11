@@ -111,6 +111,16 @@ test('rejects a review queue payload hidden under an arbitrary public key after 
   assert.throws(()=>verifyMealSnapshot({snapshotDir:injected.root}),/forbidden public.*review queue/i);
 });
 
+test('rejects unknown candidate-like fields even when they avoid review-queue tuple names',()=>{
+  const injected=writeFixture({mutate({manifest,files}){
+    const first=JSON.parse(files.get(manifest.locations[0].path));
+    first.releaseNotes=[{candidateId:'held-1',rawText:'private source text'}];
+    files.set(manifest.locations[0].path,json(first));
+    manifest.fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
+  }});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:injected.root}),/unknown public field.*releaseNotes/i);
+});
+
 test('requires immutable CSV and DB discovery lineage digests',()=>{
   const missing=writeFixture({mutate({manifest}){delete manifest.source.csvSha256;}});
   assert.throws(()=>verifyMealSnapshot({snapshotDir:missing.root}),/csv.*lineage/i);
