@@ -81,5 +81,50 @@
     "evidenceSha256": "b7800bc5270a478686be5ff5bbedaaafa9a030d7282ddb811affc1abd0014ea1",
     "dryRunSql": "/private/tmp/full-review-reconciliation.sql",
     "executeSql": "/private/tmp/full-review-reconciliation-execute.sql"
+  },
+  "mutation": {
+    "appliedAt": "2026-09-11T19:57:45.488Z",
+    "status": "committed",
+    "transaction": "full-review-reconciliation-execute.sql",
+    "verifiedValueMismatchesAfter": 0,
+    "verifiedStatusMismatchesAfter": 0,
+    "clearLeftoverValuesAfter": 0,
+    "holdValueChangesAfter": 0,
+    "postCounts": {
+      "recipeIndividuals": 72569,
+      "verifiedEvidence": 21659,
+      "unverifiedEvidence": 50910,
+      "reviewCountPresent": 23829,
+      "ratingValuePresent": 23829
+    },
+    "representativeChecks": [
+      {
+        "sourceRecipeId": "1000637",
+        "reviewCount": 1,
+        "ratingValue": 5,
+        "evidenceStatus": "verified"
+      },
+      {
+        "sourceRecipeId": "100064",
+        "reviewCount": null,
+        "ratingValue": null,
+        "evidenceStatus": "unverified",
+        "reason": "recipe-review-count-not-published"
+      },
+      {
+        "sourceRecipeId": "1484873",
+        "reviewCount": 112,
+        "ratingValue": 4.8,
+        "evidenceStatus": "unverified",
+        "reason": "review-count-conflict"
+      },
+      {
+        "sourceRecipeId": "6875875",
+        "reviewCount": null,
+        "ratingValue": null,
+        "evidenceStatus": "unverified",
+        "reason": "recipe-review-count-not-published"
+      }
+    ]
   }
 }
