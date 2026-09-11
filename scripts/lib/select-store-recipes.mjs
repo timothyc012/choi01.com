@@ -11,8 +11,15 @@ const sha256=(value)=>crypto.createHash('sha256').update(value).digest('hex');
 const text=(value)=>typeof value==='string'&&value.trim() ? value.trim() : null;
 const normalizeTitle=(value)=>String(value||'').normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g,'').replace(/[^\p{L}\p{N}]/gu,'');
 const ACTION_INGREDIENT_GROUPS=[
-  ['우유'],['김칫국물'],['식용유','올리브유','포도씨유'],['버터'],['소금'],['후추'],['설탕'],['간장'],['식초'],['참기름'],['마늘'],['생강'],['달걀','계란'],['밀가루'],['빵가루'],
+  ['우유'],['김칫국물'],['버터'],['소금'],['후추'],['설탕'],['간장'],['식초'],['참기름'],['마늘'],['생강'],['달걀','계란'],['밀가루'],['빵가루'],
 ];
+const COOKING_OILS=['기름','식용유','올리브유','올리브오일','포도씨유','카놀라유'];
+const cookingOilName=(label)=>{
+  const value=String(label||'');
+  const specific=COOKING_OILS.slice(1).find((term)=>value.includes(term));
+  if(specific)return specific;
+  return /(?:^|\s)기름(?:\s|\(|$)/u.test(value)?'기름':null;
+};
 
 function median(values) {
   const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b);
@@ -39,17 +46,22 @@ export function sourceContentHash(candidate) {
 
 export function unquantifiedActionIngredients(candidate) {
   const instructions=(candidate.steps||[]).map((step)=>String(step.instruction||'')).join(' ');
-  const quantified=(candidate.ingredients||[]).filter((ingredient)=>text(ingredient.quantity)).map((ingredient)=>String(ingredient.ingredient||ingredient.label||''));
-  const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some((term)=>instructions.includes(term))&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
+  const sourceIngredients=(candidate.ingredients||[]).map((ingredient)=>({label:String(ingredient.ingredient||ingredient.label||''),quantity:text(ingredient.quantity)}));
+  const quantified=sourceIngredients.filter((ingredient)=>ingredient.quantity).map((ingredient)=>ingredient.label);
+  const actionMentions=(term)=>instructions.split(/[.!?\n]/u).some((clause)=>clause.includes(term)&&!new RegExp(term+'\\s*(?:없(?:이|어)|대신|대체)', 'u').test(clause));
+  const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
+  const listedOil=sourceIngredients.find((ingredient)=>cookingOilName(ingredient.label));
+  if(listedOil&&!listedOil.quantity) {
+    const listedName=cookingOilName(listedOil.label);
+    if(listedName) missing.push(listedName);
+  }
   const addsGenericOil=/(?:팬에\s*)?기름(?:을)?\s*(?:두르|넣|붓|달구)|기름에\s*(?:튀|볶)/u.test(instructions);
-  const hasQuantifiedOil=['기름','식용유','올리브유','포도씨유'].some((term)=>quantified.some((label)=>label.includes(term)));
-  if(addsGenericOil&&!hasQuantifiedOil) missing.push('기름');
+  if(addsGenericOil&&!listedOil) missing.push('기름');
   return [...new Set(missing)];
 }
 
 export function representsUnknownActionIngredient(detailIngredients,ingredient) {
-  const terms=ingredient==='기름'?['기름','식용유','올리브유','포도씨유']:[ingredient];
-  return (detailIngredients||[]).some((label)=>terms.some((term)=>String(label).includes(term))&&/원문[^)]*수량\s*미표기/u.test(String(label)));
+  return (detailIngredients||[]).some((label)=>(ingredient==='기름'?Boolean(cookingOilName(label)):String(label).includes(ingredient))&&/원문[^)]*수량\s*미표기/u.test(String(label)));
 }
 
 function sourceOfferMismatch(candidate,primaryMatches,offersById) {

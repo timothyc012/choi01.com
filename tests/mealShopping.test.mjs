@@ -390,9 +390,10 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.match(html, /lang="de"/);
     assert.match(html, /할인 재료.*메뉴에 연결됨/);
     assert.match(html, /수집된 지점·지역 자료 기준/);
-    for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-data-loader', 'meal-shopping']) {
+    for (const asset of ['meal-planner-recipe-data', 'meal-data-loader', 'meal-shopping']) {
       assert.ok(html.includes(asset + '.js?v='));
     }
+    assert.doesNotMatch(html,/ontology-recipe-details\.js|meal-package-prices\.js/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);

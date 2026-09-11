@@ -8,7 +8,7 @@ import {
   selectPublicationExpansion,
   validateEditorialTransform,
 } from '../scripts/select-meal-publication-expansion.mjs';
-import {sourceContentHash} from '../scripts/lib/select-store-recipes.mjs';
+import {sourceContentHash,unquantifiedActionIngredients} from '../scripts/lib/select-store-recipes.mjs';
 
 const identity={ingredientId:'닭가슴살',species:'chicken',cut:'breast',processingState:'raw',form:'fillet',composition:'chicken'};
 
@@ -194,6 +194,31 @@ test('editorial validation requires an explicit unknown-quantity record for a so
   const renderedFat=candidate('rendered-fat');
   renderedFat.steps[1].instruction+=' 구운 고기의 기름을 뺀다.';
   assert.equal(validateEditorialTransform(renderedFat,buildOwnerAuthorizedTransform(renderedFat,{sourceDate:'2026-09-07'})).includes('unrepresented-action-ingredient'),false);
+});
+
+test('alternative cooking oils resolve to one source-listed choice without negative butter leakage',()=>{
+  const canola=candidate('alternative-oil');
+  canola.ingredients.push({ordinal:4,label:'카놀라유 35g (식용유 대체 가능)',ingredient:'카놀라유',quantity:'35g (식용유 대체 가능)'});
+  canola.steps[1].instruction+=' 카놀라유를 넣고 식용유나 포도씨유로 대체할 수 있으며 버터 없이도 됩니다.';
+  assert.deepEqual(unquantifiedActionIngredients(canola),[]);
+
+  const olive=candidate('source-listed-oil');
+  olive.ingredients.push({ordinal:4,label:'올리브유 적당히',ingredient:'올리브유',quantity:null});
+  olive.steps[1].instruction+=' 올리브유를 두른 팬에 재료를 올립니다.';
+  assert.deepEqual(unquantifiedActionIngredients(olive),['올리브유']);
+  const entry=buildOwnerAuthorizedTransform(olive,{sourceDate:'2026-09-07'});
+  entry.detailIngredients.push('올리브유 (원문 수량 미표기)');
+  assert.equal(validateEditorialTransform(olive,entry).includes('unrepresented-action-ingredient'),false);
+
+  const oliveOil=candidate('olive-oil-alias');
+  oliveOil.ingredients.push({ordinal:4,label:'올리브오일 적당히',ingredient:'올리브오일',quantity:null});
+  oliveOil.steps[1].instruction+=' 올리브오일을 두른 팬에 재료를 올립니다.';
+  assert.deepEqual(unquantifiedActionIngredients(oliveOil),['올리브오일']);
+
+  const sesame=candidate('sesame-is-not-cooking-oil');
+  sesame.ingredients.push({ordinal:4,label:'참기름 1큰술',ingredient:'참기름',quantity:'1큰술'});
+  sesame.steps[1].instruction+=' 팬에 기름을 두르고 마지막에 참기름을 넣습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(sesame),['기름']);
 });
 
 test('editorial validation requires a Korean public title',()=>{

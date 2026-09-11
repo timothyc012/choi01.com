@@ -17,8 +17,8 @@
     steps: detail.steps.slice()
   }));
 
-  function legacyEnabled(search = window.location?.search || '') {
-    return new URLSearchParams(search).get('snapshot') === 'legacy';
+  function legacyEnabled() {
+    return false;
   }
 
   function fromSnapshotLocation(location) {
@@ -156,10 +156,12 @@
     const shopping=window.MealShopping;
     const recommendations=window.MealRecommendations;
     const params=new URLSearchParams(window.location.search);
+    const legacyRequested=params.get('snapshot')==='legacy';
     const storage=createStorageAccess();
     const days=[['mon','월'],['tue','화'],['wed','수'],['thu','목'],['fri','금'],['sat','토'],['sun','일']];
     byId('sourceStatus').textContent='검증된 이번 주 자료를 불러오는 중입니다';
     try {
+      if(legacyRequested) throw new Error('legacy-snapshot-disabled');
       const manifest=await loader.loadCurrentSnapshot();
       const {locations,postcodes,activeArea,stores,activeStore,branches,activeBranch}=selectSnapshotLocation(manifest.locations,params,window.location.pathname);
       if(!activeBranch) throw new Error('선택한 지점 자료가 없습니다.');
@@ -482,11 +484,17 @@
 
       function renderDetailShopping() {
         const cart=selectedMeal?basketFor([selectedMeal]):basketFor([]);
-        byId('detailIngredients').innerHTML=cart.items.length?cart.items.map((item)=>'<li class="shopping-item'+(item.owned?' owned':'')+'"><div class="shopping-item-head"><strong>'+escapeHtml(item.name)+'</strong><label><input type="checkbox" data-shopping-key="'+escapeHtml(item.key)+'" data-shopping-field="owned"'+(item.owned?' checked':'')+'> 집에 있음</label></div><small>'+escapeHtml((item.product?item.product+' · ':'')+item.pack)+'</small><div class="shopping-controls"><strong>'+(item.owned?'구매 제외':item.subtotalCents===null?'가격 미확인':shopping.euro(item.subtotalCents))+'</strong></div></li>').join(''):'<li class="footer-note">구매할 재료가 없습니다.</li>';
+        const itemAmount=(item)=>{
+          if(item.owned)return '구매 제외';
+          if(item.subtotalCents===null)return item.quantityNeedsCheck?'가격 미확인 · 수량 확인':'가격 미확인';
+          if(item.quantityNeedsCheck)return '확인된 1팩 가격 '+shopping.euro(item.subtotalCents)+' · 수량 확인';
+          return shopping.euro(item.subtotalCents);
+        };
+        byId('detailIngredients').innerHTML=cart.items.length?cart.items.map((item)=>'<li class="shopping-item'+(item.owned?' owned':'')+'"><div class="shopping-item-head"><strong>'+escapeHtml(item.name)+'</strong><label><input type="checkbox" data-shopping-key="'+escapeHtml(item.key)+'" data-shopping-field="owned"'+(item.owned?' checked':'')+'> 집에 있음</label></div><small>'+escapeHtml((item.product?item.product+' · ':'')+item.pack)+'</small><div class="shopping-controls"><strong>'+itemAmount(item)+'</strong></div></li>').join(''):'<li class="footer-note">구매할 재료가 없습니다.</li>';
         const evidence=(selectedMeal?.matchedOffers||[]).map((offer)=>offer.evidenceUrl?'<a href="'+escapeHtml(offer.evidenceUrl)+'" target="_blank" rel="noreferrer">'+escapeHtml(offer.productDe)+' 할인 근거</a>':escapeHtml(offer.productDe)).join(' · ');
         byId('shoppingSource').innerHTML=evidence||'선택한 스냅샷의 검증된 할인상품 기준입니다.';
         byId('shoppingTitle').textContent='구매할 재료 · '+cart.purchaseCount+'종';
-        byId('shoppingTotalLabel').textContent=cart.unknownCount?'가격 확인된 재료 소계':'구매할 재료 총액';
+        byId('shoppingTotalLabel').textContent=cart.quantityCheckCount?'확인된 1팩 가격 소계 · 구매 수량 확인 필요':cart.unknownCount?'가격 확인된 재료 소계':'구매할 재료 총액';
         byId('shoppingTotal').textContent=shopping.amount(cart);
         byId('shoppingNote').textContent=shopping.summary(cart);
       }
@@ -654,19 +662,20 @@
       document.dispatchEvent(new CustomEvent('meal-snapshot-ready',{detail:runtime}));
       return runtime;
     } catch(error) {
-      byId('sourceStatus').textContent='이번 주 검증 자료를 불러올 수 없습니다';
+      byId('sourceStatus').textContent=legacyRequested?'지난 자료는 검증되지 않아 제공하지 않습니다':'이번 주 검증 자료를 불러올 수 없습니다';
       byId('sourceStatus').dataset.snapshotState='unavailable';
       byId('sourceCheck').textContent='· 다른 매장 자료로 대체하지 않았습니다';
       byId('todayTitle').textContent='메뉴 자료를 불러오지 못했습니다';
-      byId('todayReason').textContent='잠시 뒤 다시 시도하거나 지난 자료 보기를 명시적으로 선택해주세요.';
+      byId('todayReason').textContent=legacyRequested?'검증된 이번 주 자료로 돌아가 주세요.':'잠시 뒤 다시 시도해 주세요.';
       byId('menuList').innerHTML='<p class="panel-copy" role="alert">선택한 지점의 메뉴를 표시할 수 없습니다.</p>';
       byId('weekGrid').innerHTML='<p class="panel-copy" role="alert" style="padding:16px">식단은 불러오지 못한 자료로 자동 채우지 않습니다.</p>';
       byId('pantryList').innerHTML='<li class="panel-copy" style="padding:14px">할인 재료를 확인할 수 없습니다.</li>';
       for(const selector of ['#autoPlan','#clearPlan','#savePlan','#acceptToday','#nextRecommendation','#todayShopping','#prepareShopping','#targetServings','input[name="recommendationMode"]','#manualPick','#shoppingList','#markEaten','#eatFromDetail','#addFromDetail','#addShoppingItems','#menuSearch','.filter','[data-moment]','#postcodeSelect','#storeSelect','#branchSelect'])document.querySelectorAll(selector).forEach((control)=>{control.disabled=true;});
       byId('snapshotRecovery').hidden=false;
-      const legacyParams=new URLSearchParams(window.location.search);
-      legacyParams.set('snapshot','legacy');
-      byId('legacySnapshotLink').href='?'+legacyParams.toString();
+      const safeParams=new URLSearchParams(window.location.search);
+      safeParams.delete('snapshot');
+      byId('legacySnapshotLink').textContent='이번 주 자료로 돌아가기';
+      byId('legacySnapshotLink').href='?'+safeParams.toString();
       byId('retrySnapshot').addEventListener('click',()=>window.location.reload());
       const runtime={status:'unavailable',error};
       window.mealSnapshotRuntime=runtime;

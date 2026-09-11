@@ -708,7 +708,7 @@
         <div class="snapshot-recovery" id="snapshotRecovery" role="alert" hidden>
           <span>이번 주 자료를 열 수 없습니다.</span>
           <button class="button button-small" type="button" id="retrySnapshot" data-retry-snapshot>다시 시도</button>
-          <a class="button button-small" id="legacySnapshotLink" href="?snapshot=legacy">지난 자료 보기</a>
+          <a class="button button-small" id="legacySnapshotLink" href="?">이번 주 자료로 돌아가기</a>
         </div>
       </section>
 
@@ -933,16 +933,11 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script>
-      if (new URLSearchParams(location.search).get('snapshot') === 'legacy') {
-        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=2c043276745c"><\/script><script src="/mohemeokji/meal-package-prices.js?v=2c043276745c"><\/script>');
-      }
-    </script>
-    <script src="./meal-planner-recipe-data.js?v=2c043276745c"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=2c043276745c"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=2c043276745c"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=2c043276745c"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=2c043276745c"></script>
+    <script src="./meal-planner-recipe-data.js?v=558db25b64af"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=558db25b64af"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=558db25b64af"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=558db25b64af"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=558db25b64af"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {

@@ -158,10 +158,10 @@ test('returns an explicit sparse location without requesting legacy or another s
   assert.equal(data.calls.some((url)=>url.includes('legacy')||url.includes('44369')),false);
 });
 
-test('legacy recipes are enabled only by the explicit snapshot query and snapshot refs stay detail-lazy', () => {
+test('legacy recipe runtime stays disabled while snapshot refs remain detail-lazy', () => {
   const {api}=loadRecipeData();
   assert.equal(api.legacyEnabled('?postcode=52064'),false);
-  assert.equal(api.legacyEnabled('?snapshot=legacy'),true);
+  assert.equal(api.legacyEnabled('?snapshot=legacy'),false);
   assert.equal(api.legacyEnabled('?snapshot=current'),false);
   const summaries=api.fromSnapshotLocation({store:'EDEKA',recipes:[{
     sourceRecipeId:'7000001',detailPath:'snapshots/week/id/recipes/7000001.hash.json',detailSha256:'a'.repeat(64),
@@ -223,7 +223,7 @@ test('manifest-only selection maps every direct route and chooses the first bran
   assert.equal(api.acceptLegacyScopedPayload(exact,{area:'44369',store:'Netto',branchId:'branch-a',branchCount:2}),null);
 });
 
-test('unavailable snapshot disables inert controls and exposes retry and legacy recovery',async()=>{
+test('unavailable snapshot disables inert controls and exposes safe retry recovery',async()=>{
   const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=52064&store=EDEKA&branch=branch-a',runScripts:'outside-only'});
   dom.window.MealDataLoader={loadCurrentSnapshot:async()=>{throw new Error('broken pointer');}};
   dom.window.MealShopping={};
@@ -238,10 +238,24 @@ test('unavailable snapshot disables inert controls and exposes retry and legacy 
   assert.equal(recovery.hidden,false);
   assert.ok(recovery.querySelector('[data-retry-snapshot]'));
   const legacyParams=new URL(recovery.querySelector('a').href).searchParams;
-  assert.equal(legacyParams.get('snapshot'),'legacy');
+  assert.equal(legacyParams.get('snapshot'),null);
   assert.equal(legacyParams.get('postcode'),'52064');
   assert.equal(legacyParams.get('store'),'EDEKA');
   assert.equal(legacyParams.get('branch'),'branch-a');
+  dom.window.close();
+});
+
+test('legacy query is explicitly unavailable and does not load an unvalidated archive',async()=>{
+  const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?snapshot=legacy',runScripts:'outside-only'});
+  let loads=0;
+  dom.window.MealDataLoader={loadCurrentSnapshot:async()=>{loads++;throw new Error('must not load');}};
+  dom.window.MealShopping={};dom.window.MealRecommendations={};
+  dom.window.eval(fs.readFileSync(new URL('meal-planner-recipe-data.js',root),'utf8'));
+  const runtime=await dom.window.MealRecipeData.startSnapshotApp();
+  assert.equal(runtime.status,'unavailable');
+  assert.equal(loads,0);
+  assert.match(dom.window.document.getElementById('sourceStatus').textContent,/지난 자료.*제공하지 않습니다/);
+  assert.equal(new URL(dom.window.document.getElementById('legacySnapshotLink').href).searchParams.get('snapshot'),null);
   dom.window.close();
 });
 
@@ -464,6 +478,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
+  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*5,99€.*수량 확인/s);
   assert.match(dom.window.document.getElementById('shoppingSource').textContent,/example.com|할인 근거/);
   assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'확인된 금액 5,99€ · 수량 확인');
   assert.equal(calls.filter((url)=>url===('/mohemeokji/data/'+detailPath)).length,1);
