@@ -311,6 +311,10 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   const oneFatChoice=candidate('one-fat-choice');
   oneFatChoice.steps[1].instruction='팬에 올리브유 또는 버터를 넣어 재료를 굽습니다.';
   assert.deepEqual(unquantifiedActionIngredients(oneFatChoice),['기름']);
+  const quantifiedFatChoice=candidate('quantified-fat-choice');
+  quantifiedFatChoice.ingredients.push({ordinal:4,label:'버터 20g',ingredient:'버터',quantity:'20g'});
+  quantifiedFatChoice.steps[1].instruction='팬에 버터 또는 식용유를 사용해 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(quantifiedFatChoice),[]);
   for(const phrase of ['식용유 또는 버터를 사용해 볶습니다','버터 또는 식용유를 사용해 볶습니다','식용유나 버터를 사용해 볶습니다']) {
     const choice=candidate('symmetric-'+phrase);
     choice.steps[1].instruction=phrase;

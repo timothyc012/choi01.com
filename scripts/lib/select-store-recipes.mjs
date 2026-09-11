@@ -21,7 +21,7 @@ const cookingOilName=(label)=>{
   return /(?:^|\s)기름(?:\s|\(|$)/u.test(value)?'기름':null;
 };
 const RAW_ANIMAL_SPECIES=new Set(['chicken','pork','beef','turkey','trout','duck','lamb','mixed','fish','seafood']);
-const PROCESSED_ANIMAL_FORM=/(?:캔|통조림|훈제|조리된|익힌|구운|삶은|찐|데친|수비드|샐러드용|로스트|햄|베이컨|소시지|육포)/u;
+const PROCESSED_ANIMAL_FORM=/(?:캔|통조림|훈제|훈연|스모크|조리된|익힌|구운|삶은|찐|데친|수비드|샐러드용|로스트|햄|베이컨|소시지|육포)/u;
 const ANIMAL_DERIVATIVE_SEASONING=/(?:육수|액젓|젓|액|소스|가루|분말|엑기스|추출물)/u;
 
 function median(values) {
@@ -81,7 +81,7 @@ export function unquantifiedActionIngredients(candidate) {
   const namedOilActions=new Set(COOKING_OILS.slice(1).filter((term)=>clauses.some((clause)=>requiredMention(clause,term)&&new RegExp(term+'.{0,24}(?:두르|넣|붓|기름칠|볶|바르|사용)','u').test(clause))));
   for(const listed of listedOils) if(!listed.quantity&&(listedOils.length===1||namedOilActions.has(listed.name))) missing.push(listed.name);
   const quantifiedButter=quantified.some((label)=>label.includes('버터'));
-  const oilAlternativeAlreadyRepresented=quantifiedButter&&/기름칠.{0,30}(?:올리브유|올리브오일).{0,12}(?:혹은|또는|or).{0,12}버터/iu.test(instructions);
+  const oilAlternativeAlreadyRepresented=quantifiedButter&&(fatChoice||/기름칠.{0,30}(?:올리브유|올리브오일).{0,12}(?:혹은|또는|or).{0,12}버터/iu.test(instructions));
   const flavorOils=new Set(['참기름','들기름','땅콩기름','레몬오일']);
   const baseOilNames=COOKING_OILS.slice(1).filter((name)=>!flavorOils.has(name));
   const flavorAlternativeToBase=[...namedOilActions].some((name)=>flavorOils.has(name)&&!listedOilNames.has(name))&&baseOilNames.some((name)=>instructions.includes(name));
