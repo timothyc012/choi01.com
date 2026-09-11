@@ -13,7 +13,7 @@ const normalizeTitle=(value)=>String(value||'').normalize('NFKC').toLocaleLowerC
 const ACTION_INGREDIENT_GROUPS=[
   ['우유'],['김칫국물'],['버터'],['소금'],['후추'],['설탕'],['간장'],['식초'],['참기름'],['마늘'],['생강'],['달걀','계란'],['밀가루'],['빵가루'],
 ];
-const COOKING_OILS=['기름','식용유','식용오일','올리브유','올리브오일','포도씨유','카놀라유','참기름','들기름','땅콩기름','레몬오일'];
+const COOKING_OILS=['기름','식용유','식용오일','올리브유','올리브오일','포도씨유','카놀라유','해바라기유','코코넛오일','참기름','들기름','땅콩기름','레몬오일'];
 const cookingOilName=(label)=>{
   const value=String(label||'');
   const specific=COOKING_OILS.slice(1).find((term)=>value.includes(term));
@@ -59,7 +59,7 @@ export function unquantifiedActionIngredients(candidate) {
       if(index<0)return false;
       const before=clause.slice(Math.max(0,index-40),index);
       const after=clause.slice(index+term.length,index+term.length+24);
-      const negated=/^(?:을|를)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,16}(?:대체|대신|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
+      const negated=/^(?:을|를)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,16}(?:대체|대신|써도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
       const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|취향에 따라/u.test(before);
       if(!negated&&!conditional)return true;
       offset=index+term.length;
@@ -71,8 +71,9 @@ export function unquantifiedActionIngredients(candidate) {
   const listedOils=sourceIngredients.map((ingredient)=>({...ingredient,name:cookingOilName(ingredient.label)})).filter((ingredient)=>ingredient.name);
   const listedOilNames=new Set(listedOils.map((ingredient)=>ingredient.name));
   const addsGenericOil=clauses.some((clause)=>{
-    const genericClause=clause.replace(/(?:참|들|땅콩)기름/gu,'');
-    return /기름.{0,18}(?:두르|넣|붓|달구|달궈|튀김|튀겨|튀긴|볶)|(?:튀김|튀겨|튀긴|볶).{0,18}기름/u.test(genericClause)&&requiredMention(genericClause,'기름');
+    const genericClause=COOKING_OILS.slice(1).sort((a,b)=>b.length-a.length).reduce((value,term)=>value.split(term).join(''),clause);
+    const oilAction=(term)=>new RegExp(term+'.{0,18}(?:두르|넣|붓|달구|달궈|튀김|튀겨|튀긴|볶)|(?:튀김|튀겨|튀긴|볶).{0,18}'+term,'u').test(genericClause)&&requiredMention(genericClause,term);
+    return oilAction('기름')||oilAction('오일');
   });
   const namedOilActions=new Set(COOKING_OILS.slice(1).filter((term)=>clauses.some((clause)=>requiredMention(clause,term)&&new RegExp(term+'.{0,24}(?:두르|넣|붓|기름칠|볶|바르|사용)','u').test(clause))));
   for(const listed of listedOils) if(!listed.quantity&&(listedOils.length===1||namedOilActions.has(listed.name))) missing.push(listed.name);

@@ -4,7 +4,7 @@
   const normalize = (name) => {
     const value=String(name||'').trim();
     if(value==="밥")return "쌀";
-    if(["기름","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유"].includes(value)||/포도씨유$/u.test(value))return "식용유";
+    if(["기름","오일","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유","해바라기유","코코넛오일"].includes(value)||/(?:식용유|포도씨유|해바라기유|코코넛오일)$/u.test(value))return "식용유";
     if(value==="녹인버터")return "버터";
     return value;
   };
@@ -368,7 +368,7 @@
         if (saved?.snapshot !== snapshot) {
           state.prices = {};
           state.quantities = {};
-          state.list = state.list.map((item) => ({ ...item, priceCents: null, pack: '지난 자료 · 판매 단위 재확인' }));
+          state.list = state.list.map((item) => ({ ...item, quantity:1, quantityNeedsCheck:true, priceCents: null, pack: '지난 자료 · 판매 단위 재확인' }));
         }
       } catch { /* Already restored as empty above. */ }
     }

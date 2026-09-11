@@ -67,6 +67,8 @@ test('weekly rollover preserves pantry/checks but invalidates old prices and uni
   state.quantities.week={'Netto:닭고기':8};
   state.list=shopping.addToList([],shopping.basket([rice],{catalog:fixtureCatalog}));
   state.list[0].completed=true;
+  state.list[0].quantity=8;
+  state.list[0].quantityNeedsCheck=false;
   const saved=shopping.serializeState(state,'week-a');
   const same=shopping.restoreState(saved,'week-a');
   assert.equal(same.prices['Netto:닭고기'],100);
@@ -74,6 +76,8 @@ test('weekly rollover preserves pantry/checks but invalidates old prices and uni
   assert.equal(next.pantry.has('Netto:소금'),true);
   assert.equal(next.list[0].completed,true);
   assert.equal(next.list[0].priceCents,null);
+  assert.equal(next.list[0].quantity,1);
+  assert.equal(next.list[0].quantityNeedsCheck,true);
   assert.equal(Object.keys(next.prices).length,0);
   assert.equal(Object.keys(next.quantities).length,0);
 });
@@ -122,6 +126,10 @@ test('keeps a specific oil offer price while collapsing the grocery key',()=>{
   assert.equal(cart.items[0].key,'Netto:식용유');
   assert.equal(cart.items[0].product,'Olivenöl');
   assert.equal(cart.items[0].priceCents,499);
+  const secondChoice={...meal,missing:['올리브유','해바라기유'],offerCatalog:{올리브유:{product:'Chosen Olivenöl',pack:'500 ml',priceCents:499,source:'https://example.test/chosen'},해바라기유:{product:'Other Öl',pack:'1 l',priceCents:299,source:'https://example.test/other'}}};
+  const stable=shopping.basket([secondChoice],{catalog:{Netto:{}}});
+  assert.equal(stable.items[0].product,'Chosen Olivenöl');
+  assert.equal(stable.items[0].source,'https://example.test/chosen');
 });
 
 test('migrates persisted alias keys for prices quantities and shopping rows',()=>{

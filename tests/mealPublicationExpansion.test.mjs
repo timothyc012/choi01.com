@@ -281,6 +281,25 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   brandedOil.ingredients.push({ordinal:4,label:'백설포도씨유 적당량',ingredient:'백설포도씨유',quantity:'적당량'});
   brandedOil.steps[1].instruction='달군 팬에 오일을 두르고 볶음밥을 볶습니다.';
   assert.deepEqual(unquantifiedActionIngredients(brandedOil),[]);
+
+  const genericOilWord=candidate('generic-oil-word');
+  genericOilWord.steps[1].instruction='팬에 오일을 두르고 재료를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(genericOilWord),['기름']);
+
+  for(const oil of ['해바라기유','코코넛오일']) {
+    const source=candidate('oil-'+oil);
+    source.steps[1].instruction='팬에 '+oil+'를 두르고 재료를 볶습니다.';
+    assert.deepEqual(unquantifiedActionIngredients(source),['기름']);
+  }
+
+  const optionalOil=candidate('optional-oil-grammar');
+  optionalOil.steps[1].instruction='기름을 넣지 않아도 됩니다. 버터 대신 코코넛오일을 써도 됩니다.';
+  assert.deepEqual(unquantifiedActionIngredients(optionalOil),[]);
+
+  const sesameOnly=candidate('sesame-only');
+  sesameOnly.ingredients.push({ordinal:4,label:'참기름 1큰술',ingredient:'참기름',quantity:'1큰술'});
+  sesameOnly.steps[1].instruction='마지막에 참기름을 넣어 향을 냅니다.';
+  assert.deepEqual(unquantifiedActionIngredients(sesameOnly),[]);
 });
 
 test('editorial validation requires a Korean public title',()=>{
