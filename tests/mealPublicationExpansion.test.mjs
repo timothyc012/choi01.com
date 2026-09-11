@@ -237,6 +237,27 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   representedAlternative.ingredients.push({ordinal:4,label:'녹인버터 2큰술',ingredient:'녹인버터',quantity:'2큰술'});
   representedAlternative.steps[1].instruction='밥솥 안쪽을 기름칠합니다(올리브유 혹은 버터).';
   assert.deepEqual(unquantifiedActionIngredients(representedAlternative),[]);
+
+  const fryingOil=candidate('frying-oil');
+  fryingOil.steps[1].instruction='튀김 기름 온도를 올리고 반죽을 기름에 넣어 바삭하게 튀깁니다.';
+  assert.deepEqual(unquantifiedActionIngredients(fryingOil),['기름']);
+
+  const cookingOilAlias=candidate('cooking-oil-alias');
+  cookingOilAlias.steps[1].instruction='예열한 식용오일에 생선을 넣고 튀깁니다.';
+  assert.deepEqual(unquantifiedActionIngredients(cookingOilAlias),['기름']);
+
+  const adverbialOil=candidate('adverbial-oil');
+  adverbialOil.steps[1].instruction='후라이팬에 기름살짝 두르고 관자를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(adverbialOil),['기름']);
+
+  const measuredFlavorOil=candidate('measured-flavor-oil');
+  measuredFlavorOil.ingredients.push({ordinal:4,label:'들기름 1/2T',ingredient:'들기름',quantity:'1/2T'});
+  measuredFlavorOil.steps[1].instruction='들기름에 양파를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(measuredFlavorOil),[]);
+
+  const renderedOil=candidate('rendered-pan-fat');
+  renderedOil.steps[1].instruction='고기를 구운 뒤 기름이 남은 팬에 와인을 넣어 졸입니다.';
+  assert.deepEqual(unquantifiedActionIngredients(renderedOil),[]);
 });
 
 test('editorial validation requires a Korean public title',()=>{

@@ -158,6 +158,17 @@ test('selection rejects a recipe when the scoped offer matches only an incidenta
   assert.deepEqual(selected.coverage.heldForReview,[{recipeId:'incidental-lemon',reason:'no-primary-store-offer'}]);
 });
 
+test('selection revalidates exact match identity and source label against the scoped offer',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  const recipe=candidate('forged-apple',{identity:appleIdentity,offerId:'offer-apple'});
+  recipe.ingredients=[{ordinal:1,ingredient:'두부',label:'두부 300g',quantity:'300g'},{ordinal:2,ingredient:'소금',label:'소금 1t',quantity:'1t'}];
+  recipe.matches=[{offerId:'offer-apple',relation:'exact-ingredient',ingredientId:'사과',ingredientLabel:'두부'}];
+  recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'other',kind:'main'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'invalid-exact-match-evidence');
+});
+
 test('selection holds raw salmon dishes without verified raw-consumption offer state',()=>{
   const salmonIdentity={ingredientId:'연어',species:'salmon',cut:'fillet',processingState:'raw',form:'fillet',composition:'salmon'};
   const salmonOffer=offer('offer-salmon',salmonIdentity);
@@ -252,6 +263,16 @@ test('a gram unit suffix does not create a false lamb ingredient',()=>{
   assert.deepEqual(selected.recipes.map((item)=>item.sourceRecipeId),['apple-grams']);
 });
 
+test('animal-derived seasoning does not become a raw animal ingredient',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  const recipe=candidate('apple-seasoning',{identity:appleIdentity,offerId:'offer-apple'});
+  recipe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient:'참치액',quantity:'1작은술'}];
+  recipe.steps=[{ordinal:1,instruction:'사과를 씻는다.'},{ordinal:2,instruction:'참치액으로 간한다.'},{ordinal:3,instruction:'접시에 담는다.'}];
+  recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'other',kind:'side'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes.map((item)=>item.sourceRecipeId),['apple-seasoning']);
+});
+
 test('selection rejects a beef stew offer for a bulgogi-cut source ingredient',()=>{
   const stewIdentity={ingredientId:'소고기',species:'beef',cut:'stew',processingState:'raw',form:'cubed',composition:'beef'};
   const stewOffer=offer('offer-stew',stewIdentity);
@@ -273,6 +294,28 @@ test('selection rejects canned or ready-to-eat chicken for a raw breast offer',(
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes,[]);
   assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
+});
+
+test('selection rejects processed pork linked to a raw pork offer',()=>{
+  const porkIdentity={ingredientId:'돼지목살',species:'pork',cut:'neck',processingState:'raw',form:'steak',composition:'pork'};
+  const recipe=candidate('processed-pork',{identity:porkIdentity,offerId:'offer-pork'});
+  recipe.ingredients=[{ordinal:1,ingredient:'훈제 돼지고기 목살',quantity:'300g'},{ordinal:2,ingredient:'양파',quantity:'1개'}];
+  recipe.matches=[{offerId:'offer-pork',relation:'exact-ingredient',ingredientId:'돼지목살',ingredientLabel:'훈제 돼지고기 목살'}];
+  recipe.recommendationProfile={primaryIngredients:['돼지목살'],family:'pork',method:'other',kind:'main'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-pork',porkIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
+});
+
+test('selection holds an uncooked incidental raw duck inside a plant-offer recipe',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  const recipe=candidate('apple-raw-duck',{identity:appleIdentity,offerId:'offer-apple'});
+  recipe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient:'오리가슴살',quantity:'200g'}];
+  recipe.steps=[{ordinal:1,instruction:'사과를 썬다.'},{ordinal:2,instruction:'오리가슴살을 얇게 자른다.'},{ordinal:3,instruction:'접시에 함께 담는다.'}];
+  recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'salad',kind:'side'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'raw-protein-cook-unverified');
 });
 
 test('selection holds raw chicken recipes that never cook the chicken',()=>{

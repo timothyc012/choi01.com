@@ -103,6 +103,15 @@ test('merges shared ingredients once across meals and normalizes cooked rice to 
   assert.equal(resized.totalCents, 1882);
 });
 
+test('canonicalizes cooking-oil and melted-butter aliases into single shopping rows',()=>{
+  const meal={store:'Netto',sale:[],missing:['기름','식용유','올리브오일','버터','녹인버터'],requiredAmounts:{}};
+  const cart=shopping.basket([meal],{catalog:{Netto:{}}});
+  assert.deepEqual(Array.from(cart.items,(item)=>item.name).sort(),['버터','식용유']);
+  assert.deepEqual(Array.from(cart.items,(item)=>item.key).sort(),['Netto:버터','Netto:식용유']);
+  const restored=shopping.restoreState(JSON.stringify({version:1,pantry:['Netto:기름','Netto:녹인버터'],prices:{},quantities:{},list:[]}),null,{stores:['Netto']});
+  assert.deepEqual([...restored.pantry].sort(),['Netto:버터','Netto:식용유']);
+});
+
 test('pantry items are excluded from totals and missing price counts without losing prices', () => {
   const pantry = new Set(['Netto:닭고기', ...rice.missing.map((name) => shopping.keyFor('Netto', name))]);
   const cart = shopping.basket([rice], { catalog: fixtureCatalog, pantry });

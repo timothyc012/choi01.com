@@ -465,7 +465,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.HTMLElement.prototype.scrollIntoView=()=>{};
   dom.window.document.getElementById('prepareShopping').click();
   await new Promise((resolve)=>setTimeout(resolve,50));
-  assert.match(dom.window.document.getElementById('groceryPending').textContent,/올리브유.*가격 미확인/);
+  assert.match(dom.window.document.getElementById('groceryPending').textContent,/식용유.*가격 미확인/);
   assert.match(dom.window.document.getElementById('groceryPending').textContent,/감자.*가격 미확인/);
   assert.equal(dom.window.document.querySelectorAll('[data-grocery-key="NeueMarkt:닭가슴살"]').length,1);
   assert.equal(dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭 가슴살"]'),null);
@@ -496,7 +496,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.document.getElementById('addShoppingItems').click();
   let grocery=dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭가슴살"]');
   assert.ok(grocery);
-  assert.match(dom.window.document.getElementById('groceryPending').textContent,/올리브유.*가격 미확인/);
+  assert.match(dom.window.document.getElementById('groceryPending').textContent,/식용유.*가격 미확인/);
   grocery.checked=true;grocery.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
   assert.match(dom.window.document.getElementById('groceryCompleted').textContent,/닭가슴살/);
   const savedAfterCheck=dom.window.localStorage.getItem(runtime.shoppingStorageKey);

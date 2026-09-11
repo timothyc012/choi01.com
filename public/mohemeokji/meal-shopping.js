@@ -1,7 +1,13 @@
 /* Purchase costs use selling units. Comparable measured requirements are
    summed; ambiguous or incomplete quantities require a manual check. */
 (function () {
-  const normalize = (name) => name === "밥" ? "쌀" : name;
+  const normalize = (name) => {
+    const value=String(name||'').trim();
+    if(value==="밥")return "쌀";
+    if(["기름","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유"].includes(value))return "식용유";
+    if(value==="녹인버터")return "버터";
+    return value;
+  };
   const keyFor = (store, name) => store + ":" + normalize(name);
   const euro = (cents) => (cents / 100).toFixed(2).replace(".", ",") + "€";
 
@@ -324,7 +330,10 @@
       const validPrice = (value) => value === null || (Number.isSafeInteger(value) && value >= 0 && value <= 100000000);
       const validQuantity = (value) => Number.isInteger(value) && value >= 1 && value <= 999;
       const record = (value) => value && typeof value === "object" && !Array.isArray(value);
-      if (Array.isArray(saved.pantry)) state.pantry = new Set(saved.pantry.filter((key) => typeof key === "string" && validKey(key)));
+      if (Array.isArray(saved.pantry)) state.pantry = new Set(saved.pantry.filter((key) => typeof key === "string" && validKey(key)).map((key)=>{
+        const separator=key.indexOf(":");
+        return keyFor(key.slice(0,separator),key.slice(separator+1));
+      }));
       if (record(saved.prices)) state.prices = Object.fromEntries(Object.entries(saved.prices).filter(([key, value]) => validKey(key) && validPrice(value)));
       if (record(saved.quantities)) {
         state.quantities = Object.fromEntries(Object.entries(saved.quantities)

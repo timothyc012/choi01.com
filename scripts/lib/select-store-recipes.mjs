@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 
 import {canonicalJson} from './meal-snapshot-schema.mjs';
-import {offerIdentityKey} from '../find-store-recipe-candidates.mjs';
+import {offerIdentityKey,recipeSearchSpec} from '../find-store-recipe-candidates.mjs';
 
 const DEFAULT_POLICY={target:48,kindCaps:{main:36,breakfast:6,side:6},identityCap:6,familyCap:8,methodCap:12,authorCap:4};
 export const PUBLICATION_APPROVAL_METHOD='owner-authorized-editorial-transform';
@@ -13,13 +13,16 @@ const normalizeTitle=(value)=>String(value||'').normalize('NFKC').toLocaleLowerC
 const ACTION_INGREDIENT_GROUPS=[
   ['우유'],['김칫국물'],['버터'],['소금'],['후추'],['설탕'],['간장'],['식초'],['참기름'],['마늘'],['생강'],['달걀','계란'],['밀가루'],['빵가루'],
 ];
-const COOKING_OILS=['기름','식용유','올리브유','올리브오일','포도씨유','카놀라유'];
+const COOKING_OILS=['기름','식용유','식용오일','올리브유','올리브오일','포도씨유','카놀라유','참기름','들기름','땅콩기름','레몬오일'];
 const cookingOilName=(label)=>{
   const value=String(label||'');
   const specific=COOKING_OILS.slice(1).find((term)=>value.includes(term));
   if(specific)return specific;
   return /(?:^|\s)기름(?:\s|\(|$)/u.test(value)?'기름':null;
 };
+const RAW_ANIMAL_SPECIES=new Set(['chicken','pork','beef','turkey','trout','duck','lamb','mixed','fish','seafood']);
+const PROCESSED_ANIMAL_FORM=/(?:캔|통조림|훈제|조리된|익힌|구운|삶은|찐|수비드|햄|베이컨|소시지|육포)/u;
+const ANIMAL_DERIVATIVE_SEASONING=/(?:육수|액젓|액|소스|가루|분말|엑기스|추출물)/u;
 
 function median(values) {
   const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b);
@@ -56,7 +59,7 @@ export function unquantifiedActionIngredients(candidate) {
       if(index<0)return false;
       const before=clause.slice(Math.max(0,index-40),index);
       const after=clause.slice(index+term.length,index+term.length+24);
-      const negated=/^(?:을|를)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)/u.test(after);
+      const negated=/^(?:을|를)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,16}(?:대체|대신|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
       const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|취향에 따라/u.test(before);
       if(!negated&&!conditional)return true;
       offset=index+term.length;
@@ -65,16 +68,22 @@ export function unquantifiedActionIngredients(candidate) {
   };
   const actionMentions=(term)=>clauses.some((clause)=>requiredMention(clause,term));
   const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
-  const listedOil=sourceIngredients.find((ingredient)=>cookingOilName(ingredient.label));
-  if(listedOil&&!listedOil.quantity) {
-    const listedName=cookingOilName(listedOil.label);
-    if(listedName) missing.push(listedName);
-  }
-  const addsGenericOil=clauses.some((clause)=>(/(?:팬에\s*)?기름(?:을)?\s*(?:두르|넣|붓|달구)|기름에\s*(?:튀|볶)/u.test(clause)&&requiredMention(clause,'기름')));
-  const namedOilAction=clauses.some((clause)=>COOKING_OILS.slice(1).some((term)=>requiredMention(clause,term)&&(new RegExp(term+'.{0,24}(?:두르|넣|붓|기름칠|볶|바르|사용)|(?:두르|넣|붓|기름칠|볶|바르|사용).{0,24}'+term,'u').test(clause))));
+  const listedOils=sourceIngredients.map((ingredient)=>({...ingredient,name:cookingOilName(ingredient.label)})).filter((ingredient)=>ingredient.name);
+  const listedOilNames=new Set(listedOils.map((ingredient)=>ingredient.name));
+  const addsGenericOil=clauses.some((clause)=>{
+    const genericClause=clause.replace(/(?:참|들|땅콩)기름/gu,'');
+    return /기름.{0,18}(?:두르|넣|붓|달구|튀김|튀겨|튀긴|볶)|(?:튀김|튀겨|튀긴|볶).{0,18}기름/u.test(genericClause)&&requiredMention(genericClause,'기름');
+  });
+  const namedOilActions=new Set(COOKING_OILS.slice(1).filter((term)=>clauses.some((clause)=>requiredMention(clause,term)&&new RegExp(term+'.{0,24}(?:두르|넣|붓|기름칠|볶|바르|사용)','u').test(clause))));
+  for(const listed of listedOils) if(!listed.quantity&&(listedOils.length===1||namedOilActions.has(listed.name))) missing.push(listed.name);
   const quantifiedButter=quantified.some((label)=>label.includes('버터'));
   const oilAlternativeAlreadyRepresented=quantifiedButter&&/기름칠.{0,30}(?:올리브유|올리브오일).{0,12}(?:혹은|또는|or).{0,12}버터/iu.test(instructions);
-  if((addsGenericOil||namedOilAction)&&!listedOil&&!oilAlternativeAlreadyRepresented) missing.push('기름');
+  const flavorOils=new Set(['참기름','들기름','땅콩기름','레몬오일']);
+  const hasBaseOil=listedOils.some((ingredient)=>!flavorOils.has(ingredient.name));
+  const listedFlavorAction=[...namedOilActions].some((name)=>flavorOils.has(name)&&listedOilNames.has(name));
+  const unlistedNamedOilAction=[...namedOilActions].some((name)=>!listedOilNames.has(name));
+  const needsGenericOil=!oilAlternativeAlreadyRepresented&&((!listedOils.length&&(addsGenericOil||namedOilActions.size))||(addsGenericOil&&!hasBaseOil&&listedFlavorAction)||unlistedNamedOilAction);
+  if(needsGenericOil) missing.push('기름');
   return [...new Set(missing)];
 }
 
@@ -94,6 +103,7 @@ function sourceOfferMismatch(candidate,primaryMatches,offersById) {
   return primaryMatches.some((match)=>{
     const offer=offersById.get(match.offerId);
     const label=String(match.ingredientLabel||'').replace(/\s+/g,'');
+    if(offer?.identity?.processingState==='raw'&&RAW_ANIMAL_SPECIES.has(offer.identity.species)&&PROCESSED_ANIMAL_FORM.test(label)) return true;
     if(offer?.identity?.species==='beef'&&offer.identity.cut==='stew'&&!/국거리|스튜|굴라쉬|카레용|찜용|장조림용|사태|양지|덩어리|깍둑|토막/.test(sourceEvidence)) return true;
     if(offer?.identity?.species==='beef'&&offer.identity.cut==='ribeye'&&(!/등심|꽃등심|립아이|엔트레코트/i.test(sourceEvidence)||/불고기/.test(sourceEvidence))) return true;
     if(offer?.identity?.species==='salmon'&&offer.identity.processingState==='raw'&&(/훈제연어/.test(label)||/훈제연어/.test(String(candidate.title||'')))) return true;
@@ -131,11 +141,13 @@ function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
     trout:/송어/u,
     duck:/오리(?:고기|가슴살|다리)?/u,
     lamb:/양고기|램고기|램\s*(?:찹|스테이크)/u,
+    mixed:/소\s*[·/]\s*돼지|혼합\s*다짐육|다짐육/u,
+    fish:/대구|고등어|가자미|도미|농어|생선|참치/u,
+    seafood:/새우|관자|오징어|문어|조개|홍합/u,
   };
-  const readyForm=/(?:캔|통조림|훈제|조리된|익힌|구운|삶은|찐|수비드|햄|베이컨|소시지|육포)/u;
   const sourceRawSpecies=(candidate.ingredients||[]).flatMap((ingredient)=>{
     const label=[ingredient.ingredient,ingredient.label].filter(Boolean).join(' ');
-    if(readyForm.test(label))return [];
+    if(PROCESSED_ANIMAL_FORM.test(label)||ANIMAL_DERIVATIVE_SEASONING.test(label))return [];
     return Object.entries(speciesTerms).filter(([,pattern])=>pattern.test(label)).map(([species])=>species);
   });
   const offeredRawSpecies=primaryMatches.map((match)=>offersById.get(match.offerId)?.identity).filter((identity)=>identity?.processingState==='raw'&&Object.hasOwn(speciesTerms,identity.species)).map((identity)=>identity.species);
@@ -151,6 +163,9 @@ function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
     trout:/송어|생선/u,
     duck:/오리|고기/u,
     lamb:/양고기|램|고기/u,
+    mixed:/다짐육|고기/u,
+    fish:/대구|고등어|가자미|도미|농어|생선|참치|피쉬/u,
+    seafood:/새우|관자|오징어|문어|조개|홍합|해산물/u,
   };
   return rawSpecies.some((species)=>{
     const proteinHeat=steps.some((step,index)=>actionTerms[species].test(step)&&heatAction.test(step+' '+String(steps[index+1]||'')));
@@ -207,6 +222,15 @@ function registryMap(registry) {
   return result;
 }
 
+function validExactMatch(candidate,match,offer) {
+  const identityId=offer?.identity?.ingredientId;
+  if(!identityId||match?.ingredientId!==identityId||!text(match.ingredientLabel))return false;
+  const spec=recipeSearchSpec[identityId]??recipeSearchSpec[offer.ingredient]??{ingredientLabels:[identityId]};
+  const normalizedMatch=normalizeTitle(match.ingredientLabel);
+  if(!spec.ingredientLabels.some((label)=>normalizedMatch.includes(normalizeTitle(label))))return false;
+  return (candidate.ingredients||[]).some((ingredient)=>normalizeTitle(ingredient.ingredient??ingredient.label)===normalizedMatch);
+}
+
 function sourceGate(candidate,storeOffers,registryEntry) {
   const sourceRecipeId=String(candidate.sourceRecipeId??candidate.recipeId??'');
   if(!sourceRecipeId||!text(candidate.sourceUrl)) return 'missing-source';
@@ -216,7 +240,9 @@ function sourceGate(candidate,storeOffers,registryEntry) {
   if(!Array.isArray(candidate.steps)||candidate.steps.length<3) return 'incomplete-steps';
   if(!candidate.steps.every((step,index)=>Number(step.ordinal)===index+1&&text(step.instruction))) return 'noncontiguous-steps';
   const offersById=new Map(storeOffers.map((offer)=>[offer.offerId,offer]));
-  const exactMatches=(candidate.matches||[]).filter((match)=>match.relation==='exact-ingredient'&&offersById.has(match.offerId));
+  const scopedMatches=(candidate.matches||[]).filter((match)=>match.relation==='exact-ingredient'&&offersById.has(match.offerId));
+  const exactMatches=scopedMatches.filter((match)=>validExactMatch(candidate,match,offersById.get(match.offerId)));
+  if(scopedMatches.length&&!exactMatches.length) return 'invalid-exact-match-evidence';
   if(!exactMatches.length) return 'no-exact-store-offer';
   const profile=registryEntry?.recommendationProfile||candidate.recommendationProfile||{};
   const primaryIngredients=new Set(Array.isArray(profile.primaryIngredients)?profile.primaryIngredients:[]);
@@ -241,7 +267,7 @@ function sourceGate(candidate,storeOffers,registryEntry) {
 
 function publicRecipe(candidate,storeOffers,registryEntry) {
   const offerById=new Map(storeOffers.map((offer)=>[offer.offerId,offer]));
-  const exactMatches=(candidate.matches||[]).filter((match)=>match.relation==='exact-ingredient'&&offerById.has(match.offerId));
+  const exactMatches=(candidate.matches||[]).filter((match)=>match.relation==='exact-ingredient'&&offerById.has(match.offerId)&&validExactMatch(candidate,match,offerById.get(match.offerId)));
   const profile=registryEntry.recommendationProfile||candidate.recommendationProfile||{};
   const primaryIngredients=new Set(Array.isArray(profile.primaryIngredients)?profile.primaryIngredients:[]);
   const matchedOffers=exactMatches.map((match)=>offerById.get(match.offerId)).filter((offer)=>primaryIngredients.has(offer.identity?.ingredientId)).sort((a,b)=>a.offerId.localeCompare(b.offerId));
