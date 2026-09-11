@@ -13,10 +13,10 @@ const normalizeTitle=(value)=>String(value||'').normalize('NFKC').toLocaleLowerC
 const ACTION_INGREDIENT_GROUPS=[
   ['우유'],['김칫국물'],['버터'],['소금'],['후추'],['설탕'],['간장'],['식초'],['참기름'],['마늘'],['생강'],['달걀','계란'],['밀가루'],['빵가루'],
 ];
-const COOKING_OILS=['기름','식용유','식용오일','올리브유','올리브오일','올리브 오일','포도씨유','카놀라유','해바라기유','코코넛오일','참기름','들기름','땅콩기름','레몬오일'];
+const COOKING_OILS=['기름','오일','식용유','식용오일','올리브유','올리브오일','올리브 오일','포도씨유','카놀라유','해바라기유','코코넛오일','참기름','들기름','땅콩기름','레몬오일'];
 const cookingOilName=(label)=>{
   const value=String(label||'');
-  const specific=COOKING_OILS.slice(1).find((term)=>value.includes(term));
+  const specific=COOKING_OILS.slice(1).sort((a,b)=>b.length-a.length).find((term)=>value.includes(term));
   if(specific)return specific;
   return /(?:^|\s)기름(?:\s|\(|$)/u.test(value)?'기름':null;
 };
@@ -51,6 +51,7 @@ export function unquantifiedActionIngredients(candidate) {
   const instructions=(candidate.steps||[]).map((step)=>String(step.instruction||'')).join(' ');
   const clauses=instructions.split(/[.!?\n]/u);
   const sourceIngredients=(candidate.ingredients||[]).map((ingredient)=>({label:String(ingredient.ingredient||ingredient.label||''),quantity:text(ingredient.quantity)}));
+  const represented=sourceIngredients.map((ingredient)=>ingredient.label);
   const quantified=sourceIngredients.filter((ingredient)=>ingredient.quantity||/(?:약간|조금|적당량|적당히|톡톡|한\s*조각)$/u.test(ingredient.label)).map((ingredient)=>ingredient.label);
   const requiredMention=(clause,term)=>{
     let offset=0;
@@ -59,7 +60,8 @@ export function unquantifiedActionIngredients(candidate) {
       if(index<0)return false;
       const before=clause.slice(Math.max(0,index-40),index);
       const after=clause.slice(index+term.length,index+term.length+24);
-      const negated=/^(?:을|를|은|는)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외|선택)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,20}(?:대체|대신|써도|넣어도\s*되고\s*(?:생략|안\s*넣)|넣을\s*수도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
+      const laterNegation=new RegExp(term+'.{0,60}(?:바르지|두르지|넣지|사용하지|쓰지)\\s*않','u').test(clause.slice(index));
+      const negated=laterNegation||/^(?:을|를|은|는)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외|선택)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,20}(?:대체|대신|써도|넣어도\s*되고\s*(?:생략|안\s*넣)|넣을\s*수도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
       const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|필요하면|취향에 따라|필요에 따라|원하는 경우/u.test(before);
       if(!negated&&!conditional)return true;
       offset=index+term.length;
@@ -67,9 +69,10 @@ export function unquantifiedActionIngredients(candidate) {
     return false;
   };
   const actionMentions=(term)=>clauses.some((clause)=>requiredMention(clause,term));
-  const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
+  const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>represented.some((label)=>label.includes(term)))).map((group)=>group[0]);
   const baseFat='(?:식용유|올리브유|올리브오일|올리브 오일|카놀라유|해바라기유|코코넛오일)';
-  const fatChoice=new RegExp('(?:'+baseFat+'.{0,12}(?:또는|혹은|이나|나|or).{0,12}버터|버터.{0,12}(?:또는|혹은|이나|나|or).{0,12}'+baseFat+'|버터.{0,12}(?:넣거나|사용하거나).{0,12}'+baseFat+'|'+baseFat+'.{0,12}(?:넣거나|사용하거나).{0,12}버터|버터\\s*대신.{0,12}(?:오일|'+baseFat+')|'+baseFat+'\\s*대신.{0,12}버터)','iu').test(instructions);
+  const fatEvidence=instructions+' '+represented.join(' ');
+  const fatChoice=new RegExp('(?:'+baseFat+'.{0,12}(?:또는|혹은|이나|or).{0,12}버터|(?:오일|버터).{0,12}(?:또는|혹은|이나|or).{0,12}(?:버터|'+baseFat+')|'+baseFat+'\\s*나\\s*버터|버터\\s*나\\s*'+baseFat+'|버터.{0,12}(?:넣거나|사용하거나).{0,12}'+baseFat+'|'+baseFat+'.{0,12}(?:넣거나|사용하거나).{0,12}버터|버터\\s*대신.{0,12}(?:오일|'+baseFat+')|'+baseFat+'\\s*대신.{0,12}버터)','iu').test(fatEvidence);
   if(fatChoice)for(let index=missing.length-1;index>=0;index--)if(missing[index]==='버터')missing.splice(index,1);
   const listedOils=sourceIngredients.map((ingredient)=>({...ingredient,name:cookingOilName(ingredient.label)})).filter((ingredient)=>ingredient.name);
   const listedOilNames=new Set(listedOils.map((ingredient)=>ingredient.name));
@@ -79,7 +82,7 @@ export function unquantifiedActionIngredients(candidate) {
     return oilAction('기름')||oilAction('오일');
   });
   const namedOilActions=new Set(COOKING_OILS.slice(1).filter((term)=>clauses.some((clause)=>requiredMention(clause,term)&&new RegExp(term+'.{0,24}(?:두르|넣|붓|기름칠|볶|바르|사용)','u').test(clause))));
-  for(const listed of listedOils) if(!listed.quantity&&(listedOils.length===1||namedOilActions.has(listed.name))) missing.push(listed.name);
+  for(const listed of listedOils) if(!listed.quantity&&(listedOils.length===1||namedOilActions.has(listed.name))) missing.push(fatChoice?'기름':listed.name==='오일'?'기름':listed.name);
   const quantifiedButter=quantified.some((label)=>label.includes('버터'));
   const quantifiedBaseOil=listedOils.some((ingredient)=>ingredient.quantity&&!['참기름','들기름','땅콩기름','레몬오일'].includes(ingredient.name));
   const oilAlternativeAlreadyRepresented=(fatChoice&&(quantifiedButter||quantifiedBaseOil))||(quantifiedButter&&/기름칠.{0,30}(?:올리브유|올리브오일).{0,12}(?:혹은|또는|or).{0,12}버터/iu.test(instructions));
@@ -89,7 +92,7 @@ export function unquantifiedActionIngredients(candidate) {
   for(const name of namedOilActions) if(flavorOils.has(name)&&!listedOilNames.has(name)&&!flavorAlternativeToBase) missing.push(name);
   const hasBaseOil=listedOils.some((ingredient)=>!flavorOils.has(ingredient.name));
   const listedFlavorAction=[...namedOilActions].some((name)=>flavorOils.has(name)&&listedOilNames.has(name));
-  const unlistedNamedOilAction=[...namedOilActions].some((name)=>!flavorOils.has(name)&&!listedOilNames.has(name));
+  const unlistedNamedOilAction=[...namedOilActions].some((name)=>!flavorOils.has(name)&&!listedOilNames.has(name)&&!(name==='오일'&&hasBaseOil));
   const needsGenericOil=!oilAlternativeAlreadyRepresented&&((!listedOils.length&&(addsGenericOil||unlistedNamedOilAction||flavorAlternativeToBase))||(addsGenericOil&&!hasBaseOil&&listedFlavorAction)||unlistedNamedOilAction);
   if(needsGenericOil) missing.push('기름');
   return [...new Set(missing)];

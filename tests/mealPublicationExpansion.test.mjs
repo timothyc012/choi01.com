@@ -331,8 +331,18 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   assert.deepEqual(unquantifiedActionIngredients(existingOliveChoice),[]);
   const qualitativeChoice=candidate('6878699');
   qualitativeChoice.ingredients.push({ordinal:4,label:'후추 톡톡',ingredient:'후추 톡톡',quantity:null});
+  qualitativeChoice.ingredients.push({ordinal:5,label:'소금',ingredient:'소금',quantity:null});
+  qualitativeChoice.ingredients.push({ordinal:6,label:'오일 약간 (또는 버터)',ingredient:'오일 약간 (또는 버터)',quantity:null});
   qualitativeChoice.steps[1].instruction='팬에 버터 한 조각 또는 식용유 적당량을 넣고 스테이크를 굽습니다. 완성 후 후추를 살짝 뿌립니다.';
   assert.deepEqual(unquantifiedActionIngredients(qualitativeChoice),['기름']);
+  const labelChoice=candidate('2412881');
+  labelChoice.ingredients.push({ordinal:4,label:'올리브오일 (또는버터)',ingredient:'올리브오일 (또는버터)',quantity:null});
+  labelChoice.ingredients.push({ordinal:5,label:'마늘',ingredient:'마늘',quantity:null});
+  labelChoice.steps[1].instruction='올리브오일에 마늘을 섞어 빵에 바릅니다.';
+  assert.deepEqual(unquantifiedActionIngredients(labelChoice),['기름']);
+  const explicitlySkippedOil=candidate('7036949');
+  explicitlySkippedOil.steps[1].instruction='오일을 바르면 더 바삭하지만 저는 오일을 바르지 않았어요.';
+  assert.deepEqual(unquantifiedActionIngredients(explicitlySkippedOil),[]);
   for(const phrase of ['식용유 또는 버터를 사용해 볶습니다','버터 또는 식용유를 사용해 볶습니다','식용유나 버터를 사용해 볶습니다']) {
     const choice=candidate('symmetric-'+phrase);
     choice.steps[1].instruction=phrase;
