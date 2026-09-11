@@ -123,17 +123,38 @@ function unverifiedRawConsumption(candidate,primaryMatches,offersById) {
 }
 
 function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
-  const rawSpecies=[...new Set(primaryMatches.map((match)=>offersById.get(match.offerId)?.identity).filter((identity)=>identity?.processingState==='raw'&&['chicken','pork','beef','turkey','trout'].includes(identity.species)).map((identity)=>identity.species))];
+  const speciesTerms={
+    chicken:/닭(?:가슴살|안심|고기|봉|다리)?|치킨/u,
+    pork:/돼지|삼겹|목살|항정살|앞다리살|뒷다리살|돈육/u,
+    beef:/소고기|쇠고기|우둔|양지|사태|등심|갈비|차돌/u,
+    turkey:/칠면조/u,
+    trout:/송어/u,
+    duck:/오리(?:고기|가슴살|다리)?/u,
+    lamb:/양고기|램고기|램\s*(?:찹|스테이크)/u,
+  };
+  const readyForm=/(?:캔|통조림|훈제|조리된|익힌|구운|삶은|찐|수비드|햄|베이컨|소시지|육포)/u;
+  const sourceRawSpecies=(candidate.ingredients||[]).flatMap((ingredient)=>{
+    const label=[ingredient.ingredient,ingredient.label].filter(Boolean).join(' ');
+    if(readyForm.test(label))return [];
+    return Object.entries(speciesTerms).filter(([,pattern])=>pattern.test(label)).map(([species])=>species);
+  });
+  const offeredRawSpecies=primaryMatches.map((match)=>offersById.get(match.offerId)?.identity).filter((identity)=>identity?.processingState==='raw'&&Object.hasOwn(speciesTerms,identity.species)).map((identity)=>identity.species);
+  const rawSpecies=[...new Set([...sourceRawSpecies,...offeredRawSpecies])];
   if(!rawSpecies.length) return false;
-  const title=String(candidate.title||'');
   const steps=(candidate.steps||[]).map((step)=>String(step.instruction||''));
-  const cookedTitle=/볶|구이|스테이크|조림|찜|튀김|강정|수육|완탕|만두|카레|국|탕/.test(title);
-  const heat=/볶|굽|구워|익|찌|쪄|데치|삶|끓|튀/.test(steps.join(' '));
-  const completeHeat=/익히|익힌|익을|속까지|완전히|삶|끓|튀|찌|쪄|데치|오븐|에어프라이어|구워/.test(steps.join(' '));
-  const terms={chicken:/닭|치킨/,pork:/돼지|목살|삼겹|고기/,beef:/소고기|쇠고기|고기/,turkey:/칠면조/,trout:/송어|생선/};
+  const heatAction=/(?:익히|익힌|익을|속까지|완전히|삶|끓|튀|볶|굽|구워|찌|쪄|데치|데쳐|오븐|에어프라이어)/u;
+  const actionTerms={
+    chicken:/닭|치킨|고기/u,
+    pork:/돼지|삼겹|목살|목심|돈육|고기/u,
+    beef:/소고기|쇠고기|우둔|양지|사태|등심|갈비|차돌|고기/u,
+    turkey:/칠면조|고기/u,
+    trout:/송어|생선/u,
+    duck:/오리|고기/u,
+    lamb:/양고기|램|고기/u,
+  };
   return rawSpecies.some((species)=>{
-    const proteinHeat=steps.some((step)=>terms[species].test(step)&&/(?:익히|익힌|익을|속까지|완전히|삶|끓|튀|볶|굽|구워|찌|쪄|데치|오븐|에어프라이어)/.test(step));
-    return !proteinHeat&&!(cookedTitle&&(completeHeat||heat));
+    const proteinHeat=steps.some((step,index)=>actionTerms[species].test(step)&&heatAction.test(step+' '+String(steps[index+1]||'')));
+    return !proteinHeat;
   });
 }
 
