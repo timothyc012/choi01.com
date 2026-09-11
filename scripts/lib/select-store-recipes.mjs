@@ -21,7 +21,7 @@ const cookingOilName=(label)=>{
   return /(?:^|\s)기름(?:\s|\(|$)/u.test(value)?'기름':null;
 };
 const RAW_ANIMAL_SPECIES=new Set(['chicken','pork','beef','turkey','trout','duck','lamb','mixed','fish','seafood']);
-const PROCESSED_ANIMAL_FORM=/(?:캔|통조림|훈제|훈연|스모크|조리된|익힌|구운|삶은|찐|데친|수비드|샐러드용|로스트|햄|베이컨|소시지|육포)/u;
+const PROCESSED_ANIMAL_FORM=/(?:캔|통조림|훈제|훈연|스모크|스모키|smoked|조리된|익힌|구운|삶은|찐|데친|수비드|샐러드용|로스트|햄|베이컨|소시지|육포)/iu;
 const ANIMAL_DERIVATIVE_SEASONING=/(?:육수|액젓|젓|액|소스|가루|분말|엑기스|추출물)/u;
 
 function median(values) {
@@ -60,7 +60,7 @@ export function unquantifiedActionIngredients(candidate) {
       const before=clause.slice(Math.max(0,index-40),index);
       const after=clause.slice(index+term.length,index+term.length+24);
       const negated=/^(?:을|를|은|는)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외|선택)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,20}(?:대체|대신|써도|넣어도\s*되고\s*(?:생략|안\s*넣)|넣을\s*수도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
-      const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|취향에 따라|필요에 따라|원하는 경우/u.test(before);
+      const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|필요하면|취향에 따라|필요에 따라|원하는 경우/u.test(before);
       if(!negated&&!conditional)return true;
       offset=index+term.length;
     }
@@ -69,7 +69,7 @@ export function unquantifiedActionIngredients(candidate) {
   const actionMentions=(term)=>clauses.some((clause)=>requiredMention(clause,term));
   const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
   const baseFat='(?:식용유|올리브유|올리브오일|올리브 오일|카놀라유|해바라기유|코코넛오일)';
-  const fatChoice=new RegExp('(?:'+baseFat+'\\s*(?:또는|혹은|이나|나|or)\\s*버터|버터\\s*(?:또는|혹은|이나|나|or)\\s*'+baseFat+')','iu').test(instructions);
+  const fatChoice=new RegExp('(?:'+baseFat+'\\s*(?:또는|혹은|이나|나|or)\\s*버터|버터\\s*(?:또는|혹은|이나|나|or)\\s*'+baseFat+'|버터.{0,12}(?:넣거나|사용하거나).{0,12}'+baseFat+'|'+baseFat+'.{0,12}(?:넣거나|사용하거나).{0,12}버터)','iu').test(instructions);
   if(fatChoice)for(let index=missing.length-1;index>=0;index--)if(missing[index]==='버터')missing.splice(index,1);
   const listedOils=sourceIngredients.map((ingredient)=>({...ingredient,name:cookingOilName(ingredient.label)})).filter((ingredient)=>ingredient.name);
   const listedOilNames=new Set(listedOils.map((ingredient)=>ingredient.name));
@@ -110,7 +110,7 @@ function sourceOfferMismatch(candidate,primaryMatches,offersById) {
   return primaryMatches.some((match)=>{
     const offer=offersById.get(match.offerId);
     const label=String(match.ingredientLabel||'').replace(/\s+/g,'');
-    const speciesTitleTerms={chicken:/닭|치킨/u,pork:/돼지|삼겹|목살|돈육/u,beef:/소고기|쇠고기|등심|갈비|차돌/u,turkey:/칠면조/u,trout:/송어/u,mixed:/다짐육|혼합육/u};
+    const speciesTitleTerms={chicken:/닭|치킨|chicken/iu,pork:/돼지|삼겹|목살|돈육|포크|pork/iu,beef:/소고기|쇠고기|등심|갈비|차돌|beef/iu,turkey:/칠면조|turkey/iu,trout:/송어|trout/iu,mixed:/다짐육|혼합육/iu};
     if(offer?.identity?.processingState==='raw'&&RAW_ANIMAL_SPECIES.has(offer.identity.species)&&PROCESSED_ANIMAL_FORM.test(String(candidate.title||''))&&speciesTitleTerms[offer.identity.species]?.test(String(candidate.title||''))) return true;
     if(offer?.identity?.processingState==='raw'&&RAW_ANIMAL_SPECIES.has(offer.identity.species)&&PROCESSED_ANIMAL_FORM.test(label)) return true;
     if(offer?.identity?.processingState==='raw'&&RAW_ANIMAL_SPECIES.has(offer.identity.species)&&['fillet','steak','whole-cut'].includes(offer.identity.form)&&/(?:다진|갈은|민스|분쇄|다짐육)/u.test(label)) return true;

@@ -315,6 +315,16 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   quantifiedFatChoice.ingredients.push({ordinal:4,label:'버터 20g',ingredient:'버터',quantity:'20g'});
   quantifiedFatChoice.steps[1].instruction='팬에 버터 또는 식용유를 사용해 재료를 굽습니다.';
   assert.deepEqual(unquantifiedActionIngredients(quantifiedFatChoice),[]);
+  const quantifiedVerbChoice=candidate('quantified-verb-fat-choice');
+  quantifiedVerbChoice.ingredients.push({ordinal:4,label:'버터 20g',ingredient:'버터',quantity:'20g'});
+  quantifiedVerbChoice.steps[1].instruction='팬에 버터를 넣거나 식용유를 사용해 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(quantifiedVerbChoice),[]);
+  const unquantifiedVerbChoice=candidate('unquantified-verb-fat-choice');
+  unquantifiedVerbChoice.steps[1].instruction='팬에 버터를 넣거나 식용유를 사용해 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(unquantifiedVerbChoice),['기름']);
+  const neededButter=candidate('needed-butter');
+  neededButter.steps[1].instruction='필요하면 버터를 넣어도 됩니다.';
+  assert.deepEqual(unquantifiedActionIngredients(neededButter),[]);
   for(const phrase of ['식용유 또는 버터를 사용해 볶습니다','버터 또는 식용유를 사용해 볶습니다','식용유나 버터를 사용해 볶습니다']) {
     const choice=candidate('symmetric-'+phrase);
     choice.steps[1].instruction=phrase;

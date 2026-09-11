@@ -362,12 +362,24 @@ test('selection rejects minced chicken attached to a raw breast fillet identity'
 });
 
 test('selection rejects smoked chicken titles attached to a generic raw breast label',()=>{
-  for(const [id,title] of [['smoked-title-chicken','훈제 닭가슴살 야채볶음'],['smoke-cured-title-chicken','훈연 닭가슴살 샐러드'],['smoke-title-chicken','스모크 치킨 샐러드']]) {
+  for(const [id,title] of [['smoked-title-chicken','훈제 닭가슴살 야채볶음'],['smoke-cured-title-chicken','훈연 닭가슴살 샐러드'],['smoke-title-chicken','스모크 치킨 샐러드'],['smoky-title-chicken','스모키 치킨 샐러드'],['english-smoked-chicken','Smoked chicken salad']]) {
     const recipe=candidate(id);
     recipe.title=title;
     recipe.ingredients=[{ordinal:1,ingredient:'닭가슴살',quantity:'300g'},{ordinal:2,ingredient:'양파',quantity:'1개'}];
     recipe.recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'};
     const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+    assert.deepEqual(selected.recipes,[],id);
+    assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch',id);
+  }
+});
+
+test('selection rejects English and loanword smoked pork titles for a raw pork offer',()=>{
+  const porkIdentity={ingredientId:'돼지목살',species:'pork',cut:'neck',processingState:'raw',form:'steak',composition:'pork'};
+  for(const [id,title] of [['english-smoked-pork','Smoked pork salad'],['smoky-pokeu','스모키 포크 샐러드']]) {
+    const recipe=candidate(id,{identity:porkIdentity,offerId:'offer-pork'});
+    recipe.title=title;
+    recipe.recommendationProfile={primaryIngredients:['돼지목살'],family:'pork',method:'other',kind:'main'};
+    const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-pork',porkIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
     assert.deepEqual(selected.recipes,[],id);
     assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch',id);
   }
