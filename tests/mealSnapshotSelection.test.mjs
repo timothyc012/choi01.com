@@ -293,7 +293,7 @@ test('animal-derived seasoning does not become a raw animal ingredient',()=>{
 
 test('raw egg yolk, flatfish and oyster require their own cooking action',()=>{
   const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
-  for(const [id,ingredient] of [['raw-yolk','달걀노른자'],['raw-flatfish','광어회'],['raw-oyster','생굴']]) {
+  for(const [id,ingredient] of [['raw-yolk','달걀노른자'],['raw-quail-egg','메추리알'],['raw-flatfish','광어회'],['raw-halibut','넙치회'],['raw-tuna','다랑어회'],['raw-oyster','생굴살'],['raw-prawn','생대하']]) {
     const recipe=candidate(id,{identity:appleIdentity,offerId:'offer-apple'});
     recipe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient,quantity:'100g'}];
     recipe.steps=[{ordinal:1,instruction:'사과를 썬다.'},{ordinal:2,instruction:ingredient+'를 손질한다.'},{ordinal:3,instruction:'접시에 함께 담는다.'}];
@@ -389,6 +389,16 @@ test('selection holds raw chicken recipes that never cook the chicken',()=>{
   recipe.ingredients=[{ordinal:1,ingredient:'닭가슴살',quantity:'200g'},{ordinal:2,ingredient:'유부',quantity:'10장'}];
   recipe.steps=[{ordinal:1,instruction:'닭가슴살을 잘게 찢는다.'},{ordinal:2,instruction:'밥과 함께 섞는다.'},{ordinal:3,instruction:'유부에 채워 담는다.'}];
   recipe.recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'rice',kind:'main'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'raw-protein-cook-unverified');
+});
+
+test('a negated chicken cooking phrase is not cook-through evidence',()=>{
+  const recipe=candidate('negated-chicken-heat');
+  recipe.ingredients=[{ordinal:1,ingredient:'닭가슴살',quantity:'200g'},{ordinal:2,ingredient:'양파',quantity:'1개'}];
+  recipe.steps=[{ordinal:1,instruction:'닭가슴살은 익히지 않고 얇게 썬다.'},{ordinal:2,instruction:'양파를 볶는다.'},{ordinal:3,instruction:'두 재료를 접시에 담는다.'}];
+  recipe.recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'salad',kind:'main'};
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes,[]);
   assert.equal(selected.coverage.heldForReview[0].reason,'raw-protein-cook-unverified');

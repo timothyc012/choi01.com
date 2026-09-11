@@ -59,7 +59,7 @@ export function unquantifiedActionIngredients(candidate) {
       if(index<0)return false;
       const before=clause.slice(Math.max(0,index-40),index);
       const after=clause.slice(index+term.length,index+term.length+24);
-      const negated=/^(?:을|를)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,16}(?:대체|대신|써도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
+      const negated=/^(?:을|를|은|는)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,16}(?:대체|대신|써도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
       const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|취향에 따라/u.test(before);
       if(!negated&&!conditional)return true;
       offset=index+term.length;
@@ -80,10 +80,13 @@ export function unquantifiedActionIngredients(candidate) {
   const quantifiedButter=quantified.some((label)=>label.includes('버터'));
   const oilAlternativeAlreadyRepresented=quantifiedButter&&/기름칠.{0,30}(?:올리브유|올리브오일).{0,12}(?:혹은|또는|or).{0,12}버터/iu.test(instructions);
   const flavorOils=new Set(['참기름','들기름','땅콩기름','레몬오일']);
+  const baseOilNames=COOKING_OILS.slice(1).filter((name)=>!flavorOils.has(name));
+  const flavorAlternativeToBase=[...namedOilActions].some((name)=>flavorOils.has(name)&&!listedOilNames.has(name))&&baseOilNames.some((name)=>instructions.includes(name));
+  for(const name of namedOilActions) if(flavorOils.has(name)&&!listedOilNames.has(name)&&!flavorAlternativeToBase) missing.push(name);
   const hasBaseOil=listedOils.some((ingredient)=>!flavorOils.has(ingredient.name));
   const listedFlavorAction=[...namedOilActions].some((name)=>flavorOils.has(name)&&listedOilNames.has(name));
-  const unlistedNamedOilAction=[...namedOilActions].some((name)=>!listedOilNames.has(name));
-  const needsGenericOil=!oilAlternativeAlreadyRepresented&&((!listedOils.length&&(addsGenericOil||namedOilActions.size))||(addsGenericOil&&!hasBaseOil&&listedFlavorAction)||unlistedNamedOilAction);
+  const unlistedNamedOilAction=[...namedOilActions].some((name)=>!flavorOils.has(name)&&!listedOilNames.has(name));
+  const needsGenericOil=!oilAlternativeAlreadyRepresented&&((!listedOils.length&&(addsGenericOil||unlistedNamedOilAction||flavorAlternativeToBase))||(addsGenericOil&&!hasBaseOil&&listedFlavorAction)||unlistedNamedOilAction);
   if(needsGenericOil) missing.push('기름');
   return [...new Set(missing)];
 }
@@ -144,9 +147,9 @@ function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
     duck:/오리(?:고기|가슴살|다리)?/u,
     lamb:/양고기|램고기|램\s*(?:찹|스테이크)/u,
     mixed:/소\s*[·/]\s*돼지|혼합\s*다짐육|다짐육/u,
-    fish:/대구|고등어|가자미|광어|도미|농어|생선|참치/u,
-    seafood:/새우|관자|오징어|문어|조개|홍합|(?:^|\s)(?:생)?굴(?:\s|$)/u,
-    egg:/달걀|계란|노른자|흰자/u,
+    fish:/대구|고등어|가자미|광어|넙치|도미|농어|생선|참치|다랑어/u,
+    seafood:/새우|대하|관자|오징어|문어|조개|홍합|(?:^|\s)(?:생)?굴(?:살)?(?:\s|$)/u,
+    egg:/달걀|계란|메추리알|노른자|흰자/u,
   };
   const sourceRawSpecies=(candidate.ingredients||[]).flatMap((ingredient)=>{
     const label=[ingredient.ingredient,ingredient.label].filter(Boolean).join(' ');
@@ -167,15 +170,16 @@ function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
     duck:/오리/u,
     lamb:/양고기|램/u,
     mixed:/다짐육|소\s*[·/]\s*돼지|혼합육/u,
-    fish:/대구|고등어|가자미|광어|도미|농어|생선|참치|피쉬/u,
-    seafood:/새우|관자|오징어|문어|조개|홍합|해산물|(?:^|\s)(?:생)?굴(?:\s|$)/u,
-    egg:/달걀|계란|노른자|흰자/u,
+    fish:/대구|고등어|가자미|광어|넙치|도미|농어|생선|참치|다랑어|피쉬/u,
+    seafood:/새우|대하|관자|오징어|문어|조개|홍합|해산물|(?:^|\s)(?:생)?굴(?:살)?(?:\s|$)/u,
+    egg:/달걀|계란|메추리알|노른자|흰자/u,
   };
   const placement=/(?:팬|냄비|오븐|찜기|에어프라이어).{0,60}(?:올|넣|담|붓|덮)|(?:올|넣|담|붓|덮).{0,60}(?:팬|냄비|오븐|찜기|에어프라이어)/u;
+  const positiveHeat=(value)=>String(value||'').split(/[.!?\n]/u).some((clause)=>heatAction.test(clause)&&!/(?:익히|굽|구우|볶|삶|찌|튀기|가열)지\s*않/u.test(clause));
   return rawSpecies.some((species)=>{
-    const explicitHeat=steps.some((step,index)=>actionTerms[species].test(step)&&(heatAction.test(step)||((['pork','beef'].includes(species)||placement.test(step))&&heatAction.test(String(steps[index+1]||'')))));
-    const soleGenericMeatHeat=['pork','beef'].includes(species)&&rawSpecies.length===1&&steps.some((step)=>/고기/u.test(step)&&heatAction.test(step));
-    const boundEggHeat=species==='egg'&&steps.some((step,index)=>actionTerms.egg.test(step)&&/(?:반죽|튀김옷|옷을|묻|버무)/u.test(step)&&steps.slice(index+1).some((later)=>heatAction.test(later)));
+    const explicitHeat=steps.some((step,index)=>actionTerms[species].test(step)&&(positiveHeat(step)||((['pork','beef'].includes(species)||placement.test(step))&&positiveHeat(steps[index+1]))));
+    const soleGenericMeatHeat=['pork','beef'].includes(species)&&rawSpecies.length===1&&steps.some((step)=>/고기/u.test(step)&&positiveHeat(step));
+    const boundEggHeat=species==='egg'&&steps.some((step,index)=>actionTerms.egg.test(step)&&/(?:반죽|튀김옷|옷을|묻|버무)/u.test(step)&&steps.slice(index+1).some(positiveHeat));
     const proteinHeat=explicitHeat||soleGenericMeatHeat||boundEggHeat;
     return !proteinHeat;
   });

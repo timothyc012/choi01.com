@@ -475,6 +475,11 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.getElementById('groceryPending').textContent,/감자.*가격 미확인/);
   assert.equal(dom.window.document.querySelectorAll('[data-grocery-key="NeueMarkt:닭가슴살"]').length,1);
   assert.equal(dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭 가슴살"]'),null);
+  const persistedChoice=runtime.shoppingState.list.find((item)=>item.key==='NeueMarkt:닭가슴살');
+  persistedChoice.product='Persisted chosen fillet';persistedChoice.source='https://example.com/persisted-choice';
+  const persistedCheckbox=dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭가슴살"]');
+  persistedCheckbox.checked=true;persistedCheckbox.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+  assert.match(dom.window.document.getElementById('groceryCompleted').textContent,/Persisted chosen fillet.*할인 근거 연결됨/s);
   dom.window.document.querySelectorAll('[data-grocery-remove]').forEach((button)=>button.click());
   dom.window.document.getElementById('acceptToday').click();
   assert.ok(Object.values(runtime.plans.저녁).filter((slot)=>slot.origin==='manual').length>=1);

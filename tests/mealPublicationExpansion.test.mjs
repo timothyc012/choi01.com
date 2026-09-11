@@ -293,13 +293,16 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   }
 
   const optionalOil=candidate('optional-oil-grammar');
-  optionalOil.steps[1].instruction='기름을 넣지 않아도 됩니다. 버터 대신 코코넛오일을 써도 됩니다.';
+  optionalOil.steps[1].instruction='기름은 넣지 않아도 됩니다. 버터는 넣지 않아도 됩니다. 버터 대신 코코넛오일을 써도 됩니다.';
   assert.deepEqual(unquantifiedActionIngredients(optionalOil),[]);
 
   const sesameOnly=candidate('sesame-only');
   sesameOnly.ingredients.push({ordinal:4,label:'참기름 1큰술',ingredient:'참기름',quantity:'1큰술'});
   sesameOnly.steps[1].instruction='마지막에 참기름을 넣어 향을 냅니다.';
   assert.deepEqual(unquantifiedActionIngredients(sesameOnly),[]);
+  const bareSesame=candidate('bare-sesame');
+  bareSesame.steps[1].instruction='마지막에 참기름을 넣어 향을 냅니다.';
+  assert.deepEqual(unquantifiedActionIngredients(bareSesame),['참기름']);
 });
 
 test('editorial validation requires a Korean public title',()=>{

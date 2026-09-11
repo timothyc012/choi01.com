@@ -117,6 +117,8 @@ test('canonicalizes cooking-oil and melted-butter aliases into single shopping r
   assert.equal(shopping.ingredientName('식용유 약간'),'식용유');
   assert.equal(shopping.ingredientName('백설포도씨유 적당히'),'백설포도씨유');
   assert.equal(shopping.keyFor('Netto','백설포도씨유'),'Netto:식용유');
+  for(const label of ['백설 카놀라유','엑스트라버진 올리브유','식용유 넉넉히']) assert.equal(shopping.keyFor('Netto',shopping.ingredientName(label)),'Netto:식용유',label);
+  assert.equal(shopping.keyFor('Netto','녹인 버터'),'Netto:버터');
 });
 
 test('keeps a specific oil offer price while collapsing the grocery key',()=>{
@@ -357,11 +359,20 @@ test('X replacement records a bounded dismissal and clear is a distinct manual e
 });
 
 test('shopping list rows keep purchase facts needed by the aisle view',()=>{
-  const cart=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{'닭고기':{amount:300,unit:'g'}}}],{catalog:fixtureCatalog});
+  const cart=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{'닭고기':{amount:300,unit:'g'}},offerCatalog:{닭고기:{...fixtureCatalog.Netto.닭고기,product:'Hähnchen',source:'https://example.test/chicken'}}}],{catalog:fixtureCatalog});
   const [listed]=shopping.addToList([],cart);
   assert.equal(listed.pack,'1 kg');
   assert.equal(listed.priceCents,799);
   assert.equal(listed.completed,false);
+  assert.equal(listed.product,'Hähnchen');
+  assert.equal(listed.source,'https://example.test/chicken');
+  const repeated=shopping.addToList([listed],cart)[0];
+  assert.equal(repeated.quantity,1);
+  assert.equal(repeated.quantityNeedsCheck,false);
+  const uncertain=shopping.basket([{store:'Netto',sale:[],missing:['식용유'],requiredAmounts:{}}],{catalog:{Netto:{식용유:{priceCents:299,pack:'1 l',product:'Öl',source:'https://example.test/oil'}}}});
+  const repeatedUncertain=shopping.addToList(shopping.addToList([],uncertain),uncertain)[0];
+  assert.equal(repeatedUncertain.quantity,1);
+  assert.equal(repeatedUncertain.quantityNeedsCheck,true);
 });
 
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {
@@ -431,6 +442,7 @@ test('all six entry pages are identical and use current recipes without portion 
       assert.ok(html.includes(asset + '.js?v='));
     }
     assert.doesNotMatch(html,/ontology-recipe-details\.js|meal-package-prices\.js/);
+    assert.doesNotMatch(html,/직접 조절할 수 있습니다/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);

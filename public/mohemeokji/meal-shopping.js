@@ -4,8 +4,8 @@
   const normalize = (name) => {
     const value=String(name||'').trim();
     if(value==="밥")return "쌀";
-    if(["기름","오일","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유","해바라기유","코코넛오일"].includes(value)||/(?:식용유|포도씨유|해바라기유|코코넛오일)$/u.test(value))return "식용유";
-    if(value==="녹인버터")return "버터";
+    if(["기름","오일","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유","해바라기유","코코넛오일"].includes(value)||/(?:식용유|포도씨유|카놀라유|해바라기유|올리브유|올리브오일|코코넛오일)$/u.test(value))return "식용유";
+    if(/^녹인\s*버터$/u.test(value))return "버터";
     return value;
   };
   const keyFor = (store, name) => store + ":" + normalize(name);
@@ -13,7 +13,7 @@
 
   function ingredientName(label) {
     return String(label||'').trim().replace(/\s*\(원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
-      .replace(/\s+(?:약간|조금|적당량|적당히)\s*$/u,'')
+      .replace(/\s+(?:약간|조금|적당량|적당히|넉넉히)\s*$/u,'')
       .split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
   }
 
@@ -302,8 +302,9 @@
       const previous = merged.get(item.key);
       const quantity = Math.max(previous?.quantity || 1, item.quantity);
       merged.set(item.key, {
-        key: item.key, name: item.name, store: item.store, pack: item.pack,
-        quantity, priceCents: item.priceCents, quantityNeedsCheck:Boolean(item.quantityNeedsCheck),
+        key: item.key, name: item.name, store: item.store, pack: previous?.product?previous.pack:item.pack,
+        product:previous?.product||item.product||'',source:previous?.source||item.source||'',
+        quantity, priceCents: previous?.product?previous.priceCents:item.priceCents, quantityNeedsCheck:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck),
         completed: Boolean(previous?.completed && quantity === previous.quantity)
       });
     }
@@ -356,10 +357,11 @@
           if (!item || !validStore(item.store) || typeof item.name !== "string" || !item.name.trim()
             || item._validAliasKey!==true || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
+            || (item.product!==undefined&&typeof item.product!=="string") || (item.source!==undefined&&typeof item.source!=="string")
             || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, quantity, priceCents, completed, quantityNeedsCheck }) => ({ key, name, store, pack, quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true }));
+        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true }));
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
@@ -368,7 +370,7 @@
         if (saved?.snapshot !== snapshot) {
           state.prices = {};
           state.quantities = {};
-          state.list = state.list.map((item) => ({ ...item, quantity:1, quantityNeedsCheck:true, priceCents: null, pack: '지난 자료 · 판매 단위 재확인' }));
+          state.list = state.list.map((item) => ({ ...item, quantity:1, quantityNeedsCheck:true, priceCents: null, product:'', source:'', pack: '지난 자료 · 판매 단위 재확인' }));
         }
       } catch { /* Already restored as empty above. */ }
     }

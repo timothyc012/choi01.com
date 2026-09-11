@@ -437,8 +437,8 @@
         byId('groceryEmpty').hidden=shoppingState.list.length>0;
         const row=(item)=>{
           const offer=catalog[item.store]?.[item.name];
-          const product=offer?.product||item.product||'독어 상품명 미확인';
-          const source=offer?.source||item.source;
+          const product=item.product||offer?.product||'독어 상품명 미확인';
+          const source=item.source||offer?.source;
           return '<li class="grocery-item'+(item.completed?' completed':'')+'"><label class="grocery-check"><input type="checkbox" data-grocery-key="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 구매 완료"'+(item.completed?' checked':'')+'><span><strong>'+escapeHtml(item.name)+'</strong><small lang="de">'+escapeHtml(product)+'</small><small>'+escapeHtml(item.store+' · '+item.pack+(item.quantityNeedsCheck?' · 구매 수량 확인':' × '+item.quantity))+' · '+(source?'할인 근거 연결됨':'가격·근거 확인 필요')+'</small></span></label><span class="grocery-item-cost">'+(item.priceCents===null?(item.quantityNeedsCheck?'가격 미확인 · 수량 확인':'가격 미확인'):item.quantityNeedsCheck?'수량 확인':shopping.euro(item.priceCents*item.quantity))+'</span><button class="icon-button" data-grocery-remove="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 장보기 목록에서 삭제">×</button></li>';
         };
         byId('groceryPending').innerHTML=shoppingState.list.filter((item)=>!item.completed).map(row).join('');
