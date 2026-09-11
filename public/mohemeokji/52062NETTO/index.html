@@ -28,7 +28,7 @@
         --blue-wash: #eef5fb;
         --amber: #9a6a12;
         --amber-wash: #faf3e2;
-        --content: 1180px;
+        --content: 1640px;
         --radius: 8px;
         font-family: Aptos, "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
         color: var(--ink);
@@ -344,11 +344,11 @@
       .pantry-list small { margin-top: 2px; color: var(--muted); font-size: 10px; }
       .workspace, .planning-desk {
         display: grid;
-        grid-template-columns: minmax(0, 1.18fr) minmax(300px, .82fr);
+        grid-template-columns: minmax(0, 1fr) 320px;
         gap: 16px;
         align-items: start;
       }
-      .week-planner { order: 1; }
+      .week-planner { order: 1; min-width: 0; }
       .recipe-ledger { order: 2; position: sticky; top: 84px; }
       .panel {
         overflow: hidden;
@@ -367,25 +367,21 @@
       .panel-kicker { margin: 0 0 6px; color: var(--blue); text-transform: uppercase; }
       .panel-header h3 { margin: 0; font-size: 20px; letter-spacing: -.02em; }
       .panel-copy { margin: 7px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-      .week-head, .week-row {
-        display: grid;
-        grid-template-columns: 74px minmax(0, 1fr) minmax(0, 1fr);
-      }
-      .week-head {
-        padding: 11px 20px;
-        border-bottom: 1px solid var(--border-soft);
-        color: var(--faint);
-        font-size: 12px;
-      }
+      .week-calendar { overflow-x: auto; overscroll-behavior-x: contain; }
+      #weekGrid { display: grid; grid-template-columns: repeat(7, minmax(128px, 1fr)); min-width: 896px; }
       .week-row {
-        min-height: 88px;
-        border-bottom: 1px solid var(--border-soft);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: 44px repeat(2, minmax(236px, auto));
+        min-width: 0;
+        border-right: 1px solid var(--border-soft);
       }
       .week-row.today-row { background: rgba(238, 245, 251, .38); }
-      .week-row:last-child { border-bottom: 0; }
-      .day { padding: 17px 10px 10px 20px; color: var(--muted); font-size: 13px; font-weight: 650; }
+      .week-row:last-child { border-right: 0; }
+      .day { position: relative; display: grid; place-items: center; padding: 8px; background: var(--surface-strong); color: var(--ink-soft); font-size: 14px; font-weight: 700; }
       .day small { display: block; margin-top: 3px; color: var(--blue); font-size: 9px; }
-      .slot { min-width: 0; padding: 10px; border-left: 1px solid var(--border-soft); }
+      .slot { min-width: 0; padding: 8px; border-top: 1px solid var(--border-soft); display: flex; flex-direction: column; gap: 8px; }
+      .slot-moment { color: var(--muted); font-size: 12px; font-weight: 700; }
       .slot.drop-target {
         border-radius: var(--radius);
         background: var(--blue-wash);
@@ -409,18 +405,23 @@
       .meal-card {
         min-height: 68px;
         display: flex;
-        align-items: center;
+        flex: 1;
+        flex-direction: column;
+        align-items: stretch;
         justify-content: space-between;
         gap: 12px;
-        padding: 10px 12px;
+        padding: 10px;
         border: 1px solid #b8ddcb;
         border-radius: var(--radius);
         background: var(--green-wash);
       }
       .meal-card-main { min-width: 0; flex: 1 1 auto; }
-      .meal-card-title { overflow-wrap: anywhere; font-size: 13px; font-weight: 650; line-height: 1.35; }
+      .meal-card-title { overflow-wrap: anywhere; word-break: keep-all; font-size: 14px; font-weight: 650; line-height: 1.5; }
       .meal-card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; color: var(--muted); font-size: 11px; }
-      .meal-card-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: 4px; }
+      .meal-card-actions { display: flex; flex-wrap: wrap; justify-content: start; gap: 4px; }
+      .meal-card-actions .button { width: 100%; text-align: left; }
+      .meal-card-meta { font-size: 10px; overflow-wrap: anywhere; }
+      .slot-empty { flex: 1; flex-direction: column; justify-content: center; padding: 8px; }
       .icon-button {
         width: 30px;
         height: 30px;
@@ -585,9 +586,6 @@
         }
         .mobile-task-nav button { min-height: 56px; border: 0; background: transparent; color: var(--muted); font-weight: 700; }
         .mobile-task-nav button[aria-current="page"] { color: var(--green); box-shadow: inset 0 3px var(--green); }
-        .week-head, .week-row { grid-template-columns: 54px minmax(0, 1fr) minmax(0, 1fr); }
-        .week-head { padding-inline: 8px; }
-        .day { padding-inline: 8px 4px; }
         .slot { padding: 6px; }
         .meal-card { display: grid; align-content: space-between; padding: 8px; }
         .meal-card-title { font-size: 12px; }
@@ -626,9 +624,6 @@
         .pantry-list { grid-template-columns: 1fr; }
         .offer-original-list li:nth-child(odd) { border-right: 0; }
         .panel-header { display: block; }
-        .week-head, .week-row { grid-template-columns: 46px minmax(0, 1fr) minmax(0, 1fr); }
-        .week-head { padding-left: 8px; }
-        .day { padding-left: 8px; }
         .meal-card-title { white-space: normal; }
         .menu-bottom { align-items: end; }
         .menu-actions { flex-direction: column; }
@@ -819,12 +814,12 @@
               <div>
                 <p class="panel-kicker mono">01 · MY WEEK</p>
                 <h3>나의 식단표</h3>
-                <p class="panel-copy">자동으로 채운 뒤, 오른쪽 메뉴를 끌어다 놓아 원하는 칸을 바꿀 수 있습니다.</p>
+                <p class="panel-copy">월요일부터 일요일까지 점심·저녁을 정해보세요. 메뉴를 끌어 놓거나 칸을 골라 추가할 수 있습니다.</p>
               </div>
               <button class="button button-small button-quiet" id="shoppingList">장보기 목록 보기</button>
             </header>
-            <div class="week-head"><span>요일</span><span>점심</span><span>저녁</span></div>
-            <div id="weekGrid"></div>
+            <div class="week-calendar" role="region" aria-label="월요일부터 일요일까지 주간 식단표, 가로로 스크롤" tabindex="0"><div id="weekGrid"></div></div>
+            <p class="footer-note" style="padding:0 20px">작은 화면에서는 식단표를 좌우로 넘겨 일요일까지 확인하세요.</p>
             <p class="footer-note" id="planStatus" role="status" aria-live="polite" style="padding:0 20px"></p>
             <p class="footer-note" id="todayPlanNote" style="padding:0 20px 18px"></p>
           </article>
@@ -937,11 +932,12 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="./meal-planner-recipe-data.js?v=23df61ee7a4b"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=23df61ee7a4b"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=23df61ee7a4b"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=23df61ee7a4b"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=23df61ee7a4b"></script>
+    <script src="/mohemeokji/meal-verified-evidence.js?v=a8d2dbc990be"></script>
+    <script src="./meal-planner-recipe-data.js?v=a8d2dbc990be"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=a8d2dbc990be"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=a8d2dbc990be"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=a8d2dbc990be"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=a8d2dbc990be"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {

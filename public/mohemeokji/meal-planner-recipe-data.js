@@ -26,6 +26,21 @@
     return sourceRecipeId&&value===expected?value:null;
   }
 
+  function reviewEvidenceFor(recipe,snapshotId,evidence=window.mealVerifiedEvidence) {
+    const entry=evidence?.recipes?.[recipe.sourceRecipeId];
+    if(!snapshotId||evidence?.snapshotId!==snapshotId||entry?.sourceRecipeId!==recipe.sourceRecipeId||entry?.detailSha256!==recipe.detailSha256||!safeRecipeSourceUrl(entry.sourceUrl,recipe.sourceRecipeId))return null;
+    if(!/^\d{4}-\d{2}-\d{2}T/.test(entry.checkedAt||'')||!Number.isFinite(Date.parse(entry.checkedAt))||entry.method!=='recipe-feedback-v1')return null;
+    return entry;
+  }
+
+  function reviewSummary(meal) {
+    const evidence=meal?.reviewEvidence;
+    const verified=evidence?.status==='verified'&&Number.isSafeInteger(evidence.reviewCount)&&evidence.reviewCount>=0;
+    const count=verified?'요리 후기 '+evidence.reviewCount.toLocaleString('ko-KR')+'개':'리뷰 수 미확인';
+    const rating=verified&&typeof evidence.ratingValue==='number'&&evidence.ratingValue>=0&&evidence.ratingValue<=5?' · 평점 '+evidence.ratingValue.toFixed(1):'';
+    return count+rating+(evidence?' · 원문 확인 '+evidence.checkedAt.slice(0,10):'');
+  }
+
   function fromSnapshotLocation(location) {
     const offersById=Object.fromEntries((location?.offers||[]).map((offer)=>[offer.offerId,offer]));
     return (location?.recipes || []).map((recipe) => {
@@ -65,6 +80,7 @@
       recommendationProfile: recipe.recommendationProfile || {},
       qualityScore: recipe.qualityScore ?? null,
       qualityFacts: recipe.qualityFacts || {},
+      reviewEvidence: reviewEvidenceFor(recipe,location.snapshotId),
       basketFacts: recipe.basketFacts || null,
       nutritionFacts: recipe.nutritionFacts || null,
       sourceServings: recipe.sourceServings ?? null,
@@ -117,8 +133,8 @@
       if(/카레|탄두리|난|또띠아|커리|볶음면|라이스페이퍼/.test(text)) keys.add('asian');
       if(/샐러드|머핀|토스트|스콘|티라미수|스무디|파스타|스파게티|프라이|치즈|버터빵|그라탕/.test(text)) keys.add('western');
     }
-    const animal=/닭|돼지|소고기|소·돼지|고기|햄|베이컨|참치|연어|송어|새우|굴|멸치|육수|불고기/.test(text);
-    if(!animal&&['fruit','yogurt','cheese','vegetable'].includes(profile.family)) keys.add('vegetarian');
+    // A title or ingredient family cannot establish a vegetarian dish.
+    // Keep that filter explicit until the full ingredient list is reviewed.
     if(Number.isFinite(recipe?.time)&&recipe.time<=20) keys.add('quick');
     return [...keys];
   }
@@ -126,8 +142,8 @@
   function qualitySummary(meal) {
     const facts=meal?.qualityFacts||{};
     const completeness=facts.completeness===1?'원문 재료·조리 순서 확인':'원문 확인 범위 제한';
-    const primary=(meal?.recommendationProfile?.primaryIngredients||meal?.sale||[]).join(' · ');
-    return [completeness,primary?primary+' 할인 연결':'주재료 할인 연결 확인'].join(' · ');
+    const primary=(meal?.sale||[]).join(' · ');
+    return [reviewSummary(meal),completeness,primary?primary+' 할인 연결':'현재 주재료 할인 미연결'].join(' · ');
   }
 
   function selectSnapshotLocation(sourceLocations,params=new URLSearchParams(),pathname='') {
@@ -218,6 +234,7 @@
       byId('branchSelect').addEventListener('change',(event)=>openLocation(activeArea,activeStore,event.target.value));
 
       const location=await loader.loadLocationSnapshot(manifest,{postcode:activeArea,store:activeStore,branchId:activeBranch.branchId});
+      const collected=window.mealVerifiedEvidence?.snapshotId===manifest.snapshotId&&window.mealVerifiedEvidence?.csvSha256===manifest.source?.csvSha256?window.mealVerifiedEvidence.locations?.[location.id]:null;
       const meals=fromSnapshotLocation(location);
       const mealById=(id)=>meals.find((meal)=>meal.id===id);
       const catalog={ [activeStore]:offerCatalogFromSnapshot(location) };
@@ -318,7 +335,7 @@
             : slot.recipeId
               ? '<div class="meal-card"><div class="meal-card-main"><div class="meal-card-title">'+escapeHtml(archived?.title||'저장한 메뉴')+'</div><div class="meal-card-meta"><span>이전 주 수동 메뉴</span><span>'+(archived?'보관 근거 있음':'상세 근거 없음')+'</span></div></div><div class="meal-card-actions">'+(useArchived?'<button class="icon-button detail-trigger" data-id="'+escapeHtml(slot.recipeId)+'" data-archived="true" aria-label="보관된 상세 열기">↗</button>':'')+'<button class="icon-button" data-replace-slot="'+day+'" data-replace-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 다음 후보 보기" title="다음 후보 보기">×</button><button class="button button-small button-quiet" data-clear-slot="'+day+'" data-clear-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 비우기">비우기</button></div></div>'
               : '<div class="slot-empty"><span>'+moment+' 메뉴 없음</span><button class="button button-small button-quiet" data-pick-slot="'+day+'" data-pick-moment="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 메뉴 고르기">메뉴 고르기</button></div>';
-          return '<div class="slot" data-day="'+day+'" data-moment-slot="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 메뉴 칸">'+body+'</div>';
+          return '<div class="slot" data-day="'+day+'" data-moment-slot="'+moment+'" aria-label="'+dayNames[day]+' '+moment+' 메뉴 칸"><span class="slot-moment">'+moment+'</span>'+body+'</div>';
         };
         byId('weekGrid').innerHTML=days.map(([day,label])=>{
           return '<div class="week-row"><div class="day"><span aria-hidden="true">'+label+'</span><span class="sr-only">'+dayNames[day]+'</span></div>'+slotBody('점심',day,label)+slotBody('저녁',day,label)+'</div>';
@@ -333,7 +350,7 @@
             const moment=slot.dataset.momentSlot,day=slot.dataset.day;
             plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
             selectedPlanTarget=null;
-            savePlans();renderPlanAndBind();renderMenu();
+            savePlans();renderPlanAndBind();renderMenu();bindDetailTriggers();
             byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+moment+'에 메뉴를 넣었습니다.';
           });
         });
@@ -362,8 +379,8 @@
           return matchesFilter&&matchesQuery;
         });
         byId('menuCount').textContent=String(meals.length);
-        byId('offerCount').textContent=location.offers.length+'종';
-        byId('menuCountNote').textContent=location.coverage?.sparse?'승인된 메뉴가 부족한 지점입니다.':'선택한 지점 스냅샷만 표시합니다.';
+        byId('offerCount').textContent=collected?'수집 '+collected.collectedRows+'건 · 연결 '+collected.linkedProducts+'종':'재료 연결 '+location.offers.length+'종';
+        byId('menuCountNote').textContent='선택한 지점의 게시 메뉴 '+meals.length+'개'+(collected?.unmatchedRows?' · 수집 상품 '+collected.unmatchedRows+'건은 재료 매칭 미완료':'');
         byId('menuList').innerHTML=visible.length?visible.map((meal)=>{
           const evaluation=recommendations.evaluateRecipeForMode(meal,recommendationContext(),preferences.mode);
           const offer=meal.matchedOffers[0];
@@ -378,7 +395,7 @@
           card.addEventListener('dragstart',(event)=>{if(!event.dataTransfer)return;event.dataTransfer.setData('text/plain',card.dataset.id);event.dataTransfer.effectAllowed='copy';card.classList.add('dragging');});
           card.addEventListener('dragend',()=>card.classList.remove('dragging'));
         });
-        byId('offerDirectorySummary').textContent=activeStore+' 할인상품 독어 원문명 '+location.offers.length+'종';
+        byId('offerDirectorySummary').textContent=activeStore+' 레시피 연결 가능 상품 독어 원문명 '+location.offers.length+'종'+(collected?' · 수집자료 '+collected.collectedRows+'건 중':'');
         byId('offerDirectoryList').innerHTML=location.offers.map((offer)=>'<li><strong>'+escapeHtml(offer.identity.ingredientId)+'</strong><span lang="de">'+escapeHtml(offer.productDe)+'</span><small>'+escapeHtml(offer.pack)+' · '+shopping.euro(offer.priceCents)+'</small></li>').join('');
       }
 
@@ -574,7 +591,8 @@
           else byId('recipeSource').removeAttribute('href');
           byId('recipeSource').hidden=!sourceUrl;
           byId('recipeStepsBlock').hidden=false;
-          byId('recipeMeta').textContent=detail.sourceServingText||'원문 인분 미표기';
+          const detailEvidence=reviewEvidenceFor({...detail,detailSha256:reference.detailSha256},reference===meal?manifest.snapshotId:reference.snapshotId);
+          byId('recipeMeta').textContent=(detail.sourceServingText||'원문 인분 미표기')+' · '+reviewSummary({reviewEvidence:detailEvidence});
           byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
           byId('addShoppingItems').disabled=false;
           byId('eatFromDetail').disabled=false;
@@ -626,7 +644,7 @@
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{input.checked=input.value===preferences.mode;});
       byId('targetServings').value=String(preferences.targetServings);
       renderMealMomentControls();renderToday();renderPlanAndBind();renderPantry();showPlanCoverage();renderMenu();bindDetailTriggers();bindMenuActions();renderGroceries();
-      byId('sourceStatus').textContent=location.coverage?.sparse?activeArea+' · '+activeStore+' · 승인 메뉴 준비 중':activeArea+' · '+activeStore+' · 검증 메뉴 '+meals.length+'개';
+      byId('sourceStatus').textContent=activeArea+' · '+activeStore+' · 게시 메뉴 '+meals.length+'개';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
       byId('sourceStatus').dataset.snapshotState=location.coverage?.sparse?'sparse':'ready';
       const lastOfferDay=location.offers.map((offer)=>offer.validThrough).filter(Boolean).sort().at(-1);
@@ -749,5 +767,5 @@
     }
   }
 
-  window.MealRecipeData = {legacyEnabled, safeRecipeSourceUrl, fromSnapshotLocation, offerCatalogFromSnapshot, selectSnapshotLocation, acceptLegacyScopedPayload, startSnapshotApp};
+  window.MealRecipeData = {legacyEnabled, safeRecipeSourceUrl, reviewEvidenceFor, reviewSummary, fromSnapshotLocation, offerCatalogFromSnapshot, selectSnapshotLocation, acceptLegacyScopedPayload, startSnapshotApp};
 }());

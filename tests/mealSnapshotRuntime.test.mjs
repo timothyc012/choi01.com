@@ -209,7 +209,7 @@ test('snapshot recipes restore menu categories from approved profile and title f
     {sourceRecipeId:'2',title:'닭가슴살 장조림',offerIds:[],primaryIngredientIds:['닭가슴살'],recommendationProfile:{family:'chicken',kind:'main',method:'braise'}}
   ]});
   assert.ok(recipes[0].filter.includes('asian'));
-  assert.ok(recipes[0].filter.includes('vegetarian'));
+  assert.equal(recipes[0].filter.includes('vegetarian'),false,'a fruit title cannot prove the absence of oyster sauce');
   assert.ok(recipes[1].filter.includes('korean'));
   assert.equal(recipes[1].filter.includes('vegetarian'),false);
 });
@@ -515,8 +515,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   detailOpener.focus();detailOpener.click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
-  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'2인분');
-  assert.doesNotMatch(dom.window.document.getElementById('recipeMeta').textContent,/리뷰|평점/);
+  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'2인분 · 리뷰 수 미확인');
+  assert.doesNotMatch(dom.window.document.getElementById('recipeMeta').textContent,/1,234|평점/);
   assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
   assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
