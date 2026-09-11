@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "audit": {
+    "database": "01ontology",
+    "tenant": "recipe-full",
+    "startedAt": "2026-09-11T13:15:16.932Z",
+    "completedAt": "2026-09-11T17:25:09.669Z",
+    "wallHours": 4.1646,
+    "requests": 72569,
+    "coverage": {
+      "auditRows": 72569,
+      "expectedRecipeIndividuals": 72569,
+      "coverageRatio": 1
+    },
+    "verified": 21659,
+    "unverified": 50910,
+    "byReason": {
+      "verified": {
+        "count": 21659,
+        "dbReviewPresent": 21659,
+        "dbRatingPresent": 21659
+      },
+      "recipe-review-count-not-published": {
+        "count": 48739,
+        "dbReviewPresent": 48611,
+        "dbRatingPresent": 48611
+      },
+      "recipe-entity-missing": {
+        "count": 1003,
+        "dbReviewPresent": 1003,
+        "dbRatingPresent": 1003
+      },
+      "review-count-conflict": {
+        "count": 229,
+        "dbReviewPresent": 229,
+        "dbRatingPresent": 229
+      },
+      "source-unavailable": {
+        "count": 937,
+        "dbReviewPresent": 936,
+        "dbRatingPresent": 936
+      },
+      "recipe-identity-mismatch": {
+        "count": 2,
+        "dbReviewPresent": 2,
+        "dbRatingPresent": 2
+      }
+    }
+  },
+  "sourceComparison": {
+    "verifiedDbReviewMatches": 33,
+    "verifiedDbReviewMismatches": 21626,
+    "verifiedDbRatingMatches": 6921,
+    "verifiedDbRatingMismatches": 14738
+  },
+  "beforeDbSnapshot": {
+    "recipeIndividuals": 72569,
+    "reviewCountPresent": 72440,
+    "ratingValuePresent": 72440,
+    "reviewEvidenceStatusPresent": 49
+  },
+  "reconciliationPlan": {
+    "updateVerified": 21659,
+    "clearReviewFieldsForNoPublishedCount": 48739,
+    "holdUncertain": 2171,
+    "holdReasons": {
+      "recipe-entity-missing": 1003,
+      "review-count-conflict": 229,
+      "source-unavailable": 937,
+      "recipe-identity-mismatch": 2
+    },
+    "policy": "Only source-verified reviewCount/ratingValue are written. Recipes with no published review count are cleared. Conflicts, unavailable sources, and identity/entity failures retain existing numeric fields but receive unverified evidence metadata."
+  },
+  "costEstimate": {
+    "paidApiCost": 0,
+    "requestMethod": "curl HTML fetch to public recipe pages",
+    "note": "No paid API was used; bandwidth/provider rate charges are not measured."
+  },
+  "artifacts": {
+    "evidenceJsonl": "/private/tmp/full-recipe-review-evidence.jsonl",
+    "evidenceSha256": "b7800bc5270a478686be5ff5bbedaaafa9a030d7282ddb811affc1abd0014ea1",
+    "dryRunSql": "/private/tmp/full-review-reconciliation.sql",
+    "executeSql": "/private/tmp/full-review-reconciliation-execute.sql"
+  }
+}
