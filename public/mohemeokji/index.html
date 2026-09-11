@@ -344,10 +344,12 @@
       .pantry-list small { margin-top: 2px; color: var(--muted); font-size: 10px; }
       .workspace, .planning-desk {
         display: grid;
-        grid-template-columns: minmax(300px, .78fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1.18fr) minmax(300px, .82fr);
         gap: 16px;
         align-items: start;
       }
+      .week-planner { order: 1; }
+      .recipe-ledger { order: 2; position: sticky; top: 84px; }
       .panel {
         overflow: hidden;
         border: 1px solid var(--border);
@@ -415,8 +417,8 @@
         border-radius: var(--radius);
         background: var(--green-wash);
       }
-      .meal-card-main { min-width: 0; }
-      .meal-card-title { overflow: hidden; font-size: 13px; font-weight: 650; text-overflow: ellipsis; white-space: nowrap; }
+      .meal-card-main { min-width: 0; flex: 1 1 auto; }
+      .meal-card-title { overflow-wrap: anywhere; font-size: 13px; font-weight: 650; line-height: 1.35; }
       .meal-card-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; color: var(--muted); font-size: 11px; }
       .meal-card-actions { display: flex; flex-wrap: wrap; justify-content: end; gap: 4px; }
       .icon-button {
@@ -470,6 +472,7 @@
       .menu-offer b { color: var(--green); }
       .menu-facts { display: grid; gap: 3px; margin: 8px 0 0; color: var(--muted); font-size: 10px; line-height: 1.45; }
       .menu-facts span { overflow-wrap: anywhere; }
+      .menu-quality { margin: 8px 0 0; color: var(--green); font-size: 10px; line-height: 1.45; }
       .menu-sub { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
       .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
       .tag { padding: 4px 7px; border-radius: 4px; background: var(--surface-strong); color: var(--muted); font-size: 10px; }
@@ -562,6 +565,7 @@
       @media (max-width: 1023px) {
         .nav-links { display: none; }
         .decision-grid, .workspace, .planning-desk { grid-template-columns: 1fr; }
+        .recipe-ledger { position: static; }
         .why-card { min-height: 340px; }
         .menu-list { max-height: none; }
         .section-head { align-items: start; }
@@ -815,7 +819,7 @@
               <div>
                 <p class="panel-kicker mono">01 · MY WEEK</p>
                 <h3>나의 식단표</h3>
-                <p class="panel-copy">자동으로 채운 뒤 메뉴를 삭제하거나 직접 바꿀 수 있습니다.</p>
+                <p class="panel-copy">자동으로 채운 뒤, 오른쪽 메뉴를 끌어다 놓아 원하는 칸을 바꿀 수 있습니다.</p>
               </div>
               <button class="button button-small button-quiet" id="shoppingList">장보기 목록 보기</button>
             </header>
@@ -933,11 +937,11 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="./meal-planner-recipe-data.js?v=3dba5330c26f"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=3dba5330c26f"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=3dba5330c26f"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=3dba5330c26f"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=3dba5330c26f"></script>
+    <script src="./meal-planner-recipe-data.js?v=94206a9b1d8c"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=94206a9b1d8c"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=94206a9b1d8c"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=94206a9b1d8c"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=94206a9b1d8c"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {

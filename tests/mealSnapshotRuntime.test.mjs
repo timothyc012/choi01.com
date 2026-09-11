@@ -202,6 +202,18 @@ test('legacy recipe runtime stays disabled while snapshot refs remain detail-laz
   assert.equal(api.safeRecipeSourceUrl('https://www.10000recipe.com/recipe/other','7000001'),null);
 });
 
+test('snapshot recipes restore menu categories from approved profile and title facts',()=>{
+  const {api}=loadRecipeData();
+  const recipes=api.fromSnapshotLocation({store:'EDEKA',recipes:[
+    {sourceRecipeId:'1',title:'카레 사과컵 볶음밥',offerIds:[],primaryIngredientIds:['사과'],recommendationProfile:{family:'cheese',kind:'main',method:'stirfry'}},
+    {sourceRecipeId:'2',title:'닭가슴살 장조림',offerIds:[],primaryIngredientIds:['닭가슴살'],recommendationProfile:{family:'chicken',kind:'main',method:'braise'}}
+  ]});
+  assert.ok(recipes[0].filter.includes('asian'));
+  assert.ok(recipes[0].filter.includes('vegetarian'));
+  assert.ok(recipes[1].filter.includes('korean'));
+  assert.equal(recipes[1].filter.includes('vegetarian'),false);
+});
+
 test('manifest-only selection maps every direct route and chooses the first branch deterministically',()=>{
   const {api}=loadRecipeData();
   const locations=[
@@ -268,7 +280,7 @@ test('legacy query is explicitly unavailable and does not load an unvalidated ar
 test('non-legacy bootstrap uses snapshot-only location and branch, rerenders summaries, rolls shopping state, and lazily opens detail', async () => {
   const detailPath='snapshots/2026-09-07/snapshot-new/recipes/9000001.detail.json';
   const detail=JSON.stringify({
-    schemaVersion:1,sourceRecipeId:'9000001',title:'새 지점 닭가슴살 볶음',sourceTitle:'원문 제목',sourceAuthor:'작성자',
+    schemaVersion:1,sourceRecipeId:'9000001',title:'새 지점 닭가슴살 볶음',sourceTitle:'원문 제목',sourceAuthor:'작성자',ratingNumber:4.8,reviewCount:1234,
     sourceUrl:'https://www.10000recipe.com/recipe/9000001',sourceServingText:'2인분',detailIngredients:['닭 가슴살 300g','소금 1t','올리브유 1큰술'],steps:['손질한다.','익힌다.','담는다.']
   });
   const badCurrentPath='snapshots/2026-09-07/snapshot-new/recipes/9000002.bad.json';
@@ -436,6 +448,21 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.getElementById('menuList').textContent,/Hähnchenbrustfilet.*Hähnchenbrust Innenfilet/);
   assert.match(dom.window.document.getElementById('menuList').textContent,/500 g.*5,99€.*Second branch.*2026-09-07.*할인 근거/s);
   assert.ok(dom.window.document.querySelector('[data-add-menu]'));
+  assert.deepEqual([...dom.window.document.querySelectorAll('.filter')].map((button)=>button.textContent.trim()),['전체','한식','중식·아시아','양식','20분 안','채식']);
+  assert.equal([...dom.window.document.querySelectorAll('.filter')].every((button)=>button.hidden===false),true);
+  assert.equal(dom.window.document.querySelector('.menu-item')?.getAttribute('draggable'),'true');
+  assert.match(dom.window.document.querySelector('.menu-quality')?.textContent||'',/선정 근거/);
+  const dragCard=dom.window.document.querySelector('.menu-item');
+  const dropSlot=dom.window.document.querySelector('#weekGrid .slot');
+  const dragData={setData(){},effectAllowed:''};
+  const dragStart=new dom.window.Event('dragstart',{bubbles:true});
+  Object.defineProperty(dragStart,'dataTransfer',{value:dragData});
+  dragCard.dispatchEvent(dragStart);
+  const drop=new dom.window.Event('drop',{bubbles:true});
+  Object.defineProperty(drop,'dataTransfer',{value:{getData:()=>dragCard.dataset.id}});
+  dropSlot.dispatchEvent(drop);
+  assert.equal(runtime.plans[dropSlot.dataset.momentSlot][dropSlot.dataset.day].recipeId,dragCard.dataset.id);
+  assert.equal(runtime.plans[dropSlot.dataset.momentSlot][dropSlot.dataset.day].origin,'manual');
   const search=dom.window.document.getElementById('menuSearch');
   search.value='없는 검색어';search.dispatchEvent(new dom.window.Event('input',{bubbles:true}));
   assert.doesNotMatch(dom.window.document.getElementById('menuList').textContent,/닭가슴살 활용/);
@@ -488,6 +515,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   detailOpener.focus();detailOpener.click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
+  assert.match(dom.window.document.getElementById('recipeMeta').textContent,/평점 4\.8 · 리뷰 1,234개/);
   assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
   assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
