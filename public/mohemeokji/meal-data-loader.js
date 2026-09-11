@@ -58,7 +58,7 @@
       artifactPath(path);
       if (!DIGEST.test(expected || '')) throw unavailable('invalid artifact hash');
     }
-    for (const field of ['coveragePath','recipeIndexPath','reviewQueuePath']) {
+    for (const field of ['coveragePath','recipeIndexPath']) {
       const path = artifactPath(manifest[field]);
       if (!DIGEST.test(manifest.fileHashes[path] || '')) throw unavailable('invalid ' + field);
     }

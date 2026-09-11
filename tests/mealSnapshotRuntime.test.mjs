@@ -34,7 +34,6 @@ function fixture(overrides = {}) {
     schemaVersion:1,snapshotId:'snapshot-a',weekStart:'2026-09-07',
     coveragePath:'snapshots/2026-09-07/snapshot-a/coverage.json',
     recipeIndexPath:'snapshots/2026-09-07/snapshot-a/recipes/index.json',
-    reviewQueuePath:'snapshots/2026-09-07/snapshot-a/review-queue.json',
     locations:[
       {id:'52064-edeka-branch-a',postcode:'52064',store:'EDEKA',branchId:'branch-a',path:locationPath,recipeCount:1},
       {id:'44369-netto-branch-b',postcode:'44369',store:'Netto',branchId:'branch-b',path:otherPath,recipeCount:0}
@@ -42,8 +41,7 @@ function fixture(overrides = {}) {
     fileHashes:{
       [locationPath]:sha256(location),[detailPath]:sha256(detail),[otherPath]:sha256('{}'),
       'snapshots/2026-09-07/snapshot-a/coverage.json':sha256('{}'),
-      'snapshots/2026-09-07/snapshot-a/recipes/index.json':sha256('{}'),
-      'snapshots/2026-09-07/snapshot-a/review-queue.json':sha256('{}')
+      'snapshots/2026-09-07/snapshot-a/recipes/index.json':sha256('{}')
     }
   };
   Object.assign(manifestObject, overrides.manifest);
@@ -83,6 +81,7 @@ test('fetches only current, its pinned manifest, the selected location, and one 
   const loader = loadRuntime();
   const data = fixture();
   const manifest = await loader.loadCurrentSnapshot(data.fetcher);
+  assert.equal('reviewQueuePath' in manifest,false);
   const location = await loader.loadLocationSnapshot(manifest,{postcode:'52064',store:'EDEKA',branchId:'branch-a'},data.fetcher);
   assert.equal(location.recipes.length,1);
   assert.equal(data.calls.length,3);
@@ -269,13 +268,12 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   const otherLocationPath='snapshots/2026-09-07/snapshot-new/locations/99999-neuemarkt-branch-a.json';
   const support={
     coveragePath:'snapshots/2026-09-07/snapshot-new/coverage.json',
-    recipeIndexPath:'snapshots/2026-09-07/snapshot-new/recipes/index.json',
-    reviewQueuePath:'snapshots/2026-09-07/snapshot-new/review-queue.json'
+    recipeIndexPath:'snapshots/2026-09-07/snapshot-new/recipes/index.json'
   };
   const manifestPath='snapshots/2026-09-07/snapshot-new/manifest.json';
   const fileHashes={
     [locationPath]:sha256(locationBody),[otherLocationPath]:sha256('{}'),[detailPath]:sha256(detail),[badCurrentPath]:sha256(badCurrent),[slowCurrentPath]:sha256(slowCurrent),[slowFailPath]:sha256(slowFailExpected),
-    [support.coveragePath]:sha256('{}'),[support.recipeIndexPath]:sha256('{}'),[support.reviewQueuePath]:sha256('{}')
+    [support.coveragePath]:sha256('{}'),[support.recipeIndexPath]:sha256('{}')
   };
   const manifestBody=JSON.stringify({schemaVersion:1,snapshotId:'snapshot-new',weekStart:'2026-09-07',...support,fileHashes,locations:[
     {id:'99999-neuemarkt-branch-a',postcode:'99999',store:'NeueMarkt',branch:'First branch',branchId:'branch-a',path:otherLocationPath,recipeCount:0},

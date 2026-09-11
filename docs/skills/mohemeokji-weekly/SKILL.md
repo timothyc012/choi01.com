@@ -34,10 +34,18 @@ This is the required bridge from store offer research to `recipe-full`. It group
 After reviewing or updating `data/mohemeokji/recipe-publication-registry.json`, compile the immutable public snapshot into a new empty directory:
 
 ```sh
-node scripts/compile-meal-week.mjs INPUT.csv --output-dir NEW_SNAPSHOT_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir NEW_SNAPSHOT_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_REVIEW_QUEUE.json
 ```
 
-The compiler selects separately for every postcode, chain, and branch. It publishes at most 48 recipes per location, keeps sparse and zero-candidate locations explicit, and writes `current.json`, the immutable manifest, location shards, recipe index, content-hashed recipe details, coverage, and a metadata-only review queue. It runs an internal twin build and stops if the bytes differ. Validate the result with `validateMealSnapshotDirectory`; do not move `current.json` into production if validation fails.
+The compiler selects separately for every postcode, chain, and branch. It publishes at most 48 recipes per location, keeps sparse and zero-candidate locations explicit, and writes `current.json`, the immutable manifest, location shards, recipe index, content-hashed recipe details, and coverage. The review queue is never part of the public manifest or public directory; request it only with `--audit-output` to a path outside the public snapshot root. The compiler rejects a private audit path nested under the public output. It runs an internal twin build and stops if the bytes differ. Run two complete database-backed compilations into separate new directories and verify their complete file trees:
+
+```sh
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_A --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_A.json
+node scripts/compile-meal-week.mjs INPUT.csv --output-dir TWIN_B --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --audit-output PRIVATE_B.json
+node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B
+```
+
+The verifier checks the pointer and every artifact hash, exact location boundaries, coverage and recipe references, zero-candidate facts, four-mode readiness, lazy browser asset sets, and asset budgets. A mode with missing price or measured nutrient evidence must be reported unavailable; it cannot silently fall back to balanced. Do not move `current.json` into production if either compile, validation, twin comparison, or verifier fails.
 
 Registry approval is tied to `sourceRecipeId`, current `sourceContentHash`, and `transformVersion`. An existing recipe ID or broad ingredient overlap is not approval. When source ingredients or instructions change, the old hash becomes stale and the recipe remains in the review queue until its Korean paraphrase is reviewed again. The public output may contain the approved Korean paraphrase, but never raw source instructions, source images, HTML, or unapproved text.
 
@@ -69,15 +77,24 @@ After evidence review, copy the dated CSV to `public/offers/` and regenerate:
 node scripts/generate-meal-offers.mjs public/offers/INPUT.csv public/mohemeokji/meal-package-prices.js
 node scripts/sync-meal-pages.mjs
 node scripts/sync-meal-pages.mjs --check
-node --test tests/mealShopping.test.mjs tests/mealWeekly.test.mjs tests/mealWeekPreflight.test.mjs tests/mealRecommendations.test.mjs
+node --test tests/mealSnapshotE2E.test.mjs tests/mealShopping.test.mjs tests/mealWeekly.test.mjs tests/mealWeekPreflight.test.mjs tests/mealRecommendations.test.mjs
 npm test
 npm run build
 npm run typecheck
+git diff --check
 ```
 
 The sync command copies canonical HTML/recipe wrapper to existing routes and changes asset URLs by content hash. Do not edit six pages independently or keep last week's cache key. Regression fixtures for known bad products remain pinned to the historical CSV; tests of the current catalog must use its actual source file rather than comparing next week's prices to last week.
 
-Browser QA must exercise the real static paths. Vite may serve the homepage for `/mohemeokji/`; use the existing static preview or a temporary `python3 -m http.server PORT --bind 127.0.0.1 --directory public` and close it afterward. Test all postcode/store options, legacy routes, invalid query fallback, recipe details/source link, independent lunch/dinner plans, switching stores and reloading saved state, pantry exclusion, check/uncheck and next-week stale-price invalidation. Inspect both 390px mobile and desktop screenshots and console logs. Never claim mobile QA from one desktop screenshot. If the Mac is locked, report that UI verification is blocked; do not bypass the lock.
+Browser QA must use the available CUA browser tool against the real static paths. Vite may serve the homepage for `/mohemeokji/`; use the existing static preview or a temporary `python3 -m http.server PORT --bind 127.0.0.1 --directory public` and close it afterward. Capture `1280×900`, `390×844`, and `320×844` screenshots and console/network evidence. Cover all manifest locations and one complete store plus a sparse/zero store in depth: four modes, lunch and dinner, X replacement and explicit clear, Plan/Shop/mobile navigation, detail/source failure, pantry, checklist, reload, and saved-plan rollover. The initial load must request only `current.json`, the pinned manifest, and the selected location; details are lazy and the browser must not request CSV, review queue, or another location. Never claim mobile QA from one desktop screenshot. If CUA is unavailable or the Mac is locked, record the precise blocker and leave the release gate failed; do not substitute raw Playwright/CDP or bypass the lock.
+
+Promote only after the twin compile, verifier, full test/build/typecheck/sync checks, and CUA matrix pass. Retain the previous two immutable snapshot trees. Before switching `public/mohemeokji/data/current.json`, save and verify the prior pointer as a rollback target:
+
+```sh
+node scripts/verify-meal-snapshot.mjs NEW_DATA_ROOT --twin TWIN_B --previous PREVIOUS_DATA_ROOT
+```
+
+After deployment, compare the deployed `current.json`, manifest, selected location, and changed app asset bytes with the committed files, then perform a read-only production smoke test. Rollback means restoring the verified previous pointer; do not delete or rewrite immutable snapshot files.
 
 Existing feature limits: pantry is scoped per postcode/store, and adding separate recipes to a checklist takes the larger pack count to avoid duplicate additions; weekly basket selection is the supported way to sum measured needs. Do not claim cross-store stock inventory, partial pantry quantities, serving scaling, a complete receipt total with unknown prices, live DB search or all grocery needs fulfilled.
 

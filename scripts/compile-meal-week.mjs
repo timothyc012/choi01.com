@@ -87,7 +87,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   }
   const reviewQueueEntries=[...reviewQueue.values()].map((entry)=>({...entry,locationIds:[...new Set(entry.locationIds)].sort()}))
     .sort((a,b)=>[a.recipeId,a.reason].join('|').localeCompare([b.recipeId,b.reason].join('|')));
-  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,locations,coverageLocations,reviewQueue:reviewQueueEntries};
+  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,locations,coverageLocations};
   const snapshotId=sha256(canonicalJson(seed));
   const snapshotRoot=`snapshots/${weekStart}/${snapshotId}`;
   const files=new Map();
@@ -108,21 +108,20 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   }
   const coveragePath=`${snapshotRoot}/coverage.json`;
   const recipeIndexPath=`${snapshotRoot}/recipes/index.json`;
-  const reviewQueuePath=`${snapshotRoot}/review-queue.json`;
   files.set(coveragePath,jsonBytes({schemaVersion:1,snapshotId,locations:coverageLocations,identityStats:candidateReport.identityStats||{},overflow:candidateReport.overflow||{},zeroCandidateIdentities:candidateReport.zeroCandidateIdentities||[],zeroCandidateOfferIds:(candidateReport.zeroCandidateOfferIds||[]).slice().sort()}));
   files.set(recipeIndexPath,jsonBytes({schemaVersion:1,snapshotId,recipes:recipeIndex}));
-  files.set(reviewQueuePath,jsonBytes({schemaVersion:1,snapshotId,recipes:reviewQueueEntries}));
   const manifestLocations=locations.map((location)=>({id:location.id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,path:`${snapshotRoot}/locations/${location.id}.json`,recipeCount:location.recipes.length}));
   const fileHashes=Object.fromEntries([...files].sort(([a],[b])=>a.localeCompare(b)).map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,locations:manifestLocations,coveragePath,recipeIndexPath,reviewQueuePath,fileHashes};
+  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
   const manifestPath=`${snapshotRoot}/manifest.json`;
   const manifestBytes=jsonBytes(manifest);
   const current={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)};
-  return {snapshotId,manifest,current,manifestPath,manifestBytes,files};
+  return {snapshotId,manifest,current,manifestPath,manifestBytes,files,reviewQueueBytes:jsonBytes({schemaVersion:1,snapshotId,recipes:reviewQueueEntries})};
 }
 
 function compareBuilds(left,right) {
   if(left.manifestPath!==right.manifestPath||!left.manifestBytes.equals(right.manifestBytes)||jsonBytes(left.current).compare(jsonBytes(right.current))!==0) throw new Error('Deterministic twin build mismatch');
+  if(!left.reviewQueueBytes.equals(right.reviewQueueBytes)) throw new Error('Deterministic private review queue mismatch');
   const leftFiles=[...left.files].sort(([a],[b])=>a.localeCompare(b));
   const rightFiles=[...right.files].sort(([a],[b])=>a.localeCompare(b));
   if(leftFiles.length!==rightFiles.length) throw new Error('Deterministic twin build file count mismatch');
@@ -171,6 +170,10 @@ export async function compileMealWeek(options) {
   }
   if(!/^\d{4}-\d{2}-\d{2}$/.test(weekStart||'')) throw new Error('weekStart must be YYYY-MM-DD');
   if(!collectionTimestamp) throw new Error('collectionTimestamp is required for deterministic output');
+  const publicOutputDir=path.resolve(outputDir);
+  const auditTarget=options.auditOutputPath?path.resolve(options.auditOutputPath):null;
+  if(auditTarget&&(auditTarget===publicOutputDir||auditTarget.startsWith(publicOutputDir+path.sep))) throw new Error('Private audit output must be outside the public snapshot directory');
+  if(auditTarget&&fs.existsSync(auditTarget)) throw new Error('Private audit output must not already exist: '+auditTarget);
   const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion};
   const first=buildFiles(input);
   const second=buildFiles(structuredClone(input));
@@ -185,7 +188,11 @@ export async function compileMealWeek(options) {
       const validation=validateMealSnapshotDirectory(stage);
       if(!validation.valid) throw new Error('Compiled snapshot validation failed: '+validation.errors.join('; '));
     }
-    writeBuild(path.resolve(outputDir),first);
+    writeBuild(publicOutputDir,first);
+    if(auditTarget) {
+      fs.mkdirSync(path.dirname(auditTarget),{recursive:true});
+      fs.writeFileSync(auditTarget,first.reviewQueueBytes);
+    }
   } finally {
     fs.rmSync(stageA,{recursive:true,force:true});
     fs.rmSync(stageB,{recursive:true,force:true});
@@ -194,7 +201,7 @@ export async function compileMealWeek(options) {
 }
 
 function parseArgs(argv) {
-  const args={csvPath:null,outputDir:null,db:'01ontology',tenant:'recipe-full',policyVersion:'selection-v1',registryPath:null,weekStart:null};
+  const args={csvPath:null,outputDir:null,db:'01ontology',tenant:'recipe-full',policyVersion:'selection-v1',registryPath:null,weekStart:null,auditOutputPath:null};
   for(let index=0;index<argv.length;index++) {
     const value=argv[index];
     if(!args.csvPath&&!value.startsWith('--')) args.csvPath=value;
@@ -204,9 +211,10 @@ function parseArgs(argv) {
     else if(value==='--registry') args.registryPath=argv[++index];
     else if(value==='--policy-version') args.policyVersion=argv[++index];
     else if(value==='--week-start') args.weekStart=argv[++index];
+    else if(value==='--audit-output') args.auditOutputPath=argv[++index];
     else throw new Error('Unknown argument: '+value);
   }
-  if(!args.csvPath||!args.outputDir||!args.registryPath) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json');
+  if(!args.csvPath||!args.outputDir||!args.registryPath) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json [--audit-output PRIVATE.json]');
   return args;
 }
 

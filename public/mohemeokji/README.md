@@ -1,9 +1,14 @@
-# Meal shopping totals
+# 모해먹지 정적 주간 스냅샷
+
+기본 화면은 `public/mohemeokji/data/current.json`이 가리키는 해시 고정 manifest를 읽고, 사용자가 고른 우편번호·마트·지점의 location 파일만 불러옵니다. 레시피 상세는 사용자가 열 때만 content-hashed detail 파일을 가져옵니다. 공개 디렉터리와 manifest에는 원본 CSV나 DB 후보 review queue가 없으며, 브라우저는 다른 마트 location도 읽지 않습니다. `?snapshot=legacy`는 저장된 이전 식단 복구를 위한 명시적 임시 경로입니다.
+
+현재 게시 스냅샷은 2026-09-07 주간 CSV와 읽기 전용 `01ontology`의 `recipe-full`에서 만든 11개 실제 지점 자료입니다. 승인 registry의 source ID·source hash·transform version이 모두 일치하는 한국어 의역만 게시합니다. 48개는 지점별 상한이며 목표를 채우기 위해 미승인 레시피를 섞지 않습니다. 현재 스냅샷은 37개 고유 승인 레시피를 지점별로 145회 참조하며, 모든 지점이 희소 상태이고 44369 ALDI Nord는 승인 메뉴가 0개입니다. 가성비는 완전한 장바구니 가격, 영양·다이어트는 계량된 영양 근거가 없어 현재 스냅샷에서 사용할 수 없다고 표시됩니다.
 
 All six HTML entry pages share `meal-shopping.js`, `meal-package-prices.js`, and
-the 07.09.2026 recipe data. Existing postcode/store paths remain valid, while
+the snapshot runtime. Existing postcode/store paths remain valid, while
 the page presents a postcode selector followed by the supermarkets found under
-that postcode in the CSV. The source archive currently contains 52 recipes.
+that postcode in the CSV. The legacy source archive contains 52 recipes; it is
+not the default visible catalog.
 Each supermarket shows only dishes whose defining ingredients have a current
 offer in that postcode/store, so menu membership and counts vary by location.
 Run `node scripts/sync-meal-pages.mjs` after changing shared assets or the
@@ -43,6 +48,20 @@ recommendation ranking.
 
 Run `node scripts/generate-meal-offers.mjs public/offers/supermarket_food_offers_2026-09-07.csv public/mohemeokji/meal-package-prices.js` to refresh the catalog, then
 `node --test tests/mealShopping.test.mjs` from the repository root.
+
+정적 snapshot을 갱신할 때는 같은 CSV·DB·registry로 빈 디렉터리 두 곳에 컴파일한 뒤 전체 바이트를 비교합니다. 첫 빌드는 아래 검증을 통과해야 하며, 브라우저 QA 전에는 `current.json`을 전환하지 않습니다.
+
+```sh
+node scripts/verify-meal-snapshot.mjs TWIN_A --twin TWIN_B
+node --test tests/mealSnapshotE2E.test.mjs
+npm test
+npm run build
+npm run typecheck
+node scripts/sync-meal-pages.mjs --check
+git diff --check
+```
+
+검증 보고서는 manifest 및 모든 artifact hash, 지점 경계, coverage/recipe/detail 연결, 0건 후보, 네 가지 모드 준비 상태, 자산 크기와 selected-store 요청 집합을 검사합니다. 이전 배포가 있다면 `--previous PREVIOUS_DATA_ROOT`로 rollback pointer도 독립 검증하고 최근 두 snapshot을 보존합니다. CUA로 1280×900, 390×844, 320×844 화면·콘솔·네트워크 증거를 남기지 못하면 배포 준비 완료로 간주하지 않습니다.
 
 For a new weekly CSV, run the non-publishing preflight first:
 `node scripts/prepare-meal-week.mjs INPUT.csv --week-start YYYY-MM-DD --output-dir NEW_DIRECTORY`.

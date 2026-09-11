@@ -66,9 +66,35 @@ test('compiled output is byte-identical, hash-valid, and contains no raw source 
   for(const file of relativeFiles(a)) assert.deepEqual(fs.readFileSync(path.join(a,file)),fs.readFileSync(path.join(b,file)),file);
   const validation=validateMealSnapshotDirectory(a);
   assert.deepEqual(validation,{valid:true,errors:[]});
+  assert.equal(relativeFiles(a).some((file)=>file.includes('review-queue')),false);
+  const published=readSnapshot(a);
+  assert.equal('reviewQueuePath' in published.manifest,false);
   const bytes=relativeFiles(a).map((file)=>fs.readFileSync(path.join(a,file),'utf8')).join('\n');
   assert.equal(bytes.includes('DO NOT PUBLISH RAW'),false);
   assert.equal(/sourceImage|imageUrl|"images"/.test(bytes),false);
+});
+
+test('writes held recipe IDs only to an explicitly separate private audit file',async(t)=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-private-audit-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const outputDir=path.join(root,'public');
+  const auditOutputPath=path.join(root,'private','review-queue.json');
+  const data=fixture();
+  data.candidateReport.candidates=[{...data.candidate,recipeId:'held-1',sourceRecipeId:'held-1',title:'held'}];
+  data.candidateReport.locations[0].offers[0].recipeCandidateIds=['held-1'];
+  await compileMealWeek({outputDir,auditOutputPath,candidateReport:data.candidateReport,registry:{schemaVersion:1,recipes:{}},weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const audit=JSON.parse(fs.readFileSync(auditOutputPath,'utf8'));
+  assert.deepEqual(audit.recipes.map((entry)=>entry.recipeId),['held-1']);
+  assert.equal(fs.readdirSync(outputDir,{recursive:true}).some((entry)=>String(entry).includes('review-queue')),false);
+});
+
+test('rejects a private audit path under the public root before writing public files',async(t)=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-nested-audit-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const outputDir=path.join(root,'public');
+  const data=fixture();
+  await assert.rejects(compileMealWeek({outputDir,auditOutputPath:path.join(outputDir,'review-queue.json'),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'}),/outside the public snapshot/i);
+  assert.equal(fs.existsSync(path.join(outputDir,'current.json')),false);
 });
 
 test('current pointer resolves an immutable manifest and every listed artifact hash',async(t)=>{
@@ -94,6 +120,19 @@ test('validator rejects an unsafe or unhashed declared manifest artifact path',a
   const validation=validateMealSnapshotDirectory(outputDir);
   assert.equal(validation.valid,false);
   assert.ok(validation.errors.some((error)=>error.includes('coveragePath')));
+});
+
+test('validator rejects any public review queue reference',async(t)=>{
+  const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-public-queue-'));
+  t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));
+  const data=fixture();
+  await compileMealWeek({outputDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const snapshot=readSnapshot(outputDir);
+  snapshot.manifest.reviewQueuePath='snapshots/private/review-queue.json';
+  rewriteManifest(snapshot);
+  const validation=validateMealSnapshotDirectory(outputDir);
+  assert.equal(validation.valid,false);
+  assert.ok(validation.errors.some((error)=>/review queue/i.test(error)));
 });
 
 test('validator rejects unsafe, missing-hash recipe details even when container hashes are recomputed',async(t)=>{

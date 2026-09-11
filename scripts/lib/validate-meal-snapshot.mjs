@@ -52,6 +52,7 @@ export function validateMealSnapshotDirectory(outputDir) {
   if(manifest.snapshotId!==current.snapshotId) errors.push('manifest snapshotId does not match current pointer');
   if(manifest.schemaVersion!==1) errors.push('manifest.schemaVersion must be 1');
   if(!manifest.fileHashes||typeof manifest.fileHashes!=='object'||Array.isArray(manifest.fileHashes)) errors.push('manifest.fileHashes must be an object');
+  if('reviewQueuePath' in manifest||Object.keys(manifest.fileHashes||{}).some((relative)=>relative.includes('review-queue'))) errors.push('public snapshot must not contain a review queue');
   const parsedArtifacts=new Map();
   for(const [relative,expected] of Object.entries(manifest.fileHashes||{})) {
     const target=safePath(outputDir,relative);
@@ -74,7 +75,7 @@ export function validateMealSnapshotDirectory(outputDir) {
     reachable.add(relative);
     return true;
   };
-  for(const field of ['coveragePath','recipeIndexPath','reviewQueuePath']) declare(field,manifest[field]);
+  for(const field of ['coveragePath','recipeIndexPath']) declare(field,manifest[field]);
   const coverage=parsedArtifacts.get(manifest.coveragePath);
   if(!coverage||!Array.isArray(coverage.locations)) errors.push('coveragePath does not contain location coverage');
   const recipeIndex=declare('recipeIndexPath',manifest.recipeIndexPath)?parsedArtifacts.get(manifest.recipeIndexPath):null;
