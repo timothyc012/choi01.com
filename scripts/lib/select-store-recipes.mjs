@@ -59,7 +59,7 @@ export function unquantifiedActionIngredients(candidate) {
       if(index<0)return false;
       const before=clause.slice(Math.max(0,index-40),index);
       const after=clause.slice(index+term.length,index+term.length+24);
-      const negated=/^(?:을|를|은|는)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,16}(?:대체|대신|써도|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
+      const negated=/^(?:을|를|은|는)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외|선택)|^(?:이|가)?\s*(?:남|나오|빠|고이|생기)|^.{0,20}(?:대체|대신|써도|넣어도\s*되고\s*생략|사용(?:하셔도|해도|할\s*수)|사용\S*\s*경우)/u.test(after);
       const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|취향에 따라/u.test(before);
       if(!negated&&!conditional)return true;
       offset=index+term.length;
@@ -68,6 +68,8 @@ export function unquantifiedActionIngredients(candidate) {
   };
   const actionMentions=(term)=>clauses.some((clause)=>requiredMention(clause,term));
   const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
+  const fatChoice=/(?:식용유|올리브유|올리브오일|카놀라유|해바라기유|코코넛오일)\s*(?:또는|혹은|or)\s*버터/iu.test(instructions);
+  if(fatChoice)for(let index=missing.length-1;index>=0;index--)if(missing[index]==='버터')missing.splice(index,1);
   const listedOils=sourceIngredients.map((ingredient)=>({...ingredient,name:cookingOilName(ingredient.label)})).filter((ingredient)=>ingredient.name);
   const listedOilNames=new Set(listedOils.map((ingredient)=>ingredient.name));
   const addsGenericOil=clauses.some((clause)=>{

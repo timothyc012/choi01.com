@@ -303,6 +303,14 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   const bareSesame=candidate('bare-sesame');
   bareSesame.steps[1].instruction='마지막에 참기름을 넣어 향을 냅니다.';
   assert.deepEqual(unquantifiedActionIngredients(bareSesame),['참기름']);
+
+  const optionalIngredients=candidate('optional-ingredients');
+  optionalIngredients.steps[1].instruction='우유는 선택입니다. 취향에 따라 버터를 넣습니다. 원하면 설탕을 넣어도 되고 생략할 수 있습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(optionalIngredients),[]);
+
+  const oneFatChoice=candidate('one-fat-choice');
+  oneFatChoice.steps[1].instruction='팬에 올리브유 또는 버터를 넣어 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(oneFatChoice),['기름']);
 });
 
 test('editorial validation requires a Korean public title',()=>{

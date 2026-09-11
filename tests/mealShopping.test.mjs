@@ -117,7 +117,7 @@ test('canonicalizes cooking-oil and melted-butter aliases into single shopping r
   assert.equal(shopping.ingredientName('식용유 약간'),'식용유');
   assert.equal(shopping.ingredientName('백설포도씨유 적당히'),'백설포도씨유');
   assert.equal(shopping.keyFor('Netto','백설포도씨유'),'Netto:식용유');
-  for(const label of ['백설 카놀라유','엑스트라버진 올리브유','식용유 넉넉히']) assert.equal(shopping.keyFor('Netto',shopping.ingredientName(label)),'Netto:식용유',label);
+  for(const label of ['백설 카놀라유','엑스트라버진 올리브유','식용유 넉넉히','식용유 필요량','올리브유 한 바퀴','카놀라유 취향껏','해바라기유 적당한 양']) assert.equal(shopping.keyFor('Netto',shopping.ingredientName(label)),'Netto:식용유',label);
   assert.equal(shopping.keyFor('Netto','녹인 버터'),'Netto:버터');
 });
 
@@ -373,6 +373,23 @@ test('shopping list rows keep purchase facts needed by the aisle view',()=>{
   const repeatedUncertain=shopping.addToList(shopping.addToList([],uncertain),uncertain)[0];
   assert.equal(repeatedUncertain.quantity,1);
   assert.equal(repeatedUncertain.quantityNeedsCheck,true);
+});
+
+test('sequential recipe additions aggregate structured shared packages and remain idempotent',()=>{
+  const catalog={Netto:{닭고기:{priceCents:799,pack:'500 g',product:'Hähnchen',source:'https://example.test/chicken'}}};
+  const meal=(id)=>({id,store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{닭고기:{amount:300,unit:'g'}}});
+  const firstCart=shopping.basket([meal('recipe-a')],{catalog});
+  let list=shopping.addToList([],firstCart);
+  assert.equal(list[0].quantity,1);
+  list=shopping.addToList(list,firstCart);
+  assert.equal(list[0].quantity,1);
+  list=shopping.addToList(list,shopping.basket([meal('recipe-b')],{catalog}));
+  assert.equal(list[0].quantity,2);
+  assert.equal(list[0].quantityNeedsCheck,false);
+  const state={pantry:new Set(),prices:{},quantities:{},list};
+  const restored=shopping.restoreState(shopping.serializeState(state,'week-a'),'week-a',{stores:['Netto']});
+  const afterRestore=shopping.addToList(restored.list,firstCart);
+  assert.equal(afterRestore[0].quantity,2);
 });
 
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {

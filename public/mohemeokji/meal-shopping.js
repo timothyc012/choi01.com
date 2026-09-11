@@ -13,7 +13,7 @@
 
   function ingredientName(label) {
     return String(label||'').trim().replace(/\s*\(원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
-      .replace(/\s+(?:약간|조금|적당량|적당히|넉넉히)\s*$/u,'')
+      .replace(/\s+(?:약간|조금|적당량|적당히|넉넉히|필요량|한\s*바퀴|취향껏|적당한\s*양)\s*$/u,'')
       .split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
   }
 
@@ -174,6 +174,7 @@
     const { catalog = {}, pantry = new Set(), prices = {}, quantities = {} } = options;
     const ingredients = new Map();
     for (const meal of meals.filter(Boolean)) {
+      const contributionKey=typeof (meal.id||meal.sourceRecipeId)==="string"&&(meal.id||meal.sourceRecipeId)?String(meal.id||meal.sourceRecipeId):null;
       const seenInMeal = new Set();
       for (const originalName of [...meal.sale, ...meal.missing]) {
         const name = normalize(originalName);
@@ -192,6 +193,12 @@
               unit: required.unit
             };
           }
+          if(!alreadySeen&&contributionKey) {
+            const prior=existing.contributions[contributionKey];
+            existing.contributions[contributionKey]=required
+              ? {amount:(prior?.unit===required.unit?prior.amount:0)+required.amount,unit:required.unit}
+              : null;
+          }
           if(!existing.product&&offer) {
             existing.pack=offer.pack||existing.pack;existing.product=offer.product||'';existing.source=offer.source||'';
             existing.priceCents=Number.isSafeInteger(offer.priceCents)&&offer.priceCents>=0?offer.priceCents:existing.priceCents;
@@ -209,7 +216,7 @@
           customPrice: Object.hasOwn(prices, key),
           priceCents, normalPriceCents: Number.isSafeInteger(normalPrice) && normalPrice >= priceCents ? normalPrice : null,
           owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
-          requirementComplete: Boolean(required)
+          requirementComplete: Boolean(required),contributions:contributionKey?{[contributionKey]:required?{...required}:null}:{}
         });
       }
     }
@@ -300,11 +307,24 @@
         continue;
       }
       const previous = merged.get(item.key);
-      const quantity = Math.max(previous?.quantity || 1, item.quantity);
+      const incomingContributions=item.contributions&&typeof item.contributions==="object"?item.contributions:{};
+      const hasIncomingContributions=Object.keys(incomingContributions).length>0;
+      const contributions={...(previous?.contributions||{})};
+      if(previous&&!previous.contributions&&hasIncomingContributions)contributions['legacy-unknown']=null;
+      Object.assign(contributions,incomingContributions);
+      const contributionValues=Object.values(contributions);
+      const contributionUnit=contributionValues.find((value)=>value)?.unit;
+      const contributionsComplete=contributionValues.length>0&&contributionValues.every((value)=>value&&value.unit===contributionUnit&&Number.isFinite(value.amount)&&value.amount>0);
+      const packAmount=metricAmount(previous?.product?previous.pack:item.pack);
+      const contributionQuantity=contributionsComplete&&packAmount&&packAmount.unit===contributionUnit
+        ? Math.max(1,Math.ceil(contributionValues.reduce((sum,value)=>sum+value.amount,0)/packAmount.amount))
+        : null;
+      const quantity=contributionQuantity??Math.max(previous?.quantity || 1,item.quantity);
+      const quantityNeedsCheck=contributionValues.length?contributionQuantity===null:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck);
       merged.set(item.key, {
         key: item.key, name: item.name, store: item.store, pack: previous?.product?previous.pack:item.pack,
         product:previous?.product||item.product||'',source:previous?.source||item.source||'',
-        quantity, priceCents: previous?.product?previous.priceCents:item.priceCents, quantityNeedsCheck:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck),
+        quantity, priceCents: previous?.product?previous.priceCents:item.priceCents, quantityNeedsCheck,contributions,
         completed: Boolean(previous?.completed && quantity === previous.quantity)
       });
     }
@@ -338,6 +358,7 @@
       const validPrice = (value) => value === null || (Number.isSafeInteger(value) && value >= 0 && value <= 100000000);
       const validQuantity = (value) => Number.isInteger(value) && value >= 1 && value <= 999;
       const record = (value) => value && typeof value === "object" && !Array.isArray(value);
+      const validContributions=(value)=>record(value)&&Object.values(value).every((entry)=>entry===null||(record(entry)&&Number.isFinite(entry.amount)&&entry.amount>0&&['g','ml'].includes(entry.unit)));
       const canonicalKey=(key)=>{
         const separator=key.indexOf(":");
         return keyFor(key.slice(0,separator),key.slice(separator+1));
@@ -358,10 +379,11 @@
             || item._validAliasKey!==true || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
             || (item.product!==undefined&&typeof item.product!=="string") || (item.source!==undefined&&typeof item.source!=="string")
+            || (item.contributions!==undefined&&!validContributions(item.contributions))
             || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true }));
+        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{} }));
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
@@ -370,7 +392,7 @@
         if (saved?.snapshot !== snapshot) {
           state.prices = {};
           state.quantities = {};
-          state.list = state.list.map((item) => ({ ...item, quantity:1, quantityNeedsCheck:true, priceCents: null, product:'', source:'', pack: '지난 자료 · 판매 단위 재확인' }));
+          state.list = state.list.map((item) => ({ ...item, quantity:1, quantityNeedsCheck:true, contributions:{}, priceCents: null, product:'', source:'', pack: '지난 자료 · 판매 단위 재확인' }));
         }
       } catch { /* Already restored as empty above. */ }
     }
