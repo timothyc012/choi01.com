@@ -60,6 +60,16 @@ test('publication expansion excludes weak, incomplete, inexact and unquantified 
   ]);
 });
 
+test('publication expansion fails closed when a review evidence map is supplied',()=>{
+  const result=selectPublicationExpansion({
+    candidateReport:report([candidate('verified'),candidate('unverified')]),
+    registry:{schemaVersion:1,recipes:{}},target:2,
+    reviewEvidenceById:{verified:{status:'verified',reviewCount:101},unverified:{status:'unverified',reviewCount:null}},
+  });
+  assert.deepEqual(result.selected.map((item)=>item.sourceRecipeId),['verified']);
+  assert.equal(result.exclusionCounts['review-unverified'],1);
+});
+
 test('publication expansion is deterministic and prioritizes candidates serving the sparsest store',()=>{
   const locations=[
     {postcode:'52064',store:'EDEKA',branchId:'branch-52064-EDEKA',offers:[offer('offer-a')]},
