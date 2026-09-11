@@ -63,11 +63,16 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     process.exitCode=1;
   } else {
     const source='/offers/'+path.basename(input);
-    const {packageCatalog,meta}=generateCatalog(rows,source);
+    const {packageCatalog,offersByIdentity,meta}=generateCatalog(rows,source);
     report.matchedIngredients=Object.fromEntries(Object.entries(packageCatalog).flatMap(([area,stores])=>Object.entries(stores).map(([store,offers])=>[area+'/'+store,Object.keys(offers).length])));
+    report.snapshotCompile={
+      registry:'data/mohemeokji/recipe-publication-registry.json',
+      policyVersion:'selection-v1',
+      requiresReadOnlyRecipeFull:true,
+    };
     fs.mkdirSync(output,{recursive:true});
     fs.copyFileSync(input,path.join(output,path.basename(input)));
-    fs.writeFileSync(path.join(output,'meal-package-prices.js'), 'window.mealPackagePricesByArea = '+JSON.stringify(packageCatalog,null,2)+';\nwindow.mealOfferMeta = '+JSON.stringify(meta,null,2)+';\n');
+    fs.writeFileSync(path.join(output,'meal-package-prices.js'), 'window.mealPackagePricesByArea = '+JSON.stringify(packageCatalog,null,2)+';\nwindow.mealOffersByIdentity = '+JSON.stringify(offersByIdentity,null,2)+';\nwindow.mealOfferMeta = '+JSON.stringify(meta,null,2)+';\n');
     fs.writeFileSync(path.join(output,'audit.json'),JSON.stringify(report,null,2)+'\n');
     console.log(JSON.stringify({staging:output,rows:report.rowCount,stores:Object.keys(report.combinations).length,warnings:report.warnings.length}));
   }

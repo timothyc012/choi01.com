@@ -3,15 +3,25 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import {generateCatalog,parseCsv} from '../scripts/generate-meal-offers.mjs';
+import {basketReadiness,nutritionReadiness} from '../scripts/lib/meal-ranking-facts.mjs';
 const context=vm.createContext({window:{}});
 const root=new URL('../public/mohemeokji/',import.meta.url);
-for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) {
+for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) {
   vm.runInContext(fs.readFileSync(new URL(f,root),'utf8'),context);
 }
 const engine=context.window.MealRecommendations;
 const meal=(id, primary, family, extra={})=>({id,sourceRecipeId:id,title:id,time:20,tags:[],sale:primary,missing:[],recommendationProfile:{primaryIngredients:primary,family,method:'stirfry'},...extra});
 const price={priceCents:100,pack:'500 g'};
 const fixtureCatalog=generateCatalog(parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv',import.meta.url),'utf8')),'/offers/supermarket_food_offers_2026-09-07.csv').packageCatalog;
+const rankingPolicy=JSON.parse(fs.readFileSync(new URL('../scripts/data/nutrition-policy.json',import.meta.url),'utf8'));
+
+test('browser recommendation policy artifact matches the versioned source',()=>{
+  const browserPath=new URL('../public/mohemeokji/meal-nutrition-policy.js',import.meta.url);
+  assert.equal(fs.existsSync(browserPath),true);
+  const policyContext=vm.createContext({window:{}});
+  vm.runInContext(fs.readFileSync(browserPath,'utf8'),policyContext);
+  assert.deepEqual(JSON.parse(JSON.stringify(policyContext.window.mealNutritionPolicy)),rankingPolicy);
+});
 
 test('each source recipe has explicit editorial main-ingredient and variety metadata',()=>{
   for(const recipe of context.window.ontologyRecipeDetails){
@@ -136,4 +146,183 @@ test('actual 44369 Netto top recommendation has a discounted main and never maps
   assert.equal(engine.explain(rawChicken,catalog).substitutionNotes.length,1);
   const canned=pool.find(m=>m.sourceRecipeId==='6871908');
   assert.equal(engine.explain(canned,catalog).substitutionNotes.length,0);
+});
+
+test('value mode rejects unknown package prices and quantities instead of ranking them as zero',()=>{
+  const candidate=meal('partial',['닭고기'],'chicken',{store:'Netto'});
+  const unknownPrice={costStatus:'unknown',knownSubtotalCents:0,unknownItemKeys:['Netto:닭고기'],quantityCheckKeys:[],savingsStatus:'unavailable'};
+  const unknownQuantity={costStatus:'partial',knownSubtotalCents:799,unknownItemKeys:[],quantityCheckKeys:['Netto:닭고기'],savingsStatus:'unavailable'};
+  assert.deepEqual(basketReadiness(unknownPrice),{ready:false,status:'unknown',knownSubtotalCents:0,unknownItemKeys:['Netto:닭고기'],quantityCheckKeys:[],savingsStatus:'unavailable'});
+  assert.equal(engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true,basketFor:()=>unknownPrice},'value').eligible,false);
+  assert.equal(engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true,basketFor:()=>unknownQuantity},'value').eligible,false);
+});
+
+test('value mode rejects a complete-labelled basket whose known subtotal is absent or invalid',()=>{
+  const candidate=meal('invalid-subtotal',['닭고기'],'chicken',{store:'Netto'});
+  for(const knownSubtotalCents of [null,undefined,-1,1.5,'0']) {
+    const basket={costStatus:'complete',knownSubtotalCents,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
+    assert.equal(basketReadiness(basket).ready,false,String(knownSubtotalCents));
+    assert.equal(engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true,basketFor:()=>basket},'value').eligible,false,String(knownSubtotalCents));
+  }
+});
+
+test('a complete basket remains value-ready when same-product normal price is unavailable',()=>{
+  const candidate=meal('complete',['닭고기'],'chicken',{store:'Netto'});
+  const complete={costStatus:'complete',knownSubtotalCents:799,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
+  const result=engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true,basketFor:()=>complete},'value');
+  assert.equal(result.eligible,true);
+  assert.equal(result.readiness.cost,'complete');
+  assert.equal(result.readiness.savings,'unavailable');
+  assert.equal(result.scoreComponents.knownSubtotalCents,799);
+});
+
+test('snapshot value mode requires compiler-proven full basket coverage, not priced primary ingredients alone',()=>{
+  const primaryOnly=meal('primary-only',['닭고기'],'chicken',{store:'Netto',sourceServings:2,requiredAmounts:{닭고기:{amount:300,unit:'g'}}});
+  const calculatedPrimary={costStatus:'complete',knownSubtotalCents:799,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
+  const context={catalog:{닭고기:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:()=>calculatedPrimary};
+  assert.equal(engine.evaluateRecipeForMode(primaryOnly,context,'value').eligible,false);
+  const proven={...primaryOnly,basketFacts:{...calculatedPrimary,sourceCoverage:'complete',targetServings:2}};
+  assert.equal(engine.evaluateRecipeForMode(proven,context,'value').eligible,true);
+  assert.equal(engine.evaluateRecipeForMode({...proven,basketFacts:{...proven.basketFacts,targetServings:4}},context,'value').eligible,false);
+});
+
+test('value ranking applies pantry ownership only through compiler-proven per-item basket facts',()=>{
+  const shopping=context.window.MealShopping;
+  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',targetServings:2,items:[{key,priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true}],savingsStatus:'unavailable'});
+  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',basketFacts:basketFacts('Netto:닭고기',150)});
+  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',basketFacts:basketFacts('Netto:당근',100)});
+  const pantry=new Set(['Netto:닭고기']);
+  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)};
+  assert.equal(engine.rankForMode([vegetable,chicken],options,'value')[0].id,'chicken-value');
+  const aggregateOnly={...chicken,basketFacts:{sourceCoverage:'complete',targetServings:2,costStatus:'complete',knownSubtotalCents:150,unknownItemKeys:[],quantityCheckKeys:[]}};
+  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)},'value').eligible,false);
+});
+
+test('nutrition and diet reject recipes without complete sourced serving nutrients',()=>{
+  const candidate=meal('nutrition-partial',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{source:'verified',sourceServings:2,perServing:{kcal:400,proteinGrams:30}}});
+  assert.equal(nutritionReadiness(candidate).ready,false);
+  for(const mode of ['nutrition','diet']) {
+    const result=engine.evaluateRecipeForMode(candidate,{catalog:{닭고기:price},requireMainOffer:true},mode);
+    assert.equal(result.eligible,false);
+    assert.equal(result.readiness.nutrition,'unknown');
+    assert.ok(result.reasons.some((reason)=>reason.includes('영양')));
+  }
+});
+
+test('all recommendation modes retain exact main-offer, main-meal, and store gates',()=>{
+  const side=meal('side',['닭고기'],'chicken',{store:'Netto',recommendationProfile:{primaryIngredients:['닭고기'],family:'chicken',method:'stirfry',kind:'side'}});
+  const wrongStore=meal('wrong-store',['닭고기'],'chicken',{store:'EDEKA'});
+  const noOffer=meal('no-offer',['연어'],'salmon',{store:'Netto'});
+  const complete={costStatus:'complete',knownSubtotalCents:799,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'};
+  for(const mode of ['balanced','value','nutrition','diet']) {
+    const context={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true,basketFor:()=>complete};
+    assert.equal(engine.evaluateRecipeForMode(side,context,mode).eligible,false,mode+' side');
+    assert.equal(engine.evaluateRecipeForMode(wrongStore,context,mode).eligible,false,mode+' store');
+    assert.equal(engine.evaluateRecipeForMode(noOffer,context,mode).eligible,false,mode+' offer');
+  }
+});
+
+test('selected-branch automatic candidates require exact branch provenance',()=>{
+  const branchless=meal('branchless',['닭고기'],'chicken',{store:'Netto'});
+  const exact=meal('exact',['닭고기'],'chicken',{store:'Netto',branchId:'branch-a'});
+  const context={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',branchId:'branch-a',mealOnly:true};
+  assert.equal(engine.evaluateRecipeForMode(branchless,context,'balanced').eligible,false);
+  assert.equal(engine.evaluateRecipeForMode(exact,context,'balanced').eligible,true);
+});
+
+test('preference corruption falls back safely and valid values round trip',()=>{
+  assert.deepEqual(JSON.parse(JSON.stringify(engine.restorePreferences('{broken'))),{mode:'balanced',targetServings:2});
+  assert.deepEqual(JSON.parse(JSON.stringify(engine.restorePreferences(JSON.stringify({mode:'medical',targetServings:0})))),{mode:'balanced',targetServings:2});
+  const stored=engine.serializePreferences({mode:'diet',targetServings:6});
+  assert.deepEqual(JSON.parse(JSON.stringify(engine.restorePreferences(stored))),{mode:'diet',targetServings:6});
+});
+
+test('next candidate skips dismissed, used, ineligible, and keeps deterministic pool order',()=>{
+  const pool=[meal('a',['닭고기'],'chicken',{store:'Netto'}),meal('b',['닭고기'],'chicken',{store:'Netto'}),meal('side',['닭고기'],'chicken',{store:'Netto',recommendationProfile:{primaryIngredients:['닭고기'],family:'chicken',method:'cold',kind:'side'}}),meal('c',['닭고기'],'chicken',{store:'Netto'})];
+  const result=engine.nextCandidate(pool,{dismissedRecipeIds:['a'],usedRecipeIds:['b'],mode:'balanced',context:{catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true}});
+  assert.equal(result.id,'c');
+  assert.equal(engine.nextCandidate(pool,{dismissedRecipeIds:['a','c'],usedRecipeIds:['b'],mode:'balanced',context:{catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true}}),null);
+});
+
+test('ready modes order by transparent cost and nutrient facts while keeping diversity sequencing',()=>{
+  const cheap=meal('cheap',['닭고기'],'chicken',{store:'Netto'});
+  const costly=meal('costly',['닭고기'],'chicken',{store:'Netto'});
+  const base={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true,date:'2026-09-08',basketFor:(candidate)=>({costStatus:'complete',knownSubtotalCents:candidate.id==='cheap'?500:900,unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:'unavailable'})};
+  assert.equal(engine.rankForMode([costly,cheap],base,'value')[0].id,'cheap');
+  const protein=meal('protein',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal:500,proteinGrams:40,fiberGrams:5,sodiumMg:300}}});
+  const light=meal('light',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal:300,proteinGrams:20,fiberGrams:4,sodiumMg:250}}});
+  assert.equal(engine.rankForMode([light,protein],base,'nutrition')[0].id,'protein');
+  assert.equal(engine.rankForMode([protein,light],base,'diet')[0].id,'light');
+});
+
+test('nutrition policy weights every complete nutrient dimension and explains the active policy',()=>{
+  assert.deepEqual(rankingPolicy.modes.nutrition.weights,{kcal:20,proteinGrams:30,fiberGrams:30,sodiumMg:20});
+  assert.deepEqual(rankingPolicy.modes.diet.weights,{kcal:40,proteinGrams:30,fiberGrams:20,sodiumMg:10});
+  const recipe=(id,perServing)=>meal(id,['닭고기'],id,{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing}});
+  const baseFacts={kcal:400,proteinGrams:20,fiberGrams:4,sodiumMg:300};
+  const context={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true,rankingPolicy};
+  for(const [mode,field,better,worse] of [
+    ['nutrition','kcal',300,500],['nutrition','proteinGrams',30,10],['nutrition','fiberGrams',8,2],['nutrition','sodiumMg',200,500],
+    ['diet','kcal',300,500],['diet','proteinGrams',30,10],['diet','fiberGrams',8,2],['diet','sodiumMg',200,500]
+  ]) {
+    const worseRecipe=recipe('a-worse-'+mode+'-'+field,{...baseFacts,[field]:worse});
+    const betterRecipe=recipe('z-better-'+mode+'-'+field,{...baseFacts,[field]:better});
+    assert.equal(engine.rankForMode([worseRecipe,betterRecipe],context,mode)[0].id,betterRecipe.id,mode+' '+field);
+  }
+  const explained=engine.evaluateRecipeForMode(recipe('explained',baseFacts),context,'nutrition');
+  assert.ok(explained.reasons.some((reason)=>reason.includes('열량 20%')&&reason.includes('단백질 30%')&&reason.includes('식이섬유 30%')&&reason.includes('나트륨 20%')));
+});
+
+test('runtime scoring and explanation consume the injected browser policy',()=>{
+  const injected=JSON.parse(JSON.stringify(rankingPolicy));
+  injected.modes.nutrition.weights={kcal:100,proteinGrams:0,fiberGrams:0,sodiumMg:0};
+  const runtimeContext=vm.createContext({window:{mealNutritionPolicy:injected}});
+  vm.runInContext(fs.readFileSync(new URL('meal-recommendations.js',root),'utf8'),runtimeContext);
+  const runtime=runtimeContext.window.MealRecommendations;
+  const candidate=(id,kcal,protein)=>meal(id,['닭고기'],id,{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal,proteinGrams:protein,fiberGrams:5,sodiumMg:300}}});
+  const highProtein=candidate('a-high-protein',600,60),lowKcal=candidate('z-low-kcal',250,10);
+  const options={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  assert.equal(runtime.rankForMode([highProtein,lowKcal],options,'nutrition')[0].id,'z-low-kcal');
+  assert.ok(runtime.evaluateRecipeForMode(lowKcal,options,'nutrition').reasons.some((reason)=>reason.includes('열량 100%')&&reason.includes('단백질 0%')));
+});
+
+test('missing browser policy fails complete nutrition ranking closed without throwing',()=>{
+  const runtimeContext=vm.createContext({window:{}});
+  vm.runInContext(fs.readFileSync(new URL('meal-recommendations.js',root),'utf8'),runtimeContext);
+  const runtime=runtimeContext.window.MealRecommendations;
+  const complete=meal('complete-no-policy',['닭고기'],'chicken',{store:'Netto',nutritionFacts:{status:'complete',source:'verified',sourceServings:2,perServing:{kcal:300,proteinGrams:25,fiberGrams:5,sodiumMg:250}}});
+  const options={catalog:{닭고기:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  const evaluation=runtime.evaluateRecipeForMode(complete,options,'nutrition');
+  assert.equal(evaluation.eligible,false);
+  assert.ok(evaluation.reasons.some((reason)=>reason.includes('정책 자료')));
+  assert.deepEqual(JSON.parse(JSON.stringify(runtime.rankForMode([complete],options,'nutrition'))),[]);
+});
+
+test('fourteen-slot sequencing keeps the family cap until exhausted and records relaxation',()=>{
+  const pool=[];
+  for(const family of ['a','b','c','d','e'])for(let index=0;index<3;index++)pool.push(meal(family+index,['닭고기'],family,{store:'Netto'}));
+  const result=engine.sequence(pool,{catalog:{닭고기:price},date:'2026-09-08'},14);
+  const firstTen=result.slice(0,10);
+  for(const family of ['a','b','c','d','e'])assert.ok(firstTen.filter((candidate)=>candidate.recommendationProfile.family===family).length<=2);
+  for(let index=1;index<result.length;index++)assert.notEqual(result[index].recommendationProfile.family,result[index-1].recommendationProfile.family);
+  assert.ok(result.relaxations.some((entry)=>entry.code==='family-cap'&&entry.at>=10));
+});
+
+test('auto slot planning is day-major, includes manual diversity, and reports limited coverage',()=>{
+  const slot=(recipeId=null,origin='auto',dismissedRecipeIds=[])=>({recipeId,origin,dismissedRecipeIds});
+  const days=['mon','tue','wed','thu','fri','sat','sun'];
+  const emptyPlans={점심:Object.fromEntries(days.map((day)=>[day,slot()])),저녁:Object.fromEntries(days.map((day)=>[day,slot()]))};
+  const candidates=[meal('chicken-a',['닭고기'],'chicken',{store:'Netto'}),meal('chicken-b',['닭고기'],'chicken',{store:'Netto'}),meal('beef-a',['소고기'],'beef',{store:'Netto'}),meal('fish-a',['연어'],'fish',{store:'Netto'})];
+  const context={catalog:{닭고기:price,소고기:price,연어:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  const chronological=engine.planAutoSlots(candidates,{plans:emptyPlans,days,moments:['점심','저녁'],mode:'balanced',context});
+  const mondayLunch=chronological.plans.점심.mon.recipeId,mondayDinner=chronological.plans.저녁.mon.recipeId;
+  assert.notEqual(candidates.find((candidate)=>candidate.id===mondayLunch).recommendationProfile.family,candidates.find((candidate)=>candidate.id===mondayDinner).recommendationProfile.family);
+  const manualPlans=JSON.parse(JSON.stringify(emptyPlans));
+  manualPlans.점심.mon=slot('manual-chicken-a','manual');
+  manualPlans.저녁.mon=slot('manual-chicken-b','manual');
+  const manualPool=[meal('manual-chicken-a',['닭고기'],'chicken',{store:'Netto'}),meal('manual-chicken-b',['닭고기'],'chicken',{store:'Netto'}),meal('third-chicken',['닭고기'],'chicken',{store:'Netto'}),meal('beef',['소고기'],'beef',{store:'Netto'}),meal('fish',['연어'],'fish',{store:'Netto'})];
+  const seeded=engine.planAutoSlots(manualPool,{plans:manualPlans,days,moments:['점심','저녁'],mode:'balanced',context});
+  assert.notEqual(seeded.plans.점심.tue.recipeId,'third-chicken');
+  const limited=engine.planAutoSlots(candidates.slice(0,2),{plans:emptyPlans,days,moments:['점심','저녁'],mode:'balanced',context});
+  assert.deepEqual(JSON.parse(JSON.stringify(limited.coverage)),{eligible:2,filled:2,totalSlots:14,limited:true});
 });

@@ -1,5 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import vm from 'node:vm';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { parseCsv, generateCatalog, cents } from '../scripts/generate-meal-offers.mjs';
 
 const header = ['수집시각','체인','지점','우편번호','행사기간','상품명','상품정보','행사가격','앱가격','출처','도시','가격적용단위','할인조건'];
@@ -72,4 +78,33 @@ test('raw meat and processed cheese offers keep their exact recipe ingredient id
   assert.ok(catalog['소고기등심']);
   assert.ok(catalog['슬라이스치즈']);
   for (const broad of ['닭고기','돼지고기','소고기','치즈']) assert.equal(catalog[broad],undefined);
+});
+
+test('keeps all identity-resolved offers while retaining one preferred pricing offer for legacy totals', () => {
+  const generated = generateCatalog([
+    row({ 상품명: 'Schweinefilet lang', 상품정보: '500 g' }),
+    row({ 상품명: 'Schweinefilet lang', 상품정보: '750 g', 가격적용단위: '750 g', 행사가격: '6.99' })
+  ], '/offers/next.csv');
+
+  assert.equal(generated.offersByIdentity.length, 2);
+  assert.notEqual(generated.offersByIdentity[0].offerId, generated.offersByIdentity[1].offerId);
+  assert.equal(generated.packageCatalog['10115'].Lidl['돼지안심'].preferredPricingOfferId, generated.offersByIdentity[0].offerId);
+});
+
+test('generator output publishes all identity-resolved offers', () => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'meal-offers-'));
+  const input = path.join(directory, 'offers.csv');
+  const output = path.join(directory, 'meal-package-prices.js');
+  fs.writeFileSync(input, csv([
+    row({ 상품명: 'Schweinefilet lang', 상품정보: '500 g' }),
+    row({ 상품명: 'Schweinefilet lang', 상품정보: '750 g', 가격적용단위: '750 g', 행사가격: '6.99' })
+  ]));
+  try {
+    execFileSync(process.execPath, [fileURLToPath(new URL('../scripts/generate-meal-offers.mjs', import.meta.url)), input, output]);
+    const context = { window: {} };
+    vm.runInNewContext(fs.readFileSync(output, 'utf8'), context);
+    assert.equal(context.window.mealOffersByIdentity.length, 2);
+  } finally {
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
 });

@@ -35,7 +35,7 @@ test('charges full packages and distinguishes missing prices from a complete tot
   assert.equal(cart.totalCents, 1584);
   assert.equal(cart.unknownCount, 2);
   assert.equal(cart.items.find((item) => item.name === '닭고기').pack, '1 kg');
-  assert.equal(shopping.summary(cart), '확인된 재료 15,84€ · 미확인 2종');
+  assert.equal(shopping.summary(cart), '확인된 금액 15,84€ · 가격 미확인 2종 · 수량 확인 8종');
 });
 
 test('includes additional ingredients and multiplies whole package counts', () => {
@@ -43,7 +43,7 @@ test('includes additional ingredients and multiplies whole package counts', () =
   const cart = shopping.basket([rice], { catalog: fixtureCatalog, prices, quantities: { 'Netto:닭고기': 2 } });
   assert.equal(cart.totalCents, 2851);
   assert.equal(cart.unknownCount, 0);
-  assert.equal(shopping.summary(cart), '구매 합계 28,51€');
+  assert.equal(shopping.summary(cart), '확인된 금액 28,51€ · 수량 확인 7종');
 });
 
 test('ambiguous pack sizes and partially measured weekly ingredients require a check', () => {
@@ -103,6 +103,35 @@ test('merges shared ingredients once across meals and normalizes cooked rice to 
   assert.equal(resized.totalCents, 1882);
 });
 
+test('canonicalizes cooking-oil and melted-butter aliases into single shopping rows',()=>{
+  const meal={store:'Netto',sale:[],missing:['기름','식용유','올리브오일','버터','녹인버터'],requiredAmounts:{}};
+  const cart=shopping.basket([meal],{catalog:{Netto:{}}});
+  assert.deepEqual(Array.from(cart.items,(item)=>item.name).sort(),['버터','식용유']);
+  assert.deepEqual(Array.from(cart.items,(item)=>item.key).sort(),['Netto:버터','Netto:식용유']);
+  const restored=shopping.restoreState(JSON.stringify({version:1,pantry:['Netto:기름','Netto:녹인버터'],prices:{},quantities:{},list:[]}),null,{stores:['Netto']});
+  assert.deepEqual([...restored.pantry].sort(),['Netto:버터','Netto:식용유']);
+  assert.equal(shopping.ingredientName('식용유 약간'),'식용유');
+  assert.equal(shopping.ingredientName('백설포도씨유 적당히'),'백설포도씨유');
+  assert.equal(shopping.keyFor('Netto','백설포도씨유'),'Netto:식용유');
+});
+
+test('keeps a specific oil offer price while collapsing the grocery key',()=>{
+  const meal={store:'Netto',sale:[],missing:['기름','올리브유'],requiredAmounts:{},offerCatalog:{올리브유:{product:'Olivenöl',pack:'500 ml',priceCents:499,source:'https://example.test/offer'}}};
+  const cart=shopping.basket([meal],{catalog:{Netto:{}}});
+  assert.equal(cart.items.length,1);
+  assert.equal(cart.items[0].key,'Netto:식용유');
+  assert.equal(cart.items[0].product,'Olivenöl');
+  assert.equal(cart.items[0].priceCents,499);
+});
+
+test('migrates persisted alias keys for prices quantities and shopping rows',()=>{
+  const saved={version:1,pantry:[],prices:{'Netto:기름':199},quantities:{week:{'Netto:올리브유':2}},list:[{key:'Netto:녹인버터',name:'녹인버터',store:'Netto',pack:'1개',quantity:1,priceCents:299,completed:false}]};
+  const restored=shopping.restoreState(JSON.stringify(saved),null,{stores:['Netto']});
+  assert.equal(restored.prices['Netto:식용유'],199);
+  assert.equal(restored.quantities.week['Netto:식용유'],2);
+  assert.deepEqual(Array.from(restored.list,(item)=>[item.key,item.name]),[['Netto:버터','버터']]);
+});
+
 test('pantry items are excluded from totals and missing price counts without losing prices', () => {
   const pantry = new Set(['Netto:닭고기', ...rice.missing.map((name) => shopping.keyFor('Netto', name))]);
   const cart = shopping.basket([rice], { catalog: fixtureCatalog, pantry });
@@ -121,6 +150,13 @@ test('does not borrow another store price or call unknown prices zero euros', ()
   const mixed = shopping.basket([rice, { ...rice, store: 'EDEKA' }], { catalog: fixtureCatalog });
   assert.equal(mixed.items.length, 16);
   assert.equal(mixed.unknownCount, 10);
+});
+
+test('snapshot meals price against their concrete offer instead of another same-identity product',()=>{
+  const first={store:'EDEKA',sale:['소고기등심'],missing:[],offerCatalog:{소고기등심:{offerId:'rib',product:'Rib-Eye',pack:'300 g',priceCents:699}}};
+  const second={store:'EDEKA',sale:['소고기등심'],missing:[],offerCatalog:{소고기등심:{offerId:'entrecote',product:'Entrecôte',pack:'300 g',priceCents:799}}};
+  assert.equal(shopping.basket([first],{catalog:{EDEKA:{}}}).items[0].priceCents,699);
+  assert.equal(shopping.basket([second],{catalog:{EDEKA:{}}}).items[0].priceCents,799);
 });
 
 test('clearing a price keeps it unknown, explicit zero is valid, empty basket is zero', () => {
@@ -167,6 +203,157 @@ test('lunch and dinner plans restore independently and legacy plans stay in thei
   assert.equal(Object.keys(shopping.restorePlans(JSON.stringify(payload),{...scope,store:'REWE'})).length,0);
   const legacy=shopping.restorePlans(JSON.stringify({activeArea:scope.area,mealMoment:'점심',plan:{mon:'lidl-a'}}),scope);
   assert.equal(legacy.점심.mon,'lidl-a');assert.equal(legacy.저녁,undefined);
+});
+
+test('legacy recipe choices and explicit empty slots migrate to manual v2 slots',()=>{
+  const serialized=JSON.stringify({activeArea:'52064',activeStore:'EDEKA',plans:{저녁:{mon:'known',tue:null}}});
+  const restored=shopping.restorePlansV2(serialized,{days:['mon','tue'],moments:['저녁'],availableRecipeIds:['known']});
+  assert.equal(restored.migrated,true);
+  assert.deepEqual(JSON.parse(JSON.stringify(restored.plans)),{저녁:{
+    mon:{recipeId:'known',origin:'manual',dismissedRecipeIds:[]},
+    tue:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
+  }});
+});
+
+test('legacy global plans never cross postcode, store, or branch scope',()=>{
+  const serialized=JSON.stringify({activeArea:'44369',activeStore:'Netto',activeBranchId:'branch-a',plans:{저녁:{mon:'netto-only'}}});
+  const autoPlans={저녁:{mon:{recipeId:'edeka-auto',origin:'auto',dismissedRecipeIds:[]}}};
+  const restored=shopping.restorePlansV2(serialized,{area:'52064',store:'EDEKA',branchId:'branch-b',days:['mon'],moments:['저녁'],availableRecipeIds:['edeka-auto'],autoPlans});
+  assert.equal(restored.plans.저녁.mon.recipeId,'edeka-auto');
+  assert.equal(restored.plans.저녁.mon.origin,'auto');
+  assert.equal(restored.migrated,false);
+  assert.deepEqual([...restored.stale],[]);
+});
+
+test('snapshot refresh replaces auto slots only and retains unavailable manual recipes',()=>{
+  const saved=JSON.stringify({version:2,plans:{저녁:{
+    mon:{recipeId:'old-auto',origin:'auto',dismissedRecipeIds:['dismissed']},
+    tue:{recipeId:'removed-manual',origin:'manual',dismissedRecipeIds:[]},
+    wed:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
+  }}});
+  const restored=shopping.restorePlansV2(saved,{days:['mon','tue','wed'],moments:['저녁'],availableRecipeIds:['new-auto']});
+  const refreshed=shopping.refreshAutoPlans(restored.plans,{저녁:{mon:'new-auto',tue:'wrong',wed:'wrong'}});
+  assert.equal(refreshed.저녁.mon.recipeId,'new-auto');
+  assert.equal(refreshed.저녁.mon.origin,'auto');
+  assert.deepEqual([...refreshed.저녁.mon.dismissedRecipeIds],['dismissed']);
+  assert.equal(refreshed.저녁.tue.recipeId,'removed-manual');
+  assert.equal(refreshed.저녁.wed.recipeId,null);
+  assert.deepEqual(JSON.parse(JSON.stringify(restored.stale)),[{moment:'저녁',day:'tue',recipeId:'removed-manual'}]);
+  const sparse=shopping.restorePlansV2(saved,{days:['mon','tue','wed'],moments:['저녁'],availableRecipeIds:[]});
+  assert.deepEqual(JSON.parse(JSON.stringify(sparse.stale)),[{moment:'저녁',day:'tue',recipeId:'removed-manual'}]);
+});
+
+test('snapshot rollover clears stale dismissals while preserving manual slots',()=>{
+  const saved=JSON.stringify({version:2,snapshotId:'snapshot-old',plans:{저녁:{
+    mon:{recipeId:'manual-choice',origin:'manual',dismissedRecipeIds:['old-dismissal']},
+    tue:{recipeId:'old-auto',origin:'auto',dismissedRecipeIds:['old-dismissal']}
+  }}});
+  const restored=shopping.restorePlansV2(saved,{snapshotId:'snapshot-new',days:['mon','tue'],moments:['저녁'],availableRecipeIds:['manual-choice'],autoPlans:{저녁:{mon:null,tue:'new-auto'}}});
+  assert.equal(restored.plans.저녁.mon.recipeId,'manual-choice');
+  assert.deepEqual([...restored.plans.저녁.mon.dismissedRecipeIds],[]);
+  assert.deepEqual([...restored.plans.저녁.tue.dismissedRecipeIds],[]);
+});
+
+test('a current snapshot treats a saved v2 plan without snapshot identity as changed',()=>{
+  const saved=JSON.stringify({version:2,plans:{저녁:{mon:{recipeId:'old-auto',origin:'auto',dismissedRecipeIds:['old-dismissal']}}}});
+  const restored=shopping.restorePlansV2(saved,{snapshotId:'snapshot-current',days:['mon'],moments:['저녁'],availableRecipeIds:['old-auto'],autoPlans:{저녁:{mon:'new-auto'}}});
+  assert.equal(restored.snapshotChanged,true);
+  assert.deepEqual([...restored.plans.저녁.mon.dismissedRecipeIds],[]);
+});
+
+test('v2 slot normalization keeps the 20 most recent unique dismissed recipes',()=>{
+  const ids=Array.from({length:22},(_,index)=>'recipe-'+index).concat(['recipe-5','recipe-21']);
+  const slot=shopping.normalizePlanSlot({recipeId:'current',origin:'auto',dismissedRecipeIds:ids});
+  assert.equal(slot.dismissedRecipeIds.length,20);
+  assert.equal(new Set(slot.dismissedRecipeIds).size,20);
+  assert.deepEqual([...slot.dismissedRecipeIds].slice(-2),['recipe-5','recipe-21']);
+});
+
+test('basket exposes complete, partial, and unknown cost facts without calling gaps zero',()=>{
+  const completeMeal={store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{닭고기:{amount:300,unit:'g'}}};
+  const complete=shopping.basket([completeMeal],{catalog:fixtureCatalog});
+  assert.equal(complete.costStatus,'complete');
+  assert.equal(complete.knownSubtotalCents,799);
+  assert.deepEqual([...complete.unknownItemKeys],[]);
+  assert.deepEqual([...complete.quantityCheckKeys],[]);
+  assert.equal(complete.savingsStatus,'unavailable');
+  const partial=shopping.basket([rice],{catalog:fixtureCatalog});
+  assert.equal(partial.costStatus,'partial');
+  assert.equal(partial.knownSubtotalCents,1584);
+  assert.ok(partial.unknownItemKeys.includes('Netto:간장'));
+  assert.ok(partial.quantityCheckKeys.includes('Netto:닭고기'));
+  const unknown=shopping.basket([{store:'EDEKA',sale:['연어'],missing:[],requiredAmounts:{연어:{amount:200,unit:'g'}}}],{catalog:{}});
+  assert.equal(unknown.costStatus,'unknown');
+  assert.equal(unknown.knownSubtotalCents,0);
+});
+
+test('source-quantity-unknown ingredients remain visible and cannot produce a definitive total',()=>{
+  const label='우유 (원문 수량 미표기)';
+  assert.equal(shopping.ingredientName(label),'우유');
+  const result=shopping.basket([{store:'EDEKA',sale:[],missing:[shopping.ingredientName(label)],requiredAmounts:{}}],{catalog:{EDEKA:{우유:{priceCents:199,pack:'1 l'}}}});
+  assert.equal(result.items[0].name,'우유');
+  assert.equal(result.items[0].quantityNeedsCheck,true);
+  assert.equal(result.costStatus,'partial');
+  assert.ok(result.quantityCheckKeys.includes('EDEKA:우유'));
+  assert.equal(result.knownSubtotalCents,199);
+  assert.match(shopping.summary(result),/수량 확인 1종/);
+  assert.doesNotMatch(shopping.summary(result),/구매 합계/);
+  const list=shopping.addToList([],result);
+  assert.equal(list[0].quantityNeedsCheck,true);
+  const progress=shopping.listProgress(list);
+  assert.equal(progress.knownSubtotalCents,199);
+  assert.equal(progress.quantityCheckCount,1);
+  assert.match(shopping.summary(progress),/수량 확인 1종/);
+});
+
+test('empty and all-pantry baskets keep savings unavailable without same-product normal-price evidence',()=>{
+  const empty=shopping.basket([],{catalog:fixtureCatalog});
+  assert.equal(empty.costStatus,'complete');
+  assert.equal(empty.savingsStatus,'unavailable');
+  assert.equal(empty.savingsCents,null);
+  const stocked=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{닭고기:{amount:300,unit:'g'}}}],{
+    catalog:fixtureCatalog,
+    pantry:new Set(['Netto:닭고기'])
+  });
+  assert.equal(stocked.purchaseCount,0);
+  assert.equal(stocked.savingsStatus,'unavailable');
+  assert.equal(stocked.savingsCents,null);
+});
+
+test('mode and serving refresh replaces auto slots only',()=>{
+  const plans={저녁:{
+    mon:{recipeId:'auto-old',origin:'auto',dismissedRecipeIds:['dismissed']},
+    tue:{recipeId:'manual-choice',origin:'manual',dismissedRecipeIds:[]},
+    wed:{recipeId:null,origin:'manual',dismissedRecipeIds:[]}
+  }};
+  const refreshed=shopping.refreshAutoPlans(plans,{저녁:{mon:'auto-new',tue:'wrong',wed:'wrong'}});
+  assert.equal(refreshed.저녁.mon.recipeId,'auto-new');
+  assert.equal(refreshed.저녁.mon.origin,'auto');
+  assert.equal(refreshed.저녁.tue.recipeId,'manual-choice');
+  assert.equal(refreshed.저녁.wed.recipeId,null);
+});
+
+test('X replacement records a bounded dismissal and clear is a distinct manual empty',()=>{
+  const current={recipeId:'current',origin:'auto',dismissedRecipeIds:Array.from({length:20},(_,index)=>'old-'+index)};
+  const replaced=shopping.replaceAutoSlot(current,'next');
+  assert.equal(replaced.recipeId,'next');
+  assert.equal(replaced.origin,'auto');
+  assert.equal(replaced.dismissedRecipeIds.length,20);
+  assert.equal(replaced.dismissedRecipeIds.at(-1),'current');
+  assert.equal(replaced.dismissedRecipeIds.includes('old-0'),false);
+  const exhausted=shopping.replaceAutoSlot(replaced,null);
+  assert.equal(exhausted.recipeId,null);
+  assert.equal(exhausted.origin,'auto');
+  const cleared=shopping.clearPlanSlot(replaced);
+  assert.deepEqual(JSON.parse(JSON.stringify(cleared)),{recipeId:null,origin:'manual',dismissedRecipeIds:[]});
+});
+
+test('shopping list rows keep purchase facts needed by the aisle view',()=>{
+  const cart=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{'닭고기':{amount:300,unit:'g'}}}],{catalog:fixtureCatalog});
+  const [listed]=shopping.addToList([],cart);
+  assert.equal(listed.pack,'1 kg');
+  assert.equal(listed.priceCents,799);
+  assert.equal(listed.completed,false);
 });
 
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {
@@ -232,9 +419,10 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.match(html, /lang="de"/);
     assert.match(html, /할인 재료.*메뉴에 연결됨/);
     assert.match(html, /수집된 지점·지역 자료 기준/);
-    for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-shopping']) {
+    for (const asset of ['meal-planner-recipe-data', 'meal-data-loader', 'meal-shopping']) {
       assert.ok(html.includes(asset + '.js?v='));
     }
+    assert.doesNotMatch(html,/ontology-recipe-details\.js|meal-package-prices\.js/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);

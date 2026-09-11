@@ -3,18 +3,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 const root = path.resolve('public/mohemeokji');
-const assets = ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js'];
-const version = crypto.createHash('sha256').update(assets.map((file)=>fs.readFileSync(path.join(root,file),'utf8')).join('\n')).digest('hex').slice(0,12);
+const nutritionPolicy=JSON.parse(fs.readFileSync(path.resolve('scripts/data/nutrition-policy.json'),'utf8'));
+const policyFile='meal-nutrition-policy.js';
+const policyContent='/* Generated from scripts/data/nutrition-policy.json. */\nwindow.mealNutritionPolicy='+JSON.stringify(nutritionPolicy)+';\n';
+const assets = ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-data-loader.js','meal-shopping.js',policyFile,'meal-recommendations.js'];
+const assetContent=(file)=>file===policyFile?policyContent:fs.readFileSync(path.join(root,file),'utf8');
+const version = crypto.createHash('sha256').update(assets.map(assetContent).join('\n')).digest('hex').slice(0,12);
 const canonical = fs.readFileSync(path.join(root,'index.html'),'utf8').replace(/(<script src="[^"?]+\.js)\?v=[^"]+("[^>]*>)/g, '$1?v='+version+'$2');
 const routes = fs.readdirSync(root,{withFileTypes:true}).filter((entry)=>entry.isDirectory() && fs.existsSync(path.join(root,entry.name,'index.html'))).map((entry)=>entry.name);
-const outputs = [[path.join(root,'index.html'),canonical]];
+const outputs = [[path.join(root,policyFile),policyContent],[path.join(root,'index.html'),canonical]];
 for (const route of routes) {
   outputs.push([path.join(root,route,'index.html'),canonical]);
   outputs.push([path.join(root,route,'meal-planner-recipe-data.js'),fs.readFileSync(path.join(root,'meal-planner-recipe-data.js'),'utf8')]);
 }
 let drift = false;
 for (const [file,content] of outputs) {
-  if (fs.readFileSync(file,'utf8') === content) continue;
+  if (fs.existsSync(file)&&fs.readFileSync(file,'utf8') === content) continue;
   drift = true;
   if (!process.argv.includes('--check')) fs.writeFileSync(file,content);
 }

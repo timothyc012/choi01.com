@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {generateCatalog,parseCsv} from './generate-meal-offers.mjs';
+import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
 
 export const recipeSearchSpec = {
   '닭가슴살': {ingredientLabels:['닭가슴살'],titleTerms:['닭가슴살']},
@@ -34,6 +35,128 @@ export const recipeSearchSpec = {
   '쌀': {ingredientLabels:['쌀','밥'],titleTerms:['밥','덮밥','볶음밥']},
 };
 
+const identityFields=['ingredientId','species','cut','processingState','form','composition'];
+
+export function offerIdentityKey(identity) {
+  return canonicalJson(Object.fromEntries(identityFields.map((field)=>[field,identity?.[field]??null])));
+}
+
+function ingredientLabel(ingredient) {
+  return typeof ingredient==='string' ? ingredient : ingredient?.ingredient ?? ingredient?.ingredientLabel ?? ingredient?.label ?? null;
+}
+
+export function parseRating(value) {
+  const rating=value===null||value===undefined ? null : String(value);
+  if(rating===null) return {rating:null,ratingNumber:null};
+  const trimmed=rating.trim();
+  return {rating,ratingNumber:/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(trimmed) ? Number(trimmed) : null};
+}
+
+function positiveOrdinal(value) {
+  const number=Number(value);
+  return Number.isInteger(number)&&number>0 ? number : null;
+}
+
+function nonNegativeInteger(value) {
+  if(value===null||value===undefined||value==='') return null;
+  const number=Number(value);
+  return Number.isSafeInteger(number)&&number>=0 ? number : null;
+}
+
+function ordered(items=[],positionFallback=false) {
+  return items.map((item,index)=>({...item,ordinal:positiveOrdinal(item.ordinal)??(positionFallback?index+1:null)}))
+    .sort((left,right)=>(left.ordinal??Number.POSITIVE_INFINITY)-(right.ordinal??Number.POSITIVE_INFINITY));
+}
+
+export function normalizeCandidateExport(candidate) {
+  const parsed=parseRating(candidate.rating);
+  return {
+    recipeId:String(candidate.recipeId??candidate.sourceRecipeId??''),
+    sourceRecipeId:String(candidate.sourceRecipeId??candidate.recipeId??''),
+    title:candidate.title??null,
+    sourceUrl:candidate.sourceUrl??null,
+    author:candidate.author??null,
+    rating:parsed.rating,
+    ratingNumber:parsed.ratingNumber,
+    reviewCount:nonNegativeInteger(candidate.reviewCount),
+    stepCount:nonNegativeInteger(candidate.stepCount),
+    ingredientCount:nonNegativeInteger(candidate.ingredientCount),
+    measuredIngredientCount:nonNegativeInteger(candidate.measuredIngredientCount),
+    sourceServingText:candidate.sourceServingText??null,
+    ingredients:ordered(candidate.ingredients,true).map((item)=>({
+      ordinal:item.ordinal,
+      label:item.label??null,
+      ingredient:ingredientLabel(item),
+      quantity:item.quantity??null,
+    })),
+    steps:ordered(candidate.steps).map((item)=>({
+      ordinal:item.ordinal,
+      name:item.name??null,
+      instruction:item.instruction??item.instructionText??null,
+    })),
+    matches:Array.isArray(candidate.matches) ? candidate.matches : [],
+  };
+}
+
+export function matchCandidate(candidate,offer,{allowLabelFallback=false}={}) {
+  const ingredientId=offer?.identity?.ingredientId;
+  const spec=recipeSearchSpec[ingredientId]??recipeSearchSpec[offer?.ingredient]??(ingredientId?{ingredientLabels:[ingredientId],titleTerms:[ingredientId]}:null);
+  if(!offer?.offerId||!spec||identityFields.some((field)=>!offer.identity?.[field])) return null;
+  const structuredIdentities=candidate.ingredientIdentities??candidate.identities??(candidate.identity?[candidate.identity]:null);
+  let ingredient;
+  if(Array.isArray(structuredIdentities)&&structuredIdentities.length) {
+    const exact=structuredIdentities.find((identity)=>offerIdentityKey(identity)===offerIdentityKey(offer.identity));
+    if(!exact) return null;
+    ingredient=exact.ingredientLabel??exact.ingredientId;
+  } else {
+    const labels=(candidate.ingredients||candidate.matchedIngredientLabels||[]).map(ingredientLabel).filter(Boolean);
+    const trustedIdentityKeys=candidate.identityKeys??(candidate.identityKey?[candidate.identityKey]:null);
+    if(trustedIdentityKeys&&!trustedIdentityKeys.includes(offerIdentityKey(offer.identity))) return null;
+    if(!trustedIdentityKeys&&!allowLabelFallback) return null;
+    ingredient=labels.find((label)=>spec.ingredientLabels.includes(label));
+  }
+  if(!ingredient) return null;
+  return {
+    offerId:offer.offerId,
+    relation:'exact-ingredient',
+    ingredientId,
+    ingredientLabel:ingredient,
+    offerIdentityKey:offerIdentityKey(offer.identity),
+    titleEvidence:spec.titleTerms.some((term)=>String(candidate.title||'').includes(term)),
+  };
+}
+
+function recipeSearchSpecForOffer(offer) {
+  const ingredientId=offer?.identity?.ingredientId;
+  const spec=recipeSearchSpec[ingredientId]??recipeSearchSpec[offer?.ingredient]??(ingredientId?{ingredientLabels:[ingredientId],titleTerms:[ingredientId]}:null);
+  if(!offer?.offerId||!spec||identityFields.some((field)=>!offer.identity?.[field])) return null;
+  return {
+    identityId:offer.identity.ingredientId,
+    identityKey:offerIdentityKey(offer.identity),
+    identity:offer.identity,
+    ingredientLabels:spec.ingredientLabels,
+    titleTerms:spec.titleTerms,
+  };
+}
+
+export function searchRequestForOffers(offers) {
+  const byIdentity=new Map();
+  for(const offer of offers) {
+    const spec=recipeSearchSpecForOffer(offer);
+    if(!spec) continue;
+    const key=offerIdentityKey(offer.identity);
+    if(!byIdentity.has(key)) byIdentity.set(key,spec);
+  }
+  const specs=[...byIdentity.values()];
+  for(const spec of specs) {
+    spec.labelEligible=!specs.some((other)=>
+      other.identityKey!==spec.identityKey
+      && other.ingredientLabels.some((label)=>spec.ingredientLabels.includes(label))
+    );
+  }
+  return specs.sort((left,right)=>left.identityKey.localeCompare(right.identityKey));
+}
+
 export function searchRequestForCatalog(packageCatalog) {
   const keys = new Set();
   for (const stores of Object.values(packageCatalog)) {
@@ -42,7 +165,123 @@ export function searchRequestForCatalog(packageCatalog) {
   return [...keys].filter((key)=>recipeSearchSpec[key]).sort().map((key)=>({key,...recipeSearchSpec[key]}));
 }
 
-export function buildStoreCandidateReport({packageCatalog,meta,candidates,input,database}) {
+function rowsFromPsql(database,sql,variables) {
+  const args=['-X','-qAt','-w','-d',database,'-v','ON_ERROR_STOP=1'];
+  for(const [key,value] of Object.entries(variables)) args.push('-v',key+'='+value);
+  args.push('-f',sql);
+  const stdout=execFileSync('psql',args,{encoding:'utf8',maxBuffer:128*1024*1024});
+  return stdout.split(/\r?\n/).filter(Boolean).map((line)=>JSON.parse(line));
+}
+
+function psqlDatabase(database) {
+  return {
+    findCandidateMetadata({searchSpec,tenant,perIdentityLimit}) {
+      return rowsFromPsql(database,fileURLToPath(new URL('./find-store-recipe-candidates.sql',import.meta.url)),{
+        search_spec_json:JSON.stringify(searchSpec),tenant,candidate_limit:perIdentityLimit,
+      });
+    },
+    exportCandidateFacts(recipeIds,{tenant}) {
+      if(!recipeIds.length) return [];
+      return rowsFromPsql(database,fileURLToPath(new URL('./export-store-recipe-candidates.sql',import.meta.url)),{
+        recipe_ids_json:JSON.stringify(recipeIds),tenant,
+      });
+    },
+  };
+}
+
+function candidateOrder(left,right) {
+  const leftTitle=left.titleEvidence===true?1:0;
+  const rightTitle=right.titleEvidence===true?1:0;
+  if(leftTitle!==rightTitle) return rightTitle-leftTitle;
+  const reviews=(Number(right.reviewCount)||0)-(Number(left.reviewCount)||0);
+  if(reviews) return reviews;
+  const rating=(parseRating(right.rating).ratingNumber??-1)-(parseRating(left.rating).ratingNumber??-1);
+  return rating||String(left.recipeId??left.sourceRecipeId).localeCompare(String(right.recipeId??right.sourceRecipeId));
+}
+
+export async function discoverStoreRecipeCandidates({offers,db,tenant,perIdentityLimit=500,totalLimit=5000}) {
+  if(!Array.isArray(offers)) throw new TypeError('offers must be an array');
+  if(!tenant) throw new TypeError('tenant is required');
+  if(!Number.isInteger(perIdentityLimit)||perIdentityLimit<1) throw new TypeError('perIdentityLimit must be a positive integer');
+  if(!Number.isInteger(totalLimit)||totalLimit<1) throw new TypeError('totalLimit must be a positive integer');
+  const searchSpec=searchRequestForOffers(offers);
+  const database=typeof db==='string' ? psqlDatabase(db) : db;
+  if(!database?.findCandidateMetadata||!database?.exportCandidateFacts) throw new TypeError('db must name a database or provide discovery methods');
+  const metadata=await database.findCandidateMetadata({searchSpec,tenant,perIdentityLimit,totalLimit});
+  const selectedByRecipe=new Map();
+  const identityStats={};
+  const overflow={};
+  const zeroCandidateIdentities=[];
+  const selectedIdentityKeysByRecipe=new Map();
+  const identityResults=searchSpec.map((spec)=>{
+    const identityOffers=offers.filter((offer)=>offerIdentityKey(offer.identity)===spec.identityKey);
+    const eligible=metadata.filter((candidate)=>{
+      if(candidate.identityKey&&candidate.identityKey!==spec.identityKey) return false;
+      if(!candidate.identityKey&&!spec.labelEligible) return false;
+      if(!candidate.identityKey&&candidate.identityId&&candidate.identityId!==spec.identityId) return false;
+      return Boolean(matchCandidate(candidate,identityOffers[0],{allowLabelFallback:spec.labelEligible}));
+    }).sort(candidateOrder);
+    const reportedTotal=eligible.reduce((total,candidate)=>Math.max(total,Number(candidate.identityTotal)||0),0);
+    const total=Math.max(reportedTotal,eligible.length);
+    return {spec,total,eligible:eligible.slice(0,perIdentityLimit),returned:0};
+  });
+
+  for(let rank=0;rank<perIdentityLimit;rank++) {
+    for(const result of identityResults) {
+      const candidate=result.eligible[rank];
+      if(!candidate) continue;
+      const recipeId=String(candidate.recipeId??candidate.sourceRecipeId??'');
+      if(!recipeId) continue;
+      if(!selectedByRecipe.has(recipeId)&&selectedByRecipe.size>=totalLimit) continue;
+      result.returned++;
+      if(!selectedByRecipe.has(recipeId)) selectedByRecipe.set(recipeId,candidate);
+      if(!selectedIdentityKeysByRecipe.has(recipeId)) selectedIdentityKeysByRecipe.set(recipeId,new Set());
+      selectedIdentityKeysByRecipe.get(recipeId).add(result.spec.identityKey);
+    }
+  }
+
+  for(const result of identityResults) {
+    const {identityKey}=result.spec;
+    const stats={total:result.total,returned:result.returned,omitted:result.total-result.returned};
+    identityStats[identityKey]=stats;
+    if(result.total===0) zeroCandidateIdentities.push(identityKey);
+    if(stats.omitted>0) overflow[identityKey]=stats;
+  }
+
+  const recipeIds=[...selectedByRecipe.keys()];
+  const facts=await database.exportCandidateFacts(recipeIds,{tenant});
+  const factsById=new Map(facts.map((candidate)=>[String(candidate.recipeId??candidate.sourceRecipeId),candidate]));
+  for(const recipeId of recipeIds) {
+    if(!factsById.has(recipeId)) throw new Error('Full candidate export omitted recipe: '+recipeId);
+  }
+  const candidates=recipeIds.map((recipeId)=>{
+    const candidate=normalizeCandidateExport({...selectedByRecipe.get(recipeId),...factsById.get(recipeId)});
+    candidate.matches=offers.map((offer)=>matchCandidate({...candidate,identityKeys:[...selectedIdentityKeysByRecipe.get(recipeId)]},offer)).filter(Boolean);
+    return candidate;
+  });
+  return {candidates,identityStats,overflow,zeroCandidateIdentities};
+}
+
+export function buildStoreCandidateReport({packageCatalog,offersByIdentity,meta,candidates,input,database,tenant='recipe-full',discovery}) {
+  if(offersByIdentity) {
+    const locations=[];
+    for(const [postcode,stores] of Object.entries(meta.stores)) {
+      for(const store of stores) {
+        const offers=offersByIdentity.filter((offer)=>offer.postcode===postcode&&offer.chain===store).map((offer)=>{
+          const recipeCandidateIds=candidates.filter((candidate)=>candidate.matches.some((match)=>match.offerId===offer.offerId)).map((candidate)=>candidate.recipeId);
+          return {...offer,recipeCandidateIds};
+        });
+        locations.push({postcode,store,branch:meta.profiles[postcode][store].branch,branchId:offers[0]?.branchId??null,offers});
+      }
+    }
+    const zeroCandidateOfferIds=locations.flatMap((location)=>location.offers).filter((offer)=>offer.recipeCandidateIds.length===0).map((offer)=>offer.offerId);
+    return {
+      generatedAt:new Date().toISOString(),input,database,tenant,locations,
+      candidates,zeroCandidateOfferIds,
+      identityStats:discovery?.identityStats??{},overflow:discovery?.overflow??{},
+      zeroCandidateIdentities:discovery?.zeroCandidateIdentities??[],
+    };
+  }
   const byKey = new Map();
   for (const candidate of candidates) {
     if (!byKey.has(candidate.offerKey)) byKey.set(candidate.offerKey,[]);
@@ -59,35 +298,37 @@ export function buildStoreCandidateReport({packageCatalog,meta,candidates,input,
       locations.push({postcode,store,branch:meta.profiles[postcode][store].branch,offers});
     }
   }
-  return {generatedAt:new Date().toISOString(),input,database,tenant:'recipe-full',locations};
+  return {generatedAt:new Date().toISOString(),input,database,tenant,locations};
 }
 
 function parseArgs(argv) {
-  const args={input:null,output:null,database:'01ontology',limit:5};
+  const args={input:null,output:null,database:'01ontology',tenant:'recipe-full',limit:500,totalLimit:5000};
   for(let i=0;i<argv.length;i++) {
     const value=argv[i];
     if(!args.input && !value.startsWith('--')) args.input=value;
     else if(value==='--output') args.output=argv[++i];
     else if(value==='--database') args.database=argv[++i];
+    else if(value==='--tenant') args.tenant=argv[++i];
     else if(value==='--limit') args.limit=Number(argv[++i]);
+    else if(value==='--total-limit') args.totalLimit=Number(argv[++i]);
     else throw new Error('Unknown argument: '+value);
   }
-  if(!args.input || !args.output) throw new Error('Usage: node scripts/find-store-recipe-candidates.mjs INPUT.csv --output REPORT.json [--database 01ontology] [--limit 5]');
-  if(!Number.isInteger(args.limit) || args.limit<1 || args.limit>20) throw new Error('--limit must be an integer from 1 to 20');
+  if(!args.input || !args.output) throw new Error('Usage: node scripts/find-store-recipe-candidates.mjs INPUT.csv --output REPORT.json [--database 01ontology] [--limit 500] [--total-limit 5000]');
+  if(!Number.isInteger(args.limit) || args.limit<1 || args.limit>500) throw new Error('--limit must be an integer from 1 to 500');
+  if(!Number.isInteger(args.totalLimit) || args.totalLimit<1 || args.totalLimit>5000) throw new Error('--total-limit must be an integer from 1 to 5000');
   return args;
 }
 
-export function run(argv=process.argv.slice(2)) {
+export async function run(argv=process.argv.slice(2)) {
   const args=parseArgs(argv);
   const rows=parseCsv(fs.readFileSync(args.input,'utf8'));
   const generated=generateCatalog(rows,'/offers/'+path.basename(args.input));
-  const request=searchRequestForCatalog(generated.packageCatalog);
-  const sql=fileURLToPath(new URL('./find-store-recipe-candidates.sql',import.meta.url));
-  const stdout=execFileSync('psql',['-X','-qAt','-w','-d',args.database,'-v','ON_ERROR_STOP=1','-v','search_spec_json='+JSON.stringify(request),'-v','candidate_limit='+args.limit,'-f',sql],{encoding:'utf8',maxBuffer:64*1024*1024});
-  const candidates=stdout.split(/\r?\n/).filter(Boolean).map((line)=>JSON.parse(line));
-  const report=buildStoreCandidateReport({packageCatalog:generated.packageCatalog,meta:generated.meta,candidates,input:args.input,database:args.database});
+  const discovery=await discoverStoreRecipeCandidates({offers:generated.offersByIdentity,db:args.database,tenant:args.tenant,perIdentityLimit:args.limit,totalLimit:args.totalLimit});
+  const report=buildStoreCandidateReport({packageCatalog:generated.packageCatalog,offersByIdentity:generated.offersByIdentity,meta:generated.meta,candidates:discovery.candidates,input:args.input,database:args.database,tenant:args.tenant,discovery});
   fs.writeFileSync(args.output,JSON.stringify(report,null,2)+'\n');
-  console.log(JSON.stringify({locations:report.locations.length,offers:report.locations.reduce((n,x)=>n+x.offers.length,0),candidates:candidates.length,output:args.output}));
+  console.log(JSON.stringify({locations:report.locations.length,offers:report.locations.reduce((n,x)=>n+x.offers.length,0),candidates:discovery.candidates.length,zeroCandidateIdentities:discovery.zeroCandidateIdentities,overflow:discovery.overflow,output:args.output}));
 }
 
-if (process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) run();
+if (process.argv[1] && path.resolve(process.argv[1])===fileURLToPath(import.meta.url)) {
+  run().catch((error)=>{ console.error(error.stack||error); process.exitCode=1; });
+}

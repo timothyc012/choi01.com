@@ -8,6 +8,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
+import ingredientIdentities from './data/ingredient-identities.json' with { type: 'json' };
+import { canonicalJson } from './lib/meal-snapshot-schema.mjs';
 
 export function parseCsv(text) {
   text = text.replace(/^\uFEFF/, '');
@@ -130,7 +132,95 @@ export function parsePeriod(value) {
   if (!dates || dates.some((d) => !Number.isFinite(Date.parse(d)) || new Date(d).toISOString().slice(0,10) !== d) || dates[0] > dates[1]) return null;
   return {validFrom:dates[0],validThrough:dates[1]};
 }
+
+function sha256(value) {
+  return createHash('sha256').update(value).digest('hex');
+}
+
+export function createOfferIdentity(row) {
+  const ingredient = compact(row?.ingredient || row?.ingredientId || row?.['재료'] || row?.['재료명']);
+  const identity = ingredientIdentities[ingredient];
+  return identity ? { ...identity } : null;
+}
+
+export function createOfferId(row, sourceSha) {
+  const period = parsePeriod(row?.['행사기간']);
+  if (!period) throw new Error('Cannot create an offer ID without a valid period');
+  if (!/^[a-f0-9]{64}$/.test(sourceSha || '')) throw new Error('Cannot create an offer ID without a source SHA-256');
+  return sha256(canonicalJson({
+    sourceSha,
+    postcode: compact(row?.['우편번호']),
+    chain: chainName(compact(row?.['체인'])),
+    branch: compact(row?.['지점']),
+    sourceRow: row?.__sourceRow,
+    product: compact(row?.['상품명']),
+    variant: compact(row?.['변형정보']),
+    validFrom: period.validFrom,
+    validThrough: period.validThrough
+  }));
+}
+
+function createBranchId(row) {
+  return 'branch-' + sha256(canonicalJson({
+    postcode: compact(row['우편번호']),
+    chain: chainName(compact(row['체인'])),
+    branch: compact(row['지점'])
+  })).slice(0, 16);
+}
+
+function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha) {
+  const identity = createOfferIdentity({ ...row, ingredient });
+  const priceCents = cents(row['행사가격']);
+  const period = parsePeriod(row['행사기간']);
+  if (!identity || priceCents === null || !period) return null;
+  const detail = compact(row['상품정보']);
+  const conditions = compact(row['할인조건']);
+  const normalPriceCents = cents(row['정상가격']) ?? cents(row['정상가']) ?? null;
+  const rowWithSource = { ...row, __sourceRow: sourceRow };
+  return {
+    offerId: createOfferId(rowWithSource, sourceSha),
+    postcode: compact(row['우편번호']),
+    chain: chainName(compact(row['체인'])),
+    branchId: createBranchId(row),
+    sourceRow,
+    evidenceUrl: /^https:\/\//.test(row['출처']) ? row['출처'] : null,
+    validFrom: period.validFrom,
+    validThrough: period.validThrough,
+    productDe: compact(row['상품명']),
+    pack: compact(row['가격적용단위']) || compact(detail.split('|')[0]) || '판매 단위 확인',
+    priceCents,
+    normalPriceCents,
+    conditions,
+    autoPriceEligible: !conditions || /^(없음|none|unconditional)$/i.test(conditions),
+    identity,
+    ingredient,
+    product: compact(row['상품명']),
+    appPriceCents: cents(row['앱가격']),
+    detail,
+    category: compact(row['카테고리']),
+    period: compact(row['행사기간']),
+    branch: compact(row['지점']),
+    source: sourcePublicPath,
+  };
+}
+
+export function generateOfferSnapshot(rows, sourceSha = sha256(canonicalJson(rows))) {
+  const offers = rows.map((row, index) => serializeOffer(
+    row,
+    row.ingredient || row.ingredientId || row['재료'] || row['재료명'],
+    row.__sourceRow || index + 2,
+    null,
+    sourceSha
+  )).filter(Boolean);
+  return {
+    schemaVersion: 1,
+    snapshotId: sha256(canonicalJson({ sourceSha, offers })),
+    offers
+  };
+}
+
 export function generateCatalog(rows, sourcePublicPath) {
+  const sourceSha = sha256(canonicalJson(rows));
   const collectedAt = rows.map((row) => compact(row['수집시각'])).filter(Boolean).sort().at(-1) || null;
   const areaDefaults = {};
   for (const row of rows) {
@@ -147,49 +237,24 @@ export function generateCatalog(rows, sourcePublicPath) {
     const preferred = legacyAreas[area]?.chain;
     if (rows.some((row) => row['우편번호'] === area && row['체인'] === preferred)) meta.chain = preferred;
   }
-  function pickOffer(area, chain, ingredient) {
+  function pickOffers(area, chain, ingredient) {
     const areaRows = rows.filter((row) => row['우편번호'] === area && chainName(row['체인']) === chain);
     const matchers = rules[ingredient] || [];
-    for (const matcher of matchers) {
-      const found = areaRows.find((row) => {
-        const name = compact(row['상품명']);
-        const conditions = compact(row['할인조건']);
-        return matcher.test(name) && !(excluded[ingredient] || []).some((bad) => bad.test(name))
-          && cents(row['행사가격']) !== null && (!conditions || /^(없음|none|unconditional)$/i.test(conditions))
-          && (!row['최소구매수량'] || Number(row['최소구매수량']) === 1)
-          && (ingredient !== '다진고기' || /50\s*%\s*Schwein.*50\s*%\s*Rind/i.test(row['상품정보']))
-          && (ingredient !== '돼지뒷다리살' || /Oberschale/i.test(row['상품정보']))
-          && !/3\s*für\s*2|\d\s*\+\s*\d|ab\s*\d+\s*(stück|pack)/i.test(row['상품정보'])
-          && !(['닭가슴살','닭안심','돼지안심','돼지목살','돼지등심','돼지뒷다리살','다진고기','돼지다짐육','소고기등심','연어'].includes(ingredient) && /가열완료|훈제|통조림/.test(row['상품상태'] || ''));
-      });
-      if (found) return found;
-    }
-    return null;
-  }
-  function serializeOffer(row, ingredient, sourceRow) {
-    if (!row) return null;
-    const priceCents = cents(row['행사가격']);
-    if (priceCents === null) return null;
-    const detail = compact(row['상품정보']);
-    return {
-      ingredient: ingredient,
-      product: compact(row['상품명']),
-      priceCents,
-      appPriceCents: cents(row['앱가격']),
-      pack: compact(row['가격적용단위']) || compact(detail.split('|')[0]) || '판매 단위 확인',
-      detail,
-      category: compact(row['카테고리']),
-      period: compact(row['행사기간']),
-      ...parsePeriod(row['행사기간']),
-      branch: compact(row['지점']),
-      source: sourcePublicPath,
-      evidenceUrl: /^https:\/\//.test(row['출처']) ? row['출처'] : null,
-      conditions: compact(row['할인조건']),
-      sourceRow
-    };
+    return areaRows.filter((row) => {
+      const name = compact(row['상품명']);
+      const conditions = compact(row['할인조건']);
+      return matchers.some((matcher) => matcher.test(name)) && !(excluded[ingredient] || []).some((bad) => bad.test(name))
+        && cents(row['행사가격']) !== null && (!conditions || /^(없음|none|unconditional)$/i.test(conditions))
+        && (!row['최소구매수량'] || Number(row['최소구매수량']) === 1)
+        && (ingredient !== '다진고기' || /50\s*%\s*Schwein.*50\s*%\s*Rind/i.test(row['상품정보']))
+        && (ingredient !== '돼지뒷다리살' || /Oberschale/i.test(row['상품정보']))
+        && !/3\s*für\s*2|\d\s*\+\s*\d|ab\s*\d+\s*(stück|pack)/i.test(row['상품정보'])
+        && !(['닭가슴살','닭안심','돼지안심','돼지목살','돼지등심','돼지뒷다리살','다진고기','돼지다짐육','소고기등심','연어'].includes(ingredient) && /가열완료|훈제|통조림/.test(row['상품상태'] || ''));
+    });
   }
 
   const packageCatalog = {};
+  const offersByIdentity = [];
   const profiles = {};
   const stores = {};
   for (const [area, meta] of Object.entries(areaDefaults)) {
@@ -205,11 +270,17 @@ export function generateCatalog(rows, sourcePublicPath) {
       const branches = [...new Set(areaRows.map((row) => compact(row['지점'])))];
       if (branches.length !== 1) throw new Error('Multiple branches share ' + area + '/' + chain + '; select a branch before publishing');
       for (const [ingredient] of Object.entries(rules)) {
-        const offer = pickOffer(area, chain, ingredient);
-        if (!offer) continue;
-        const rowIndex = rows.indexOf(offer) + 2;
-        const serialized = serializeOffer(offer, ingredient, rowIndex);
-        if (serialized) packageCatalog[area][chain][ingredient] = serialized;
+        const serializedOffers = pickOffers(area, chain, ingredient).map((offer) => serializeOffer(
+          offer,
+          ingredient,
+          rows.indexOf(offer) + 2,
+          sourcePublicPath,
+          sourceSha
+        )).filter(Boolean);
+        if (!serializedOffers.length) continue;
+        offersByIdentity.push(...serializedOffers);
+        const preferred = serializedOffers[0];
+        packageCatalog[area][chain][ingredient] = { ...preferred, preferredPricingOfferId: preferred.offerId };
       }
       const summary = Object.values(packageCatalog[area][chain]).slice(0, 5).map((offer) => offer.ingredient).join(' · ');
       profiles[area][chain] = {
@@ -225,7 +296,7 @@ export function generateCatalog(rows, sourcePublicPath) {
   }
 
   const snapshotId = createHash('sha256').update(JSON.stringify(rows)).digest('hex');
-  return { packageCatalog, meta: { source: sourcePublicPath, snapshotId, collectedAt, profiles, stores, areas: areaDefaults } };
+  return { packageCatalog, offersByIdentity, meta: { source: sourcePublicPath, snapshotId, collectedAt, profiles, stores, areas: areaDefaults } };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
@@ -233,8 +304,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   const output = process.argv[3];
   if (!input || !output) throw new Error('Usage: node scripts/generate-meal-offers.mjs INPUT.csv OUTPUT.js');
   const rows = parseCsv(fs.readFileSync(input, 'utf8'));
-  const { packageCatalog, meta } = generateCatalog(rows, '/offers/' + path.basename(input));
-  const generated = `/* Generated from ${path.basename(input)}. Prices are sale selling-unit prices. */\nwindow.mealPackagePricesByArea = ${JSON.stringify(packageCatalog, null, 2)};\nwindow.mealPackagePrices = window.mealPackagePricesByArea[${JSON.stringify(Object.keys(meta.areas)[0])}];\nwindow.mealOfferMeta = ${JSON.stringify(meta, null, 2)};\n`;
+  const { packageCatalog, offersByIdentity, meta } = generateCatalog(rows, '/offers/' + path.basename(input));
+  const generated = `/* Generated from ${path.basename(input)}. Prices are sale selling-unit prices. */\nwindow.mealPackagePricesByArea = ${JSON.stringify(packageCatalog, null, 2)};\nwindow.mealPackagePrices = window.mealPackagePricesByArea[${JSON.stringify(Object.keys(meta.areas)[0])}];\nwindow.mealOffersByIdentity = ${JSON.stringify(offersByIdentity, null, 2)};\nwindow.mealOfferMeta = ${JSON.stringify(meta, null, 2)};\n`;
   fs.writeFileSync(output, generated);
   console.log(`generated ${output}: ${Object.keys(packageCatalog).length} areas, ${rows.length} source rows`);
 }

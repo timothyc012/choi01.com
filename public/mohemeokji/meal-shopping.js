@@ -1,9 +1,21 @@
 /* Purchase costs use selling units. Comparable measured requirements are
    summed; ambiguous or incomplete quantities require a manual check. */
 (function () {
-  const normalize = (name) => name === "밥" ? "쌀" : name;
+  const normalize = (name) => {
+    const value=String(name||'').trim();
+    if(value==="밥")return "쌀";
+    if(["기름","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유"].includes(value)||/포도씨유$/u.test(value))return "식용유";
+    if(value==="녹인버터")return "버터";
+    return value;
+  };
   const keyFor = (store, name) => store + ":" + normalize(name);
   const euro = (cents) => (cents / 100).toFixed(2).replace(".", ",") + "€";
+
+  function ingredientName(label) {
+    return String(label||'').trim().replace(/\s*\(원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
+      .replace(/\s+(?:약간|조금|적당량|적당히)\s*$/u,'')
+      .split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
+  }
 
   function parsePrice(value) {
     const text = String(value).trim().replace(",", ".");
@@ -49,6 +61,92 @@
     return restored;
   }
 
+  function recentUniqueRecipeIds(values) {
+    if (!Array.isArray(values)) return [];
+    const seen = new Set();
+    const latest = [];
+    for (let index = values.length - 1; index >= 0; index -= 1) {
+      const value = values[index];
+      if (typeof value !== 'string' || !value || seen.has(value)) continue;
+      seen.add(value);
+      latest.unshift(value);
+    }
+    return latest.slice(-20);
+  }
+
+  function normalizePlanSlot(value, fallbackOrigin = 'manual') {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return {
+        recipeId: typeof value.recipeId === 'string' && value.recipeId ? value.recipeId : null,
+        origin: value.origin === 'auto' || value.origin === 'manual' ? value.origin : fallbackOrigin,
+        dismissedRecipeIds: recentUniqueRecipeIds(value.dismissedRecipeIds)
+      };
+    }
+    return {
+      recipeId: typeof value === 'string' && value ? value : null,
+      origin: fallbackOrigin,
+      dismissedRecipeIds: []
+    };
+  }
+
+  function restorePlansV2(serialized, context = {}) {
+    const days = Array.isArray(context.days) ? context.days : [];
+    const checksAvailability = Array.isArray(context.availableRecipeIds);
+    const available = new Set(checksAvailability ? context.availableRecipeIds.map(String) : []);
+    let saved = null;
+    try { saved = JSON.parse(serialized); } catch { /* Missing or corrupt state uses auto defaults. */ }
+    const scopeMismatch=Boolean(saved&&(
+      (saved.activeArea&&context.area&&saved.activeArea!==context.area)
+      ||(saved.activeStore&&context.store&&saved.activeStore!==context.store)
+      ||(saved.activeBranchId&&context.branchId&&saved.activeBranchId!==context.branchId)
+    ));
+    if(scopeMismatch) saved=null;
+    const isV2 = saved?.version === 2 && saved.plans && typeof saved.plans === 'object' && !Array.isArray(saved.plans);
+    const snapshotChanged=Boolean(isV2&&context.snapshotId&&saved.snapshotId!==context.snapshotId);
+    const legacyPlans = saved?.plans || (saved?.plan && saved?.mealMoment ? { [saved.mealMoment]: saved.plan } : {});
+    const sourcePlans = isV2 ? saved.plans : legacyPlans;
+    const fallbackPlans = context.autoPlans && typeof context.autoPlans === 'object' ? context.autoPlans : {};
+    const moments = Array.isArray(context.moments) && context.moments.length
+      ? context.moments : [...new Set([...Object.keys(sourcePlans || {}), ...Object.keys(fallbackPlans)])];
+    const plans = {};
+    const stale = [];
+    for (const moment of moments) {
+      plans[moment] = {};
+      for (const day of days) {
+        const hasSaved = sourcePlans?.[moment] && Object.hasOwn(sourcePlans[moment], day);
+        const value = hasSaved ? sourcePlans[moment][day] : fallbackPlans?.[moment]?.[day];
+        const origin = hasSaved ? 'manual' : 'auto';
+        const slot = normalizePlanSlot(value, origin);
+        if(snapshotChanged) slot.dismissedRecipeIds=[];
+        plans[moment][day] = slot;
+        if (slot.origin === 'manual' && slot.recipeId && checksAvailability && !available.has(slot.recipeId)) {
+          stale.push({moment, day, recipeId: slot.recipeId});
+        }
+      }
+    }
+    return {plans, migrated:Boolean(saved && !isV2), stale, snapshotChanged};
+  }
+
+  function refreshAutoPlans(plans, replacements = {}) {
+    return Object.fromEntries(Object.entries(plans || {}).map(([moment, plan]) => [moment,
+      Object.fromEntries(Object.entries(plan || {}).map(([day, value]) => {
+        const current = normalizePlanSlot(value);
+        if (current.origin === 'manual') return [day, current];
+        const replacement = normalizePlanSlot(replacements?.[moment]?.[day], 'auto');
+        replacement.origin = 'auto';
+        replacement.dismissedRecipeIds = current.dismissedRecipeIds.slice();
+        return [day, replacement];
+      }))
+    ]));
+  }
+
+  function serializePlansV2(plans, metadata = {}) {
+    const normalized = Object.fromEntries(Object.entries(plans || {}).map(([moment, plan]) => [moment,
+      Object.fromEntries(Object.entries(plan || {}).map(([day, slot]) => [day, normalizePlanSlot(slot)]))
+    ]));
+    return JSON.stringify({...metadata, version:2, plans:normalized});
+  }
+
   function metricAmount(value) {
     const text = String(value || "").trim().replace(",", ".");
     if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
@@ -80,29 +178,37 @@
       for (const originalName of [...meal.sale, ...meal.missing]) {
         const name = normalize(originalName);
         const key = keyFor(meal.store, name);
-        if (seenInMeal.has(key)) continue;
+        const alreadySeen=seenInMeal.has(key);
         seenInMeal.add(key);
         const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name];
         const required = candidate && Number.isFinite(candidate.amount) && candidate.amount > 0 && ['g', 'ml'].includes(candidate.unit) ? candidate : null;
+        const offer = meal.offerCatalog?.[originalName] || catalog[meal.store]?.[originalName] || meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
         const existing = ingredients.get(key);
         if (existing) {
-          existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
-          if (required && (!existing.requiredAmount || existing.requiredAmount.unit === required.unit)) {
+          if(!alreadySeen)existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
+          if (!alreadySeen&&required && (!existing.requiredAmount || existing.requiredAmount.unit === required.unit)) {
             existing.requiredAmount = {
               amount: (existing.requiredAmount?.amount || 0) + required.amount,
               unit: required.unit
             };
           }
+          if(!existing.product&&offer) {
+            existing.pack=offer.pack||existing.pack;existing.product=offer.product||'';existing.source=offer.source||'';
+            existing.priceCents=Number.isSafeInteger(offer.priceCents)&&offer.priceCents>=0?offer.priceCents:existing.priceCents;
+            existing.normalPriceCents=Number.isSafeInteger(offer.normalPriceCents)&&offer.normalPriceCents>=existing.priceCents?offer.normalPriceCents:null;
+          }
           continue;
         }
-        const offer = catalog[meal.store]?.[name];
+        if(alreadySeen)continue;
         const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
         const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
+        const normalPrice = offer?.normalPriceCents;
         ingredients.set(key, {
           key, name, store: meal.store, pack: offer?.pack || "구매 단위 직접 확인",
           product: offer?.product || "", source: offer?.source || "",
           customPrice: Object.hasOwn(prices, key),
-          priceCents, owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
+          priceCents, normalPriceCents: Number.isSafeInteger(normalPrice) && normalPrice >= priceCents ? normalPrice : null,
+          owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
           requirementComplete: Boolean(required)
         });
       }
@@ -125,25 +231,65 @@
       };
     });
     const purchases = items.filter((item) => !item.owned);
+    const unknownItemKeys = purchases.filter((item) => item.subtotalCents === null).map((item) => item.key);
+    const quantityCheckKeys = purchases.filter((item) => item.quantityNeedsCheck).map((item) => item.key);
+    const knownSubtotalCents = purchases.reduce((sum, item) => sum + (item.subtotalCents ?? 0), 0);
+    const costStatus = unknownItemKeys.length === purchases.length && purchases.length > 0
+      ? 'unknown' : (unknownItemKeys.length || quantityCheckKeys.length ? 'partial' : 'complete');
+    const comparableSavings = costStatus === 'complete' && purchases.length > 0 && purchases.every((item) => item.normalPriceCents !== null);
     return {
       items,
-      totalCents: purchases.reduce((sum, item) => sum + (item.subtotalCents ?? 0), 0),
-      unknownCount: purchases.filter((item) => item.priceCents === null).length,
-      quantityCheckCount: purchases.filter((item) => item.quantityNeedsCheck).length,
+      totalCents: knownSubtotalCents,
+      knownSubtotalCents,
+      unknownItemKeys,
+      quantityCheckKeys,
+      costStatus,
+      savingsStatus: comparableSavings ? 'complete' : 'unavailable',
+      savingsCents: comparableSavings
+        ? purchases.reduce((sum, item) => sum + ((item.normalPriceCents - item.priceCents) * item.quantity), 0)
+        : null,
+      unknownCount: unknownItemKeys.length,
+      quantityCheckCount: quantityCheckKeys.length,
       purchaseCount: purchases.length
     };
   }
 
+  function replaceAutoSlot(value, nextRecipeId) {
+    const current = normalizePlanSlot(value, 'auto');
+    const dismissed = recentUniqueRecipeIds([...current.dismissedRecipeIds, current.recipeId].filter(Boolean));
+    return {recipeId:typeof nextRecipeId === 'string' && nextRecipeId ? nextRecipeId : null,origin:'auto',dismissedRecipeIds:dismissed};
+  }
+
+  function clearPlanSlot() {
+    return {recipeId:null,origin:'manual',dismissedRecipeIds:[]};
+  }
+
+  function marginalBasketFacts(facts, pantry = new Set()) {
+    if(facts?.sourceCoverage!=='complete'||!Number.isInteger(facts.targetServings)||facts.targetServings<1||!Array.isArray(facts.items)||!facts.items.length) {
+      return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+    }
+    const valid=facts.items.every((item)=>typeof item?.key==='string'&&item.key&&Number.isSafeInteger(item.priceCents)&&item.priceCents>=0&&Number.isSafeInteger(item.quantity)&&item.quantity>0&&item.quantityComplete===true&&item.subtotalCents===item.priceCents*item.quantity);
+    if(!valid)return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+    const purchases=facts.items.filter((item)=>!pantry.has(item.key));
+    const comparable=purchases.length>0&&purchases.every((item)=>Number.isSafeInteger(item.normalPriceCents)&&item.normalPriceCents>=item.priceCents);
+    return {sourceCoverage:'complete',targetServings:facts.targetServings,costStatus:'complete',knownSubtotalCents:purchases.reduce((sum,item)=>sum+item.subtotalCents,0),unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:comparable?'complete':'unavailable',savingsCents:comparable?purchases.reduce((sum,item)=>sum+(item.normalPriceCents-item.priceCents)*item.quantity,0):null};
+  }
+
   function amount(cart) {
     if (cart.unknownCount === cart.purchaseCount && cart.unknownCount > 0) return "가격 확인 필요";
-    return euro(cart.totalCents);
+    if (cart.quantityCheckCount) return "확인된 금액 " + euro(cart.knownSubtotalCents ?? cart.totalCents) + " · 수량 확인";
+    return euro(cart.knownSubtotalCents ?? cart.totalCents);
   }
 
   function summary(cart) {
     if (!cart.purchaseCount) return "구매할 재료 없음 · " + euro(0);
     if (cart.unknownCount === cart.purchaseCount) return "가격 미확인 " + cart.unknownCount + "종";
-    if (cart.unknownCount) return "확인된 재료 " + euro(cart.totalCents) + " · 미확인 " + cart.unknownCount + "종";
-    return "구매 합계 " + euro(cart.totalCents);
+    if (cart.costStatus === 'complete' && !cart.quantityCheckCount) return "구매 합계 " + euro(cart.knownSubtotalCents ?? cart.totalCents);
+    const parts=[];
+    if ((cart.knownSubtotalCents ?? 0)>0) parts.push((cart.quantityCheckCount?"확인된 금액 ":"확인된 재료 ")+euro(cart.knownSubtotalCents));
+    if (cart.unknownCount) parts.push((cart.quantityCheckCount?"가격 미확인 ":"미확인 ")+cart.unknownCount+"종");
+    if (cart.quantityCheckCount) parts.push("수량 확인 "+cart.quantityCheckCount+"종");
+    return parts.join(" · ") || "가격·수량 확인 필요";
   }
 
   function addToList(list, cart) {
@@ -157,7 +303,7 @@
       const quantity = Math.max(previous?.quantity || 1, item.quantity);
       merged.set(item.key, {
         key: item.key, name: item.name, store: item.store, pack: item.pack,
-        quantity, priceCents: item.priceCents,
+        quantity, priceCents: item.priceCents, quantityNeedsCheck:Boolean(item.quantityNeedsCheck),
         completed: Boolean(previous?.completed && quantity === previous.quantity)
       });
     }
@@ -166,43 +312,54 @@
 
   function listProgress(list) {
     const remaining = list.filter((item) => !item.completed);
+    const quantityCheckCount=remaining.filter((item)=>item.quantityNeedsCheck===true).length;
+    const knownSubtotalCents=remaining.reduce((sum, item) => sum + (item.priceCents ?? 0) * item.quantity, 0);
+    const unknownCount=remaining.filter((item) => item.priceCents === null).length;
     return {
       remainingCount: remaining.length,
       completedCount: list.length - remaining.length,
       purchaseCount: remaining.length,
-      totalCents: remaining.reduce((sum, item) => sum + (item.priceCents ?? 0) * item.quantity, 0),
-      unknownCount: remaining.filter((item) => item.priceCents === null).length
+      totalCents: knownSubtotalCents,knownSubtotalCents,unknownCount,quantityCheckCount,
+      costStatus:unknownCount||quantityCheckCount?'partial':'complete'
     };
   }
 
-  function restoreState(serialized, snapshot = null) {
+  function restoreState(serialized, snapshot = null, options = {}) {
     const state = { pantry: new Set(), prices: {}, quantities: {}, list: [] };
     try {
       const saved = JSON.parse(serialized);
       if (!saved || saved.version !== 1) return state;
-      const availableStores = [...new Set(Object.values(window.mealOfferMeta?.stores || {}).flat())];
+      const availableStores = Array.isArray(options.stores) && options.stores.length
+        ? [...new Set(options.stores.filter((store)=>typeof store==='string'&&store))]
+        : [...new Set(Object.values(window.mealOfferMeta?.stores || {}).flat())];
       const validStore = (store) => (availableStores.length ? availableStores : ["Netto", "EDEKA"]).includes(store);
       const validKey = (key) => typeof key === "string" && key.includes(":") && validStore(key.slice(0, key.indexOf(":"))) && key.slice(key.indexOf(":") + 1).length > 0;
       const validPrice = (value) => value === null || (Number.isSafeInteger(value) && value >= 0 && value <= 100000000);
       const validQuantity = (value) => Number.isInteger(value) && value >= 1 && value <= 999;
       const record = (value) => value && typeof value === "object" && !Array.isArray(value);
-      if (Array.isArray(saved.pantry)) state.pantry = new Set(saved.pantry.filter((key) => typeof key === "string" && validKey(key)));
-      if (record(saved.prices)) state.prices = Object.fromEntries(Object.entries(saved.prices).filter(([key, value]) => validKey(key) && validPrice(value)));
+      const canonicalKey=(key)=>{
+        const separator=key.indexOf(":");
+        return keyFor(key.slice(0,separator),key.slice(separator+1));
+      };
+      if (Array.isArray(saved.pantry)) state.pantry = new Set(saved.pantry.filter((key) => typeof key === "string" && validKey(key)).map((key)=>{
+        return canonicalKey(key);
+      }));
+      if (record(saved.prices)) state.prices = Object.fromEntries(Object.entries(saved.prices).filter(([key, value]) => validKey(key) && validPrice(value)).map(([key,value])=>[canonicalKey(key),value]));
       if (record(saved.quantities)) {
         state.quantities = Object.fromEntries(Object.entries(saved.quantities)
           .filter(([scope, value]) => (scope === "week" || scope.startsWith("meal:")) && record(value))
-          .map(([scope, value]) => [scope, Object.fromEntries(Object.entries(value).filter(([key, quantity]) => validKey(key) && validQuantity(quantity)))]));
+          .map(([scope, value]) => [scope, Object.fromEntries(Object.entries(value).filter(([key, quantity]) => validKey(key) && validQuantity(quantity)).map(([key,quantity])=>[canonicalKey(key),quantity]))]));
       }
       if (Array.isArray(saved.list)) {
         const seen = new Set();
-        state.list = saved.list.filter((item) => {
+        state.list = saved.list.map((item)=>item&&typeof item.name==='string'?{...item,_validAliasKey:item.key===String(item.store)+':'+item.name||item.key===keyFor(item.store,item.name),name:normalize(item.name),key:keyFor(item.store,item.name)}:item).filter((item) => {
           if (!item || !validStore(item.store) || typeof item.name !== "string" || !item.name.trim()
-            || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
+            || item._validAliasKey!==true || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
             || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, quantity, priceCents, completed }) => ({ key, name, store, pack, quantity, priceCents, completed }));
+        }).map(({ key, name, store, pack, quantity, priceCents, completed, quantityNeedsCheck }) => ({ key, name, store, pack, quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true }));
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
@@ -222,5 +379,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

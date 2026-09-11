@@ -7,6 +7,25 @@
   };
   const identity = (meal) => meal.sourceRecipeId || meal.id;
   const profile = (meal) => meal.recommendationProfile || {primaryIngredients:[],family:identity(meal),method:'unknown'};
+  const modes = new Set(['balanced','value','nutrition','diet']);
+  const runtimeRankingPolicy=window.mealNutritionPolicy||null;
+
+  function restorePreferences(serialized) {
+    try {
+      const value=JSON.parse(serialized);
+      if(value&&modes.has(value.mode)&&Number.isInteger(value.targetServings)&&value.targetServings>=1&&value.targetServings<=6) {
+        return {mode:value.mode,targetServings:value.targetServings};
+      }
+    } catch { /* Corrupt preferences use safe defaults. */ }
+    return {mode:'balanced',targetServings:2};
+  }
+
+  function serializePreferences(value={}) {
+    return JSON.stringify({
+      mode:modes.has(value.mode)?value.mode:'balanced',
+      targetServings:Number.isInteger(value.targetServings)&&value.targetServings>=1&&value.targetServings<=6?value.targetServings:2
+    });
+  }
 
   function restoreHistory(serialized, date) {
     const today = dayNumber(date);
@@ -67,26 +86,147 @@
     return meals.filter((meal)=>explain(meal,catalog).mainOffers.length>0);
   }
 
+  function nutritionReadiness(meal) {
+    const facts=meal?.nutritionFacts,perServing=facts?.perServing;
+    const fields=['kcal','proteinGrams','fiberGrams','sodiumMg'];
+    const ready=facts?.status==='complete'&&typeof facts.source==='string'&&facts.source.trim()
+      &&Number.isFinite(facts.sourceServings)&&facts.sourceServings>0
+      &&perServing&&fields.every((field)=>Number.isFinite(perServing[field])&&perServing[field]>=0);
+    return {ready:Boolean(ready),status:ready?'complete':'unknown',facts:ready?perServing:null};
+  }
+
+  function costReadiness(cart) {
+    const unknown=Array.isArray(cart?.unknownItemKeys)?cart.unknownItemKeys:[];
+    const quantity=Array.isArray(cart?.quantityCheckKeys)?cart.quantityCheckKeys:[];
+    const subtotalValid=Number.isSafeInteger(cart?.knownSubtotalCents)&&cart.knownSubtotalCents>=0;
+    const ready=subtotalValid&&cart?.costStatus==='complete'&&!unknown.length&&!quantity.length;
+    return {ready,status:subtotalValid&&['complete','partial','unknown'].includes(cart?.costStatus)?cart.costStatus:'unknown',knownSubtotalCents:subtotalValid?cart.knownSubtotalCents:null,savingsStatus:cart?.savingsStatus==='complete'?'complete':'unavailable'};
+  }
+
+  function evaluateRecipeForMode(meal, context={}, mode='balanced') {
+    const selectedMode=modes.has(mode)?mode:'balanced';
+    const reasons=[];
+    let eligible=Boolean(meal&&typeof identity(meal)==='string'&&identity(meal));
+    if(!eligible) reasons.push('출처 레시피 식별자가 없습니다.');
+    if(context.store&&meal?.store!==context.store) { eligible=false; reasons.push('선택한 마트의 메뉴가 아닙니다.'); }
+    if(context.branchId&&meal?.branchId!==context.branchId) { eligible=false; reasons.push('선택한 지점의 메뉴가 아닙니다.'); }
+    if(context.mealOnly&&['side','breakfast'].includes(profile(meal||{}).kind)) { eligible=false; reasons.push('점심·저녁 자동 추천용 주식 메뉴가 아닙니다.'); }
+    if(context.requireMainOffer&&explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length===0) { eligible=false; reasons.push('현재 지점의 정확한 주재료 할인과 연결되지 않습니다.'); }
+    if(typeof context.offerIds?.has==='function'&&!((meal?.offerIds||[]).some((offerId)=>context.offerIds.has(offerId)))) { eligible=false; reasons.push('현재 지점의 할인상품 ID와 일치하지 않습니다.'); }
+    const readiness={cost:'unknown',savings:'unavailable',nutrition:'unknown'};
+    const scoreComponents={qualityScore:Number.isFinite(meal?.qualityScore)?meal.qualityScore:null};
+    if(selectedMode==='value') {
+      if(context.requireCompilerBasketFacts&&(meal?.basketFacts?.sourceCoverage!=='complete'||meal.basketFacts.targetServings!==context.targetServings)) { eligible=false; reasons.push('선택한 인분 수의 전체 재료 범위가 검증된 구매 바구니 자료가 없습니다.'); }
+      const cost=costReadiness(typeof context.basketFor==='function'?context.basketFor(meal,context.targetServings||2):meal?.basketFacts);
+      readiness.cost=cost.status;readiness.savings=cost.savingsStatus;scoreComponents.knownSubtotalCents=cost.knownSubtotalCents;
+      if(!cost.ready) { eligible=false; reasons.push('가격 또는 필요한 포장 수량이 모두 확인되지 않았습니다.'); }
+      else reasons.push('확인된 구매 합계 '+cost.knownSubtotalCents+'센트 기준입니다.');
+    } else if(selectedMode==='nutrition'||selectedMode==='diet') {
+      const nutrient=nutritionReadiness(meal);readiness.nutrition=nutrient.status;
+      if(!nutrient.ready) { eligible=false; reasons.push('원문 인분 수와 영양 근거가 완전하지 않습니다.'); }
+      else {
+        Object.assign(scoreComponents,nutrient.facts);
+        const policy=(context.rankingPolicy||runtimeRankingPolicy)?.modes?.[selectedMode];
+        if(!policy) { eligible=false; reasons.push('추천 정책 자료를 불러오지 못했습니다.'); }
+        else reasons.push('1인분 근거: '+nutrient.facts.kcal+' kcal · 단백질 '+nutrient.facts.proteinGrams+' g · 식이섬유 '+nutrient.facts.fiberGrams+' g · 나트륨 '+nutrient.facts.sodiumMg+' mg · 정책 가중치 열량 '+policy.weights.kcal+'%·단백질 '+policy.weights.proteinGrams+'%·식이섬유 '+policy.weights.fiberGrams+'%·나트륨 '+policy.weights.sodiumMg+'%');
+      }
+    } else reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
+    return {eligible,readiness,scoreComponents,reasons};
+  }
+
+  function rankForMode(pool, context={}, mode='balanced') {
+    const eligible=(pool||[]).filter((meal)=>evaluateRecipeForMode(meal,context,mode).eligible);
+    if(!eligible.length)return [];
+    const facts=(meal)=>evaluateRecipeForMode(meal,context,mode).scoreComponents;
+    let compare=null;
+    if(mode==='value') compare=(a,b)=>facts(a).knownSubtotalCents-facts(b).knownSubtotalCents;
+    if(mode==='nutrition'||mode==='diet') {
+      const policy=(context.rankingPolicy||runtimeRankingPolicy).modes[mode];
+      const fields=Object.keys(policy.weights);
+      const ranges=Object.fromEntries(fields.map((field)=>{
+        const values=eligible.map((meal)=>facts(meal)[field]);
+        return [field,{min:Math.min(...values),max:Math.max(...values)}];
+      }));
+      const weighted=(meal)=>fields.reduce((sum,field)=>{
+        const {min,max}=ranges[field],value=facts(meal)[field];
+        const normalized=max===min?0.5:(policy.directions[field]==='lower'?(max-value)/(max-min):(value-min)/(max-min));
+        return sum+normalized*policy.weights[field];
+      },0);
+      compare=(a,b)=>weighted(b)-weighted(a);
+    }
+    return sequence(eligible,{...context,compare},eligible.length);
+  }
+
+  function nextCandidate(pool, {dismissedRecipeIds=[],usedRecipeIds=[],mode='balanced',context={}}={}) {
+    const excluded=new Set([...dismissedRecipeIds,...usedRecipeIds]);
+    return (pool||[]).find((meal)=>!excluded.has(identity(meal))&&!excluded.has(meal.id)&&evaluateRecipeForMode(meal,context,mode).eligible)||null;
+  }
+
+  function planAutoSlots(pool, {plans={},days=[],moments=['점심','저녁'],mode='balanced',context={}}={}) {
+    const ranked=rankForMode(pool,context,mode);
+    const byId=new Map((pool||[]).map((meal)=>[meal.id,meal]));
+    const used=new Set();
+    const families=new Map(),methods=new Map();
+    for(const plan of Object.values(plans||{}))for(const slot of Object.values(plan||{})) {
+      if(slot?.origin!=='manual'||!slot.recipeId)continue;
+      used.add(slot.recipeId);
+      const meal=byId.get(slot.recipeId);
+      if(!meal)continue;
+      const meta=profile(meal);
+      families.set(meta.family,(families.get(meta.family)||0)+1);
+      methods.set(meta.method,(methods.get(meta.method)||0)+1);
+    }
+    const result=Object.fromEntries(moments.map((moment)=>[moment,{}]));
+    let filled=0,lastFamily=null;
+    for(const day of days)for(const moment of moments) {
+      const current=plans?.[moment]?.[day];
+      if(current?.origin==='manual') {
+        result[moment][day]={recipeId:current.recipeId||null,origin:'manual',dismissedRecipeIds:Array.isArray(current.dismissedRecipeIds)?current.dismissedRecipeIds.slice(-20):[]};
+        const manual=byId.get(current.recipeId);
+        if(manual)lastFamily=profile(manual).family;
+        continue;
+      }
+      const dismissed=new Set(current?.dismissedRecipeIds||[]);
+      let candidates=ranked.filter((meal)=>!used.has(meal.id)&&!dismissed.has(meal.id)&&!dismissed.has(identity(meal))&&(families.get(profile(meal).family)||0)<2);
+      if(!candidates.length)candidates=ranked.filter((meal)=>!used.has(meal.id)&&!dismissed.has(meal.id)&&!dismissed.has(identity(meal)));
+      const differentFamily=candidates.filter((meal)=>profile(meal).family!==lastFamily);
+      if(differentFamily.length)candidates=differentFamily;
+      const methodFloor=Math.min(...candidates.map((meal)=>methods.get(profile(meal).method)||0));
+      const selected=candidates.find((meal)=>(methods.get(profile(meal).method)||0)===methodFloor)||null;
+      result[moment][day]={recipeId:selected?.id||null,origin:'auto',dismissedRecipeIds:Array.isArray(current?.dismissedRecipeIds)?current.dismissedRecipeIds.slice(-20):[]};
+      if(!selected)continue;
+      filled+=1;used.add(selected.id);
+      const meta=profile(selected);lastFamily=meta.family;
+      families.set(meta.family,(families.get(meta.family)||0)+1);
+      methods.set(meta.method,(methods.get(meta.method)||0)+1);
+    }
+    return {plans:result,coverage:{eligible:ranked.length,filled,totalSlots:days.length*moments.length,limited:filled<days.length*moments.length}};
+  }
+
   function sequence(meals, options, count = meals.length) {
     const matched = options.requireMainOffer ? available(meals,options) : meals;
     const eligible = options.mealOnly ? matched.filter((meal)=>!['side','breakfast'].includes(profile(meal).kind)) : matched;
     const remaining = [...new Map(eligible.map((meal)=>[identity(meal),meal])).values()];
-    const result = [], families = new Map(), methods = new Map();
+    const result = [], families = new Map(), methods = new Map(), relaxations=[];
     while (remaining.length && result.length < count) {
       // Relax the family cap only if no remaining family can satisfy it.
-      let candidates = result.length < 7 ? remaining.filter((meal)=>(families.get(profile(meal).family)||0)<2) : remaining;
-      if (!candidates.length) candidates = remaining;
+      let candidates = remaining.filter((meal)=>(families.get(profile(meal).family)||0)<2);
+      if (!candidates.length) {
+        relaxations.push({code:'family-cap',at:result.length});
+        candidates = remaining;
+      }
       const lastFamily = result.length ? profile(result.at(-1)).family : null;
       const alternatives = candidates.filter((meal)=>profile(meal).family !== lastFamily);
       if (alternatives.length) candidates = alternatives;
       const adjusted = (meal)=>score(meal,options) - (families.get(profile(meal).family)||0)*25 - (methods.get(profile(meal).method)||0)*12;
-      const selected = candidates.slice().sort((a,b)=>adjusted(b)-adjusted(a) || identity(a).localeCompare(identity(b)))[0];
+      const selected = candidates.slice().sort((a,b)=>(typeof options.compare==='function'?options.compare(a,b):0) || adjusted(b)-adjusted(a) || identity(a).localeCompare(identity(b)))[0];
       result.push(selected);
       const meta = profile(selected);
       families.set(meta.family,(families.get(meta.family)||0)+1);
       methods.set(meta.method,(methods.get(meta.method)||0)+1);
       remaining.splice(remaining.indexOf(selected),1);
     }
+    result.relaxations=relaxations;
     return result;
   }
 
@@ -95,5 +235,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal};
+  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
 }());
