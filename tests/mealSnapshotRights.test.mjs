@@ -104,6 +104,15 @@ test('compiler creates a verifier-ready rollover with the prior snapshot retaine
   const report=verifyMealSnapshot({snapshotDir:rolloverDir,releaseMode:'rollover',previousManifestPath:bootstrapCurrent.manifestPath});
   assert.equal(report.rollback.valid,true);
 
+  const rolloverCurrent=JSON.parse(fs.readFileSync(path.join(rolloverDir,'current.json'),'utf8'));
+  const thirdDir=path.join(root,'third');
+  const third=await compileMealWeek({outputDir:thirdDir,releaseMode:'rollover',previousManifestPath:path.join(rolloverDir,rolloverCurrent.manifestPath),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-21',collectionTimestamp:'2026-09-20T09:00:00+02:00',policyVersion:'selection-v1'});
+  assert.equal(third.previousSnapshot.snapshotId,rollover.snapshotId);
+  assert.equal(fs.existsSync(path.join(thirdDir,bootstrapCurrent.manifestPath)),true);
+  assert.equal(fs.existsSync(path.join(thirdDir,rolloverCurrent.manifestPath)),true);
+  const thirdReport=verifyMealSnapshot({snapshotDir:thirdDir,releaseMode:'rollover',previousManifestPath:rolloverCurrent.manifestPath});
+  assert.equal(thirdReport.rollback.valid,true);
+
   await assert.rejects(compileMealWeek({outputDir:path.join(root,'same-week'),releaseMode:'rollover',previousManifestPath:path.join(bootstrapDir,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T10:00:00+02:00',policyVersion:'selection-v1'}),/earlier week/i);
   const corruptRoot=path.join(root,'corrupt');
   fs.cpSync(bootstrapDir,corruptRoot,{recursive:true});

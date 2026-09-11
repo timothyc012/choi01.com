@@ -64,6 +64,19 @@ function outputFiles(root,current='',result=[]) {
   return result;
 }
 
+function collectRetainedFiles(root,pointer,result,seen=new Set()) {
+  if(!pointer||seen.has(pointer.manifestPath)) return;
+  seen.add(pointer.manifestPath);
+  const target=safePath(root,pointer.manifestPath);
+  if(!target||!fs.existsSync(target)) return;
+  let manifest;
+  try { manifest=JSON.parse(fs.readFileSync(target,'utf8')); }
+  catch { return; }
+  result.add(pointer.manifestPath);
+  for(const relative of Object.keys(manifest.fileHashes||{})) result.add(relative);
+  collectRetainedFiles(root,manifest.previousSnapshot,result,seen);
+}
+
 export function validateMealSnapshotDirectory(outputDir,options={}) {
   const errors=[];
   const currentPath=path.join(outputDir,'current.json');
@@ -104,6 +117,7 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
   const retainedFiles=new Set();
   if(manifest.previousSnapshot!==undefined) {
     const previous=manifest.previousSnapshot;
+    collectRetainedFiles(outputDir,previous,retainedFiles);
     allowOnly(previous,SCHEMAS.previous,'manifest.previousSnapshot',errors);
     if(!previous||typeof previous!=='object'||previous.snapshotId===manifest.snapshotId) errors.push('previous snapshot must identify a different retained snapshot');
     else if(!digest.test(previous.snapshotId||'')||!digest.test(previous.manifestSha256||'')) errors.push('previous snapshot pointer is invalid');
