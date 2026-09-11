@@ -219,6 +219,24 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   sesame.ingredients.push({ordinal:4,label:'참기름 1큰술',ingredient:'참기름',quantity:'1큰술'});
   sesame.steps[1].instruction+=' 팬에 기름을 두르고 마지막에 참기름을 넣습니다.';
   assert.deepEqual(unquantifiedActionIngredients(sesame),['기름']);
+
+  const dryPan=candidate('negated-oil');
+  dryPan.steps[1].instruction='아몬드는 기름 두르지 않은 팬에서 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(dryPan),[]);
+
+  const conditionalButter=candidate('conditional-butter');
+  conditionalButter.ingredients.push({ordinal:4,label:'올리브유 2큰술',ingredient:'올리브유',quantity:'2큰술'});
+  conditionalButter.steps[1].instruction='팬에 올리브유를 붓습니다. 식용유를 사용할 경우 가능하면 버터를 함께 넣습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(conditionalButter),[]);
+
+  const unlistedOil=candidate('unlisted-required-oil');
+  unlistedOil.steps[1].instruction='팬에 포도씨유를 두르고 양파를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(unlistedOil),['기름']);
+
+  const representedAlternative=candidate('represented-fat-choice');
+  representedAlternative.ingredients.push({ordinal:4,label:'녹인버터 2큰술',ingredient:'녹인버터',quantity:'2큰술'});
+  representedAlternative.steps[1].instruction='밥솥 안쪽을 기름칠합니다(올리브유 혹은 버터).';
+  assert.deepEqual(unquantifiedActionIngredients(representedAlternative),[]);
 });
 
 test('editorial validation requires a Korean public title',()=>{

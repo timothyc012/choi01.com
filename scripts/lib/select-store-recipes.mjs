@@ -46,17 +46,35 @@ export function sourceContentHash(candidate) {
 
 export function unquantifiedActionIngredients(candidate) {
   const instructions=(candidate.steps||[]).map((step)=>String(step.instruction||'')).join(' ');
+  const clauses=instructions.split(/[.!?\n]/u);
   const sourceIngredients=(candidate.ingredients||[]).map((ingredient)=>({label:String(ingredient.ingredient||ingredient.label||''),quantity:text(ingredient.quantity)}));
   const quantified=sourceIngredients.filter((ingredient)=>ingredient.quantity).map((ingredient)=>ingredient.label);
-  const actionMentions=(term)=>instructions.split(/[.!?\n]/u).some((clause)=>clause.includes(term)&&!new RegExp(term+'\\s*(?:없(?:이|어)|대신|대체)', 'u').test(clause));
+  const requiredMention=(clause,term)=>{
+    let offset=0;
+    while(offset<clause.length) {
+      const index=clause.indexOf(term,offset);
+      if(index<0)return false;
+      const before=clause.slice(Math.max(0,index-40),index);
+      const after=clause.slice(index+term.length,index+term.length+24);
+      const negated=/^(?:을|를)?\s*(?:두르지|넣지|사용하지|쓰지|않|말|없|제외)/u.test(after);
+      const conditional=/(?:대신|대체|선택|사용)\S*\s*(?:할|한)?\s*경우|가능하면|원하면|취향에 따라/u.test(before);
+      if(!negated&&!conditional)return true;
+      offset=index+term.length;
+    }
+    return false;
+  };
+  const actionMentions=(term)=>clauses.some((clause)=>requiredMention(clause,term));
   const missing=ACTION_INGREDIENT_GROUPS.filter((group)=>group.some(actionMentions)&&!group.some((term)=>quantified.some((label)=>label.includes(term)))).map((group)=>group[0]);
   const listedOil=sourceIngredients.find((ingredient)=>cookingOilName(ingredient.label));
   if(listedOil&&!listedOil.quantity) {
     const listedName=cookingOilName(listedOil.label);
     if(listedName) missing.push(listedName);
   }
-  const addsGenericOil=/(?:팬에\s*)?기름(?:을)?\s*(?:두르|넣|붓|달구)|기름에\s*(?:튀|볶)/u.test(instructions);
-  if(addsGenericOil&&!listedOil) missing.push('기름');
+  const addsGenericOil=clauses.some((clause)=>(/(?:팬에\s*)?기름(?:을)?\s*(?:두르|넣|붓|달구)|기름에\s*(?:튀|볶)/u.test(clause)&&requiredMention(clause,'기름')));
+  const namedOilAction=clauses.some((clause)=>COOKING_OILS.slice(1).some((term)=>requiredMention(clause,term)&&(new RegExp(term+'.{0,24}(?:두르|넣|붓|기름칠|볶|바르|사용)|(?:두르|넣|붓|기름칠|볶|바르|사용).{0,24}'+term,'u').test(clause))));
+  const quantifiedButter=quantified.some((label)=>label.includes('버터'));
+  const oilAlternativeAlreadyRepresented=quantifiedButter&&/기름칠.{0,30}(?:올리브유|올리브오일).{0,12}(?:혹은|또는|or).{0,12}버터/iu.test(instructions);
+  if((addsGenericOil||namedOilAction)&&!listedOil&&!oilAlternativeAlreadyRepresented) missing.push('기름');
   return [...new Set(missing)];
 }
 
