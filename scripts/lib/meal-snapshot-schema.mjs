@@ -33,6 +33,10 @@ function validDate(value) {
   return nonEmptyString(value) && /^\d{4}-\d{2}-\d{2}$/.test(value) && new Date(value).toISOString().slice(0, 10) === value;
 }
 
+export function validRecipeSourceUrl(value,sourceRecipeId) {
+  return nonEmptyString(sourceRecipeId)&&value===`https://www.10000recipe.com/recipe/${sourceRecipeId}`;
+}
+
 export function validateSnapshot(snapshot) {
   const errors = [];
   if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return { valid: false, errors: ['snapshot must be an object'] };

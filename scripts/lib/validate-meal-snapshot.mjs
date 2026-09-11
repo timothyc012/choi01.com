@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import {offerIdentityKey} from '../find-store-recipe-candidates.mjs';
+import {validRecipeSourceUrl} from './meal-snapshot-schema.mjs';
 
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const digest=/^[a-f0-9]{64}$/;
@@ -17,7 +18,7 @@ const SCHEMAS={
   location:['schemaVersion','snapshotId','weekStart','id','postcode','store','branch','branchId','offers','recipes','coverage','warnings'],
   offer:['offerId','postcode','chain','branchId','evidenceUrl','validFrom','validThrough','productDe','pack','priceCents','normalPriceCents','conditions','autoPriceEligible','identity'],
   identity:['ingredientId','species','cut','processingState','form','composition'],
-  recipeRef:['sourceRecipeId','offerIds','offerIdentityKeys','primaryIngredientIds','recommendationProfile','qualityScore','qualityFacts','detailPath','detailSha256'],
+  recipeRef:['sourceRecipeId','title','offerIds','offerIdentityKeys','primaryIngredientIds','recommendationProfile','qualityScore','qualityFacts','detailPath','detailSha256'],
   profile:['primaryIngredients','family','method','kind'],quality:['adjustedRating','popularity','completeness','priorStrength','globalMean'],
   locationCoverage:['target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds'],
   warning:['code','published','target','added','cap'],
@@ -235,12 +236,15 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
       }
       const indexed=recipesById.get(recipeRef.sourceRecipeId);
       if(!indexed||indexed.path!==recipeRef.detailPath||indexed.sha256!==recipeRef.detailSha256) errors.push(`${refPrefix} must match the recipe index`);
+      const detail=parsedArtifacts.get(recipeRef.detailPath);
+      if(typeof recipeRef.title!=='string'||!recipeRef.title.trim()||recipeRef.title!==detail?.title) errors.push(`${refPrefix}.title must match its approved detail title`);
     }
   }
   for(const [sourceRecipeId,indexed] of recipesById) {
     const detail=parsedArtifacts.get(indexed.path);
     allowOnly(detail,SCHEMAS.detail,`recipes.${sourceRecipeId}`,errors);
     allowOnly(detail?.recommendationProfile,SCHEMAS.profile,`recipes.${sourceRecipeId}.recommendationProfile`,errors);
+    if(!validRecipeSourceUrl(detail?.sourceUrl,sourceRecipeId)) errors.push(`recipes.${sourceRecipeId}.sourceUrl must match the approved recipe host and id`);
   }
   const coverageLocationKeys=new Set((coverage?.locations||[]).map((location)=>[location.postcode,location.store,location.branchId].join('|')));
   if(locationKeys.size!==coverageLocationKeys.size||[...locationKeys].some((key)=>!coverageLocationKeys.has(key))) errors.push('manifest.locations must match coverage locations');

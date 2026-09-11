@@ -36,7 +36,7 @@ function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64),weekStart='2
     recipeIndex.push({sourceRecipeId,path:detailPath,sha256:detailHash,sourceContentHash:detail.sourceContentHash});
     const location={schemaVersion:1,snapshotId,weekStart,id,postcode,store,branch:`지점 ${index}`,branchId,
       offers:[{offerId,postcode,chain:store,branchId,productDe:`Produkt ${index}`,pack:'500 g',priceCents:499,validFrom:'2026-09-07',validThrough:'2026-09-13',autoPriceEligible:true,identity}],
-      recipes:[{sourceRecipeId,offerIds:[offerId],offerIdentityKeys:[offerIdentityKey(identity)],primaryIngredientIds:['감자'],detailPath,detailSha256:detailHash,recommendationProfile:profile}],
+      recipes:[{sourceRecipeId,title:detail.title,offerIds:[offerId],offerIdentityKeys:[offerIdentityKey(identity)],primaryIngredientIds:['감자'],detailPath,detailSha256:detailHash,recommendationProfile:profile}],
       coverage:{target:48,published:1,eligible:1,heldForReviewCount:0,zeroCandidateOfferIds:[],sparse:true},warnings:[]};
     const locationPath=`${snapshotRoot}/locations/${id}.json`;
     files.set(locationPath,json(location));
@@ -289,5 +289,9 @@ test('real published bootstrap has no invalid prior snapshot chain',()=>{
   assert.equal(manifest.previousSnapshot,undefined);
   const report=verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'bootstrap'});
   assert.deepEqual(report.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});
+  for(const reference of manifest.locations) {
+    const location=JSON.parse(fs.readFileSync(path.join(dataRoot,reference.path),'utf8'));
+    assert.equal(new Set(location.recipes.map((recipe)=>recipe.title)).size,location.recipes.length,reference.id);
+  }
   assert.equal(fs.readdirSync(path.join(dataRoot,'snapshots',manifest.weekStart)).length,1);
 });

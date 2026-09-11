@@ -165,10 +165,11 @@ test('legacy recipe runtime stays disabled while snapshot refs remain detail-laz
   assert.equal(api.legacyEnabled('?snapshot=current'),false);
   const summaries=api.fromSnapshotLocation({store:'EDEKA',recipes:[{
     sourceRecipeId:'7000001',detailPath:'snapshots/week/id/recipes/7000001.hash.json',detailSha256:'a'.repeat(64),
-    offerIds:['offer-a'],primaryIngredientIds:['닭가슴살'],recommendationProfile:{kind:'main'}
+    title:'승인된 닭가슴살 볶음',offerIds:['offer-a'],primaryIngredientIds:['닭가슴살'],recommendationProfile:{kind:'main'}
   }]});
   assert.equal(summaries.length,1);
   assert.equal(summaries[0].sourceRecipeId,'7000001');
+  assert.equal(summaries[0].title,'승인된 닭가슴살 볶음');
   assert.equal('steps' in summaries[0],false);
   assert.equal('detailIngredients' in summaries[0],false);
   const catalog=api.offerCatalogFromSnapshot({offers:[{
@@ -182,9 +183,9 @@ test('legacy recipe runtime stays disabled while snapshot refs remain detail-laz
     {offerId:'offer-rib',identity:{ingredientId:'소고기등심'},productDe:'Rib-Eye',pack:'300 g',priceCents:699},
     {offerId:'offer-entrecote',identity:{ingredientId:'소고기등심'},productDe:'Entrecôte',pack:'300 g',priceCents:799}
   ],recipes:[
-    {sourceRecipeId:'1',offerIds:['offer-rib','offer-entrecote'],preferredPricingOfferId:'offer-rib',primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
-    {sourceRecipeId:'2',offerIds:['offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
-    {sourceRecipeId:'3',offerIds:['offer-rib','offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}}
+    {sourceRecipeId:'1',title:'립아이 스테이크',offerIds:['offer-rib','offer-entrecote'],preferredPricingOfferId:'offer-rib',primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
+    {sourceRecipeId:'2',title:'등심 채소구이',offerIds:['offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}},
+    {sourceRecipeId:'3',title:'등심 덮밥',offerIds:['offer-rib','offer-entrecote'],primaryIngredientIds:['소고기등심'],recommendationProfile:{}}
   ]};
   const duplicateCatalog=api.offerCatalogFromSnapshot(duplicateLocation);
   const duplicateRecipes=api.fromSnapshotLocation(duplicateLocation);
@@ -194,6 +195,11 @@ test('legacy recipe runtime stays disabled while snapshot refs remain detail-laz
   assert.equal(duplicateRecipes[0].offerCatalog['소고기등심'].offerId,'offer-rib');
   assert.equal(duplicateRecipes[1].matchedOffers[0].productDe,'Entrecôte');
   assert.equal(duplicateRecipes[2].offerCatalog['소고기등심'].offerId,'offer-entrecote');
+  assert.deepEqual(duplicateRecipes.map((recipe)=>recipe.title),['립아이 스테이크','등심 채소구이','등심 덮밥']);
+  assert.equal(api.safeRecipeSourceUrl('https://www.10000recipe.com/recipe/7000001','7000001'),'https://www.10000recipe.com/recipe/7000001');
+  assert.equal(api.safeRecipeSourceUrl('javascript:alert(1)','7000001'),null);
+  assert.equal(api.safeRecipeSourceUrl('https://evil.example/recipe/7000001','7000001'),null);
+  assert.equal(api.safeRecipeSourceUrl('https://www.10000recipe.com/recipe/other','7000001'),null);
 });
 
 test('manifest-only selection maps every direct route and chooses the first branch deterministically',()=>{
@@ -477,6 +483,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   detailOpener.focus();detailOpener.click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
+  assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
+  assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*5,99€.*수량 확인/s);
   assert.match(dom.window.document.getElementById('shoppingSource').textContent,/example.com|할인 근거/);
@@ -522,6 +530,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(JSON.parse(dom.window.localStorage.getItem(runtime.shoppingStorageKey)).list.some((item)=>item.key==='NeueMarkt:닭가슴살'),false);
   await runtime.openDetail('neuemarkt-recipe-8000001');
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'지난주 수동 메뉴');
+  assert.equal(dom.window.document.getElementById('recipeSource').hasAttribute('href'),false);
+  assert.equal(dom.window.document.getElementById('recipeSource').hidden,true);
   assert.equal(dom.window.document.getElementById('addFromDetail').disabled,true);
   assert.equal(calls.at(-1),'/mohemeokji/data/'+archivedDetailPath);
   dom.window.document.getElementById('eatFromDetail').click();

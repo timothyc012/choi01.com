@@ -121,6 +121,7 @@ export function matchCandidate(candidate,offer,{allowLabelFallback=false}={}) {
     relation:'exact-ingredient',
     ingredientId,
     ingredientLabel:ingredient,
+    offerIdentityKey:offerIdentityKey(offer.identity),
     titleEvidence:spec.titleTerms.some((term)=>String(candidate.title||'').includes(term)),
   };
 }

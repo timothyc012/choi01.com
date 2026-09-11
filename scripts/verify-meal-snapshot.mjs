@@ -2,6 +2,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import {validRecipeSourceUrl} from './lib/meal-snapshot-schema.mjs';
 import {pathToFileURL} from 'node:url';
 
 import {validateMealSnapshotDirectory} from './lib/validate-meal-snapshot.mjs';
@@ -130,7 +131,7 @@ function verifyOne(snapshotDir,assetBudgets) {
     if(!detail) continue;
     if(detail.sourceRecipeId!==entry.sourceRecipeId||detail.sourceContentHash!==entry.sourceContentHash) errors.push(`source lineage mismatch: ${entry.sourceRecipeId}`);
     if(!DIGEST.test(detail.sourceContentHash||'')) errors.push(`source lineage hash is invalid: ${entry.sourceRecipeId}`);
-    if(typeof detail.sourceTitle!=='string'||!detail.sourceTitle||typeof detail.sourceUrl!=='string'||!detail.sourceUrl||typeof detail.sourceAuthor!=='string'||!detail.sourceAuthor) errors.push(`source lineage metadata is incomplete: ${entry.sourceRecipeId}`);
+    if(typeof detail.sourceTitle!=='string'||!detail.sourceTitle||!validRecipeSourceUrl(detail.sourceUrl,entry.sourceRecipeId)||typeof detail.sourceAuthor!=='string'||!detail.sourceAuthor) errors.push(`source lineage metadata is incomplete or unsafe: ${entry.sourceRecipeId}`);
     indexedRecipes.set(entry.sourceRecipeId,entry);
   }
   const coverageByKey=new Map((coverage?.locations||[]).map((entry)=>[[entry.postcode,entry.store,entry.branchId].join('|'),entry]));
@@ -152,6 +153,9 @@ function verifyOne(snapshotDir,assetBudgets) {
       if(!(recipe.offerIds||[]).length) errors.push(`recipe has no exact store offer: ${reference.id} recipe ${recipe.sourceRecipeId}`);
       for(const offerId of recipe.offerIds||[]) if(!offerIds.has(offerId)) errors.push(`cross-store offer borrow: ${reference.id} recipe ${recipe.sourceRecipeId} offer ${offerId}`);
       if(!indexedRecipes.has(recipe.sourceRecipeId)) errors.push(`location recipe is absent from source lineage index: ${reference.id} recipe ${recipe.sourceRecipeId}`);
+      const indexed=indexedRecipes.get(recipe.sourceRecipeId);
+      const detail=indexed?readJson(root,indexed.path,'recipe detail',errors):null;
+      if(typeof recipe.title!=='string'||!recipe.title.trim()||recipe.title!==detail?.title) errors.push(`location recipe title does not match approved detail: ${reference.id} recipe ${recipe.sourceRecipeId}`);
       const detailSize=byteSize(root,recipe.detailPath);
       if(detailSize>budgets.detailBytes) errors.push(`asset budget exceeded: detail ${recipe.detailPath} ${detailSize} > ${budgets.detailBytes}`);
     }

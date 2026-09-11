@@ -258,6 +258,29 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   const renderedOil=candidate('rendered-pan-fat');
   renderedOil.steps[1].instruction='고기를 구운 뒤 기름이 남은 팬에 와인을 넣어 졸입니다.';
   assert.deepEqual(unquantifiedActionIngredients(renderedOil),[]);
+
+  const hotOil=candidate('hot-oil-frying');
+  hotOil.steps[1].instruction='기름이 충분히 달궈지면 반죽을 넣어 튀깁니다.';
+  assert.deepEqual(unquantifiedActionIngredients(hotOil),['기름']);
+
+  const unspacedNegation=candidate('unspaced-oil-negation');
+  unspacedNegation.steps[1].instruction='기름을두르지 않은 팬에 재료를 올립니다.';
+  assert.deepEqual(unquantifiedActionIngredients(unspacedNegation),[]);
+
+  const bananaFry=candidate('5529835');
+  bananaFry.ingredients.push({ordinal:4,label:'식용유',ingredient:'식용유',quantity:null});
+  bananaFry.steps[1].instruction='달군 프라이팬에 식용유를 붓고 온도가 오르면 바나나를 튀깁니다.';
+  assert.deepEqual(unquantifiedActionIngredients(bananaFry),['식용유']);
+
+  const potatoBake=candidate('6739041');
+  potatoBake.ingredients.push({ordinal:4,label:'식용유 약간',ingredient:'식용유',quantity:'약간'});
+  potatoBake.steps[1].instruction='달군 팬에 기름을 두르고 다진 고기를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(potatoBake),[]);
+
+  const brandedOil=candidate('6849218');
+  brandedOil.ingredients.push({ordinal:4,label:'백설포도씨유 적당량',ingredient:'백설포도씨유',quantity:'적당량'});
+  brandedOil.steps[1].instruction='달군 팬에 오일을 두르고 볶음밥을 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(brandedOil),[]);
 });
 
 test('editorial validation requires a Korean public title',()=>{

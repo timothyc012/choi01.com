@@ -120,7 +120,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
     const refs=selection.recipes.map((recipe)=>{
       details.set(recipe.sourceRecipeId,detailRecipe(recipe));
       return {
-        sourceRecipeId:recipe.sourceRecipeId,offerIds:recipe.offerIds,offerIdentityKeys:recipe.offerIdentityKeys,
+        sourceRecipeId:recipe.sourceRecipeId,title:recipe.title,offerIds:recipe.offerIds,offerIdentityKeys:recipe.offerIdentityKeys,
         primaryIngredientIds:recipe.primaryIngredientIds,recommendationProfile:recipe.recommendationProfile,
         qualityScore:recipe.qualityScore,qualityFacts:recipe.qualityFacts,
       };

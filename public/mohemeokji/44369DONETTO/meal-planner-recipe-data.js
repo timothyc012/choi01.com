@@ -21,6 +21,11 @@
     return false;
   }
 
+  function safeRecipeSourceUrl(value,sourceRecipeId) {
+    const expected='https://www.10000recipe.com/recipe/'+String(sourceRecipeId||'');
+    return sourceRecipeId&&value===expected?value:null;
+  }
+
   function fromSnapshotLocation(location) {
     const offersById=Object.fromEntries((location?.offers||[]).map((offer)=>[offer.offerId,offer]));
     return (location?.recipes || []).map((recipe) => {
@@ -47,7 +52,7 @@
       sourceRecipeId: recipe.sourceRecipeId,
       store: location.store,
       branchId: location.branchId,
-      title: (recipe.primaryIngredientIds || []).join(' · ') + ' 활용 레시피',
+      title: typeof recipe.title==='string'&&recipe.title.trim()?recipe.title.trim():(recipe.primaryIngredientIds || []).join(' · ') + ' 활용 레시피',
       time: null,
       timeBasis: 'detail',
       sale: Array.isArray(recipe.primaryIngredientIds) ? recipe.primaryIngredientIds.slice() : [],
@@ -516,8 +521,10 @@
           byId('detailIntro').textContent='검증된 원문 정보를 바탕으로 정리한 상세입니다.';
           byId('recipeAmounts').innerHTML=(detail.detailIngredients||[]).map((item)=>'<li>'+escapeHtml(item)+'</li>').join('');
           byId('detailSteps').innerHTML=(detail.steps||[]).map((step)=>'<li>'+escapeHtml(step)+'</li>').join('');
-          byId('recipeSource').href=detail.sourceUrl||'#';
-          byId('recipeSource').hidden=false;
+          const sourceUrl=safeRecipeSourceUrl(detail.sourceUrl,detail.sourceRecipeId);
+          if(sourceUrl)byId('recipeSource').href=sourceUrl;
+          else byId('recipeSource').removeAttribute('href');
+          byId('recipeSource').hidden=!sourceUrl;
           byId('recipeStepsBlock').hidden=false;
           byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
           byId('addShoppingItems').disabled=false;
@@ -683,5 +690,5 @@
     }
   }
 
-  window.MealRecipeData = {legacyEnabled, fromSnapshotLocation, offerCatalogFromSnapshot, selectSnapshotLocation, acceptLegacyScopedPayload, startSnapshotApp};
+  window.MealRecipeData = {legacyEnabled, safeRecipeSourceUrl, fromSnapshotLocation, offerCatalogFromSnapshot, selectSnapshotLocation, acceptLegacyScopedPayload, startSnapshotApp};
 }());

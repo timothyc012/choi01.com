@@ -6,6 +6,7 @@ import {
   selectStoreRecipes,
   sourceContentHash,
 } from '../scripts/lib/select-store-recipes.mjs';
+import {offerIdentityKey} from '../scripts/find-store-recipe-candidates.mjs';
 
 const chickenIdentity={ingredientId:'닭가슴살',species:'chicken',cut:'breast',processingState:'raw',form:'fillet',composition:'chicken'};
 const beefIdentity={ingredientId:'소고기등심',species:'beef',cut:'ribeye',processingState:'raw',form:'steak',composition:'beef'};
@@ -25,7 +26,7 @@ function candidate(recipeId,{identity=chickenIdentity,offerId='offer-chicken',ra
       {ordinal:2,instruction:'팬에서 '+ingredient+'을 볶는다.'},
       {ordinal:3,instruction:ingredient+'을 속까지 완전히 익힌다.'},
     ],
-    matches:[{offerId,relation:'exact-ingredient',ingredientId:ingredient,ingredientLabel:ingredient}],
+    matches:[{offerId,relation:'exact-ingredient',ingredientId:ingredient,ingredientLabel:ingredient,offerIdentityKey:offerIdentityKey(identity)}],
     recommendationProfile:{primaryIngredients:[ingredient],family,method,kind},
   };
 }
@@ -98,6 +99,15 @@ test('selection holds candidates with a missing source title or author for revie
   ]);
 });
 
+test('selection rejects unsafe or mismatched recipe source URLs',()=>{
+  for(const [id,url] of [['unsafe-scheme','javascript:alert(1)'],['wrong-host','https://evil.example/recipe/wrong-host'],['wrong-id','https://www.10000recipe.com/recipe/another-id']]) {
+    const recipe={...candidate(id),sourceUrl:url};
+    const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+    assert.deepEqual(selected.recipes,[],id);
+    assert.equal(selected.coverage.heldForReview[0].reason,'invalid-source-url',id);
+  }
+});
+
 test('a recipe ID alone is not a publication-registry approval key',()=>{
   const recipe=candidate('id-only');
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:{recipes:{'id-only':approved(recipe)}}});
@@ -162,9 +172,17 @@ test('selection revalidates exact match identity and source label against the sc
   const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
   const recipe=candidate('forged-apple',{identity:appleIdentity,offerId:'offer-apple'});
   recipe.ingredients=[{ordinal:1,ingredient:'두부',label:'두부 300g',quantity:'300g'},{ordinal:2,ingredient:'소금',label:'소금 1t',quantity:'1t'}];
-  recipe.matches=[{offerId:'offer-apple',relation:'exact-ingredient',ingredientId:'사과',ingredientLabel:'두부'}];
+  recipe.matches=[{offerId:'offer-apple',relation:'exact-ingredient',ingredientId:'사과',ingredientLabel:'두부',offerIdentityKey:offerIdentityKey(appleIdentity)}];
   recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'other',kind:'main'};
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'invalid-exact-match-evidence');
+});
+
+test('selection rejects a stale full offer identity attached to an otherwise matching label',()=>{
+  const recipe=candidate('stale-full-identity');
+  recipe.matches[0].offerIdentityKey=offerIdentityKey(beefIdentity);
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes,[]);
   assert.equal(selected.coverage.heldForReview[0].reason,'invalid-exact-match-evidence');
 });
@@ -188,7 +206,7 @@ test('selection does not match smoked salmon or surface-torched salmon to a raw 
   const smoked=candidate('smoked-salmon',{identity:salmonIdentity,offerId:'offer-salmon'});
   smoked.title='훈제연어 무순말이';
   smoked.ingredients=[{ordinal:1,ingredient:'훈제연어',quantity:'300g'},{ordinal:2,ingredient:'무순',quantity:'50g'}];
-  smoked.matches=[{offerId:'offer-salmon',relation:'exact-ingredient',ingredientId:'연어',ingredientLabel:'훈제연어'}];
+  smoked.matches=[{offerId:'offer-salmon',relation:'exact-ingredient',ingredientId:'연어',ingredientLabel:'훈제연어',offerIdentityKey:offerIdentityKey(salmonIdentity)}];
   smoked.recommendationProfile={primaryIngredients:['연어'],family:'salmon',method:'other',kind:'main'};
   const torched={...candidate('torched-salmon',{identity:salmonIdentity,offerId:'offer-salmon'}),title:'연어 덮밥'};
   torched.ingredients=[{ordinal:1,ingredient:'연어',quantity:'300g'},{ordinal:2,ingredient:'밥',quantity:'2공기'}];
@@ -247,7 +265,7 @@ test('selection permits incidental raw chicken when a source action explicitly c
   const recipe=candidate('apple-cooked-chicken',{identity:appleIdentity,offerId:'offer-apple'});
   recipe.title='사과 닭가슴살 볶음';
   recipe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient:'닭가슴살',quantity:'200g'}];
-  recipe.steps=[{ordinal:1,instruction:'사과와 닭가슴살을 썬다.'},{ordinal:2,instruction:'팬에서 고기를 속까지 완전히 익힌다.'},{ordinal:3,instruction:'사과를 넣고 마무리한다.'}];
+  recipe.steps=[{ordinal:1,instruction:'사과와 닭가슴살을 썬다.'},{ordinal:2,instruction:'팬에서 닭가슴살을 속까지 완전히 익힌다.'},{ordinal:3,instruction:'사과를 넣고 마무리한다.'}];
   recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'stirfry',kind:'main'};
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[appleOffer],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes.map((item)=>item.sourceRecipeId),['apple-cooked-chicken']);
@@ -273,13 +291,50 @@ test('animal-derived seasoning does not become a raw animal ingredient',()=>{
   assert.deepEqual(selected.recipes.map((item)=>item.sourceRecipeId),['apple-seasoning']);
 });
 
+test('raw egg yolk, flatfish and oyster require their own cooking action',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  for(const [id,ingredient] of [['raw-yolk','달걀노른자'],['raw-flatfish','광어회'],['raw-oyster','생굴']]) {
+    const recipe=candidate(id,{identity:appleIdentity,offerId:'offer-apple'});
+    recipe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient,quantity:'100g'}];
+    recipe.steps=[{ordinal:1,instruction:'사과를 썬다.'},{ordinal:2,instruction:ingredient+'를 손질한다.'},{ordinal:3,instruction:'접시에 함께 담는다.'}];
+    recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'salad',kind:'side'};
+    const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+    assert.equal(selected.coverage.heldForReview[0].reason,'raw-protein-cook-unverified',id);
+  }
+});
+
+test('structured prepared animal forms do not require another cooking step',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  const recipe=candidate('prepared-animal-forms',{identity:appleIdentity,offerId:'offer-apple'});
+  recipe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient:'데친 새우',quantity:'4개'},{ordinal:3,ingredient:'샐러드용 치킨',quantity:'100g'},{ordinal:4,ingredient:'로스트비프',quantity:'3장'}];
+  recipe.steps=[{ordinal:1,instruction:'사과를 썬다.'},{ordinal:2,instruction:'준비된 재료를 올린다.'},{ordinal:3,instruction:'접시에 담는다.'}];
+  recipe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'salad',kind:'side'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes.map((item)=>item.sourceRecipeId),['prepared-animal-forms']);
+});
+
+test('salmon sauce and another meat cooking action do not prove raw chicken is cooked',()=>{
+  const appleIdentity={ingredientId:'사과',species:'plant',cut:'apple',processingState:'fresh',form:'whole',composition:'apple'};
+  const sauce=candidate('salmon-sauce',{identity:appleIdentity,offerId:'offer-apple'});
+  sauce.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient:'연어소스',quantity:'1큰술'}];
+  sauce.steps=[{ordinal:1,instruction:'사과를 썬다.'},{ordinal:2,instruction:'연어소스를 뿌린다.'},{ordinal:3,instruction:'접시에 담는다.'}];
+  sauce.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'salad',kind:'side'};
+  const unsafe=candidate('other-meat-heat',{identity:appleIdentity,offerId:'offer-apple'});
+  unsafe.ingredients=[{ordinal:1,ingredient:'사과',quantity:'1개'},{ordinal:2,ingredient:'닭가슴살',quantity:'100g'},{ordinal:3,ingredient:'소고기',quantity:'100g'}];
+  unsafe.steps=[{ordinal:1,instruction:'소고기를 완전히 익힌다.'},{ordinal:2,instruction:'닭가슴살을 얇게 썬다.'},{ordinal:3,instruction:'사과와 함께 담는다.'}];
+  unsafe.recommendationProfile={primaryIngredients:['사과'],family:'apple',method:'salad',kind:'side'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-apple',appleIdentity)],candidates:[sauce,unsafe],registry:registryFor([approved(sauce),approved(unsafe)])});
+  assert.deepEqual(selected.recipes.map((item)=>item.sourceRecipeId),['salmon-sauce']);
+  assert.equal(selected.coverage.heldForReview[0].reason,'raw-protein-cook-unverified');
+});
+
 test('selection rejects a beef stew offer for a bulgogi-cut source ingredient',()=>{
   const stewIdentity={ingredientId:'소고기',species:'beef',cut:'stew',processingState:'raw',form:'cubed',composition:'beef'};
   const stewOffer=offer('offer-stew',stewIdentity);
   const recipe=candidate('bulgogi-cut',{identity:stewIdentity,offerId:'offer-stew'});
   recipe.ingredients=[{ordinal:1,ingredient:'불고기용 소고기',quantity:'300g'},{ordinal:2,ingredient:'감자',quantity:'2개'}];
   recipe.recommendationProfile={primaryIngredients:['소고기'],family:'beef',method:'stirfry',kind:'main'};
-  recipe.matches=[{offerId:'offer-stew',relation:'exact-ingredient',ingredientId:'소고기',ingredientLabel:'불고기용 소고기'}];
+  recipe.matches=[{offerId:'offer-stew',relation:'exact-ingredient',ingredientId:'소고기',ingredientLabel:'불고기용 소고기',offerIdentityKey:offerIdentityKey(stewIdentity)}];
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[stewOffer],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes,[]);
   assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
@@ -289,8 +344,18 @@ test('selection rejects canned or ready-to-eat chicken for a raw breast offer',(
   const recipe=candidate('canned-chicken');
   recipe.title='닭가슴살 오이 샐러드';
   recipe.ingredients=[{ordinal:1,ingredient:'닭가슴살 통조림',quantity:'1캔'},{ordinal:2,ingredient:'오이',quantity:'1개'}];
-  recipe.matches=[{offerId:'offer-chicken',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'닭가슴살 통조림'}];
+  recipe.matches=[{offerId:'offer-chicken',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'닭가슴살 통조림',offerIdentityKey:offerIdentityKey(chickenIdentity)}];
   recipe.recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'salad',kind:'side'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
+});
+
+test('selection rejects minced chicken attached to a raw breast fillet identity',()=>{
+  const recipe=candidate('minced-chicken');
+  recipe.ingredients=[{ordinal:1,ingredient:'다진 닭가슴살',quantity:'300g'},{ordinal:2,ingredient:'양파',quantity:'1개'}];
+  recipe.matches=[{offerId:'offer-chicken',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'다진 닭가슴살',offerIdentityKey:offerIdentityKey(chickenIdentity)}];
+  recipe.recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'};
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes,[]);
   assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
@@ -300,7 +365,7 @@ test('selection rejects processed pork linked to a raw pork offer',()=>{
   const porkIdentity={ingredientId:'돼지목살',species:'pork',cut:'neck',processingState:'raw',form:'steak',composition:'pork'};
   const recipe=candidate('processed-pork',{identity:porkIdentity,offerId:'offer-pork'});
   recipe.ingredients=[{ordinal:1,ingredient:'훈제 돼지고기 목살',quantity:'300g'},{ordinal:2,ingredient:'양파',quantity:'1개'}];
-  recipe.matches=[{offerId:'offer-pork',relation:'exact-ingredient',ingredientId:'돼지목살',ingredientLabel:'훈제 돼지고기 목살'}];
+  recipe.matches=[{offerId:'offer-pork',relation:'exact-ingredient',ingredientId:'돼지목살',ingredientLabel:'훈제 돼지고기 목살',offerIdentityKey:offerIdentityKey(porkIdentity)}];
   recipe.recommendationProfile={primaryIngredients:['돼지목살'],family:'pork',method:'other',kind:'main'};
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-pork',porkIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
   assert.deepEqual(selected.recipes,[]);

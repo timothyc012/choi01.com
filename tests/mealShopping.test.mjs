@@ -110,6 +110,26 @@ test('canonicalizes cooking-oil and melted-butter aliases into single shopping r
   assert.deepEqual(Array.from(cart.items,(item)=>item.key).sort(),['Netto:버터','Netto:식용유']);
   const restored=shopping.restoreState(JSON.stringify({version:1,pantry:['Netto:기름','Netto:녹인버터'],prices:{},quantities:{},list:[]}),null,{stores:['Netto']});
   assert.deepEqual([...restored.pantry].sort(),['Netto:버터','Netto:식용유']);
+  assert.equal(shopping.ingredientName('식용유 약간'),'식용유');
+  assert.equal(shopping.ingredientName('백설포도씨유 적당히'),'백설포도씨유');
+  assert.equal(shopping.keyFor('Netto','백설포도씨유'),'Netto:식용유');
+});
+
+test('keeps a specific oil offer price while collapsing the grocery key',()=>{
+  const meal={store:'Netto',sale:[],missing:['기름','올리브유'],requiredAmounts:{},offerCatalog:{올리브유:{product:'Olivenöl',pack:'500 ml',priceCents:499,source:'https://example.test/offer'}}};
+  const cart=shopping.basket([meal],{catalog:{Netto:{}}});
+  assert.equal(cart.items.length,1);
+  assert.equal(cart.items[0].key,'Netto:식용유');
+  assert.equal(cart.items[0].product,'Olivenöl');
+  assert.equal(cart.items[0].priceCents,499);
+});
+
+test('migrates persisted alias keys for prices quantities and shopping rows',()=>{
+  const saved={version:1,pantry:[],prices:{'Netto:기름':199},quantities:{week:{'Netto:올리브유':2}},list:[{key:'Netto:녹인버터',name:'녹인버터',store:'Netto',pack:'1개',quantity:1,priceCents:299,completed:false}]};
+  const restored=shopping.restoreState(JSON.stringify(saved),null,{stores:['Netto']});
+  assert.equal(restored.prices['Netto:식용유'],199);
+  assert.equal(restored.quantities.week['Netto:식용유'],2);
+  assert.deepEqual(Array.from(restored.list,(item)=>[item.key,item.name]),[['Netto:버터','버터']]);
 });
 
 test('pantry items are excluded from totals and missing price counts without losing prices', () => {

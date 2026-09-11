@@ -9,6 +9,7 @@ import {compileMealWeek} from '../scripts/compile-meal-week.mjs';
 import {sourceContentHash} from '../scripts/lib/select-store-recipes.mjs';
 import {validateMealSnapshotDirectory} from '../scripts/lib/validate-meal-snapshot.mjs';
 import {verifyMealSnapshot} from '../scripts/verify-meal-snapshot.mjs';
+import {offerIdentityKey} from '../scripts/find-store-recipe-candidates.mjs';
 
 const identity={ingredientId:'닭가슴살',species:'chicken',cut:'breast',processingState:'raw',form:'fillet',composition:'chicken'};
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
@@ -42,7 +43,7 @@ function fixture() {
       {ordinal:2,instruction:'DO NOT PUBLISH RAW 닭가슴살을 팬에서 볶는다.'},
       {ordinal:3,instruction:'DO NOT PUBLISH RAW 닭가슴살을 속까지 완전히 익힌다.'},
     ],
-    matches:[{offerId:'offer-a',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'닭가슴살'}],
+    matches:[{offerId:'offer-a',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'닭가슴살',offerIdentityKey:offerIdentityKey(identity)}],
     recommendationProfile:{primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'},
   };
   const registryEntry={sourceRecipeId:'7000001',sourceContentHash:sourceContentHash(candidate),transformVersion:'ko-paraphrase-v1',approved:true,approvalMethod:'owner-authorized-editorial-transform',validationVersion:'source-facts-v2',title:'닭가슴살 볶음',detailIngredients:['닭가슴살 300g','소금 1t'],steps:['닭가슴살을 손질한다.','팬에서 속까지 익힌다.','간을 맞춰 담는다.'],recommendationProfile:candidate.recommendationProfile};
@@ -78,9 +79,25 @@ test('compiled output is byte-identical, hash-valid, and contains no raw source 
   assert.equal(published.manifest.source.csvSha256,'d'.repeat(64));
   assert.match(published.manifest.source.discoverySha256,/^[a-f0-9]{64}$/);
   assert.equal(published.manifest.source.database,'fixture-db');
+  const location=JSON.parse(fs.readFileSync(path.join(a,published.manifest.locations[0].path),'utf8'));
+  assert.equal(location.recipes[0].title,'닭가슴살 볶음');
   const bytes=relativeFiles(a).map((file)=>fs.readFileSync(path.join(a,file),'utf8')).join('\n');
   assert.equal(bytes.includes('DO NOT PUBLISH RAW'),false);
   assert.equal(/sourceImage|imageUrl|"images"/.test(bytes),false);
+});
+
+test('validator rejects a location title that differs from its hash-pinned approved detail',async(t)=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-title-integrity-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const data=fixture();
+  const manifest=await compileMealWeek({outputDir:root,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const snapshot=readSnapshot(root);
+  const locationPath=path.join(root,manifest.locations[0].path);
+  const location=JSON.parse(fs.readFileSync(locationPath,'utf8'));
+  location.recipes[0].title='변조된 제목';
+  snapshot.manifest.fileHashes[manifest.locations[0].path]=rewriteJson(locationPath,location);
+  rewriteManifest(snapshot);
+  assert.match(validateMealSnapshotDirectory(root).errors.join('\n'),/title.*detail/i);
 });
 
 test('approved paraphrase changes produce a new immutable snapshot identity',async(t)=>{

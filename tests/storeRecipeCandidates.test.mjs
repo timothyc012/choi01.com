@@ -62,6 +62,7 @@ test('an exact ingredient identity qualifies every matching offer and title term
     relation: 'exact-ingredient',
     ingredientId: '닭가슴살',
     ingredientLabel: '닭가슴살',
+    offerIdentityKey: rawChickenIdentityKey,
     titleEvidence: false,
   });
   assert.equal(matchCandidate(titleCandidate, rawChickenOffer).titleEvidence, true);

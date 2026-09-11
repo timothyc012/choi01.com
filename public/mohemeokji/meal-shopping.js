@@ -4,7 +4,7 @@
   const normalize = (name) => {
     const value=String(name||'').trim();
     if(value==="밥")return "쌀";
-    if(["기름","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유"].includes(value))return "식용유";
+    if(["기름","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유"].includes(value)||/포도씨유$/u.test(value))return "식용유";
     if(value==="녹인버터")return "버터";
     return value;
   };
@@ -13,6 +13,7 @@
 
   function ingredientName(label) {
     return String(label||'').trim().replace(/\s*\(원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
+      .replace(/\s+(?:약간|조금|적당량|적당히)\s*$/u,'')
       .split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
   }
 
@@ -177,22 +178,28 @@
       for (const originalName of [...meal.sale, ...meal.missing]) {
         const name = normalize(originalName);
         const key = keyFor(meal.store, name);
-        if (seenInMeal.has(key)) continue;
+        const alreadySeen=seenInMeal.has(key);
         seenInMeal.add(key);
         const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name];
         const required = candidate && Number.isFinite(candidate.amount) && candidate.amount > 0 && ['g', 'ml'].includes(candidate.unit) ? candidate : null;
+        const offer = meal.offerCatalog?.[originalName] || catalog[meal.store]?.[originalName] || meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
         const existing = ingredients.get(key);
         if (existing) {
-          existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
-          if (required && (!existing.requiredAmount || existing.requiredAmount.unit === required.unit)) {
+          if(!alreadySeen)existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
+          if (!alreadySeen&&required && (!existing.requiredAmount || existing.requiredAmount.unit === required.unit)) {
             existing.requiredAmount = {
               amount: (existing.requiredAmount?.amount || 0) + required.amount,
               unit: required.unit
             };
           }
+          if(!existing.product&&offer) {
+            existing.pack=offer.pack||existing.pack;existing.product=offer.product||'';existing.source=offer.source||'';
+            existing.priceCents=Number.isSafeInteger(offer.priceCents)&&offer.priceCents>=0?offer.priceCents:existing.priceCents;
+            existing.normalPriceCents=Number.isSafeInteger(offer.normalPriceCents)&&offer.normalPriceCents>=existing.priceCents?offer.normalPriceCents:null;
+          }
           continue;
         }
-        const offer = meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
+        if(alreadySeen)continue;
         const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
         const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
         const normalPrice = offer?.normalPriceCents;
@@ -330,21 +337,24 @@
       const validPrice = (value) => value === null || (Number.isSafeInteger(value) && value >= 0 && value <= 100000000);
       const validQuantity = (value) => Number.isInteger(value) && value >= 1 && value <= 999;
       const record = (value) => value && typeof value === "object" && !Array.isArray(value);
-      if (Array.isArray(saved.pantry)) state.pantry = new Set(saved.pantry.filter((key) => typeof key === "string" && validKey(key)).map((key)=>{
+      const canonicalKey=(key)=>{
         const separator=key.indexOf(":");
         return keyFor(key.slice(0,separator),key.slice(separator+1));
+      };
+      if (Array.isArray(saved.pantry)) state.pantry = new Set(saved.pantry.filter((key) => typeof key === "string" && validKey(key)).map((key)=>{
+        return canonicalKey(key);
       }));
-      if (record(saved.prices)) state.prices = Object.fromEntries(Object.entries(saved.prices).filter(([key, value]) => validKey(key) && validPrice(value)));
+      if (record(saved.prices)) state.prices = Object.fromEntries(Object.entries(saved.prices).filter(([key, value]) => validKey(key) && validPrice(value)).map(([key,value])=>[canonicalKey(key),value]));
       if (record(saved.quantities)) {
         state.quantities = Object.fromEntries(Object.entries(saved.quantities)
           .filter(([scope, value]) => (scope === "week" || scope.startsWith("meal:")) && record(value))
-          .map(([scope, value]) => [scope, Object.fromEntries(Object.entries(value).filter(([key, quantity]) => validKey(key) && validQuantity(quantity)))]));
+          .map(([scope, value]) => [scope, Object.fromEntries(Object.entries(value).filter(([key, quantity]) => validKey(key) && validQuantity(quantity)).map(([key,quantity])=>[canonicalKey(key),quantity]))]));
       }
       if (Array.isArray(saved.list)) {
         const seen = new Set();
-        state.list = saved.list.filter((item) => {
+        state.list = saved.list.map((item)=>item&&typeof item.name==='string'?{...item,_validAliasKey:item.key===String(item.store)+':'+item.name||item.key===keyFor(item.store,item.name),name:normalize(item.name),key:keyFor(item.store,item.name)}:item).filter((item) => {
           if (!item || !validStore(item.store) || typeof item.name !== "string" || !item.name.trim()
-            || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
+            || item._validAliasKey!==true || item.key !== keyFor(item.store, item.name) || typeof item.pack !== "string"
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
             || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
           seen.add(item.key);
