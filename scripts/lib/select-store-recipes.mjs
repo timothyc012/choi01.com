@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 
 import {canonicalJson,validRecipeSourceUrl} from './meal-snapshot-schema.mjs';
 import {offerIdentityKey,recipeSearchSpec} from '../find-store-recipe-candidates.mjs';
+import {sourceProfileMatches} from './main-ingredient-gate.mjs';
 
 const DEFAULT_POLICY={target:48,kindCaps:{main:36,breakfast:6,side:6},identityCap:6,familyCap:8,methodCap:12,authorCap:4};
 export const PUBLICATION_APPROVAL_METHOD='owner-authorized-editorial-transform';
@@ -267,11 +268,13 @@ function sourceGate(candidate,storeOffers,registryEntry) {
   if(scopedMatches.length&&!exactMatches.length) return 'invalid-exact-match-evidence';
   if(!exactMatches.length) return 'no-exact-store-offer';
   const profile=registryEntry?.recommendationProfile||candidate.recommendationProfile||{};
+  const exactLinks=exactMatches.map((match)=>({match,offer:offersById.get(match.offerId)}));
   const primaryIngredients=new Set(Array.isArray(profile.primaryIngredients)?profile.primaryIngredients:[]);
   const primaryMatches=exactMatches.filter((match)=>primaryIngredients.has(offersById.get(match.offerId)?.identity?.ingredientId));
   if(!primaryMatches.length) return 'no-primary-store-offer';
   const offerRisk=sourceOfferRisk(candidate,primaryMatches,offersById);
   if(offerRisk) return offerRisk;
+  if(!sourceProfileMatches(candidate,exactLinks,profile)) return 'stale-primary-profile';
   if(unquantifiedActionIngredients(candidate).some((ingredient)=>!representsUnknownActionIngredient(registryEntry?.detailIngredients,ingredient))) return 'unrepresented-action-ingredient';
   const quantified=primaryMatches.some((match)=>candidate.ingredients.some((ingredient)=>
     text(ingredient.quantity)&&(ingredient.ingredient===match.ingredientLabel||ingredient.ingredient===match.ingredientId)

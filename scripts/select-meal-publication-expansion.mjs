@@ -7,11 +7,14 @@ import {
   buildStoreCandidateReport,
   discoverStoreRecipeCandidates,
 } from './find-store-recipe-candidates.mjs';
+import {definingOfferLinks, ingredientLabelsMatch} from './lib/main-ingredient-gate.mjs';
 import {PUBLICATION_APPROVAL_METHOD, PUBLICATION_VALIDATION_VERSION, rankByQuality, representsUnknownActionIngredient, sourceContentHash, sourceOfferRisk, unquantifiedActionIngredients} from './lib/select-store-recipes.mjs';
 
 export const APPROVAL_METHOD=PUBLICATION_APPROVAL_METHOD;
 export const VALIDATION_VERSION=PUBLICATION_VALIDATION_VERSION;
-export const REVIEW_THRESHOLD=100;
+// The source page is the authority for review counts. A verified recipe with
+// one real cooking review is eligible; ranking still prefers higher counts.
+export const REVIEW_THRESHOLD=1;
 export const DEFAULT_TARGET=120;
 
 const text=(value)=>typeof value==='string'&&value.trim()?value.trim():null;
@@ -52,9 +55,11 @@ function eligibilityReason(candidate,candidateReport,reviewEvidenceById=null) {
   if(!links.length) return 'no-exact-store-offer';
   const offerRisk=sourceOfferRisk(candidate,links.map(({match})=>match),new Map(links.map(({offer})=>[offer.offerId,offer])));
   if(offerRisk) return offerRisk;
-  const primaryLabels=new Set(links.flatMap(({offer})=>[offer.identity?.ingredientId]).filter(Boolean));
-  const quantified=candidate.ingredients.some((ingredient)=>text(ingredient.quantity)&&(
-    primaryLabels.has(ingredient.ingredient)||primaryLabels.has(ingredient.label)
+  const primaryLinks=definingOfferLinks(candidate,links);
+  if(links.length&&!primaryLinks.length) return 'incidental-exact-offer';
+  const primaryLabels=new Set(primaryLinks.flatMap(({offer})=>[offer.identity?.ingredientId]).filter(Boolean));
+  const quantified=primaryLinks.some(({match})=>candidate.ingredients.some((ingredient)=>
+    text(ingredient.quantity)&&ingredientLabelsMatch(ingredient.ingredient??ingredient.label,match.ingredientLabel)
   ));
   if(!quantified) return 'unquantified-primary-match';
   return null;
@@ -71,14 +76,14 @@ function currentLocationCounts(candidateReport,registry) {
 export function derivePublicationProfile(candidate,candidateReport) {
   const title=text(candidate.title)||'';
   const links=linkedOffers(candidate,candidateReport);
-  const allPrimary=[...new Set(links.map(({offer})=>offer.identity?.ingredientId).filter(Boolean))].sort();
-  const evidenced=[...new Set(links.filter(({match})=>match?.titleEvidence===true).map(({offer})=>offer.identity?.ingredientId).filter(Boolean))].sort();
+  const primaryLinks=definingOfferLinks(candidate,links);
+  const allPrimary=[...new Set(primaryLinks.map(({offer})=>offer.identity?.ingredientId).filter(Boolean))].sort();
   const ingredientOrder=(candidate.ingredients||[]).map((item)=>String(item.ingredient||item.label||'').replace(/\s+/g,''));
   const firstIngredient=allPrimary.slice().sort((left,right)=>{
     const leftIndex=ingredientOrder.indexOf(left.replace(/\s+/g,'')),rightIndex=ingredientOrder.indexOf(right.replace(/\s+/g,''));
     return (leftIndex<0?Number.MAX_SAFE_INTEGER:leftIndex)-(rightIndex<0?Number.MAX_SAFE_INTEGER:rightIndex)||left.localeCompare(right);
   })[0];
-  const primary=evidenced.length?evidenced:(firstIngredient?[firstIngredient]:[]);
+  const primary=allPrimary.length ? allPrimary : (firstIngredient && allPrimary.includes(firstIngredient) ? [firstIngredient] : []);
   const ingredient=allPrimary.join(' ');
   const family=/닭/.test(ingredient)?'chicken':/돼지/.test(ingredient)?'pork':/소고기|쇠고기/.test(ingredient)?'beef':/연어/.test(ingredient)?'salmon':/참치/.test(ingredient)?'tuna':/달걀|계란/.test(ingredient)?'egg':/요거트|요구르트/.test(ingredient)?'yogurt':/치즈/.test(ingredient)?'cheese':/복숭아|사과|바나나|과일/.test(ingredient)?'fruit':/양파|감자|토마토|채소/.test(ingredient)?'vegetable':'other';
   const soupTitle=/미역국|된장국|국밥|닭개장|육개장|(?:국|탕|찌개|수프|스프|죽)(?:\s|$|[),])/u.test(title);
@@ -100,7 +105,7 @@ export function selectPublicationExpansion({candidateReport,registry={schemaVers
     const links=linkedOffers(candidate,candidateReport);
     const recommendationProfile=derivePublicationProfile(candidate,candidateReport);
     const primaryIngredients=new Set(recommendationProfile.primaryIngredients);
-    const definingLinks=links.filter(({offer})=>primaryIngredients.has(offer.identity?.ingredientId));
+    const definingLinks=definingOfferLinks(candidate,links).filter(({offer})=>primaryIngredients.has(offer.identity?.ingredientId));
     const offersById=new Map(definingLinks.map(({offer})=>[offer.offerId,offer]));
     const offerRisk=sourceOfferRisk(candidate,definingLinks.map(({match})=>match),offersById);
     if(offerRisk) { exclusions.push({sourceRecipeId:idOf(candidate),reason:offerRisk}); continue; }

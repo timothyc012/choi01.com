@@ -1729,6 +1729,44 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6881146|5ff4360a474026605d357b41f797a0858dc79884ae13bea8b9dfd16f8d25debe|ko-paraphrase-v1": {
+      "sourceRecipeId": "6881146",
+      "sourceContentHash": "5ff4360a474026605d357b41f797a0858dc79884ae13bea8b9dfd16f8d25debe",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-07",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-07",
+      "title": "대파 닭안심 조림",
+      "detailIngredients": [
+        "닭안심 5토막",
+        "대파 1대",
+        "통마늘 3개",
+        "물 200ml",
+        "간장 3큰술",
+        "자일로스설탕 1.5큰술",
+        "다진마늘 1/2큰술",
+        "후추 톡톡",
+        "맛술 2큰술"
+      ],
+      "steps": [
+        "닭안심을 도톰하게 자르고 대파는 1cm로 썬 뒤 통마늘은 반으로 가른다.",
+        "팬에 물 200ml, 간장 3큰술, 자일로스설탕 1.5큰술, 맛술 2큰술과 후추를 넣어 끓인 뒤 닭안심을 넣는다.",
+        "대파와 통마늘을 더한다.",
+        "중불에서 양념이 조려질 때까지 끓인다.",
+        "양념이 자작해지면 약불로 낮추고 다진마늘 반큰술을 넣는다.",
+        "고루 저어 조림을 마친다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭안심"
+        ],
+        "family": "chicken",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
     "6882836|1ce0f666c815a2b84337d26d38069a7a0c02239678ab627b30f3d6c1e507d468|ko-paraphrase-v1": {
       "sourceRecipeId": "6882836",
       "sourceContentHash": "1ce0f666c815a2b84337d26d38069a7a0c02239678ab627b30f3d6c1e507d468",
@@ -2211,6 +2249,47 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6959014|16048dc60039daa3f1447adbaab0bfc94c867f8e5d54f1fc1ba146e205c623ff|ko-paraphrase-v1": {
+      "sourceRecipeId": "6959014",
+      "sourceContentHash": "16048dc60039daa3f1447adbaab0bfc94c867f8e5d54f1fc1ba146e205c623ff",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-07",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-07",
+      "title": "등심콩나물볶음~어린이반찬/다이어트반찬",
+      "detailIngredients": [
+        "굵은 콩나물 500~600g",
+        "돼지등심 600g",
+        "대파 1/2개",
+        "청양고추 2개",
+        "진간장 5~6큰술",
+        "다진마늘 1큰술",
+        "설탕 2~3큰술",
+        "후추가루 조금",
+        "생강술 1큰술",
+        "참기름 1큰술",
+        "통깨 조금",
+        "소금 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "콩나물을 물 1컵과 함께 삶고 채반에서 물기를 뺀다.",
+        "돼지고기 등심은 냉동 상태에서 얇게 썰어 양념을 넣고 주물러 팬에서 볶는다.",
+        "대파와 청양고추를 잘게 썬다.",
+        "등심이 거의 익으면 삶은 콩나물과 진간장 2큰술을 넣고 볶아 간을 맞춘다.",
+        "돼지등심이 완전히 익을 때까지 대파와 고추를 넣고 2~3분 더 볶는다.",
+        "참기름과 통깨를 뿌려 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지등심"
+        ],
+        "family": "pork",
+        "method": "stirfry",
+        "kind": "main"
+      }
     },
     "6960046|91c5706bc5382e9515f3fc6c5479adbb59886f9cb89201b445c456c7fdd87e53|ko-paraphrase-v1": {
       "sourceRecipeId": "6960046",

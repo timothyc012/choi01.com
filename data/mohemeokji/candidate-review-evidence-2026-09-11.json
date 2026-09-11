@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-09-11T11:19:01.420Z",
+  "recipes": {
+    "6881146": {
+      "sourceRecipeId": "6881146",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6881146",
+      "checkedAt": "2026-09-11T11:19:08.723Z",
+      "htmlSha256": "fbf9fbd3bee3e7372d5f96b6357527b166d35db64a188bdf77758064b16bca12",
+      "status": "verified",
+      "reviewCount": 110,
+      "ratingValue": 5,
+      "commentCount": 13,
+      "method": "recipe-feedback-v1",
+      "reason": null,
+      "candidateTitle": "대파 닭안심 조림"
+    },
+    "6959014": {
+      "sourceRecipeId": "6959014",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6959014",
+      "checkedAt": "2026-09-11T11:19:05.487Z",
+      "htmlSha256": "f8f168b554faf78d3b9b46100231e1b4d6471989f840fc92f9c05d12e1e5b302",
+      "status": "verified",
+      "reviewCount": 1,
+      "ratingValue": 5,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": null,
+      "candidateTitle": "등심콩나물볶음~어린이반찬/다이어트반찬"
+    }
+  }
+}
