@@ -25,7 +25,9 @@ test('canonical and direct pages expose the same Plan and Shop workspace contrac
 
 test('workspace CSS provides a ruled ledger, 7 by 2 planner and narrow no-overflow view',()=>{
   const html=fs.readFileSync(new URL('index.html',root),'utf8');
-  assert.match(html,/\.planning-desk\s*\{[^}]*grid-template-columns:\s*minmax\(300px,[^}]+minmax\(0,\s*1fr\)/s);
+  assert.match(html,/\.planning-desk\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1\.18fr\)\s+minmax\(300px,\s*\.82fr\)/s);
+  assert.match(html,/\.recipe-ledger\s*\{[^}]*order:\s*2/);
+  assert.match(html,/\.meal-card-title\s*\{[^}]*overflow-wrap:\s*anywhere/);
   assert.match(html,/\.week-head,\s*\.week-row\s*\{[^}]*grid-template-columns:\s*74px\s+minmax\(0,\s*1fr\)\s+minmax\(0,\s*1fr\)/s);
   assert.match(html,/@media\s*\(max-width:\s*767px\)[\s\S]*?\.mobile-task-nav\s*\{[^}]*display:\s*grid/s);
   assert.match(html,/html\s*\{[^}]*overflow-x:\s*clip/);
