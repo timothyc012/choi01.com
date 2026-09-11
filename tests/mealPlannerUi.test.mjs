@@ -86,3 +86,17 @@ test('shopping anchor and hash deep link open the Shop context',()=>{
   assert.equal(clicked.window.document.getElementById('groceries').hidden,false);
   clicked.window.close();
 });
+
+test('legacy meal-time controls update visual and pressed state together',()=>{
+  const html=fs.readFileSync(new URL('index.html',root),'utf8');
+  const dom=new JSDOM(html,{url:'https://choi01.com/mohemeokji/?snapshot=legacy&postcode=52064&store=EDEKA',runScripts:'outside-only'});
+  dom.window.eval(dom.window.document.querySelector('script[data-workspace-controller]').textContent);
+  const lunch=dom.window.document.querySelector('[data-moment="점심"]');
+  const dinner=dom.window.document.querySelector('[data-moment="저녁"]');
+  lunch.click();
+  assert.equal(lunch.classList.contains('active'),true);
+  assert.equal(lunch.getAttribute('aria-pressed'),'true');
+  assert.equal(dinner.classList.contains('active'),false);
+  assert.equal(dinner.getAttribute('aria-pressed'),'false');
+  dom.window.close();
+});

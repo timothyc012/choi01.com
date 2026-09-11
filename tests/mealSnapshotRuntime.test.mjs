@@ -225,7 +225,7 @@ test('manifest-only selection maps every direct route and chooses the first bran
 });
 
 test('unavailable snapshot disables inert controls and exposes retry and legacy recovery',async()=>{
-  const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/',runScripts:'outside-only'});
+  const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=52064&store=EDEKA&branch=branch-a',runScripts:'outside-only'});
   dom.window.MealDataLoader={loadCurrentSnapshot:async()=>{throw new Error('broken pointer');}};
   dom.window.MealShopping={};
   dom.window.MealRecommendations={};
@@ -238,7 +238,11 @@ test('unavailable snapshot disables inert controls and exposes retry and legacy 
   const recovery=dom.window.document.getElementById('snapshotRecovery');
   assert.equal(recovery.hidden,false);
   assert.ok(recovery.querySelector('[data-retry-snapshot]'));
-  assert.match(recovery.querySelector('a').href,/snapshot=legacy/);
+  const legacyParams=new URL(recovery.querySelector('a').href).searchParams;
+  assert.equal(legacyParams.get('snapshot'),'legacy');
+  assert.equal(legacyParams.get('postcode'),'52064');
+  assert.equal(legacyParams.get('store'),'EDEKA');
+  assert.equal(legacyParams.get('branch'),'branch-a');
   dom.window.close();
 });
 
@@ -530,6 +534,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.getElementById('recipeAmounts').textContent,'');
   assert.equal(dom.window.document.getElementById('recipeProvenance').textContent,'');
   assert.equal(dom.window.document.getElementById('shoppingSource').textContent,'');
+  assert.equal(dom.window.document.getElementById('shoppingTitle').textContent,'');
   assert.equal(dom.window.document.getElementById('recipeSource').hasAttribute('href'),false);
   const staleModeDetail=runtime.requestDetail('neuemarkt-recipe-9000004');
   await new Promise((resolve)=>setTimeout(resolve,0));

@@ -347,6 +347,7 @@
       }
 
       function renderMealMomentControls() {
+        if(window.MealWorkspace?.setMealMoment){window.MealWorkspace.setMealMoment(mealMoment);return;}
         document.querySelectorAll('[data-moment]').forEach((control)=>{
           const selected=control.dataset.moment===mealMoment;
           control.classList.toggle('active',selected);
@@ -542,7 +543,7 @@
         selectedMeal=null;
         byId('detailTitle').textContent='레시피 상세를 열 수 없습니다';
         byId('detailIntro').textContent='저장된 상세의 지점 또는 해시를 검증하지 못했습니다.';
-        for(const id of ['detailOfferInfo','shoppingSource','detailIngredients','shoppingTotalLabel','shoppingTotal','shoppingNote','recipeMeta','recipeAmounts','detailSteps','recipeProvenance'])byId(id).textContent='';
+        for(const id of ['detailOfferInfo','shoppingTitle','shoppingSource','detailIngredients','shoppingTotalLabel','shoppingTotal','shoppingNote','recipeMeta','recipeAmounts','detailSteps','recipeProvenance'])byId(id).textContent='';
         byId('recipeSource').removeAttribute('href');
         byId('recipeSource').hidden=true;
         byId('recipeStepsBlock').hidden=true;
@@ -667,6 +668,9 @@
       byId('pantryList').innerHTML='<li class="panel-copy" style="padding:14px">할인 재료를 확인할 수 없습니다.</li>';
       for(const selector of ['#autoPlan','#clearPlan','#savePlan','#acceptToday','#nextRecommendation','#todayShopping','#prepareShopping','#targetServings','input[name="recommendationMode"]','#manualPick','#shoppingList','#markEaten','#eatFromDetail','#addFromDetail','#addShoppingItems','#menuSearch','.filter','[data-moment]','#postcodeSelect','#storeSelect','#branchSelect'])document.querySelectorAll(selector).forEach((control)=>{control.disabled=true;});
       byId('snapshotRecovery').hidden=false;
+      const legacyParams=new URLSearchParams(window.location.search);
+      legacyParams.set('snapshot','legacy');
+      byId('legacySnapshotLink').href='?'+legacyParams.toString();
       byId('retrySnapshot').addEventListener('click',()=>window.location.reload());
       const runtime={status:'unavailable',error};
       window.mealSnapshotRuntime=runtime;

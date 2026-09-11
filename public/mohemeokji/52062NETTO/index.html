@@ -708,7 +708,7 @@
         <div class="snapshot-recovery" id="snapshotRecovery" role="alert" hidden>
           <span>이번 주 자료를 열 수 없습니다.</span>
           <button class="button button-small" type="button" id="retrySnapshot" data-retry-snapshot>다시 시도</button>
-          <a class="button button-small" href="?snapshot=legacy">지난 자료 보기</a>
+          <a class="button button-small" id="legacySnapshotLink" href="?snapshot=legacy">지난 자료 보기</a>
         </div>
       </section>
 
@@ -901,6 +901,11 @@
         const contextButtons=[...document.querySelectorAll('[data-context-target]')];
         const mobileButtons=[...document.querySelectorAll('[data-mobile-target]')];
         const isMobile=()=>window.matchMedia?.('(max-width: 767px)').matches===true;
+        const setMealMoment=(moment)=>document.querySelectorAll('[data-moment]').forEach((control)=>{
+          const selected=control.dataset.moment===moment;
+          control.classList.toggle('active',selected);
+          control.setAttribute('aria-pressed',String(selected));
+        });
         const showContext=(context,{resetPlanViews=true}={})=>{
           document.body.dataset.activeContext=context;
           document.querySelectorAll('[data-context]').forEach((region)=>{region.hidden=region.dataset.context!==context;});
@@ -915,6 +920,7 @@
         };
         contextButtons.forEach((button)=>button.addEventListener('click',()=>showContext(button.dataset.contextTarget)));
         mobileButtons.forEach((button)=>button.addEventListener('click',()=>showMobile(button.dataset.mobileTarget)));
+        document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>setMealMoment(button.dataset.moment)));
         document.querySelectorAll('.filter').forEach((button)=>button.addEventListener('click',()=>{
           if(button.disabled)return;
           document.querySelectorAll('.filter').forEach((item)=>item.setAttribute('aria-pressed',String(item===button)));
@@ -922,21 +928,21 @@
         document.querySelectorAll('a[href="#groceries"]').forEach((link)=>link.addEventListener('click',(event)=>{event.preventDefault();showContext('shop');history.replaceState(null,'','#groceries');}));
         window.addEventListener('hashchange',()=>showContext(location.hash==='#groceries'?'shop':'plan'));
         document.body.dataset.mobileView='recipes';
-        window.MealWorkspace={showContext,showMobile};
+        window.MealWorkspace={showContext,showMobile,setMealMoment};
         if(isMobile()&&location.hash!=='#groceries')showMobile('recipes');
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
     <script>
       if (new URLSearchParams(location.search).get('snapshot') === 'legacy') {
-        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=3f418ebe61ff"><\/script><script src="/mohemeokji/meal-package-prices.js?v=3f418ebe61ff"><\/script>');
+        document.write('<script src="/mohemeokji/ontology-recipe-details.js?v=a9aae4928346"><\/script><script src="/mohemeokji/meal-package-prices.js?v=a9aae4928346"><\/script>');
       }
     </script>
-    <script src="./meal-planner-recipe-data.js?v=3f418ebe61ff"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=3f418ebe61ff"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=3f418ebe61ff"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=3f418ebe61ff"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=3f418ebe61ff"></script>
+    <script src="./meal-planner-recipe-data.js?v=a9aae4928346"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=a9aae4928346"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=a9aae4928346"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=a9aae4928346"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=a9aae4928346"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
@@ -1564,7 +1570,7 @@
         byId("groceryTitle").focus({ preventScroll: true });
       });
 
-      document.querySelectorAll("[data-moment]").forEach((button) => button.classList.toggle("active", button.dataset.moment === mealMoment));
+      window.MealWorkspace?.setMealMoment(mealMoment);
       renderToday();
       renderPlan();
       renderMenu();
