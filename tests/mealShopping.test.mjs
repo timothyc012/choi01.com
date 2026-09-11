@@ -456,7 +456,8 @@ test('all six entry pages are identical and use current recipes without portion 
   for (const path of paths) {
     const html = fs.readFileSync(new URL(path + 'index.html', root), 'utf8');
     assert.equal(html, canonical, path);
-    assert.doesNotMatch(html, /1인분|\bcost:/);
+    assert.match(html, /<option value="1">1인분<\/option>/);
+    assert.doesNotMatch(html, /\bcost:/);
     assert.match(html, /52062 · Aachen/);
     assert.match(html, /52064 · Aachen/);
     assert.match(html, /id="postcodeSelect"/);
