@@ -4,7 +4,7 @@
   const normalize = (name) => {
     const value=String(name||'').trim();
     if(value==="밥")return "쌀";
-    if(["기름","오일","식용유","식용오일","올리브유","올리브오일","포도씨유","카놀라유","해바라기유","코코넛오일"].includes(value)||/(?:식용유|포도씨유|카놀라유|해바라기유|올리브유|올리브오일|코코넛오일)$/u.test(value))return "식용유";
+    if(["기름","오일","식용유","식용오일","올리브유","올리브오일","올리브 오일","포도씨유","카놀라유","해바라기유","코코넛오일"].includes(value)||/(?:식용유|포도씨유|카놀라유|해바라기유|올리브유|올리브\s*오일|코코넛오일)$/u.test(value))return "식용유";
     if(/^녹인\s*버터$/u.test(value))return "버터";
     return value;
   };
@@ -310,8 +310,19 @@
       const incomingContributions=item.contributions&&typeof item.contributions==="object"?item.contributions:{};
       const hasIncomingContributions=Object.keys(incomingContributions).length>0;
       const contributions={...(previous?.contributions||{})};
-      if(previous&&!previous.contributions&&hasIncomingContributions)contributions['legacy-unknown']=null;
-      Object.assign(contributions,incomingContributions);
+      if(previous&&(!previous.contributions||!Object.keys(previous.contributions).length)&&hasIncomingContributions)contributions['legacy-unknown']=null;
+      for(const [sourceKey,incoming] of Object.entries(incomingContributions)) {
+        const prior=contributions[sourceKey];
+        if(incoming===null) {
+          if(!(sourceKey in contributions))contributions[sourceKey]=null;
+        } else if(prior&&prior.unit===incoming.unit) {
+          contributions[sourceKey]={amount:Math.max(prior.amount,incoming.amount),unit:incoming.unit};
+        } else if(prior&&prior.unit!==incoming.unit) {
+          contributions[sourceKey]=null;
+        } else {
+          contributions[sourceKey]={...incoming};
+        }
+      }
       const contributionValues=Object.values(contributions);
       const contributionUnit=contributionValues.find((value)=>value)?.unit;
       const contributionsComplete=contributionValues.length>0&&contributionValues.every((value)=>value&&value.unit===contributionUnit&&Number.isFinite(value.amount)&&value.amount>0);

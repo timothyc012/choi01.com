@@ -311,6 +311,17 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   const oneFatChoice=candidate('one-fat-choice');
   oneFatChoice.steps[1].instruction='팬에 올리브유 또는 버터를 넣어 재료를 굽습니다.';
   assert.deepEqual(unquantifiedActionIngredients(oneFatChoice),['기름']);
+  for(const phrase of ['식용유 또는 버터를 사용해 볶습니다','버터 또는 식용유를 사용해 볶습니다','식용유나 버터를 사용해 볶습니다']) {
+    const choice=candidate('symmetric-'+phrase);
+    choice.steps[1].instruction=phrase;
+    assert.deepEqual(unquantifiedActionIngredients(choice),['기름'],phrase);
+  }
+  const optionalFat=candidate('optional-fat-phrases');
+  optionalFat.steps[1].instruction='기름을 넣어도 되고 안 넣어도 됩니다. 필요에 따라 버터를 넣습니다. 원하는 경우 식용유를 넣을 수도 있습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(optionalFat),[]);
+  const spacedOlive=candidate('spaced-olive-oil');
+  spacedOlive.steps[1].instruction='팬에 올리브 오일을 두르고 재료를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(spacedOlive),['기름']);
 });
 
 test('editorial validation requires a Korean public title',()=>{

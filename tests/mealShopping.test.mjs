@@ -390,6 +390,18 @@ test('sequential recipe additions aggregate structured shared packages and remai
   const restored=shopping.restoreState(shopping.serializeState(state,'week-a'),'week-a',{stores:['Netto']});
   const afterRestore=shopping.addToList(restored.list,firstCart);
   assert.equal(afterRestore[0].quantity,2);
+  const duplicatePlan=shopping.basket([meal('recipe-a'),meal('recipe-a')],{catalog});
+  let prepared=shopping.addToList([],duplicatePlan);
+  assert.equal(prepared[0].quantity,2);
+  prepared=shopping.addToList(prepared,firstCart);
+  assert.equal(prepared[0].quantity,2);
+  prepared=shopping.addToList(prepared,duplicatePlan);
+  assert.equal(prepared[0].quantity,2);
+  const legacySaved={version:1,snapshot:'week-a',pantry:[],prices:{},quantities:{},list:[{key:'Netto:닭고기',name:'닭고기',store:'Netto',pack:'500 g',product:'Hähnchen',source:'https://example.test/chicken',quantity:2,priceCents:799,quantityNeedsCheck:false,completed:false}]};
+  const legacy=shopping.restoreState(JSON.stringify(legacySaved),'week-a',{stores:['Netto']});
+  const legacyAfterDirect=shopping.addToList(legacy.list,firstCart)[0];
+  assert.equal(legacyAfterDirect.quantity,2);
+  assert.equal(legacyAfterDirect.quantityNeedsCheck,true);
 });
 
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {

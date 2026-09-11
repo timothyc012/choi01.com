@@ -361,6 +361,16 @@ test('selection rejects minced chicken attached to a raw breast fillet identity'
   assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
 });
 
+test('selection rejects a smoked chicken title attached to a generic raw breast label',()=>{
+  const recipe=candidate('smoked-title-chicken');
+  recipe.title='훈제 닭가슴살 야채볶음';
+  recipe.ingredients=[{ordinal:1,ingredient:'닭가슴살',quantity:'300g'},{ordinal:2,ingredient:'양파',quantity:'1개'}];
+  recipe.recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'};
+  const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('offer-chicken',chickenIdentity)],candidates:[recipe],registry:registryFor([approved(recipe)])});
+  assert.deepEqual(selected.recipes,[]);
+  assert.equal(selected.coverage.heldForReview[0].reason,'source-offer-form-mismatch');
+});
+
 test('selection rejects processed pork linked to a raw pork offer',()=>{
   const porkIdentity={ingredientId:'돼지목살',species:'pork',cut:'neck',processingState:'raw',form:'steak',composition:'pork'};
   const recipe=candidate('processed-pork',{identity:porkIdentity,offerId:'offer-pork'});
