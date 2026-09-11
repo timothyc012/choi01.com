@@ -67,6 +67,8 @@ test('weekly rollover preserves pantry/checks but invalidates old prices and uni
   state.quantities.week={'Netto:닭고기':8};
   state.list=shopping.addToList([],shopping.basket([rice],{catalog:fixtureCatalog}));
   state.list[0].completed=true;
+  state.list[0].quantity=8;
+  state.list[0].quantityNeedsCheck=false;
   const saved=shopping.serializeState(state,'week-a');
   const same=shopping.restoreState(saved,'week-a');
   assert.equal(same.prices['Netto:닭고기'],100);
@@ -74,6 +76,8 @@ test('weekly rollover preserves pantry/checks but invalidates old prices and uni
   assert.equal(next.pantry.has('Netto:소금'),true);
   assert.equal(next.list[0].completed,true);
   assert.equal(next.list[0].priceCents,null);
+  assert.equal(next.list[0].quantity,1);
+  assert.equal(next.list[0].quantityNeedsCheck,true);
   assert.equal(Object.keys(next.prices).length,0);
   assert.equal(Object.keys(next.quantities).length,0);
 });
@@ -113,6 +117,8 @@ test('canonicalizes cooking-oil and melted-butter aliases into single shopping r
   assert.equal(shopping.ingredientName('식용유 약간'),'식용유');
   assert.equal(shopping.ingredientName('백설포도씨유 적당히'),'백설포도씨유');
   assert.equal(shopping.keyFor('Netto','백설포도씨유'),'Netto:식용유');
+  for(const label of ['백설 카놀라유','엑스트라버진 올리브유','식용유 넉넉히','식용유 필요량','올리브유 한 바퀴','카놀라유 취향껏','해바라기유 적당한 양']) assert.equal(shopping.keyFor('Netto',shopping.ingredientName(label)),'Netto:식용유',label);
+  assert.equal(shopping.keyFor('Netto','녹인 버터'),'Netto:버터');
 });
 
 test('keeps a specific oil offer price while collapsing the grocery key',()=>{
@@ -122,6 +128,10 @@ test('keeps a specific oil offer price while collapsing the grocery key',()=>{
   assert.equal(cart.items[0].key,'Netto:식용유');
   assert.equal(cart.items[0].product,'Olivenöl');
   assert.equal(cart.items[0].priceCents,499);
+  const secondChoice={...meal,missing:['올리브유','해바라기유'],offerCatalog:{올리브유:{product:'Chosen Olivenöl',pack:'500 ml',priceCents:499,source:'https://example.test/chosen'},해바라기유:{product:'Other Öl',pack:'1 l',priceCents:299,source:'https://example.test/other'}}};
+  const stable=shopping.basket([secondChoice],{catalog:{Netto:{}}});
+  assert.equal(stable.items[0].product,'Chosen Olivenöl');
+  assert.equal(stable.items[0].source,'https://example.test/chosen');
 });
 
 test('migrates persisted alias keys for prices quantities and shopping rows',()=>{
@@ -349,11 +359,49 @@ test('X replacement records a bounded dismissal and clear is a distinct manual e
 });
 
 test('shopping list rows keep purchase facts needed by the aisle view',()=>{
-  const cart=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{'닭고기':{amount:300,unit:'g'}}}],{catalog:fixtureCatalog});
+  const cart=shopping.basket([{store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{'닭고기':{amount:300,unit:'g'}},offerCatalog:{닭고기:{...fixtureCatalog.Netto.닭고기,product:'Hähnchen',source:'https://example.test/chicken'}}}],{catalog:fixtureCatalog});
   const [listed]=shopping.addToList([],cart);
   assert.equal(listed.pack,'1 kg');
   assert.equal(listed.priceCents,799);
   assert.equal(listed.completed,false);
+  assert.equal(listed.product,'Hähnchen');
+  assert.equal(listed.source,'https://example.test/chicken');
+  const repeated=shopping.addToList([listed],cart)[0];
+  assert.equal(repeated.quantity,1);
+  assert.equal(repeated.quantityNeedsCheck,false);
+  const uncertain=shopping.basket([{store:'Netto',sale:[],missing:['식용유'],requiredAmounts:{}}],{catalog:{Netto:{식용유:{priceCents:299,pack:'1 l',product:'Öl',source:'https://example.test/oil'}}}});
+  const repeatedUncertain=shopping.addToList(shopping.addToList([],uncertain),uncertain)[0];
+  assert.equal(repeatedUncertain.quantity,1);
+  assert.equal(repeatedUncertain.quantityNeedsCheck,true);
+});
+
+test('sequential recipe additions aggregate structured shared packages and remain idempotent',()=>{
+  const catalog={Netto:{닭고기:{priceCents:799,pack:'500 g',product:'Hähnchen',source:'https://example.test/chicken'}}};
+  const meal=(id)=>({id,store:'Netto',sale:['닭고기'],missing:[],requiredAmounts:{닭고기:{amount:300,unit:'g'}}});
+  const firstCart=shopping.basket([meal('recipe-a')],{catalog});
+  let list=shopping.addToList([],firstCart);
+  assert.equal(list[0].quantity,1);
+  list=shopping.addToList(list,firstCart);
+  assert.equal(list[0].quantity,1);
+  list=shopping.addToList(list,shopping.basket([meal('recipe-b')],{catalog}));
+  assert.equal(list[0].quantity,2);
+  assert.equal(list[0].quantityNeedsCheck,false);
+  const state={pantry:new Set(),prices:{},quantities:{},list};
+  const restored=shopping.restoreState(shopping.serializeState(state,'week-a'),'week-a',{stores:['Netto']});
+  const afterRestore=shopping.addToList(restored.list,firstCart);
+  assert.equal(afterRestore[0].quantity,2);
+  const duplicatePlan=shopping.basket([meal('recipe-a'),meal('recipe-a')],{catalog});
+  let prepared=shopping.addToList([],duplicatePlan);
+  assert.equal(prepared[0].quantity,2);
+  prepared=shopping.addToList(prepared,firstCart);
+  assert.equal(prepared[0].quantity,2);
+  prepared=shopping.addToList(prepared,duplicatePlan);
+  assert.equal(prepared[0].quantity,2);
+  const legacySaved={version:1,snapshot:'week-a',pantry:[],prices:{},quantities:{},list:[{key:'Netto:닭고기',name:'닭고기',store:'Netto',pack:'500 g',product:'Hähnchen',source:'https://example.test/chicken',quantity:2,priceCents:799,quantityNeedsCheck:false,completed:false}]};
+  const legacy=shopping.restoreState(JSON.stringify(legacySaved),'week-a',{stores:['Netto']});
+  const legacyAfterDirect=shopping.addToList(legacy.list,firstCart)[0];
+  assert.equal(legacyAfterDirect.quantity,2);
+  assert.equal(legacyAfterDirect.quantityNeedsCheck,true);
 });
 
 test('current catalog covers the supplied postcodes and points to exact source rows', () => {
@@ -423,6 +471,7 @@ test('all six entry pages are identical and use current recipes without portion 
       assert.ok(html.includes(asset + '.js?v='));
     }
     assert.doesNotMatch(html,/ontology-recipe-details\.js|meal-package-prices\.js/);
+    assert.doesNotMatch(html,/직접 조절할 수 있습니다/);
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);

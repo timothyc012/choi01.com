@@ -281,6 +281,79 @@ test('alternative cooking oils resolve to one source-listed choice without negat
   brandedOil.ingredients.push({ordinal:4,label:'백설포도씨유 적당량',ingredient:'백설포도씨유',quantity:'적당량'});
   brandedOil.steps[1].instruction='달군 팬에 오일을 두르고 볶음밥을 볶습니다.';
   assert.deepEqual(unquantifiedActionIngredients(brandedOil),[]);
+
+  const genericOilWord=candidate('generic-oil-word');
+  genericOilWord.steps[1].instruction='팬에 오일을 두르고 재료를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(genericOilWord),['기름']);
+
+  for(const oil of ['해바라기유','코코넛오일']) {
+    const source=candidate('oil-'+oil);
+    source.steps[1].instruction='팬에 '+oil+'를 두르고 재료를 볶습니다.';
+    assert.deepEqual(unquantifiedActionIngredients(source),['기름']);
+  }
+
+  const optionalOil=candidate('optional-oil-grammar');
+  optionalOil.steps[1].instruction='기름은 넣지 않아도 됩니다. 버터는 넣지 않아도 됩니다. 버터 대신 코코넛오일을 써도 됩니다.';
+  assert.deepEqual(unquantifiedActionIngredients(optionalOil),[]);
+
+  const sesameOnly=candidate('sesame-only');
+  sesameOnly.ingredients.push({ordinal:4,label:'참기름 1큰술',ingredient:'참기름',quantity:'1큰술'});
+  sesameOnly.steps[1].instruction='마지막에 참기름을 넣어 향을 냅니다.';
+  assert.deepEqual(unquantifiedActionIngredients(sesameOnly),[]);
+  const bareSesame=candidate('bare-sesame');
+  bareSesame.steps[1].instruction='마지막에 참기름을 넣어 향을 냅니다.';
+  assert.deepEqual(unquantifiedActionIngredients(bareSesame),['참기름']);
+
+  const optionalIngredients=candidate('optional-ingredients');
+  optionalIngredients.steps[1].instruction='우유는 선택입니다. 취향에 따라 버터를 넣습니다. 원하면 설탕을 넣어도 되고 생략할 수 있습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(optionalIngredients),[]);
+
+  const oneFatChoice=candidate('one-fat-choice');
+  oneFatChoice.steps[1].instruction='팬에 올리브유 또는 버터를 넣어 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(oneFatChoice),['기름']);
+  const quantifiedFatChoice=candidate('quantified-fat-choice');
+  quantifiedFatChoice.ingredients.push({ordinal:4,label:'버터 20g',ingredient:'버터',quantity:'20g'});
+  quantifiedFatChoice.steps[1].instruction='팬에 버터 또는 식용유를 사용해 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(quantifiedFatChoice),[]);
+  const quantifiedVerbChoice=candidate('quantified-verb-fat-choice');
+  quantifiedVerbChoice.ingredients.push({ordinal:4,label:'버터 20g',ingredient:'버터',quantity:'20g'});
+  quantifiedVerbChoice.steps[1].instruction='팬에 버터를 넣거나 식용유를 사용해 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(quantifiedVerbChoice),[]);
+  const unquantifiedVerbChoice=candidate('unquantified-verb-fat-choice');
+  unquantifiedVerbChoice.steps[1].instruction='팬에 버터를 넣거나 식용유를 사용해 재료를 굽습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(unquantifiedVerbChoice),['기름']);
+  const neededButter=candidate('needed-butter');
+  neededButter.steps[1].instruction='필요하면 버터를 넣어도 됩니다.';
+  assert.deepEqual(unquantifiedActionIngredients(neededButter),[]);
+  const existingOliveChoice=candidate('6869787');
+  existingOliveChoice.ingredients.push({ordinal:4,label:'올리브오일 1큰술',ingredient:'올리브오일',quantity:'1큰술'});
+  existingOliveChoice.steps[1].instruction='달궈진 팬에 버터를 녹이고 고기를 굽습니다. 버터 대신 그냥 오일을 사용해도 좋아요.';
+  assert.deepEqual(unquantifiedActionIngredients(existingOliveChoice),[]);
+  const qualitativeChoice=candidate('6878699');
+  qualitativeChoice.ingredients.push({ordinal:4,label:'후추 톡톡',ingredient:'후추 톡톡',quantity:null});
+  qualitativeChoice.ingredients.push({ordinal:5,label:'소금',ingredient:'소금',quantity:null});
+  qualitativeChoice.ingredients.push({ordinal:6,label:'오일 약간 (또는 버터)',ingredient:'오일 약간 (또는 버터)',quantity:null});
+  qualitativeChoice.steps[1].instruction='팬에 버터 한 조각 또는 식용유 적당량을 넣고 스테이크를 굽습니다. 완성 후 후추를 살짝 뿌립니다.';
+  assert.deepEqual(unquantifiedActionIngredients(qualitativeChoice),['기름']);
+  const labelChoice=candidate('2412881');
+  labelChoice.ingredients.push({ordinal:4,label:'올리브오일 (또는버터)',ingredient:'올리브오일 (또는버터)',quantity:null});
+  labelChoice.ingredients.push({ordinal:5,label:'마늘',ingredient:'마늘',quantity:null});
+  labelChoice.steps[1].instruction='올리브오일에 마늘을 섞어 빵에 바릅니다.';
+  assert.deepEqual(unquantifiedActionIngredients(labelChoice),['기름']);
+  const explicitlySkippedOil=candidate('7036949');
+  explicitlySkippedOil.steps[1].instruction='오일을 바르면 더 바삭하지만 저는 오일을 바르지 않았어요.';
+  assert.deepEqual(unquantifiedActionIngredients(explicitlySkippedOil),[]);
+  for(const phrase of ['식용유 또는 버터를 사용해 볶습니다','버터 또는 식용유를 사용해 볶습니다','식용유나 버터를 사용해 볶습니다']) {
+    const choice=candidate('symmetric-'+phrase);
+    choice.steps[1].instruction=phrase;
+    assert.deepEqual(unquantifiedActionIngredients(choice),['기름'],phrase);
+  }
+  const optionalFat=candidate('optional-fat-phrases');
+  optionalFat.steps[1].instruction='기름을 넣어도 되고 안 넣어도 됩니다. 필요에 따라 버터를 넣습니다. 원하는 경우 식용유를 넣을 수도 있습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(optionalFat),[]);
+  const spacedOlive=candidate('spaced-olive-oil');
+  spacedOlive.steps[1].instruction='팬에 올리브 오일을 두르고 재료를 볶습니다.';
+  assert.deepEqual(unquantifiedActionIngredients(spacedOlive),['기름']);
 });
 
 test('editorial validation requires a Korean public title',()=>{

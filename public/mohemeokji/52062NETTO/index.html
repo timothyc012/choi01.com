@@ -868,7 +868,7 @@
         <p class="primary-offer" id="detailOfferInfo"></p>
         <div class="detail-block">
           <h4 id="shoppingTitle">구매할 재료</h4>
-          <p class="footer-note">원문 중량과 판매 포장량을 비교할 수 있으면 필요한 포장 수를 자동 계산합니다. 단위가 없으면 1포장을 기본으로 두며 직접 조절할 수 있습니다. ‘집에 있음’을 체크하면 구매금액에서 빠집니다.</p>
+          <p class="footer-note">원문 중량과 판매 포장량을 비교할 수 있을 때만 필요한 포장 수를 계산합니다. 단위가 없거나 정규화되지 않은 재료는 ‘수량 확인’으로 표시됩니다. ‘집에 있음’을 체크하면 구매금액에서 빠집니다.</p>
           <p class="footer-note" id="shoppingSource"></p>
           <ul class="shopping-items" id="detailIngredients"></ul>
           <div class="shopping-total" role="status" aria-live="polite"><span id="shoppingTotalLabel"></span><strong id="shoppingTotal"></strong><p id="shoppingNote"></p></div>
@@ -933,11 +933,11 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="./meal-planner-recipe-data.js?v=fa5fc48f33fc"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=fa5fc48f33fc"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=fa5fc48f33fc"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=fa5fc48f33fc"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=fa5fc48f33fc"></script>
+    <script src="./meal-planner-recipe-data.js?v=3dba5330c26f"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=3dba5330c26f"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=3dba5330c26f"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=3dba5330c26f"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=3dba5330c26f"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
