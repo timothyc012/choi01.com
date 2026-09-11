@@ -37,11 +37,15 @@ function fixture() {
   const candidate={
     recipeId:'7000001',sourceRecipeId:'7000001',title:'raw title',sourceUrl:'https://www.10000recipe.com/recipe/7000001',author:'author',rating:'4.9',ratingNumber:4.9,reviewCount:100,sourceServingText:'2인분',
     ingredients:[{ordinal:1,ingredient:'닭가슴살',quantity:'300g'},{ordinal:2,ingredient:'소금',quantity:'1t'}],
-    steps:[1,2,3].map((ordinal)=>({ordinal,instruction:'DO NOT PUBLISH RAW '+ordinal})),
+    steps:[
+      {ordinal:1,instruction:'DO NOT PUBLISH RAW 닭가슴살을 손질한다.'},
+      {ordinal:2,instruction:'DO NOT PUBLISH RAW 닭가슴살을 팬에서 볶는다.'},
+      {ordinal:3,instruction:'DO NOT PUBLISH RAW 닭가슴살을 속까지 완전히 익힌다.'},
+    ],
     matches:[{offerId:'offer-a',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'닭가슴살'}],
     recommendationProfile:{primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'},
   };
-  const registryEntry={sourceRecipeId:'7000001',sourceContentHash:sourceContentHash(candidate),transformVersion:'ko-paraphrase-v1',approved:true,title:'닭가슴살 볶음',detailIngredients:['닭가슴살 300g','소금 1t'],steps:['닭가슴살을 손질한다.','팬에서 속까지 익힌다.','간을 맞춰 담는다.'],recommendationProfile:candidate.recommendationProfile};
+  const registryEntry={sourceRecipeId:'7000001',sourceContentHash:sourceContentHash(candidate),transformVersion:'ko-paraphrase-v1',approved:true,approvalMethod:'owner-authorized-editorial-transform',validationVersion:'source-facts-v2',title:'닭가슴살 볶음',detailIngredients:['닭가슴살 300g','소금 1t'],steps:['닭가슴살을 손질한다.','팬에서 속까지 익힌다.','간을 맞춰 담는다.'],recommendationProfile:candidate.recommendationProfile};
   const registry={schemaVersion:1,recipes:{
     [['7000001',registryEntry.sourceContentHash,registryEntry.transformVersion].join('|')]:registryEntry,
   }};
@@ -118,6 +122,25 @@ test('compiler creates a verifier-ready rollover with the prior snapshot retaine
   fs.cpSync(bootstrapDir,corruptRoot,{recursive:true});
   fs.appendFileSync(path.join(corruptRoot,bootstrapCurrent.manifestPath),'corrupt');
   await assert.rejects(compileMealWeek({outputDir:path.join(root,'invalid'),releaseMode:'rollover',previousManifestPath:path.join(corruptRoot,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-14',collectionTimestamp:'2026-09-13T09:00:00+02:00',policyVersion:'selection-v1'}),/previous snapshot/i);
+});
+
+test('compiler creates a same-week correction that retains the prior immutable snapshot',async(t)=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-compiler-correction-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const data=fixture();
+  const bootstrapDir=path.join(root,'bootstrap');
+  await compileMealWeek({outputDir:bootstrapDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const bootstrapCurrent=JSON.parse(fs.readFileSync(path.join(bootstrapDir,'current.json'),'utf8'));
+  const changed=structuredClone(data.registry);
+  Object.values(changed.recipes)[0].title='교정된 닭가슴살 볶음';
+  const correctionDir=path.join(root,'correction');
+  const correction=await compileMealWeek({outputDir:correctionDir,releaseMode:'correction',previousManifestPath:path.join(bootstrapDir,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:changed,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  assert.notEqual(correction.snapshotId,bootstrapCurrent.snapshotId);
+  assert.deepEqual(correction.previousSnapshot,{snapshotId:bootstrapCurrent.snapshotId,manifestPath:bootstrapCurrent.manifestPath,manifestSha256:bootstrapCurrent.manifestSha256,mode:'correction'});
+  assert.equal(fs.existsSync(path.join(correctionDir,bootstrapCurrent.manifestPath)),true);
+  const report=verifyMealSnapshot({snapshotDir:correctionDir,releaseMode:'correction',previousManifestPath:bootstrapCurrent.manifestPath});
+  assert.deepEqual(report.rollback,{mode:'correction',provided:true,valid:true,snapshotId:bootstrapCurrent.snapshotId,manifestPath:bootstrapCurrent.manifestPath});
+  await assert.rejects(compileMealWeek({outputDir:path.join(root,'wrong-week'),releaseMode:'correction',previousManifestPath:path.join(bootstrapDir,bootstrapCurrent.manifestPath),candidateReport:data.candidateReport,registry:changed,weekStart:'2026-09-14',collectionTimestamp:'2026-09-13T09:00:00+02:00',policyVersion:'selection-v1'}),/same week/i);
 });
 
 test('writes held recipe IDs only to an explicitly separate private audit file',async(t)=>{

@@ -64,13 +64,15 @@ function sourceMetadata({candidateReport,csvPath,db,tenant}) {
 
 function digest(value) { return typeof value==='string'&&/^[a-f0-9]{64}$/.test(value); }
 
-function retainedSnapshot(previousManifestPath,nextWeekStart) {
-  if(!previousManifestPath) throw new Error('Rollover requires --previous-manifest');
+function retainedSnapshot(previousManifestPath,nextWeekStart,mode) {
+  if(!previousManifestPath) throw new Error(`${mode} requires --previous-manifest`);
   const manifestFile=path.resolve(previousManifestPath);
   let manifest;
   try { manifest=JSON.parse(fs.readFileSync(manifestFile,'utf8')); }
   catch { throw new Error('Previous snapshot manifest is missing or invalid'); }
-  if(!digest(manifest.snapshotId)||!/^\d{4}-\d{2}-\d{2}$/.test(manifest.weekStart||'')||manifest.weekStart>=nextWeekStart) throw new Error('Previous snapshot must be from an earlier week');
+  if(!digest(manifest.snapshotId)||!/^\d{4}-\d{2}-\d{2}$/.test(manifest.weekStart||'')) throw new Error('Previous snapshot identity is invalid');
+  if(mode==='rollover'&&manifest.weekStart>=nextWeekStart) throw new Error('Previous snapshot must be from an earlier week');
+  if(mode==='correction'&&manifest.weekStart!==nextWeekStart) throw new Error('Correction previous snapshot must be from the same week');
   const relative=path.join('snapshots',manifest.weekStart,manifest.snapshotId,'manifest.json');
   if(!manifestFile.endsWith(path.sep+relative)) throw new Error('Previous snapshot manifest path does not match its identity');
   const root=manifestFile.slice(0,-relative.length-1);
@@ -99,7 +101,7 @@ function retainedSnapshot(previousManifestPath,nextWeekStart) {
   const manifestPath=relative.split(path.sep).join('/');
   const manifestSha256=sha256(fs.readFileSync(manifestFile));
   collect(manifestPath,manifestSha256,manifest.snapshotId);
-  return {pointer:{snapshotId:manifest.snapshotId,manifestPath,manifestSha256},files};
+  return {pointer:{snapshotId:manifest.snapshotId,manifestPath,manifestSha256,mode},files};
 }
 
 function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source,previousSnapshot,retainedFiles}) {
@@ -240,9 +242,9 @@ export async function compileMealWeek(options) {
   if(auditTarget&&fs.existsSync(auditTarget)) throw new Error('Private audit output must not already exist: '+auditTarget);
   const source=sourceMetadata({candidateReport,csvPath:options.csvPath,db,tenant});
   const releaseMode=options.releaseMode||'bootstrap';
-  if(!['bootstrap','rollover'].includes(releaseMode)) throw new Error('releaseMode must be bootstrap or rollover');
+  if(!['bootstrap','rollover','correction'].includes(releaseMode)) throw new Error('releaseMode must be bootstrap, rollover, or correction');
   if(releaseMode==='bootstrap'&&options.previousManifestPath) throw new Error('Bootstrap must not include a previous manifest');
-  const previous=releaseMode==='rollover'?retainedSnapshot(options.previousManifestPath,weekStart):null;
+  const previous=releaseMode!=='bootstrap'?retainedSnapshot(options.previousManifestPath,weekStart,releaseMode):null;
   const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source,previousSnapshot:previous?.pointer||null,retainedFiles:previous?.files||new Map()};
   const first=buildFiles(input);
   const second=buildFiles(structuredClone(input));
@@ -283,11 +285,12 @@ function parseArgs(argv) {
     else if(value==='--audit-output') args.auditOutputPath=argv[++index];
     else if(value==='--bootstrap') args.releaseMode='bootstrap';
     else if(value==='--rollover') args.releaseMode='rollover';
+    else if(value==='--correction') args.releaseMode='correction';
     else if(value==='--previous-manifest') args.previousManifestPath=argv[++index];
     else throw new Error('Unknown argument: '+value);
   }
-  if(!args.csvPath||!args.outputDir||!args.registryPath||!args.releaseMode) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json (--bootstrap | --rollover --previous-manifest MANIFEST.json) [--audit-output PRIVATE.json]');
-  if(args.releaseMode==='rollover'&&!args.previousManifestPath) throw new Error('--rollover requires --previous-manifest');
+  if(!args.csvPath||!args.outputDir||!args.registryPath||!args.releaseMode) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json (--bootstrap | --rollover --previous-manifest MANIFEST.json | --correction --previous-manifest MANIFEST.json) [--audit-output PRIVATE.json]');
+  if(['rollover','correction'].includes(args.releaseMode)&&!args.previousManifestPath) throw new Error(`--${args.releaseMode} requires --previous-manifest`);
   return args;
 }
 

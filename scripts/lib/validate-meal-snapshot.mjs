@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import {offerIdentityKey} from '../find-store-recipe-candidates.mjs';
 
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const digest=/^[a-f0-9]{64}$/;
@@ -8,7 +9,7 @@ const SCHEMAS={
   current:['schemaVersion','snapshotId','weekStart','collectionTimestamp','manifestPath','manifestSha256'],
   manifest:['schemaVersion','snapshotId','weekStart','collectionTimestamp','policyVersion','tenant','source','locations','coveragePath','recipeIndexPath','fileHashes','previousSnapshot'],
   source:['inputLogicalName','csvSha256','database','tenant','discoverySha256','discoveryAlgorithm'],
-  previous:['snapshotId','manifestPath','manifestSha256'],
+  previous:['snapshotId','manifestPath','manifestSha256','mode'],
   manifestLocation:['id','postcode','store','branch','branchId','path','recipeCount'],
   coverage:['schemaVersion','snapshotId','locations','identityStats','overflow','zeroCandidateIdentities','zeroCandidateOfferIds'],
   coverageLocation:['locationId','postcode','store','branchId','target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds','warnings'],
@@ -120,6 +121,7 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
     collectRetainedFiles(outputDir,previous,retainedFiles);
     allowOnly(previous,SCHEMAS.previous,'manifest.previousSnapshot',errors);
     if(!previous||typeof previous!=='object'||previous.snapshotId===manifest.snapshotId) errors.push('previous snapshot must identify a different retained snapshot');
+    else if(previous.mode!==undefined&&!['rollover','correction'].includes(previous.mode)) errors.push('previous snapshot mode is invalid');
     else if(!digest.test(previous.snapshotId||'')||!digest.test(previous.manifestSha256||'')) errors.push('previous snapshot pointer is invalid');
     else {
       const previousPath=safePath(outputDir,previous.manifestPath);
@@ -132,6 +134,8 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
           try {
             const previousManifest=JSON.parse(previousBytes.toString('utf8'));
             if(previousManifest.snapshotId!==previous.snapshotId) errors.push('previous snapshotId does not match retained manifest');
+            if(previous.mode==='correction'&&previousManifest.weekStart!==manifest.weekStart) errors.push('correction previous snapshot must be from the same week');
+            if(previous.mode==='rollover'&&previousManifest.weekStart>=manifest.weekStart) errors.push('rollover previous snapshot must be from an earlier week');
             const nested=validateMealSnapshotDirectory(outputDir,{current:{schemaVersion:1,snapshotId:previous.snapshotId,weekStart:previousManifest.weekStart,collectionTimestamp:previousManifest.collectionTimestamp,manifestPath:previous.manifestPath,manifestSha256:previous.manifestSha256},allowUnlisted:true});
             for(const error of nested.errors) errors.push('previous snapshot: '+error);
             retainedFiles.add(previous.manifestPath);
@@ -212,12 +216,20 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
       allowOnly(offer.identity,SCHEMAS.identity,`${prefix}.offers[${offerIndex}].identity`,errors);
       if(offer.postcode!==location.postcode||offer.chain!==location.store||offer.branchId!==location.branchId) errors.push(`${prefix}.offers[${offerIndex}] offer boundary does not match owning location`);
     }
+    const offersById=new Map((locationArtifact.offers||[]).map((offer)=>[offer.offerId,offer]));
     for(const [recipeIndexInLocation,recipeRef] of locationArtifact.recipes.entries()) {
       const refPrefix=`${prefix}.recipes[${recipeIndexInLocation}]`;
       if(!recipeRef||typeof recipeRef!=='object') { errors.push(`${refPrefix} must be an object`); continue; }
       allowOnly(recipeRef,SCHEMAS.recipeRef,refPrefix,errors);
       allowOnly(recipeRef.recommendationProfile,SCHEMAS.profile,`${refPrefix}.recommendationProfile`,errors);
       allowOnly(recipeRef.qualityFacts,SCHEMAS.quality,`${refPrefix}.qualityFacts`,errors);
+      const primary=new Set(Array.isArray(recipeRef.recommendationProfile?.primaryIngredients)?recipeRef.recommendationProfile.primaryIngredients:[]);
+      const scopedPrimary=[...new Set((Array.isArray(recipeRef.offerIds)?recipeRef.offerIds:[]).map((offerId)=>offersById.get(offerId)?.identity?.ingredientId).filter((ingredientId)=>primary.has(ingredientId)))].sort();
+      const declaredPrimary=[...new Set(Array.isArray(recipeRef.primaryIngredientIds)?recipeRef.primaryIngredientIds:[])].sort();
+      if(!options.allowUnlisted&&(!scopedPrimary.length||JSON.stringify(scopedPrimary)!==JSON.stringify(declaredPrimary))) errors.push(`${refPrefix} primary ingredients must match a scoped exact offer`);
+      const scopedIdentityKeys=[...new Set((Array.isArray(recipeRef.offerIds)?recipeRef.offerIds:[]).map((offerId)=>offersById.get(offerId)).filter((offer)=>offer&&primary.has(offer.identity?.ingredientId)).map((offer)=>offerIdentityKey(offer.identity)))].sort();
+      const declaredIdentityKeys=[...new Set(Array.isArray(recipeRef.offerIdentityKeys)?recipeRef.offerIdentityKeys:[])].sort();
+      if(!options.allowUnlisted&&JSON.stringify(scopedIdentityKeys)!==JSON.stringify(declaredIdentityKeys)) errors.push(`${refPrefix} canonical offer identity keys must match referenced offers`);
       if(declare(`${refPrefix}.detailPath`,recipeRef.detailPath)) {
         if(!digest.test(recipeRef.detailSha256||'')||manifest.fileHashes[recipeRef.detailPath]!==recipeRef.detailSha256) errors.push(`${refPrefix}.detailSha256 must match the manifest hash`);
       }

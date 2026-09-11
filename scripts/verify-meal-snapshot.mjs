@@ -188,14 +188,14 @@ export function verifyMealSnapshot({snapshotDir,previousSnapshotDir=null,previou
     const manifest=JSON.parse(fs.readFileSync(path.join(root,current.manifestPath),'utf8'));
     if(previousSnapshotDir||previousManifestPath||manifest.previousSnapshot) report.errors.push('bootstrap release must not claim a previous snapshot');
     report.rollback={mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'};
-  } else if(releaseMode==='rollover') {
+  } else if(['rollover','correction'].includes(releaseMode)) {
     if(previousSnapshotDir) report.errors.push('external previous snapshot is not valid release proof');
     const current=JSON.parse(fs.readFileSync(path.join(root,'current.json'),'utf8'));
     const manifest=JSON.parse(fs.readFileSync(path.join(root,current.manifestPath),'utf8'));
     if(previousManifestPath===current.manifestPath) report.errors.push('previous snapshot must be different from current snapshot');
     const pointer=manifest.previousSnapshot;
-    if(!previousManifestPath||path.isAbsolute(previousManifestPath)||!safePath(root,previousManifestPath)) report.errors.push('rollover requires a retained previous manifest path inside the release data root');
-    else if(!pointer||pointer.manifestPath!==previousManifestPath) report.errors.push('rollover previous manifest does not match the retained pointer');
+    if(!previousManifestPath||path.isAbsolute(previousManifestPath)||!safePath(root,previousManifestPath)) report.errors.push(`${releaseMode} requires a retained previous manifest path inside the release data root`);
+    else if(!pointer||pointer.manifestPath!==previousManifestPath) report.errors.push(`${releaseMode} previous manifest does not match the retained pointer`);
     else {
       const previous=readJson(root,previousManifestPath,'previous snapshot manifest',report.errors);
       const bytesPath=safePath(root,previousManifestPath);
@@ -203,7 +203,9 @@ export function verifyMealSnapshot({snapshotDir,previousSnapshotDir=null,previou
         const actual=sha256(fs.readFileSync(bytesPath));
         if(actual!==pointer.manifestSha256) report.errors.push('rollback manifest hash mismatch');
         if(previous.snapshotId!==pointer.snapshotId||previous.snapshotId===manifest.snapshotId) report.errors.push('previous snapshot must be different from current snapshot');
-        report.rollback={mode:'rollover',provided:true,valid:report.errors.length===0,snapshotId:previous.snapshotId,manifestPath:previousManifestPath};
+        if(releaseMode==='correction'&&(pointer.mode!=='correction'||previous.weekStart!==manifest.weekStart)) report.errors.push('correction requires a same-week previous snapshot with correction mode');
+        if(releaseMode==='rollover'&&(pointer.mode!==undefined&&pointer.mode!=='rollover'||previous.weekStart>=manifest.weekStart)) report.errors.push('rollover requires an earlier-week previous snapshot');
+        report.rollback={mode:releaseMode,provided:true,valid:report.errors.length===0,snapshotId:previous.snapshotId,manifestPath:previousManifestPath};
       }
     }
   } else if(previousSnapshotDir) {
@@ -213,7 +215,7 @@ export function verifyMealSnapshot({snapshotDir,previousSnapshotDir=null,previou
     if(!different) report.errors.push('rollback snapshot must be different from current snapshot');
     if(!report.rollback.valid) report.errors.push('rollback snapshot is invalid: '+previous.errors.join('; '));
   } else if(releaseMode!==null) {
-    report.errors.push('release mode must be bootstrap or rollover');
+    report.errors.push('release mode must be bootstrap, rollover, or correction');
   }
   report.valid=report.errors.length===0;
   if(!report.valid) {
@@ -233,9 +235,10 @@ function parseArgs(argv) {
     else if(value==='--twin') options.twinSnapshotDir=argv[++index];
     else if(value==='--bootstrap') options.releaseMode='bootstrap';
     else if(value==='--rollover') options.releaseMode='rollover';
+    else if(value==='--correction') options.releaseMode='correction';
     else throw new Error('Unknown argument: '+value);
   }
-  if(!options.snapshotDir||!options.releaseMode) throw new Error('Usage: node scripts/verify-meal-snapshot.mjs SNAPSHOT_DIR [--twin DIR] (--bootstrap | --rollover --previous RETAINED_MANIFEST.json)');
+  if(!options.snapshotDir||!options.releaseMode) throw new Error('Usage: node scripts/verify-meal-snapshot.mjs SNAPSHOT_DIR [--twin DIR] (--bootstrap | --rollover --previous RETAINED_MANIFEST.json | --correction --previous RETAINED_MANIFEST.json)');
   return options;
 }
 

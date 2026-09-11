@@ -7,13 +7,14 @@ import path from 'node:path';
 import vm from 'node:vm';
 
 import {verifyMealSnapshot} from '../scripts/verify-meal-snapshot.mjs';
+import {offerIdentityKey} from '../scripts/find-store-recipe-candidates.mjs';
 
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const json=(value)=>Buffer.from(JSON.stringify(value)+'\n');
 
-function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64)}={}) {
+function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64),weekStart='2026-09-07'}={}) {
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-verify-'));
-  const snapshotRoot=`snapshots/2026-09-07/${snapshotId}`;
+  const snapshotRoot=`snapshots/${weekStart}/${snapshotId}`;
   const files=new Map();
   const manifestLocations=[];
   const coverageLocations=[];
@@ -24,16 +25,18 @@ function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64)}={}) {
     const branchId=`branch-${index}`;
     const id=`${postcode}-${store.toLowerCase()}-${branchId}`;
     const offerId=String(index+1).padStart(64,'b');
+    const identity={ingredientId:'감자',species:'plant',cut:'whole',processingState:'raw',form:'whole',composition:'potato'};
     const sourceRecipeId=String(7000000+index);
-    const detail={schemaVersion:1,sourceRecipeId,sourceContentHash:String(index+1).padStart(64,'c'),sourceTitle:`원문 ${index}`,sourceUrl:`https://www.10000recipe.com/recipe/${sourceRecipeId}`,sourceAuthor:'작성자',title:`메뉴 ${index}`,detailIngredients:['재료 100g','소금 1g'],steps:['씻는다.','익힌다.','담는다.'],recommendationProfile:{kind:'main'}};
+    const profile={primaryIngredients:['감자'],family:'vegetable',method:'other',kind:'main'};
+    const detail={schemaVersion:1,sourceRecipeId,sourceContentHash:String(index+1).padStart(64,'c'),sourceTitle:`원문 ${index}`,sourceUrl:`https://www.10000recipe.com/recipe/${sourceRecipeId}`,sourceAuthor:'작성자',title:`메뉴 ${index}`,detailIngredients:['재료 100g','소금 1g'],steps:['씻는다.','익힌다.','담는다.'],recommendationProfile:profile};
     const detailBytes=json(detail);
     const detailHash=sha256(detailBytes);
     const detailPath=`${snapshotRoot}/recipes/${sourceRecipeId}.${detailHash}.json`;
     files.set(detailPath,detailBytes);
     recipeIndex.push({sourceRecipeId,path:detailPath,sha256:detailHash,sourceContentHash:detail.sourceContentHash});
-    const location={schemaVersion:1,snapshotId,weekStart:'2026-09-07',id,postcode,store,branch:`지점 ${index}`,branchId,
-      offers:[{offerId,postcode,chain:store,branchId,productDe:`Produkt ${index}`,pack:'500 g',priceCents:499,validFrom:'2026-09-07',validThrough:'2026-09-13',autoPriceEligible:true,identity:{ingredientId:'감자',species:'plant',cut:'whole',processingState:'raw',form:'whole',composition:'potato'}}],
-      recipes:[{sourceRecipeId,offerIds:[offerId],detailPath,detailSha256:detailHash,recommendationProfile:{kind:'main'}}],
+    const location={schemaVersion:1,snapshotId,weekStart,id,postcode,store,branch:`지점 ${index}`,branchId,
+      offers:[{offerId,postcode,chain:store,branchId,productDe:`Produkt ${index}`,pack:'500 g',priceCents:499,validFrom:'2026-09-07',validThrough:'2026-09-13',autoPriceEligible:true,identity}],
+      recipes:[{sourceRecipeId,offerIds:[offerId],offerIdentityKeys:[offerIdentityKey(identity)],primaryIngredientIds:['감자'],detailPath,detailSha256:detailHash,recommendationProfile:profile}],
       coverage:{target:48,published:1,eligible:1,heldForReviewCount:0,zeroCandidateOfferIds:[],sparse:true},warnings:[]};
     const locationPath=`${snapshotRoot}/locations/${id}.json`;
     files.set(locationPath,json(location));
@@ -45,7 +48,7 @@ function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64)}={}) {
   files.set(coveragePath,json({schemaVersion:1,snapshotId,locations:coverageLocations,zeroCandidateIdentities:[],zeroCandidateOfferIds:[]}));
   files.set(recipeIndexPath,json({schemaVersion:1,snapshotId,recipes:recipeIndex}));
   const fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1',tenant:'recipe-full',source:{inputLogicalName:'fixture.csv',csvSha256:'d'.repeat(64),database:'fixture-db',tenant:'recipe-full',discoverySha256:'e'.repeat(64),discoveryAlgorithm:'canonical-candidate-report-v1'},locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
+  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1',tenant:'recipe-full',source:{inputLogicalName:'fixture.csv',csvSha256:'d'.repeat(64),database:'fixture-db',tenant:'recipe-full',discoverySha256:'e'.repeat(64),discoveryAlgorithm:'canonical-candidate-report-v1'},locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes};
   mutate?.({manifest,files,manifestLocations,coverageLocations,snapshotId,snapshotRoot});
   for(const [relative,bytes] of files) {
     const target=path.join(root,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);
@@ -53,7 +56,7 @@ function writeFixture({locations=2,mutate,snapshotId='a'.repeat(64)}={}) {
   const manifestPath=`${snapshotRoot}/manifest.json`;
   const manifestBytes=json(manifest);
   const target=path.join(root,manifestPath);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,manifestBytes);
-  fs.writeFileSync(path.join(root,'current.json'),json({schemaVersion:1,snapshotId,weekStart:'2026-09-07',collectionTimestamp:manifest.collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)}));
+  fs.writeFileSync(path.join(root,'current.json'),json({schemaVersion:1,snapshotId,weekStart,collectionTimestamp:manifest.collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)}));
   return {root,manifestPath,manifest};
 }
 
@@ -99,6 +102,27 @@ test('rejects a foreign offer row inside a location even when all container hash
     manifest.fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
   }});
   assert.throws(()=>verifyMealSnapshot({snapshotDir:foreign.root}),/offer boundary/i);
+});
+
+test('rejects a recipe reference whose defining primary has no scoped offer',()=>{
+  const mismatched=writeFixture({mutate({manifest,files}){
+    const first=JSON.parse(files.get(manifest.locations[0].path));
+    first.recipes[0].primaryIngredientIds=['닭가슴살'];
+    first.recipes[0].recommendationProfile={primaryIngredients:['닭가슴살'],family:'chicken',method:'grill',kind:'main'};
+    files.set(manifest.locations[0].path,json(first));
+    manifest.fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
+  }});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:mismatched.root}),/primary.*offer/i);
+});
+
+test('rejects a rehashed offer identity that disagrees with the recipe canonical identity keys',()=>{
+  const mismatched=writeFixture({mutate({manifest,files}){
+    const first=JSON.parse(files.get(manifest.locations[0].path));
+    first.offers[0].identity={ingredientId:'감자',species:'plant',cut:'zucchini',processingState:'fresh',form:'whole',composition:'zucchini'};
+    files.set(manifest.locations[0].path,json(first));
+    manifest.fileHashes=Object.fromEntries([...files].map(([relative,bytes])=>[relative,sha256(bytes)]));
+  }});
+  assert.throws(()=>verifyMealSnapshot({snapshotDir:mismatched.root}),/canonical offer identity/i);
 });
 
 test('rejects a review queue payload hidden under an arbitrary public key after rehashing',()=>{
@@ -210,7 +234,7 @@ test('release verification distinguishes explicit bootstrap from an in-tree roll
   assert.deepEqual(bootstrapReport.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});
   assert.throws(()=>verifyMealSnapshot({snapshotDir:bootstrap.root,releaseMode:'rollover',previousManifestPath:bootstrap.manifestPath}),/different from current/i);
 
-  const external=writeFixture({snapshotId:'f'.repeat(64)});
+  const external=writeFixture({snapshotId:'f'.repeat(64),weekStart:'2026-08-31'});
   assert.throws(()=>verifyMealSnapshot({snapshotDir:bootstrap.root,releaseMode:'rollover',previousSnapshotDir:external.root}),/external.*release proof/i);
 
   fs.cpSync(path.join(external.root,'snapshots'),path.join(bootstrap.root,'snapshots'),{recursive:true});
@@ -219,7 +243,7 @@ test('release verification distinguishes explicit bootstrap from an in-tree roll
   const current=JSON.parse(fs.readFileSync(currentPath,'utf8'));
   const manifestPath=path.join(bootstrap.root,current.manifestPath);
   const manifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
-  manifest.previousSnapshot={snapshotId:externalCurrent.snapshotId,manifestPath:externalCurrent.manifestPath,manifestSha256:externalCurrent.manifestSha256};
+  manifest.previousSnapshot={snapshotId:externalCurrent.snapshotId,manifestPath:externalCurrent.manifestPath,manifestSha256:externalCurrent.manifestSha256,mode:'rollover'};
   const manifestBytes=json(manifest);
   fs.writeFileSync(manifestPath,manifestBytes);
   current.manifestSha256=sha256(manifestBytes);
@@ -256,4 +280,14 @@ test('real published output loads only the selected location before a detail is 
   assert.equal(detail.sourceRecipeId,location.recipes[0].sourceRecipeId);
   assert.equal(calls.filter((url)=>url.includes('/locations/')).length,1);
   assert.equal(calls.at(-1),`/mohemeokji/data/${location.recipes[0].detailPath}`);
+});
+
+test('real published bootstrap has no invalid prior snapshot chain',()=>{
+  const dataRoot=path.resolve(new URL('../public/mohemeokji/data/',import.meta.url).pathname);
+  const current=JSON.parse(fs.readFileSync(path.join(dataRoot,'current.json'),'utf8'));
+  const manifest=JSON.parse(fs.readFileSync(path.join(dataRoot,current.manifestPath),'utf8'));
+  assert.equal(manifest.previousSnapshot,undefined);
+  const report=verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'bootstrap'});
+  assert.deepEqual(report.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});
+  assert.equal(fs.readdirSync(path.join(dataRoot,'snapshots',manifest.weekStart)).length,1);
 });

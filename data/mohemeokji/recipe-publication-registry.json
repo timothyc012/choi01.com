@@ -2,13 +2,50 @@
   "schemaVersion": 1,
   "transformVersion": "ko-paraphrase-v1",
   "recipes": {
+    "1041323|eaa911596ef2981b9c2a351d1a93f1ae14539877b383d5cbeab4487d278a266e|ko-paraphrase-v1": {
+      "sourceRecipeId": "1041323",
+      "sourceContentHash": "eaa911596ef2981b9c2a351d1a93f1ae14539877b383d5cbeab4487d278a266e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바나나 땅콩 레몬 샐러드",
+      "detailIngredients": [
+        "바나나 1개",
+        "방울토마토 1줌",
+        "파인애플 1/8조각 (140g)",
+        "양상추 1줌 (100g)",
+        "피스타치오 20g (또는 땅콩)",
+        "땅콩잼 2큰술 (듬뿍)",
+        "레몬즙 3큰술",
+        "꿀 2큰술",
+        "피스타치오 다진 것 10g"
+      ],
+      "steps": [
+        "양상추는 찬물에 씻어 물기를 빼고 견과류는 다진다.",
+        "과일은 한입 크기로 자르며 바나나는 접시에 담기 직전에 썬다.",
+        "땅콩잼과 레몬즙, 다진 피스타치오를 섞어 드레싱을 만든다.",
+        "과일과 양상추를 접시에 보기 좋게 담는다.",
+        "다진 땅콩을 과일 위에 뿌린다.",
+        "먹기 직전에 드레싱을 더한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
     "1396425|dc4f4fafb8e56b3bb7ca6c5426356af6650572dd165a32cf912b4b728079c2c2|ko-paraphrase-v1": {
       "sourceRecipeId": "1396425",
       "sourceContentHash": "dc4f4fafb8e56b3bb7ca6c5426356af6650572dd165a32cf912b4b728079c2c2",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
       "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
       "title": "과일 요거트 샐러드",
       "detailIngredients": [
         "수박",
@@ -31,328 +68,565 @@
         "family": "fruit",
         "method": "salad",
         "kind": "breakfast"
-      }
+      },
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-07"
     },
-    "1480748|2d88b9942fc6daa6a0d2d537e7724befa24906de82940eb5778bdf3809f91529|ko-paraphrase-v1": {
-      "sourceRecipeId": "1480748",
-      "sourceContentHash": "2d88b9942fc6daa6a0d2d537e7724befa24906de82940eb5778bdf3809f91529",
+    "1407202|2cf95dc9d4ae328348d9df2adee825e59bcabb403c74f478c40092d75810a966|ko-paraphrase-v1": {
+      "sourceRecipeId": "1407202",
+      "sourceContentHash": "2cf95dc9d4ae328348d9df2adee825e59bcabb403c74f478c40092d75810a966",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "소고기 감자볶음 덮밥",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "닭가슴살 달걀샐러드 모닝롤",
       "detailIngredients": [
-        "소고기 300g (불고기용)",
-        "감자 2개",
-        "양파 1/2개",
-        "대파 1/2대",
-        "불린당면 1줌",
-        "청양고추 1개",
-        "청주 1큰술",
+        "닭가슴살 4쪽",
+        "계란",
+        "피클",
+        "보라양파",
+        "파슬리",
+        "모닝빵",
+        "양파",
+        "통후추",
+        "마늘",
+        "대파",
+        "소금",
+        "마요네즈 4~5큰술",
+        "머스타드 1~2큰술",
         "후추 약간",
-        "다진마늘 약간",
-        "물 2컵",
-        "간장 3큰술",
-        "고춧가루 2큰술",
-        "물엿 1/2~1큰술",
-        "다진마늘 1큰술",
-        "소금후추 약간",
-        "소금후추 약간",
-        "깨 약간",
-        "식용유 약간 (원문 조리 단계, 수량 미표기)",
-        "밥 2인분 (덮밥용)"
+        "소금 1/2티스푼",
+        "마늘 (원문 수량 미표기)",
+        "달걀 (원문 수량 미표기)"
       ],
       "steps": [
-        "소고기를 청주·후추·마늘에 버무려 10분 밑간한다.",
-        "감자는 1cm 두께로, 양파는 채 썰고 대파와 고추는 어슷 썬다.",
-        "달군 냄비에 식용유를 두르고 소고기를 볶다가 겉면이 익으면 감자를 넣는다.",
-        "물 2컵을 붓고 끓으면 양파와 간장·고춧가루·물엿·마늘을 넣는다.",
-        "중불에서 국물이 처음의 1/2~2/3 정도로 줄고 감자가 익을 때까지 졸인다.",
-        "불린 당면·대파·고추를 넣어 2~3분 익힌 뒤 밥 위에 올린다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "불고기용 소고기"
-        ],
-        "family": "beef",
-        "method": "rice-bowl",
-        "kind": "main"
-      }
-    },
-    "1633372|f426c0500a12b47d276bb1c2595dca7fbf7ebdfea3080d5476d8df05e0afa823|ko-paraphrase-v1": {
-      "sourceRecipeId": "1633372",
-      "sourceContentHash": "f426c0500a12b47d276bb1c2595dca7fbf7ebdfea3080d5476d8df05e0afa823",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭가슴살 부추잡채",
-      "detailIngredients": [
-        "닭가슴살 2장",
-        "양파 1/2개",
-        "빨간 파프리카 1/3개",
-        "노란 파프리카 1/3개",
-        "부추 1줌",
-        "후추 조금",
-        "소금 조금",
-        "미림 1큰술",
-        "간장 2큰술",
-        "굴소스 1큰술",
-        "설탕 1/2큰술",
-        "참기름 조금",
-        "통깨 조금",
-        "식용유 (원문 조리 단계, 양 미표기)"
-      ],
-      "steps": [
-        "닭가슴살을 길게 썰어 후추·소금·미림으로 밑간한다.",
-        "양파·파프리카는 채 썰고 부추는 먹기 좋은 길이로 자른다.",
-        "간장·굴소스·설탕을 섞어 양념을 준비한다.",
-        "팬에 식용유를 두르고 닭가슴살을 볶아 속까지 익힌다.",
-        "양파와 파프리카를 넣고 양념을 부어 함께 볶는다.",
-        "부추를 넣어 짧게 섞고 참기름과 통깨로 마무리한다."
+        "닭가슴살 4쪽을 해동해 크게 자르고 양파, 통후추, 마늘, 대파, 소금과 함께 삶은 뒤 다지거나 간다.",
+        "닭가슴살을 익히는 동안 계란 4개를 삶고 피클, 보라양파, 파슬리와 삶은 계란을 잘게 다진다.",
+        "다진 닭가슴살과 채소에 소금 1/2티스푼, 후추 약간, 머스타드 1~2큰술, 마요네즈 4~5큰술을 더해 버무린다.",
+        "모닝빵 속에 샐러드를 넣어 약 20~22개를 만든다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "닭가슴살"
         ],
         "family": "chicken",
-        "method": "stirfry",
+        "method": "other",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "1973163|b5317efdf6905d66fd18ba5378410432c0988eee2dbbbd89848f525982baa806|ko-paraphrase-v1": {
-      "sourceRecipeId": "1973163",
-      "sourceContentHash": "b5317efdf6905d66fd18ba5378410432c0988eee2dbbbd89848f525982baa806",
+    "1564879|2f9e58029605e3ebd5f7b2b999139fb37adeafb9d219880802ae4100db3756ac|ko-paraphrase-v1": {
+      "sourceRecipeId": "1564879",
+      "sourceContentHash": "2f9e58029605e3ebd5f7b2b999139fb37adeafb9d219880802ae4100db3756ac",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "돼지고기 미트볼 조림",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "토마토소스 목살 조림",
       "detailIngredients": [
-        "다진 돼지고기 350g",
-        "당근 50g",
-        "풋고추 1개",
+        "돼지고기 목살 2줌 (어느부위든 가능)",
+        "밀가루 약간",
+        "소금",
+        "후추",
+        "청주",
+        "사과 1.5개",
+        "토마토 2개",
         "양파 1개",
-        "달걀 1개",
-        "빵가루 1/2컵",
-        "소금 1/2 작은술",
-        "후추 1/3작은술",
-        "포도씨유 5큰술",
-        "토마토 케첩 1.5큰술",
-        "고추장 1큰술",
-        "스위트 칠리소스 1큰술",
-        "올리고당 2/3큰술",
-        "물 1/2컵"
+        "피망 1줌",
+        "빨강 파프리카 1줌",
+        "토마토 페이스트 5스푼",
+        "샐러리 3줄기",
+        "소금 1/2스푼",
+        "올리고당 2스푼",
+        "식용유 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)"
       ],
       "steps": [
-        "양파·당근·풋고추를 잘게 다지고 돼지다짐육 350g을 준비한다.",
-        "포도씨유를 조금 두른 팬에서 양파를 볶은 뒤 고기·당근·고추·달걀·빵가루·소금·후추와 충분히 치댄다.",
-        "지름 약 2cm의 미트볼을 빚고 기름을 넉넉히 두른 팬에서 약불로 굴려가며 속까지 익힌다.",
-        "케첩 1.5큰술·고추장 1큰술·스위트칠리소스 1큰술·올리고당 2/3큰술을 섞는다.",
-        "팬에 익힌 미트볼과 소스·물 1/2컵을 넣고 소스가 자작하게 남을 때까지 졸인다."
+        "목살은 청주·소금·후추로 밑간한 뒤 밀가루를 묻혀 노릇하게 굽고 기름을 뺀다.",
+        "사과와 채소를 썰고 토마토 페이스트에 샐러리·양파·토마토·사과를 갈아 끓인 소스는 냉동 보관할 수 있다.",
+        "카놀라유에 양파를 볶다가 사과와 토마토, 피망·파프리카, 토마토소스를 넣고 끓인다. 월계수잎 1장을 넣었다가 꺼낸다.",
+        "소스가 끓으면 구운 목살을 넣어 부드러워질 때까지 졸인다.",
+        "조린 목살을 접시에 담고 사과를 곁들인다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "돼지다짐육"
+          "토마토"
         ],
         "family": "pork",
-        "method": "meatballs",
+        "method": "other",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "3526900|af5da4b1cabf054317bc94e22dad26d7eaa888139f560e55f67934968ce39fb0|ko-paraphrase-v1": {
-      "sourceRecipeId": "3526900",
-      "sourceContentHash": "af5da4b1cabf054317bc94e22dad26d7eaa888139f560e55f67934968ce39fb0",
+    "1656710|b8cebc3da6e3757ec662b098f1d9d9612b0a6147e961a4d31d1953fce52e532c|ko-paraphrase-v1": {
+      "sourceRecipeId": "1656710",
+      "sourceContentHash": "b8cebc3da6e3757ec662b098f1d9d9612b0a6147e961a4d31d1953fce52e532c",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭가슴살 깐풍기",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "유자된장 목살구이",
       "detailIngredients": [
-        "닭가슴살 3조각",
-        "양파 1/3개",
-        "대파 1/2개",
-        "청양고추 3개",
-        "마른홍고추 2개",
-        "식용유",
-        "녹말가루 5~6T",
-        "달걀흰자 1개",
-        "다진마늘",
-        "소금",
-        "참기름",
-        "후추가루 약간",
-        "간장",
-        "맛술",
-        "굴소스",
-        "식초",
-        "설탕",
-        "올리고당"
+        "돼지목살 1근 (600그램)",
+        "깻잎 20장",
+        "양파 1개",
+        "된장 4큰술",
+        "유자청 2큰술",
+        "설탕 1/2큰술",
+        "청주 2큰술",
+        "다진 마늘 듬뿍 1큰술",
+        "다진 생강 1작은술",
+        "후추 약간"
       ],
       "steps": [
-        "닭가슴살을 한입 크기로 썰어 다진 마늘 1/2T·고운 소금 1/2T·참기름 2/3T·후추 소량으로 밑간한다. 냉장고에서 30분~1시간 재운다.",
-        "양파 1/3개·대파 1/2개·청양고추 3개와 마른 홍고추를 잘게 자른다.",
-        "재운 닭에 녹말가루 5~6T와 달걀흰자 1개를 넣고 버무린다.",
-        "튀김용 기름을 중불로 데운 뒤 중약불에서 닭을 노릇하게 튀긴다. 한 김 식힌 후 센불에서 다시 짧게 튀겨 속까지 익힌다.",
-        "다른 팬에 식용유 1.5T와 다진 마늘 1/2T를 넣고 볶다가 손질한 채소를 넣는다.",
-        "불을 잠시 끄고 물 3T·간장 2T·맛술 2T·굴소스 1T·식초 2T·설탕 1T·올리고당 2T를 넣는다. 중불에서 약 1분 끓인다.",
-        "튀긴 닭을 소스에 빠르게 버무려 바로 낸다."
+        "양파 1개를 갈아 목살 1근(600그램)에 섞고 20분 재워 둔다.",
+        "된장 4큰술, 유자청 2큰술, 설탕 1/2큰술, 청주 2큰술, 다진 마늘 1큰술, 생강 1작은술, 후추를 섞어 고기에 넣고 2시간 이상 재워 둔다.",
+        "오븐을 200도로 예열해 20분 굽거나, 팬의 약불에서 익힌다.",
+        "깻잎 20장을 채 썰어 접시에 깔고 목살을 먹기 좋게 잘라 담는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "닭가슴살"
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "1783024|d2ac23d46eafe48a75648877e7528656af4a0a2ed129c3acf1ba0ce72a346ebe|ko-paraphrase-v1": {
+      "sourceRecipeId": "1783024",
+      "sourceContentHash": "d2ac23d46eafe48a75648877e7528656af4a0a2ed129c3acf1ba0ce72a346ebe",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바나나 치즈 또띠아 말이",
+      "detailIngredients": [
+        "또띠아 1장",
+        "슬라이스치즈 2장",
+        "바나나 1개",
+        "피넛버터 적당량"
+      ],
+      "steps": [
+        "또띠아는 바로 사용하고 냉동 상태라면 팬에서 살짝 데운다.",
+        "피넛버터를 또띠아 전체에 편다.",
+        "치즈와 바나나를 가운데에 올린다.",
+        "속을 감싸듯 말아 랩으로 고정한 뒤 반으로 자른다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "1805771|41e3015d632d001c16ab67f4ec32563dbe64b900f64e8e937d95864d7922b708|ko-paraphrase-v1": {
+      "sourceRecipeId": "1805771",
+      "sourceContentHash": "41e3015d632d001c16ab67f4ec32563dbe64b900f64e8e937d95864d7922b708",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "단호박 밀크잼 요거트 머핀",
+      "detailIngredients": [
+        "설탕 60g",
+        "박력분 50g",
+        "베이킹파우더 1ts",
+        "카놀라유 35g (식용유대체가능)",
+        "요거트 80g",
+        "레몬즙 1/2Ts",
+        "단호박밀크잼 4큰술",
+        "단호박씨 적당량",
+        "식용유 (원문 수량 미표기)",
+        "버터 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "설탕 60g, 박력분 50g, 베이킹파우더 1ts를 거품기로 고루 섞는다.",
+        "요거트·카놀라유·레몬즙을 넣어 4~5번만 가볍게 섞는다.",
+        "가루 혼합물에 액체 혼합물을 붓는다.",
+        "주걱을 세워 자르듯 빠르게 섞는다.",
+        "머핀컵에 반죽을 2/3 높이로 나누어 담는다.",
+        "각 반죽에 단호박밀크잼을 1큰술씩 넣는다.",
+        "단호박씨를 올리고 180°C 오븐을 20분 이상 예열한 뒤 25분~30분 굽는다.",
+        "꼬치에 반죽이 묻어나오지 않으면 꺼내 식힌다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "1944236|a3074eeb979ef2e210faa2a546830b472079515d6a09df84835ae56e831de4b1|ko-paraphrase-v1": {
+      "sourceRecipeId": "1944236",
+      "sourceContentHash": "a3074eeb979ef2e210faa2a546830b472079515d6a09df84835ae56e831de4b1",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "매콤 닭가슴살 오이무침",
+      "detailIngredients": [
+        "닭가슴살 300g",
+        "소금 1/8t (닭가슴살밑간용)",
+        "오이 1개",
+        "소금 1/4t (오이절임용)",
+        "양파 60g",
+        "다진마늘 1T",
+        "맛술 1T",
+        "후추 약간",
+        "통깨 1T",
+        "고추장 3T",
+        "식초 2T",
+        "케찹 1T",
+        "물엿 2T",
+        "다진파 2T"
+      ],
+      "steps": [
+        "닭가슴살 300g에 소금 1/8t, 맛술 1T, 다진마늘 1T를 더해 냉장고에서 약 20분 재운다.",
+        "고추장 3T, 식초 2T, 케찹 1T, 물엿 2T, 다진파 2T, 통깨 1T와 후추 약간을 섞어 양념장을 만든다.",
+        "오이 1개는 길게 반으로 가른 뒤 어슷하게 썬다.",
+        "소금 1/4t로 오이를 절인 후 물기를 짠다.",
+        "양파 60g은 가늘게 채 썬다.",
+        "양파는 찬물에 담가 매운맛을 빼고 물기를 제거한다.",
+        "재운 닭가슴살은 잔기포가 오르는 찜솥의 끓는 물에서 약한 불로 익힌 뒤 찢는다.",
+        "양념장에 오이, 양파, 닭가슴살을 넣는다.",
+        "재료가 고르게 묻도록 버무린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살",
+          "오이"
         ],
         "family": "chicken",
-        "method": "fried",
-        "kind": "main"
-      }
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "4741814|b4cb40782bcbd7a2b78eece0e1fa25e535943fe6e9f655f2ecb728d0ba019e4c|ko-paraphrase-v1": {
-      "sourceRecipeId": "4741814",
-      "sourceContentHash": "b4cb40782bcbd7a2b78eece0e1fa25e535943fe6e9f655f2ecb728d0ba019e4c",
+    "2006110|ffcd8e664bc1bffe99be912131e346f3a0788da61811607d8dc96de2f77b46b3|ko-paraphrase-v1": {
+      "sourceRecipeId": "2006110",
+      "sourceContentHash": "ffcd8e664bc1bffe99be912131e346f3a0788da61811607d8dc96de2f77b46b3",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "연어스테이크",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "치킨텐더 또띠아 스낵랩",
       "detailIngredients": [
-        "연어 1조각",
-        "빵가루 3Ts",
-        "파슬리가루 1/2Ts",
-        "굵은소금",
-        "후춧가루 약간",
-        "올리브오일 1/2Ts",
-        "크림치즈 25g",
-        "플레인요구르트 50g",
-        "곱게 다진 양파 2Ts",
-        "케이퍼 20~25알",
-        "레몬즙 1Ts",
-        "아가베시럽 1/3Ts",
-        "소금 2꼬집",
-        "후춧가루 약간"
-      ],
-      "steps": [
-        "연어에 소금과 후추로 밑간한 뒤 표면에 생긴 물기를 키친타월로 닦는다.",
-        "빵가루 3Ts에 파슬리 1/2Ts와 올리브유 1/2Ts를 섞어 촉촉하게 만든다.",
-        "크림치즈를 부드럽게 풀어 플레인요거트·레몬즙·아가베시럽·소금·후추와 섞고 다진 양파와 케이퍼를 넣는다. 소스는 차갑게 보관한다.",
-        "연어 앞뒤에 허브 빵가루를 골고루 묻힌다.",
-        "에어프라이어를 180°C로 약 3분 예열하고 연어를 굽는다. 원문은 6~7분을 제시하며, 두께와 기기에 따라 속까지 익도록 시간을 조절한다.",
-        "익힌 연어를 담고 요거트 소스를 곁들인다. 베이비채소·딸기 장식은 선택 사항이다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "연어"
-        ],
-        "family": "salmon",
-        "method": "air-fryer",
-        "kind": "main"
-      }
-    },
-    "5056237|df7fc353c14134d7e3bbaa372bf0b9da4ebb4aab890727d008f48f06e3d10b91|ko-paraphrase-v1": {
-      "sourceRecipeId": "5056237",
-      "sourceContentHash": "df7fc353c14134d7e3bbaa372bf0b9da4ebb4aab890727d008f48f06e3d10b91",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭가슴살 또띠아 롤",
-      "detailIngredients": [
-        "또띠아 2장",
-        "닭가슴살 200g",
-        "로메인",
-        "치커리",
-        "적겨자",
-        "치즈",
-        "파프리카",
-        "마요네즈",
-        "머스터드",
-        "피클",
-        "핫소스",
-        "씨겨자",
-        "소금 약간 (원문 조리 단계, 수량 미표기)",
-        "후추 약간 (원문 조리 단계, 수량 미표기)",
-        "청주 약간 (원문 조리 단계, 수량 미표기)",
-        "씨겨자 (원문 첫 번째 롤 소스, 양 미표기)"
-      ],
-      "steps": [
-        "닭가슴살을 길게 썰어 소금·후추·청주로 밑간하고 파프리카도 채 썬다.",
-        "팬에서 닭가슴살을 앞뒤로 구워 속까지 익힌 뒤 기름기를 뺀다.",
-        "또띠아 2장을 팬에서 앞뒤로 살짝 데우고 잎채소의 물기를 없앤다.",
-        "첫 번째 롤에는 마요네즈와 씨겨자를 섞어 바르고 잎채소·닭·파프리카·피클을 올려 돌돌 만다.",
-        "두 번째 롤에는 치즈와 머스터드를 올리고 잎채소·파프리카·닭을 담은 뒤 핫소스를 뿌려 만다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "닭가슴살"
-        ],
-        "family": "chicken",
-        "method": "wrap",
-        "kind": "main"
-      }
-    },
-    "6280691|c146a59c5158c7f59d88666d5f647924b2a3c3d33390e63aad058e6196b5af7e|ko-paraphrase-v1": {
-      "sourceRecipeId": "6280691",
-      "sourceContentHash": "c146a59c5158c7f59d88666d5f647924b2a3c3d33390e63aad058e6196b5af7e",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "독일식 감자전 뢰스티",
-      "detailIngredients": [
-        "감자",
-        "베이컨",
+        "닭가슴살 1덩이",
         "소금 약간",
         "후추 약간",
-        "밀가루나부침가루",
-        "식용유 (팬 조리를 위한 추가 재료, 양 직접 확인)"
+        "밀가루 적당량",
+        "계란 1/2개",
+        "빵가루 적당량",
+        "파프리카 1/2개",
+        "양파 1/2개",
+        "새싹채소 약간",
+        "또띠아 2장",
+        "양상추 2~3장",
+        "칠리소스 적당량",
+        "우유 (원문 수량 미표기)",
+        "기름 (원문 수량 미표기)"
       ],
       "steps": [
-        "감자는 가늘게 채 썰고 물기를 손이나 면포로 단단히 짠다.",
-        "베이컨도 가늘게 썰어 감자와 섞는다.",
-        "소금·후추로 간하고 섞는다. 모양을 잡기 위한 밀가루나 부침가루는 필요하면 조금 넣는다.",
-        "중불 팬에 기름을 두르고 반죽을 얇고 단단하게 눌러 펼친다.",
-        "밑면이 짙은 금색이 되면 접시를 이용해 뒤집고 반대쪽도 바삭하게 굽는다."
+        "양상추 2~3장과 새싹채소는 씻어 물기를 제거하고 파프리카 1/2개는 길게 자른다.",
+        "양파 1/2개는 링 모양으로 잘라 찬물에 30분 이상 담가 매운맛을 뺀다.",
+        "닭가슴살 1덩이는 원문처럼 우유에 담고 소금과 후추를 뿌려 30분 이상 둔 뒤 헹군다. 손가락 2개 두께로 썰어 물기를 제거한다.",
+        "닭가슴살에 밀가루, 계란 1/2개, 빵가루 순서로 튀김옷을 입힌다.",
+        "또띠아 2장은 기름 없는 팬에서 앞뒤를 짧게 데운다.",
+        "기름에 빵가루를 넣었을 때 바로 떠오르면 치킨텐더를 넣어 바삭하게 튀긴다.",
+        "튀긴 텐더는 키친타월에 올려 기름기를 뺀다.",
+        "또띠아에 양상추, 물기를 뺀 양파, 치킨텐더, 파프리카, 새싹채소를 순서대로 담고 칠리소스를 넣는다.",
+        "아랫부분부터 접은 뒤 양옆을 접어 랩 모양으로 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살"
+        ],
+        "family": "chicken",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "2306622|4bfe0a6ae3dc17274e309695f016c27cd595ea0bbaa71ff883548fb177665635|ko-paraphrase-v1": {
+      "sourceRecipeId": "2306622",
+      "sourceContentHash": "4bfe0a6ae3dc17274e309695f016c27cd595ea0bbaa71ff883548fb177665635",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "고추장 등갈비와 관자 볶음밥",
+      "detailIngredients": [
+        "등갈비 1kg",
+        "관자 2개 (싱싱한)",
+        "파인애플 1쪽",
+        "적양파 1개",
+        "파프리카 1개",
+        "노랑주황파프리카 각 1개",
+        "오이 1/2개",
+        "밥 2인분",
+        "고구마 2개",
+        "고추장 3.5T",
+        "케첩 4T",
+        "설탕 1.5T",
+        "올리고당 1.5T",
+        "청주 2T",
+        "다진마늘 1T",
+        "생강즙 2T",
+        "후추 약간",
+        "소금 약간",
+        "굴소스 1큰술",
+        "마요네즈 4T",
+        "머스타드 0.5T",
+        "플레인요거트 2T",
+        "소금 약간"
+      ],
+      "steps": [
+        "등갈비 2팩(1kg)은 찬물에 1시간 담가 두고, 중간에 물을 2~3번 바꾼다.",
+        "등갈비는 30분 삶아 건진 뒤 팬에서 노릇하게 굽는다.",
+        "케첩 4T에 고추장 3.5T, 청주 2T, 올리고당 1.5T, 생강즙 2T, 설탕 1.5T, 다진마늘 1T와 후추를 섞어 양념장을 만든다.",
+        "팬에서 양념장을 끓인 뒤 구운 등갈비와 고루 섞는다.",
+        "관자 2개, 파인애플 1쪽, 적양파 1개, 파프리카 1개를 썰어 볶고 밥과 굴소스 1큰술을 넣어 볶음밥을 만든다.",
+        "고구마는 전자레인지에서 5분 익히고, 플레인요거트 2T·마요네즈 4T·머스타드 0.5T·오이와 섞어 냉장 보관한다.",
+        "등갈비에 관자파인애플볶음밥과 고구마샐러드를 곁들인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "yogurt",
+        "method": "stirfry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "2376493|27e426cee6ea579814c9438240100a1cad0aac4b2298aa93f5abc3b170fff2cf|ko-paraphrase-v1": {
+      "sourceRecipeId": "2376493",
+      "sourceContentHash": "27e426cee6ea579814c9438240100a1cad0aac4b2298aa93f5abc3b170fff2cf",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "감자 베이컨 치즈 식빵 튀김",
+      "detailIngredients": [
+        "슬라이스치즈 2장",
+        "베이컨 2장",
+        "감자 2개",
+        "식빵 3장",
+        "달걀 (원문 수량 미표기)",
+        "기름 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "식빵 가장자리의 갈색 부분을 제거한다.",
+        "밀대로 편 식빵을 4등분한다.",
+        "감자는 삶아 으깨고 베이컨은 굽고 치즈는 가늘게 자른다.",
+        "감자·베이컨·치즈를 한데 섞는다.",
+        "식빵 조각에 노른자를 바른 뒤 타원형 속을 올리고 반으로 접는다.",
+        "접힌 가장자리를 눌러 단단히 붙인다.",
+        "기름을 160~170도로 맞춰 양면이 노릇해질 때까지 튀긴다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "감자"
         ],
-        "family": "potato",
-        "method": "pancake",
-        "kind": "side"
-      }
+        "family": "cheese",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "6608766|cb4034dbec21bc4f5c7f19ecfbc9a5551a6c7c41bfb5c6f4aefe0e267d7c756f|ko-paraphrase-v1": {
-      "sourceRecipeId": "6608766",
-      "sourceContentHash": "cb4034dbec21bc4f5c7f19ecfbc9a5551a6c7c41bfb5c6f4aefe0e267d7c756f",
+    "4756817|a798b3467ae30bc88918d4cc8f914f48eda4ff21520c347f0bd80d0b7db9de92|ko-paraphrase-v1": {
+      "sourceRecipeId": "4756817",
+      "sourceContentHash": "a798b3467ae30bc88918d4cc8f914f48eda4ff21520c347f0bd80d0b7db9de92",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "미트볼 토마토 스파게티",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "머스터드 과일 채소 샐러드",
       "detailIngredients": [
-        "스파게티면 150g",
-        "수제소세지 4개",
-        "토마토소스 250g",
-        "드라이 바질 1/3t",
-        "올리브유 1T"
+        "치커리 5장",
+        "양상추 3장",
+        "오렌지",
+        "사과",
+        "블루베리",
+        "청포도",
+        "바나나",
+        "적포도",
+        "머스터드소스 1.5TS",
+        "마요네즈 1.5TS",
+        "요리당 1TS",
+        "치즈가루 약간"
       ],
       "steps": [
-        "파스타를 삶을 물을 먼저 끓인다.",
-        "소시지 속을 꺼내 같은 크기의 미트볼로 빚는다.",
-        "중불 팬에 올리브유를 두르고 미트볼 겉면을 굴려가며 노릇하게 굽는다.",
-        "토마토소스를 붓고 뚜껑을 덮어 미트볼 중심까지 익도록 5~7분 끓인다.",
-        "스파게티를 포장 시간대로 삶아 물기를 뺀다.",
-        "면을 미트볼 소스에 넣고 바질을 뿌려 1분간 고루 버무린다."
+        "치커리와 양상추는 씻어서 손으로 먹기 좋게 찢는다.",
+        "머스터드소스·마요네즈·요리당을 분량대로 섞어 드레싱을 만든다.",
+        "물기를 뺀 과일과 채소를 접시에 담고 드레싱을 더한 뒤 치즈가루를 뿌린다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "속을 꺼낼 수 있는 수제 소시지",
-          "파스타"
+          "양상추"
         ],
-        "family": "sausage",
-        "method": "pasta",
+        "family": "fruit",
+        "method": "other",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "5179816|4cbb3f7f2d254f247725e81375eb2472b8a0897f177de937de3d05911709d93e|ko-paraphrase-v1": {
+      "sourceRecipeId": "5179816",
+      "sourceContentHash": "4cbb3f7f2d254f247725e81375eb2472b8a0897f177de937de3d05911709d93e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "복숭아 바나나 과일 스무디",
+      "detailIngredients": [
+        "복숭아 2개",
+        "바나나 1개",
+        "얼음",
+        "아가베시럽 1큰술"
+      ],
+      "steps": [
+        "복숭아 2개와 바나나 1개를 준비한다.",
+        "두 과일을 비슷한 크기로 자른다.",
+        "블렌더에 얼음, 손질한 과일, 아가베시럽 1큰술을 넣고 매끈해질 때까지 간다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나",
+          "복숭아"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "5346518|ac2dd551b5337cb2b8ab2e412cace9ada1c9a45b7660bdeb9cbf9f22d78a3901|ko-paraphrase-v1": {
+      "sourceRecipeId": "5346518",
+      "sourceContentHash": "ac2dd551b5337cb2b8ab2e412cace9ada1c9a45b7660bdeb9cbf9f22d78a3901",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "마늘 치즈 또띠아 피자",
+      "detailIngredients": [
+        "또띠아 2장",
+        "마늘 10~15개",
+        "모짜렐라치즈 100g",
+        "슬라이스치즈 1장",
+        "슬라이스아몬드 약간",
+        "메이플시럽(꿀) 약간"
+      ],
+      "steps": [
+        "또띠아 2장, 마늘 10~15개, 모짜렐라치즈 100g, 슬라이스치즈 1장을 준비한다.",
+        "마늘은 얇게 저며 취향에 맞게 양을 조절한다.",
+        "오븐용기에 또띠아를 놓고 모짜렐라치즈, 슬라이스치즈, 마늘을 차례로 얹는다.",
+        "슬라이스아몬드 약간을 뿌려 190~200도 오븐에서 10~13분 굽고 메이플시럽이나 꿀을 곁들인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "마늘"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "5529835|828e13f579959adf583e4a14dcf26dd12875a45814b00948640181cea698c472|ko-paraphrase-v1": {
+      "sourceRecipeId": "5529835",
+      "sourceContentHash": "828e13f579959adf583e4a14dcf26dd12875a45814b00948640181cea698c472",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "찹쌀옷 바나나튀김",
+      "detailIngredients": [
+        "바나나 2개",
+        "튀김가루",
+        "찹쌀가루 1큰술",
+        "식용유",
+        "얼음",
+        "물",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "바나나 2개는 껍질을 벗겨 알맞은 크기로 자른다.",
+        "바나나는 위생봉지에 담아 찹쌀가루 1큰술을 고루 입힌다.",
+        "튀김가루와 물을 섞어 반죽하고 얼음을 넣는다.",
+        "찹쌀가루를 묻힌 바나나에 튀김반죽을 입힌다.",
+        "달군 팬의 식용유에 바나나를 넣어 노릇하게 튀긴 뒤 키친타월에서 기름을 뺀다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "fry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6690857|bf23111226ca033eb86b80447877a7de5b9cf435a5f23d5a5e2b420b22ae2bba|ko-paraphrase-v1": {
+      "sourceRecipeId": "6690857",
+      "sourceContentHash": "bf23111226ca033eb86b80447877a7de5b9cf435a5f23d5a5e2b420b22ae2bba",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "닭가슴살 새송이 장조림",
+      "detailIngredients": [
+        "닭가슴살 250g",
+        "새송이버섯 3송이",
+        "간장 7큰술",
+        "설탕 1큰술",
+        "매실액 1큰술",
+        "올리고당 1큰술",
+        "맛술 1큰술",
+        "후추 조금",
+        "다시마우린물"
+      ],
+      "steps": [
+        "새송이버섯은 씻어 3등분한 뒤 납작하게 자른다.",
+        "닭가슴살은 한 번 데쳐 불순물을 없애고 자르지 않는다.",
+        "간장·설탕·매실액·올리고당·맛술·후추를 섞고 다시마 우린 물을 같은 양 또는 조금 더 붓는다.",
+        "냄비에 닭가슴살과 버섯을 넣고 조림장을 붓는다.",
+        "처음에는 센불로 끓이다가 끓어오르면 중불로 줄이며 거품을 걷는다.",
+        "조림장이 자작해질 때까지 졸인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살",
+          "버섯"
+        ],
+        "family": "chicken",
+        "method": "braise",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     },
     "6700719|082402e4902e622ffe0239c369b5e4deebfc0070e0c8b73c790a403b636d5e17|ko-paraphrase-v1": {
       "sourceRecipeId": "6700719",
@@ -360,7 +634,6 @@
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
       "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
       "title": "시금치요거트",
       "detailIngredients": [
         "시금치",
@@ -378,608 +651,2072 @@
         "family": "yogurt",
         "method": "smoothie",
         "kind": "breakfast"
-      }
+      },
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-07"
     },
-    "6831097|bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437|ko-paraphrase-v1": {
-      "sourceRecipeId": "6831097",
-      "sourceContentHash": "bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437",
+    "6739041|49c20bb1a174f52be8d6fcf1b7418cfc30f7c56ef3f0587c3b73ea882cf4f83a|ko-paraphrase-v1": {
+      "sourceRecipeId": "6739041",
+      "sourceContentHash": "49c20bb1a174f52be8d6fcf1b7418cfc30f7c56ef3f0587c3b73ea882cf4f83a",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "연어 간장조림",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "치즈 채운 오븐 감자",
       "detailIngredients": [
-        "연어 200g",
-        "정종",
-        "소금",
-        "후추",
-        "간장 1.5T",
-        "올리고당 1T",
-        "물 100ml",
-        "참기름",
-        "마늘",
-        "양파 1/2개",
-        "쪽파",
-        "카놀라유 (원문 조리 단계, 양 미표기)"
-      ],
-      "steps": [
-        "연어 200g을 먹기 좋은 크기로 나누고 소금·후추·정종 1/2스푼으로 밑간한다.",
-        "간장 1.5T·올리고당 1T·물 100ml에 참기름·다진 마늘·다진 양파를 섞어 양념한다.",
-        "카놀라유를 두른 팬에서 편 썬 마늘을 볶아 향을 낸다.",
-        "중불에서 연어 한 면을 익히고 뒤집은 뒤 양념 절반과 채 썬 양파 일부를 넣는다.",
-        "양념이 끓고 약 1분 뒤 다시 뒤집어 남은 양념을 넣고 연어 속까지 익힌다.",
-        "접시에 담아 얇게 썬 양파와 쪽파를 올린다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "연어"
-        ],
-        "family": "salmon",
-        "method": "braise",
-        "kind": "main"
-      }
-    },
-    "6831408|016b9f5ec3f80ca346e50ad3696ce916c931a7f1cb7fb5195219530ca882be42|ko-paraphrase-v1": {
-      "sourceRecipeId": "6831408",
-      "sourceContentHash": "016b9f5ec3f80ca346e50ad3696ce916c931a7f1cb7fb5195219530ca882be42",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "훈제연어롤",
-      "detailIngredients": [
-        "훈제연어",
-        "치커리",
-        "무순",
-        "케이퍼",
-        "양파",
-        "마요네즈",
-        "머스타드소스",
-        "파슬리가루",
-        "후추",
-        "다진양파"
-      ],
-      "steps": [
-        "치커리와 무순을 씻고 물기를 뺀다.",
-        "양파 일부는 가늘게 썰고 소스에 넣을 나머지는 잘게 다진다.",
-        "마요네즈와 머스터드에 다진 양파·파슬리·후추를 섞는다. 훈제연어 제품에 동봉 소스가 있다면 함께 사용한다.",
-        "훈제연어를 펴고 양파·무순·치커리·케이퍼를 올린다.",
-        "내용물이 흐트러지지 않게 말고 준비한 소스와 함께 담는다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "훈제연어"
-        ],
-        "family": "salmon",
-        "method": "cold-roll",
-        "kind": "main"
-      }
-    },
-    "6846033|5b3546135490a665deb8a7e8115ce9f5ddd17d6d0bdc000466d539c1d394fb95|ko-paraphrase-v1": {
-      "sourceRecipeId": "6846033",
-      "sourceContentHash": "5b3546135490a665deb8a7e8115ce9f5ddd17d6d0bdc000466d539c1d394fb95",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "냉이 목살 볶음밥",
-      "detailIngredients": [
-        "밥 2공기",
-        "냉이 70g",
-        "돼지목살 200g",
-        "홍고추 1개",
-        "대파 10cm",
-        "청주 1큰술",
-        "굴소스 1.5큰술",
+        "감자 4개",
+        "다진돼지고기 50g",
+        "양파 1/5개",
+        "파프리카 1/3개",
+        "버섯 약간",
+        "슬라이스치즈 2장",
         "소금 약간",
-        "후춧가루 약간",
-        "식용유 1큰술",
-        "참기름 2큰술"
+        "올리고당 1t",
+        "마요네즈 1T (생략가능)",
+        "식용유 약간"
       ],
       "steps": [
-        "대파와 홍고추는 어슷 썰고 목살은 작은 한입 크기로 자른다.",
-        "냉이는 손질해 끓는 물에 약 10초 데친 뒤 물기를 빼고 1cm 길이로 썬다.",
-        "중불 팬에 식용유를 두르고 대파와 홍고추를 볶다가 향이 나면 목살·후추·소금·청주를 넣는다.",
-        "목살이 속까지 익고 겉이 노릇해지면 냉이와 굴소스를 넣어 볶는다.",
-        "밥 2공기와 참기름을 넣고 고루 섞어 볶는다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "돼지목살"
-        ],
-        "family": "pork-rice",
-        "method": "stirfry",
-        "kind": "main"
-      }
-    },
-    "6871908|7539d98152720306e6ec2b5184f39ffcbd64314568e8fba2897b3010f7f0b0e5|ko-paraphrase-v1": {
-      "sourceRecipeId": "6871908",
-      "sourceContentHash": "7539d98152720306e6ec2b5184f39ffcbd64314568e8fba2897b3010f7f0b0e5",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭가슴살 퀘사디아",
-      "detailIngredients": [
-        "닭가슴살 1캔",
-        "또띠아 1장",
-        "모짜렐라 치즈 1큰술",
-        "양파 1/2개",
-        "파프리카 1/2개",
-        "옥수수통조림 2큰술",
-        "소금 약간",
-        "후추 약간",
-        "토마토 소스 3큰술",
-        "닭가슴살캔을 사용하는 레시피입니다. 생닭 가격을 연결하지 않습니다."
-      ],
-      "steps": [
-        "양파와 파프리카를 5mm 크기로 잘게 썬다.",
-        "중불 팬에서 양파·파프리카를 3분 볶고 닭가슴살과 옥수수를 넣는다.",
-        "소금·후추·토마토소스를 넣고 수분이 많지 않게 1분 졸인다.",
-        "다른 팬에서 또띠아 한 면을 30초 데운 뒤 뒤집고 한쪽에 속과 치즈를 올린다.",
-        "반으로 접어 약불에서 양면을 각각 2분씩, 치즈가 녹을 때까지 굽는다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "닭가슴살캔"
-        ],
-        "family": "chicken",
-        "method": "wrap",
-        "kind": "main"
-      }
-    },
-    "6875048|42a1826a5b449fcf7b90b7f2c54634bb6cf4f61bf82464936eeea1576f5f4a61|ko-paraphrase-v1": {
-      "sourceRecipeId": "6875048",
-      "sourceContentHash": "42a1826a5b449fcf7b90b7f2c54634bb6cf4f61bf82464936eeea1576f5f4a61",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "토마토 치즈 토스트",
-      "detailIngredients": [
-        "식빵 6쪽",
-        "토마토 1개",
-        "슬라이스 모짜렐라치즈 3장",
-        "슬라이스 체다치즈 3장",
-        "땅콩쨈 조금",
-        "딸기쨈 조금",
-        "발사믹크림 조금"
-      ],
-      "steps": [
-        "토마토를 5mm 두께로 슬라이스하고 표면 물기를 닦는다.",
-        "식빵 한쪽에는 딸기잼을, 다른 쪽에는 땅콩잼을 얇게 바른다.",
-        "각 빵에 치즈와 토마토를 올리고 발사믹크림을 소량 뿌린다.",
-        "빵을 덮어 샌드위치를 만들고 겉면을 가볍게 누른다.",
-        "샌드위치 메이커나 약불 팬에서 양면이 노릇하고 치즈가 녹을 때까지 굽는다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "토마토",
-          "모짜렐라치즈"
-        ],
-        "family": "toast",
-        "method": "toast",
-        "kind": "main"
-      }
-    },
-    "6903216|06661e4a65459a656d67f7c8bf52fc3a0170d61423f35c767c8c6e2a59a2155b|ko-paraphrase-v1": {
-      "sourceRecipeId": "6903216",
-      "sourceContentHash": "06661e4a65459a656d67f7c8bf52fc3a0170d61423f35c767c8c6e2a59a2155b",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "토마토 치즈 제육볶음",
-      "detailIngredients": [
-        "돼지고기 앞다리살 200g",
-        "양파 1/4개",
-        "토마토 1개",
-        "양송이버섯 2개",
-        "청양고추 1개",
-        "토마토 소스 1종이컵",
-        "모짜렐라 치즈 1종이컵",
-        "물 1/2종이컵",
-        "고추장 1숟가락",
-        "간장 1숟가락",
-        "고춧가루 1숟가락",
-        "다진 마늘 1/2숟가락",
-        "맛술 2숟가락",
-        "후추 약간",
-        "올리고당 1숟가락"
-      ],
-      "steps": [
-        "양파는 채 썰고 버섯은 얇게, 토마토는 큼직하게 썬다.",
-        "돼지고기에 양파·고추장·간장·고춧가루·마늘·맛술·후추·올리고당을 넣어 버무린다.",
-        "중강불로 예열한 팬에서 돼지고기를 거의 익을 때까지 볶는다.",
-        "토마토·버섯·토마토소스·물 1/2종이컵을 넣고 중약불에서 7~8분 졸인다.",
-        "치즈와 다진 고추를 올리고 뚜껑을 덮어 약불에서 치즈가 녹을 때까지 익힌다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "돼지고기 앞다리살"
-        ],
-        "family": "pork",
-        "method": "stirfry",
-        "kind": "main"
-      }
-    },
-    "6910345|11593c04711272e57e8ea7434eef259987d76cf281fe426d8aeda6958c915727|ko-paraphrase-v1": {
-      "sourceRecipeId": "6910345",
-      "sourceContentHash": "11593c04711272e57e8ea7434eef259987d76cf281fe426d8aeda6958c915727",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "허니갈릭 연어",
-      "detailIngredients": [
-        "연어 3덩이",
-        "소금 1꼬집",
-        "후추 1꼬집",
-        "올리브오일 2T (혹은 식용유)",
-        "물 5T",
-        "간장 5T",
-        "꿀 3T",
-        "옥수수 전분 2T",
-        "다진 마늘 (원문 조리 단계, 양 미표기)"
-      ],
-      "steps": [
-        "연어에 소금과 후추를 뿌려 밑간한다.",
-        "팬에 올리브유를 두르고 중불에서 연어 양면을 익힌 후 따뜻하게 보관한다.",
-        "팬에 다진 마늘을 넣어 약 30초 볶는다.",
-        "물 5T·간장 5T·꿀 3T를 넣어 섞는다.",
-        "옥수수전분을 물에 풀어 소스에 조금씩 넣고 농도를 맞춘다. 전분물을 만드는 물의 양은 원문에 적혀 있지 않다.",
-        "소스가 끓으면 익힌 연어를 넣고 양념을 끼얹으며 졸인다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "연어"
-        ],
-        "family": "salmon",
-        "method": "pan-grilled",
-        "kind": "main"
-      }
-    },
-    "6918204|e16e555a5465c3bb4a8fec5efcc8cc38e45520c6c3f4cdcb39d8a30c8178f4ba|ko-paraphrase-v1": {
-      "sourceRecipeId": "6918204",
-      "sourceContentHash": "e16e555a5465c3bb4a8fec5efcc8cc38e45520c6c3f4cdcb39d8a30c8178f4ba",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "알록달록 토마토 파스타",
-      "detailIngredients": [
-        "푸실리 1종이컵",
-        "양파 1/2개",
-        "토마토 1개",
-        "통마늘 3개",
-        "양송이 버섯 3개",
-        "토마토 소스 1종이컵",
-        "올리브유 2숟가락",
-        "바질 가루 약간",
-        "파마산 치즈가루 약간",
-        "소금 약간 (원문 조리 단계, 수량 미표기)",
-        "후추 약간 (원문 조리 단계, 수량 미표기)"
-      ],
-      "steps": [
-        "토마토는 한입 크기로, 양파는 채로, 마늘과 버섯은 얇게 썬다.",
-        "끓는 소금물에 푸실리를 넣어 약 9분 삶고 면수를 한 국자 남긴다.",
-        "중불 팬에 올리브유를 두르고 마늘과 양파를 충분히 볶는다.",
-        "버섯과 토마토를 넣어 버섯 수분이 줄 때까지 볶는다.",
-        "푸실리·토마토소스·면수를 넣고 소스가 면에 붙도록 2분 졸인다.",
-        "소금·후추로 간하고 바질과 파마산치즈를 뿌린다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "파스타",
-          "토마토"
-        ],
-        "family": "pasta",
-        "method": "pasta",
-        "kind": "main"
-      }
-    },
-    "6920555|c7685bc1e03a9b3ce0f51a1017f32f16d57d0fae9fdf0f2f3a6b598577fb5e94|ko-paraphrase-v1": {
-      "sourceRecipeId": "6920555",
-      "sourceContentHash": "c7685bc1e03a9b3ce0f51a1017f32f16d57d0fae9fdf0f2f3a6b598577fb5e94",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "버섯 알리오 올리오",
-      "detailIngredients": [
-        "파스타면 150g",
-        "표고버섯 2~3개",
-        "새송이 1개",
-        "양파 1/2개",
-        "올리브유 1/2종이컵",
-        "마늘 5~6개",
-        "베트남고추 6~7개 (또는 페퍼론치노)",
-        "블랙올리브 7~8개",
-        "맛술 1T",
-        "올리고당 1T",
-        "바질가루 1t",
-        "소금 1t",
-        "파마산치즈가루 1t",
-        "파슬리 1t",
-        "설탕 1t",
-        "후추 1t (원문 조리 단계)"
-      ],
-      "steps": [
-        "끓는 소금물에 파스타를 8분 삶고 면수를 한 컵 남긴다.",
-        "마늘과 올리브는 편 썰고 버섯과 양파는 채 썬다.",
-        "팬에 올리브유·마늘·건고추를 넣고 약불에서 마늘이 연한 금색이 되게 익힌다.",
-        "버섯·양파·올리브에 맛술 1T·올리고당 1T·설탕 1t·파마산치즈가루 1t·소금 1t·후추 1t·바질가루 1t를 넣어 볶는다.",
-        "면과 면수 3큰술을 넣고 팬을 흔들어 오일과 물이 걸쭉하게 섞이도록 한다.",
-        "소금·후추·바질로 간하고 파마산치즈와 파슬리를 뿌린다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "파스타",
-          "버섯"
-        ],
-        "family": "pasta",
-        "method": "pasta",
-        "kind": "main"
-      }
-    },
-    "6940608|895d48bbf00560c85102bbc10cab84c34172aef6034fa9f7233899cf07e42ede|ko-paraphrase-v1": {
-      "sourceRecipeId": "6940608",
-      "sourceContentHash": "895d48bbf00560c85102bbc10cab84c34172aef6034fa9f7233899cf07e42ede",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "파프리카 콘치즈",
-      "detailIngredients": [
-        "옥수수 1캔",
-        "파프리카 1/4개",
-        "양파 1/4개",
-        "버터 25g",
-        "마요네즈 3T",
-        "모짜렐라치즈 양껏",
-        "소금 약간",
-        "후추 약간"
-      ],
-      "steps": [
-        "옥수수는 물기를 빼고 양파와 파프리카는 옥수수알 크기로 썬다.",
-        "옥수수·양파·파프리카·마요네즈를 고루 섞는다.",
-        "달군 팬에 버터를 녹이고 섞은 재료를 넓게 편 뒤 치즈를 올린다.",
-        "팬 뚜껑을 덮어 치즈가 완전히 녹을 때까지 익힌다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "파프리카"
-        ],
-        "family": "vegetable",
-        "method": "pan-bake",
-        "kind": "side"
-      }
-    },
-    "6943215|aac47f38e26ad75eb500b7a4c9b30956fafb15c1df9fca1651518eacd6defd86|ko-paraphrase-v1": {
-      "sourceRecipeId": "6943215",
-      "sourceContentHash": "aac47f38e26ad75eb500b7a4c9b30956fafb15c1df9fca1651518eacd6defd86",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "부드러운 감자스프",
-      "detailIngredients": [
-        "감자 3개",
-        "양파 1개",
-        "우유 1~2컵",
-        "버터 약간",
-        "치킨스톡 적당량 (원문 조리 단계, 수량 미표기)",
-        "소금 약간 (원문 조리 단계, 수량 미표기)",
-        "후추 약간 (원문 조리 단계, 수량 미표기)"
-      ],
-      "steps": [
-        "감자는 삶아 큼직하게 자르고 양파는 얇게 채 썬다.",
-        "팬에 버터를 녹여 양파가 투명하고 단맛이 날 때까지 약불에서 볶는다.",
-        "블렌더에 감자·양파·우유를 넣고 곱게 간다.",
-        "냄비로 옮겨 중불에서 저어가며 데우고 우유로 원하는 농도를 맞춘다.",
-        "끓기 시작하면 약불로 줄이고 치킨스톡과 소금으로 간한다.",
-        "후추로 마무리한다. 치즈와 구운 빵 곁들임은 선택 사항이며 장보기 목록에 포함하지 않았다."
+        "감자 4개는 깨끗이 씻어 반으로 가르고 중간불의 물에서 약 20분 삶는다.",
+        "다진돼지고기 50g을 먼저 볶은 뒤 양파 1/5개, 파프리카 1/3개, 버섯을 차례로 더해 볶고 소금과 올리고당 1t으로 간한다.",
+        "오븐을 200°C로 예열하고, 삶은 감자를 식힌 뒤 테두리 1cm를 남겨 속을 파낸다.",
+        "파낸 감자와 볶은 고기·채소에 소금과 마요네즈 1T를 넣어 섞는다.",
+        "감자 껍질 그릇에 속을 채우고 슬라이스치즈 2장을 올린 뒤 200°C 오븐에서 약 5분 굽는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "감자"
         ],
-        "family": "potato",
-        "method": "soup",
-        "kind": "side"
-      }
+        "family": "cheese",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "6955759|89a230cc92f7c6f5070bf9c8b43472c9ed82d82c18c6c53b9ad8214ce60b0f58|ko-paraphrase-v1": {
-      "sourceRecipeId": "6955759",
-      "sourceContentHash": "89a230cc92f7c6f5070bf9c8b43472c9ed82d82c18c6c53b9ad8214ce60b0f58",
+    "6769969|327174a02628d3ca4f581077c80bf5fe72513b940a46064ad1877ccb06886695|ko-paraphrase-v1": {
+      "sourceRecipeId": "6769969",
+      "sourceContentHash": "327174a02628d3ca4f581077c80bf5fe72513b940a46064ad1877ccb06886695",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭안심냉채",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "감자샐러드 식빵 꽃컵",
       "detailIngredients": [
-        "닭안심 300g",
-        "양파 1/2개",
-        "당근 1/5개",
-        "파프리카빨강 1/4개",
-        "파프리카노랑 1/4개",
-        "오이 1/2 개",
-        "간장 2T",
-        "연겨자 3T",
-        "2배식초 3T",
-        "레몬즙 3T",
-        "마늘 1T",
-        "설탕 3T",
-        "매실청 3T",
-        "소금 1꼬집"
+        "감자 3개",
+        "버터 1큰술",
+        "소금 1큰술",
+        "식빵 6장",
+        "다진 피망 1큰술",
+        "다진양파 1큰술",
+        "햄 100g",
+        "플레인요거트 2큰술",
+        "마요네즈 6큰술",
+        "파슬리가루 1/2큰술",
+        "다진마늘 1/3큰술",
+        "후춧가루 약간"
       ],
       "steps": [
-        "끓는 물에 닭안심을 넣고 다시 끓어오르면 저어가며 원문 기준 10분 더 삶는다. 크기에 따라 속까지 익었는지 확인한다.",
-        "익힌 닭안심을 식히고 먹기 좋게 나눈다.",
-        "양파·당근·오이·빨강과 노랑 파프리카를 약 5cm 길이로 채 썬다.",
-        "간장 2T·연겨자 3T·2배식초 3T·레몬즙 3T·마늘 1T·설탕 3T·매실청 3T·소금 1꼬집을 섞는다.",
-        "접시에 닭안심과 채소를 담고 각자 먹을 만큼 덜어 소스를 취향에 맞게 곁들인다."
+        "식빵을 꽃처럼 구부려 머핀틀 안에 자리 잡게 한다.",
+        "180~200도로 예열한 오븐에서 10분 안팎으로 굽는다.",
+        "햄과 피망, 양파를 모두 잘게 다진다.",
+        "손질한 햄은 팬에서 먼저 볶는다.",
+        "감자는 껍질을 벗겨 삶은 뒤 물을 따라내고, 뜨거울 때 버터와 소금으로 으깬다.",
+        "감자에 볶은 햄과 채소, 드레싱 재료를 넣어 고루 버무린다.",
+        "바삭해진 식빵 컵에 감자 속을 나누어 담는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "닭안심"
+          "감자"
         ],
-        "family": "chicken",
+        "family": "yogurt",
         "method": "salad",
-        "kind": "main"
-      }
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "6959935|0b2c81aa5038ee06687c2022f91d63a391820ed4d535fec67391b3ae0cb6ec21|ko-paraphrase-v1": {
-      "sourceRecipeId": "6959935",
-      "sourceContentHash": "0b2c81aa5038ee06687c2022f91d63a391820ed4d535fec67391b3ae0cb6ec21",
+    "6823511|42ab82351ea543529f8af72adc665fd23337d64d8c1c1aae1a214a9170528093|ko-paraphrase-v1": {
+      "sourceRecipeId": "6823511",
+      "sourceContentHash": "42ab82351ea543529f8af72adc665fd23337d64d8c1c1aae1a214a9170528093",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "프랑스식 당근 라페",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "묵은지 요거트 스파게티",
       "detailIngredients": [
+        "스파게티 2인분",
+        "햄 100g",
+        "묵은지 1/4 쪽",
+        "마늘 10개",
+        "표고버섯 2개",
+        "당근",
+        "양송이스프",
+        "치즈 약간",
+        "대파",
+        "청양초 약간",
+        "요거트 200ml",
+        "토마토케첩",
+        "김칫국물 (원문 수량 미표기)",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "묵은지 1/4쪽은 한입 크기로 자르고 스파게티 2인분은 끓는 물에 올리브유 몇 방울을 넣어 삶는다.",
+        "기름을 두른 팬에 편으로 썬 마늘 10개를 볶아 향을 낸 뒤 묵은지를 넣는다.",
+        "햄 100g과 표고버섯 2개를 더해 볶고 김칫국물과 요거트 200ml를 넣는다.",
+        "삶은 면을 팬에 넣어 소스와 섞는다.",
+        "양송이스프, 치즈 약간, 토마토케첩을 뿌린다.",
+        "대파와 청양초 약간으로 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6831160|c98f196e28066d348a0b59b1a6471fbecb701c3a9fa82dc50c617ae8a58a5b45|ko-paraphrase-v1": {
+      "sourceRecipeId": "6831160",
+      "sourceContentHash": "c98f196e28066d348a0b59b1a6471fbecb701c3a9fa82dc50c617ae8a58a5b45",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바질 닭가슴살 채소찜",
+      "detailIngredients": [
+        "양파 큰거 3개",
+        "큰 새송이버섯 2개",
         "당근 1개",
-        "천일염 1ts",
-        "홀그레인 머스터드 1T",
-        "올리브유 1/2T",
-        "레몬즙 약간",
-        "가는 소금 약간"
+        "닭가슴살 200g",
+        "조선 호박 1개",
+        "말린바질가루",
+        "후추가루",
+        "소금 (원문 수량 미표기)",
+        "간장 (원문 수량 미표기)",
+        "달걀 (원문 수량 미표기)"
       ],
       "steps": [
-        "당근은 껍질을 벗기고 가늘고 일정하게 채 썬다.",
-        "천일염을 뿌려 고루 섞고 15분간 절인다.",
-        "머스터드·올리브유·레몬즙·가는 소금을 섞어 드레싱을 만든다.",
-        "절인 당근은 물에 헹구지 말고 키친타월로 눌러 수분을 제거한다.",
-        "당근을 드레싱에 고루 버무린다.",
-        "밀폐 용기에 담아 냉장고에서 3시간 이상 숙성한 뒤 낸다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "당근"
-        ],
-        "family": "carrot",
-        "method": "salad",
-        "kind": "side"
-      }
-    },
-    "6965953|ff18443622604d7fbd257ead1851ae505f6e1e087fcf65326af1ad4cfffc09fa|ko-paraphrase-v1": {
-      "sourceRecipeId": "6965953",
-      "sourceContentHash": "ff18443622604d7fbd257ead1851ae505f6e1e087fcf65326af1ad4cfffc09fa",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭안심 간장조림",
-      "detailIngredients": [
-        "닭안심살 800g",
-        "양배추 1장",
-        "양파 1/4개",
-        "당근 3T",
-        "대파 1/2개",
-        "매운고추 2개",
-        "참기름 2.5T",
-        "미향 100ml",
-        "다진마늘 1T",
-        "원당 2T (또는 설탕)",
-        "홍 매실액 1T",
-        "굴소스 1T",
-        "진간장 5T",
-        "물엿 2T",
-        "후춧가루 톡톡",
-        "통깨 적당량"
-      ],
-      "steps": [
-        "마늘 1T·설탕 2T·굴소스 1T·간장 5T·물엿 2T를 섞어 양념을 준비한다. 원문의 매실액은 양념에 곁들여 맛을 조절한다.",
-        "양배추와 일부 양파는 채 썰어 접시에 깔고, 남은 양파·당근·대파·고추는 작게 썬다.",
-        "팬에 참기름 2T를 두르고 중불에서 닭안심을 앞뒤로 익힌다.",
-        "미향 100ml를 넣어 익힌 뒤 닭안심을 건져 물기가 줄어들도록 볶는다.",
-        "썰어 둔 채소와 양념을 넣고 닭안심 양면에 양념이 배도록 졸인다.",
-        "고추를 넣어 뒤적이며 고기 속까지 익힌 후, 접시에 담아 후추·남은 참기름·통깨로 마무리한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "닭안심"
-        ],
-        "family": "chicken",
-        "method": "braise",
-        "kind": "main"
-      }
-    },
-    "6970683|0f0635706f0bb4d8cf47feb9c5a7d7cc54ae7fb981cff233e496c33377a16bd7|ko-paraphrase-v1": {
-      "sourceRecipeId": "6970683",
-      "sourceContentHash": "0f0635706f0bb4d8cf47feb9c5a7d7cc54ae7fb981cff233e496c33377a16bd7",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭안심살 볶음밥",
-      "detailIngredients": [
-        "닭안심살 7개",
-        "당근 1/2T",
-        "양파 1/2개",
-        "맛타리버섯 1덩어리",
-        "양배추 1조각",
-        "밥 3공기",
-        "미향 1T",
-        "진간장 4T",
-        "다진생강 1/5T",
-        "고추기름 1T",
-        "후춧가루 톡톡",
-        "통깨 1T"
-      ],
-      "steps": [
-        "해동한 닭안심을 작게 썰어 미향 1T·간장 1T·다진 생강 1/5T로 밑간한다.",
-        "양파·버섯·당근·양배추를 작게 썬다.",
-        "팬에서 채소를 볶다가 밑간한 닭안심을 넣고 고기가 익도록 볶는다.",
-        "간장 2T와 고추기름 1T를 넣어 골고루 섞는다.",
-        "밥 3공기를 넣고 남은 간장 1T는 밥의 양과 간을 보며 더한다.",
-        "센불에서 고슬고슬하게 볶은 후 불을 끄고 후추와 통깨를 넣어 섞는다. 참기름·올리브유 마무리는 선택 사항이다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "닭안심"
-        ],
-        "family": "chicken",
-        "method": "rice-bowl",
-        "kind": "main"
-      }
-    },
-    "6988653|af2b359e04f63df2559175ef6873ae0955e7fb576e43b01b0fc0adbf3a6aa600|ko-paraphrase-v1": {
-      "sourceRecipeId": "6988653",
-      "sourceContentHash": "af2b359e04f63df2559175ef6873ae0955e7fb576e43b01b0fc0adbf3a6aa600",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "닭가슴살 오일 파스타",
-      "detailIngredients": [
-        "스파게티면 1인분",
-        "대파 1/3단",
-        "청양고추 1개",
-        "닭가슴살 1개",
-        "면수 14스푼",
-        "올리브유 조금",
-        "​소금 1스푼",
-        "다진마늘 1스푼",
-        "굴소스 2스푼",
-        "멸치액젓 1스푼"
-      ],
-      "steps": [
-        "대파는 길게, 청양고추는 얇게 썰고 닭가슴살은 한입 크기로 자른다.",
-        "끓는 소금물에 면을 넣어 포장 시간보다 1분 덜 삶고 면수를 남긴다.",
-        "중약불 팬에 올리브유와 마늘을 넣어 향을 낸 뒤 대파를 볶는다.",
-        "닭가슴살과 고추를 넣어 닭이 완전히 익을 때까지 볶는다.",
-        "면과 면수 14큰술을 넣고 센불에서 1분간 흔들어 소스를 유화한다.",
-        "굴소스와 액젓을 넣어 간을 맞추고 국물이 면에 얇게 묻으면 불을 끈다."
+        "양파 큰거 3개, 큰 새송이버섯 2개, 당근 1개, 닭가슴살 200g, 조선 호박 1개를 손질해 잘게 썬다.",
+        "재료를 찜기에 담으며 후추가루와 말린바질가루를 뿌려 섞고, 채소에서 나오는 수분으로 익힌다.",
+        "만능찜 기능으로 30분 조리해 마무리한다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "닭가슴살"
         ],
         "family": "chicken",
-        "method": "pasta",
+        "method": "steam",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6833593|27f91ef0e7c8ac534153367bd07e3b2d694fca8a26c318d8fe041a6a39f10374|ko-paraphrase-v1": {
+      "sourceRecipeId": "6833593",
+      "sourceContentHash": "27f91ef0e7c8ac534153367bd07e3b2d694fca8a26c318d8fe041a6a39f10374",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "소시지 치즈 크림파스타",
+      "detailIngredients": [
+        "스파게티면 2줌 (1줌 500원동전크기)",
+        "양파 1개",
+        "파프리카 1개",
+        "베이컨 100g",
+        "비엔나소세지 10개",
+        "스위트콘 1T",
+        "다진마늘 1T",
+        "우유 400ml",
+        "슬라이스치즈 2장",
+        "파마산치즈가루 2.5T",
+        "건조 바질 약간",
+        "후추 약간",
+        "소금 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "끓는 물에 소금 1T를 넣고 스파게티면 2줌을 약 10분 삶는 동안, 다진마늘 1T·베이컨 100g·비엔나소세지 10개를 살짝 볶는다.",
+        "양파 1개를 넣어 볶다가 익기 시작하면 우유 400ml를 붓는다.",
+        "소스가 끓기 시작하면 파프리카 1개, 슬라이스치즈 2장, 파마산치즈가루 2.5T를 넣는다.",
+        "10분 지난 파스타면을 소스에 넣고 건조 바질과 후추를 더한다.",
+        "접시에 담아 낸다.",
+        "포크로 돌돌 말아 먹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6837129|d4f97707ef453a046210a8658ffcae8f98b01ca83b77ef199448779c4b474e4b|ko-paraphrase-v1": {
+      "sourceRecipeId": "6837129",
+      "sourceContentHash": "d4f97707ef453a046210a8658ffcae8f98b01ca83b77ef199448779c4b474e4b",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "피넛버터 초코바나나 파니니",
+      "detailIngredients": [
+        "식빵 4장",
+        "바나나 1/2개",
+        "트러플초콜릿 6개",
+        "피넛버터 1~2큰술",
+        "아몬드슬라이스 약간"
+      ],
+      "steps": [
+        "식빵 4장에 피넛버터 1~2큰술을 고르게 바른다.",
+        "바나나 1/2개를 얇게 썰어 올린다.",
+        "트러플초콜릿 6개를 중간중간 얹는다.",
+        "아몬드슬라이스를 골고루 뿌린다.",
+        "나머지 식빵으로 덮고 파니니그릴로 눌러 굽는다.",
+        "따뜻한 초코바나나 파니니를 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6842384|d6ce15c3fc44ba235327d2fa473219ed228ac53443224031f4c1aeb438b03efe|ko-paraphrase-v1": {
+      "sourceRecipeId": "6842384",
+      "sourceContentHash": "d6ce15c3fc44ba235327d2fa473219ed228ac53443224031f4c1aeb438b03efe",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "누텔라 바나나 식빵롤",
+      "detailIngredients": [
+        "바나나 1개",
+        "식빵 1장",
+        "누텔라"
+      ],
+      "steps": [
+        "식빵 1장마다 바나나 1개를 준비한다.",
+        "식빵의 가장자리를 잘라 낸다.",
+        "밀대로 식빵을 얇고 넓게 민다.",
+        "펼친 면에 누텔라를 고르게 바른다.",
+        "바나나를 올려 일자로 맞춘다.",
+        "식빵을 돌돌 만 뒤 먹기 좋게 자른다.",
+        "초콜릿과 바나나의 단맛이 어우러지게 둔다.",
+        "어린잎과 석류를 곁들여 장식한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6844289|3c0c6ed09bf926f782037c8a76fe8b2db1f877128f2f09dc7423ef7fedfe03fc|ko-paraphrase-v1": {
+      "sourceRecipeId": "6844289",
+      "sourceContentHash": "3c0c6ed09bf926f782037c8a76fe8b2db1f877128f2f09dc7423ef7fedfe03fc",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "두 번 튀긴 닭가슴살 카라아게",
+      "detailIngredients": [
+        "닭가슴살 2덩이",
+        "허브솔트 약간",
+        "간마늘 1T",
+        "간장 1T",
+        "생강가루 1/3t",
+        "전분가루 5T",
+        "계란 1개",
+        "간장 2T",
+        "케찹 2T",
+        "올리고당 2T (or꿀)"
+      ],
+      "steps": [
+        "닭가슴살 2덩이는 썰어 허브솔트, 간마늘 1T, 생강가루 1/3t, 간장 1T로 밑간한다.",
+        "계란 1개와 전분가루 5T를 넣어 버무린다.",
+        "1차 튀김은 150-160도 기름에서, 반죽 조각이 3초 뒤 떠오르는 온도가 되면 닭가슴살을 넣는다.",
+        "조각들이 붙지 않도록 가볍게 저어 준다.",
+        "옅은 갈색이 되면 건져 잠시 식힌다.",
+        "기름의 부스러기를 걷어 낸다.",
+        "2차는 강불로 올려 한 번 더 바삭하게 튀긴다.",
+        "양배추와 함께 담아 케찹에 찍어 먹는다.",
+        "간장 2T, 케찹 2T, 올리고당 또는 꿀 2T를 약불에 끓여 소스를 만들고, 튀긴 닭가슴살의 반만 버무린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살"
+        ],
+        "family": "chicken",
+        "method": "fry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6846632|badc70c6706a267b90de30bdddf81f2a1f651d1a37bb308100609b19f8b79e3c|ko-paraphrase-v1": {
+      "sourceRecipeId": "6846632",
+      "sourceContentHash": "badc70c6706a267b90de30bdddf81f2a1f651d1a37bb308100609b19f8b79e3c",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "딸기 뮤즐리 보틀샐러드",
+      "detailIngredients": [
+        "딸기 10개",
+        "뮤즐리 1종이컵",
+        "양상추 1/4개",
+        "플레인요거트 100ml",
+        "꿀 1.5T",
+        "레몬즙 1.5T"
+      ],
+      "steps": [
+        "딸기 10개는 흐르는 물에 씻고 세로로 반 갈라 둔다.",
+        "양상추 1/4개는 잎을 떼어 씻고 한입 크기로 찢는다.",
+        "꿀 1.5큰술과 레몬즙 1.5큰술을 먼저 섞은 뒤 플레인요거트 100ml를 넣어 드레싱을 만든다.",
+        "보틀 또는 유리컵에 딸기, 양상추, 뮤즐리 1종이컵, 드레싱을 번갈아 층을 만든다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6847824|5bad72252ebc5eae241de7da5212dab4576063698df0017003f04f229b68e47f|ko-paraphrase-v1": {
+      "sourceRecipeId": "6847824",
+      "sourceContentHash": "5bad72252ebc5eae241de7da5212dab4576063698df0017003f04f229b68e47f",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "오이 딜 요거트 냉수프",
+      "detailIngredients": [
+        "플레인요거트 250g",
+        "마늘 1/2쪽",
+        "소금 1꼬집",
+        "딜 2~3줄기",
+        "오이 1/2개",
+        "호두 4조각",
+        "올리브오일 약간",
+        "물 약간"
+      ],
+      "steps": [
+        "딜과 마늘을 곱게 다진다.",
+        "오이와 호두도 잘게 손질한다.",
+        "플레인요거트에 다진 딜·마늘·오이와 소금 1꼬집을 넣는다.",
+        "물을 조금씩 섞어 농도를 맞추며, 요거트와 물은 4:1 또는 3:1 비율로 잡는다.",
+        "그릇에 옮겨 호두와 딜을 얹고 올리브오일을 더한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "마늘"
+        ],
+        "family": "yogurt",
+        "method": "soup",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6849218|6e8ea2ae36ebd35a4e2398128d41e622142c9829176d5bfaf2d3e215f2a40993|ko-paraphrase-v1": {
+      "sourceRecipeId": "6849218",
+      "sourceContentHash": "6e8ea2ae36ebd35a4e2398128d41e622142c9829176d5bfaf2d3e215f2a40993",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "BBQ 폭립 볶음밥 부리토",
+      "detailIngredients": [
+        "프레시안오렌지BBQ폭립byVIPS 1개",
+        "프레시안byVIPS치킨볶음밥 1봉 (450g)",
+        "토르티야 4장",
+        "파인애플 50g",
+        "모차렐라치즈 1개",
+        "양상추 30g",
+        "요거트 2큰술",
+        "백설포도씨유 적당량",
+        "오천년의신비구운소금 약간",
+        "후추 약간"
+      ],
+      "steps": [
+        "해동한 프레시안오렌지BBQ폭립byVIPS 1개는 포장비닐을 벗겨 랩을 씌운 접시에서 4분 가열하고, 토르티야 4장은 마른 팬에 살짝 굽는다.",
+        "파인애플 50g은 얇게 썰고 모차렐라치즈 1개는 한입 크기로 찢으며 양상추 30g은 씻어 물기를 제거하고 손으로 뜯는다.",
+        "달군 팬에 기름을 두르고 프레시안byVIPS치킨볶음밥 1봉(450g)을 볶다가 밥알이 투명해지면 파인애플을 더한다.",
+        "토르티야에 볶음밥, 모차렐라치즈, 양상추, 요거트 2큰술을 올리고 양쪽을 접어 안쪽으로 말아 준다.",
+        "부리토를 반으로 잘라 BBQ폭립과 함께 접시에 담는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "yogurt",
+        "method": "stirfry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6855815|3b9ff622b32fb26ef26af19402bdacc1c5da743f9c6dca1e76ba7128a37f2040|ko-paraphrase-v1": {
+      "sourceRecipeId": "6855815",
+      "sourceContentHash": "3b9ff622b32fb26ef26af19402bdacc1c5da743f9c6dca1e76ba7128a37f2040",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "유자요거트 꿀떡 샐러드",
+      "detailIngredients": [
+        "인디안밥 1/2봉지",
+        "양상추 1/4개",
+        "그린채소 100g",
+        "꿀떡 10개",
+        "요거트 3T",
+        "소금 1t",
+        "유자청 1T"
+      ],
+      "steps": [
+        "양상추와 그린채소를 한입 크기로 손질한다.",
+        "요거트 3T에 소금 1t과 유자청 1T를 섞어 드레싱을 만든다.",
+        "볼에 꿀떡 10개, 인디안밥 1/2봉지, 양상추와 그린채소를 담고 2단계 드레싱을 더한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6856433|1b88a5653e68ab42f6d3345c03f4c6f1b4e619aaf4cbc1296a8509fba1bbedb7|ko-paraphrase-v1": {
+      "sourceRecipeId": "6856433",
+      "sourceContentHash": "1b88a5653e68ab42f6d3345c03f4c6f1b4e619aaf4cbc1296a8509fba1bbedb7",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "밥솥 레몬요거트 버터빵",
+      "detailIngredients": [
+        "박력분 2.5종이컵",
+        "계란 4개",
+        "베이킹파우더 2작은술",
+        "레몬청 2큰술 (or 유자청 자몽청)",
+        "요거트 1개",
+        "녹인버터 2큰술",
+        "우유 2큰술",
+        "식용유 (원문 수량 미표기)",
+        "설탕 (원문 수량 미표기)",
+        "밀가루 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "계란 4개는 충분히 풀어 체에 내려 알끈을 없앤다.",
+        "원문 조리 순서의 설탕은 3번 나누어 계란에 넣고 녹인다.",
+        "녹인버터 2큰술을 더한다.",
+        "박력분 2.5종이컵과 베이킹파우더 2작은술을 체에 내린다.",
+        "가루 재료를 계란 반죽에 섞는다.",
+        "레몬청 2큰술 또는 유자청·자몽청을 넣는다.",
+        "요거트 1개와 우유 2큰술을 넣어 반죽을 부드럽게 한다.",
+        "밥솥 안쪽에 올리브유 또는 버터를 발라 둔다.",
+        "반죽을 밥솥에 붓는다.",
+        "만능찜 기능으로 40분 가열한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6857273|c42977537b53045a89aa403b55f5609510b41778a1bbd557c64ba5747aeaf857|ko-paraphrase-v1": {
+      "sourceRecipeId": "6857273",
+      "sourceContentHash": "c42977537b53045a89aa403b55f5609510b41778a1bbd557c64ba5747aeaf857",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "과일 가득 리코타 빵케이크",
+      "detailIngredients": [
+        "빵 1개",
+        "리코타치즈 500g",
+        "귤 1개",
+        "골드키위 1개",
+        "바나나 1개"
+      ],
+      "steps": [
+        "원문에 나온 3000원짜리 천연효모빵 1개처럼 속이 부드러운 큰 빵을 준비한다.",
+        "빵 윗면에 사각형 칼집을 낸다.",
+        "바닥은 남기고 빵 속을 파낸다.",
+        "귤 1개, 골드키위 1개, 바나나 1개를 원하는 크기로 자른다.",
+        "빈 빵 바닥에 리코타치즈 500g을 먼저 깐다.",
+        "과일을 듬뿍 올린다.",
+        "치즈를 다시 빈틈없이 채운다.",
+        "과일과 치즈 층을 반복하고 마지막은 치즈로 마감한 뒤 냉장고에서 굳히거나, 원하면 냉동실에서 1시간 차게 둔다.",
+        "완성한 빵케이크를 보기 좋게 자른다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "빵"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6857749|7501d49331825ac7d75cab965940901f8c1cc6142ff6b8d32d68bbbcbe4a25c8|ko-paraphrase-v1": {
+      "sourceRecipeId": "6857749",
+      "sourceContentHash": "7501d49331825ac7d75cab965940901f8c1cc6142ff6b8d32d68bbbcbe4a25c8",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "불고기 김치 치즈감자 프라이",
+      "detailIngredients": [
+        "불고기 130g",
+        "김치 30g",
+        "감자 3개",
+        "쪽파 1개",
+        "아보카도 1/4개",
+        "모짜렐라 치즈 1컵",
+        "감자 전분 1/2컵 (or 고구마 전분)",
+        "간장 1큰술",
+        "설탕 1.5큰술",
+        "굴 소스 1작은술",
+        "미림 1/2큰술",
+        "식초 1작은술",
+        "참기름 1/2큰술",
+        "후추 적당량",
+        "요거트 4큰술",
+        "마요네즈 1.5큰술",
+        "마늘 2작은술",
+        "레몬즙 1작은술",
+        "식용유 적당량",
+        "핫소스 적당량"
+      ],
+      "steps": [
+        "감자 3개는 껍질을 벗겨 프라이 모양으로 자른다.",
+        "감자 전분 1/2컵 또는 고구마 전분을 감자에 고루 입힌다.",
+        "불고기 130g과 김치 30g을 작게 썰고 감자를 노릇하게 튀긴다.",
+        "불고기에 간장 1큰술, 굴 소스 1작은술, 설탕 1큰술, 미림 1/2큰술, 다진 마늘 1작은술, 후추를 넣어 팬에서 바짝 굽는다.",
+        "김치는 기름에 설탕 1/2큰술, 식초 1작은술, 참기름 1/2큰술을 넣어 볶는다.",
+        "전자레인지용 그릇에 감자튀김과 모짜렐라 치즈 1컵을 담아 약 4분 돌린다.",
+        "요거트 4큰술, 마요네즈 1.5큰술, 다진 마늘 1작은술, 후추를 섞어 소스를 만든다.",
+        "8단계의 치즈감자에 볶은 불고기, 김치, 쪽파 1개를 올리고 요거트 소스와 핫소스를 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6858054|a5d99be41abb1ef326b438c3a5247741ed539dbd8d7b9a6836cb3b206b98eea3|ko-paraphrase-v1": {
+      "sourceRecipeId": "6858054",
+      "sourceContentHash": "a5d99be41abb1ef326b438c3a5247741ed539dbd8d7b9a6836cb3b206b98eea3",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "사과 머스터드 소스 돼지목살 스테이크",
+      "detailIngredients": [
+        "돼지고기(목살) 300g",
+        "올리브유 2T",
+        "대파 2대 (10cm)",
+        "사과 1/2개",
+        "소금 약간",
+        "후추 약간",
+        "올리브유 2T",
+        "머스타드 2T",
+        "꿀 2T",
+        "화이트와인 3/4컵"
+      ],
+      "steps": [
+        "돼지고기 목살 300g은 고기망치나 칼등으로 두드린 뒤 소금과 후추로 밑간한다.",
+        "화이트와인 3/4컵, 꿀 2T, 머스타드 2T, 올리브유 2T를 섞어 밑간한 고기를 잠시 재운다.",
+        "재운 목살은 팬에서 앞뒤로 노릇하게 굽는다.",
+        "고기 팬에 올리브유 2T와 10cm 길이 대파 2대를 볶고 재움 소스를 넣어 약 3분 줄인다.",
+        "사과 1/2개를 깍둑 썰어 고기와 함께 소스에 넣고 3분 더 졸인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "사과"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6861652|3a4d8208e48974cd8bb01cc386493e18223aab805513fd50f639974ddc14cdab|ko-paraphrase-v1": {
+      "sourceRecipeId": "6861652",
+      "sourceContentHash": "3a4d8208e48974cd8bb01cc386493e18223aab805513fd50f639974ddc14cdab",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바나나 요거트 채소 샐러드",
+      "detailIngredients": [
+        "바나나 2개",
+        "빨간 파프리카 1/2개",
+        "노란 파프리카 1/2개",
+        "토마토 1개",
+        "샐러드 채소 1줌 (30g)",
+        "플레인 요거트 1개 (90g)",
+        "바나나 1/2개"
+      ],
+      "steps": [
+        "토마토 1개, 바나나 2개, 노란 파프리카 1/2개, 빨간 파프리카 1/2개를 한입 크기로 자른다.",
+        "믹서에 바나나 1/2개와 플레인 요거트 1개(90g)를 넣어 소스로 곱게 간다.",
+        "샐러드 채소 1줌(30g)에 손질한 과일·채소를 담고 요거트 소스를 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6867478|7d53ec89dbd046b850f1c6fba75caba1296e9958728de739232a9aa5408ceefc|ko-paraphrase-v1": {
+      "sourceRecipeId": "6867478",
+      "sourceContentHash": "7d53ec89dbd046b850f1c6fba75caba1296e9958728de739232a9aa5408ceefc",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "차가운 골든볼 티라미수",
+      "detailIngredients": [
+        "카카오파우더 2T",
+        "설탕 2T",
+        "커피 1개",
+        "크림치즈 1통",
+        "요거트 2개",
+        "골든볼 1봉"
+      ],
+      "steps": [
+        "커피 1개는 뜨거운 물에 녹인다.",
+        "크림치즈 1통을 볼에 담는다.",
+        "요거트 2개를 크림치즈에 더한다.",
+        "설탕 2T를 넣는다.",
+        "크림치즈가 덩어리 없이 풀리도록 젓는다.",
+        "골든볼 1봉을 녹인 커피에 적셔 볼 바닥에 담는다.",
+        "골든볼 위에 크림치즈 혼합물을 올린다.",
+        "골든볼과 크림치즈 층을 한 번 더 만든다.",
+        "카카오파우더 2T를 마지막에 뿌린다.",
+        "랩을 씌워 냉장고에서 30분 차게 둔 뒤 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6868117|1e6be0df4d41a15e83627875155caa7905f584c996f9bea9799ba0b4c6eb5927|ko-paraphrase-v1": {
+      "sourceRecipeId": "6868117",
+      "sourceContentHash": "1e6be0df4d41a15e83627875155caa7905f584c996f9bea9799ba0b4c6eb5927",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "요거트 드레싱 꽃리스 샐러드",
+      "detailIngredients": [
+        "블루베리 약간",
+        "계란 3개",
+        "파프리카 주황 약간",
+        "아보카도 1개",
+        "크레미 1봉",
+        "방울토마토 1줌",
+        "이자벨 1줌 (채소)",
+        "베이비 채소 조금",
+        "양파 1/2개",
+        "마요네즈",
+        "플레인요거트",
+        "식초",
+        "설탕",
+        "소금",
+        "파슬리",
+        "후추",
+        "소금 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)",
+        "설탕 (원문 수량 미표기)",
+        "식초 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "계란 3개는 삶고 채소와 과일은 깨끗이 씻어 둔다.",
+        "준비한 재료를 한입 크기로 썬다.",
+        "접시에 원형으로 보기 좋게 담는다.",
+        "마요네즈와 플레인요거트를 1:1로 섞고 다진 양파, 식초, 소금, 설탕, 후추, 파슬리로 간해 드레싱을 만든다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "블루베리"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6870448|d7bd18b826af4fb42446dc47b186236c89985fd72e05662b2054c2cbe001cf03|ko-paraphrase-v1": {
+      "sourceRecipeId": "6870448",
+      "sourceContentHash": "d7bd18b826af4fb42446dc47b186236c89985fd72e05662b2054c2cbe001cf03",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바나나 아몬드 우유 셰이크",
+      "detailIngredients": [
+        "바나나 1개",
+        "우유 1컵",
+        "볶은 아몬드 1큰술",
+        "올리고당 1큰술"
+      ],
+      "steps": [
+        "바나나 1개, 볶은 아몬드 1큰술, 올리고당 1큰술, 우유 1컵을 준비한다.",
+        "아몬드는 잘 갈리도록 굵게 다진다.",
+        "믹서에 바나나 1개와 아몬드 1큰술을 먼저 넣고 우유 1컵을 붓는다.",
+        "올리고당 1큰술을 더한다. 원문은 꿀로 바꿀 수 있다고 안내한다.",
+        "아몬드 입자가 충분히 곱게 갈릴 때까지 작동한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6872166|ad5432c904a76b4103c897e67277af98232d3258f134c08a92b5e2e0a47f71bf|ko-paraphrase-v1": {
+      "sourceRecipeId": "6872166",
+      "sourceContentHash": "ad5432c904a76b4103c897e67277af98232d3258f134c08a92b5e2e0a47f71bf",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "아보카도 그린 요거트샐러드",
+      "detailIngredients": [
+        "양상추 2장",
+        "베이비채소 1줌",
+        "오이 1개",
+        "아보카도 1/2개",
+        "플레인요거트 1/2컵",
+        "꿀 1큰술",
+        "소금 약간"
+      ],
+      "steps": [
+        "아보카도 1/2개와 샐러드 채소를 준비한다.",
+        "양상추 2장은 손으로 찢고, 오이 1개와 아보카도는 어슷하게 썬다.",
+        "플레인요거트 1/2컵에 꿀 1큰술과 소금을 넣어 드레싱을 만든다.",
+        "샐러드볼에 채소를 담고 요거트 드레싱을 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6872321|58f9cf336328872e7d2a1c44cc0291fa57d95a00c29d53d9e7bbcb51b8c97f02|ko-paraphrase-v1": {
+      "sourceRecipeId": "6872321",
+      "sourceContentHash": "58f9cf336328872e7d2a1c44cc0291fa57d95a00c29d53d9e7bbcb51b8c97f02",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "닭가슴살 한 그릇 죽",
+      "detailIngredients": [
+        "쌀 1/3밥그릇",
+        "닭가슴살 200g",
+        "양파 1/2개",
+        "당근 3cm",
+        "대파 1/2줄기",
+        "파뿌리 1개",
+        "맛소금 1/3T",
+        "참기름 1T",
+        "마늘 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "1인분으로 쌀 1/3밥그릇을 미리 불리고, 16cm 냄비에 물을 약 90% 채운 뒤 닭가슴살 200g과 파뿌리 1개를 넣어 물이 2/3로 줄 때까지 끓인다.",
+        "닭가슴살 200g과 파뿌리 1개를 넣고 국물이 약 2/3가 될 때까지 끓인다.",
+        "양파 1/2개, 당근 3cm, 대파 1/2줄기를 다지고 불린 쌀은 물기를 제거한다.",
+        "익힌 닭가슴살은 한김 식힌 뒤 잘게 찢고, 육수에서는 채소를 건져 낸다.",
+        "닭 육수에 불린 쌀을 넣어 끓이다가 쌀이 익기 시작하면 양파와 당근을 더해 푹 끓인다.",
+        "찢은 닭가슴살을 넣고 마지막에 대파를 더한다.",
+        "필요하면 물을 보충하고 맛소금 1/3T로 간한 뒤 참기름 1T를 넣어 마친다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살"
+        ],
+        "family": "chicken",
+        "method": "soup",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6872333|1d5339bd517391b0e73fbc1894eb891cb847c8d9711d037991f8cd6e1233e4f1|ko-paraphrase-v1": {
+      "sourceRecipeId": "6872333",
+      "sourceContentHash": "1d5339bd517391b0e73fbc1894eb891cb847c8d9711d037991f8cd6e1233e4f1",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바나나 아보카도 밀크 스무디",
+      "detailIngredients": [
+        "바나나 1개",
+        "아보카도 1/2개",
+        "우유 500ml",
+        "메이플시럽 1큰술"
+      ],
+      "steps": [
+        "아보카도는 짙은 녹색에서 검은빛으로 익은 것을 사용한다.",
+        "바나나 1개와 아보카도 1/2개의 껍질을 벗긴다.",
+        "믹서에 우유 500ml, 아보카도, 바나나, 메이플시럽 1큰술을 담는다.",
+        "곱게 갈아 마신다. 우유를 더하면 묽고 줄이면 걸쭉해진다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6875439|9938c41f9cb8ab54199f8052e4804a321f53c3838040079c3381c3cf6d70956e|ko-paraphrase-v1": {
+      "sourceRecipeId": "6875439",
+      "sourceContentHash": "9938c41f9cb8ab54199f8052e4804a321f53c3838040079c3381c3cf6d70956e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "사과와 구운 식빵의 과일 샐러드",
+      "detailIngredients": [
+        "사과 1개",
+        "바나나 1개",
+        "씨없는 포도 10알",
+        "방울토마토 10개",
+        "소금 적당히",
+        "후추 적당히",
+        "마요네즈 1.5T (플레인 요거트 대체가능)",
+        "소금 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "사과 1개, 바나나 1개, 씨없는 포도 10알, 방울토마토 10개를 한입 크기로 자른다.",
+        "과일에 소금과 후추를 넣고 마요네즈 1.5T로 버무린다. 원문은 플레인 요거트로 바꿀 수 있다고 안내한다.",
+        "냉장고에 있는 원문 자투리 식빵은 과일과 비슷한 크기로 자른다.",
+        "레몬오일이나 올리브오일을 두른 팬에서 식빵을 노릇하게 구워 곁들인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "사과"
+        ],
+        "family": "fruit",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6875456|1b4568788654c16d0d5094f4e5a3d8785e5c349880e32cfbd129f731376cd514|ko-paraphrase-v1": {
+      "sourceRecipeId": "6875456",
+      "sourceContentHash": "1b4568788654c16d0d5094f4e5a3d8785e5c349880e32cfbd129f731376cd514",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "꿀복숭아 요거트 스무디 컵",
+      "detailIngredients": [
+        "복숭아 1개",
+        "플레인 요거트 80g 4개",
+        "꿀 2스푼"
+      ],
+      "steps": [
+        "복숭아 1개, 꿀 2스푼, 80g씩 든 플레인 요거트 4개를 꺼낸다.",
+        "복숭아를 씻어 껍질을 벗긴 뒤 적당히 자른다.",
+        "복숭아의 2/3는 깍둑 모양으로 썬다.",
+        "요거트와 갈 조각과 깍둑썬 조각을 따로 나눈다.",
+        "플레인 요거트에 복숭아 1/3을 넣고 곱게 간다.",
+        "부드러운 복숭아 요거트 베이스를 준비한다.",
+        "깍둑썬 복숭아는 꿀에 가볍게 절인다.",
+        "절인 복숭아의 1/2은 얼음틀에 넣어 얼린다.",
+        "몇 시간 지나 얼린 복숭아가 단단해지면 꺼낸다.",
+        "컵 바닥에 꿀에 절인 복숭아를 먼저 담는다.",
+        "갈아 둔 요거트 베이스를 붓는다.",
+        "복숭아 얼음을 올려 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "복숭아"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6875875|1f3135bbf6aafc722b1f6edcae7c3bfcb262b79be4f2b8a13125b848bd2668bc|ko-paraphrase-v1": {
+      "sourceRecipeId": "6875875",
+      "sourceContentHash": "1f3135bbf6aafc722b1f6edcae7c3bfcb262b79be4f2b8a13125b848bd2668bc",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "카레 사과컵 볶음밥",
+      "detailIngredients": [
+        "사과 2개",
+        "찬밥 1공기",
+        "양파 1/2개",
+        "당근 1/2개",
+        "대파 1/2개",
+        "슬라이스치즈 1장",
+        "카레가루 1스푼",
+        "굴소스 0.5스푼",
+        "허브솔트 약간",
+        "참기름 1스푼",
+        "버터 약간",
+        "올리브유 1스푼",
+        "검정깨 약간"
+      ],
+      "steps": [
+        "사과 2개와 찬밥 1공기, 나머지 재료를 준비한다.",
+        "당근 1/2개, 양파 1/2개, 대파 1/2개는 잘게 다진다.",
+        "사과는 껍질째 씻어 위쪽 1/3 지점을 잘라 낸다.",
+        "사과 속을 파내 그릇처럼 만든다.",
+        "파낸 사과 속은 씨 부분을 골라내고 잘게 다진다.",
+        "뜨거운 팬에 올리브유 1스푼과 버터를 녹여 대파부터 볶고, 양파·당근·사과·찬밥을 차례대로 더한다.",
+        "카레가루 1스푼, 굴소스 0.5스푼, 허브솔트, 참기름 1스푼으로 간해 볶는다.",
+        "검정깨를 뿌려 볶음밥을 마무리한다.",
+        "파낸 사과 안에 볶음밥을 채운다.",
+        "슬라이스치즈 1장을 얹어 오븐이나 그릴에서 녹을 만큼만 굽는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "사과"
+        ],
+        "family": "cheese",
+        "method": "stirfry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6878047|e97499d4dcc68cdffc9d32c74e92df4c5188548c818bec243d17dd0e239074ae|ko-paraphrase-v1": {
+      "sourceRecipeId": "6878047",
+      "sourceContentHash": "e97499d4dcc68cdffc9d32c74e92df4c5188548c818bec243d17dd0e239074ae",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "복숭아 배양념 목살구이",
+      "detailIngredients": [
+        "돼지 목살 1kg",
+        "간장 1/2컵",
+        "배 1/2개",
+        "복숭아 2개",
+        "양파 1개",
+        "파 2뿌리",
+        "마늘 20톨",
+        "후추 (원문 수량 미표기)",
+        "참기름 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "대파 2뿌리와 양파 1개를 씻고, 복숭아 2개와 배 1/2개도 준비한다.",
+        "파와 양파는 갈기 좋게 자르고 복숭아와 배도 손질한다.",
+        "양파, 파, 간장 1/2컵은 곱게 갈고 배와 복숭아도 따로 곱게 간다.",
+        "두 과일·채소 갈은 것을 합쳐 원문 조리 순서의 매실액, 참기름, 후추와 마늘 20톨을 섞는다.",
+        "돼지 목살 1kg의 한 장씩에 양념을 발라 용기에 차곡차곡 담는다.",
+        "뚜껑을 덮어 냉장고에서 하루 숙성한다.",
+        "호일을 깐 팬에 양념 목살을 올려 약한 불에서 굽는다.",
+        "고기가 익으면 접시에 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6880921|4501e11086d77da12d202cac6688e53be4062b67ce7012c8e34030a3508aeb57|ko-paraphrase-v1": {
+      "sourceRecipeId": "6880921",
+      "sourceContentHash": "4501e11086d77da12d202cac6688e53be4062b67ce7012c8e34030a3508aeb57",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "고구마 요거트 그래놀라 컵",
+      "detailIngredients": [
+        "고구마 삶은 것 1/2개",
+        "우유 400ml",
+        "플레인요거트 2개",
+        "포스트그래놀라 듬뿍",
+        "비스켓 2개",
+        "사과 2쪽",
+        "설탕 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "삶은 고구마 1/2개를 준비한다.",
+        "고구마 1/2개와 우유 400ml를 갈아 무스를 만든다.",
+        "컵에 플레인요거트를 담는다.",
+        "요거트 컵을 2잔 준비한다.",
+        "요거트 위에 고구마무스와 그래놀라, 사과를 올린다.",
+        "비스켓을 곁들여 담는다.",
+        "남은 고구마무스에는 그래놀라를 더한다.",
+        "먹기 전 가볍게 섞는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "사과"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6882836|1ce0f666c815a2b84337d26d38069a7a0c02239678ab627b30f3d6c1e507d468|ko-paraphrase-v1": {
+      "sourceRecipeId": "6882836",
+      "sourceContentHash": "1ce0f666c815a2b84337d26d38069a7a0c02239678ab627b30f3d6c1e507d468",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "요거트 소스 채소 또띠아롤",
+      "detailIngredients": [
+        "또띠아 1봉 (좀 큰사이즈가 좋아요)",
+        "양파 큰거1개",
+        "파프리카 1/2개",
+        "양상추 1/3통",
+        "토마토 2개",
+        "소고기or돼지갈비 200g (구이용)",
+        "칠리소스 4T",
+        "플레인요거트 1통",
+        "허브솔트 (or소금후추)",
+        "식용유 (원문 수량 미표기)",
+        "소금 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "양파 큰 것 1개를 채로 썬다.",
+        "팬에 식용유를 두르고 양파를 센불에서 볶아 허브솔트 또는 소금·후추로 간한다.",
+        "또띠아 1봉은 약한 불에서 앞뒤를 살짝만 데운다.",
+        "파프리카 1/2개는 채 썰어 허브솔트와 함께 볶는다.",
+        "소고기 또는 돼지갈비 200g을 굽는다.",
+        "익는 고기는 가위로 얇게 자른다.",
+        "양상추 1/3통은 씻어 채로 썰고 물기를 뺀다.",
+        "볶은 양파와 파프리카, 고기를 한데 모은다.",
+        "토마토 2개를 채로 썰고 플레인요거트 1통과 칠리소스 4T를 준비한다.",
+        "또띠아에 재료와 소스를 넣고 단단히 말아 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6888739|6d1d29f76b326f79ef1a8edeabd260fb676a2894de9a27f6aa47efff6f9fab1a|ko-paraphrase-v1": {
+      "sourceRecipeId": "6888739",
+      "sourceContentHash": "6d1d29f76b326f79ef1a8edeabd260fb676a2894de9a27f6aa47efff6f9fab1a",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "목살 달콤강정",
+      "detailIngredients": [
+        "돼지목살 400g",
+        "녹말가루 5큰술",
+        "맛술 1큰술",
+        "생강가루 조금",
+        "허브솔트 조금",
+        "고추장 1작은술",
+        "케첩 1큰술",
+        "간장 1큰술",
+        "마늘 저민거 4쪽",
+        "올리고당 3큰술",
+        "물 조금",
+        "기름 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "목살 표면에 군데군데 칼집을 낸다.",
+        "고기를 한입 분량으로 잘라 둔다.",
+        "생강가루와 허브솔트를 뿌린 뒤 15분 둔다.",
+        "녹말가루 5큰술을 넣는다.",
+        "손으로 눌러가며 고기 전체에 녹말 옷을 입힌다.",
+        "기름을 넉넉히 두른 팬에서 한 면이 익은 뒤에만 뒤집어 양쪽을 굽는다.",
+        "고기 표면이 노릇해지면 잠시 덜어 둔다.",
+        "마늘을 볶고 간장 1큰술·올리고당 3큰술·고추장 1작은술·케첩 1큰술과 물을 더해 졸인다.",
+        "완성된 소스에 구운 목살을 넣는다.",
+        "소스가 빠짐없이 묻도록 저어 마친다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "fry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6891679|8dc2af22f3263f7d4b20c7d80ef61cada397e893b451024dd91103ab7a22cd63|ko-paraphrase-v1": {
+      "sourceRecipeId": "6891679",
+      "sourceContentHash": "8dc2af22f3263f7d4b20c7d80ef61cada397e893b451024dd91103ab7a22cd63",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "망고 바나나 그래놀라 밀크자",
+      "detailIngredients": [
+        "망고 1/2개",
+        "바나나 2/3개",
+        "블루베리 1/2종이컵",
+        "우유 1종이컵",
+        "골든그래놀라(크런치) 2종이컵",
+        "민트 약간"
+      ],
+      "steps": [
+        "망고 1/2개와 바나나 2/3개는 껍질을 벗겨 한입 크기로 자른다.",
+        "유리 자에 골든그래놀라 2종이컵을 담는다.",
+        "우유 1종이컵을 붓고 블루베리 1/2종이컵, 바나나, 망고 순으로 올린다.",
+        "민트 약간을 꽂아 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6909547|49eec49571f01fdf7bf9793fdd2a24e052a51468e57a984665f87c0995e2ecfd|ko-paraphrase-v1": {
+      "sourceRecipeId": "6909547",
+      "sourceContentHash": "49eec49571f01fdf7bf9793fdd2a24e052a51468e57a984665f87c0995e2ecfd",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "블루베리 콩포트 크림치즈 토스트",
+      "detailIngredients": [
+        "식빵 2장",
+        "크림치즈 80g",
+        "요거트 60g",
+        "레몬즙 1tsp",
+        "블루베리 100g",
+        "설탕 70g",
+        "버터 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "블루베리 100g과 설탕 70g을 약불에서 수분이 생길 때까지 졸이고, 되직해지면 레몬즙 1tsp를 넣어 한 번 섞는다.",
+        "팬을 미열로 데워 버터를 녹인 뒤 식빵 2장의 양면을 노릇하게 굽는다. 토스터를 쓰면 먼저 굽고 버터를 얇게 바른다.",
+        "실온에서 부드러워진 크림치즈 80g과 요거트 60g을 풀고, 단맛이 더 필요하면 원문에 나온 설탕 1Tps를 더한다.",
+        "필링은 짤주머니로 짜거나 식빵에 펴 바른다.",
+        "토스트에 크림치즈 요거트 필링과 블루베리 콩포트를 차례로 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6912132|57dfd28f61b4255ff04604a5563f66dcfe9919b602594758f8137615dce4ad08|ko-paraphrase-v1": {
+      "sourceRecipeId": "6912132",
+      "sourceContentHash": "57dfd28f61b4255ff04604a5563f66dcfe9919b602594758f8137615dce4ad08",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "토치 바나나를 곁들인 깔루아 밀크",
+      "detailIngredients": [
+        "깔루아 1oz",
+        "우유 3oz",
+        "바나나 1개",
+        "설탕 약간"
+      ],
+      "steps": [
+        "잔에 얼음을 넣고 깔루아 1oz와 우유 3oz를 1:3 비율로 붓는다.",
+        "원하면 우유 거품과 커피가루를 올린다.",
+        "바나나 1개는 반으로 자르고 설탕 약간을 뿌린 후 토치로 표면을 굽는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6912196|67cdc83738ebffd478f26f429d671c5ab751bc63a063eededd3f3d9e18a7438e|ko-paraphrase-v1": {
+      "sourceRecipeId": "6912196",
+      "sourceContentHash": "67cdc83738ebffd478f26f429d671c5ab751bc63a063eededd3f3d9e18a7438e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "키위 바나나 우유 스무디",
+      "detailIngredients": [
+        "우유 200ml",
+        "키위 2개",
+        "바나나 1개"
+      ],
+      "steps": [
+        "블렌더에 우유 200ml를 넣는다.",
+        "키위 2개를 더한다.",
+        "바나나 1개를 넣는다.",
+        "재료가 부드럽게 섞일 때까지 간다.",
+        "키위 바나나 우유를 잔에 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6920179|05ad0cc29dc74540d357feff76e93fc4308b2ef69d87221da40bd73dcf79540f|ko-paraphrase-v1": {
+      "sourceRecipeId": "6920179",
+      "sourceContentHash": "05ad0cc29dc74540d357feff76e93fc4308b2ef69d87221da40bd73dcf79540f",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "과일 요거트 샐러드",
+      "detailIngredients": [
+        "샐러드 1팩",
+        "포도 적당량",
+        "방울토마토 적당량",
+        "귤 1개",
+        "요거트 2개"
+      ],
+      "steps": [
+        "포도와 방울토마토는 씻어 꼭지를 떼고 귤 1개는 껍질을 벗겨 한입 크기로 나눈다.",
+        "큰 볼에 과일과 요거트 2개를 넣어 섞는다.",
+        "접시에 샐러드 1팩을 깔고 과일 요거트 혼합물을 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6933103|93a64db89e29868ba0b2364ca79bcaf2a651981d1667c9f5c3ac3e30651debd2|ko-paraphrase-v1": {
+      "sourceRecipeId": "6933103",
+      "sourceContentHash": "93a64db89e29868ba0b2364ca79bcaf2a651981d1667c9f5c3ac3e30651debd2",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "알로에 요거트 샐러드",
+      "detailIngredients": [
+        "알로에 100g",
+        "방울 토마토 5개",
+        "파프리카 1/2개",
+        "소금 1꼬집",
+        "플레인 요거트 3Ts",
+        "설탕 1/2Ts"
+      ],
+      "steps": [
+        "알로에를 먹기 좋은 길이로 자른다.",
+        "방울토마토는 반으로 나눈다.",
+        "파프리카는 가는 채로 손질한다.",
+        "소금·설탕·플레인 요거트를 섞어 드레싱을 만든다.",
+        "알로에와 채소를 그릇에 담고 드레싱을 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6936631|9361a7324499719b3e5c7dc1dbd4cb51cd5429d3af75a7ef0e6604af87b8b384|ko-paraphrase-v1": {
+      "sourceRecipeId": "6936631",
+      "sourceContentHash": "9361a7324499719b3e5c7dc1dbd4cb51cd5429d3af75a7ef0e6604af87b8b384",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "요거트 버터난",
+      "detailIngredients": [
+        "강력분 250g",
+        "이스트 6g",
+        "소금 6g",
+        "설탕 20g",
+        "버터 20g",
+        "플레인요거트 100g",
+        "미지근한 물 80g",
+        "녹인버터 10g",
+        "파슬리 약간",
+        "밀가루 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "미지근한 물에 이스트를 풀어 젓는다.",
+        "이스트 물에 설탕을 넣어 녹인다.",
+        "소금을 섞은 뒤 5분 둔다.",
+        "강력분을 정확히 계량한다.",
+        "플레인요거트 100g을 넣는다.",
+        "가루에 이스트 물을 부어 반죽을 시작한다.",
+        "반죽이 한 덩이가 되면 버터를 넣고 10분 치댄다.",
+        "랩을 씌운 반죽 그릇에 구멍을 내고 따뜻한 곳에서 1차 발효한다.",
+        "반죽이 2.5배가 되면 1차 발효를 끝낸다.",
+        "1차 발효 뒤 반죽을 4~5개로 나누고 2mm 두께로 편다.",
+        "팬을 중약불로 달군 후 납작한 반죽을 올린다.",
+        "윗면이 부풀면 반죽을 뒤집는다.",
+        "양쪽이 노릇해지면 녹인버터를 바른다.",
+        "파슬리를 약간 뿌린다.",
+        "겉은 바삭하고 속은 쫄깃한 난으로 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "버터"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6954339|76291cc5fb7e22c555cc82dc6bb7c45d596cd2c3f6aa87b192463bfcccb9dfee|ko-paraphrase-v1": {
+      "sourceRecipeId": "6954339",
+      "sourceContentHash": "76291cc5fb7e22c555cc82dc6bb7c45d596cd2c3f6aa87b192463bfcccb9dfee",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "대구튀김 요거트 타코",
+      "detailIngredients": [
+        "라임 1개",
+        "레몬 1 개",
+        "고수 잎 1 줌",
+        "할라피뇨 2 스푼",
+        "소금",
+        "후추 살짝",
+        "파프리카가루",
+        "양배추 1/3개",
+        "적양파 1/2 개",
+        "설탕 적당히",
+        "식초 조금",
+        "와사비 0.3 스푼",
+        "마요네즈 적당히",
+        "마늘 1 알",
+        "요거트 10 스푼",
+        "대구 살 6조각",
+        "토마토 2 개",
+        "또띠야 6 장",
+        "마일드 타코소스 1 팩",
+        "핫소스",
+        "튀김가루 2 컵",
+        "맥주 150ml",
+        "계란 1 개",
+        "베이킹소다 1 티스푼",
+        "소금 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)",
+        "설탕 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "라임과 레몬은 각각 얇은 조각으로 썬다.",
+        "고수 잎 1줌을 잘게 다진다.",
+        "마늘 1알, 다진 고수, 설탕 2, 요거트 10, 할라피뇨 1, 마요네즈 1, 식초 1, 소금, 레몬 또는 라임즙 1스푼을 믹서에 갈아 소스를 만든다.",
+        "양배추 1/3통을 채로 썰어 소금 1/2티스푼으로 절이고 물기를 짠다. 적양파 1/2개와 설탕 1스푼, 식초 1스푼, 마요네즈 4스푼, 와사비 0.3스푼을 섞는다.",
+        "토마토 1개는 얇게 썰고 남은 1개는 작은 주사위 모양으로 자른다.",
+        "다진 토마토에 마일드 타코소스와 설탕 1/2스푼, 할라피뇨를 섞고 핫소스 2스푼으로 매운맛을 조절한다.",
+        "기름 없이 또띠야 양면을 굽는다.",
+        "대구살은 길게 썰어 씻고 물기를 닦은 뒤 파프리카가루를 뿌린다.",
+        "계란 1개의 흰자만 거품 내어 푼다.",
+        "튀김가루 1컵, 후추, 베이킹소다 1티스푼, 맥주 150ml를 섞고 계란흰자를 더한다. 별도 접시에 튀김가루 1컵을 펼쳐 대구살에 입힌다.",
+        "가루를 묻힌 대구살을 묽은 반죽에 담가 옷을 완성한다.",
+        "예열한 기름에 넣어 3분 30초 튀긴 뒤 뒤집고 40초 더 익혀 건진다.",
+        "또띠야에 대구튀김, 코울슬로, 토마토 소스, 요거트 소스를 차례로 올려 싼다.",
+        "남은 소스와 재료를 곁들여 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "레몬"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6956219|426cbbd71d6a3b31c393b0596a5493cd160fd88e34eba373e1978b701c519cc3|ko-paraphrase-v1": {
+      "sourceRecipeId": "6956219",
+      "sourceContentHash": "426cbbd71d6a3b31c393b0596a5493cd160fd88e34eba373e1978b701c519cc3",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "미나리 목살 조림말이",
+      "detailIngredients": [
+        "손질한 미나리 250g",
+        "돼지목살 600g (3mm두께)",
+        "식용유 3큰술",
+        "참기름 1큰술",
+        "통깨 약간",
+        "다진 청양고추 1개",
+        "다진 홍고추 1개",
+        "송송썬 미나리 약간",
+        "진간장 2큰술",
+        "중간 고춧가루 3큰술",
+        "맛술 6큰술",
+        "물 5큰술",
+        "채썬 마늘 7개",
+        "채썬 생강 1개",
+        "물엿 3큰술",
+        "새우젓 1큰술"
+      ],
+      "steps": [
+        "미나리 250g은 씻어 물기를 제거하고 잎을 떼어 손질한다.",
+        "냉동 상태의 돼지목살 600g을 약 3mm로 썬다.",
+        "목살 1장에 미나리 3줄기를 놓고 말아 길게 자른다.",
+        "말린 고기는 눌러 풀리지 않게 고정한다.",
+        "식용유 3큰술을 두른 팬에 고기 말이의 끝을 아래로 하여 올린다.",
+        "고기가 절반 익으면 뒤집어 핏기만 가실 때까지 익힌다.",
+        "익힌 말이는 키친타월 위에서 기름을 뺀다.",
+        "물 5큰술에 맛술 6큰술, 진간장 2큰술, 물엿 3큰술, 다진 생강 1개, 새우젓 1큰술, 채썬 마늘 7개, 고춧가루 3큰술을 섞어 양념장을 만든다.",
+        "센불에서 양념장이 끓으면 중불로 낮추고 고기 말이를 넣어 자작해질 때까지 졸인다.",
+        "불을 끄고 다진 홍고추 1개와 남은 미나리, 통깨, 다진 청양고추 1개를 고명으로 얹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6958777|e602ff2adab025f226cdce7c77cebc5d78075848641c67a0e70e78469882009f|ko-paraphrase-v1": {
+      "sourceRecipeId": "6958777",
+      "sourceContentHash": "e602ff2adab025f226cdce7c77cebc5d78075848641c67a0e70e78469882009f",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "단호박 퓌레 목살 스테이크",
+      "detailIngredients": [
+        "돼지목살 250g",
+        "가니쉬용 채소 약간",
+        "단호박 1/2개",
+        "설탕 1Ts",
+        "레드와인 50ml",
+        "바베큐소스 1Ts (또는 스테이크소스)",
+        "소금 적당량",
+        "후추 적당량"
+      ],
+      "steps": [
+        "단호박 1/2개에 소금을 살짝 뿌리고 약 30분 찐 뒤 속을 떠낸다.",
+        "예열한 팬에서 돼지목살 250g을 굽는다.",
+        "두께 약 3cm의 목살은 약불에서 1분 간격으로 뒤집으며 10분 익혀 내부 온도를 60도대로 맞춘다.",
+        "고기를 구운 팬에서 가니쉬용 채소 약간을 굽는다.",
+        "레드와인 50ml로 팬 바닥을 긁어가며 졸이고 바베큐소스 1Ts를 더해 체에 거른다.",
+        "찐 단호박에 설탕 1Ts를 넣어 갈고 목살, 채소, 소스와 함께 담는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6960046|91c5706bc5382e9515f3fc6c5479adbb59886f9cb89201b445c456c7fdd87e53|ko-paraphrase-v1": {
+      "sourceRecipeId": "6960046",
+      "sourceContentHash": "91c5706bc5382e9515f3fc6c5479adbb59886f9cb89201b445c456c7fdd87e53",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "오이 토마토 요거트 달걀샐러드",
+      "detailIngredients": [
+        "오이 1개",
+        "토마토 작은크기 2개",
+        "크기가 큰 양파 1/4 개",
+        "구운 계란 2 개",
+        "청양고추 2개",
+        "굵은 소금 1/2 큰술",
+        "플레인 요거트 1컵",
+        "마요네즈 3 큰술",
+        "식초 3큰술",
+        "올리고당 1 큰술",
+        "소금 약간",
+        "파슬리가루 약간"
+      ],
+      "steps": [
+        "오이 1개, 작은 토마토 2개, 큰 양파 1/4개, 구운 계란 2개, 청양고추 2개를 준비한다.",
+        "오이는 껍질의 거친 부분만 벗기고 0.5~1cm 두께로 썬 뒤 십자 모양으로 자른다.",
+        "오이와 다진 양파를 그릇에 함께 담는다.",
+        "굵은 소금 1/2큰술로 버무려 20분 재우며 중간에 한 번씩 섞는다.",
+        "절인 오이와 양파는 흐르는 물에 헹군 뒤 물기를 최대한 제거한다.",
+        "청양고추, 굵직하게 다진 토마토와 구운 계란을 더해 섞는다.",
+        "플레인 요거트 1컵, 마요네즈 3큰술, 식초 3큰술, 올리고당 1큰술, 소금 약간, 파슬리가루 약간을 고루 섞어 드레싱을 만든다.",
+        "샐러드에 드레싱을 넉넉히 올려 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "오이"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6960613|e19aa90ee2d46d057e8819bf08c20c1412959044e4c5b8af9bc436ed8025f3a1|ko-paraphrase-v1": {
+      "sourceRecipeId": "6960613",
+      "sourceContentHash": "e19aa90ee2d46d057e8819bf08c20c1412959044e4c5b8af9bc436ed8025f3a1",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "네 가지 속을 접어 만드는 김밥",
+      "detailIngredients": [
+        "김밥용김 6장",
+        "밥 3인분",
+        "계란 2개",
+        "베이컨 4장",
+        "아보카도 1개",
+        "데친 새우 10개",
+        "상추 8장",
+        "당근 1개",
+        "샐러드용 치킨 140g",
+        "슬라이스치즈 2장",
+        "로스트비프 9장 (또는 햄)",
+        "참기름 약간",
+        "소금 약간",
+        "통깨 약간",
+        "올리브유 약간",
+        "시저 드레싱 적당량",
+        "와사비 간장 적당량",
+        "크리미사우전드 적당량 (또는 사우전아일랜드)",
+        "스리라차 적당량"
+      ],
+      "steps": [
+        "당근 1개는 채로 썰어 소금을 조금 넣고 볶고, 계란 2개는 소금 간해 스크램블로 만든다. 베이컨 4장은 양면을 굽고 아보카도 1개는 얇게 자른다.",
+        "밥 3인분에 참기름, 소금, 통깨를 섞어 한김 식힌다.",
+        "김 4장은 긴 변을 따라 반으로 나누고 남은 김 2장은 4등분해 반으로 자른 김에 붙인다.",
+        "상추 1장, 볶은 당근, 로스트비프, 밥을 올려 3번 접고 랩으로 감싼다.",
+        "다른 김에는 상추 1장, 당근, 아보카도 3쪽, 데친 새우 4개, 밥을 올려 같은 방식으로 접는다.",
+        "베이컨 버전은 상추·당근·베이컨 2장·스크램블에그·밥 순으로, 치킨 버전은 상추·당근·슬라이스치즈 1장·샐러드용 치킨 5쪽·밥 순으로 접는다. 이때 김 4장은 긴 변을 따라 반으로 자른다.",
+        "남은 김 2장은 4등분해 이어 붙이고, 완성한 김밥을 잘라 시저 드레싱, 와사비 간장, 크리미사우전드, 스리라차와 함께 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "쌀"
+        ],
+        "family": "cheese",
+        "method": "rice",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6964474|f797b9c939593e5d5a1abd93df86dd95a3b211d2b71c975a5626fcd585053396|ko-paraphrase-v1": {
+      "sourceRecipeId": "6964474",
+      "sourceContentHash": "f797b9c939593e5d5a1abd93df86dd95a3b211d2b71c975a5626fcd585053396",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "복숭아 그래놀라 요거트볼",
+      "detailIngredients": [
+        "센트룸 포커스 신바이오틱스 100 4알",
+        "요거트 2개",
+        "그래놀라 1/2종이컵",
+        "복숭아 1/2개",
+        "견과류 2숟가락"
+      ],
+      "steps": [
+        "복숭아는 껍질을 벗겨 알맞게 자른다.",
+        "요거트에 센트룸 포커스 신바이오틱스 100을 섞는다.",
+        "볼에 요거트와 그래놀라, 견과류, 복숭아를 차례로 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "복숭아",
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6973302|bbbb285dbd05d91dd664024acc6e78a8b762abbff9d9a219bd3351e9b63f5141|ko-paraphrase-v1": {
+      "sourceRecipeId": "6973302",
+      "sourceContentHash": "bbbb285dbd05d91dd664024acc6e78a8b762abbff9d9a219bd3351e9b63f5141",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "치즈옥수수 접은 감자채전",
+      "detailIngredients": [
+        "감자 2개",
+        "슬라이스치즈 2장",
+        "캔 옥수수 2숟가락",
+        "소금 약간",
+        "튀김가루 2숟가락",
+        "올리브유 적당히",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "감자 2개는 껍질을 벗겨 최대한 가늘게 채 썬다.",
+        "감자채를 물에 10분 담가 전분을 뺀다.",
+        "물이 맑아질 때까지 여러 번 헹군 뒤 체에 밭쳐 물기를 뺀다.",
+        "감자채에 소금 2꼬집과 튀김가루 2숟가락을 넣어 섞는다.",
+        "올리브유를 두른 팬에 감자채를 얇게 펴고 눌러가며 중약불에서 굽는다.",
+        "감자채전은 뒤집어 반대쪽도 노릇하게 굽는다.",
+        "한쪽에 슬라이스치즈 2장과 캔 옥수수 2숟가락을 올린다.",
+        "뒤집개로 가운데를 반으로 나눈다.",
+        "감자채전을 반으로 접는다.",
+        "치즈가 녹을 때까지만 더 굽는다.",
+        "먹기 좋은 크기로 잘라 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6973499|ab78001f6927bbbf14867875c84c36cbf9cfd1b95e5aa63e6d0a531d25fc9542|ko-paraphrase-v1": {
+      "sourceRecipeId": "6973499",
+      "sourceContentHash": "ab78001f6927bbbf14867875c84c36cbf9cfd1b95e5aa63e6d0a531d25fc9542",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "요거트 양념 탄두리 닭구이",
+      "detailIngredients": [
+        "닭봉 적당량 (또는 닭날개)",
+        "우유 1/2컵",
+        "요거트 180g",
+        "카레 2큰술",
+        "고춧가루 1큰술",
+        "다진마늘 1큰술",
+        "올리브유 1큰술",
+        "레몬즙 1작은술",
+        "식초 1작은술",
+        "소금 1작은술",
+        "맛술 1큰술",
+        "후추 톡톡",
+        "후추 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "닭봉이나 닭날개를 씻고 포크로 찔러 칼집을 낸다.",
+        "냉동 닭이라면 우유 1/2컵에 30분 담가 잡내를 줄인다.",
+        "요거트 180g에 카레 2큰술, 고춧가루·다진마늘·올리브유·맛술 각 1큰술, 레몬즙·식초·소금 각 1작은술, 후추를 섞는다.",
+        "닭에 양념을 버무려 냉장고에서 반나절 숙성한다.",
+        "에어프라이어는 185도에서 10분 예열한다. 한 면을 185도에서 10분~15분, 즉 10~15분 굽고 뒤집어 같은 온도와 시간으로 총 2번 굽는다.",
+        "팬 조리 대신 에어프라이어를 185도에서 10분 예열한 사실을 확인한다. 팬 조리 시에는 기름을 넉넉히 두르고 센불에서 앞뒤를 굽고, 약불로 줄여 뚜껑을 덮은 채 각 면을 5~7분 익혀 속까지 익힌다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6982749|452586c0aa4756c64c9f2fef61fd837ecb76776eeba85bd87586c97bed3a2917|ko-paraphrase-v1": {
+      "sourceRecipeId": "6982749",
+      "sourceContentHash": "452586c0aa4756c64c9f2fef61fd837ecb76776eeba85bd87586c97bed3a2917",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "블루베리 요거트 과일볼",
+      "detailIngredients": [
+        "플레인요거트 2개",
+        "아몬드밀크 50ml",
+        "위트빅스 2개",
+        "햄프씨드 1T",
+        "단백질파우더 1T",
+        "포도 11알",
+        "방울토마토 3알",
+        "바나나 1개",
+        "냉동블루베리 1줌",
+        "청포도 3알"
+      ],
+      "steps": [
+        "포도 11알은 1/2로 자른다.",
+        "방울토마토 3알은 1/4로 자른다.",
+        "청포도 3알도 1/2로 나눈다.",
+        "바나나 1개는 얇게 썬다.",
+        "냉동블루베리 1줌은 아몬드밀크 50ml를 조금씩 더해 되직하게 간다.",
+        "플레인요거트 2개에 단백질파우더 1T를 섞는다.",
+        "컵 바닥에 간 블루베리를 먼저 담는다.",
+        "위트빅스 2개는 잘게 부순다.",
+        "블루베리 위에 부순 위트빅스를 올린다.",
+        "위트빅스가 덮일 정도로 요거트를 올린다.",
+        "적포도와 청포도를 얹는다.",
+        "플레인요거트와 바나나를 다시 층으로 쌓는다.",
+        "요거트를 한 번 더 얹고 햄프씨드 1T를 뿌린다.",
+        "방울토마토를 올려 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "breakfast"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6984918|318c0e1069119a5702211f0247b3f6e4b919babadec42131f97133653a4e05ba|ko-paraphrase-v1": {
+      "sourceRecipeId": "6984918",
+      "sourceContentHash": "318c0e1069119a5702211f0247b3f6e4b919babadec42131f97133653a4e05ba",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "닭가슴살 단호박 라이스페이퍼 쌈",
+      "detailIngredients": [
+        "양상추 3장",
+        "양파 1/4개",
+        "토마토 1개",
+        "청양고추 2개",
+        "할라피뇨 10개",
+        "닭가슴살 270g",
+        "단호박 1개",
+        "라이스페이퍼 7장",
+        "플레인요거트 1컵",
+        "식용유 2컵",
+        "마늘 3~4쪽",
+        "대파 1/2대",
+        "후춧가루 0.5ts",
+        "카레가루 1Ts"
+      ],
+      "steps": [
+        "양상추는 가늘게 썰고 양파·토마토는 작게 자른다. 청양고추와 할라피뇨는 다진다.",
+        "냄비에 물 10컵과 닭가슴살, 삶는 재료, 후춧가루 0.3ts를 넣어 7분 삶고 닭가슴살은 결대로 찢는다.",
+        "단호박을 4조각으로 나누어 씨를 빼고 물 1컵으로 찐 뒤 껍질을 제거한다. 물 1컵을 더하며 으깬다.",
+        "약한 불 팬에서 단호박·닭가슴살·청양고추·카레가루와 후춧가루 0.2ts를 수분이 없어질 때까지 볶는다.",
+        "식용유 2컵을 중간 불에서 예열하고 라이스페이퍼를 튀긴 즉시 건진다.",
+        "튀긴 라이스페이퍼에 단호박 볶음, 손질한 채소, 플레인요거트를 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살"
+        ],
+        "family": "chicken",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6989987|37bdf8fdad867f2613bf2808a60ca46dfb7caeb3580b49022cd49520838616ed|ko-paraphrase-v1": {
+      "sourceRecipeId": "6989987",
+      "sourceContentHash": "37bdf8fdad867f2613bf2808a60ca46dfb7caeb3580b49022cd49520838616ed",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "돼지목살 토마토 두부볶음",
+      "detailIngredients": [
+        "돼지고기목살 30g",
+        "두부 30g",
+        "토마토 50g",
+        "다진 생강 5g",
+        "다진 파 5g",
+        "땅콩기름 5g",
+        "간장 5g",
+        "닭육수 10g",
+        "물전분 10g",
+        "소금 적당량"
+      ],
+      "steps": [
+        "돼지고기목살 30g은 잘게 다지고 두부 30g은 1cm 정육면체로 자른다.",
+        "두부 30g은 1cm 정육면체로 자르고 토마토 50g은 껍질과 씨를 빼 같은 크기로 썬다.",
+        "땅콩기름 5g을 두른 팬에 다진 파 5g과 생강 5g을 볶아 향을 내고 목살을 볶은 뒤 잠시 덜어 둔다.",
+        "1단계의 볶은 고기, 토마토, 두부에 닭육수 10g을 더하고 간장 5g과 소금으로 간한다.",
+        "소스가 줄면 물전분 10g으로 농도를 맞춘다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "pork",
+        "method": "stirfry",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6990287|430db4ac6f9fe7b7d9d643fa21a8208a298b265b174bc0bca36ce412cd7d99a8|ko-paraphrase-v1": {
+      "sourceRecipeId": "6990287",
+      "sourceContentHash": "430db4ac6f9fe7b7d9d643fa21a8208a298b265b174bc0bca36ce412cd7d99a8",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "요거트 뮤즐리 과일볼",
+      "detailIngredients": [
+        "오트밀 15g",
+        "꿀 5g",
+        "플레인 요거트 18g",
+        "아몬드 5g",
+        "사과 8g",
+        "건포도 4g",
+        "우유 30g",
+        "계피가루 적당량",
+        "바나나 10g",
+        "키위 10g",
+        "기름 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "아몬드는 기름 없는 팬에서 옅은 갈색이 날 때까지 볶는다.",
+        "사과는 껍질을 벗겨 작은 주사위 모양으로 자른다.",
+        "바나나와 키위도 껍질을 제거해 사과와 같은 크기로 자른다.",
+        "꿀·플레인 요거트·우유를 한데 섞는다.",
+        "깨끗한 볼에 오트밀을 담고 4단계의 요거트 혼합물을 넣어 버무린다.",
+        "5단계의 오트밀 위에 과일·아몬드·건포도를 올리고 계피가루를 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "사과"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "6990676|dcf3bb10bd4eff23dcfa03bcb0ca60fd867bc40c13f41416c5b9846e0211b776|ko-paraphrase-v1": {
+      "sourceRecipeId": "6990676",
+      "sourceContentHash": "dcf3bb10bd4eff23dcfa03bcb0ca60fd867bc40c13f41416c5b9846e0211b776",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "양념졸임 목살 스테이크",
+      "detailIngredients": [
+        "돼지목살 400g",
+        "소금 약간",
+        "후추 약간",
+        "계란 1개",
+        "콘옥수수 2T",
+        "토마토 1/2개",
+        "파슬리가루 약간",
+        "물 1/2컵",
+        "돈까스소스 2T",
+        "굴소스 1T",
+        "올리고당 2T",
+        "설탕 1T",
+        "다진마늘 1T",
+        "진간장 1T",
+        "맛술 2T"
+      ],
+      "steps": [
+        "돼지목살 400g에 소금과 후추로 밑간한 뒤 냉장고에서 1시간 둔다.",
+        "맛술 2T, 진간장 1T, 다진마늘 1T, 설탕 1T, 올리고당 2T, 굴소스 1T, 돈까스소스 2T를 섞어 양념장을 만든다.",
+        "목살은 앞뒤로 굽는다.",
+        "물 1/2컵과 양념장을 팬에 넣는다.",
+        "소스가 고기에 배도록 졸인다.",
+        "양파와 토마토 1/2개, 계란 1개를 곁들일 수 있게 준비한다.",
+        "졸인 고기와 채소, 계란후라이, 콘옥수수 2T를 담고 파슬리가루를 뿌린다.",
+        "먹기 좋은 크기로 잘라 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "7005148|6a8cadab0706a20e1f4d4e0fadcd01cd03533424c42f33384323d133bb78f019|ko-paraphrase-v1": {
+      "sourceRecipeId": "7005148",
+      "sourceContentHash": "6a8cadab0706a20e1f4d4e0fadcd01cd03533424c42f33384323d133bb78f019",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "배즙 양념 목살구이",
+      "detailIngredients": [
+        "돼지목살 400g",
+        "양파 1개",
+        "배즙 1포",
+        "다진마늘 1T",
+        "진간장 4T",
+        "맛술 2T",
+        "참기름 1T",
+        "후추 톡톡",
+        "후추 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "양파 1/2개를 곱게 간다.",
+        "간 양파에 배즙 1포(100ml)를 붓는다.",
+        "다진마늘 1T, 진간장 4T, 맛술 2T, 참기름 1T와 후추를 더해 양념을 만든다.",
+        "용기에 돼지목살 400g을 담고 양념을 붓는다. 고기가 두꺼우면 칼집을 낸다.",
+        "목살이 양념에 충분히 잠기게 한다.",
+        "뚜껑을 덮어 냉장고에서 하루 숙성시키고, 급하면 4-5시간 뒤 구워도 되지만 충분히 재워 둔다.",
+        "양념이 타지 않도록 불을 조절하며 고기를 굽는다.",
+        "먹기 좋게 잘라 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "7006893|a6c3de4d68832da4b0efa24d4be83cf5173ba623121c1d802e90f887f5958a1c|ko-paraphrase-v1": {
+      "sourceRecipeId": "7006893",
+      "sourceContentHash": "a6c3de4d68832da4b0efa24d4be83cf5173ba623121c1d802e90f887f5958a1c",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "노릇한 감자 요거트 샐러드",
+      "detailIngredients": [
+        "자색 감자 4개",
+        "일반 감자 2개",
+        "오이 1/2개",
+        "당근 100g",
+        "빨강 파프리카 70~100g",
+        "맛살 2개",
+        "콘 옥수수 3큰술",
+        "슬라이스 아몬드 조금",
+        "마요네즈 1~2큰술",
+        "홀그레인 머스타드소스 2큰술",
+        "요거트 1큰술",
+        "꿀 1큰술",
+        "후추 조금",
+        "바질가루 조금",
+        "후추 조금"
+      ],
+      "steps": [
+        "자색 감자 4개와 일반 감자 2개는 껍질을 벗겨 자르고 냉수에 10분 담가 전분을 뺀다.",
+        "감자는 망에 받쳐 물기를 빼고 키친타월로 한 번 더 닦는다.",
+        "종이 포일을 깐 에어프라이어에서 스팀 기능 160도 10분, 이어 가열 기능 170도 5~10분으로 익힌다.",
+        "익은 감자는 한김 식힌다.",
+        "오이 1/2개, 당근 100g, 빨강 파프리카 70~100g, 맛살 2개는 감자와 비슷한 크기로 자르고 콘 옥수수 3큰술은 물기를 뺀다.",
+        "식힌 감자와 채소에 마요네즈 1~2큰술, 홀그레인 머스타드소스 2큰술, 요거트 1큰술, 꿀 1큰술, 후추 조금을 넣어 가볍게 섞는다.",
+        "슬라이스 아몬드와 바질가루, 후추 조금을 더해 한 번 더 섞는다.",
+        "그릇에 담아 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "요거트"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     },
     "7007791|c50160923c682d15c9ff6a5cbf49dd00be99a60fd4a367520a3f0b03b9fd7139|ko-paraphrase-v1": {
       "sourceRecipeId": "7007791",
@@ -987,7 +2724,6 @@
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
       "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
       "title": "닭가슴살 토마토볶음",
       "detailIngredients": [
         "닭가슴살 1팩",
@@ -1012,529 +2748,573 @@
         "family": "chicken",
         "method": "stirfry",
         "kind": "main"
-      }
+      },
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-07"
     },
-    "7015227|6f8a969564dd9cdb44b9cb88dc4add57f95be3829ae4e73e87ed1749b2c16fe3|ko-paraphrase-v1": {
-      "sourceRecipeId": "7015227",
-      "sourceContentHash": "6f8a969564dd9cdb44b9cb88dc4add57f95be3829ae4e73e87ed1749b2c16fe3",
+    "7007996|69a58bb0c346df24435d1f3f6ede6d72d53a8314b046fc6717936eb709edd3bd|ko-paraphrase-v1": {
+      "sourceRecipeId": "7007996",
+      "sourceContentHash": "69a58bb0c346df24435d1f3f6ede6d72d53a8314b046fc6717936eb709edd3bd",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "바나나 블루베리 스무디",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "딸기잼 바나나 아이스크림",
       "detailIngredients": [
-        "블루베리 40알",
-        "바나나 2개",
-        "우유 150ml"
+        "바나나 1개",
+        "딸기잼 1스푼",
+        "우유 4스푼"
       ],
       "steps": [
-        "바나나는 껍질을 벗겨 약 2cm 두께로 썬다.",
-        "블루베리는 물에 가볍게 헹군 뒤 물기를 빼고 바나나와 함께 용기에 담는다.",
-        "우유 150ml를 붓고 믹서나 핸드블렌더로 곱게 간다."
+        "잘 익은 바나나 1개를 준비한다.",
+        "믹서기를 준비한다.",
+        "딸기잼 1스푼을 꺼낸다.",
+        "우유 4스푼을 준비한다.",
+        "바나나, 딸기잼, 우유를 믹서기로 간다.",
+        "아이스크림 틀에 담아 냉동에서 하루 얼린다.",
+        "틀이 없으면 종이컵을 사용한다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "블루베리",
           "바나나"
         ],
         "family": "fruit",
-        "method": "blend",
-        "kind": "breakfast"
-      }
-    },
-    "7015342|0c2c38bbfc09f1efaaa2f73f0fd6677ce717dbad5bcc51f5ea2b2269d1fe7ece|ko-paraphrase-v1": {
-      "sourceRecipeId": "7015342",
-      "sourceContentHash": "0c2c38bbfc09f1efaaa2f73f0fd6677ce717dbad5bcc51f5ea2b2269d1fe7ece",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "새콤달콤 닭가슴살 냉채",
-      "detailIngredients": [
-        "닭가슴살 145g",
-        "크래미 3개",
-        "오이 1/2개",
-        "양배추 35g",
-        "당근 30g",
-        "간장 1큰술",
-        "식초 2큰술",
-        "설탕 2큰술",
-        "알룰로스 1큰술",
-        "겨자 1/3큰술",
-        "검은깨 1큰술",
-        "다진마늘 2/3큰술"
-      ],
-      "steps": [
-        "오이·당근·양배추를 얇게 채 썰고 크래미는 결대로 찢는다.",
-        "닭가슴살을 끓는 물에 넣어 약 18분 삶고 중심까지 익었는지 확인한다.",
-        "간장·식초·설탕·알룰로스 1큰술·겨자·마늘·검은깨를 섞어 냉채 소스를 만든다.",
-        "삶은 닭은 한 김 식힌 뒤 결대로 가늘게 찢는다.",
-        "큰 볼에 채소·크래미·닭을 담고 소스를 절반부터 넣어가며 버무린다.",
-        "간을 확인한 뒤 검은깨를 뿌리고 차갑게 내면 된다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "닭가슴살"
-        ],
-        "family": "chicken",
-        "method": "salad",
+        "method": "other",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7020528|d2d1f1ff9c6de420fd94b7ffa9f19da38be10242ffcf07af578336197f5fa788|ko-paraphrase-v1": {
-      "sourceRecipeId": "7020528",
-      "sourceContentHash": "d2d1f1ff9c6de420fd94b7ffa9f19da38be10242ffcf07af578336197f5fa788",
+    "7018027|97aecbb56e91da93f18fa7cdc7bd0a5c5efd14f20c6aba55d1e157ea828bfb45|ko-paraphrase-v1": {
+      "sourceRecipeId": "7018027",
+      "sourceContentHash": "97aecbb56e91da93f18fa7cdc7bd0a5c5efd14f20c6aba55d1e157ea828bfb45",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "돼지안심 장조림",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "사과잼 바나나 오트밀죽",
       "detailIngredients": [
-        "돼지 안심 500g",
-        "청양고추 2개",
-        "대파 1대",
-        "마늘 5~8쪽",
-        "된장 1T",
-        "생강가루 약간 (또는 다진 생강)",
-        "통후추 약간",
-        "물 500ml",
-        "간장 7T",
-        "맛술 3T",
-        "설탕 1T",
-        "물엿 1T",
-        "물 400ml"
+        "오트밀 60g",
+        "우유 250ml",
+        "바나나 1개",
+        "블루베리 30g",
+        "사과잼 1큰술",
+        "소금 0.5작은술",
+        "시나몬파우더 0.5작은술"
       ],
       "steps": [
-        "돼지안심의 겉지방을 정리하고 큼직하게 썬다. 대파와 청양고추도 먹기 좋은 크기로 준비한다.",
-        "냄비에 돼지안심·대파·마늘·생강·된장·통후추와 물 500ml를 넣고 된장을 푼 뒤 약 15분 삶는다.",
-        "삶은 고기를 건져 한 김 식힌 다음 결을 따라 찢는다.",
-        "간장 7T·맛술 3T·설탕 1T·물엿 1T·물 400ml를 끓인다.",
-        "조림장이 끓으면 찢은 안심을 넣고 센불에서 원하는 간이 밸 때까지 졸인다.",
-        "청양고추를 넣고 한 번 더 끓인다. 아이용이라면 원문 안내대로 고추를 생략할 수 있다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "돼지안심"
-        ],
-        "family": "pork",
-        "method": "braise",
-        "kind": "main"
-      }
-    },
-    "7021280|133077e26d02c01915820d50f5cab1860eb51da4d7d79b18e9b77a48df1ce28d|ko-paraphrase-v1": {
-      "sourceRecipeId": "7021280",
-      "sourceContentHash": "133077e26d02c01915820d50f5cab1860eb51da4d7d79b18e9b77a48df1ce28d",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "슬라이스치즈 오믈렛",
-      "detailIngredients": [
-        "계란 3알",
-        "후추 적당량",
-        "소금 적당량",
-        "우유 2T",
-        "슬라이스치즈 1장 (또는 2장)",
-        "버터 적당량",
-        "토마토살사소스 적당량"
-      ],
-      "steps": [
-        "계란 3알에 소금·후추·우유 2T를 넣고 한 방향으로 고루 푼다.",
-        "팬에 버터를 녹이고 계란물을 붓는다.",
-        "계란 가장자리가 익기 시작하면 슬라이스치즈 1~2장을 올린다.",
-        "계란말이처럼 말아 속까지 익히고 접시에 담는다.",
-        "미리 준비한 토마토 살사소스를 원문 안내대로 곁들인다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "슬라이스치즈"
-        ],
-        "family": "egg",
-        "method": "omelet",
-        "kind": "breakfast"
-      }
-    },
-    "7022427|160b2ef990f03c163f0abab2a937c5b92eb9d87068f8202c5e2e1db7ddff67c5|ko-paraphrase-v1": {
-      "sourceRecipeId": "7022427",
-      "sourceContentHash": "160b2ef990f03c163f0abab2a937c5b92eb9d87068f8202c5e2e1db7ddff67c5",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "감자 크림 그라탕",
-      "detailIngredients": [
-        "감자 150g",
-        "양파 1/4개",
-        "마늘 1톨",
-        "우유 150ml",
-        "생크림 80ml",
-        "버터 20g",
-        "밀가루 3tbsp",
-        "소금 적당량",
-        "후추 적당량",
-        "딜 또는 바질 적당량 (원문 조리 단계, 수량 미표기)",
-        "양송이버섯 적당량 (원문 조리 단계, 수량 미표기)",
-        "모짜렐라치즈 적당량 (원문 조리 단계, 수량 미표기)"
-      ],
-      "steps": [
-        "감자를 1.5cm 크기로 썰어 소금물에서 15분 정도 반쯤 익힌다.",
-        "냄비에 버터를 녹이고 밀가루를 넣어 약불에서 2분 볶아 루를 만든다.",
-        "우유와 생크림을 조금씩 부으며 저어 덩어리 없는 소스를 만든다.",
-        "소금·후추로 간하고 양파·마늘·버섯 등 준비한 채소와 딜을 넣는다.",
-        "그라탕 용기에 감자와 소스를 번갈아 담고 포일을 덮어 예열한 180°C 오븐에서 20분 굽는다.",
-        "포일을 벗기고 치즈를 올려 190°C에서 15~20분 더 구운 뒤 5분 식힌다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "감자"
-        ],
-        "family": "potato",
-        "method": "baked",
-        "kind": "main"
-      }
-    },
-    "7030595|ac6965d66b598371671a4535410bfcafc4a00e905f23abf51bbbb89e23f7755b|ko-paraphrase-v1": {
-      "sourceRecipeId": "7030595",
-      "sourceContentHash": "ac6965d66b598371671a4535410bfcafc4a00e905f23abf51bbbb89e23f7755b",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "소고기 등심 찹스테이크",
-      "detailIngredients": [
-        "소고기 등심 300g",
-        "양파 2/3개",
-        "표고버섯 2개",
-        "노랑·빨강 파프리카 각 1/3개",
-        "통마늘 10개",
-        "버터 10g",
-        "파슬리가루 약간",
-        "소금 3꼬집",
-        "통후추 약간",
-        "올리브오일 1스푼",
-        "돈까스소스 2스푼",
-        "굴소스 1스푼",
-        "케첩 0.7스푼",
-        "발사믹식초 0.7스푼",
-        "올리고당 0.3스푼"
-      ],
-      "steps": [
-        "등심을 한입 크기로 썰어 올리브유·소금·후추와 버무리고 약 10분 재운다.",
-        "양파·파프리카·표고버섯은 고기와 비슷한 크기로, 마늘은 편으로 썬다.",
-        "돈까스소스·굴소스·케첩·발사믹식초·올리고당·후추를 섞어 소스를 만든다.",
-        "센불로 달군 팬에서 등심 겉면을 빠르게 굽고 잠시 덜어둔다.",
-        "같은 팬에 버터를 녹여 마늘을 볶고, 손질한 채소에 소금과 후추를 넣어 익힌다.",
-        "고기와 소스를 넣고 중불에서 재료에 소스가 고루 묻도록 짧게 볶는다.",
-        "접시에 담고 파슬리가루를 뿌린다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "소고기등심"
-        ],
-        "family": "beef",
-        "method": "stirfry",
-        "kind": "main"
-      }
-    },
-    "7032812|637c28d2eecea25c6a4965bf40b098a95225699dfedc0687401ed2af49e126c4|ko-paraphrase-v1": {
-      "sourceRecipeId": "7032812",
-      "sourceContentHash": "637c28d2eecea25c6a4965bf40b098a95225699dfedc0687401ed2af49e126c4",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "바나나 팬케이크",
-      "detailIngredients": [
-        "핫케이크믹스 1봉 (500g)",
-        "우유 270ml",
-        "계란 2개",
-        "바나나 2개",
-        "식용유 (원문 조리 단계, 소량)"
-      ],
-      "steps": [
-        "우유 270ml와 달걀 2개를 골고루 푼다.",
-        "부드러운 반죽을 원하면 달걀물을 체에 한 번 내린다.",
-        "핫케이크믹스 500g에 달걀물을 부어 섞는다.",
-        "바나나 2개를 약 1cm 두께로 썰어 반죽에 넣는다.",
-        "약불로 예열한 팬에 기름을 조금 바르고 반죽 묻힌 바나나를 올린다.",
-        "양면이 노릇하고 반죽 속까지 익도록 굽는다. 블루베리·시럽·슈가파우더 장식은 선택 사항이다."
+        "오트밀죽에 쓸 재료를 펼쳐 준비한다.",
+        "납작하게 눌린 형태의 오트밀을 사용한다.",
+        "사과잼은 원문에 표시된 별도 조리 정보 번호 7016174를 따른다.",
+        "내열 용기에 우유 250ml를 담아 전자레인지에서 1분30초 데운다.",
+        "따뜻한 우유에 오트밀을 넣고 2시간 불린다.",
+        "불린 오트밀에 소금 0.5작은술과 시나몬파우더 0.5작은술을 섞는다.",
+        "전자레인지에서 2분30초 더 익힌다.",
+        "농도가 잡힌 오트밀죽을 꺼낸다.",
+        "바나나는 1센치 두께로 썬다.",
+        "죽 위에 바나나·블루베리·사과잼을 올려 섞는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "바나나"
         ],
-        "family": "banana",
-        "method": "pancake",
-        "kind": "breakfast"
-      }
+        "family": "fruit",
+        "method": "soup",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7036199|a72cc6f25d719c759a4c2e18463bdea544251577351a9a16253de512d75506f2|ko-paraphrase-v1": {
-      "sourceRecipeId": "7036199",
-      "sourceContentHash": "a72cc6f25d719c759a4c2e18463bdea544251577351a9a16253de512d75506f2",
+    "7036949|23877a2566a52b5eae3478aea2b662875704b69a41d2ec067c3ae7038e48aef4|ko-paraphrase-v1": {
+      "sourceRecipeId": "7036949",
+      "sourceContentHash": "23877a2566a52b5eae3478aea2b662875704b69a41d2ec067c3ae7038e48aef4",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "주키니 새우전",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "에어프라이어 바나나 튀김",
       "detailIngredients": [
-        "새우 10마리",
-        "주키니 1/2개",
-        "청양고추 2개",
-        "홍고추 1개",
-        "양파 1/2개",
+        "바나나 2개",
         "계란 2개",
-        "부침가루 3.5큰술",
-        "치킨스톡 1큰술",
-        "식용유"
+        "빵가루 1컵",
+        "밀가루 3큰술"
       ],
       "steps": [
-        "주키니와 양파는 일정한 굵기로 채 썰고 고추는 잘게 다진다.",
-        "해동한 새우는 키친타월로 눌러 물기를 완전히 제거한다.",
-        "볼에 채소·부침가루·달걀·치킨스톡을 넣어 가루가 보이지 않게 섞는다.",
-        "중불로 예열한 팬에 기름을 넉넉히 두르고 반죽을 작게 나누어 올린다.",
-        "반죽 위에 새우와 홍고추를 올리고 밑면이 단단해질 때까지 기다린다.",
-        "뒤집어 새우 중심까지 익히고 양면이 노릇하면 기름을 빼서 낸다."
+        "넓은 접시에 빵가루와 밀가루를 따로 펼치고 계란 2개는 그릇에 깬다.",
+        "계란 포장에 적힌 유통기한과 일련번호 표기를 확인한다.",
+        "계란 2개는 노른자를 터뜨려 매끈하게 푼다.",
+        "바나나는 낱개로 준비한다.",
+        "일반 바나나는 3~4등분하고 끝부분은 잘라낸다.",
+        "에어프라이어에 종이호일을 깐다.",
+        "1단계로 바나나에 밀가루를 골고루 묻힌다.",
+        "2단계로 밀가루 묻힌 바나나에 계란물을 입힌다.",
+        "3단계로 빵가루를 빠짐없이 덮는다.",
+        "튀김옷을 입힌 바나나를 서로 간격을 두고 올린다.",
+        "예열 없이 에어프라이어를 180도로 맞춰 5분 익힌다.",
+        "5분 후 꺼내 아랫면이 익도록 뒤집는다.",
+        "뒤집은 바나나는 180도로 2분 더 익힌다.",
+        "오일을 바르지 않아도 빵가루로 바삭하게 만들 수 있다.",
+        "채소나 과일로 접시를 꾸며 낸다.",
+        "남은 바나나 튀김은 냉장고에 넣어 차갑게 먹는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "새우",
-          "주키니"
+          "바나나"
         ],
-        "family": "seafood",
-        "method": "pancake",
+        "family": "fruit",
+        "method": "fry",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7039038|bf2038ee4223b9d329d1648cfce9555f7ec682fb9cef99215fea698ee523adae|ko-paraphrase-v1": {
-      "sourceRecipeId": "7039038",
-      "sourceContentHash": "bf2038ee4223b9d329d1648cfce9555f7ec682fb9cef99215fea698ee523adae",
+    "7038038|2900c387b5d7b1b0a42732321e23fb4d0becbef85c41db27b13dfe628d30237b|ko-paraphrase-v1": {
+      "sourceRecipeId": "7038038",
+      "sourceContentHash": "2900c387b5d7b1b0a42732321e23fb4d0becbef85c41db27b13dfe628d30237b",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "새우젓 애호박볶음",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "치즈 채소 달걀말이",
       "detailIngredients": [
-        "애호박 1개 (350g)",
-        "소금 1/2-1큰술",
-        "양파 1개 (150g)",
-        "대파 100g",
-        "식용유 1-2큰술",
-        "다진 마늘 1큰술",
-        "새우젓 2/3-1큰술",
-        "소금 1/3작은술",
-        "홍고추 1개 (12g)",
-        "통깨 1/2큰술"
+        "계란 4개",
+        "체다슬라이스치즈 2장",
+        "양파 25g",
+        "당근 15g",
+        "대파 15g",
+        "소금 0.5작은술",
+        "설탕 0.3작은술",
+        "참치액 0.5작은술",
+        "참기름 0.5작은술",
+        "후추 (톡톡톡)",
+        "올리브오일 적당히",
+        "후추 (원문 수량 미표기)"
       ],
       "steps": [
-        "애호박을 5mm 반달 모양으로 썰어 소금을 뿌리고 15분 절인 뒤 물기를 짠다.",
-        "양파는 채 썰고 대파와 홍고추는 잘게 썬다.",
-        "중불 팬에 기름을 두르고 마늘과 대파를 30초 볶아 향을 낸다.",
-        "양파와 애호박을 넣고 중불에서 약 2분 볶는다.",
-        "새우젓과 물 4큰술을 넣고 약불로 줄여 2~3분 익힌다.",
-        "간을 확인하고 불을 끈 뒤 홍고추와 통깨를 넣는다."
+        "양파 25g과 당근 15g은 잘게 썰고 대파 15g은 송송 썰며 계란 4개를 준비한다.",
+        "체다슬라이스치즈 2장은 각각 반으로 자른다.",
+        "볼에 계란 4개와 손질한 채소를 넣는다.",
+        "소금 0.5작은술을 더한다.",
+        "설탕 0.3작은술을 넣는다.",
+        "참기름 0.5작은술과 참치액 0.5작은술을 넣는다.",
+        "후추를 뿌리고 계란물을 고르게 섞는다.",
+        "맛을 본 뒤 싱거우면 소금을 조금 보탠다.",
+        "올리브오일을 두른 팬을 중약불로 예열하고 계란물을 부어 평평하게 편다.",
+        "계란이 반쯤 익으면 한쪽 끝을 말고 치즈 2장을 올린다.",
+        "남은 계란물을 부어가며 계란물이 없어질 때까지 계속 만다.",
+        "앞뒤가 노릇해지면 불을 끄고 마무리한다.",
+        "한김 식힌 뒤 먹기 좋은 두께로 자른다.",
+        "접시에 담아 낸다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "애호박"
+          "당근"
         ],
-        "family": "zucchini",
-        "method": "stirfry",
-        "kind": "side"
-      }
-    },
-    "7044610|df39562a5c6d6efbaba59d11f9efa1c340ea633481834569c8eeccfe5860de93|ko-paraphrase-v1": {
-      "sourceRecipeId": "7044610",
-      "sourceContentHash": "df39562a5c6d6efbaba59d11f9efa1c340ea633481834569c8eeccfe5860de93",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "순살 돼지고기 감자탕",
-      "detailIngredients": [
-        "돼지고기 사태 600g",
-        "삶은 시래기 200g",
-        "감자 2개",
-        "대파 1대",
-        "홍고추 1개",
-        "청양고추 1개",
-        "깻잎 10장",
-        "동전육수 1알",
-        "물 1L",
-        "양파 1/2개",
-        "대파 1대",
-        "월계수잎 4장",
-        "생강가루 약간",
-        "들깨가루 3",
-        "물 1L",
-        "고춧가루 3",
-        "된장 2",
-        "고추장 1",
-        "멸치액젓 2",
-        "다진 마늘 1",
-        "들기름 1",
-        "통후추 약간 (원문 조리 단계, 수량 미표기)",
-        "소금 약간 (원문 조리 단계, 수량 미표기)"
-      ],
-      "steps": [
-        "압력솥에 돼지고기·대파·월계수잎·물 1L를 넣고 압력이 오른 뒤 중불에서 20분 익힌다.",
-        "압력솥 제조사의 안내에 따라 압력을 완전히 뺀 뒤 고기를 건져 결대로 찢고 육수는 체에 거른다.",
-        "시래기는 씻어 자르고 고춧가루 3T·된장 2T·고추장 1T·액젓 2T·마늘 1T·들기름 1T에 무친다.",
-        "큰 냄비에 시래기·감자·고기를 담고 육수를 붓고 부족하면 물을 추가해 재료가 잠기게 한다.",
-        "센불에서 끓으면 뚜껑을 덮고 중불로 20분 끓인다.",
-        "대파와 고추·들깨가루 3T를 넣고 3분 더 끓인 뒤 소금으로 간한다.",
-        "깻잎을 넣고 한소끔 끓여 향을 살린다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "돼지고기 사태"
-        ],
-        "family": "pork",
-        "method": "stew",
+        "family": "cheese",
+        "method": "other",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7050889|74bc8cadaaeecb7731e7e75ce9b875664fb646589e0865f052828df9f492f081|ko-paraphrase-v1": {
-      "sourceRecipeId": "7050889",
-      "sourceContentHash": "74bc8cadaaeecb7731e7e75ce9b875664fb646589e0865f052828df9f492f081",
+    "7045560|2e865521eeca8041240dd620dbf1fd13bae19116addd1942ea49d9e3bbff3c5f|ko-paraphrase-v1": {
+      "sourceRecipeId": "7045560",
+      "sourceContentHash": "2e865521eeca8041240dd620dbf1fd13bae19116addd1942ea49d9e3bbff3c5f",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "목살 스테이크",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "오븐 감자 곁들임 목살스테이크",
       "detailIngredients": [
-        "돼지고기 목살 300~400g",
-        "통마늘 10개",
-        "아스파라거스 1개",
-        "버터 1T (원문은 갈릭기버터 사용)",
-        "소금 약간",
-        "후추 약간",
-        "아보카도기름 적당량",
-        "케찹 2T",
-        "진간장 1T",
-        "설탕 1T",
-        "식초 1T",
-        "물 1/3종이컵"
+        "돼지목살 1.2kg",
+        "소금 1/2~1작은술",
+        "후추 1/2작은술",
+        "올리브유 2큰술",
+        "감자 350g",
+        "소금 1/2작은술",
+        "후추 1/3작은술",
+        "생강가루 1/3작은술",
+        "파프리카가루 1/2작은술",
+        "올리브유 2-3큰술",
+        "버터 (원문 수량 미표기)"
       ],
       "steps": [
-        "목살의 표면 수분과 핏물을 닦고 소금과 후추로 밑간한다.",
-        "팬에 아보카도오일과 통마늘을 넣어 마늘 향을 낸 뒤 약불에서 목살을 천천히 굽는다.",
-        "고기와 마늘을 잠시 덜고 팬의 기름을 닦은 다음 버터와 목살을 넣어 한 번 더 노릇하게 굽는다.",
-        "아스파라거스와 구운 마늘을 넣어 함께 익힌다.",
-        "설탕·간장·케첩·식초를 섞어 팬에 붓고 물을 조금씩 더해 원하는 농도로 맞춘다.",
-        "목살을 소스에 넣어 속까지 완전히 익히며 졸인 뒤 접시에 담는다."
+        "돼지목살 1.2kg에 소금 1/2-1작은술과 후추 1/2작은술로 밑간하고 약 15분 둔다.",
+        "감자 350g에 올리브유 2-3큰술을 먼저 두르고, 파프리카가루 1/2작은술, 생강가루 1/3작은술, 후추 1/3작은술, 소금 1/2작은술을 차례로 넣어 버무린다.",
+        "달군 프라이팬에 올리브유 2큰술을 두르고, 식용유를 쓸 때는 버터 15g도 함께 넣는다.",
+        "팬에 목살을 올려 양면이 바삭하고 노릇해질 때까지 굽는다.",
+        "처음에는 센불로 익힌 뒤 중불로 줄여 계속 굽는다.",
+        "오븐 용기 바닥에 양념한 감자를 깐다.",
+        "감자 위에 구운 돼지목살을 얹는다.",
+        "용기를 호일로 덮는다.",
+        "오븐을 220도로 예열해 용기를 넣는다.",
+        "약 35-40분 더 굽는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "돼지목살"
         ],
         "family": "pork",
-        "method": "steak",
+        "method": "grill",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7057231|601652d58405e775a3872540113e0a22930aed511a38be839963c3a93f24251f|ko-paraphrase-v1": {
-      "sourceRecipeId": "7057231",
-      "sourceContentHash": "601652d58405e775a3872540113e0a22930aed511a38be839963c3a93f24251f",
+    "7047542|428e5b200471cca7ba7198be92d1eadc6340b2feef350f98b1c2739435865c19|ko-paraphrase-v1": {
+      "sourceRecipeId": "7047542",
+      "sourceContentHash": "428e5b200471cca7ba7198be92d1eadc6340b2feef350f98b1c2739435865c19",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "계란 토마토 피자",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "아몬드 요거트 냉장 스콘",
       "detailIngredients": [
-        "토마토 1개",
-        "계란 2개",
-        "토마토소스 100g",
-        "바질 적당량",
-        "파슬리가루 약간",
-        "채소 약간 (상추 등)",
-        "파마산치즈가루 (수량 미표기)",
-        "식용유 (수량 미표기)",
-        "후추 (수량 미표기)"
+        "아몬드가루 70g",
+        "설탕 1tsp",
+        "베이킹파우더 1/2tsp",
+        "소금 1꼬집",
+        "버터 20g",
+        "요거트 30g",
+        "우유 (원문 수량 미표기)",
+        "달걀 (원문 수량 미표기)"
       ],
       "steps": [
-        "채소는 씻어 큼직하게 썰고 토마토는 약 5mm 두께로 썬 뒤 4등분한다.",
-        "계란에 소금을 조금 넣어 풀고, 기름을 두른 팬에서 약불로 익힌다.",
-        "가장자리가 익기 시작하면 토마토소스·채소·토마토·바질을 차례로 올린다.",
-        "파마산치즈가루와 후추를 뿌리고 뚜껑을 덮어 가장 약한 불에서 원문 기준 약 6분 익힌다.",
-        "계란이 완전히 익었는지 확인한 뒤 접시에 옮긴다."
+        "볼에 아몬드가루 70g, 소금 1꼬집, 베이킹파우더 1/2tsp, 무염버터 20g을 담는다.",
+        "스크래퍼로 버터를 잘게 부수며 가루와 섞는다.",
+        "설탕 1tsp과 플레인 요거트 30g을 넣는데, 1tbsp를 15g으로 보면 2tbsp에 해당한다.",
+        "원하면 푼 계란물 1스푼을 넣고, 그릭요거트를 쓸 때는 우유를 약간 보탠다.",
+        "버터가 녹지 않도록 손 대신 스패출러로 반죽을 모은다.",
+        "반죽은 랩으로 싸서 냉장고에 최소 1시간 둔다.",
+        "유산지 위의 반죽에 원하면 계란물이나 우유를 바른다.",
+        "200°C 오븐에서 15분 굽는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "토마토"
+          "요거트"
         ],
-        "family": "egg",
-        "method": "pan-bake",
+        "family": "yogurt",
+        "method": "other",
         "kind": "main"
-      }
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7061001|96c7fff2c8b8e6f2e86c1fd685bb7aa6a42108113d8edd1021b761a465f3c6d4|ko-paraphrase-v1": {
-      "sourceRecipeId": "7061001",
-      "sourceContentHash": "96c7fff2c8b8e6f2e86c1fd685bb7aa6a42108113d8edd1021b761a465f3c6d4",
+    "7053111|3929cd3ee63628c60c72ff53f6a14f202ab2558d0c25041672057c5a59be0ca2|ko-paraphrase-v1": {
+      "sourceRecipeId": "7053111",
+      "sourceContentHash": "3929cd3ee63628c60c72ff53f6a14f202ab2558d0c25041672057c5a59be0ca2",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "과일 듬뿍 요거트볼",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "배양파 양념 목살구이",
       "detailIngredients": [
-        "복숭아 1개",
-        "수박 넉넉히",
-        "드링킹 요거트 넉넉히 (딸기맛)",
-        "거봉 적당히",
-        "치아씨드 1큰술",
-        "바질잎 2장"
+        "돼지목살 600g",
+        "진간장 40ml",
+        "설탕 35g",
+        "간 양파 1/2개",
+        "갈아만든배 100ml",
+        "다진마늘 1.5큰술",
+        "맛술 2큰술"
       ],
       "steps": [
-        "복숭아는 껍질과 씨를 제거하고 1.5cm 크기로 썬다.",
-        "수박도 비슷한 크기로 자르고 포도는 반으로 가른다.",
-        "넓은 볼에 차가운 드링킹 요거트를 붓는다.",
-        "손질한 과일을 요거트 위에 골고루 올린다.",
-        "치아씨드와 바질잎을 올려 바로 먹는다."
+        "돼지목살 600g의 앞뒤에 칼집을 낸다.",
+        "진간장 40ml, 설탕 35g, 맛술 2T, 다진마늘 1.5T를 섞는다.",
+        "갈아만든배 100ml와 양파 1/2개를 간 뒤 양념에 합친다.",
+        "목살에 양념을 넣고 1시간 이상 재워 둔다.",
+        "팬에 재운 목살과 양념소스를 조금 넣는다.",
+        "소스를 졸이며 양면을 노릇하게 굽는다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
-          "복숭아",
-          "포도"
+          "돼지목살"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "7053618|a8e7e2015df0dc54d72cebae21208e1581b7057ca7666c39cb77fc2917a33790|ko-paraphrase-v1": {
+      "sourceRecipeId": "7053618",
+      "sourceContentHash": "a8e7e2015df0dc54d72cebae21208e1581b7057ca7666c39cb77fc2917a33790",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "초코 바나나 요거트 레이어컵",
+      "detailIngredients": [
+        "에이스 1봉지 (5개)",
+        "초코에몽 115g",
+        "바나나 1개",
+        "요거트 80g",
+        "초코에몽 225g",
+        "코코아파우더 적당량 (선택)",
+        "꿀 적당량 (선택)"
+      ],
+      "steps": [
+        "에이스 1봉지(5개)를 알갱이가 남게 부수고 초코에몽 115g을 눅눅하지 않을 만큼 섞는다.",
+        "바나나 1개는 0.5~1cm 두께로 자른다.",
+        "요거트 80g에 원문 조리 순서의 초코에몽 2, 재료표의 초코에몽 225g을 섞고 원하면 꿀을 더한다.",
+        "컵 바닥에 에이스 부스러기를 깔고 초코 요거트와 바나나를 차례로 반복해 2~3층을 만든다.",
+        "4번째 층 쌓기가 끝나면 코코아파우더 또는 원하는 토핑을 올리고 냉장고에 잠시 둔다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "7056011|6a08deccf70de9642b355e925dec656b0d695c32d1d164abe1786cd3bb0f95c6|ko-paraphrase-v1": {
+      "sourceRecipeId": "7056011",
+      "sourceContentHash": "6a08deccf70de9642b355e925dec656b0d695c32d1d164abe1786cd3bb0f95c6",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바나나 오트밀 에그팬 파이",
+      "detailIngredients": [
+        "바나나 7개",
+        "오트밀 4컵",
+        "시나몬가루 1/2스푼",
+        "베이킹파우더 1/2스푼",
+        "식용유 약간"
+      ],
+      "steps": [
+        "오트밀 4컵을 다져 볼에 담는다.",
+        "바나나 7개를 곱게 갈고 시나몬가루 1/2스푼, 베이킹파우더 1/2스푼과 함께 볼에 넣는다.",
+        "재료를 섞어 10분 불린다.",
+        "예열한 4구 에그팬에 식용유를 두르고 반죽을 한 국자씩 넣어 모양을 잡은 뒤, 찬물에 씻은 건포도를 가운데 눌러 양면을 굽는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
         ],
         "family": "fruit",
-        "method": "cold",
-        "kind": "breakfast"
-      }
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     },
-    "7071800|11437589934ebbb6e8220e864b8a89c4393351320aca24f818496260ebc4aaa2|ko-paraphrase-v1": {
-      "sourceRecipeId": "7071800",
-      "sourceContentHash": "11437589934ebbb6e8220e864b8a89c4393351320aca24f818496260ebc4aaa2",
+    "7061954|3ffd8b75644bb2237ef26da35a4bed8b8f7b271419c322e3ec2a527f44f1f8f0|ko-paraphrase-v1": {
+      "sourceRecipeId": "7061954",
+      "sourceContentHash": "3ffd8b75644bb2237ef26da35a4bed8b8f7b271419c322e3ec2a527f44f1f8f0",
       "transformVersion": "ko-paraphrase-v1",
       "approved": true,
-      "approvedAt": "2026-09-08",
-      "provenance": "existing-reviewed-public-record",
-      "title": "사과 에그 모닝빵",
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "사과 채소 무수분 목살수육",
       "detailIngredients": [
-        "모닝빵 (수량 미표기)",
-        "감자 1개",
-        "계란 2개",
-        "사과 1/2쪽",
-        "마요네즈 2~2.5큰술",
-        "홀그레인 머스타드 소스 1티스푼",
-        "꿀 1/2스푼",
-        "소금 약간",
-        "후추 약간",
-        "딸기쨈 (선택)"
+        "돼지고기 목살 500g",
+        "돼지고기 삼겹살 500g",
+        "양파 2개",
+        "대파 2대",
+        "사과 1개"
       ],
       "steps": [
-        "감자는 껍질을 벗겨 삶고 젓가락이 쉽게 들어가면 물을 버린 뒤 곱게 으깬다.",
-        "계란은 완숙으로 삶아 흰자를 잘게 다지고 노른자는 체에 내려 부드럽게 만든다.",
-        "사과는 껍질을 벗겨 작은 크기로 썬다.",
-        "감자·계란·사과에 마요네즈·홀그레인 머스터드·꿀·소금·후추를 넣어 섞고 간을 확인한다.",
-        "모닝빵을 갈라 속을 채운다. 딸기잼은 원문에서 선택 재료다."
+        "양파 2개는 통으로 두툼하게 썰고 대파 2대는 3-4cm 길이로 자른다.",
+        "사과 1개는 2등분한 다음 얇게 자른다.",
+        "냄비에 양파, 대파, 돼지고기 삼겹살 500g과 목살 500g, 사과 순으로 덮고 삼겹살의 비계 면은 아래로 둔다.",
+        "뚜껑을 덮어 중약불에서 약 45분 끓인 뒤 불을 끄고 뚜껑을 닫은 채 5분 뜸 들인다.",
+        "익은 고기는 먹기 좋은 크기로 썰어 곁들임과 낸다."
       ],
       "recommendationProfile": {
         "primaryIngredients": [
           "사과"
         ],
-        "family": "fruit-sandwich",
-        "method": "assemble",
+        "family": "pork",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "7063193|1a84c20a38d4bd077d53fb4fa721875ddc63f011c995719e30897717421d2f7e|ko-paraphrase-v1": {
+      "sourceRecipeId": "7063193",
+      "sourceContentHash": "1a84c20a38d4bd077d53fb4fa721875ddc63f011c995719e30897717421d2f7e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "그릭요거트 오이무침",
+      "detailIngredients": [
+        "오이 1개",
+        "소금 약간",
+        "화이트발사믹 1큰술",
+        "다진마늘 1/2큰술",
+        "꿀 1큰술",
+        "요거트 2큰술",
+        "파슬리 가루 적당량"
+      ],
+      "steps": [
+        "오이 1개를 얇게 썬다.",
+        "소금 약간을 고루 섞어 잠시 절인다.",
+        "절인 오이는 단단히 짜서 물기를 제거한다.",
+        "화이트발사믹 1큰술과 다진마늘 1/2큰술을 섞는다.",
+        "꿀 1큰술과 요거트 2큰술을 더해 드레싱을 만든다.",
+        "오이와 드레싱을 고르게 버무린다.",
+        "파슬리 가루를 적당량 뿌려 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "오이"
+        ],
+        "family": "yogurt",
+        "method": "salad",
+        "kind": "side"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "786265|775d06454b9246ab32a901838e4153b6c0da48dc83bd7dc7832b03aa30d946c7|ko-paraphrase-v1": {
+      "sourceRecipeId": "786265",
+      "sourceContentHash": "775d06454b9246ab32a901838e4153b6c0da48dc83bd7dc7832b03aa30d946c7",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "전자레인지 바나나 계피잼",
+      "detailIngredients": [
+        "바나나 3개",
+        "설탕 5큰술",
+        "레몬즙 2큰술",
+        "계피가루 적당량"
+      ],
+      "steps": [
+        "넉넉한 내열용기에 바나나 3개를 듬성듬성 썰어 넣고 설탕 5큰술과 함께 잠시 절인다.",
+        "레몬즙 2큰술을 더한다.",
+        "바나나 그릇을 전자레인지에서 약 3분 먼저 데운다.",
+        "3분 뒤 꺼내 으깨고 한김 식힌 다음 약 2분씩 더 데우며, 전자레인지 조리를 6-7차례 반복해 저어 준다.",
+        "원하는 잼 농도가 되면 멈춘다.",
+        "계피가루를 취향껏 섞고, 빵 6-7쪽에 바를 만큼은 냉장 보관한다.",
+        "완성한 잼은 2종지 분량으로 담고, 바나나 3개로 만든 잼의 알갱이를 남긴다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "바나나"
+        ],
+        "family": "fruit",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "830985|12ee9c46616dcc960ad2ab960e3b28ad3922e1253431ccd08c2549d70f7871d2|ko-paraphrase-v1": {
+      "sourceRecipeId": "830985",
+      "sourceContentHash": "12ee9c46616dcc960ad2ab960e3b28ad3922e1253431ccd08c2549d70f7871d2",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "복숭아 요거트 스무디",
+      "detailIngredients": [
+        "복숭아 1개",
+        "플레인 요거트 100ml",
+        "우유 1컵",
+        "얼음 1컵",
+        "꿀 1~2큰술"
+      ],
+      "steps": [
+        "복숭아 1개는 깨끗이 씻어 껍질째 썬다.",
+        "블렌더에 복숭아를 넣은 다음 꿀 1~2큰술과 얼음 1컵, 우유 1컵, 플레인 요거트 1통(100ml)을 더해 곱게 간다.",
+        "완성한 스무디는 2명이 나눠 마실 양으로 컵에 따른다.",
+        "시나몬가루와 민트잎을 올려 장식한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "복숭아"
+        ],
+        "family": "yogurt",
+        "method": "other",
         "kind": "breakfast"
-      }
+      },
+      "validationVersion": "source-facts-v2"
+    },
+    "990311|b226f4b0d865c1fee8e45ed8d0acf10267de36f9efc4c764375a10af70eaa5c0|ko-paraphrase-v1": {
+      "sourceRecipeId": "990311",
+      "sourceContentHash": "b226f4b0d865c1fee8e45ed8d0acf10267de36f9efc4c764375a10af70eaa5c0",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-11",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "sourceDate": "2026-09-07",
+      "title": "바비큐 폭립 오므라이스 플레이트",
+      "detailIngredients": [
+        "등갈비 600g",
+        "맥주 1/2컵",
+        "양파 1/2개",
+        "대파 1/2뿌리",
+        "통마늘 5개",
+        "통후추 20알",
+        "월계수잎 4장",
+        "물 넉넉히",
+        "양파 1/2개",
+        "당근 1/5개",
+        "대파 1/2뿌리",
+        "옥수수콘 2T",
+        "밥 2공기",
+        "딸기 10개",
+        "양상추 4장",
+        "채썬 양배추 1줌",
+        "치커리 1/2줌",
+        "옥수수콘 2T",
+        "달걀 2개",
+        "우유 2T",
+        "소금 약간",
+        "간장 2T",
+        "설탕 0.5T",
+        "흑설탕 1T",
+        "물엿 2T",
+        "식초 0.5T",
+        "케첩 0.5T",
+        "다진마늘 1T",
+        "스테이크 소스 2T",
+        "굴소스 0.5T",
+        "핫소스 0.5T",
+        "청주 1T",
+        "케첩 적당량",
+        "마요네즈 적당량",
+        "소금 약간",
+        "후춧가루 약간",
+        "플레인 요거트 4T",
+        "꿀 1T",
+        "레몬즙 0.5T",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "등갈비 600g은 4쪽씩 나누어 자른다.",
+        "찬물에 2~3시간 담가 핏물을 뺀다.",
+        "끓는 물에서 1~2분 데친 뒤 건져 찬물에 헹군다.",
+        "냄비에 등갈비, 양파 1/2개, 대파 1/2뿌리, 통마늘 5개, 통후추 20알, 월계수잎 4장, 맥주 1/2컵과 물을 넣고 센불로 끓인 뒤 불을 낮춰 1시간 이상 익힌다.",
+        "간장 2T, 설탕 0.5T, 흑설탕 1T, 물엿 2T, 식초 0.5T, 케첩 0.5T, 다진마늘 1T, 스테이크 소스 2T, 굴소스 0.5T, 핫소스 0.5T, 청주 1T로 바비큐 소스를 만들고 센불에서 2분 끓인다.",
+        "속까지 익은 등갈비는 건져 바닥 쪽에 칼집을 낸다.",
+        "소스를 앞뒤로 바르고 200°C 오븐에서 20분 굽되, 10분 뒤 소스를 한 번 더 바르고 10분 더 굽는다.",
+        "양파 1/2개, 당근 1/5개, 대파 1/2뿌리를 다지고 옥수수콘 2T와 준비한다.",
+        "채소와 옥수수콘을 볶다가 밥 2공기를 넣고 마지막에 대파를 넣어 볶음밥을 만든다.",
+        "달걀 2개와 우유 2T, 소금을 풀어 달걀옷을 만들고 그중 반을 팬에 부어 볶음밥을 감싼다.",
+        "오므라이스를 오므려 뒤집어 접시에 담는다.",
+        "케첩과 마요네즈를 지그재그로 뿌린다.",
+        "오므라이스에 폭립을 얹고 딸기 10개, 양상추 4장, 채썬 양배추 1줌, 치커리 1/2줌, 옥수수콘 2T를 곁들이며 플레인 요거트 4T, 꿀 1T, 레몬즙 0.5T로 만든 드레싱을 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "yogurt",
+        "method": "other",
+        "kind": "main"
+      },
+      "validationVersion": "source-facts-v2"
     }
   }
 }

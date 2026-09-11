@@ -5,6 +5,11 @@
   const keyFor = (store, name) => store + ":" + normalize(name);
   const euro = (cents) => (cents / 100).toFixed(2).replace(".", ",") + "€";
 
+  function ingredientName(label) {
+    return String(label||'').trim().replace(/\s*\(원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
+      .split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
+  }
+
   function parsePrice(value) {
     const text = String(value).trim().replace(",", ".");
     if (!/^\d+(?:\.\d{1,2})?$/.test(text)) return null;
@@ -259,14 +264,19 @@
 
   function amount(cart) {
     if (cart.unknownCount === cart.purchaseCount && cart.unknownCount > 0) return "가격 확인 필요";
-    return euro(cart.totalCents);
+    if (cart.quantityCheckCount) return "확인된 금액 " + euro(cart.knownSubtotalCents ?? cart.totalCents) + " · 수량 확인";
+    return euro(cart.knownSubtotalCents ?? cart.totalCents);
   }
 
   function summary(cart) {
     if (!cart.purchaseCount) return "구매할 재료 없음 · " + euro(0);
     if (cart.unknownCount === cart.purchaseCount) return "가격 미확인 " + cart.unknownCount + "종";
-    if (cart.unknownCount) return "확인된 재료 " + euro(cart.totalCents) + " · 미확인 " + cart.unknownCount + "종";
-    return "구매 합계 " + euro(cart.totalCents);
+    if (cart.costStatus === 'complete' && !cart.quantityCheckCount) return "구매 합계 " + euro(cart.knownSubtotalCents ?? cart.totalCents);
+    const parts=[];
+    if ((cart.knownSubtotalCents ?? 0)>0) parts.push((cart.quantityCheckCount?"확인된 금액 ":"확인된 재료 ")+euro(cart.knownSubtotalCents));
+    if (cart.unknownCount) parts.push((cart.quantityCheckCount?"가격 미확인 ":"미확인 ")+cart.unknownCount+"종");
+    if (cart.quantityCheckCount) parts.push("수량 확인 "+cart.quantityCheckCount+"종");
+    return parts.join(" · ") || "가격·수량 확인 필요";
   }
 
   function addToList(list, cart) {
@@ -280,7 +290,7 @@
       const quantity = Math.max(previous?.quantity || 1, item.quantity);
       merged.set(item.key, {
         key: item.key, name: item.name, store: item.store, pack: item.pack,
-        quantity, priceCents: item.priceCents,
+        quantity, priceCents: item.priceCents, quantityNeedsCheck:Boolean(item.quantityNeedsCheck),
         completed: Boolean(previous?.completed && quantity === previous.quantity)
       });
     }
@@ -289,12 +299,15 @@
 
   function listProgress(list) {
     const remaining = list.filter((item) => !item.completed);
+    const quantityCheckCount=remaining.filter((item)=>item.quantityNeedsCheck===true).length;
+    const knownSubtotalCents=remaining.reduce((sum, item) => sum + (item.priceCents ?? 0) * item.quantity, 0);
+    const unknownCount=remaining.filter((item) => item.priceCents === null).length;
     return {
       remainingCount: remaining.length,
       completedCount: list.length - remaining.length,
       purchaseCount: remaining.length,
-      totalCents: remaining.reduce((sum, item) => sum + (item.priceCents ?? 0) * item.quantity, 0),
-      unknownCount: remaining.filter((item) => item.priceCents === null).length
+      totalCents: knownSubtotalCents,knownSubtotalCents,unknownCount,quantityCheckCount,
+      costStatus:unknownCount||quantityCheckCount?'partial':'complete'
     };
   }
 
@@ -327,7 +340,7 @@
             || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, quantity, priceCents, completed }) => ({ key, name, store, pack, quantity, priceCents, completed }));
+        }).map(({ key, name, store, pack, quantity, priceCents, completed, quantityNeedsCheck }) => ({ key, name, store, pack, quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true }));
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
@@ -347,5 +360,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
 }());

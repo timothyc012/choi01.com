@@ -35,7 +35,7 @@ test('charges full packages and distinguishes missing prices from a complete tot
   assert.equal(cart.totalCents, 1584);
   assert.equal(cart.unknownCount, 2);
   assert.equal(cart.items.find((item) => item.name === '닭고기').pack, '1 kg');
-  assert.equal(shopping.summary(cart), '확인된 재료 15,84€ · 미확인 2종');
+  assert.equal(shopping.summary(cart), '확인된 금액 15,84€ · 가격 미확인 2종 · 수량 확인 8종');
 });
 
 test('includes additional ingredients and multiplies whole package counts', () => {
@@ -43,7 +43,7 @@ test('includes additional ingredients and multiplies whole package counts', () =
   const cart = shopping.basket([rice], { catalog: fixtureCatalog, prices, quantities: { 'Netto:닭고기': 2 } });
   assert.equal(cart.totalCents, 2851);
   assert.equal(cart.unknownCount, 0);
-  assert.equal(shopping.summary(cart), '구매 합계 28,51€');
+  assert.equal(shopping.summary(cart), '확인된 금액 28,51€ · 수량 확인 7종');
 });
 
 test('ambiguous pack sizes and partially measured weekly ingredients require a check', () => {
@@ -256,6 +256,25 @@ test('basket exposes complete, partial, and unknown cost facts without calling g
   const unknown=shopping.basket([{store:'EDEKA',sale:['연어'],missing:[],requiredAmounts:{연어:{amount:200,unit:'g'}}}],{catalog:{}});
   assert.equal(unknown.costStatus,'unknown');
   assert.equal(unknown.knownSubtotalCents,0);
+});
+
+test('source-quantity-unknown ingredients remain visible and cannot produce a definitive total',()=>{
+  const label='우유 (원문 수량 미표기)';
+  assert.equal(shopping.ingredientName(label),'우유');
+  const result=shopping.basket([{store:'EDEKA',sale:[],missing:[shopping.ingredientName(label)],requiredAmounts:{}}],{catalog:{EDEKA:{우유:{priceCents:199,pack:'1 l'}}}});
+  assert.equal(result.items[0].name,'우유');
+  assert.equal(result.items[0].quantityNeedsCheck,true);
+  assert.equal(result.costStatus,'partial');
+  assert.ok(result.quantityCheckKeys.includes('EDEKA:우유'));
+  assert.equal(result.knownSubtotalCents,199);
+  assert.match(shopping.summary(result),/수량 확인 1종/);
+  assert.doesNotMatch(shopping.summary(result),/구매 합계/);
+  const list=shopping.addToList([],result);
+  assert.equal(list[0].quantityNeedsCheck,true);
+  const progress=shopping.listProgress(list);
+  assert.equal(progress.knownSubtotalCents,199);
+  assert.equal(progress.quantityCheckCount,1);
+  assert.match(shopping.summary(progress),/수량 확인 1종/);
 });
 
 test('empty and all-pantry baskets keep savings unavailable without same-product normal-price evidence',()=>{

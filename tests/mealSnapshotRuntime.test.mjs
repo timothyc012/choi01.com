@@ -426,7 +426,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.document.querySelector('[data-moment="저녁"]').click();
   const activeClear=dom.window.document.querySelector('[data-clear-slot]');
   assert.match(activeClear.textContent,/비우기/);
-  assert.equal(dom.window.document.getElementById('totalCost').textContent,'5,99€');
+  assert.equal(dom.window.document.getElementById('totalCost').textContent,'확인된 금액 5,99€ · 수량 확인');
   assert.equal(runtime.weekBasket().items[0].product,'Hähnchenbrustfilet');
   assert.equal(runtime.weekBasket().items[0].priceCents,599);
   assert.equal(runtime.shoppingState.prices['NeueMarkt:닭가슴살'],undefined);
@@ -465,7 +465,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
   assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
   assert.match(dom.window.document.getElementById('shoppingSource').textContent,/example.com|할인 근거/);
-  assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'5,99€');
+  assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'확인된 금액 5,99€ · 수량 확인');
   assert.equal(calls.filter((url)=>url===('/mohemeokji/data/'+detailPath)).length,1);
   assert.equal(dom.window.document.activeElement,dom.window.document.getElementById('closeDetail'));
   dom.window.document.getElementById('detailDrawer').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
