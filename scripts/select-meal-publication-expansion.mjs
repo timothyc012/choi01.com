@@ -36,8 +36,12 @@ function linkedOffers(candidate,candidateReport) {
   return linked.sort((left,right)=>left.locationId.localeCompare(right.locationId)||left.offer.offerId.localeCompare(right.offer.offerId));
 }
 
-function eligibilityReason(candidate,candidateReport) {
-  if(Number(candidate.reviewCount)<REVIEW_THRESHOLD) return 'review-threshold';
+function eligibilityReason(candidate,candidateReport,reviewEvidenceById=null) {
+  if(reviewEvidenceById) {
+    const evidence=reviewEvidenceById[idOf(candidate)];
+    if(evidence?.status!=='verified') return 'review-unverified';
+    if(!Number.isSafeInteger(evidence.reviewCount)||evidence.reviewCount<REVIEW_THRESHOLD) return 'review-threshold';
+  } else if(Number(candidate.reviewCount)<REVIEW_THRESHOLD) return 'review-threshold';
   if(!text(candidate.sourceUrl)) return 'missing-source-url';
   if(!text(candidate.title)) return 'missing-source-title';
   if(!text(candidate.author)) return 'missing-source-author';
@@ -83,7 +87,7 @@ export function derivePublicationProfile(candidate,candidateReport) {
   return {primaryIngredients:primary,family,method,kind};
 }
 
-export function selectPublicationExpansion({candidateReport,registry={schemaVersion:1,recipes:{}},target=DEFAULT_TARGET}) {
+export function selectPublicationExpansion({candidateReport,registry={schemaVersion:1,recipes:{}},target=DEFAULT_TARGET,reviewEvidenceById=null}) {
   if(!Number.isInteger(target)||target<1) throw new Error('target must be a positive integer');
   const existing=registeredRecipeIds(registry);
   const locationCounts=currentLocationCounts(candidateReport,registry);
@@ -91,7 +95,7 @@ export function selectPublicationExpansion({candidateReport,registry={schemaVers
   const eligible=[];
   for(const candidate of [...(candidateReport.candidates||[])].sort((a,b)=>idOf(a).localeCompare(idOf(b)))) {
     if(existing.has(idOf(candidate))) { exclusions.push({sourceRecipeId:idOf(candidate),reason:'already-registered'}); continue; }
-    const reason=eligibilityReason(candidate,candidateReport);
+    const reason=eligibilityReason(candidate,candidateReport,reviewEvidenceById);
     if(reason) { exclusions.push({sourceRecipeId:idOf(candidate),reason}); continue; }
     const links=linkedOffers(candidate,candidateReport);
     const recommendationProfile=derivePublicationProfile(candidate,candidateReport);
@@ -306,6 +310,7 @@ function parseArgs(argv) {
     else if(value==='--database') args.database=argv[++index];
     else if(value==='--tenant') args.tenant=argv[++index];
     else if(value==='--target') args.target=Number(argv[++index]);
+    else if(value==='--review-evidence') args.reviewEvidencePath=argv[++index];
     else if(value==='--source-date') args.sourceDate=argv[++index];
     else if(value==='--approval-date') args.approvalDate=argv[++index];
     else if(value==='--transforms') args.transformPaths.push(argv[++index]);
@@ -323,7 +328,8 @@ export async function run(argv=process.argv.slice(2)) {
   const discovery=await discoverStoreRecipeCandidates({offers:generated.offersByIdentity,db:args.database,tenant:args.tenant,perIdentityLimit:500,totalLimit:5000});
   const candidateReport=buildStoreCandidateReport({packageCatalog:generated.packageCatalog,offersByIdentity:generated.offersByIdentity,meta:generated.meta,candidates:discovery.candidates,input:args.csvPath,database:args.database,tenant:args.tenant,discovery});
   const registry=JSON.parse(fs.readFileSync(args.registryPath,'utf8'));
-  const selection=selectPublicationExpansion({candidateReport,registry,target:args.target});
+  const reviewEvidence=args.reviewEvidencePath?JSON.parse(fs.readFileSync(args.reviewEvidencePath,'utf8')).recipes:null;
+  const selection=selectPublicationExpansion({candidateReport,registry,target:args.target,reviewEvidenceById:reviewEvidence});
   const transforms=args.transformPaths.flatMap((transformPath)=>{
     const value=JSON.parse(fs.readFileSync(transformPath,'utf8'));
     if(!Array.isArray(value)) throw new Error('Editorial transforms must be a JSON array: '+transformPath);
