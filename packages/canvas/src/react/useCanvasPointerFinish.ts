@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { CanvasShape } from './InfiniteCanvas';
 import type { PointerLifecycleOptions } from './canvasPointerLifecycleTypes';
-import { centreOf, eraseAlongPath, rawBounds } from './canvasGeometry';
+import { centreOf, eraseAlongPath, pointInPolygon, rawBounds } from './canvasGeometry';
 import { DOUBLE_CLICK_DRIFT_PX, ERASER_RADIUS } from './canvasPointerTypes';
 
 type PointerFinishOptions = Pick<PointerLifecycleOptions,
@@ -17,6 +17,7 @@ type PointerFinishOptions = Pick<PointerLifecycleOptions,
   | 'setAnnouncement'
   | 'applyInteraction'
   | 'selectNow'
+  | 'expandToGroups'
   | 'endHistory'
   | 'commit'
   | 'onToolChange'
@@ -38,6 +39,7 @@ export function useCanvasPointerFinish({
   setAnnouncement,
   applyInteraction,
   selectNow,
+  expandToGroups,
   endHistory,
   commit,
   onToolChange,
@@ -61,6 +63,24 @@ export function useCanvasPointerFinish({
       }
 
       setGuides([]);
+
+      if (interaction.kind === 'lasso') {
+        if (e.type === 'pointerup') {
+          const release = toPage(e.clientX, e.clientY);
+          const last = interaction.points[interaction.points.length - 1];
+          const points = last && Math.hypot(release.x - last.x, release.y - last.y) > 1e-9
+            ? [...interaction.points, release]
+            : interaction.points;
+          const enclosed = points.length >= 3
+            ? shapesRef.current.filter(shape => pointInPolygon(centreOf(shape), points)).map(shape => shape.id)
+            : [];
+          const base = interaction.additive ? interaction.baseSelection : [];
+          selectNow(expandToGroups(new Set([...base, ...enclosed])));
+          setAnnouncement(enclosed.length > 0 ? `${enclosed.length}개 올가미 선택됨` : '올가미 안에 선택할 항목이 없습니다');
+        }
+        applyInteraction({ kind: 'none' });
+        return;
+      }
 
       if (interaction.kind === 'erasing') {
         if (e.type === 'pointerup') {
@@ -198,7 +218,7 @@ export function useCanvasPointerFinish({
   }, [
     applyInteraction, cameraRef, createId, drawing, endHistory,
     interactionRef, onToolChange,
-    pointers, selectNow, setAnnouncement, setEditingId, setGuides, setEraserPos,
+    pointers, selectNow, expandToGroups, setAnnouncement, setEditingId, setGuides, setEraserPos,
     setShapes, shapesRef, toPage, commit,
   ]);
 }

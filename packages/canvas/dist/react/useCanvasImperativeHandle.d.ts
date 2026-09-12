@@ -4,10 +4,17 @@ import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './Infini
 import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 type Camera = CanvasSnapshot['camera'];
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
+/** Additional export methods exposed once the host provides its selection ref. */
+export interface CanvasSelectionExportHandle {
+    exportSvgForSelection: () => string | null;
+    exportPngForSelection: () => Promise<Blob | null>;
+}
 interface UseCanvasImperativeHandleOptions {
     ref: ForwardedRef<InfiniteCanvasHandle>;
     containerRef: RefObject<HTMLDivElement | null>;
     shapesRef: RefObject<CanvasShape[]>;
+    /** Optional during the transition for hosts that have not wired selection export yet. */
+    selectedRef?: RefObject<Set<string>>;
     cameraRef: RefObject<Camera>;
     toolRef: RefObject<CanvasTool | 'highlighter'>;
     activeColorRef: RefObject<CanvasColorKey>;
@@ -37,6 +44,6 @@ interface UseCanvasImperativeHandleOptions {
     setAnnouncement: Dispatch<SetStateAction<string>>;
     createId: (prefix?: string) => string;
 }
-export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, cameraRef, toolRef, activeColorRef, drawColorRef, setDrawColor, setActiveColor, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, selectNow, selectionActions, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
+export declare function useCanvasImperativeHandle({ ref, containerRef, shapesRef, selectedRef, cameraRef, toolRef, activeColorRef, drawColorRef, setDrawColor, setActiveColor, past, future, controlled, isDarkMode, minZoom, maxZoom, onToolChange, setSelectedStrokeWidth, onDirty, commit, selectNow, selectionActions, viewportCentre, setShapes, setLocalShapes, setCamera, setEditingId, setAnnouncement, createId, }: UseCanvasImperativeHandleOptions): void;
 export {};
 //# sourceMappingURL=useCanvasImperativeHandle.d.ts.map

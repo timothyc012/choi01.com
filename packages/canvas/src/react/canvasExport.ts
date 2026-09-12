@@ -24,12 +24,45 @@ import { CANVAS_UI_COLORS } from './theme';
 import { effectiveStroke, shapeStrokeRendering } from './canvasShapeStyle';
 
 /** Builds a bounded, sanitized SVG snapshot suitable for download or rasterization. */
-export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string | null {
-  if (all.length === 0) return null;
+function buildCanvasSvgForShapes(
+  shapes: CanvasShape[],
+  isDarkMode: boolean,
+  geometryContext: CanvasShape[] = shapes,
+): string | null {
+  if (shapes.length === 0) return null;
+
+  // A selected connector can refer to nodes that intentionally do not appear
+  // in the exported SVG. Keep the full document available to compute its
+  // attachment points and routing, while rendering only `shapes` below.
+  const geometryById = new Map(geometryContext.map(shape => [shape.id, shape]));
+  const arrowGeometries = new Map<string, ReturnType<typeof arrowGeometry>>();
+  const geometryForArrow = (arrow: CanvasShape) => {
+    const cached = arrowGeometries.get(arrow.id);
+    if (cached) return cached;
+    const geometry = arrowGeometry(arrow, geometryById, geometryContext);
+    arrowGeometries.set(arrow.id, geometry);
+    return geometry;
+  };
+
+  const visibleBounds = (shape: CanvasShape) => {
+    if (shape.type !== 'arrow') return bounds(shape);
+    const geometry = geometryForArrow(shape);
+    const points = geometry.pathPoints?.length
+      ? geometry.pathPoints
+      : geometry.routing === 'curved'
+        ? [geometry.start, geometry.control, geometry.end]
+        : [geometry.start, geometry.end];
+    return {
+      minX: Math.min(...points.map(point => point.x)),
+      minY: Math.min(...points.map(point => point.y)),
+      maxX: Math.max(...points.map(point => point.x)),
+      maxY: Math.max(...points.map(point => point.y)),
+    };
+  };
 
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-  for (const s of all) {
-    const b = bounds(s);
+  for (const s of shapes) {
+    const b = visibleBounds(s);
     minX = Math.min(minX, b.minX); minY = Math.min(minY, b.minY);
     maxX = Math.max(maxX, b.maxX); maxY = Math.max(maxY, b.maxY);
   }
@@ -64,7 +97,7 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
     }).join('');
   };
 
-  const body = all.map(s => {
+  const body = shapes.map(s => {
     const palette = CANVAS_COLORS[s.color ?? 'blue'];
     const b = rawBounds(s);
     const c = centreOf(s);
@@ -78,7 +111,7 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
       return `<path d="${rendering.d}" fill="${rendering.filled ? color : 'none'}" stroke="${rendering.filled ? 'none' : color}" stroke-width="${rendering.width}"${opacity} stroke-linecap="round" stroke-linejoin="round"/>`;
     }
     if (s.type === 'arrow') {
-      const g = arrowGeometry(s, new Map(all.map(x => [x.id, x])), all);
+      const g = geometryForArrow(s);
       const documentStrokeWidth = s.strokeWidth ?? 2.5;
       const arrowheadSize = Math.max(10, 8 + documentStrokeWidth * 2);
       const dotRadius = Math.max(4, 2 + documentStrokeWidth);
@@ -172,6 +205,28 @@ export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="${minX - pad} ${minY - pad} ${w} ${h}">`
     + `<rect x="${minX - pad}" y="${minY - pad}" width="${w}" height="${h}" fill="${isDarkMode ? CANVAS_UI_COLORS.canvasDark : CANVAS_UI_COLORS.canvasLight}"/>`
     + body + `</svg>`;
+}
+
+/** Builds the existing full-board export without changing document state. */
+export function buildCanvasSvg(all: CanvasShape[], isDarkMode: boolean): string | null {
+  return buildCanvasSvgForShapes(all, isDarkMode);
+}
+
+/**
+ * Builds a bounded SVG for exactly the current selection. Connected endpoints
+ * remain available for geometry calculation, but are never emitted as SVG
+ * elements unless they are part of the selection.
+ */
+export function buildSelectionCanvasSvg(
+  all: CanvasShape[],
+  selectedIds: ReadonlySet<string>,
+  isDarkMode: boolean,
+): string | null {
+  return buildCanvasSvgForShapes(
+    all.filter(shape => selectedIds.has(shape.id)),
+    isDarkMode,
+    all,
+  );
 }
 
 export type SvgBuilder = () => string | null;

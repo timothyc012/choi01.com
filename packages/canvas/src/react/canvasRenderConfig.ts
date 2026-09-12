@@ -26,6 +26,7 @@ export function getCanvasRenderConfig({
     ? 'grabbing'
     : tool === 'hand' ? 'grab'
     : tool === 'draw' ? 'crosshair'
+    : tool === 'lasso' ? 'crosshair'
     : tool === 'eraser' ? 'cell'
     : tool === 'select' ? 'default'
     : 'crosshair';
