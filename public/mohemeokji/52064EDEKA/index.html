@@ -788,11 +788,12 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="/mohemeokji/ontology-recipe-details.js?v=706d817fb518"></script>
-    <script src="/mohemeokji/meal-package-prices.js?v=706d817fb518"></script>
-    <script src="./meal-planner-recipe-data.js?v=706d817fb518"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=706d817fb518"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=706d817fb518"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=277f0fb764c8"></script>
+    <script src="/mohemeokji/ontology-recipe-popular.js?v=277f0fb764c8"></script>
+    <script src="/mohemeokji/meal-package-prices.js?v=277f0fb764c8"></script>
+    <script src="./meal-planner-recipe-data.js?v=277f0fb764c8"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=277f0fb764c8"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=277f0fb764c8"></script>
     <script>
       const meals = [];
 
@@ -952,6 +953,12 @@
       function currentRecommendation() {
         return recommendations.current(meals.filter((item)=>item.store===activeStore),recommendationOptions(),recommendationId);
       }
+      function qualityText(item) {
+        const rating=Number(item?.ratingValue),reviews=Number(item?.reviewCount);
+        return Number.isFinite(rating) && rating > 0 && Number.isFinite(reviews) && reviews > 0
+          ? '평점 '+rating.toFixed(1)+' · 후기 '+reviews.toLocaleString('ko-KR')+'개'
+          : '평점·후기 정보 없음';
+      }
       function renderToday() {
         const item = currentRecommendation();
         byId("sourceStatus").textContent = profile.label + (Object.keys(catalog[activeStore]).length ? " · 행사 재료 연결됨" : " · 오늘 유효한 행사 가격 없음");
@@ -977,7 +984,7 @@
         byId("todayTitle").textContent = item.title;
         const info=offerInfo(item);
         byId("todayReason").textContent = (info.mainOffers.length ? '이번 주 할인 주재료를 쓰는 메뉴입니다. ' : '주재료 할인은 없지만 선택할 수 있는 대안입니다. ')
-          + '조리 시간은 '+(item.timeBasis === 'estimate' ? '예상 ' : '원문 표시 ')+item.time+'분입니다.';
+          + '조리 시간은 '+(item.timeBasis === 'estimate' ? '예상 ' : '원문 표시 ')+item.time+'분이며, '+qualityText(item)+'입니다.';
         byId('todayPrimaryOffer').textContent=primaryOfferText(item);
         renderHistoryStatus();
         byId("todayTime").textContent = item.time + "분";
@@ -987,7 +994,7 @@
         byId("whyList").innerHTML =
           '<div class="why-item"><span class="why-index">01</span><div><b>'+(info.mainOffers.length ? '주재료가 할인 중입니다' : '주재료 할인은 없습니다')+'</b><span>' + escapeHtml(info.mainIngredients.join(' · ')) + '</span></div></div>' +
           '<div class="why-item"><span class="why-index">02</span><div><b>할인 외 재료를 확인합니다</b><span>' + (item.missing.length ? item.missing.join(" · ") : "할인 외 재료 없음") + '</span></div></div>' +
-          '<div class="why-item"><span class="why-index">03</span><div><b>반복을 줄여 추천합니다</b><span>같은 주재료·조리 방식과 최근 먹은 기록을 함께 봅니다.</span></div></div>';
+          '<div class="why-item"><span class="why-index">03</span><div><b>후기 신뢰도와 반복을 함께 봅니다</b><span>' + qualityText(item) + ' · 같은 주재료·조리 방식과 최근 먹은 기록을 반영합니다.</span></div></div>';
         const pool = suggestedMeals();
         const recommendationIndex=pool.findIndex((entry)=>entry.id===item.id);
         const alternatives = [...pool.slice(recommendationIndex + 1), ...pool.slice(0, recommendationIndex + 1)].filter((alt)=>alt.id!==item.id).slice(0,2);
@@ -1070,7 +1077,7 @@
           '<p class="menu-offer"><b>할인상품 독어 원문명</b><br>' + escapeHtml(linkedOfferText(item)) + '</p>' +
           '<p class="menu-sub">할인: ' + (item.sale.join(" · ") || "해당 없음") + '<br>할인 외: ' + (item.missing.join(" · ") || "없음") + '</p>' +
           '<div class="tag-row"><span class="tag tag-source">' + item.store + '</span>' + item.tags.map((tag) => '<span class="tag">' + tag + '</span>').join("") + '</div>' +
-          '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
+          '<div class="menu-bottom"><span class="menu-price">' + item.time + '분 · ' + qualityText(item) + ' · ' + shopping.summary(mealBasket(item)) + '</span><div class="menu-actions"><button class="button button-small choose-today" data-id="' + item.id + '">오늘 선택</button><button class="button button-small add-menu" data-id="' + item.id + '">식단표</button></div></div>' +
           '</article>'
         ).join("") : '<p class="panel-copy" style="padding:0 20px 20px">조건에 맞는 할인 메뉴가 없습니다. 다른 필터나 마트를 선택해주세요.</p>';
         document.querySelectorAll(".menu-item").forEach((card) => {
@@ -1110,10 +1117,13 @@
         byId("detailIntro").textContent = selectedMeal.recipeNote || "원문 재료와 조리 순서를 바탕으로 정리했습니다. 수량이 비어 있는 재료는 직접 확인하세요.";
         byId('detailOfferInfo').textContent=primaryOfferText(selectedMeal);
         renderHistoryStatus();
-        byId("recipeMeta").textContent = [selectedMeal.servingsText, (selectedMeal.timeBasis === 'estimate' ? "예상 " : "원문 시간 ") + selectedMeal.time + "분", selectedMeal.difficultyText].filter(Boolean).join(" · ");
+        byId("recipeMeta").textContent = [selectedMeal.servingsText, (selectedMeal.timeBasis === 'estimate' ? "예상 " : "원문 시간 ") + selectedMeal.time + "분", selectedMeal.difficultyText, qualityText(selectedMeal)].filter(Boolean).join(" · ");
         byId("recipeAmounts").innerHTML = selectedMeal.detailIngredients.map((item) => "<li>" + escapeHtml(item) + "</li>").join("");
-        byId("detailSteps").innerHTML = selectedMeal.steps.map((step) => "<li>" + escapeHtml(step) + "</li>").join("");
-        byId("recipeProvenance").textContent = "출처: " + selectedMeal.sourceCorpus + " · 원문: " + selectedMeal.sourceTitle + " · 작성자: " + selectedMeal.sourceAuthor + " · 조리법은 원문 단계를 바탕으로 정리했습니다.";
+        const sourceLinkOnly=selectedMeal.detailStatus === 'source-link-only';
+        byId("detailSteps").innerHTML = sourceLinkOnly
+          ? "<li>조리 단계는 만개의레시피 원문에서 확인하세요.</li>"
+          : selectedMeal.steps.map((step) => "<li>" + escapeHtml(step) + "</li>").join("");
+        byId("recipeProvenance").textContent = "출처: " + selectedMeal.sourceCorpus + " · 원문: " + selectedMeal.sourceTitle + " · 작성자: " + selectedMeal.sourceAuthor + (sourceLinkOnly ? " · 재료·평점·후기 메타데이터를 수집했으며 조리 단계는 원문 링크에서 제공합니다." : " · 조리법은 원문 단계를 바탕으로 정리했습니다.");
         byId("recipeSource").href = selectedMeal.sourceUrl;
         byId("recipeSource").setAttribute("aria-label", selectedMeal.sourceTitle + " 만개의레시피 원문 보기");
         setRecipeVisibility(true);

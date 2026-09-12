@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import {generateCatalog,parseCsv} from '../scripts/generate-meal-offers.mjs';
 const context=vm.createContext({window:{}});
 const root=new URL('../public/mohemeokji/',import.meta.url);
-for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) {
+for(const f of ['ontology-recipe-details.js','ontology-recipe-popular.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-recommendations.js']) {
   vm.runInContext(fs.readFileSync(new URL(f,root),'utf8'),context);
 }
 const engine=context.window.MealRecommendations;
@@ -14,7 +14,7 @@ const price={priceCents:100,pack:'500 g'};
 const fixtureCatalog=generateCatalog(parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv',import.meta.url),'utf8')),'/offers/supermarket_food_offers_2026-09-07.csv').packageCatalog;
 
 test('each source recipe has explicit editorial main-ingredient and variety metadata',()=>{
-  for(const recipe of context.window.ontologyRecipeDetails){
+  for(const recipe of context.window.ontologyRecipeCatalog){
     const info=recipe.recommendationProfile;
     assert.ok(info.primaryIngredients.length>0,recipe.title);
     assert.ok(info.primaryIngredients.every(name=>[...recipe.sale,...recipe.missing].includes(name)),recipe.title);
@@ -103,7 +103,7 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   assert.ok(rewe.some(r=>r.sourceRecipeId==='7032812'));
   assert.deepEqual(aldi.map(r=>r.sourceRecipeId).join(','),'6700719');
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
-  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,3);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,7);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
     assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
   }

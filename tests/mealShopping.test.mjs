@@ -232,16 +232,21 @@ test('all six entry pages are identical and use current recipes without portion 
     assert.match(html, /lang="de"/);
     assert.match(html, /할인 재료.*메뉴에 연결됨/);
     assert.match(html, /수집된 지점·지역 자료 기준/);
-    for (const asset of ['ontology-recipe-details', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-shopping']) {
+    assert.match(html, /function qualityText/);
+    assert.match(html, /후기 신뢰도와 반복을 함께 봅니다/);
+    assert.match(html, /조리 단계는 만개의레시피 원문에서 확인하세요/);
+    for (const asset of ['ontology-recipe-details', 'ontology-recipe-popular', 'meal-planner-recipe-data', 'meal-package-prices', 'meal-shopping']) {
       assert.ok(html.includes(asset + '.js?v='));
     }
     new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
     const recipes = vm.createContext({ window: {} });
     vm.runInContext(fs.readFileSync(new URL('ontology-recipe-details.js', root), 'utf8'), recipes);
+    vm.runInContext(fs.readFileSync(new URL('ontology-recipe-popular.js', root), 'utf8'), recipes);
     vm.runInContext(fs.readFileSync(new URL('meal-package-prices.js', root), 'utf8'), recipes);
     vm.runInContext(fs.readFileSync(new URL(path + 'meal-planner-recipe-data.js', root), 'utf8'), recipes);
     const stores = [...new Set(Object.values(sourceMeta.stores).flat())];
-    const sourceCount = recipes.window.ontologyRecipeDetails.length;
+    const sourceCount = recipes.window.ontologyRecipeCatalog.length;
+    assert.equal(sourceCount,100);
     assert.equal(recipes.window.expandedMealExtras,undefined);
     const archive=stores.flatMap(store=>recipes.window.createMealRecipes(store));
     assert.equal(archive.length, stores.length * sourceCount);
@@ -249,12 +254,17 @@ test('all six entry pages are identical and use current recipes without portion 
       assert.equal('cost' in meal, false);
       assert.match(meal.id, new RegExp('-recipe-' + meal.sourceRecipeId + '$'));
       assert.ok(meal.detailIngredients.length >= 2, meal.title);
-      assert.ok(meal.steps.length >= 3, meal.title);
+      if (meal.detailStatus === 'source-link-only') {
+        assert.equal(meal.steps.length,0,meal.title);
+        assert.match(meal.recipeNote,/원문에서 확인/);
+      } else assert.ok(meal.steps.length >= 3, meal.title);
       assert.match(meal.sourceUrl, /^https:\/\/www\.10000recipe\.com\/recipe\/\d+$/);
       assert.ok(meal.sourceTitle.length > 0);
-      assert.equal(meal.sourceCorpus, '01ontology DB · recipe-full (01ontology-open 연동)');
+      assert.match(meal.sourceCorpus,/^01ontology DB · recipe-(?:full|popular-30k)/);
       assert.ok(meal.sourceAuthor.length > 0);
       assert.ok(Number.isFinite(meal.time) && meal.time > 0);
+      assert.ok(Object.hasOwn(meal,'ratingValue'));
+      assert.ok(Object.hasOwn(meal,'reviewCount'));
     }
   }
 });
