@@ -1,6 +1,6 @@
 ---
 name: mohemeokji-weekly
-description: Update Choi01 모해먹지 from a weekly supermarket CSV, verify postcode/store offers and recipe-full recipe provenance, test shopping and meal persistence, and prepare an authorized deployment. Use for 다음 주 모해먹지 갱신, 할인 CSV 반영, or the Aside weekly handoff.
+description: Update Choi01 모해먹지 from a weekly supermarket CSV, verify postcode/store offers and recipe-30k-v2 recipe provenance, test shopping and meal persistence, and prepare an authorized deployment. Use for 다음 주 모해먹지 갱신, 할인 CSV 반영, or the Aside weekly handoff.
 ---
 
 # 모해먹지 주간 갱신
@@ -29,7 +29,7 @@ After verifying the configured recipe database and tenant, create the store-spec
 node scripts/find-store-recipe-candidates.mjs INPUT.csv --output NEW_STAGING_DIRECTORY/recipe-candidates.json --database VERIFIED_DATABASE --limit 5
 ```
 
-This is the required bridge from store offer research to `recipe-full`. It groups each exact product and its source row with candidate recipes under the actual postcode/store. It runs a read-only transaction. Treat zero-candidate offers as an explicit coverage gap. The output is a review queue, not an auto-publish artifact: select and export source records only after checking that the ingredient is defining, the raw/cooked form and cut match, and the recipe has usable quantities and steps.
+This is the required bridge from store offer research to the active `recipe-30k-v2` tenant. It groups each exact product and its source row with candidate recipes under the actual postcode/store. It runs a read-only transaction. Treat zero-candidate offers as an explicit coverage gap. The output is a review queue, not an auto-publish artifact: select and export source records only after checking that the ingredient is defining, the raw/cooked form and cut match, and the recipe has usable quantities and steps.
 
 Generator data shape: `mealPackagePricesByArea[postcode][store][ingredient]`; `mealOfferMeta.profiles[postcode][store]`; `stores[postcode]`; `areas[postcode]`. New postcode selectors are generated at runtime. Legacy routes remain valid. Current UI has one branch per postcode/chain: if two branches appear, stop that combination and implement/select an explicit branch rather than blending prices. The parser intentionally fails closed here.
 
@@ -39,7 +39,7 @@ Use explicit `가격적용단위` to distinguish one pack, per 100 g, per kg and
 
 ## Recipes
 
-Read [recipe and application checks](references/verification.md). Locate the configured `01ontology-open` project/connection and verify its actual database/tenant before querying. Historically the local backing DB was named `01ontology` and the source corpus `recipe-full`; these are observations, not guarantees. Do not assume a repo name is a database name. Use read-only search/export, without importing or modifying the ontology DB.
+Read [recipe and application checks](references/verification.md). Locate the configured `01ontology-open` project/connection and verify its actual database/tenant before querying. The current verified local target is database `onto_personal`, tenant `recipe-30k-v2`; the earlier `01ontology`/`recipe-full` pair is historical. Do not assume a repo name is a database name. Use read-only search/export, without importing or modifying the ontology DB.
 
 Use actual source recipe IDs, titles, authors, quantities, ordered steps and URLs. Curated website records live in `ontology-recipe-details.js`; store variants are generated in `meal-planner-recipe-data.js`. IDs derive from sourceRecipeId, never array position. Do not claim the entire DB is searchable from the website: the website serves a selected static subset. Review which new sale ingredients lack menu coverage; select additional relevant source recipes where needed, without an arbitrary 30-recipe cap or duplicating one dish under new titles.
 
@@ -49,7 +49,7 @@ Every selected recipe also needs editorial `recommendationProfile`: `primaryIngr
 
 Visible menus and automatic meals require a **currently valid primary-ingredient offer for the selected postcode/store** (`requireMainOffer`). Sorting a shared full library differently is insufficient. `createMealRecipes(store)` builds a source archive for saved-plan restoration, not the visible menu list. Keep old saved dishes accessible and label those without a current primary offer. Never force seven meals when fewer qualify; snack-only coverage needs an explicit empty main-meal state. Identical valid offers may legitimately produce overlapping lists. Preserve the CSV `상품명` as the German original name apart from whitespace normalization and show it with the Korean ingredient, selling unit and price in the lead recommendation, every menu card and the expandable recipe-linked offer directory (`lang="de"` on the original name). This makes legitimate overlap auditable. Within a postcode, the lead recommendation may prefer a valid ingredient offered by fewer of the selectable stores; this must never make an ineligible recipe visible. Report each store's eligible menu count and automatic-main count, then seek source-backed recipes for uncovered sale ingredients.
 
-Use `scripts/export-meal-recipes.sql` for read-only source export after verifying the database/tenant. Pass selected source IDs through psql's `recipe_ids` variable. Compare source labels, quantities, metadata and ordered instructions before adding records. Preserve naturally short, complete recipes; do not pad a two-ingredient snack to an arbitrary five steps. Distinguish plain from flavored yogurt, raw breast from tenderloin, pork tenderloin/neck/loin/topside from generic pork, rib-eye from generic beef, processed slices from other cheese, and pure pork mince from verified 50/50 pork/beef blends.
+Use `scripts/export-meal-recipes.sql` for read-only source export after verifying the database/tenant. Pass the verified tenant through `recipe_tenant` and selected source IDs through psql's `recipe_ids` variable. Compare source labels, quantities, metadata and ordered instructions before adding records. Preserve naturally short, complete recipes; do not pad a two-ingredient snack to an arbitrary five steps. Distinguish plain from flavored yogurt, raw breast from tenderloin, pork tenderloin/neck/loin/topside from generic pork, rib-eye from generic beef, processed slices from other cheese, and pure pork mince from verified 50/50 pork/beef blends.
 
 ## Apply and verify
 

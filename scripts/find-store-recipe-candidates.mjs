@@ -4,6 +4,8 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {generateCatalog,parseCsv} from './generate-meal-offers.mjs';
 
+export const DEFAULT_RECIPE_TENANT='recipe-30k-v2';
+
 export const recipeSearchSpec = {
   '닭가슴살': {ingredientLabels:['닭가슴살'],titleTerms:['닭가슴살']},
   '닭안심': {ingredientLabels:['닭안심','닭안심살'],titleTerms:['닭안심']},
@@ -42,7 +44,7 @@ export function searchRequestForCatalog(packageCatalog) {
   return [...keys].filter((key)=>recipeSearchSpec[key]).sort().map((key)=>({key,...recipeSearchSpec[key]}));
 }
 
-export function buildStoreCandidateReport({packageCatalog,meta,candidates,input,database}) {
+export function buildStoreCandidateReport({packageCatalog,meta,candidates,input,database,tenant=DEFAULT_RECIPE_TENANT}) {
   const byKey = new Map();
   for (const candidate of candidates) {
     if (!byKey.has(candidate.offerKey)) byKey.set(candidate.offerKey,[]);
@@ -59,20 +61,22 @@ export function buildStoreCandidateReport({packageCatalog,meta,candidates,input,
       locations.push({postcode,store,branch:meta.profiles[postcode][store].branch,offers});
     }
   }
-  return {generatedAt:new Date().toISOString(),input,database,tenant:'recipe-full',locations};
+  return {generatedAt:new Date().toISOString(),input,database,tenant,locations};
 }
 
 function parseArgs(argv) {
-  const args={input:null,output:null,database:'01ontology',limit:5};
+  const args={input:null,output:null,database:'onto_personal',tenant:DEFAULT_RECIPE_TENANT,limit:5};
   for(let i=0;i<argv.length;i++) {
     const value=argv[i];
     if(!args.input && !value.startsWith('--')) args.input=value;
     else if(value==='--output') args.output=argv[++i];
     else if(value==='--database') args.database=argv[++i];
+    else if(value==='--tenant') args.tenant=argv[++i];
     else if(value==='--limit') args.limit=Number(argv[++i]);
     else throw new Error('Unknown argument: '+value);
   }
-  if(!args.input || !args.output) throw new Error('Usage: node scripts/find-store-recipe-candidates.mjs INPUT.csv --output REPORT.json [--database 01ontology] [--limit 5]');
+  if(!args.input || !args.output) throw new Error('Usage: node scripts/find-store-recipe-candidates.mjs INPUT.csv --output REPORT.json [--database onto_personal] [--tenant recipe-30k-v2] [--limit 5]');
+  if(!args.tenant) throw new Error('--tenant must not be empty');
   if(!Number.isInteger(args.limit) || args.limit<1 || args.limit>20) throw new Error('--limit must be an integer from 1 to 20');
   return args;
 }
@@ -83,9 +87,9 @@ export function run(argv=process.argv.slice(2)) {
   const generated=generateCatalog(rows,'/offers/'+path.basename(args.input));
   const request=searchRequestForCatalog(generated.packageCatalog);
   const sql=fileURLToPath(new URL('./find-store-recipe-candidates.sql',import.meta.url));
-  const stdout=execFileSync('psql',['-X','-qAt','-w','-d',args.database,'-v','ON_ERROR_STOP=1','-v','search_spec_json='+JSON.stringify(request),'-v','candidate_limit='+args.limit,'-f',sql],{encoding:'utf8',maxBuffer:64*1024*1024});
+  const stdout=execFileSync('psql',['-X','-qAt','-w','-d',args.database,'-v','ON_ERROR_STOP=1','-v','recipe_tenant='+args.tenant,'-v','search_spec_json='+JSON.stringify(request),'-v','candidate_limit='+args.limit,'-f',sql],{encoding:'utf8',maxBuffer:64*1024*1024});
   const candidates=stdout.split(/\r?\n/).filter(Boolean).map((line)=>JSON.parse(line));
-  const report=buildStoreCandidateReport({packageCatalog:generated.packageCatalog,meta:generated.meta,candidates,input:args.input,database:args.database});
+  const report=buildStoreCandidateReport({packageCatalog:generated.packageCatalog,meta:generated.meta,candidates,input:args.input,database:args.database,tenant:args.tenant});
   fs.writeFileSync(args.output,JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({locations:report.locations.length,offers:report.locations.reduce((n,x)=>n+x.offers.length,0),candidates:candidates.length,output:args.output}));
 }
