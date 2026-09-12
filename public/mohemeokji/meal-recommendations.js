@@ -45,6 +45,15 @@
     return {mainIngredients,mainOffers,secondaryOffers,substitutionNotes};
   }
 
+  function quality(meal) {
+    const rating=Number(meal.ratingValue),reviews=Number(meal.reviewCount);
+    if (!Number.isFinite(rating) || rating<1 || rating>5 || !Number.isInteger(reviews) || reviews<1) return 0;
+    const weightedRating=(rating*reviews+4.5*20)/(reviews+20);
+    const ratingPoints=Math.max(0,Math.min(1,(weightedRating-3.5)/1.5))*18;
+    const reviewPoints=Math.min(1,Math.log1p(reviews)/Math.log1p(1000))*12;
+    return ratingPoints+reviewPoints;
+  }
+
   function score(meal, {catalog = {}, history = [], date, moment = '저녁', offerFrequency = {}}) {
     const info = explain(meal,catalog), meta = profile(meal);
     const recent = restoreHistory(JSON.stringify(history),date);
@@ -54,7 +63,7 @@
     const storeSpecificity = info.mainOffers.reduce((sum,offer)=>sum+12/Math.max(1,offerFrequency[offer.name]||1),0);
     const breakfast = meal.tags.includes('아침') && ['점심','저녁'].includes(moment) ? 140 : 0;
     const side = meta.kind === 'side' ? 140 : 0;
-    return mainCoverage*100 + storeSpecificity + Math.min(info.secondaryOffers.length,3)*3 - Math.min(meal.time/15,15)
+    return mainCoverage*100 + storeSpecificity + Math.min(info.secondaryOffers.length,3)*3 + quality(meal) - Math.min(meal.time/15,15)
       - breakfast - side - (sameDish ? 160 : 0) - familyRecent*18;
   }
 
@@ -95,5 +104,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal};
+  window.MealRecommendations = {available,rank,sequence,current,explain,quality,restoreHistory,recordMeal};
 }());

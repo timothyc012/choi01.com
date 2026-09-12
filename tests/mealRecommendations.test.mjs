@@ -39,6 +39,21 @@ test('the lead recommendation favors an offer that is distinctive to the selecte
   assert.equal(ranked[0].id,'distinctive');
 });
 
+test('verified rating and review confidence rank equally discounted recipes',()=>{
+  const lightlyReviewed=meal('light',['감자'],'potato',{ratingValue:5,reviewCount:1});
+  const trusted=meal('trusted',['감자'],'potato',{ratingValue:4.8,reviewCount:180});
+  const missing=meal('missing',['감자'],'potato');
+  const ranked=engine.rank([lightlyReviewed,missing,trusted],{catalog:{감자:price},date:'2026-09-08'});
+  assert.deepEqual(ranked.map(item=>item.id),['trusted','light','missing']);
+});
+
+test('rating data cannot make a recipe without a discounted primary ingredient eligible',()=>{
+  const unrelated=meal('unrelated',['연어'],'salmon',{ratingValue:5,reviewCount:2000});
+  const discounted=meal('discounted',['감자'],'potato',{ratingValue:4.2,reviewCount:4});
+  const ranked=engine.rank([unrelated,discounted],{catalog:{감자:price},date:'2026-09-08',requireMainOffer:true});
+  assert.deepEqual(ranked.map(item=>item.id),['discounted']);
+});
+
 test('a varied week does not repeat source IDs, exceed two per family, or place families consecutively when alternatives exist',()=>{
   const pool=Array.from({length:12},(_,i)=>meal('c'+i,['닭고기'],'chicken'));
   pool.push(...Array.from({length:3},(_,i)=>meal('p'+i,['감자'],'potato')),...Array.from({length:3},(_,i)=>meal('n'+i,['파스타'],'pasta')),meal('v',['당근'],'carrot'));
