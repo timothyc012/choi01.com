@@ -12,7 +12,7 @@
   const euro = (cents) => (cents / 100).toFixed(2).replace(".", ",") + "€";
 
   function ingredientName(label) {
-    return String(label||'').trim().replace(/\s*\(원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
+    return String(label||'').trim().replace(/\s*\([^)]*원문[^)]*수량\s*미표기[^)]*\)\s*$/u,'')
       .replace(/\s+(?:약간|조금|적당량|적당히|넉넉히|필요량|한\s*바퀴|취향껏|적당한\s*양)\s*$/u,'')
       .split(/\s+(?=(?:\d|약\b|조금\b|적당량|수량\s*미표기))/)[0].trim();
   }

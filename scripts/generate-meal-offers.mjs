@@ -50,7 +50,7 @@ const legacyAreas = {
 };
 
 const rules = {
-  '닭가슴살': [/(?:^|\s)Hähnchenbrustfilets?$/i],
+  '닭가슴살': [/(?:^|\s)Hähnchenbrustfilets?$/i, /^Frisches Hähnchen Brustfilet$/i],
   '닭안심': [/^Hähnchen-Innenfilet$/i],
   '돼지안심': [/^Schweinefilet lang$/i],
   '돼지목살': [/^Schweine-Nackensteaks$/i],
@@ -63,7 +63,7 @@ const rules = {
   '칠면조가슴살': [/^Putenbrustfilet/i],
   '연어': [/Lachsfilet/i],
   '훈제연어': [/Räucherlachs/i],
-  '송어': [/Forelle/i, /Lachsforellen-Filetseite/i],
+  '송어': [/Forellen[ -]?filet/i, /Lachsforellen-Filetseite/i],
   '새우': [/Garnelen/i, /Garnele/i, /Shrimp/i],
   '참치': [/Thunfisch/i, /Tuna/i],
   '토마토': [/Tomaten/i, /Tomato/i],
@@ -77,7 +77,7 @@ const rules = {
   '양상추': [/^Kopfsalat$/i, /Eisbergsalat/i, /Blattsalat/i],
   '레몬': [/^Bio Zitronen$/i, /^Zitronen/i, /^Zitrone/i],
   '아보카도': [/Avocado/i],
-  '바나나': [/^Bio Bananen$/i, /^Bananen$/i, /^Banane$/i],
+  '바나나': [/^Bio Bananen$/i, /^Bananen$/i, /^Banane$/i, /^Ecuador - Bananen$/i],
   '블루베리': [/Heidelbeeren/i, /Heidelbeere/i],
   '딸기': [/Erdbeeren/i, /Erdbeere/i],
   '복숭아': [/Pfirsiche/i, /Pfirsich/i],
@@ -91,7 +91,7 @@ const rules = {
   '파마산치즈': [/Parmesan/i],
   '버터': [/Butter/i],
   '허브 쿼크': [/Kräuterquark/i, /Kraeuterquark/i],
-  '파스타': [/^3 Glocken.*Teigwaren$/i, /^Combino Spaghetti$/i, /^Spaghetti/i, /^Pasta(?!sauce)/i],
+  '파스타': [/^3 Glocken.*Teigwaren$/i, /^3 Glocken Genuss Pur Pasta$/i, /^Combino Spaghetti$/i, /^Spaghetti/i, /^Pasta(?!sauce)/i],
   '토스트': [/Toast/i],
   '식빵': [/Toastbrot/i],
   '달걀': [/Eier/i, /^Ei\b/i],
@@ -104,14 +104,21 @@ const rules = {
 };
 
 const excluded = {
-  '토마토': [/sauce/i],
+  '토마토': [/sauce|ketchup|getrocknet|passiert|mark\b|konserve/i],
+  '오이': [/gewürz|gewuerz|eingelegt|essig|cornichon/i],
+  '양파': [/lauchzwiebel|frühlingszwiebel|fruehlingszwiebel/i],
+  '참치': [/dose|konserve|abtropfgewicht/i],
   '파스타': [/sauce/i, /pesto/i, /instant/i],
   '바나나': [/schoko/i],
   '양상추': [/fleischsalat/i, /salatkrönung/i],
   '레몬': [/limonade/i, /eistee/i],
-  '요거트': [/pudding/i, /dessert/i],
-  '빵': [/Brotaufstrich/i, /Brotzeit/i, /Frikadellenbrötchen/i],
-  '버터': [/Buttermilch/i, /Buttercroissant/i],
+  '요거트': [/pudding|dessert|frucht|alternative|soja|mit der ecke|quarkbällchen/i],
+  '빵': [/Brotaufstrich/i, /Brotzeit/i, /Frikadellenbrötchen/i, /Käsebrötchen/i],
+  '토스트': [/brötchen|broetchen/i],
+  '버터': [/Buttermilch/i, /Buttercroissant/i, /Butterkäse|Butterkaese/i],
+  '모짜렐라치즈': [/piccolini|pizza|tomate-mozzarella/i],
+  '쌀': [/milchreis|milch-reis|pudding|express|vorgegart|gekocht/i],
+  '또띠아': [/nacho|chips|110[ -]?g|\bchio\b/i],
   '사과': [/Apfeltasche/i],
   '치즈': [/pizza-fleischkäse/i, /Leberkäse/i, /Pizza/i, /Ofenfrische/i]
 };
@@ -242,8 +249,10 @@ export function generateCatalog(rows, sourcePublicPath) {
     const matchers = rules[ingredient] || [];
     return areaRows.filter((row) => {
       const name = compact(row['상품명']);
+      const productText = name + ' ' + compact(row['상품정보']);
       const conditions = compact(row['할인조건']);
-      return matchers.some((matcher) => matcher.test(name)) && !(excluded[ingredient] || []).some((bad) => bad.test(name))
+      return matchers.some((matcher) => matcher.test(name)) && !(excluded[ingredient] || []).some((bad) => bad.test(productText))
+        && (ingredient !== '요거트' || /natur|plain|ungesüßt|ungesuesst/i.test(productText))
         && cents(row['행사가격']) !== null && (!conditions || /^(없음|none|unconditional)$/i.test(conditions))
         && (!row['최소구매수량'] || Number(row['최소구매수량']) === 1)
         && (ingredient !== '다진고기' || /50\s*%\s*Schwein.*50\s*%\s*Rind/i.test(row['상품정보']))
@@ -287,6 +296,7 @@ export function generateCatalog(rows, sourcePublicPath) {
         chain,
         label: chain + ' · ' + meta.label,
         branch: compact(first?.['지점']),
+        branchId: createBranchId(first),
         offerCount: areaRows.length + '행',
         offerSummary: (summary || '행사 상품') + ' · ' + compact(first?.['행사기간']),
         period: [...new Set(areaRows.map((row) => compact(row['행사기간'])))].join(' / '),

@@ -1,0 +1,1250 @@
+{
+  "input": "supermarket_food_offers_2026-09-14.csv",
+  "inputSha256": "81f3679d3f7c8f5cba5be5513f6fde837ddd94f044e91b40c50f48c131786948",
+  "inputRows": 810,
+  "rowCount": 686,
+  "duplicateSearchRows": 124,
+  "statuses": {
+    "verified": 175,
+    "held": 510,
+    "held-form": 1
+  },
+  "verified": [
+    {
+      "sourceRow": 2,
+      "postcode": "40468",
+      "store": "REWE",
+      "product": "3 Glocken Genuss Pur Pasta",
+      "evidence": "REWE An der Piwipp 공식 지점 상품 카드: 3 Glocken Genuss Pur Pasta; 500 g; 0.99 EUR. Bonus 적립 제외 일반 행사가."
+    },
+    {
+      "sourceRow": 9,
+      "postcode": "40468",
+      "store": "REWE",
+      "product": "Frisches Hähnchen Brustfilet",
+      "evidence": "REWE An der Piwipp 공식 지점 상품 카드: Frisches Hähnchen Brustfilet; 1 kg; 11.99 EUR. Bonus 적립 제외 일반 행사가."
+    },
+    {
+      "sourceRow": 44,
+      "postcode": "40472",
+      "store": "EDEKA",
+      "product": "Ecuador - Bananen",
+      "evidence": "Ecuador - Bananen; 1 kg; 1.49 EUR; 14.09.2026–19.09.2026. 지점 공식 행사 페이지 확인."
+    },
+    {
+      "sourceRow": 56,
+      "postcode": "40474",
+      "store": "EDEKA",
+      "product": "Ecuador - Bananen",
+      "evidence": "Ecuador - Bananen; 1 kg; 1.49 EUR; 14.09.2026–19.09.2026. 지점 공식 행사 페이지 확인."
+    },
+    {
+      "sourceRow": 68,
+      "postcode": "44369",
+      "store": "EDEKA",
+      "product": "Ecuador - Bananen",
+      "evidence": "Ecuador - Bananen; 1 kg; 1.49 EUR; 14.09.2026–19.09.2026. 지점 공식 행사 페이지 확인."
+    },
+    {
+      "sourceRow": 80,
+      "postcode": "52064",
+      "store": "EDEKA",
+      "product": "Ecuador - Bananen",
+      "evidence": "Ecuador - Bananen; 1 kg; 1.49 EUR; 14.09.2026–19.09.2026. 지점 공식 행사 페이지 확인."
+    },
+    {
+      "sourceRow": 128,
+      "postcode": "40468",
+      "store": "ALDI SÜD",
+      "product": "Galbani Mozzarella",
+      "evidence": "ALDI SÜD 공식 18.09.2026 행사 페이지 상품 카드: Galbani Mozzarella; 125 g; 0.99 EUR."
+    },
+    {
+      "sourceRow": 131,
+      "postcode": "40468",
+      "store": "ALDI SÜD",
+      "product": "Räucherlachs",
+      "evidence": "ALDI SÜD 공식 18.09.2026 행사 페이지 상품 카드: Räucherlachs; 220 g; 4.29 EUR."
+    },
+    {
+      "sourceRow": 134,
+      "postcode": "40474",
+      "store": "ALDI SÜD",
+      "product": "Galbani Mozzarella",
+      "evidence": "ALDI SÜD 공식 18.09.2026 행사 페이지 상품 카드: Galbani Mozzarella; 125 g; 0.99 EUR."
+    },
+    {
+      "sourceRow": 137,
+      "postcode": "40474",
+      "store": "ALDI SÜD",
+      "product": "Räucherlachs",
+      "evidence": "ALDI SÜD 공식 18.09.2026 행사 페이지 상품 카드: Räucherlachs; 220 g; 4.29 EUR."
+    },
+    {
+      "sourceRow": 140,
+      "postcode": "52064",
+      "store": "ALDI SÜD",
+      "product": "Galbani Mozzarella",
+      "evidence": "ALDI SÜD 공식 18.09.2026 행사 페이지 상품 카드: Galbani Mozzarella; 125 g; 0.99 EUR."
+    },
+    {
+      "sourceRow": 143,
+      "postcode": "52064",
+      "store": "ALDI SÜD",
+      "product": "Räucherlachs",
+      "evidence": "ALDI SÜD 공식 18.09.2026 행사 페이지 상품 카드: Räucherlachs; 220 g; 4.29 EUR."
+    },
+    {
+      "sourceRow": 144,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Alpenfrischkäse",
+      "evidence": "ALDI 공식 OFFER_GET product 1001079; 2026-09-14..2026-09-19; 0.99 EUR; 150-g-Becher"
+    },
+    {
+      "sourceRow": 145,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Alpensalz XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1024168; 2026-09-14..2026-09-19; 0.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 146,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Antipasti",
+      "evidence": "ALDI 공식 OFFER_GET product 1040565; 2026-09-14..2026-09-19; 2.29 EUR; 180-g-Glas"
+    },
+    {
+      "sourceRow": 147,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Äpfel",
+      "evidence": "ALDI 공식 OFFER_GET product 1029250; 2026-09-17..2026-09-19; 1.69 EUR; 600-g-Schale"
+    },
+    {
+      "sourceRow": 148,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Apfelchips",
+      "evidence": "ALDI 공식 OFFER_GET product 1034490; 2026-09-14..2026-09-19; 1.49 EUR; 70-g-Beutel"
+    },
+    {
+      "sourceRow": 149,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Apfelessig naturtrüb",
+      "evidence": "ALDI 공식 OFFER_GET product 1002327; 2026-09-14..2026-09-19; 1.29 EUR; 750-ml-Flasche"
+    },
+    {
+      "sourceRow": 150,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Avocados",
+      "evidence": "ALDI 공식 OFFER_GET product 1022015; 2026-09-17..2026-09-19; 1.79 EUR; 2er-Schale"
+    },
+    {
+      "sourceRow": 151,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Backfisch-Stäbchen / Fischstäbchen",
+      "evidence": "ALDI 공식 OFFER_GET product 78540000002; 2026-09-14..2026-09-19; 2.49 EUR; Packung"
+    },
+    {
+      "sourceRow": 152,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Beilagensalat",
+      "evidence": "ALDI 공식 OFFER_GET product 1007854; 2026-09-14..2026-09-19; 1.79 EUR; 400-g-Becher"
+    },
+    {
+      "sourceRow": 153,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Bergbauernkäse",
+      "evidence": "ALDI 공식 OFFER_GET product 1025807; 2026-09-14..2026-09-19; 2.99 EUR; 250-g-Packung"
+    },
+    {
+      "sourceRow": 154,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Best of Kekse & Waffeln",
+      "evidence": "ALDI 공식 OFFER_GET product 3472; 2026-09-17..2026-09-19; 2.49 EUR; 300-g-Dose"
+    },
+    {
+      "sourceRow": 155,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Bio-Miesmuscheln",
+      "evidence": "ALDI 공식 OFFER_GET product 1042345; 2026-09-17..2026-09-19; 3.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 156,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Blonde Roast",
+      "evidence": "ALDI 공식 OFFER_GET product 1035606; 2026-09-14..2026-09-19; 9.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 157,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Bratenspezialität",
+      "evidence": "ALDI 공식 OFFER_GET product 1028259; 2026-09-17..2026-09-19; 1.79 EUR; 120-g-Packung"
+    },
+    {
+      "sourceRow": 158,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Brotaufstrich",
+      "evidence": "ALDI 공식 OFFER_GET product 1040739; 2026-09-17..2026-09-19; 3.49 EUR; 350-g-Glas"
+    },
+    {
+      "sourceRow": 160,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Cabernet Blanc-Grauburgunder Rheinhessen QbA",
+      "evidence": "ALDI 공식 OFFER_GET product 1035031; 2026-09-14..2026-09-19; 3.99 EUR; 0,75-L-Flasche"
+    },
+    {
+      "sourceRow": 161,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Camembert",
+      "evidence": "ALDI 공식 OFFER_GET product 1031874; 2026-09-14..2026-09-19; 1.69 EUR; 150-g-Packung"
+    },
+    {
+      "sourceRow": 162,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Chicorée",
+      "evidence": "ALDI 공식 OFFER_GET product 6258; 2026-09-17..2026-09-19; 1.39 EUR; 500-g-Packung"
+    },
+    {
+      "sourceRow": 164,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Comtess",
+      "evidence": "ALDI 공식 OFFER_GET product 1002822; 2026-09-14..2026-09-19; 1.69 EUR; 350-g-Packung"
+    },
+    {
+      "sourceRow": 165,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Dark Roast",
+      "evidence": "ALDI 공식 OFFER_GET product 1035608; 2026-09-14..2026-09-19; 9.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 166,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Die Backfrische Mozarella",
+      "evidence": "ALDI 공식 OFFER_GET product 5617; 2026-09-17..2026-09-19; 1.99 EUR; 350-g-Packung"
+    },
+    {
+      "sourceRow": 167,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Die Backfrische Salami",
+      "evidence": "ALDI 공식 OFFER_GET product 2975; 2026-09-17..2026-09-19; 1.99 EUR; 320-g-Packung"
+    },
+    {
+      "sourceRow": 168,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Dip!",
+      "evidence": "ALDI 공식 OFFER_GET product 1412; 2026-09-14..2026-09-19; 1.49 EUR; 200-ml-Glas"
+    },
+    {
+      "sourceRow": 169,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Döner-Box",
+      "evidence": "ALDI 공식 OFFER_GET product 1039720; 2026-09-17..2026-09-19; 7.99 EUR; 950-g-Packung"
+    },
+    {
+      "sourceRow": 170,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Edelsalami XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1028286; 2026-09-17..2026-09-19; 1.39 EUR; 180-g-Packung"
+    },
+    {
+      "sourceRow": 171,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Eis-Box",
+      "evidence": "ALDI 공식 OFFER_GET product 611; 2026-09-14..2026-09-19; 1.99 EUR; Packung"
+    },
+    {
+      "sourceRow": 172,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Eisbergsalat",
+      "evidence": "ALDI 공식 OFFER_GET product 6276; 2026-09-14..2026-09-19; 0.88 EUR; Stück"
+    },
+    {
+      "sourceRow": 173,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Energydrink Blueberry-Pomegranate-Açai",
+      "evidence": "ALDI 공식 OFFER_GET product 1014193; 2026-09-14..2026-09-19; 0.77 EUR; 0,5-L-Dose"
+    },
+    {
+      "sourceRow": 174,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Energydrink Classic",
+      "evidence": "ALDI 공식 OFFER_GET product 1001470; 2026-09-17..2026-09-19; 3.39 EUR; 4x250-ml-Dose"
+    },
+    {
+      "sourceRow": 175,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Energydrink Original",
+      "evidence": "ALDI 공식 OFFER_GET product 1014192; 2026-09-14..2026-09-19; 0.77 EUR; 0,5-L-Dose"
+    },
+    {
+      "sourceRow": 176,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Energydrink Sugarfree",
+      "evidence": "ALDI 공식 OFFER_GET product 1036274; 2026-09-17..2026-09-19; 3.39 EUR; 4x250-ml-Dose"
+    },
+    {
+      "sourceRow": 177,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Energydrink Tropical Guava",
+      "evidence": "ALDI 공식 OFFER_GET product 1016626; 2026-09-14..2026-09-19; 0.77 EUR; 0,5-L-Dose"
+    },
+    {
+      "sourceRow": 178,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Entrecôte-Braten",
+      "evidence": "ALDI 공식 OFFER_GET product 1043507; 2026-09-14..2026-09-19; 12.99 EUR; z. B. 685 g"
+    },
+    {
+      "sourceRow": 179,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Erdnüsse XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1001286; 2026-09-14..2026-09-19; 2.99 EUR; 450-g-Beutel"
+    },
+    {
+      "sourceRow": 180,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Erdnussmus",
+      "evidence": "ALDI 공식 OFFER_GET product 1037286; 2026-09-14..2026-09-19; 1.65 EUR; 250-g-Glas"
+    },
+    {
+      "sourceRow": 181,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Essigessenz XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1041926; 2026-09-17..2026-09-19; 2.49 EUR; 1-kg-Flasche"
+    },
+    {
+      "sourceRow": 182,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Express-Reis",
+      "evidence": "ALDI 공식 OFFER_GET product 1038162; 2026-09-14..2026-09-19; 1.19 EUR; 220-g-Beutel"
+    },
+    {
+      "sourceRow": 183,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Federweißer",
+      "evidence": "ALDI 공식 OFFER_GET product 1000991; 2026-09-14..2026-09-19; 2.49 EUR; 1-L-Flasche"
+    },
+    {
+      "sourceRow": 184,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Finello",
+      "evidence": "ALDI 공식 OFFER_GET product 1006372; 2026-09-17..2026-09-19; 1.49 EUR; 150-g-Beutel"
+    },
+    {
+      "sourceRow": 186,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Fish and Chips",
+      "evidence": "ALDI 공식 OFFER_GET product 6105; 2026-09-17..2026-09-19; 5.99 EUR; 1.000-g-Beutel"
+    },
+    {
+      "sourceRow": 188,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Fleischwurst",
+      "evidence": "ALDI 공식 OFFER_GET product 1003483; 2026-09-14..2026-09-19; 2.69 EUR; 500-g-Packung"
+    },
+    {
+      "sourceRow": 189,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Französischer Weichkäse",
+      "evidence": "ALDI 공식 OFFER_GET product 10015260001; 2026-09-17..2026-09-19; 1.99 EUR; Packung"
+    },
+    {
+      "sourceRow": 190,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Frische Eier",
+      "evidence": "ALDI 공식 OFFER_GET product 1020468; 2026-09-14..2026-09-19; 3.99 EUR; 12er-Packung"
+    },
+    {
+      "sourceRow": 191,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Frische Mahlzeit",
+      "evidence": "ALDI 공식 OFFER_GET product 1043066; 2026-09-14..2026-09-19; 2.49 EUR; 350-g-Packung"
+    },
+    {
+      "sourceRow": 192,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Frischkäse / -zubereitung",
+      "evidence": "ALDI 공식 OFFER_GET product 1013335; 2026-09-14..2026-09-19; 0.99 EUR; Becher"
+    },
+    {
+      "sourceRow": 193,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Fruchtjoghurt",
+      "evidence": "ALDI 공식 OFFER_GET product 1036918; 2026-09-14..2026-09-19; 1.11 EUR; 400-g-Becher"
+    },
+    {
+      "sourceRow": 194,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Fruchtmus XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1031866; 2026-09-17..2026-09-19; 3.99 EUR; 12x90-g-Packung"
+    },
+    {
+      "sourceRow": 195,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Fruchtsaftgetränk",
+      "evidence": "ALDI 공식 OFFER_GET product 8129; 2026-09-17..2026-09-19; 0.99 EUR; 1-L-Packung"
+    },
+    {
+      "sourceRow": 196,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Gewürz-Ketchup Curry delikat",
+      "evidence": "ALDI 공식 OFFER_GET product 1032615; 2026-09-17..2026-09-19; 1.89 EUR; 800-ml-Flasche"
+    },
+    {
+      "sourceRow": 197,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Gewürz-Ketchup Curry leicht scharf",
+      "evidence": "ALDI 공식 OFFER_GET product 1020769; 2026-09-17..2026-09-19; 1.89 EUR; 800-ml-Flasche"
+    },
+    {
+      "sourceRow": 198,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Gewürzspezialität",
+      "evidence": "ALDI 공식 OFFER_GET product 2454; 2026-09-14..2026-09-19; 1.99 EUR; Dose"
+    },
+    {
+      "sourceRow": 199,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Golden Longs",
+      "evidence": "ALDI 공식 OFFER_GET product 10133890002; 2026-09-14..2026-09-19; 1.99 EUR; 750-g-Packung"
+    },
+    {
+      "sourceRow": 200,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Goldsaft",
+      "evidence": "ALDI 공식 OFFER_GET product 1017672; 2026-09-17..2026-09-19; 1.29 EUR; 450-g-Becher"
+    },
+    {
+      "sourceRow": 201,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Granatapfel",
+      "evidence": "ALDI 공식 OFFER_GET product 6130; 2026-09-14..2026-09-19; 0.99 EUR; Stück"
+    },
+    {
+      "sourceRow": 202,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Griechische Beilage",
+      "evidence": "ALDI 공식 OFFER_GET product 1037684; 2026-09-14..2026-09-19; 2.49 EUR; 280-g-Packung"
+    },
+    {
+      "sourceRow": 203,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Grill & Ofen",
+      "evidence": "ALDI 공식 OFFER_GET product 1007420; 2026-09-17..2026-09-19; 1.79 EUR; 150-g-Packung"
+    },
+    {
+      "sourceRow": 204,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Grobe Bratwurst XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 6783; 2026-09-14..2026-09-19; 3.69 EUR; 800-g-Packung"
+    },
+    {
+      "sourceRow": 205,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Gronie",
+      "evidence": "ALDI 공식 OFFER_GET product 1008089; 2026-09-14..2026-09-19; 0.79 EUR; 0,5-L-Dose"
+    },
+    {
+      "sourceRow": 206,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Hafer-Riegel",
+      "evidence": "ALDI 공식 OFFER_GET product 1038572; 2026-09-17..2026-09-19; 0.99 EUR; 140-g-Packung"
+    },
+    {
+      "sourceRow": 207,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Hähnchen-Geschnetzeltes XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1010669; 2026-09-17..2026-09-19; 6.99 EUR; 800-g-Packung"
+    },
+    {
+      "sourceRow": 208,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Hähnchen-Minutenschnitzel",
+      "evidence": "ALDI 공식 OFFER_GET product 37000000001; 2026-09-14..2026-09-19; 3.99 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 209,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Hähnchen-Ofenschale",
+      "evidence": "ALDI 공식 OFFER_GET product 1020454; 2026-09-14..2026-09-19; 3.99 EUR; 450-g-Packung"
+    },
+    {
+      "sourceRow": 210,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Hähnchenbrustfilet-Teilstücke",
+      "evidence": "ALDI 공식 OFFER_GET product 89980000002; 2026-09-14..2026-09-19; 5.19 EUR; 600-g-Packung"
+    },
+    {
+      "sourceRow": 211,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Himbeeren XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 5657; 2026-09-17..2026-09-19; 7.99 EUR; 1-kg-Beutel"
+    },
+    {
+      "sourceRow": 212,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Hirtenkäse",
+      "evidence": "ALDI 공식 OFFER_GET product 1015514; 2026-09-14..2026-09-19; 1.59 EUR; 200-g-Packung"
+    },
+    {
+      "sourceRow": 213,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Irish Whiskey / Berry",
+      "evidence": "ALDI 공식 OFFER_GET product 1040779; 2026-09-17..2026-09-19; 10.99 EUR; 0,7-L-Flasche"
+    },
+    {
+      "sourceRow": 216,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Joghurt XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 10353290001; 2026-09-14..2026-09-19; 1.39 EUR; 1-kg-Becher"
+    },
+    {
+      "sourceRow": 217,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Junge Erbsen mit Möhrchen",
+      "evidence": "ALDI 공식 OFFER_GET product 1037600; 2026-09-17..2026-09-19; 1.19 EUR; 350-g-Glas"
+    },
+    {
+      "sourceRow": 218,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kalinka Kefir / Ayran",
+      "evidence": "ALDI 공식 OFFER_GET product 10304950003; 2026-09-17..2026-09-19; 0.79 EUR; 500-ml-Flasche"
+    },
+    {
+      "sourceRow": 219,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kartoffelchips",
+      "evidence": "ALDI 공식 OFFER_GET product 1035053; 2026-09-14..2026-09-19; 1.79 EUR; 125-g-Beutel"
+    },
+    {
+      "sourceRow": 220,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kartoffelspezialität",
+      "evidence": "ALDI 공식 OFFER_GET product 1042923; 2026-09-14..2026-09-19; 1.29 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 221,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Käse-Schinken-Croissant",
+      "evidence": "ALDI 공식 OFFER_GET product 8602; 2026-09-17..2026-09-19; 0.69 EUR; Stück"
+    },
+    {
+      "sourceRow": 223,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kinder Überraschungsei",
+      "evidence": "ALDI 공식 OFFER_GET product 1033984; 2026-09-17..2026-09-19; 3.99 EUR; 4x20-g-Packung"
+    },
+    {
+      "sourceRow": 224,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Knoblauch",
+      "evidence": "ALDI 공식 OFFER_GET product 1039298; 2026-09-14..2026-09-19; 1.49 EUR; 250-g-Körbchen"
+    },
+    {
+      "sourceRow": 225,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Knusperecken",
+      "evidence": "ALDI 공식 OFFER_GET product 1036261; 2026-09-14..2026-09-19; 1.29 EUR; 80-g-Packung"
+    },
+    {
+      "sourceRow": 226,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kondensmilch XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1030540; 2026-09-14..2026-09-19; 0.79 EUR; 500-g-Packung"
+    },
+    {
+      "sourceRow": 227,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Konfitüre / Gelee",
+      "evidence": "ALDI 공식 OFFER_GET product 1026533; 2026-09-17..2026-09-19; 1.99 EUR; 370-g-Glas"
+    },
+    {
+      "sourceRow": 228,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Körniger Frischkäse",
+      "evidence": "ALDI 공식 OFFER_GET product 1012174; 2026-09-14..2026-09-19; 1.19 EUR; 200-g-Becher"
+    },
+    {
+      "sourceRow": 229,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Köttbullar",
+      "evidence": "ALDI 공식 OFFER_GET product 3221; 2026-09-14..2026-09-19; 3.99 EUR; 500-g-Beutel"
+    },
+    {
+      "sourceRow": 230,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kräuterbitter",
+      "evidence": "ALDI 공식 OFFER_GET product 1002735; 2026-09-17..2026-09-19; 9.99 EUR; 0,7-L-Flasche"
+    },
+    {
+      "sourceRow": 231,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Kürbiskerne",
+      "evidence": "ALDI 공식 OFFER_GET product 1001374; 2026-09-14..2026-09-19; 1.79 EUR; 200-g-Beutel"
+    },
+    {
+      "sourceRow": 232,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Lachsfiletportionen XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1032204; 2026-09-14..2026-09-19; 9.99 EUR; 2x200-g-Packung"
+    },
+    {
+      "sourceRow": 234,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Lammfilets XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 4499; 2026-09-17..2026-09-19; 13.99 EUR; z. B. 500 g"
+    },
+    {
+      "sourceRow": 235,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Ländertee",
+      "evidence": "ALDI 공식 OFFER_GET product 10136930001; 2026-09-14..2026-09-19; 1.49 EUR; Packung"
+    },
+    {
+      "sourceRow": 236,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Lauchzwiebeln",
+      "evidence": "ALDI 공식 OFFER_GET product 6109; 2026-09-14..2026-09-19; 0.49 EUR; Bund"
+    },
+    {
+      "sourceRow": 237,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Limo",
+      "evidence": "ALDI 공식 OFFER_GET product 451; 2026-09-17..2026-09-19; 0.99 EUR; 0,75-L-Flasche"
+    },
+    {
+      "sourceRow": 238,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "m&m’s",
+      "evidence": "ALDI 공식 OFFER_GET product 10379850002; 2026-09-14..2026-09-19; 1.69 EUR; Beutel"
+    },
+    {
+      "sourceRow": 239,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Mandarinen",
+      "evidence": "ALDI 공식 OFFER_GET product 1018281; 2026-09-14..2026-09-19; 1.89 EUR; kg-Preis"
+    },
+    {
+      "sourceRow": 240,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Mandel- / Cashewmus",
+      "evidence": "ALDI 공식 OFFER_GET product 1037285; 2026-09-14..2026-09-19; 4.25 EUR; 250-g-Glas"
+    },
+    {
+      "sourceRow": 241,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Matjes XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1042951; 2026-09-14..2026-09-19; 3.79 EUR; Packung"
+    },
+    {
+      "sourceRow": 242,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Medium Roast",
+      "evidence": "ALDI 공식 OFFER_GET product 1035607; 2026-09-14..2026-09-19; 9.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 243,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Mehrkornbrötchen",
+      "evidence": "ALDI 공식 OFFER_GET product 1020066; 2026-09-14..2026-09-19; 1.49 EUR; 300-g-Beutel"
+    },
+    {
+      "sourceRow": 244,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "merci lovelies",
+      "evidence": "ALDI 공식 OFFER_GET product 10208230001; 2026-09-14..2026-09-19; 2.79 EUR; 185-g-Packung"
+    },
+    {
+      "sourceRow": 245,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Metzgersalat",
+      "evidence": "ALDI 공식 OFFER_GET product 1032206; 2026-09-17..2026-09-19; 1.79 EUR; 200-g-Packung"
+    },
+    {
+      "sourceRow": 246,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Milch-Schnitte",
+      "evidence": "ALDI 공식 OFFER_GET product 1013076; 2026-09-14..2026-09-19; 1.99 EUR; 판매 단위 확인"
+    },
+    {
+      "sourceRow": 247,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Milchmäuse-SchoKeksis",
+      "evidence": "ALDI 공식 OFFER_GET product 1032619; 2026-09-17..2026-09-19; 2.99 EUR; 300-g-Packung"
+    },
+    {
+      "sourceRow": 248,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Mini-Kuchen",
+      "evidence": "ALDI 공식 OFFER_GET product 1037994; 2026-09-14..2026-09-19; 1.49 EUR; Packung"
+    },
+    {
+      "sourceRow": 249,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Minutensteaks XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1036093; 2026-09-17..2026-09-19; 5.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 251,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Mixed Minis",
+      "evidence": "ALDI 공식 OFFER_GET product 4677; 2026-09-17..2026-09-19; 3.69 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 252,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Mohnschnecke",
+      "evidence": "ALDI 공식 OFFER_GET product 4535; 2026-09-17..2026-09-19; 0.89 EUR; Stück"
+    },
+    {
+      "sourceRow": 253,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Nackensteaks XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1022580; 2026-09-17..2026-09-19; 5.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 254,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Near Water",
+      "evidence": "ALDI 공식 OFFER_GET product 1004838; 2026-09-17..2026-09-19; 0.59 EUR; 0,75-L-Flasche"
+    },
+    {
+      "sourceRow": 255,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Nektarinen",
+      "evidence": "ALDI 공식 OFFER_GET product 62280000002; 2026-09-17..2026-09-19; 1.69 EUR; 1-kg-Schale"
+    },
+    {
+      "sourceRow": 257,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Nuss-Mix",
+      "evidence": "ALDI 공식 OFFER_GET product 1033731; 2026-09-17..2026-09-19; 1.99 EUR; 125-g-Beutel"
+    },
+    {
+      "sourceRow": 258,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Oliven",
+      "evidence": "ALDI 공식 OFFER_GET product 1007535; 2026-09-14..2026-09-19; 1.99 EUR; 314-ml-Glas"
+    },
+    {
+      "sourceRow": 259,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Orangen",
+      "evidence": "ALDI 공식 OFFER_GET product 6145; 2026-09-14..2026-09-19; 2.22 EUR; 1,5-kg-Netz"
+    },
+    {
+      "sourceRow": 260,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Original / Zero Zucker",
+      "evidence": "ALDI 공식 OFFER_GET product 10330310003; 2026-09-14..2026-09-19; 0.69 EUR; 1,25-L-Flasche"
+    },
+    {
+      "sourceRow": 261,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Paprika rot",
+      "evidence": "ALDI 공식 OFFER_GET product 3911; 2026-09-14..2026-09-19; 1.19 EUR; 500-g-Packung"
+    },
+    {
+      "sourceRow": 262,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Paradiescreme",
+      "evidence": "ALDI 공식 OFFER_GET product 83080000002; 2026-09-14..2026-09-19; 0.79 EUR; Packung"
+    },
+    {
+      "sourceRow": 263,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Passata",
+      "evidence": "ALDI 공식 OFFER_GET product 1040380; 2026-09-14..2026-09-19; 1.05 EUR; 700-g-Flasche"
+    },
+    {
+      "sourceRow": 264,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Peanut-Pretzel-Sticks",
+      "evidence": "ALDI 공식 OFFER_GET product 1042310; 2026-09-14..2026-09-19; 0.99 EUR; 150-g-Beutel"
+    },
+    {
+      "sourceRow": 265,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Piccolinis Drei Käse",
+      "evidence": "ALDI 공식 OFFER_GET product 1024; 2026-09-14..2026-09-19; 1.66 EUR; 270-g-Packung"
+    },
+    {
+      "sourceRow": 266,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Piccolinis Prosciutto",
+      "evidence": "ALDI 공식 OFFER_GET product 1038062; 2026-09-14..2026-09-19; 1.66 EUR; 270-g-Packung"
+    },
+    {
+      "sourceRow": 267,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Piccolinis Salami",
+      "evidence": "ALDI 공식 OFFER_GET product 12850000002; 2026-09-14..2026-09-19; 1.66 EUR; 270-g-Packung"
+    },
+    {
+      "sourceRow": 268,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Piccolinis Tomate-Mozzarella",
+      "evidence": "ALDI 공식 OFFER_GET product 1038063; 2026-09-14..2026-09-19; 1.66 EUR; 270-g-Packung"
+    },
+    {
+      "sourceRow": 269,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Pilsener",
+      "evidence": "ALDI 공식 OFFER_GET product 1041419; 2026-09-17..2026-09-19; 2.79 EUR; 4x0,5-L-Dose"
+    },
+    {
+      "sourceRow": 270,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Pilsener alkoholfrei",
+      "evidence": "ALDI 공식 OFFER_GET product 1041420; 2026-09-17..2026-09-19; 2.79 EUR; 4x0,5-L-Dose"
+    },
+    {
+      "sourceRow": 271,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Pilze",
+      "evidence": "ALDI 공식 OFFER_GET product 1025645; 2026-09-17..2026-09-19; 2.22 EUR; 150/200 g Schale · 품종별 중량 확인"
+    },
+    {
+      "sourceRow": 272,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Pizza-Donut Cheeseburger-Style",
+      "evidence": "ALDI 공식 OFFER_GET product 1044173; 2026-09-14..2026-09-19; 0.99 EUR; Stück"
+    },
+    {
+      "sourceRow": 273,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Primitivo Salento IGT",
+      "evidence": "ALDI 공식 OFFER_GET product 1003157; 2026-09-14..2026-09-19; 4.49 EUR; 0,75-L-Flasche"
+    },
+    {
+      "sourceRow": 274,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Prinzenrolle",
+      "evidence": "ALDI 공식 OFFER_GET product 10018280002; 2026-09-14..2026-09-19; 1.59 EUR; 450-g-Packung"
+    },
+    {
+      "sourceRow": 275,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Prodomo",
+      "evidence": "ALDI 공식 OFFER_GET product 1013317; 2026-09-17..2026-09-19; 6.99 EUR; 500-g-Packung"
+    },
+    {
+      "sourceRow": 276,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Pudding",
+      "evidence": "ALDI 공식 OFFER_GET product 1029471; 2026-09-14..2026-09-19; 0.69 EUR; 150-g-Becher"
+    },
+    {
+      "sourceRow": 277,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Rahm-Spinat",
+      "evidence": "ALDI 공식 OFFER_GET product 92750000002; 2026-09-14..2026-09-19; 1.79 EUR; 750-g-Packung"
+    },
+    {
+      "sourceRow": 278,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Rindergulasch XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1036951; 2026-09-14..2026-09-19; 11.99 EUR; 800-g-Packung"
+    },
+    {
+      "sourceRow": 279,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Rinderhackfleisch",
+      "evidence": "ALDI 공식 OFFER_GET product 10372970001; 2026-09-14..2026-09-19; 5.49 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 280,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Sahne-Rolle Erdbeer-Sahne",
+      "evidence": "ALDI 공식 OFFER_GET product 9532; 2026-09-17..2026-09-19; 2.79 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 281,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Sahne-Rolle Zitronen-Sahne",
+      "evidence": "ALDI 공식 OFFER_GET product 9549; 2026-09-17..2026-09-19; 2.79 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 282,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Saltletts",
+      "evidence": "ALDI 공식 OFFER_GET product 1008609; 2026-09-19..2026-09-19; 1.49 EUR; Packung"
+    },
+    {
+      "sourceRow": 283,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "SchwipSchwap",
+      "evidence": "ALDI 공식 OFFER_GET product 1033030; 2026-09-14..2026-09-19; 0.69 EUR; 1,25-L-Flasche"
+    },
+    {
+      "sourceRow": 284,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Sirup",
+      "evidence": "ALDI 공식 OFFER_GET product 1017091; 2026-09-14..2026-09-19; 1.65 EUR; 250-ml-Flasche"
+    },
+    {
+      "sourceRow": 285,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Sommermix",
+      "evidence": "ALDI 공식 OFFER_GET product 1042721; 2026-09-14..2026-09-19; 0.89 EUR; 160-g-Beutel"
+    },
+    {
+      "sourceRow": 286,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Speisekartoffeln",
+      "evidence": "ALDI 공식 OFFER_GET product 6104; 2026-09-14..2026-09-19; 2.99 EUR; 5-kg-Netz"
+    },
+    {
+      "sourceRow": 288,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Streuselkuchen",
+      "evidence": "ALDI 공식 OFFER_GET product 1034160; 2026-09-17..2026-09-19; 2.29 EUR; 400-g-Packung"
+    },
+    {
+      "sourceRow": 289,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "SunGold Kiwi",
+      "evidence": "ALDI 공식 OFFER_GET product 61600000002; 2026-09-14..2026-09-19; 0.59 EUR; Stück"
+    },
+    {
+      "sourceRow": 290,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Superberliner",
+      "evidence": "ALDI 공식 OFFER_GET product 1039073; 2026-09-14..2026-09-19; 0.89 EUR; Stück"
+    },
+    {
+      "sourceRow": 291,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Superfood-Pulver",
+      "evidence": "ALDI 공식 OFFER_GET product 1005083; 2026-09-14..2026-09-19; 3.49 EUR; Packung"
+    },
+    {
+      "sourceRow": 292,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Sushi-Maki-Mix",
+      "evidence": "ALDI 공식 OFFER_GET product 1036670; 2026-09-17..2026-09-19; 1.99 EUR; 120-g-Packung"
+    },
+    {
+      "sourceRow": 293,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tafelschokolade",
+      "evidence": "ALDI 공식 OFFER_GET product 10374390003; 2026-09-14..2026-09-19; 0.95 EUR; Packung"
+    },
+    {
+      "sourceRow": 294,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tafelschokolade",
+      "evidence": "ALDI 공식 OFFER_GET product 1040381; 2026-09-17..2026-09-19; 2.99 EUR; Tafel"
+    },
+    {
+      "sourceRow": 295,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tafeltrauben",
+      "evidence": "ALDI 공식 OFFER_GET product 1045525; 2026-09-14..2026-09-19; 1.99 EUR; 400-g-Schale"
+    },
+    {
+      "sourceRow": 296,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tafeltrauben-Mix",
+      "evidence": "ALDI 공식 OFFER_GET product 9981; 2026-09-14..2026-09-19; 1.59 EUR; 500-g-Schale"
+    },
+    {
+      "sourceRow": 297,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tee",
+      "evidence": "ALDI 공식 OFFER_GET product 1002009; 2026-09-14..2026-09-19; 0.99 EUR; 1,5-L-Flasche"
+    },
+    {
+      "sourceRow": 298,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tee- / Leberwurst XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1043111; 2026-09-14..2026-09-19; 1.69 EUR; Becher"
+    },
+    {
+      "sourceRow": 300,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Thüringer Rostbratwurst XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1012200; 2026-09-17..2026-09-19; 4.99 EUR; 1-kg-Packung"
+    },
+    {
+      "sourceRow": 301,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tiroler Speck g. g. A.",
+      "evidence": "ALDI 공식 OFFER_GET product 1044764; 2026-09-17..2026-09-19; 1.99 EUR; 80-g-Packung"
+    },
+    {
+      "sourceRow": 302,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Toffee-Sortiment",
+      "evidence": "ALDI 공식 OFFER_GET product 10397250001; 2026-09-14..2026-09-19; 1.59 EUR; Beutel"
+    },
+    {
+      "sourceRow": 303,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Tortillas",
+      "evidence": "ALDI 공식 OFFER_GET product 10220910002; 2026-09-14..2026-09-19; 0.88 EUR; 110-g-Beutel"
+    },
+    {
+      "sourceRow": 304,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Triple",
+      "evidence": "ALDI 공식 OFFER_GET product 1045269; 2026-09-17..2026-09-19; 0.99 EUR; 150-g-Becher"
+    },
+    {
+      "sourceRow": 305,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Triple Dessert Nuss",
+      "evidence": "ALDI 공식 OFFER_GET product 1045270; 2026-09-17..2026-09-19; 0.99 EUR; 150-g-Becher"
+    },
+    {
+      "sourceRow": 306,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Vegetarische Vielfalt",
+      "evidence": "ALDI 공식 OFFER_GET product 1007772; 2026-09-14..2026-09-19; 1.99 EUR; Packung"
+    },
+    {
+      "sourceRow": 307,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Vodka",
+      "evidence": "ALDI 공식 OFFER_GET product 1002364; 2026-09-14..2026-09-19; 10.99 EUR; 0,7-L-Flasche"
+    },
+    {
+      "sourceRow": 308,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Walnusskerne",
+      "evidence": "ALDI 공식 OFFER_GET product 10351060001; 2026-09-14..2026-09-19; 2.29 EUR; 250-g-Packung"
+    },
+    {
+      "sourceRow": 309,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Weichkäse",
+      "evidence": "ALDI 공식 OFFER_GET product 1023023; 2026-09-17..2026-09-19; 1.99 EUR; 130-g-Packung"
+    },
+    {
+      "sourceRow": 310,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Weichkäse Duo",
+      "evidence": "ALDI 공식 OFFER_GET product 1023025; 2026-09-17..2026-09-19; 1.99 EUR; 140-g-Packung"
+    },
+    {
+      "sourceRow": 311,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Weizen-Brötchen",
+      "evidence": "ALDI 공식 OFFER_GET product 52270000002; 2026-09-14..2026-09-19; 1.49 EUR; 450-g-Beutel"
+    },
+    {
+      "sourceRow": 312,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Wiener Würstchen XXL",
+      "evidence": "ALDI 공식 OFFER_GET product 1027775; 2026-09-17..2026-09-19; 2.99 EUR; 2x250-g-Packung"
+    },
+    {
+      "sourceRow": 313,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Zaziki",
+      "evidence": "ALDI 공식 OFFER_GET product 1020857; 2026-09-14..2026-09-19; 1.79 EUR; 500-g-Becher"
+    },
+    {
+      "sourceRow": 314,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Zitronen",
+      "evidence": "ALDI 공식 OFFER_GET product 6219; 2026-09-14..2026-09-19; 0.99 EUR; 500-g-Netz"
+    },
+    {
+      "sourceRow": 315,
+      "postcode": "44369",
+      "store": "ALDI Nord",
+      "product": "Zwiebeln rot",
+      "evidence": "ALDI 공식 OFFER_GET product 1041180; 2026-09-14..2026-09-19; 0.89 EUR; 500-g-Netz"
+    },
+    {
+      "sourceRow": 355,
+      "postcode": "40476",
+      "store": "Kaufland",
+      "product": "K-CLASSIC Deutsche Markenbutter K-CLASSIC Deutsche Markenbutter",
+      "evidence": "지점 공식 PDF 전단 6쪽: K-CLASSIC Deutsche Markenbutter; je 250-g-Stück; 0.88 EUR; 14.09.2026–16.09.2026."
+    },
+    {
+      "sourceRow": 475,
+      "postcode": "40476",
+      "store": "Kaufland",
+      "product": "K-CLASSIC Deutsche Markenbutter K-CLASSIC Deutsche Markenbutter",
+      "evidence": "지점 공식 PDF 전단 6쪽: K-CLASSIC Deutsche Markenbutter; je 250-g-Stück; 0.88 EUR; 14.09.2026–16.09.2026."
+    },
+    {
+      "sourceRow": 595,
+      "postcode": "44145",
+      "store": "Kaufland",
+      "product": "K-CLASSIC Deutsche Markenbutter K-CLASSIC Deutsche Markenbutter",
+      "evidence": "지점 공식 PDF 전단 6쪽: K-CLASSIC Deutsche Markenbutter; je 250-g-Stück; 0.88 EUR; 14.09.2026–16.09.2026."
+    },
+    {
+      "sourceRow": 715,
+      "postcode": "52068",
+      "store": "Kaufland",
+      "product": "K-CLASSIC Deutsche Markenbutter K-CLASSIC Deutsche Markenbutter",
+      "evidence": "지점 공식 PDF 전단 6쪽: K-CLASSIC Deutsche Markenbutter; je 250-g-Stück; 0.88 EUR; 14.09.2026–16.09.2026."
+    }
+  ],
+  "notes": [
+    "Regional ALDI/Kaufland flyer evidence does not confirm branch stock or checkout price. Original branch qualifiers retained.",
+    "Original CSV and all product names and price columns retained; reviewed derivative separates search postcode and actual EDEKA postcode."
+  ]
+}

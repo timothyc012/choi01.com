@@ -50,6 +50,17 @@ function registryFor(entries) {
   ]))};
 }
 
+test('only reviewed registry dietary filters reach the public recipe',()=>{
+  const identity={ingredientId:'감자',species:'plant',cut:'potato',processingState:'fresh',form:'whole',composition:'potato'};
+  const item=candidate('potato',{identity,offerId:'potato'});
+  item.recommendationProfile.filters=['vegetarian'];
+  const entry=approved(item,{recommendationProfile:{...item.recommendationProfile,filters:['vegetarian']}});
+  const options={store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer('potato',identity)],candidates:[item]};
+  assert.deepEqual(selectStoreRecipes({...options,registry:registryFor([entry])}).recipes[0].recommendationProfile.filters,['vegetarian']);
+  delete entry.recommendationProfile.filters;
+  assert.equal(selectStoreRecipes({...options,registry:registryFor([entry])}).recipes[0].recommendationProfile.filters,undefined);
+});
+
 test('Bayesian quality ranks a proven 4.9 recipe above a one-review 5.0 recipe',()=>{
   const thin=candidate('thin',{rating:5,reviews:1});
   const proven=candidate('proven',{rating:4.9,reviews:400});
@@ -250,6 +261,21 @@ test('selection permits raw salmon fillet when the source cooks the salmon throu
   cooked.recommendationProfile={primaryIngredients:['연어'],family:'salmon',method:'grill',kind:'main'};
   const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[salmonOffer],candidates:[cooked],registry:registryFor([approved(cooked)])});
   assert.deepEqual(selected.recipes.map((recipe)=>recipe.sourceRecipeId),['cooked-salmon']);
+});
+
+test('cooking evidence recognizes conjugated grilling and eggs rather than chicken meat',()=>{
+  const salmon={ingredientId:'연어',species:'salmon',cut:'fillet',processingState:'raw',form:'fillet',composition:'salmon'};
+  const egg={ingredientId:'달걀',species:'chicken',cut:'egg',processingState:'raw',form:'whole',composition:'egg'};
+  for(const [id,identity,title,steps] of [
+    ['salmon-braise',salmon,'연어 간장조림',['연어를 자른다.','연어를 중불에서 구워줍니다.','뒤집어 양념을 넣고 조린다.']],
+    ['egg-fry',egg,'달걀밥',['달걀을 준비한다.','달걀을 프라이 해주세요.','밥 위에 올린다.']],
+    ['egg-microwave',egg,'달걀밥',['전자레인지용 그릇에 달걀을 풀어 섞는다.','밥을 달걀물에 섞는다.','전자레인지에서 3분 익힌다.']],
+    ['egg-steam',egg,'파프리카 계란찜',['달걀을 푼다.','그릇의 파프리카에 계란물을 넣는다.','전자렌지에서 2분 30초 돌려주었다.']],
+  ]) {
+    const item=candidate(id,{identity,offerId:id});item.title=title;item.steps=steps.map((instruction,index)=>({ordinal:index+1,instruction}));
+    const selected=selectStoreRecipes({store:{postcode:'52064',chain:'EDEKA',branchId:'branch-a'},offers:[offer(id,identity)],candidates:[item],registry:registryFor([approved(item)])});
+    assert.equal(selected.recipes.length,1,id+': '+JSON.stringify(selected.coverage.heldForReview));
+  }
 });
 
 test('selection holds an uncooked salmon recipe when only an incidental produce offer matches',()=>{

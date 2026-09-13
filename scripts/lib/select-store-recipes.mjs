@@ -140,7 +140,7 @@ function unverifiedRawConsumption(candidate,primaryMatches,offersById) {
   const salmonClauses=(candidate.steps||[]).flatMap((step)=>String(step.instruction||'').split(/[.!?]/)).filter((clause)=>/연어/.test(clause));
   const surfaceOnly=salmonClauses.some((clause)=>/토치|겉면|표면|살짝/.test(clause)&&/익|굽|불/.test(clause));
   const cookedTitle=/구이|스테이크|튀김|조림|찜/.test(title);
-  const salmonHeat=salmonClauses.some((clause)=>/굽|익히|익힌|튀|조리|오븐|에어프라이어|삶/.test(clause)&&!/토치|겉면|표면|살짝/.test(clause));
+  const salmonHeat=salmonClauses.some((clause)=>/굽|구워|익히|익힌|튀|조리|오븐|에어프라이어|삶/.test(clause)&&!/토치|겉면|표면|살짝/.test(clause));
   const cookedThrough=salmonClauses.some((clause)=>/(?:속까지|완전히).*(?:익|굽)|(?:익|굽).*(?:속까지|완전히)/.test(clause));
   const cooked=cookedThrough||(cookedTitle&&salmonHeat);
   if(hasOtherRawProtein&&!offeredRawReady) return true;
@@ -166,11 +166,11 @@ function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
     if(PROCESSED_ANIMAL_FORM.test(label)||ANIMAL_DERIVATIVE_SEASONING.test(label))return [];
     return Object.entries(speciesTerms).filter(([,pattern])=>pattern.test(label)).map(([species])=>species);
   });
-  const offeredRawSpecies=primaryMatches.map((match)=>offersById.get(match.offerId)?.identity).filter((identity)=>identity?.processingState==='raw'&&Object.hasOwn(speciesTerms,identity.species)).map((identity)=>identity.species);
+  const offeredRawSpecies=primaryMatches.map((match)=>offersById.get(match.offerId)?.identity).filter((identity)=>identity?.processingState==='raw'&&Object.hasOwn(speciesTerms,identity.species)).map((identity)=>identity.cut==='egg'?'egg':identity.species);
   const rawSpecies=[...new Set([...sourceRawSpecies,...offeredRawSpecies])];
   if(!rawSpecies.length) return false;
   const steps=(candidate.steps||[]).map((step)=>String(step.instruction||''));
-  const heatAction=/(?:익히|익힌|익을|속까지|완전히|삶|끓|튀|볶|굽|구워|찌|쪄|데치|데쳐|오븐|에어프라이어|스크램블|부치|후라이|가열)/u;
+  const heatAction=/(?:익히|익힌|익혀|익을|속까지|완전히|삶|끓|튀|볶|굽|구워|찌|쪄|데치|데쳐|오븐|에어프라이어|스크램블|부치|후라이|프라이|가열)/u;
   const actionTerms={
     chicken:/닭|치킨/u,
     pork:/돼지|삼겹|목살|목심|돈육/u,
@@ -184,13 +184,14 @@ function unverifiedRawAnimalCooking(candidate,primaryMatches,offersById) {
     seafood:/새우|대하|관자|오징어|문어|조개|홍합|해산물|(?:^|\s)(?:생)?굴(?:살)?(?:\s|$)/u,
     egg:/달걀|계란|메추리알|노른자|흰자/u,
   };
-  const placement=/(?:팬|냄비|오븐|찜기|에어프라이어).{0,60}(?:올|넣|담|붓|덮)|(?:올|넣|담|붓|덮).{0,60}(?:팬|냄비|오븐|찜기|에어프라이어)/u;
-  const positiveHeat=(value)=>String(value||'').split(/[.!?\n]/u).some((clause)=>heatAction.test(clause)&&!/(?:익히|굽|구우|볶|삶|찌|튀기|가열)지\s*않/u.test(clause));
+  const placement=/(?:팬|냄비|오븐|찜기|에어프라이어|그릇).{0,60}(?:올|넣|담|붓|덮)|(?:올|넣|담|붓|덮).{0,60}(?:팬|냄비|오븐|찜기|에어프라이어|그릇)/u;
+  const positiveHeat=(value)=>String(value||'').split(/[.!?\n]/u).some((clause)=>(heatAction.test(clause)||/(?:전자레인지|전자렌지).*\d+\s*분.*(?:돌려|돌리)/u.test(clause))&&!/(?:익히|굽|구우|볶|삶|찌|튀기|가열|돌리)지\s*않/u.test(clause));
   return rawSpecies.some((species)=>{
     const explicitHeat=steps.some((step,index)=>actionTerms[species].test(step)&&(positiveHeat(step)||((['pork','beef'].includes(species)||placement.test(step))&&positiveHeat(steps[index+1]))));
     const soleGenericMeatHeat=['pork','beef'].includes(species)&&rawSpecies.length===1&&steps.some((step)=>/고기/u.test(step)&&positiveHeat(step));
     const boundEggHeat=species==='egg'&&steps.some((step,index)=>actionTerms.egg.test(step)&&/(?:반죽|튀김옷|옷을|묻|버무)/u.test(step)&&steps.slice(index+1).some(positiveHeat));
-    const proteinHeat=explicitHeat||soleGenericMeatHeat||boundEggHeat;
+    const microwaveEggHeat=species==='egg'&&steps.some((step,index)=>actionTerms.egg.test(step)&&/(?:전자레인지용\s*그릇|그릇.{0,40}(?:달걀|계란))/u.test(step)&&steps.slice(index+1).some((later)=>/(?:전자레인지|전자렌지)/u.test(later)&&positiveHeat(later)));
+    const proteinHeat=explicitHeat||soleGenericMeatHeat||boundEggHeat||microwaveEggHeat;
     return !proteinHeat;
   });
 }
@@ -312,6 +313,7 @@ function publicRecipe(candidate,storeOffers,registryEntry) {
     recommendationProfile:{
       primaryIngredients:Array.isArray(profile.primaryIngredients)?profile.primaryIngredients.slice().sort():[],
       family:text(profile.family)||'other',method:text(profile.method)||'other',kind:['main','breakfast','side'].includes(profile.kind)?profile.kind:'main',
+      ...(Array.isArray(registryEntry.recommendationProfile?.filters)&&registryEntry.recommendationProfile.filters.includes('vegetarian')?{filters:['vegetarian']}:{}),
     },
     offerIds:matchedOffers.map((offer)=>offer.offerId),
     offerIdentityKeys:[...new Set(matchedOffers.map((offer)=>offerIdentityKey(offer.identity)))].sort(),

@@ -2,7 +2,7 @@
 
 기본 화면은 `public/mohemeokji/data/current.json`이 가리키는 해시 고정 manifest를 읽고, 사용자가 고른 우편번호·마트·지점의 location 파일만 불러옵니다. 레시피 상세는 사용자가 열 때만 content-hashed detail 파일을 가져옵니다. 공개 디렉터리와 manifest에는 원본 CSV나 DB 후보 review queue가 없으며, 브라우저는 다른 마트 location도 읽지 않습니다. 검증 전 상세 번들을 사용하던 `?snapshot=legacy` 경로는 데이터를 읽기 전에 명시적으로 중단하고 이번 주 자료 링크만 제공합니다.
 
-현재 게시 스냅샷은 2026-09-07 주간 CSV와 읽기 전용 `01ontology`의 `recipe-full`에서 만든 11개 실제 지점 자료입니다. 승인 registry의 source ID·source hash·transform version·approval method·validation version이 모두 일치하고, 해당 지점의 정확한 할인상품과 정의 주재료가 겹치는 한국어 의역만 게시합니다. 48개는 지점별 상한이며 목표를 채우기 위해 부정확한 레시피를 섞지 않습니다. 현재 스냅샷은 81개 고유 승인 레시피를 지점별로 333회 참조하며, 실제 주재료 연결과 생 단백질 조리 근거에 따라 지점별 8~47개를 제공합니다. 가성비는 완전한 장바구니 가격, 영양·다이어트는 계량된 영양 근거가 없어 현재 스냅샷에서 사용할 수 없다고 표시됩니다.
+현재 게시 스냅샷은 2026-09-14 주간 검토 CSV와 읽기 전용 `01ontology`의 `recipe-full`에서 만든 23개 지역/마트 조합 자료입니다. 원본 810행을 보존하고 공식 근거와 상품 형태가 확인된 할인재료만 추천에 사용합니다. 고유 승인 레시피 27개를 지점별로 53회 참조합니다. 추가 레시피 7개 중 5개는 달걀·유제품 허용 채식으로 검토했습니다. 행사 유효일에 따라 실제 보이는 메뉴는 달라집니다. 영양·다이어트는 계량 영양 근거, 가성비는 완전한 구매비 근거가 없어 사용할 수 없다고 표시합니다. 상세 결과와 지점별 범위는 [9월 14일 검증 기록](../../docs/mohemeokji-week-2026-09-14.md)을 참고하세요.
 
 All six HTML entry pages share `meal-shopping.js`, `meal-package-prices.js`, and
 the snapshot runtime. Existing postcode/store paths remain valid, while
@@ -16,7 +16,7 @@ canonical HTML. It synchronizes legacy entry pages and content-hashed asset URLs
 
 Prices are whole selling-unit prices, represented as integer euro cents.
 The catalog links every postcode/store record to its exact row in
-`public/offers/supermarket_food_offers_2026-09-07.csv`. It is a weekly snapshot,
+`public/offers/supermarket_food_offers_2026-09-14-reviewed.csv`. It is a weekly snapshot,
 not a live offer feed. Generated metadata groups the available supermarkets
 under each postcode and keeps the legacy route's store first as the default.
 The selected combination is represented as `?postcode=...&store=...`.
@@ -46,7 +46,7 @@ at one package and remain editable. Cooked rice (`밥`) is grouped with rice
 (`쌀`) for purchasing. Removing the old portion prices also removes them from
 recommendation ranking.
 
-Run `node scripts/generate-meal-offers.mjs public/offers/supermarket_food_offers_2026-09-07.csv public/mohemeokji/meal-package-prices.js` to refresh the catalog, then
+Run `node scripts/generate-meal-offers.mjs public/offers/supermarket_food_offers_2026-09-14-reviewed.csv public/mohemeokji/meal-package-prices.js` to refresh the catalog, then
 `node --test tests/mealShopping.test.mjs` from the repository root.
 
 정적 snapshot을 갱신할 때는 같은 CSV·DB·registry로 빈 디렉터리 두 곳에 컴파일한 뒤 전체 바이트를 비교합니다. 첫 빌드는 아래 검증을 통과해야 하며, 브라우저 QA 전에는 `current.json`을 전환하지 않습니다.

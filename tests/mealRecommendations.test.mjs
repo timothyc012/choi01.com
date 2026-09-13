@@ -105,7 +105,8 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   assert.ok(netto.some(r=>r.sourceRecipeId==='1483080'));
   assert.ok(!lidl.some(r=>r.sourceRecipeId==='1483080'));
   assert.ok(rewe.some(r=>r.sourceRecipeId==='7032812'));
-  assert.deepEqual(aldi.map(r=>r.sourceRecipeId).join(','),'6700719');
+  // This archived yogurt offer does not establish the plain form.
+  assert.equal(aldi.length,0);
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
   assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,3);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {

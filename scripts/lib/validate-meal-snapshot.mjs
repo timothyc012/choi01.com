@@ -19,7 +19,7 @@ const SCHEMAS={
   offer:['offerId','postcode','chain','branchId','evidenceUrl','validFrom','validThrough','productDe','pack','priceCents','normalPriceCents','conditions','autoPriceEligible','identity'],
   identity:['ingredientId','species','cut','processingState','form','composition'],
   recipeRef:['sourceRecipeId','title','offerIds','offerIdentityKeys','primaryIngredientIds','recommendationProfile','qualityScore','qualityFacts','detailPath','detailSha256'],
-  profile:['primaryIngredients','family','method','kind'],quality:['adjustedRating','popularity','completeness','priorStrength','globalMean'],
+  profile:['primaryIngredients','family','method','kind','filters'],quality:['adjustedRating','popularity','completeness','priorStrength','globalMean'],
   locationCoverage:['target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds'],
   warning:['code','published','target','added','cap'],
   detail:['schemaVersion','sourceRecipeId','sourceContentHash','sourceTitle','sourceUrl','sourceAuthor','sourceServingText','rating','ratingNumber','reviewCount','title','detailIngredients','steps','recommendationProfile','transformVersion'],

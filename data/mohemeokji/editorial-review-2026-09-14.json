@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "added": [
+    {
+      "sourceRecipeId": "6831097",
+      "sourceContentHash": "bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437",
+      "title": "연어 간장조림",
+      "kind": "main",
+      "vegetarian": false,
+      "reviewCount": 72
+    },
+    {
+      "sourceRecipeId": "6860486",
+      "sourceContentHash": "edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b",
+      "title": "전자레인지 달걀밥",
+      "kind": "main",
+      "vegetarian": false,
+      "reviewCount": 269
+    },
+    {
+      "sourceRecipeId": "6869220",
+      "sourceContentHash": "423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2",
+      "title": "감자 양파 간장조림",
+      "kind": "side",
+      "vegetarian": true,
+      "reviewCount": 265
+    },
+    {
+      "sourceRecipeId": "6879897",
+      "sourceContentHash": "385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59",
+      "title": "파프리카 달걀찜",
+      "kind": "main",
+      "vegetarian": true,
+      "reviewCount": 10
+    },
+    {
+      "sourceRecipeId": "6894323",
+      "sourceContentHash": "d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a",
+      "title": "새송이버섯 간장버터구이",
+      "kind": "side",
+      "vegetarian": true,
+      "reviewCount": 641
+    },
+    {
+      "sourceRecipeId": "6913737",
+      "sourceContentHash": "0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77",
+      "title": "아보카도 달걀비빔밥",
+      "kind": "main",
+      "vegetarian": true,
+      "reviewCount": 56
+    },
+    {
+      "sourceRecipeId": "6966445",
+      "sourceContentHash": "78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5",
+      "title": "파프리카 달걀볶음",
+      "kind": "main",
+      "vegetarian": true,
+      "reviewCount": 7
+    }
+  ],
+  "breakfastCorrections": [
+    "6872333",
+    "1783024",
+    "6912196",
+    "7056011",
+    "6837129",
+    "6842384",
+    "6870448",
+    "6891679",
+    "7007996",
+    "7036949",
+    "786265",
+    "5529835"
+  ],
+  "sideCorrections": [
+    "6936631"
+  ],
+  "heldOutsideMealScope": [
+    "6912132"
+  ],
+  "dietaryScope": "Source ingredients and selected paraphrase; ovo-lacto vegetarian, check purchased product labels. Not vegan or an allergy guarantee."
+}

@@ -271,7 +271,7 @@ export function buildStoreCandidateReport({packageCatalog,offersByIdentity,meta,
           const recipeCandidateIds=candidates.filter((candidate)=>candidate.matches.some((match)=>match.offerId===offer.offerId)).map((candidate)=>candidate.recipeId);
           return {...offer,recipeCandidateIds};
         });
-        locations.push({postcode,store,branch:meta.profiles[postcode][store].branch,branchId:offers[0]?.branchId??null,offers});
+        locations.push({postcode,store,branch:meta.profiles[postcode][store].branch,branchId:offers[0]?.branchId??meta.profiles[postcode][store].branchId??null,offers});
       }
     }
     const zeroCandidateOfferIds=locations.flatMap((location)=>location.offers).filter((offer)=>offer.recipeCandidateIds.length===0).map((offer)=>offer.offerId);

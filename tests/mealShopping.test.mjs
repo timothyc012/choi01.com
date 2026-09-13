@@ -70,9 +70,9 @@ test('weekly rollover preserves pantry/checks but invalidates old prices and uni
   state.list[0].quantity=8;
   state.list[0].quantityNeedsCheck=false;
   const saved=shopping.serializeState(state,'week-a');
-  const same=shopping.restoreState(saved,'week-a');
+  const same=shopping.restoreState(saved,'week-a',{stores:Object.keys(fixtureCatalog)});
   assert.equal(same.prices['Netto:닭고기'],100);
-  const next=shopping.restoreState(saved,'week-b');
+  const next=shopping.restoreState(saved,'week-b',{stores:Object.keys(fixtureCatalog)});
   assert.equal(next.pantry.has('Netto:소금'),true);
   assert.equal(next.list[0].completed,true);
   assert.equal(next.list[0].priceCents,null);
@@ -115,6 +115,7 @@ test('canonicalizes cooking-oil and melted-butter aliases into single shopping r
   const restored=shopping.restoreState(JSON.stringify({version:1,pantry:['Netto:기름','Netto:녹인버터'],prices:{},quantities:{},list:[]}),null,{stores:['Netto']});
   assert.deepEqual([...restored.pantry].sort(),['Netto:버터','Netto:식용유']);
   assert.equal(shopping.ingredientName('식용유 약간'),'식용유');
+  assert.equal(shopping.ingredientName('카놀라유 (조리 4단계, 원문 수량 미표기)'),'카놀라유');
   assert.equal(shopping.ingredientName('백설포도씨유 적당히'),'백설포도씨유');
   assert.equal(shopping.keyFor('Netto','백설포도씨유'),'Netto:식용유');
   for(const label of ['백설 카놀라유','엑스트라버진 올리브유','식용유 넉넉히','식용유 필요량','올리브유 한 바퀴','카놀라유 취향껏','해바라기유 적당한 양']) assert.equal(shopping.keyFor('Netto',shopping.ingredientName(label)),'Netto:식용유',label);
@@ -410,7 +411,8 @@ test('current catalog covers the supplied postcodes and points to exact source r
   for (const [area, storeProfiles] of Object.entries(sourceMeta.profiles)) {
     for (const [store, profile] of Object.entries(storeProfiles)) {
       const catalog = sourceCatalog[area][store];
-      assert.ok(Object.keys(catalog).length > 0, area + ' ' + store);
+      assert.ok(catalog && typeof catalog === 'object', area + ' ' + store);
+      assert.ok(source.some(row=>row['우편번호']===area&&row['체인'].toLowerCase()===store.toLowerCase()));
       assert.equal(profile.chain, store);
       for (const offer of Object.values(catalog)) {
         const row = source[offer.sourceRow - 2];
@@ -597,7 +599,7 @@ test('round-trips pantry, custom prices, quantities, and checked purchases throu
   state.quantities.week = { 'Netto:닭고기': 2 };
   state.list = shopping.addToList([], shopping.basket([rice], { catalog: fixtureCatalog, pantry: state.pantry }));
   state.list[0].completed = true;
-  const restored = shopping.restoreState(shopping.serializeState(state));
+  const restored = shopping.restoreState(shopping.serializeState(state),null,{stores:Object.keys(fixtureCatalog)});
   assert.equal(restored.pantry.has('Netto:쌀'), true);
   assert.equal(restored.prices['Netto:마늘'], 199);
   assert.equal(restored.quantities.week['Netto:닭고기'], 2);
@@ -605,14 +607,14 @@ test('round-trips pantry, custom prices, quantities, and checked purchases throu
   assert.equal(restored.list[0].completed, true);
 });
 
-test('restores shopping state for every supermarket exposed by the active dataset', () => {
+test('restores shopping state for every explicitly scoped supermarket', () => {
   const restored = shopping.restoreState(JSON.stringify({
     version: 1,
     pantry: ['Lidl:닭고기'],
     prices: { 'REWE:쌀': 199 },
     quantities: {},
     list: [{ key: 'ALDI SÜD:사과', name: '사과', store: 'ALDI SÜD', pack: '1 kg', quantity: 1, priceCents: 249, completed: false }]
-  }));
+  }),null,{stores:['Lidl','REWE','ALDI SÜD']});
   assert.equal(restored.pantry.has('Lidl:닭고기'), true);
   assert.equal(restored.prices['REWE:쌀'], 199);
   assert.equal(restored.list[0].store, 'ALDI SÜD');
@@ -624,7 +626,7 @@ test('corrupt storage cannot break the list or restore invalid, duplicate, or ow
   const restored = shopping.restoreState(JSON.stringify({
     version: 1, pantry: ['Netto:닭고기'],
     list: [list[0], list[1], list[1], { ...list[2], quantity: -1 }, { ...list[3], priceCents: '1.29' }]
-  }));
+  }),null,{stores:Object.keys(fixtureCatalog)});
   assert.equal(restored.list.length, 1);
   assert.equal(restored.list[0].name, '파프리카');
 });

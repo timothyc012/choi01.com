@@ -225,7 +225,7 @@
         ],
         "family": "cheese",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -584,7 +584,7 @@
         ],
         "family": "fruit",
         "method": "fry",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -886,7 +886,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -920,7 +920,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -1422,7 +1422,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -1526,7 +1526,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -1886,7 +1886,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -1929,7 +1929,7 @@
       "sourceRecipeId": "6912132",
       "sourceContentHash": "57dfd28f61b4255ff04604a5563f66dcfe9919b602594758f8137615dce4ad08",
       "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
+      "approved": false,
       "approvedAt": "2026-09-11",
       "approvalMethod": "owner-authorized-editorial-transform",
       "sourceDate": "2026-09-07",
@@ -1982,7 +1982,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -2095,7 +2095,7 @@
         ],
         "family": "yogurt",
         "method": "other",
-        "kind": "main"
+        "kind": "side"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -2860,7 +2860,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -2943,7 +2943,7 @@
         ],
         "family": "fruit",
         "method": "fry",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -3177,7 +3177,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -3281,7 +3281,7 @@
         ],
         "family": "fruit",
         "method": "other",
-        "kind": "main"
+        "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
     },
@@ -3392,6 +3392,292 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6831097|bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437|ko-paraphrase-v1": {
+      "sourceRecipeId": "6831097",
+      "sourceContentHash": "bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "연어 간장조림",
+      "detailIngredients": [
+        "연어 200g",
+        "정종 (원문 수량 미표기)",
+        "소금 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)",
+        "간장 1.5T",
+        "올리고당 1T",
+        "물 100ml",
+        "참기름 (원문 수량 미표기)",
+        "마늘 (원문 수량 미표기)",
+        "양파 1/2개",
+        "쪽파 (원문 수량 미표기)",
+        "카놀라유 (조리 4단계, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "연어를 먹기 좋은 크기로 나눈다.",
+        "소금과 후추, 정종 1/2스푼으로 연어에 밑간한다.",
+        "간장 1.5T, 올리고당 1T, 물 100ml에 참기름·다진 마늘·다진 양파를 섞어 조림장을 만든다.",
+        "팬에 카놀라유를 두르고 편으로 썬 마늘을 볶아 향을 낸다.",
+        "연어를 중불에서 굽는다.",
+        "한 면이 익으면 뒤집고 양념장 절반과 채 썬 양파 1/4개를 넣는다. 끓기 시작한 지 1분 후 다시 뒤집어 남은 장을 넣고 익힌다.",
+        "접시에 옮긴 뒤 얇게 썬 양파와 쪽파로 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "연어"
+        ],
+        "family": "salmon",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6860486|edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b|ko-paraphrase-v1": {
+      "sourceRecipeId": "6860486",
+      "sourceContentHash": "edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "전자레인지 달걀밥",
+      "detailIngredients": [
+        "밥 1/2공기",
+        "달걀 2개",
+        "물 100ml",
+        "햄 or 스팸 1/4개 (30g)",
+        "다진 대파 1T",
+        "피자치즈 1/2컵",
+        "슬라이스 치즈 1/2장",
+        "간장 1/2T",
+        "소금 약간",
+        "후추 약간"
+      ],
+      "steps": [
+        "햄 또는 스팸 1/4개(30g)와 대파 1T를 잘게 썬다.",
+        "전자레인지용 그릇에 달걀 2개를 풀고 물 100ml, 소금·후추를 섞는다.",
+        "밥 1/2공기와 햄, 다진 대파 1T, 간장 1/2T을 달걀물에 고루 섞는다.",
+        "랩을 씌워 증기가 빠질 구멍을 내고 전자레인지에서 약 3분 가열한다.",
+        "꺼내어 내용물이 고르게 익도록 다시 섞는다.",
+        "피자치즈 1/2컵과 슬라이스치즈 1/2장을 올려 약 3분 더 가열한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "달걀"
+        ],
+        "family": "egg",
+        "method": "rice",
+        "kind": "main"
+      }
+    },
+    "6894323|d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a|ko-paraphrase-v1": {
+      "sourceRecipeId": "6894323",
+      "sourceContentHash": "d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "새송이버섯 간장버터구이",
+      "detailIngredients": [
+        "새송이버섯 3송이",
+        "청양고추 1개",
+        "대파 1/2대",
+        "버터 1T",
+        "간장 5T",
+        "올리고당 2T",
+        "다진마늘 1T",
+        "참기름 1T",
+        "물 2T"
+      ],
+      "steps": [
+        "새송이버섯 3송이의 밑동을 다듬고 일정한 두께로 썬다. 대파와 청양고추는 잘게 썬다.",
+        "간장 5T, 올리고당 2T, 물 2T, 다진 마늘 1T, 참기름 1T를 섞고 대파와 고추를 더한다. 원문의 T는 성인용 숟가락 기준이다.",
+        "팬에 버터 1스푼을 녹이고 중약불로 버섯 양면을 굽는다.",
+        "버섯이 쫄깃하게 익으면 양념을 붓는다.",
+        "약불로 낮추고 양념이 타지 않게 졸여 완성한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "버섯"
+        ],
+        "family": "other",
+        "method": "grill",
+        "kind": "side",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6966445|78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5|ko-paraphrase-v1": {
+      "sourceRecipeId": "6966445",
+      "sourceContentHash": "78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "파프리카 달걀볶음",
+      "detailIngredients": [
+        "파프리카 1개",
+        "달걀 3개",
+        "양파 (원문 수량 미표기)",
+        "현미유 조금",
+        "소금 조금",
+        "후추 조금",
+        "파슬리가루 (원문 수량 미표기)",
+        "우유 (선택, 조리 2단계, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "파프리카와 양파를 한입 크기로 썬다.",
+        "달걀 3개를 푼다. 이 게시 조리안은 원문의 선택 재료인 육수를 사용하지 않는다.",
+        "팬에 현미유를 두르고 약불에서 달걀물을 익히며 소금과 후추로 간한다.",
+        "달걀이 약 80% 익으면 덜어두고 파프리카와 양파를 볶는다.",
+        "달걀을 팬에 다시 넣고 채소와 함께 마저 익힌다.",
+        "파슬리가루를 뿌려 완성한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "other",
+        "method": "stirfry",
+        "kind": "main",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6869220|423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2|ko-paraphrase-v1": {
+      "sourceRecipeId": "6869220",
+      "sourceContentHash": "423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "감자 양파 간장조림",
+      "detailIngredients": [
+        "감자 2개",
+        "양파 1/2개",
+        "청양고추 1개",
+        "간장 5스푼",
+        "설탕 2스푼",
+        "다진파 1.5스푼",
+        "다진마늘 1스푼",
+        "참기름 0.8스푼",
+        "깨소금 1/2스푼",
+        "후추 약간",
+        "식용유 (조리 4단계, 원문 수량 미표기)",
+        "물 1컵 (조리 5단계)"
+      ],
+      "steps": [
+        "감자를 껍질 벗겨 깍둑썰기하고 잠시 찬물에 담근다.",
+        "양파와 고추를 먹기 좋게 썬다. 덜 맵게 먹으려면 청양고추 대신 풋고추를 쓸 수 있다.",
+        "간장 5스푼, 설탕 2스푼, 다진 파 1.5스푼, 다진 마늘 1스푼, 참기름 0.8스푼, 깨소금 반 스푼과 후추를 섞는다.",
+        "냄비에 식용유를 두르고 감자 겉면이 투명해질 때까지 볶는다.",
+        "물 1컵과 양념장을 넣고 뚜껑을 덮어 중간불에서 감자를 익힌다.",
+        "양파를 넣고 양념을 끼얹으며 국물이 거의 없어질 때까지 졸인다.",
+        "고추를 넣어 조금 더 익힌 뒤 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "side",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6879897|385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59|ko-paraphrase-v1": {
+      "sourceRecipeId": "6879897",
+      "sourceContentHash": "385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "파프리카 달걀찜",
+      "detailIngredients": [
+        "파프리카 1개",
+        "계란 2개",
+        "소금 (원문 수량 미표기)",
+        "후추 약간",
+        "양파 (원문 수량 미표기)",
+        "애호박 (원문 수량 미표기)",
+        "당근 약간"
+      ],
+      "steps": [
+        "안정적으로 세울 수 있는 파프리카를 골라 씻는다.",
+        "윗부분을 뚜껑처럼 잘라내고 씨와 속을 정리한다.",
+        "냉장고의 양파·애호박·당근을 잘게 썰어 달걀과 섞는다. 원문에 양파와 애호박의 수량은 없다.",
+        "소금과 후추로 간하여 달걀물을 만든다.",
+        "파프리카를 전자레인지용 그릇에 세우고 속의 약 80%까지만 달걀물을 채운다.",
+        "원문 기준 파프리카 1개는 약 2분 30초, 2개는 약 5분 가열한다. 기기에 따라 달걀이 익는 상태를 확인하며 조절한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "other",
+        "method": "steam",
+        "kind": "main",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6913737|0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77|ko-paraphrase-v1": {
+      "sourceRecipeId": "6913737",
+      "sourceContentHash": "0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "아보카도 달걀비빔밥",
+      "detailIngredients": [
+        "아보카도 1/2개",
+        "달걀 1개",
+        "밥 1공기",
+        "김가루 적당량",
+        "통깨 약간",
+        "물 4",
+        "간장 2",
+        "맛술 2",
+        "올리고당 1",
+        "생강가루 약간"
+      ],
+      "steps": [
+        "간장 2와 맛술 2, 물 4 및 올리고당 1을 팬에 담고 생강가루를 더해 짧게 끓인다. 원문은 이 네 수량의 단위를 명시하지 않으므로 단위를 확인하고 조절한다. 소스가 남을 수 있다.",
+        "아보카도를 반으로 갈라 씨와 껍질을 제거하고 먹기 좋게 썬다.",
+        "달걀을 프라이한다. 원문은 노른자를 살린 반숙으로 조리한다.",
+        "그릇에 밥을 담고 달걀 프라이, 아보카도, 김가루를 얹는다.",
+        "준비한 소스를 먹을 만큼 끼얹고 통깨로 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "아보카도"
+        ],
+        "family": "other",
+        "method": "rice",
+        "kind": "main",
+        "filters": [
+          "vegetarian"
+        ]
+      }
     }
   }
 }

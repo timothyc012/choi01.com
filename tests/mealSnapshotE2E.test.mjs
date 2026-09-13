@@ -287,7 +287,7 @@ test('real published snapshot has a valid prior snapshot chain',()=>{
   const current=JSON.parse(fs.readFileSync(path.join(dataRoot,'current.json'),'utf8'));
   const manifest=JSON.parse(fs.readFileSync(path.join(dataRoot,current.manifestPath),'utf8'));
   const report=manifest.previousSnapshot
-    ? verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'correction',previousManifestPath:manifest.previousSnapshot.manifestPath})
+    ? verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:manifest.previousSnapshot.mode,previousManifestPath:manifest.previousSnapshot.manifestPath})
     : verifyMealSnapshot({snapshotDir:dataRoot,releaseMode:'bootstrap'});
   if(manifest.previousSnapshot) assert.equal(report.rollback.valid,true);
   else assert.deepEqual(report.rollback,{mode:'bootstrap',provided:false,valid:true,strategy:'app-assets-and-git'});

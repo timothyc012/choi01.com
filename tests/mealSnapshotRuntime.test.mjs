@@ -7,6 +7,15 @@ import {JSDOM} from 'jsdom';
 
 const root = new URL('../public/mohemeokji/', import.meta.url);
 
+function useFixtureDate(window) {
+  const NativeDate=window.Date;
+  window.Date=class extends NativeDate {
+    constructor(...args) { super(...(args.length?args:['2026-09-13T12:00:00+02:00'])); }
+    static now() { return new NativeDate('2026-09-13T12:00:00+02:00').getTime(); }
+  };
+}
+
+
 function sha256(text) {
   return crypto.createHash('sha256').update(text).digest('hex');
 }
@@ -76,6 +85,30 @@ function loadRecipeData(search = '') {
   vm.runInContext(fs.readFileSync(new URL('meal-planner-recipe-data.js', root), 'utf8'), context);
   return {api:context.window.MealRecipeData,window:context.window,search};
 }
+
+test('snapshot offer dates govern pricing while source recipe references remain restorable',()=>{
+  const {api}=loadRecipeData();
+  const location={store:'ALDI Nord',offers:[
+    {offerId:'monday',validFrom:'2026-09-14',validThrough:'2026-09-19'},
+    {offerId:'thursday',validFrom:'2026-09-17',validThrough:'2026-09-19'},
+    {offerId:'expired',validFrom:'2026-09-07',validThrough:'2026-09-12'},
+  ],recipes:[{sourceRecipeId:'saved'}]};
+  assert.equal(api.currentOfferLocation(location,'2026-09-13').offers.length,0);
+  assert.deepEqual([...api.currentOfferLocation(location,'2026-09-14').offers].map(o=>o.offerId),['monday']);
+  assert.deepEqual([...api.currentOfferLocation(location,'2026-09-17').offers].map(o=>o.offerId),['monday','thursday']);
+  assert.equal(api.currentOfferLocation(location,'2026-09-20').offers.length,0);
+  assert.equal(api.currentOfferLocation(location,'2026-09-14').recipes[0].sourceRecipeId,'saved');
+});
+
+test('default location prefers published menus while explicit empty-store choices are respected',()=>{
+  const {api}=loadRecipeData();
+  const locations=[
+    {postcode:'40235',store:'METRO',branchId:'empty',recipeCount:0},
+    {postcode:'44369',store:'ALDI Nord',branchId:'meals',recipeCount:13},
+  ];
+  assert.equal(api.selectSnapshotLocation(locations).activeStore,'ALDI Nord');
+  assert.equal(api.selectSnapshotLocation(locations,new URLSearchParams({postcode:'40235',store:'METRO'})).activeStore,'METRO');
+});
 
 test('fetches only current, its pinned manifest, the selected location, and one opened detail', async () => {
   const loader = loadRuntime();
@@ -243,6 +276,7 @@ test('manifest-only selection maps every direct route and chooses the first bran
 
 test('unavailable snapshot disables inert controls and exposes safe retry recovery',async()=>{
   const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=52064&store=EDEKA&branch=branch-a',runScripts:'outside-only'});
+  useFixtureDate(dom.window);
   dom.window.MealDataLoader={loadCurrentSnapshot:async()=>{throw new Error('broken pointer');}};
   dom.window.MealShopping={};
   dom.window.MealRecommendations={};
@@ -265,6 +299,7 @@ test('unavailable snapshot disables inert controls and exposes safe retry recove
 
 test('legacy query is explicitly unavailable and does not load an unvalidated archive',async()=>{
   const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?snapshot=legacy',runScripts:'outside-only'});
+  useFixtureDate(dom.window);
   let loads=0;
   dom.window.MealDataLoader={loadCurrentSnapshot:async()=>{loads++;throw new Error('must not load');}};
   dom.window.MealShopping={};dom.window.MealRecommendations={};
@@ -323,6 +358,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   ]);
   const calls=[];
   const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only',pretendToBeVisual:true});
+  useFixtureDate(dom.window);
   assert.equal([...dom.window.document.querySelectorAll('script[src]')].some((script)=>/ontology-recipe-details|meal-package-prices/.test(script.src)),false);
   Object.defineProperty(dom.window,'crypto',{value:crypto.webcrypto});
   dom.window.TextEncoder=TextEncoder;
@@ -448,7 +484,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.getElementById('menuList').textContent,/Hähnchenbrustfilet.*Hähnchenbrust Innenfilet/);
   assert.match(dom.window.document.getElementById('menuList').textContent,/500 g.*5,99€.*Second branch.*2026-09-07.*할인 근거/s);
   assert.ok(dom.window.document.querySelector('[data-add-menu]'));
-  assert.deepEqual([...dom.window.document.querySelectorAll('.filter')].map((button)=>button.textContent.trim()),['전체','한식','중식·아시아','양식','20분 안','채식']);
+  assert.deepEqual([...dom.window.document.querySelectorAll('.filter')].map((button)=>button.textContent.trim()),['전체','한식','중식·아시아','양식','20분 안','채식 (달걀·유제품 허용)']);
   assert.equal([...dom.window.document.querySelectorAll('.filter')].every((button)=>button.hidden===false),true);
   assert.equal(dom.window.document.querySelector('.menu-item')?.getAttribute('draggable'),'true');
   assert.match(dom.window.document.querySelector('.menu-quality')?.textContent||'',/선정 근거/);
@@ -569,7 +605,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.getElementById('addFromDetail').disabled,true);
   assert.equal(calls.at(-1),'/mohemeokji/data/'+archivedDetailPath);
   dom.window.document.getElementById('eatFromDetail').click();
-  const todayId=['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()];
+  const todayId=['sun','mon','tue','wed','thu','fri','sat'][new dom.window.Date().getDay()];
   assert.equal(runtime.plans.저녁[todayId].recipeId,'neuemarkt-recipe-8000001');
   await runtime.openDetail('neuemarkt-recipe-9000001');
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
@@ -638,6 +674,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(runtime.plans.저녁.sun.recipeId,chosenRecipe);
   assert.equal(runtime.plans.저녁.mon.recipeId,null);
   const disabledDom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only'});
+  useFixtureDate(disabledDom.window);
   Object.defineProperty(disabledDom.window,'crypto',{value:crypto.webcrypto});
   Object.defineProperty(disabledDom.window,'localStorage',{value:{getItem(){throw new Error('denied');},setItem(){throw new Error('quota');}}});
   disabledDom.window.TextEncoder=TextEncoder;disabledDom.window.TextDecoder=TextDecoder;
@@ -648,6 +685,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   disabledDom.window.close();
 
   const reloadDom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only'});
+  useFixtureDate(reloadDom.window);
   Object.defineProperty(reloadDom.window,'crypto',{value:crypto.webcrypto});
   reloadDom.window.TextEncoder=TextEncoder;reloadDom.window.TextDecoder=TextDecoder;
   reloadDom.window.fetch=async(url)=>bodies.has(url)?response(bodies.get(url)):response('',false);
