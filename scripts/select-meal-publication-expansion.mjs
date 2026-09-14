@@ -73,6 +73,15 @@ function currentLocationCounts(candidateReport,registry) {
   }));
 }
 
+function classifyDishKind(title) {
+  if(/요거트|요구르트|토스트|샌드위치|스콘|머핀|케이크|카스테라|크로플|디저트|간식|주스|스무디|쉐이크|라떼|와플|팬케이크|핫케익|카나페|까나페|파르페|그래놀라|뮤즐리/.test(title)) return 'breakfast';
+  if(/달걀찜|계란찜|달걀말이|계란말이/.test(title)) return 'side';
+  if(/볶음밥|비빔밥|덮밥|오므라이스|국밥|카레|파스타|스파게티|국수|수제비|라면|우동|소바|냉면|전골|찌개|감자탕|육개장|닭개장|(?:국|탕|수프|스프|죽)(?:\s|$|[),])/u.test(title)) return 'main';
+  if(/닭|치킨|돼지|목살|삼겹살|소고기|쇠고기|연어|생선|대구|고등어|참치|새우|오징어|낙지|두부/.test(title)&&/볶|구이|스테이크|조림|찜|튀김|강정|커틀릿|까스|가스|불고기/.test(title)) return 'main';
+  if(/김치|깍두기|장아찌|무침|겉절이|샐러드|냉채|피클|절임|나물|전|구이|조림|볶음|찜|크림치즈|스프레드/.test(title)) return 'side';
+  return 'side';
+}
+
 export function derivePublicationProfile(candidate,candidateReport) {
   const title=text(candidate.title)||'';
   const links=linkedOffers(candidate,candidateReport);
@@ -88,7 +97,7 @@ export function derivePublicationProfile(candidate,candidateReport) {
   const family=/닭/.test(ingredient)?'chicken':/돼지/.test(ingredient)?'pork':/소고기|쇠고기/.test(ingredient)?'beef':/연어/.test(ingredient)?'salmon':/참치/.test(ingredient)?'tuna':/달걀|계란/.test(ingredient)?'egg':/요거트|요구르트/.test(ingredient)?'yogurt':/치즈/.test(ingredient)?'cheese':/복숭아|사과|바나나|과일/.test(ingredient)?'fruit':/양파|감자|토마토|채소/.test(ingredient)?'vegetable':'other';
   const soupTitle=/미역국|된장국|국밥|닭개장|육개장|(?:국|탕|찌개|수프|스프|죽)(?:\s|$|[),])/u.test(title);
   const method=/볶/.test(title)?'stirfry':/구이|스테이크/.test(title)?'grill':/조림|장조림|졸임/.test(title)?'braise':/찜/.test(title)?'steam':soupTitle?'soup':/튀김|강정/.test(title)?'fry':/샐러드|무침|냉채/.test(title)?'salad':/밥|덮밥|김밥|초밥|포케/.test(title)?'rice':'other';
-  const kind=/요거트|요구르트|토스트|샌드위치|오믈렛|아침|주스|스무디|쉐이크|라떼|와플|팬케이크|핫케익|카나페|까나페|파르페|케이크|카스테라|크로플|디저트|간식/.test(title)?'breakfast':/샐러드|무침|냉채|피클|절임|장아찌/.test(title)?'side':'main';
+  const kind=classifyDishKind(title);
   return {primaryIngredients:primary,family,method,kind};
 }
 

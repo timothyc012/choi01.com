@@ -112,6 +112,26 @@ test('kind classification follows the dish title instead of incidental step word
   assert.equal(selected.find((item)=>item.sourceRecipeId==='salad').recommendationProfile.kind,'side');
 });
 
+test('only a complete meal is classified as a dinner main',()=>{
+  const candidates=[
+    candidate('egg-steam',{title:'파프리카 달걀찜'}),
+    candidate('green-onion-kimchi',{title:'대파김치 만드는 법'}),
+    candidate('scone',{title:'대파 치즈 스콘'}),
+    candidate('fried-rice',{title:'대파 달걀볶음밥'}),
+    candidate('mushroom-hotpot',{title:'버섯전골'}),
+    candidate('salmon-steak',{title:'연어 스테이크'}),
+  ];
+  const selected=selectPublicationExpansion({candidateReport:report(candidates),registry:{recipes:{}},target:6}).selected;
+  const kinds=Object.fromEntries(selected.map((item)=>[item.sourceRecipeId,item.recommendationProfile.kind]));
+
+  assert.equal(kinds['egg-steam'],'side');
+  assert.equal(kinds['green-onion-kimchi'],'side');
+  assert.equal(kinds.scone,'breakfast');
+  assert.equal(kinds['fried-rice'],'main');
+  assert.equal(kinds['mushroom-hotpot'],'main');
+  assert.equal(kinds['salmon-steak'],'main');
+});
+
 test('publication profile excludes an incidental exact offer from defining primary ingredients',()=>{
   const garlicIdentity={ingredientId:'마늘',species:'plant',cut:'garlic',processingState:'fresh',form:'whole',composition:'garlic'};
   const source=candidate('defining',{title:'닭가슴살 채소볶음',offerIds:['offer-a','offer-garlic']});
