@@ -3548,7 +3548,7 @@
         ],
         "family": "other",
         "method": "stirfry",
-        "kind": "main",
+        "kind": "side",
         "filters": [
           "vegetarian"
         ]
@@ -3632,7 +3632,7 @@
         ],
         "family": "other",
         "method": "steam",
-        "kind": "main",
+        "kind": "side",
         "filters": [
           "vegetarian"
         ]
