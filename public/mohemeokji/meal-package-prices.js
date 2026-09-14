@@ -1,4 +1,4 @@
-/* Generated from supermarket_food_offers_2026-09-14-reviewed.csv. Prices are sale selling-unit prices. */
+/* Generated from supermarket_food_offers_2026-09-14-reviewed-v2.csv. Prices are sale selling-unit prices. */
 window.mealPackagePricesByArea = {
   "40235": {
     "METRO": {}
@@ -6,7 +6,7 @@ window.mealPackagePricesByArea = {
   "40468": {
     "REWE": {
       "닭가슴살": {
-        "offerId": "0cb00314de03d20f53591ca25784304ba2bc584a70979a09a341e1b5b75bb377",
+        "offerId": "65f9c10e825b038e38bdae968c2198d0840393c09de46027ad873a7e4e77abcd",
         "postcode": "40468",
         "chain": "REWE",
         "branchId": "branch-79e3c0c20871fd23",
@@ -35,11 +35,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-20.09.2026",
         "branch": "REWE An der Piwipp 120, 40468 Düsseldorf (지점 확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "0cb00314de03d20f53591ca25784304ba2bc584a70979a09a341e1b5b75bb377"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "65f9c10e825b038e38bdae968c2198d0840393c09de46027ad873a7e4e77abcd"
       },
       "파스타": {
-        "offerId": "829310a247c03391a28403fd2a8442ad110964470fe772e3ae1bcae94ed860cd",
+        "offerId": "b7a2d5e4a304bdb5e7a1d1076177036f4c98ac327cc02106432760dc9a624f4d",
         "postcode": "40468",
         "chain": "REWE",
         "branchId": "branch-79e3c0c20871fd23",
@@ -68,13 +68,13 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-20.09.2026",
         "branch": "REWE An der Piwipp 120, 40468 Düsseldorf (지점 확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "829310a247c03391a28403fd2a8442ad110964470fe772e3ae1bcae94ed860cd"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "b7a2d5e4a304bdb5e7a1d1076177036f4c98ac327cc02106432760dc9a624f4d"
       }
     },
     "ALDI SÜD": {
       "훈제연어": {
-        "offerId": "5eca774cc2f30967a1e39e661d52b2732e5c56f644de95aa19f192c725b1e4b1",
+        "offerId": "05c3977f5ed32e733a7e4a1f2a1f682d09267ec73161afd26bccc7ebfc32732b",
         "postcode": "40468",
         "chain": "ALDI SÜD",
         "branchId": "branch-f2fe2ff148c4626c",
@@ -103,11 +103,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, An der Piwipp 86, 40468 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "5eca774cc2f30967a1e39e661d52b2732e5c56f644de95aa19f192c725b1e4b1"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "05c3977f5ed32e733a7e4a1f2a1f682d09267ec73161afd26bccc7ebfc32732b"
       },
       "모짜렐라치즈": {
-        "offerId": "8f76eb06ec5f613d8220fbc05c8c0ab93e12e53b2ceba7492dccb2ac9239b0af",
+        "offerId": "0c22188c54bc486695983eaba01e99bcaff2bec0c6ac887b02cfdde407d9e73d",
         "postcode": "40468",
         "chain": "ALDI SÜD",
         "branchId": "branch-f2fe2ff148c4626c",
@@ -136,15 +136,48 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, An der Piwipp 86, 40468 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "8f76eb06ec5f613d8220fbc05c8c0ab93e12e53b2ceba7492dccb2ac9239b0af"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "0c22188c54bc486695983eaba01e99bcaff2bec0c6ac887b02cfdde407d9e73d"
       }
     }
   },
   "40472": {
     "EDEKA": {
+      "돼지목살": {
+        "offerId": "5e7a4dd6195fa2444a6af66653353fa0c13c83e4a83c1ba4a188de62fe5ecc1c",
+        "postcode": "40472",
+        "chain": "EDEKA",
+        "branchId": "branch-a33ba57e7791f9e4",
+        "sourceRow": 45,
+        "evidenceUrl": "https://www.edeka.de/maerkte/071158/",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Frischer Schweinenackenbraten",
+        "pack": "1 kg",
+        "priceCents": 599,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "돼지목살",
+          "species": "pork",
+          "cut": "neck",
+          "processingState": "raw",
+          "form": "whole-cut",
+          "composition": "pork"
+        },
+        "ingredient": "돼지목살",
+        "product": "Frischer Schweinenackenbraten",
+        "appPriceCents": null,
+        "detail": "mit Knochen, der rustikale Braten, je 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "5e7a4dd6195fa2444a6af66653353fa0c13c83e4a83c1ba4a188de62fe5ecc1c"
+      },
       "바나나": {
-        "offerId": "19438b7f362f07298969806fc182ce057a6708b0fad8d1fc9a4088d90d5c4af4",
+        "offerId": "814b2174f557a00431c3544c02db865f25a2c8949a007a28cc6b03e320735362",
         "postcode": "40472",
         "chain": "EDEKA",
         "branchId": "branch-a33ba57e7791f9e4",
@@ -173,16 +206,248 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "19438b7f362f07298969806fc182ce057a6708b0fad8d1fc9a4088d90d5c4af4"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "814b2174f557a00431c3544c02db865f25a2c8949a007a28cc6b03e320735362"
       }
     },
-    "Lidl": {}
+    "Lidl": {
+      "닭날개": {
+        "offerId": "2806563a0030665fde7790148617b06914aa45c8f4eba6fbb0e36ead66dfe212",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 698,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+        "pack": "1,1 kg",
+        "priceCents": 449,
+        "normalPriceCents": 549,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "닭날개",
+          "species": "chicken",
+          "cut": "wing",
+          "processingState": "raw",
+          "form": "whole",
+          "composition": "chicken"
+        },
+        "ingredient": "닭날개",
+        "product": "METZGERFRISCH Frische Hähnchenflügel",
+        "appPriceCents": null,
+        "detail": "1,1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "2806563a0030665fde7790148617b06914aa45c8f4eba6fbb0e36ead66dfe212"
+      },
+      "양파": {
+        "offerId": "a3bbb71411d7ded643d2a0b218e9ac5af5372b1917f897f34a2a669bd894db46",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 699,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche gelbe Zwiebeln",
+        "pack": "2 kg",
+        "priceCents": 169,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양파",
+          "species": "plant",
+          "cut": "onion",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "onion"
+        },
+        "ingredient": "양파",
+        "product": "Deutsche gelbe Zwiebeln",
+        "appPriceCents": null,
+        "detail": "Klasse I, 2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "a3bbb71411d7ded643d2a0b218e9ac5af5372b1917f897f34a2a669bd894db46"
+      },
+      "감자": {
+        "offerId": "97cec8081acd0ffd6458d905eeb0e525d7c3497a790b8597402f0b089b43b4a6",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 697,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche Speisekartoffeln",
+        "pack": "2 kg",
+        "priceCents": 219,
+        "normalPriceCents": 249,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "감자",
+          "species": "plant",
+          "cut": "potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "potato"
+        },
+        "ingredient": "감자",
+        "product": "Deutsche Speisekartoffeln",
+        "appPriceCents": null,
+        "detail": "2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "97cec8081acd0ffd6458d905eeb0e525d7c3497a790b8597402f0b089b43b4a6"
+      },
+      "고구마": {
+        "offerId": "788ade9839c2f0e93edaa0e49d3c35fdb37f2a1f21f45d86564df510ca8c005e",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 701,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Süßkartoffeln",
+        "pack": "1 kg",
+        "priceCents": 169,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "고구마",
+          "species": "plant",
+          "cut": "sweet-potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "sweet-potato"
+        },
+        "ingredient": "고구마",
+        "product": "Süßkartoffeln",
+        "appPriceCents": null,
+        "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "788ade9839c2f0e93edaa0e49d3c35fdb37f2a1f21f45d86564df510ca8c005e"
+      },
+      "오이": {
+        "offerId": "357517930a84b538e20ead4ae92486e7688be4d08fd47b0695e74660b8d3b442",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 700,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Gurken",
+        "pack": "Stück",
+        "priceCents": 99,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "오이",
+          "species": "plant",
+          "cut": "cucumber",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "cucumber"
+        },
+        "ingredient": "오이",
+        "product": "Bio Gurken",
+        "appPriceCents": null,
+        "detail": "Spanien, Klasse I, Stück",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "357517930a84b538e20ead4ae92486e7688be4d08fd47b0695e74660b8d3b442"
+      },
+      "호밀빵": {
+        "offerId": "c062537f6ec4a596857dc3eb7d61b495c055b71d08a188ba93c3892f909a7264",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 91,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "pack": "500 g",
+        "priceCents": 69,
+        "normalPriceCents": 99,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "호밀빵",
+          "species": "grain",
+          "cut": "bread",
+          "processingState": "baked",
+          "form": "sliced",
+          "composition": "rye-wheat"
+        },
+        "ingredient": "호밀빵",
+        "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "appPriceCents": null,
+        "detail": "je 500 g",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "c062537f6ec4a596857dc3eb7d61b495c055b71d08a188ba93c3892f909a7264"
+      }
+    }
   },
   "40474": {
     "EDEKA": {
+      "돼지목살": {
+        "offerId": "1522a62c33533a071e727ae3670db96a5a9d95935e3b97cd74c050d4fd712f24",
+        "postcode": "40474",
+        "chain": "EDEKA",
+        "branchId": "branch-269dad5325a916e4",
+        "sourceRow": 57,
+        "evidenceUrl": "https://www.edeka.de/maerkte/071065/",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Frischer Schweinenackenbraten",
+        "pack": "1 kg",
+        "priceCents": 599,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "돼지목살",
+          "species": "pork",
+          "cut": "neck",
+          "processingState": "raw",
+          "form": "whole-cut",
+          "composition": "pork"
+        },
+        "ingredient": "돼지목살",
+        "product": "Frischer Schweinenackenbraten",
+        "appPriceCents": null,
+        "detail": "mit Knochen, der rustikale Braten, je 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "1522a62c33533a071e727ae3670db96a5a9d95935e3b97cd74c050d4fd712f24"
+      },
       "바나나": {
-        "offerId": "e0ee96354cbc3d3018299ef57043ba608a860376ef8a3dff9f44e4d5e61799c3",
+        "offerId": "24337309b3cfbcbdff4d8ca7f71337e10fd62e750aabfd25340c2bd4e06b8ffe",
         "postcode": "40474",
         "chain": "EDEKA",
         "branchId": "branch-269dad5325a916e4",
@@ -211,13 +476,13 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "e0ee96354cbc3d3018299ef57043ba608a860376ef8a3dff9f44e4d5e61799c3"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "24337309b3cfbcbdff4d8ca7f71337e10fd62e750aabfd25340c2bd4e06b8ffe"
       }
     },
     "ALDI SÜD": {
       "훈제연어": {
-        "offerId": "33b515f90267cc443125070aaeb5e538bd5aee928ae4ae7abb02717b1637a653",
+        "offerId": "1705bc82b7941043dc2807eef76f5c143f2d1aa79f1ca6f651d6ca40ee86216e",
         "postcode": "40474",
         "chain": "ALDI SÜD",
         "branchId": "branch-17d4d8ed299690c5",
@@ -246,11 +511,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Niederrheinstraße 158-166, 40474 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "33b515f90267cc443125070aaeb5e538bd5aee928ae4ae7abb02717b1637a653"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "1705bc82b7941043dc2807eef76f5c143f2d1aa79f1ca6f651d6ca40ee86216e"
       },
       "모짜렐라치즈": {
-        "offerId": "6b6babd5171c9d20fe7b69644bf2cfea86303d2c75eee9f9dfe6c2fb2070ff41",
+        "offerId": "1639cc4b427e1ecefd9c0afd0938e53f1f4b46fded074ba961c7f8c04a1c3eac",
         "postcode": "40474",
         "chain": "ALDI SÜD",
         "branchId": "branch-17d4d8ed299690c5",
@@ -279,15 +544,15 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Niederrheinstraße 158-166, 40474 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "6b6babd5171c9d20fe7b69644bf2cfea86303d2c75eee9f9dfe6c2fb2070ff41"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "1639cc4b427e1ecefd9c0afd0938e53f1f4b46fded074ba961c7f8c04a1c3eac"
       }
     }
   },
   "40476": {
     "Kaufland": {
       "버터": {
-        "offerId": "412a610cacb78b1984c4850afdf73d7697e209a58e377471a24dec4022698bd6",
+        "offerId": "660a3d9667c6f6c411a8ddede55ab61ddc5d7476f3fbfea04a656eac3b8a33e3",
         "postcode": "40476",
         "chain": "Kaufland",
         "branchId": "branch-0afb82785507a281",
@@ -316,18 +581,217 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-16.09.2026",
         "branch": "Kaufland Düsseldorf-Derendorf, Hilde-und-Joseph-Neyses-Platz 5, 40476 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "412a610cacb78b1984c4850afdf73d7697e209a58e377471a24dec4022698bd6"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "660a3d9667c6f6c411a8ddede55ab61ddc5d7476f3fbfea04a656eac3b8a33e3"
       }
     }
   },
   "40489": {
-    "Lidl": {}
+    "Lidl": {
+      "닭날개": {
+        "offerId": "2a8b7f86fa347fe925a82c5b23c97ef5f7976398f8e6763e0dfbc3d31cacc512",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 693,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+        "pack": "1,1 kg",
+        "priceCents": 449,
+        "normalPriceCents": 549,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "닭날개",
+          "species": "chicken",
+          "cut": "wing",
+          "processingState": "raw",
+          "form": "whole",
+          "composition": "chicken"
+        },
+        "ingredient": "닭날개",
+        "product": "METZGERFRISCH Frische Hähnchenflügel",
+        "appPriceCents": null,
+        "detail": "1,1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "2a8b7f86fa347fe925a82c5b23c97ef5f7976398f8e6763e0dfbc3d31cacc512"
+      },
+      "양파": {
+        "offerId": "e9693da254bae07df787c1257b4082e32292103a42cae5affac6233a899f0832",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 694,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche gelbe Zwiebeln",
+        "pack": "2 kg",
+        "priceCents": 169,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양파",
+          "species": "plant",
+          "cut": "onion",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "onion"
+        },
+        "ingredient": "양파",
+        "product": "Deutsche gelbe Zwiebeln",
+        "appPriceCents": null,
+        "detail": "Klasse I, 2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "e9693da254bae07df787c1257b4082e32292103a42cae5affac6233a899f0832"
+      },
+      "감자": {
+        "offerId": "09abf58b5d7f33afe36537dbf59001acac84a54ed2f7806469af6c3d7393cf54",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 692,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche Speisekartoffeln",
+        "pack": "2 kg",
+        "priceCents": 219,
+        "normalPriceCents": 249,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "감자",
+          "species": "plant",
+          "cut": "potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "potato"
+        },
+        "ingredient": "감자",
+        "product": "Deutsche Speisekartoffeln",
+        "appPriceCents": null,
+        "detail": "2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "09abf58b5d7f33afe36537dbf59001acac84a54ed2f7806469af6c3d7393cf54"
+      },
+      "고구마": {
+        "offerId": "9c3921373f1d3dd49e81d3f2172e08236010f2fd90021fcff576720379abb5cd",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 696,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Süßkartoffeln",
+        "pack": "1 kg",
+        "priceCents": 169,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "고구마",
+          "species": "plant",
+          "cut": "sweet-potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "sweet-potato"
+        },
+        "ingredient": "고구마",
+        "product": "Süßkartoffeln",
+        "appPriceCents": null,
+        "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "9c3921373f1d3dd49e81d3f2172e08236010f2fd90021fcff576720379abb5cd"
+      },
+      "오이": {
+        "offerId": "4039dc80878d5ceee862615b63feb3ca76592e9e905f6a90309f87d9ab03727a",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 695,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Gurken",
+        "pack": "Stück",
+        "priceCents": 99,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "오이",
+          "species": "plant",
+          "cut": "cucumber",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "cucumber"
+        },
+        "ingredient": "오이",
+        "product": "Bio Gurken",
+        "appPriceCents": null,
+        "detail": "Spanien, Klasse I, Stück",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "4039dc80878d5ceee862615b63feb3ca76592e9e905f6a90309f87d9ab03727a"
+      },
+      "호밀빵": {
+        "offerId": "727a46d3cb23f7d49f3015b038645c8fbc9b602a98259f62ec515bb132470f38",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 96,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "pack": "500 g",
+        "priceCents": 69,
+        "normalPriceCents": 99,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "호밀빵",
+          "species": "grain",
+          "cut": "bread",
+          "processingState": "baked",
+          "form": "sliced",
+          "composition": "rye-wheat"
+        },
+        "ingredient": "호밀빵",
+        "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "appPriceCents": null,
+        "detail": "je 500 g",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "727a46d3cb23f7d49f3015b038645c8fbc9b602a98259f62ec515bb132470f38"
+      }
+    }
   },
   "44145": {
     "Kaufland": {
       "버터": {
-        "offerId": "5ce40a21f0479cf6d3d03de4d3efe61daaa0db288eaad043aa821dd296517f6e",
+        "offerId": "e06adb3265e4e343e6fda6a6c7055ceb593446ef81d0ca5bcd96a7577275f961",
         "postcode": "44145",
         "chain": "Kaufland",
         "branchId": "branch-3bef4939a29657c1",
@@ -356,8 +820,8 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-16.09.2026",
         "branch": "Kaufland Dortmund-Innenstadt-Nord, Bornstraße 160 a, 44145 Dortmund (최근접 활성 전단 지점, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "5ce40a21f0479cf6d3d03de4d3efe61daaa0db288eaad043aa821dd296517f6e"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "e06adb3265e4e343e6fda6a6c7055ceb593446ef81d0ca5bcd96a7577275f961"
       }
     }
   },
@@ -368,7 +832,7 @@ window.mealPackagePricesByArea = {
     "REWE": {},
     "ALDI Nord": {
       "연어": {
-        "offerId": "3b49b3f683481d21370dd9d5b75821753662c5009576fc65d251b9edbd67c2ef",
+        "offerId": "957325f3bbcf007a774fa5f15b6e8c83ce83adffc5fd1063e59e867b92312bed",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -397,11 +861,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "3b49b3f683481d21370dd9d5b75821753662c5009576fc65d251b9edbd67c2ef"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "957325f3bbcf007a774fa5f15b6e8c83ce83adffc5fd1063e59e867b92312bed"
       },
       "파프리카": {
-        "offerId": "b76bd5f74fd836a4020d80198902bd00fa5b5faf3b8d5d8ff7f01086ae9368f6",
+        "offerId": "46b105374848d5d5d5ef85bd0aec6e1ab9e21b023a710da96bd1528bd8a0cb51",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -430,11 +894,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "b76bd5f74fd836a4020d80198902bd00fa5b5faf3b8d5d8ff7f01086ae9368f6"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "46b105374848d5d5d5ef85bd0aec6e1ab9e21b023a710da96bd1528bd8a0cb51"
       },
       "양파": {
-        "offerId": "13e1cce2689e76422909eda2b9d208daec634ad31d05ca1ee13ba69aa67be582",
+        "offerId": "22b125e5aa146e556b14e286c1f9e82c13245b58dfde17d6bbad32e445ed9751",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -463,11 +927,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "13e1cce2689e76422909eda2b9d208daec634ad31d05ca1ee13ba69aa67be582"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "22b125e5aa146e556b14e286c1f9e82c13245b58dfde17d6bbad32e445ed9751"
       },
       "버섯": {
-        "offerId": "91fe1b8a3a272ba5dab2c7e8ed135f168750f1c02461cd146997451fe046ab3d",
+        "offerId": "fc38079415a367b58b181caab020e01effe519857e0e5a2e06482d33b810a935",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -496,11 +960,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "17.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "91fe1b8a3a272ba5dab2c7e8ed135f168750f1c02461cd146997451fe046ab3d"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "fc38079415a367b58b181caab020e01effe519857e0e5a2e06482d33b810a935"
       },
       "감자": {
-        "offerId": "ffb08d06396b93f46bd0c887a6fbb298b5cbb55eabb11f4c48fb608279444bf9",
+        "offerId": "db1eef7babce8e492ac553c350a027e3314aa7890f1bec6f8345f6fb685c831e",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -529,11 +993,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "ffb08d06396b93f46bd0c887a6fbb298b5cbb55eabb11f4c48fb608279444bf9"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "db1eef7babce8e492ac553c350a027e3314aa7890f1bec6f8345f6fb685c831e"
       },
       "양상추": {
-        "offerId": "8b61e0f98dd515b9c6d123ac5ccda408bf6a099626db6c18f8d8d19c233cb977",
+        "offerId": "e136b8bcc1e704027404202e60658dbcdbf4370264e5c90e9aa5fd1e19f32cdf",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -562,11 +1026,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "8b61e0f98dd515b9c6d123ac5ccda408bf6a099626db6c18f8d8d19c233cb977"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "e136b8bcc1e704027404202e60658dbcdbf4370264e5c90e9aa5fd1e19f32cdf"
       },
       "레몬": {
-        "offerId": "178fabe476a0685ccbc93186248b9ea88cc90efc064ceb878edac1806a8e796a",
+        "offerId": "bfbd5a5381d4e6fbf4dbc1888bf55c8fe0beb00a0c6f4c3d92b9b2346ca45d03",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -595,11 +1059,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "178fabe476a0685ccbc93186248b9ea88cc90efc064ceb878edac1806a8e796a"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "bfbd5a5381d4e6fbf4dbc1888bf55c8fe0beb00a0c6f4c3d92b9b2346ca45d03"
       },
       "아보카도": {
-        "offerId": "d36b3367eb4ee66630445ca13c79d2bdfe74da8ace352a87c4746fe4bb98af3c",
+        "offerId": "a02825e54211946812d4a1a5d877740e94f80ece635ed59e1f89171bfd03da35",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -628,11 +1092,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "17.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "d36b3367eb4ee66630445ca13c79d2bdfe74da8ace352a87c4746fe4bb98af3c"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "a02825e54211946812d4a1a5d877740e94f80ece635ed59e1f89171bfd03da35"
       },
       "사과": {
-        "offerId": "c73f66f90fd414715bf24b26a89e89e89abaa2e5cbcac6e279ebd1a7bb911bba",
+        "offerId": "e7d4d9cfb52fe69bb16242d8699cdaaaca17db188784dea04e4ff9ae846247cd",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -661,11 +1125,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "17.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "c73f66f90fd414715bf24b26a89e89e89abaa2e5cbcac6e279ebd1a7bb911bba"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "e7d4d9cfb52fe69bb16242d8699cdaaaca17db188784dea04e4ff9ae846247cd"
       },
       "포도": {
-        "offerId": "1b6524a090bc439ab298e4da12f61609a8baa6f9fa73c5d38229f72550ee81ba",
+        "offerId": "9df18571c8d7b83ab5d795bc63522af5bc7a5cc1cdfb50abad0f80b43d12f8e3",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -694,11 +1158,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "1b6524a090bc439ab298e4da12f61609a8baa6f9fa73c5d38229f72550ee81ba"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "9df18571c8d7b83ab5d795bc63522af5bc7a5cc1cdfb50abad0f80b43d12f8e3"
       },
       "요거트": {
-        "offerId": "064f18b9550fc42eccd401b937ea5460dd66788a71cd64ad68d6fec55dd5bb79",
+        "offerId": "877ef013c00312851662ceed4f3add70be80fdad9960c4236241aa8dcded4358",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -727,11 +1191,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "064f18b9550fc42eccd401b937ea5460dd66788a71cd64ad68d6fec55dd5bb79"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "877ef013c00312851662ceed4f3add70be80fdad9960c4236241aa8dcded4358"
       },
       "달걀": {
-        "offerId": "4cb577890980aa2ff26a835c3b437c29f3bfebfc333b516b34ee3a0728404f16",
+        "offerId": "6d4a202e24b2abf4ad25c5882a21c5a38867c601835eb1cf1cbf1092bd2d948f",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -760,11 +1224,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "4cb577890980aa2ff26a835c3b437c29f3bfebfc333b516b34ee3a0728404f16"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "6d4a202e24b2abf4ad25c5882a21c5a38867c601835eb1cf1cbf1092bd2d948f"
       },
       "빵": {
-        "offerId": "c135a502da044af84e6abb7fd19a625c00fdd2d45bb39bf8946ff2a354a36a33",
+        "offerId": "95b1102926708b5fb2f8525c61615c8026c5a5b3ee51611acbee89ceba070b10",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -793,11 +1257,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "c135a502da044af84e6abb7fd19a625c00fdd2d45bb39bf8946ff2a354a36a33"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "95b1102926708b5fb2f8525c61615c8026c5a5b3ee51611acbee89ceba070b10"
       },
       "마늘": {
-        "offerId": "e1f34551e7a90824c75752e3928b04e10281a77a25c0463e5095e44447365250",
+        "offerId": "581cebfbd9999282ef84b702b3a439342ac860c1d1879ecdea0c65d381db56f7",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -826,11 +1290,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "e1f34551e7a90824c75752e3928b04e10281a77a25c0463e5095e44447365250"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "581cebfbd9999282ef84b702b3a439342ac860c1d1879ecdea0c65d381db56f7"
       },
       "대파": {
-        "offerId": "c0e3477c1a73809a72410e8d02eaa9356fb1a7118f56fd9cb6ba12de9133ef73",
+        "offerId": "b40d981295dbb0cc8b517f65a61df921749e1b505250ca1c824c881d395de890",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -859,13 +1323,13 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "c0e3477c1a73809a72410e8d02eaa9356fb1a7118f56fd9cb6ba12de9133ef73"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "b40d981295dbb0cc8b517f65a61df921749e1b505250ca1c824c881d395de890"
       }
     },
     "EDEKA": {
       "바나나": {
-        "offerId": "bd93d5e231112cb8cba65cc6afd37026cfe544e46597f82bffe356f1fd4c60c1",
+        "offerId": "78c89b6522716be00881beea3ce2ff16cb7d8cc58fe4d66486a182d74f430117",
         "postcode": "44369",
         "chain": "EDEKA",
         "branchId": "branch-bc5ba3d0d992ea68",
@@ -894,21 +1358,519 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Nüsken, Rossbachstraße 21-23, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "bd93d5e231112cb8cba65cc6afd37026cfe544e46597f82bffe356f1fd4c60c1"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "78c89b6522716be00881beea3ce2ff16cb7d8cc58fe4d66486a182d74f430117"
       }
     },
-    "Lidl": {},
-    "Netto Marken-Discount": {}
+    "Lidl": {
+      "닭날개": {
+        "offerId": "e714ec95793bbaa666fc05604fa42482b46e767e77efad6c18f5c3ac0be8bb24",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 703,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+        "pack": "1,1 kg",
+        "priceCents": 449,
+        "normalPriceCents": 549,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "닭날개",
+          "species": "chicken",
+          "cut": "wing",
+          "processingState": "raw",
+          "form": "whole",
+          "composition": "chicken"
+        },
+        "ingredient": "닭날개",
+        "product": "METZGERFRISCH Frische Hähnchenflügel",
+        "appPriceCents": null,
+        "detail": "1,1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "e714ec95793bbaa666fc05604fa42482b46e767e77efad6c18f5c3ac0be8bb24"
+      },
+      "양파": {
+        "offerId": "924e4f866f603885276e99ecaa118b0e8e549a1fc19990cde3462ce63db6af74",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 704,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche gelbe Zwiebeln",
+        "pack": "2 kg",
+        "priceCents": 169,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양파",
+          "species": "plant",
+          "cut": "onion",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "onion"
+        },
+        "ingredient": "양파",
+        "product": "Deutsche gelbe Zwiebeln",
+        "appPriceCents": null,
+        "detail": "Klasse I, 2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "924e4f866f603885276e99ecaa118b0e8e549a1fc19990cde3462ce63db6af74"
+      },
+      "감자": {
+        "offerId": "b361886668e9e17404fc8f26e4ee39cc39d2d64998105c7cd70b64ff62d1c5cb",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 702,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche Speisekartoffeln",
+        "pack": "2 kg",
+        "priceCents": 219,
+        "normalPriceCents": 249,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "감자",
+          "species": "plant",
+          "cut": "potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "potato"
+        },
+        "ingredient": "감자",
+        "product": "Deutsche Speisekartoffeln",
+        "appPriceCents": null,
+        "detail": "2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "b361886668e9e17404fc8f26e4ee39cc39d2d64998105c7cd70b64ff62d1c5cb"
+      },
+      "고구마": {
+        "offerId": "3ef48cd034e89ac00e223a48e1a1c853ae14a87e5743c52b85a26da0c3dedeb0",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 706,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Süßkartoffeln",
+        "pack": "1 kg",
+        "priceCents": 169,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "고구마",
+          "species": "plant",
+          "cut": "sweet-potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "sweet-potato"
+        },
+        "ingredient": "고구마",
+        "product": "Süßkartoffeln",
+        "appPriceCents": null,
+        "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "3ef48cd034e89ac00e223a48e1a1c853ae14a87e5743c52b85a26da0c3dedeb0"
+      },
+      "오이": {
+        "offerId": "cfa3d25fd2ad06cf13753cd9ca192e531555d18a0ffd4e761187b5d1e227d27c",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 705,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Gurken",
+        "pack": "Stück",
+        "priceCents": 99,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "오이",
+          "species": "plant",
+          "cut": "cucumber",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "cucumber"
+        },
+        "ingredient": "오이",
+        "product": "Bio Gurken",
+        "appPriceCents": null,
+        "detail": "Spanien, Klasse I, Stück",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "cfa3d25fd2ad06cf13753cd9ca192e531555d18a0ffd4e761187b5d1e227d27c"
+      },
+      "호밀빵": {
+        "offerId": "b01d1d31733b223048bf216dc374af30dd4f51b18e7de128ff48dc51971d00b1",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 101,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "pack": "500 g",
+        "priceCents": 69,
+        "normalPriceCents": 99,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "호밀빵",
+          "species": "grain",
+          "cut": "bread",
+          "processingState": "baked",
+          "form": "sliced",
+          "composition": "rye-wheat"
+        },
+        "ingredient": "호밀빵",
+        "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "appPriceCents": null,
+        "detail": "je 500 g",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "b01d1d31733b223048bf216dc374af30dd4f51b18e7de128ff48dc51971d00b1"
+      }
+    },
+    "Netto Marken-Discount": {
+      "닭가슴살": {
+        "offerId": "7a2c4a8792a31fabd41424e5ff4af338d5cba27185bbb1c2a22322fb893231a7",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 114,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Hähnchen-Brustfilet",
+        "pack": "600 g",
+        "priceCents": 499,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "닭가슴살",
+          "species": "chicken",
+          "cut": "breast",
+          "processingState": "raw",
+          "form": "fillet",
+          "composition": "chicken"
+        },
+        "ingredient": "닭가슴살",
+        "product": "Hähnchen-Brustfilet",
+        "appPriceCents": null,
+        "detail": "600 g",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "7a2c4a8792a31fabd41424e5ff4af338d5cba27185bbb1c2a22322fb893231a7"
+      },
+      "토마토": {
+        "offerId": "078533a6bab22a4b5927b0ad146aad922165723ddab815905677b462d4bdf60d",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 691,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Rispentomaten",
+        "pack": "1 kg",
+        "priceCents": 229,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "토마토",
+          "species": "plant",
+          "cut": "tomato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "tomato"
+        },
+        "ingredient": "토마토",
+        "product": "Rispentomaten",
+        "appPriceCents": null,
+        "detail": "Niederlande, Kl. I, 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "078533a6bab22a4b5927b0ad146aad922165723ddab815905677b462d4bdf60d"
+      },
+      "양파": {
+        "offerId": "8408713afe9607f6ba873c42c7b8f9d2d3680eb1bf4e777f0596bccccc96e335",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 688,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Zwiebeln",
+        "pack": "1,5 kg",
+        "priceCents": 139,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양파",
+          "species": "plant",
+          "cut": "onion",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "onion"
+        },
+        "ingredient": "양파",
+        "product": "Zwiebeln",
+        "appPriceCents": null,
+        "detail": "Deutschland, Kl. II, 1,5 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "8408713afe9607f6ba873c42c7b8f9d2d3680eb1bf4e777f0596bccccc96e335"
+      },
+      "버섯": {
+        "offerId": "3452f5cfc723ec162732b1fa105403f9328c7e2524a9900d6f2bd1d4a976b9d8",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 690,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Champignons weiß",
+        "pack": "400 g",
+        "priceCents": 169,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "버섯",
+          "species": "fungus",
+          "cut": "mushroom",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "mushroom"
+        },
+        "ingredient": "버섯",
+        "product": "Champignons weiß",
+        "appPriceCents": null,
+        "detail": "Polen, Kl. I, 400 g Schale",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "3452f5cfc723ec162732b1fa105403f9328c7e2524a9900d6f2bd1d4a976b9d8"
+      },
+      "감자": {
+        "offerId": "618f7dcef11500e2efc938ebbc72b995a9f007dfba1ee310c2f2d4c76c4856eb",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 689,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Speisekartoffeln",
+        "pack": "2 kg",
+        "priceCents": 199,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "감자",
+          "species": "plant",
+          "cut": "potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "potato"
+        },
+        "ingredient": "감자",
+        "product": "Speisekartoffeln",
+        "appPriceCents": null,
+        "detail": "Deutschland, Lüneburger Heide, 2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "618f7dcef11500e2efc938ebbc72b995a9f007dfba1ee310c2f2d4c76c4856eb"
+      },
+      "양상추": {
+        "offerId": "f02152bde53666af69af7b95f3a2c2d78732af6ec013b36ce02f9ce10319e49f",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 112,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Eisbergsalat",
+        "pack": "Stück",
+        "priceCents": 88,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양상추",
+          "species": "plant",
+          "cut": "lettuce",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "lettuce"
+        },
+        "ingredient": "양상추",
+        "product": "Eisbergsalat",
+        "appPriceCents": null,
+        "detail": "Stück, Deutschland, Kl. I",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "f02152bde53666af69af7b95f3a2c2d78732af6ec013b36ce02f9ce10319e49f"
+      }
+    }
   },
   "52062": {
     "REWE": {},
-    "Netto Marken-Discount": {}
+    "Netto Marken-Discount": {
+      "닭가슴살": {
+        "offerId": "8d03191fe621026161dfb2c8a14d97f3800b6858a3f9de92e44e6d5217878309",
+        "postcode": "52062",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-e3266a13232a4d10",
+        "sourceRow": 123,
+        "evidenceUrl": "https://www.netto-online.de/angebote/",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Hähnchen-Brustfilet",
+        "pack": "600 g",
+        "priceCents": 499,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "닭가슴살",
+          "species": "chicken",
+          "cut": "breast",
+          "processingState": "raw",
+          "form": "fillet",
+          "composition": "chicken"
+        },
+        "ingredient": "닭가슴살",
+        "product": "Hähnchen-Brustfilet",
+        "appPriceCents": null,
+        "detail": "600 g | 8.32 / kg | mager | -26 %UVP 6.79",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "8d03191fe621026161dfb2c8a14d97f3800b6858a3f9de92e44e6d5217878309"
+      },
+      "양상추": {
+        "offerId": "b70e6455700b5e82ea3f493aa306ff08f6dbcfc177dce1219bce31680ef2cb5f",
+        "postcode": "52062",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-e3266a13232a4d10",
+        "sourceRow": 121,
+        "evidenceUrl": "https://www.netto-online.de/angebote/",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Eisbergsalat",
+        "pack": "Stück",
+        "priceCents": 88,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양상추",
+          "species": "plant",
+          "cut": "lettuce",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "lettuce"
+        },
+        "ingredient": "양상추",
+        "product": "Eisbergsalat",
+        "appPriceCents": null,
+        "detail": "Stück | Deutschland, Kl. I | -31 %UVP 1.29",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "b70e6455700b5e82ea3f493aa306ff08f6dbcfc177dce1219bce31680ef2cb5f"
+      }
+    }
   },
   "52064": {
     "EDEKA": {
+      "돼지목살": {
+        "offerId": "345b0c65bb97df90b0ed619605193591b5292047bce404698365900e2c330718",
+        "postcode": "52064",
+        "chain": "EDEKA",
+        "branchId": "branch-b7a2687c1ad4f878",
+        "sourceRow": 81,
+        "evidenceUrl": "https://www.edeka.de/maerkte/071409/",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Frischer Schweinenackenbraten",
+        "pack": "1 kg",
+        "priceCents": 599,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "돼지목살",
+          "species": "pork",
+          "cut": "neck",
+          "processingState": "raw",
+          "form": "whole-cut",
+          "composition": "pork"
+        },
+        "ingredient": "돼지목살",
+        "product": "Frischer Schweinenackenbraten",
+        "appPriceCents": null,
+        "detail": "mit Knochen, der rustikale Braten, je 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "345b0c65bb97df90b0ed619605193591b5292047bce404698365900e2c330718"
+      },
       "바나나": {
-        "offerId": "b0a30843518012237dfce9a90185d27e8805c67610f335016d38e4efe69fe335",
+        "offerId": "8965cf81da45cd47e355c017f146f3b1fe9d23c24f9429224f2589301078118b",
         "postcode": "52064",
         "chain": "EDEKA",
         "branchId": "branch-b7a2687c1ad4f878",
@@ -937,13 +1899,13 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-19.09.2026",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "b0a30843518012237dfce9a90185d27e8805c67610f335016d38e4efe69fe335"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "8965cf81da45cd47e355c017f146f3b1fe9d23c24f9429224f2589301078118b"
       }
     },
     "ALDI SÜD": {
       "훈제연어": {
-        "offerId": "a6451fa1440640b366c21fd080b506c0af6edd89ac865b0e0271719535916694",
+        "offerId": "7ffa09c2913e332aac1aeb570a3942324f105b8852bb3484c673e8f3dce82543",
         "postcode": "52064",
         "chain": "ALDI SÜD",
         "branchId": "branch-44ec9a9b7a4cab8a",
@@ -972,11 +1934,11 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Franzstraße 2, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "a6451fa1440640b366c21fd080b506c0af6edd89ac865b0e0271719535916694"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "7ffa09c2913e332aac1aeb570a3942324f105b8852bb3484c673e8f3dce82543"
       },
       "모짜렐라치즈": {
-        "offerId": "910bfcaddc3b4367ec408f6bec4d5d13181c45e43569c8c63032c41d59c09c97",
+        "offerId": "eab2a5024a357385a69a2bed62ba245fa4c040f7460c2652bded83b3f9900353",
         "postcode": "52064",
         "chain": "ALDI SÜD",
         "branchId": "branch-44ec9a9b7a4cab8a",
@@ -1005,16 +1967,215 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Franzstraße 2, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "910bfcaddc3b4367ec408f6bec4d5d13181c45e43569c8c63032c41d59c09c97"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "eab2a5024a357385a69a2bed62ba245fa4c040f7460c2652bded83b3f9900353"
       }
     },
-    "Lidl": {}
+    "Lidl": {
+      "닭날개": {
+        "offerId": "304b107436a42db01f9a47f7b95d0f87e0bf6a614423ab2653126a391fb2befe",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 708,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+        "pack": "1,1 kg",
+        "priceCents": 449,
+        "normalPriceCents": 549,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "닭날개",
+          "species": "chicken",
+          "cut": "wing",
+          "processingState": "raw",
+          "form": "whole",
+          "composition": "chicken"
+        },
+        "ingredient": "닭날개",
+        "product": "METZGERFRISCH Frische Hähnchenflügel",
+        "appPriceCents": null,
+        "detail": "1,1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "304b107436a42db01f9a47f7b95d0f87e0bf6a614423ab2653126a391fb2befe"
+      },
+      "양파": {
+        "offerId": "96aaf7f2bda2aca6d69002f3b09edfd346d7b73635629b269cea96901037a2a9",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 709,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche gelbe Zwiebeln",
+        "pack": "2 kg",
+        "priceCents": 169,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "양파",
+          "species": "plant",
+          "cut": "onion",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "onion"
+        },
+        "ingredient": "양파",
+        "product": "Deutsche gelbe Zwiebeln",
+        "appPriceCents": null,
+        "detail": "Klasse I, 2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "96aaf7f2bda2aca6d69002f3b09edfd346d7b73635629b269cea96901037a2a9"
+      },
+      "감자": {
+        "offerId": "ca768b5cda9a1e68a2b36a9f81f65b50050cb80a6ee5095288013c1621f51cf3",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 707,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Deutsche Speisekartoffeln",
+        "pack": "2 kg",
+        "priceCents": 219,
+        "normalPriceCents": 249,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "감자",
+          "species": "plant",
+          "cut": "potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "potato"
+        },
+        "ingredient": "감자",
+        "product": "Deutsche Speisekartoffeln",
+        "appPriceCents": null,
+        "detail": "2 kg Netz",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "ca768b5cda9a1e68a2b36a9f81f65b50050cb80a6ee5095288013c1621f51cf3"
+      },
+      "고구마": {
+        "offerId": "66d4c0f78162d5cf022c41f0a64c2aee30e286696d1ef5a1e3b0b51a9e4b095a",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 711,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Süßkartoffeln",
+        "pack": "1 kg",
+        "priceCents": 169,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "고구마",
+          "species": "plant",
+          "cut": "sweet-potato",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "sweet-potato"
+        },
+        "ingredient": "고구마",
+        "product": "Süßkartoffeln",
+        "appPriceCents": null,
+        "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "66d4c0f78162d5cf022c41f0a64c2aee30e286696d1ef5a1e3b0b51a9e4b095a"
+      },
+      "오이": {
+        "offerId": "f1d0dfa9d1d6372d9460f0e905adc14aa61817f1566dad74400cc5d596f3c923",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 710,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Gurken",
+        "pack": "Stück",
+        "priceCents": 99,
+        "normalPriceCents": null,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "오이",
+          "species": "plant",
+          "cut": "cucumber",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "cucumber"
+        },
+        "ingredient": "오이",
+        "product": "Bio Gurken",
+        "appPriceCents": null,
+        "detail": "Spanien, Klasse I, Stück",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "f1d0dfa9d1d6372d9460f0e905adc14aa61817f1566dad74400cc5d596f3c923"
+      },
+      "호밀빵": {
+        "offerId": "bb5a5d82565c06bd5878592bb8aaac0303675b06f52d88989a2d9379ec8651cf",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 106,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "pack": "500 g",
+        "priceCents": 69,
+        "normalPriceCents": 99,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "호밀빵",
+          "species": "grain",
+          "cut": "bread",
+          "processingState": "baked",
+          "form": "sliced",
+          "composition": "rye-wheat"
+        },
+        "ingredient": "호밀빵",
+        "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+        "appPriceCents": null,
+        "detail": "je 500 g",
+        "category": "식품",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "bb5a5d82565c06bd5878592bb8aaac0303675b06f52d88989a2d9379ec8651cf"
+      }
+    }
   },
   "52068": {
     "Kaufland": {
       "버터": {
-        "offerId": "ba68a1e9c31b34aaab27f009ecfcf888bf3b3a17e946223027f7644ef27b1323",
+        "offerId": "9945271234a7b507d21a178f0fafbb1093db03dd04277bb1ce161212041e2654",
         "postcode": "52068",
         "chain": "Kaufland",
         "branchId": "branch-1618bf3ae78c257c",
@@ -1043,8 +2204,8 @@ window.mealPackagePricesByArea = {
         "category": "식품",
         "period": "14.09.2026-16.09.2026",
         "branch": "Kaufland Aachen, Breslauer Straße 35, 52068 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-        "preferredPricingOfferId": "ba68a1e9c31b34aaab27f009ecfcf888bf3b3a17e946223027f7644ef27b1323"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "9945271234a7b507d21a178f0fafbb1093db03dd04277bb1ce161212041e2654"
       }
     }
   },
@@ -1055,7 +2216,7 @@ window.mealPackagePricesByArea = {
 window.mealPackagePrices = window.mealPackagePricesByArea["40235"];
 window.mealOffersByIdentity = [
   {
-    "offerId": "0cb00314de03d20f53591ca25784304ba2bc584a70979a09a341e1b5b75bb377",
+    "offerId": "65f9c10e825b038e38bdae968c2198d0840393c09de46027ad873a7e4e77abcd",
     "postcode": "40468",
     "chain": "REWE",
     "branchId": "branch-79e3c0c20871fd23",
@@ -1084,10 +2245,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-20.09.2026",
     "branch": "REWE An der Piwipp 120, 40468 Düsseldorf (지점 확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "829310a247c03391a28403fd2a8442ad110964470fe772e3ae1bcae94ed860cd",
+    "offerId": "b7a2d5e4a304bdb5e7a1d1076177036f4c98ac327cc02106432760dc9a624f4d",
     "postcode": "40468",
     "chain": "REWE",
     "branchId": "branch-79e3c0c20871fd23",
@@ -1116,10 +2277,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-20.09.2026",
     "branch": "REWE An der Piwipp 120, 40468 Düsseldorf (지점 확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "5eca774cc2f30967a1e39e661d52b2732e5c56f644de95aa19f192c725b1e4b1",
+    "offerId": "05c3977f5ed32e733a7e4a1f2a1f682d09267ec73161afd26bccc7ebfc32732b",
     "postcode": "40468",
     "chain": "ALDI SÜD",
     "branchId": "branch-f2fe2ff148c4626c",
@@ -1148,10 +2309,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "18.09.2026-19.09.2026",
     "branch": "ALDI SÜD, An der Piwipp 86, 40468 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "8f76eb06ec5f613d8220fbc05c8c0ab93e12e53b2ceba7492dccb2ac9239b0af",
+    "offerId": "0c22188c54bc486695983eaba01e99bcaff2bec0c6ac887b02cfdde407d9e73d",
     "postcode": "40468",
     "chain": "ALDI SÜD",
     "branchId": "branch-f2fe2ff148c4626c",
@@ -1180,10 +2341,42 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "18.09.2026-19.09.2026",
     "branch": "ALDI SÜD, An der Piwipp 86, 40468 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "19438b7f362f07298969806fc182ce057a6708b0fad8d1fc9a4088d90d5c4af4",
+    "offerId": "5e7a4dd6195fa2444a6af66653353fa0c13c83e4a83c1ba4a188de62fe5ecc1c",
+    "postcode": "40472",
+    "chain": "EDEKA",
+    "branchId": "branch-a33ba57e7791f9e4",
+    "sourceRow": 45,
+    "evidenceUrl": "https://www.edeka.de/maerkte/071158/",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Frischer Schweinenackenbraten",
+    "pack": "1 kg",
+    "priceCents": 599,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "돼지목살",
+      "species": "pork",
+      "cut": "neck",
+      "processingState": "raw",
+      "form": "whole-cut",
+      "composition": "pork"
+    },
+    "ingredient": "돼지목살",
+    "product": "Frischer Schweinenackenbraten",
+    "appPriceCents": null,
+    "detail": "mit Knochen, der rustikale Braten, je 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "814b2174f557a00431c3544c02db865f25a2c8949a007a28cc6b03e320735362",
     "postcode": "40472",
     "chain": "EDEKA",
     "branchId": "branch-a33ba57e7791f9e4",
@@ -1212,10 +2405,234 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e0ee96354cbc3d3018299ef57043ba608a860376ef8a3dff9f44e4d5e61799c3",
+    "offerId": "2806563a0030665fde7790148617b06914aa45c8f4eba6fbb0e36ead66dfe212",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 698,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+    "pack": "1,1 kg",
+    "priceCents": 449,
+    "normalPriceCents": 549,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "닭날개",
+      "species": "chicken",
+      "cut": "wing",
+      "processingState": "raw",
+      "form": "whole",
+      "composition": "chicken"
+    },
+    "ingredient": "닭날개",
+    "product": "METZGERFRISCH Frische Hähnchenflügel",
+    "appPriceCents": null,
+    "detail": "1,1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "a3bbb71411d7ded643d2a0b218e9ac5af5372b1917f897f34a2a669bd894db46",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 699,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche gelbe Zwiebeln",
+    "pack": "2 kg",
+    "priceCents": 169,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양파",
+      "species": "plant",
+      "cut": "onion",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "onion"
+    },
+    "ingredient": "양파",
+    "product": "Deutsche gelbe Zwiebeln",
+    "appPriceCents": null,
+    "detail": "Klasse I, 2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "97cec8081acd0ffd6458d905eeb0e525d7c3497a790b8597402f0b089b43b4a6",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 697,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche Speisekartoffeln",
+    "pack": "2 kg",
+    "priceCents": 219,
+    "normalPriceCents": 249,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "감자",
+      "species": "plant",
+      "cut": "potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "potato"
+    },
+    "ingredient": "감자",
+    "product": "Deutsche Speisekartoffeln",
+    "appPriceCents": null,
+    "detail": "2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "788ade9839c2f0e93edaa0e49d3c35fdb37f2a1f21f45d86564df510ca8c005e",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 701,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Süßkartoffeln",
+    "pack": "1 kg",
+    "priceCents": 169,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "고구마",
+      "species": "plant",
+      "cut": "sweet-potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "sweet-potato"
+    },
+    "ingredient": "고구마",
+    "product": "Süßkartoffeln",
+    "appPriceCents": null,
+    "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "357517930a84b538e20ead4ae92486e7688be4d08fd47b0695e74660b8d3b442",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 700,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Gurken",
+    "pack": "Stück",
+    "priceCents": 99,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "오이",
+      "species": "plant",
+      "cut": "cucumber",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "cucumber"
+    },
+    "ingredient": "오이",
+    "product": "Bio Gurken",
+    "appPriceCents": null,
+    "detail": "Spanien, Klasse I, Stück",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "c062537f6ec4a596857dc3eb7d61b495c055b71d08a188ba93c3892f909a7264",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 91,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "pack": "500 g",
+    "priceCents": 69,
+    "normalPriceCents": 99,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "호밀빵",
+      "species": "grain",
+      "cut": "bread",
+      "processingState": "baked",
+      "form": "sliced",
+      "composition": "rye-wheat"
+    },
+    "ingredient": "호밀빵",
+    "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "appPriceCents": null,
+    "detail": "je 500 g",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "1522a62c33533a071e727ae3670db96a5a9d95935e3b97cd74c050d4fd712f24",
+    "postcode": "40474",
+    "chain": "EDEKA",
+    "branchId": "branch-269dad5325a916e4",
+    "sourceRow": 57,
+    "evidenceUrl": "https://www.edeka.de/maerkte/071065/",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Frischer Schweinenackenbraten",
+    "pack": "1 kg",
+    "priceCents": 599,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "돼지목살",
+      "species": "pork",
+      "cut": "neck",
+      "processingState": "raw",
+      "form": "whole-cut",
+      "composition": "pork"
+    },
+    "ingredient": "돼지목살",
+    "product": "Frischer Schweinenackenbraten",
+    "appPriceCents": null,
+    "detail": "mit Knochen, der rustikale Braten, je 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "24337309b3cfbcbdff4d8ca7f71337e10fd62e750aabfd25340c2bd4e06b8ffe",
     "postcode": "40474",
     "chain": "EDEKA",
     "branchId": "branch-269dad5325a916e4",
@@ -1244,10 +2661,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "33b515f90267cc443125070aaeb5e538bd5aee928ae4ae7abb02717b1637a653",
+    "offerId": "1705bc82b7941043dc2807eef76f5c143f2d1aa79f1ca6f651d6ca40ee86216e",
     "postcode": "40474",
     "chain": "ALDI SÜD",
     "branchId": "branch-17d4d8ed299690c5",
@@ -1276,10 +2693,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "18.09.2026-19.09.2026",
     "branch": "ALDI SÜD, Niederrheinstraße 158-166, 40474 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "6b6babd5171c9d20fe7b69644bf2cfea86303d2c75eee9f9dfe6c2fb2070ff41",
+    "offerId": "1639cc4b427e1ecefd9c0afd0938e53f1f4b46fded074ba961c7f8c04a1c3eac",
     "postcode": "40474",
     "chain": "ALDI SÜD",
     "branchId": "branch-17d4d8ed299690c5",
@@ -1308,10 +2725,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "18.09.2026-19.09.2026",
     "branch": "ALDI SÜD, Niederrheinstraße 158-166, 40474 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "412a610cacb78b1984c4850afdf73d7697e209a58e377471a24dec4022698bd6",
+    "offerId": "660a3d9667c6f6c411a8ddede55ab61ddc5d7476f3fbfea04a656eac3b8a33e3",
     "postcode": "40476",
     "chain": "Kaufland",
     "branchId": "branch-0afb82785507a281",
@@ -1340,10 +2757,202 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-16.09.2026",
     "branch": "Kaufland Düsseldorf-Derendorf, Hilde-und-Joseph-Neyses-Platz 5, 40476 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "5ce40a21f0479cf6d3d03de4d3efe61daaa0db288eaad043aa821dd296517f6e",
+    "offerId": "2a8b7f86fa347fe925a82c5b23c97ef5f7976398f8e6763e0dfbc3d31cacc512",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 693,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+    "pack": "1,1 kg",
+    "priceCents": 449,
+    "normalPriceCents": 549,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "닭날개",
+      "species": "chicken",
+      "cut": "wing",
+      "processingState": "raw",
+      "form": "whole",
+      "composition": "chicken"
+    },
+    "ingredient": "닭날개",
+    "product": "METZGERFRISCH Frische Hähnchenflügel",
+    "appPriceCents": null,
+    "detail": "1,1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "e9693da254bae07df787c1257b4082e32292103a42cae5affac6233a899f0832",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 694,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche gelbe Zwiebeln",
+    "pack": "2 kg",
+    "priceCents": 169,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양파",
+      "species": "plant",
+      "cut": "onion",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "onion"
+    },
+    "ingredient": "양파",
+    "product": "Deutsche gelbe Zwiebeln",
+    "appPriceCents": null,
+    "detail": "Klasse I, 2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "09abf58b5d7f33afe36537dbf59001acac84a54ed2f7806469af6c3d7393cf54",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 692,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche Speisekartoffeln",
+    "pack": "2 kg",
+    "priceCents": 219,
+    "normalPriceCents": 249,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "감자",
+      "species": "plant",
+      "cut": "potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "potato"
+    },
+    "ingredient": "감자",
+    "product": "Deutsche Speisekartoffeln",
+    "appPriceCents": null,
+    "detail": "2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "9c3921373f1d3dd49e81d3f2172e08236010f2fd90021fcff576720379abb5cd",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 696,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Süßkartoffeln",
+    "pack": "1 kg",
+    "priceCents": 169,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "고구마",
+      "species": "plant",
+      "cut": "sweet-potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "sweet-potato"
+    },
+    "ingredient": "고구마",
+    "product": "Süßkartoffeln",
+    "appPriceCents": null,
+    "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "4039dc80878d5ceee862615b63feb3ca76592e9e905f6a90309f87d9ab03727a",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 695,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Gurken",
+    "pack": "Stück",
+    "priceCents": 99,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "오이",
+      "species": "plant",
+      "cut": "cucumber",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "cucumber"
+    },
+    "ingredient": "오이",
+    "product": "Bio Gurken",
+    "appPriceCents": null,
+    "detail": "Spanien, Klasse I, Stück",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "727a46d3cb23f7d49f3015b038645c8fbc9b602a98259f62ec515bb132470f38",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 96,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "pack": "500 g",
+    "priceCents": 69,
+    "normalPriceCents": 99,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "호밀빵",
+      "species": "grain",
+      "cut": "bread",
+      "processingState": "baked",
+      "form": "sliced",
+      "composition": "rye-wheat"
+    },
+    "ingredient": "호밀빵",
+    "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "appPriceCents": null,
+    "detail": "je 500 g",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "e06adb3265e4e343e6fda6a6c7055ceb593446ef81d0ca5bcd96a7577275f961",
     "postcode": "44145",
     "chain": "Kaufland",
     "branchId": "branch-3bef4939a29657c1",
@@ -1372,10 +2981,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-16.09.2026",
     "branch": "Kaufland Dortmund-Innenstadt-Nord, Bornstraße 160 a, 44145 Dortmund (최근접 활성 전단 지점, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "3b49b3f683481d21370dd9d5b75821753662c5009576fc65d251b9edbd67c2ef",
+    "offerId": "957325f3bbcf007a774fa5f15b6e8c83ce83adffc5fd1063e59e867b92312bed",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1404,10 +3013,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b76bd5f74fd836a4020d80198902bd00fa5b5faf3b8d5d8ff7f01086ae9368f6",
+    "offerId": "46b105374848d5d5d5ef85bd0aec6e1ab9e21b023a710da96bd1528bd8a0cb51",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1436,10 +3045,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "13e1cce2689e76422909eda2b9d208daec634ad31d05ca1ee13ba69aa67be582",
+    "offerId": "22b125e5aa146e556b14e286c1f9e82c13245b58dfde17d6bbad32e445ed9751",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1468,10 +3077,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "91fe1b8a3a272ba5dab2c7e8ed135f168750f1c02461cd146997451fe046ab3d",
+    "offerId": "fc38079415a367b58b181caab020e01effe519857e0e5a2e06482d33b810a935",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1500,10 +3109,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "17.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "ffb08d06396b93f46bd0c887a6fbb298b5cbb55eabb11f4c48fb608279444bf9",
+    "offerId": "db1eef7babce8e492ac553c350a027e3314aa7890f1bec6f8345f6fb685c831e",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1532,10 +3141,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "8b61e0f98dd515b9c6d123ac5ccda408bf6a099626db6c18f8d8d19c233cb977",
+    "offerId": "e136b8bcc1e704027404202e60658dbcdbf4370264e5c90e9aa5fd1e19f32cdf",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1564,10 +3173,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "178fabe476a0685ccbc93186248b9ea88cc90efc064ceb878edac1806a8e796a",
+    "offerId": "bfbd5a5381d4e6fbf4dbc1888bf55c8fe0beb00a0c6f4c3d92b9b2346ca45d03",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1596,10 +3205,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "d36b3367eb4ee66630445ca13c79d2bdfe74da8ace352a87c4746fe4bb98af3c",
+    "offerId": "a02825e54211946812d4a1a5d877740e94f80ece635ed59e1f89171bfd03da35",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1628,10 +3237,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "17.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "c73f66f90fd414715bf24b26a89e89e89abaa2e5cbcac6e279ebd1a7bb911bba",
+    "offerId": "e7d4d9cfb52fe69bb16242d8699cdaaaca17db188784dea04e4ff9ae846247cd",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1660,10 +3269,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "17.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "1b6524a090bc439ab298e4da12f61609a8baa6f9fa73c5d38229f72550ee81ba",
+    "offerId": "9df18571c8d7b83ab5d795bc63522af5bc7a5cc1cdfb50abad0f80b43d12f8e3",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1692,10 +3301,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "371b26d641168da0ad557d5a8c646c29c6b16241fee59f0cadb247d8d9970b8b",
+    "offerId": "07792bc6f521519eae52795631179d680a49a580d4058a4dc535338eceb00cc2",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1724,10 +3333,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "064f18b9550fc42eccd401b937ea5460dd66788a71cd64ad68d6fec55dd5bb79",
+    "offerId": "877ef013c00312851662ceed4f3add70be80fdad9960c4236241aa8dcded4358",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1756,10 +3365,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "4cb577890980aa2ff26a835c3b437c29f3bfebfc333b516b34ee3a0728404f16",
+    "offerId": "6d4a202e24b2abf4ad25c5882a21c5a38867c601835eb1cf1cbf1092bd2d948f",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1788,10 +3397,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "c135a502da044af84e6abb7fd19a625c00fdd2d45bb39bf8946ff2a354a36a33",
+    "offerId": "95b1102926708b5fb2f8525c61615c8026c5a5b3ee51611acbee89ceba070b10",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1820,10 +3429,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "509356dadc10f6d99fa7c9384e811f6c1cbb2dc74afc2380b8b81744ec7f9cca",
+    "offerId": "e47d3b67e96cbe76134290d028e690a219da1776cbeb35389a77fa5151d9d803",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1852,10 +3461,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e1f34551e7a90824c75752e3928b04e10281a77a25c0463e5095e44447365250",
+    "offerId": "581cebfbd9999282ef84b702b3a439342ac860c1d1879ecdea0c65d381db56f7",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1884,10 +3493,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "c0e3477c1a73809a72410e8d02eaa9356fb1a7118f56fd9cb6ba12de9133ef73",
+    "offerId": "b40d981295dbb0cc8b517f65a61df921749e1b505250ca1c824c881d395de890",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -1916,10 +3525,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "bd93d5e231112cb8cba65cc6afd37026cfe544e46597f82bffe356f1fd4c60c1",
+    "offerId": "78c89b6522716be00881beea3ce2ff16cb7d8cc58fe4d66486a182d74f430117",
     "postcode": "44369",
     "chain": "EDEKA",
     "branchId": "branch-bc5ba3d0d992ea68",
@@ -1948,10 +3557,490 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "EDEKA Nüsken, Rossbachstraße 21-23, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b0a30843518012237dfce9a90185d27e8805c67610f335016d38e4efe69fe335",
+    "offerId": "e714ec95793bbaa666fc05604fa42482b46e767e77efad6c18f5c3ac0be8bb24",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 703,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+    "pack": "1,1 kg",
+    "priceCents": 449,
+    "normalPriceCents": 549,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "닭날개",
+      "species": "chicken",
+      "cut": "wing",
+      "processingState": "raw",
+      "form": "whole",
+      "composition": "chicken"
+    },
+    "ingredient": "닭날개",
+    "product": "METZGERFRISCH Frische Hähnchenflügel",
+    "appPriceCents": null,
+    "detail": "1,1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "924e4f866f603885276e99ecaa118b0e8e549a1fc19990cde3462ce63db6af74",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 704,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche gelbe Zwiebeln",
+    "pack": "2 kg",
+    "priceCents": 169,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양파",
+      "species": "plant",
+      "cut": "onion",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "onion"
+    },
+    "ingredient": "양파",
+    "product": "Deutsche gelbe Zwiebeln",
+    "appPriceCents": null,
+    "detail": "Klasse I, 2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "b361886668e9e17404fc8f26e4ee39cc39d2d64998105c7cd70b64ff62d1c5cb",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 702,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche Speisekartoffeln",
+    "pack": "2 kg",
+    "priceCents": 219,
+    "normalPriceCents": 249,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "감자",
+      "species": "plant",
+      "cut": "potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "potato"
+    },
+    "ingredient": "감자",
+    "product": "Deutsche Speisekartoffeln",
+    "appPriceCents": null,
+    "detail": "2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "3ef48cd034e89ac00e223a48e1a1c853ae14a87e5743c52b85a26da0c3dedeb0",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 706,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Süßkartoffeln",
+    "pack": "1 kg",
+    "priceCents": 169,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "고구마",
+      "species": "plant",
+      "cut": "sweet-potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "sweet-potato"
+    },
+    "ingredient": "고구마",
+    "product": "Süßkartoffeln",
+    "appPriceCents": null,
+    "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "cfa3d25fd2ad06cf13753cd9ca192e531555d18a0ffd4e761187b5d1e227d27c",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 705,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Gurken",
+    "pack": "Stück",
+    "priceCents": 99,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "오이",
+      "species": "plant",
+      "cut": "cucumber",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "cucumber"
+    },
+    "ingredient": "오이",
+    "product": "Bio Gurken",
+    "appPriceCents": null,
+    "detail": "Spanien, Klasse I, Stück",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "b01d1d31733b223048bf216dc374af30dd4f51b18e7de128ff48dc51971d00b1",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 101,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "pack": "500 g",
+    "priceCents": 69,
+    "normalPriceCents": 99,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "호밀빵",
+      "species": "grain",
+      "cut": "bread",
+      "processingState": "baked",
+      "form": "sliced",
+      "composition": "rye-wheat"
+    },
+    "ingredient": "호밀빵",
+    "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "appPriceCents": null,
+    "detail": "je 500 g",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "7a2c4a8792a31fabd41424e5ff4af338d5cba27185bbb1c2a22322fb893231a7",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 114,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Hähnchen-Brustfilet",
+    "pack": "600 g",
+    "priceCents": 499,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "닭가슴살",
+      "species": "chicken",
+      "cut": "breast",
+      "processingState": "raw",
+      "form": "fillet",
+      "composition": "chicken"
+    },
+    "ingredient": "닭가슴살",
+    "product": "Hähnchen-Brustfilet",
+    "appPriceCents": null,
+    "detail": "600 g",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "078533a6bab22a4b5927b0ad146aad922165723ddab815905677b462d4bdf60d",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 691,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Rispentomaten",
+    "pack": "1 kg",
+    "priceCents": 229,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "토마토",
+      "species": "plant",
+      "cut": "tomato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "tomato"
+    },
+    "ingredient": "토마토",
+    "product": "Rispentomaten",
+    "appPriceCents": null,
+    "detail": "Niederlande, Kl. I, 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "8408713afe9607f6ba873c42c7b8f9d2d3680eb1bf4e777f0596bccccc96e335",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 688,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Zwiebeln",
+    "pack": "1,5 kg",
+    "priceCents": 139,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양파",
+      "species": "plant",
+      "cut": "onion",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "onion"
+    },
+    "ingredient": "양파",
+    "product": "Zwiebeln",
+    "appPriceCents": null,
+    "detail": "Deutschland, Kl. II, 1,5 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "3452f5cfc723ec162732b1fa105403f9328c7e2524a9900d6f2bd1d4a976b9d8",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 690,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Champignons weiß",
+    "pack": "400 g",
+    "priceCents": 169,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "버섯",
+      "species": "fungus",
+      "cut": "mushroom",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "mushroom"
+    },
+    "ingredient": "버섯",
+    "product": "Champignons weiß",
+    "appPriceCents": null,
+    "detail": "Polen, Kl. I, 400 g Schale",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "618f7dcef11500e2efc938ebbc72b995a9f007dfba1ee310c2f2d4c76c4856eb",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 689,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Speisekartoffeln",
+    "pack": "2 kg",
+    "priceCents": 199,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "감자",
+      "species": "plant",
+      "cut": "potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "potato"
+    },
+    "ingredient": "감자",
+    "product": "Speisekartoffeln",
+    "appPriceCents": null,
+    "detail": "Deutschland, Lüneburger Heide, 2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "f02152bde53666af69af7b95f3a2c2d78732af6ec013b36ce02f9ce10319e49f",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 112,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Eisbergsalat",
+    "pack": "Stück",
+    "priceCents": 88,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양상추",
+      "species": "plant",
+      "cut": "lettuce",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "lettuce"
+    },
+    "ingredient": "양상추",
+    "product": "Eisbergsalat",
+    "appPriceCents": null,
+    "detail": "Stück, Deutschland, Kl. I",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "8d03191fe621026161dfb2c8a14d97f3800b6858a3f9de92e44e6d5217878309",
+    "postcode": "52062",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-e3266a13232a4d10",
+    "sourceRow": 123,
+    "evidenceUrl": "https://www.netto-online.de/angebote/",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Hähnchen-Brustfilet",
+    "pack": "600 g",
+    "priceCents": 499,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "닭가슴살",
+      "species": "chicken",
+      "cut": "breast",
+      "processingState": "raw",
+      "form": "fillet",
+      "composition": "chicken"
+    },
+    "ingredient": "닭가슴살",
+    "product": "Hähnchen-Brustfilet",
+    "appPriceCents": null,
+    "detail": "600 g | 8.32 / kg | mager | -26 %UVP 6.79",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "b70e6455700b5e82ea3f493aa306ff08f6dbcfc177dce1219bce31680ef2cb5f",
+    "postcode": "52062",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-e3266a13232a4d10",
+    "sourceRow": 121,
+    "evidenceUrl": "https://www.netto-online.de/angebote/",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Eisbergsalat",
+    "pack": "Stück",
+    "priceCents": 88,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양상추",
+      "species": "plant",
+      "cut": "lettuce",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "lettuce"
+    },
+    "ingredient": "양상추",
+    "product": "Eisbergsalat",
+    "appPriceCents": null,
+    "detail": "Stück | Deutschland, Kl. I | -31 %UVP 1.29",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "345b0c65bb97df90b0ed619605193591b5292047bce404698365900e2c330718",
+    "postcode": "52064",
+    "chain": "EDEKA",
+    "branchId": "branch-b7a2687c1ad4f878",
+    "sourceRow": 81,
+    "evidenceUrl": "https://www.edeka.de/maerkte/071409/",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Frischer Schweinenackenbraten",
+    "pack": "1 kg",
+    "priceCents": 599,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "돼지목살",
+      "species": "pork",
+      "cut": "neck",
+      "processingState": "raw",
+      "form": "whole-cut",
+      "composition": "pork"
+    },
+    "ingredient": "돼지목살",
+    "product": "Frischer Schweinenackenbraten",
+    "appPriceCents": null,
+    "detail": "mit Knochen, der rustikale Braten, je 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "8965cf81da45cd47e355c017f146f3b1fe9d23c24f9429224f2589301078118b",
     "postcode": "52064",
     "chain": "EDEKA",
     "branchId": "branch-b7a2687c1ad4f878",
@@ -1980,10 +4069,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-19.09.2026",
     "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "a6451fa1440640b366c21fd080b506c0af6edd89ac865b0e0271719535916694",
+    "offerId": "7ffa09c2913e332aac1aeb570a3942324f105b8852bb3484c673e8f3dce82543",
     "postcode": "52064",
     "chain": "ALDI SÜD",
     "branchId": "branch-44ec9a9b7a4cab8a",
@@ -2012,10 +4101,10 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "18.09.2026-19.09.2026",
     "branch": "ALDI SÜD, Franzstraße 2, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "910bfcaddc3b4367ec408f6bec4d5d13181c45e43569c8c63032c41d59c09c97",
+    "offerId": "eab2a5024a357385a69a2bed62ba245fa4c040f7460c2652bded83b3f9900353",
     "postcode": "52064",
     "chain": "ALDI SÜD",
     "branchId": "branch-44ec9a9b7a4cab8a",
@@ -2044,10 +4133,202 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "18.09.2026-19.09.2026",
     "branch": "ALDI SÜD, Franzstraße 2, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "ba68a1e9c31b34aaab27f009ecfcf888bf3b3a17e946223027f7644ef27b1323",
+    "offerId": "304b107436a42db01f9a47f7b95d0f87e0bf6a614423ab2653126a391fb2befe",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 708,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "METZGERFRISCH Frische Hähnchenflügel",
+    "pack": "1,1 kg",
+    "priceCents": 449,
+    "normalPriceCents": 549,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "닭날개",
+      "species": "chicken",
+      "cut": "wing",
+      "processingState": "raw",
+      "form": "whole",
+      "composition": "chicken"
+    },
+    "ingredient": "닭날개",
+    "product": "METZGERFRISCH Frische Hähnchenflügel",
+    "appPriceCents": null,
+    "detail": "1,1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "96aaf7f2bda2aca6d69002f3b09edfd346d7b73635629b269cea96901037a2a9",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 709,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche gelbe Zwiebeln",
+    "pack": "2 kg",
+    "priceCents": 169,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "양파",
+      "species": "plant",
+      "cut": "onion",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "onion"
+    },
+    "ingredient": "양파",
+    "product": "Deutsche gelbe Zwiebeln",
+    "appPriceCents": null,
+    "detail": "Klasse I, 2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "ca768b5cda9a1e68a2b36a9f81f65b50050cb80a6ee5095288013c1621f51cf3",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 707,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/2?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Deutsche Speisekartoffeln",
+    "pack": "2 kg",
+    "priceCents": 219,
+    "normalPriceCents": 249,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "감자",
+      "species": "plant",
+      "cut": "potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "potato"
+    },
+    "ingredient": "감자",
+    "product": "Deutsche Speisekartoffeln",
+    "appPriceCents": null,
+    "detail": "2 kg Netz",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "66d4c0f78162d5cf022c41f0a64c2aee30e286696d1ef5a1e3b0b51a9e4b095a",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 711,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Süßkartoffeln",
+    "pack": "1 kg",
+    "priceCents": 169,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "고구마",
+      "species": "plant",
+      "cut": "sweet-potato",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "sweet-potato"
+    },
+    "ingredient": "고구마",
+    "product": "Süßkartoffeln",
+    "appPriceCents": null,
+    "detail": "Ursprung Ägypten/Spanien/Portugal, 1 kg",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "f1d0dfa9d1d6372d9460f0e905adc14aa61817f1566dad74400cc5d596f3c923",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 710,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/7?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Gurken",
+    "pack": "Stück",
+    "priceCents": 99,
+    "normalPriceCents": null,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "오이",
+      "species": "plant",
+      "cut": "cucumber",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "cucumber"
+    },
+    "ingredient": "오이",
+    "product": "Bio Gurken",
+    "appPriceCents": null,
+    "detail": "Spanien, Klasse I, Stück",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "bb5a5d82565c06bd5878592bb8aaac0303675b06f52d88989a2d9379ec8651cf",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 106,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "pack": "500 g",
+    "priceCents": 69,
+    "normalPriceCents": 99,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "호밀빵",
+      "species": "grain",
+      "cut": "bread",
+      "processingState": "baked",
+      "form": "sliced",
+      "composition": "rye-wheat"
+    },
+    "ingredient": "호밀빵",
+    "product": "Graf-Schafter Pfundsschnitten Roggenmischbrot",
+    "appPriceCents": null,
+    "detail": "je 500 g",
+    "category": "식품",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "9945271234a7b507d21a178f0fafbb1093db03dd04277bb1ce161212041e2654",
     "postcode": "52068",
     "chain": "Kaufland",
     "branchId": "branch-1618bf3ae78c257c",
@@ -2076,12 +4357,12 @@ window.mealOffersByIdentity = [
     "category": "식품",
     "period": "14.09.2026-16.09.2026",
     "branch": "Kaufland Aachen, Breslauer Straße 35, 52068 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
-    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   }
 ];
 window.mealOfferMeta = {
-  "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv",
-  "snapshotId": "3cc430e666b2926365a812890aa126c45962afd673eec6cece76fe3faf0f8ddb",
+  "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+  "snapshotId": "3426ad8257edf76dc5f4d11752c8a19fb0d57e037020edfabae25d1ce32f94c0",
   "collectedAt": "2026-09-13 21:08 Europe/Berlin",
   "profiles": {
     "40235": {
@@ -2093,7 +4374,7 @@ window.mealOfferMeta = {
         "offerCount": "4행",
         "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "40468": {
@@ -2105,7 +4386,7 @@ window.mealOfferMeta = {
         "offerCount": "20행",
         "offerSummary": "닭가슴살 · 파스타 · 14.09.2026-20.09.2026",
         "period": "14.09.2026-20.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "ALDI SÜD": {
         "chain": "ALDI SÜD",
@@ -2115,7 +4396,7 @@ window.mealOfferMeta = {
         "offerCount": "6행",
         "offerSummary": "훈제연어 · 모짜렐라치즈 · 18.09.2026-19.09.2026",
         "period": "18.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "40472": {
@@ -2125,19 +4406,19 @@ window.mealOfferMeta = {
         "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
         "branchId": "branch-a33ba57e7791f9e4",
         "offerCount": "12행",
-        "offerSummary": "바나나 · 14.09.2026-19.09.2026",
+        "offerSummary": "돼지목살 · 바나나 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "Lidl": {
         "chain": "Lidl",
         "label": "Lidl · 40472 · Düsseldorf",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "branchId": "branch-7cd348bd92626483",
-        "offerCount": "5행",
-        "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
+        "offerCount": "10행",
+        "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "40474": {
@@ -2147,9 +4428,9 @@ window.mealOfferMeta = {
         "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
         "branchId": "branch-269dad5325a916e4",
         "offerCount": "12행",
-        "offerSummary": "바나나 · 14.09.2026-19.09.2026",
+        "offerSummary": "돼지목살 · 바나나 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "ALDI SÜD": {
         "chain": "ALDI SÜD",
@@ -2159,7 +4440,7 @@ window.mealOfferMeta = {
         "offerCount": "6행",
         "offerSummary": "훈제연어 · 모짜렐라치즈 · 18.09.2026-19.09.2026",
         "period": "18.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "40476": {
@@ -2171,7 +4452,7 @@ window.mealOfferMeta = {
         "offerCount": "120행",
         "offerSummary": "버터 · 14.09.2026-16.09.2026",
         "period": "14.09.2026-16.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "40489": {
@@ -2180,10 +4461,10 @@ window.mealOfferMeta = {
         "label": "Lidl · 40489 · Düsseldorf",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "branchId": "branch-063d7ebb9016057e",
-        "offerCount": "5행",
-        "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
+        "offerCount": "10행",
+        "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "44145": {
@@ -2195,7 +4476,7 @@ window.mealOfferMeta = {
         "offerCount": "120행",
         "offerSummary": "버터 · 14.09.2026-16.09.2026",
         "period": "14.09.2026-16.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "44149": {
@@ -2207,7 +4488,7 @@ window.mealOfferMeta = {
         "offerCount": "4행",
         "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "44369": {
@@ -2219,7 +4500,7 @@ window.mealOfferMeta = {
         "offerCount": "10행",
         "offerSummary": "행사 상품 · 14.09.2026-20.09.2026",
         "period": "14.09.2026-20.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "ALDI Nord": {
         "chain": "ALDI Nord",
@@ -2229,7 +4510,7 @@ window.mealOfferMeta = {
         "offerCount": "172행",
         "offerSummary": "연어 · 파프리카 · 양파 · 버섯 · 감자 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026 / 17.09.2026-19.09.2026 / 19.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "EDEKA": {
         "chain": "EDEKA",
@@ -2239,27 +4520,27 @@ window.mealOfferMeta = {
         "offerCount": "12행",
         "offerSummary": "바나나 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "Lidl": {
         "chain": "Lidl",
         "label": "Lidl · 44369 · Dortmund",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "branchId": "branch-d5a6ecc77d976fac",
-        "offerCount": "5행",
-        "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
+        "offerCount": "10행",
+        "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "Netto Marken-Discount": {
         "chain": "Netto Marken-Discount",
         "label": "Netto Marken-Discount · 44369 · Dortmund",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "branchId": "branch-9b191c8340e1ab2e",
-        "offerCount": "7행",
-        "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
+        "offerCount": "11행",
+        "offerSummary": "닭가슴살 · 토마토 · 양파 · 버섯 · 감자 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "52062": {
@@ -2271,7 +4552,7 @@ window.mealOfferMeta = {
         "offerCount": "11행",
         "offerSummary": "행사 상품 · 14.09.2026-20.09.2026",
         "period": "14.09.2026-20.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "Netto Marken-Discount": {
         "chain": "Netto Marken-Discount",
@@ -2279,9 +4560,9 @@ window.mealOfferMeta = {
         "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
         "branchId": "branch-e3266a13232a4d10",
         "offerCount": "8행",
-        "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
+        "offerSummary": "닭가슴살 · 양상추 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "52064": {
@@ -2291,9 +4572,9 @@ window.mealOfferMeta = {
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
         "branchId": "branch-b7a2687c1ad4f878",
         "offerCount": "12행",
-        "offerSummary": "바나나 · 14.09.2026-19.09.2026",
+        "offerSummary": "돼지목살 · 바나나 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "ALDI SÜD": {
         "chain": "ALDI SÜD",
@@ -2303,17 +4584,17 @@ window.mealOfferMeta = {
         "offerCount": "6행",
         "offerSummary": "훈제연어 · 모짜렐라치즈 · 18.09.2026-19.09.2026",
         "period": "18.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       },
       "Lidl": {
         "chain": "Lidl",
         "label": "Lidl · 52064 · Aachen",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "branchId": "branch-902eeb90994abf6d",
-        "offerCount": "5행",
-        "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
+        "offerCount": "10행",
+        "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "52068": {
@@ -2325,7 +4606,7 @@ window.mealOfferMeta = {
         "offerCount": "120행",
         "offerSummary": "버터 · 14.09.2026-16.09.2026",
         "period": "14.09.2026-16.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
     "52146": {
@@ -2337,7 +4618,7 @@ window.mealOfferMeta = {
         "offerCount": "4행",
         "offerSummary": "행사 상품 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
-        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed.csv"
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     }
   },
