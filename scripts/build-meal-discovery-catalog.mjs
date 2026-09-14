@@ -37,7 +37,7 @@ function ingredientText(item) {
 
 function dietaryFilters(candidate) {
   const ingredients=[candidate.title,...(candidate.ingredients||[]).map(ingredientText)].join(' ');
-  const animal=/돼지|삼겹살|목살|등갈비|폭립|돈가스|돈까스|가츠|소고기|쇠고기|닭|치킨|오리|양고기|고기|햄|베이컨|소시지|스팸|연어|참치|고등어|생선|대구|삼치|황태|멸치|새우|오징어|낙지|문어|바지락|조개|굴|게|어묵|명란|젓갈|액젓|육수|사골|육개장/u;
+  const animal=/돼지|삼겹살|목살|등갈비|폭립|돈가스|돈까스|가츠|소고기|쇠고기|차돌|닭|치킨|오리|양고기|고기|장조림|햄|베이컨|소시지|스팸|연어|참치|고등어|생선|대구|삼치|황태|멸치|가쓰오|가츠오|가다랑어|새우|오징어|낙지|문어|바지락|조개|굴|게|어묵|크래미|맛살|명란|젓갈|액젓|굴소스|참치액|치킨스톡|육수|사골|장국|다시다|육개장/u;
   const ambiguousPreparedFood=/라면|김치|만두|떡갈비|햄버거|미트볼/u;
   return animal.test(ingredients)||ambiguousPreparedFood.test(ingredients)?[]:['vegetarian'];
 }

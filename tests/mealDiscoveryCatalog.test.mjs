@@ -64,15 +64,18 @@ test('discovery catalog keeps sides out of dinner results and classifies vegetar
   const beefStock=candidate('7000008',{title:'사골 버섯라면',extraIngredients:['사골육수 500ml']});
   const ambiguousRamen=candidate('7000009',{title:'버섯 라면'});
   const ambiguousKimchi=candidate('7000010',{title:'버섯 김치볶음밥'});
+  const braisedMeat=candidate('7000011',{title:'버섯 장조림 비빔밥',extraIngredients:['장조림 100g']});
+  const beefBrisket=candidate('7000012',{title:'차돌박이 버섯덮밥',extraIngredients:['차돌박이 100g']});
+  const bonito=candidate('7000013',{title:'가쓰오 버섯우동',extraIngredients:['가쓰오부시 적당량']});
   const catalog=buildDiscoveryCatalog({
     candidateReport:report(
-      [side,vegetarian,fishSauce,meatTitle,cutlet,pollockRoe,beefStock,ambiguousRamen,ambiguousKimchi],
+      [side,vegetarian,fishSauce,meatTitle,cutlet,pollockRoe,beefStock,ambiguousRamen,ambiguousKimchi,braisedMeat,beefBrisket,bonito],
       [offer('offer-파프리카','파프리카'),offer('offer-버섯','버섯')],
     ),
     snapshotId:'b'.repeat(64),weekStart:'2026-09-14',target:20,
   });
 
-  assert.deepEqual(catalog.recipes.map((recipe)=>recipe.sourceRecipeId).sort(),['7000003','7000004','7000005','7000006','7000007','7000008','7000009','7000010']);
+  assert.deepEqual(catalog.recipes.map((recipe)=>recipe.sourceRecipeId).sort(),['7000003','7000004','7000005','7000006','7000007','7000008','7000009','7000010','7000011','7000013']);
   assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000003').dietaryFilters,['vegetarian']);
   assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000004').dietaryFilters,[]);
   assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000005').dietaryFilters,[]);
@@ -81,6 +84,9 @@ test('discovery catalog keeps sides out of dinner results and classifies vegetar
   assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000008').dietaryFilters,[]);
   assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000009').dietaryFilters,[]);
   assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000010').dietaryFilters,[]);
+  assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000011').dietaryFilters,[]);
+  assert.equal(catalog.recipes.some((recipe)=>recipe.sourceRecipeId==='7000012'),false);
+  assert.deepEqual(catalog.recipes.find((recipe)=>recipe.sourceRecipeId==='7000013').dietaryFilters,[]);
   assert.equal(catalog.exclusionCounts['not-main-meal'],1);
 });
 
