@@ -3678,6 +3678,153 @@
           "vegetarian"
         ]
       }
+    },
+    "1643325|e8e7b04ee38352a61458841e3d052a996100ff758429104437b8fec6f89349f5|ko-paraphrase-v1": {
+      "sourceRecipeId": "1643325",
+      "sourceContentHash": "e8e7b04ee38352a61458841e3d052a996100ff758429104437b8fec6f89349f5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "닭날개 윙 오븐구이",
+      "detailIngredients": [
+        "닭날개 350g (13개)",
+        "다진 마늘 1스푼",
+        "간장 1스푼",
+        "꿀 1스푼 (이나 아가베시럽)",
+        "올리브오일 1스푼 (이나 포도씨오일)",
+        "청주 1스푼",
+        "생강즙 0.3스푼 (이나 가루)",
+        "소금 0.3스푼",
+        "후춧가루 적당량",
+        "파마산 치즈가루 1스푼 (생략가능)"
+      ],
+      "steps": [
+        "닭날개를 씻은 뒤 양념이 잘 배도록 곳곳에 칼집을 낸다.",
+        "다진 마늘, 간장, 꿀 또는 아가베시럽, 올리브오일 또는 포도씨오일, 청주, 생강즙 또는 가루, 소금, 후춧가루와 선택 재료인 파마산 치즈가루를 섞는다.",
+        "닭날개에 양념을 고루 버무려 약 1시간 재운다.",
+        "쿠킹포일을 깐 팬에 석쇠를 놓고 닭날개 사이를 띄워 올린다.",
+        "오븐을 220도로 예열하고 컨벡션으로 20분 굽는다.",
+        "중간에 닭날개를 한 번 뒤집어 220도에서 10-15분 더 익힌다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭날개"
+        ],
+        "family": "chicken",
+        "method": "grill",
+        "kind": "main"
+      }
+    },
+    "1662934|eb9d211002048953d8c5ba52ec4378509e4ebf752c70603d3861897991d796c2|ko-paraphrase-v1": {
+      "sourceRecipeId": "1662934",
+      "sourceContentHash": "eb9d211002048953d8c5ba52ec4378509e4ebf752c70603d3861897991d796c2",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "간단한 고구마 스프",
+      "detailIngredients": [
+        "고구마 2~3개",
+        "우유 500ml",
+        "양파 1/2개",
+        "소금 약간"
+      ],
+      "steps": [
+        "고구마를 씻어 찐 뒤 껍질을 벗겨 잘라 믹서기에 담고 우유와 곱게 간다.",
+        "간 혼합물을 냄비에 붓고 약불에서 눌지 않게 저으며 끓인다.",
+        "양파를 잘게 다져 팬에서 노릇해질 때까지 볶는다.",
+        "볶은 양파를 끓는 수프에 넣고 함께 끓인 뒤 소금으로 간한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "고구마"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
+    "6830500|b053a6f78a0de162dd0774b882f5a7c44a70da30b9bf8ddf91167989f78a01d5|ko-paraphrase-v1": {
+      "sourceRecipeId": "6830500",
+      "sourceContentHash": "b053a6f78a0de162dd0774b882f5a7c44a70da30b9bf8ddf91167989f78a01d5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "생생 정보통 황금레시피 6146, 오이미역냉국 만들기!!",
+      "detailIngredients": [
+        "미역 1줌",
+        "오이 1개",
+        "양파 1/4개",
+        "청양고추",
+        "물 600ml",
+        "소금 1큰술",
+        "설탕 4큰술",
+        "식초 6큰술",
+        "통깨"
+      ],
+      "steps": [
+        "미역을 물에 잠시 불린 뒤 충분히 주물러 씻는다.",
+        "불린 미역을 먹기 편한 길이로 잘라 둔다.",
+        "오이를 깨끗이 씻고 돌기를 긁어낸 다음 채 썬다.",
+        "양파를 가늘게 썰어 물에 담가 매운맛을 덜어낸다.",
+        "물 600ml를 준비한다.",
+        "소금 1큰술을 넣는다.",
+        "설탕 4큰술을 더한다.",
+        "식초 6큰술을 넣고 녹을 때까지 젓는다.",
+        "채 썬 오이와 양파를 국물에 넣는다.",
+        "얼음과 미역은 먹기 직전에 넣어 식감을 살린다.",
+        "마지막에 국물과 통깨, 청양고추를 더한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "오이"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
+    "6853815|afd644a6f082f67e852bc23729121e9fbaf87cfcf7c7b81c0f18adda6e967328|ko-paraphrase-v1": {
+      "sourceRecipeId": "6853815",
+      "sourceContentHash": "afd644a6f082f67e852bc23729121e9fbaf87cfcf7c7b81c0f18adda6e967328",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "6.1.4.6.의 맞춤의 맛있고 시원한 오이냉국~~",
+      "detailIngredients": [
+        "오이 1개",
+        "물 600ml",
+        "소금 1스푼",
+        "설탕 4스푼",
+        "식초 6스푼",
+        "깨소금 약간"
+      ],
+      "steps": [
+        "소금·설탕·식초는 원문의 6.1, 이어지는 4.6 수치로 맞춰 냉국을 만들고 냉장 보관한다.",
+        "도깨비방망이나 믹서기로 재료를 고루 섞은 다음 차갑게 식힌다.",
+        "오이를 채 썰어 소금에 절였다가 물기를 꼭 짜거나 생으로 준비한다.",
+        "차갑게 둔 국물을 식사 직전에 오이 위에 끼얹는다.",
+        "마지막으로 깨소금을 조금 더하고 선택적으로 미역을 곁들인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "오이"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "main"
+      }
     }
   }
 }

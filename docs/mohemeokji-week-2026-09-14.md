@@ -12,9 +12,11 @@
 공식 Netto KW38 PDF, Lidl Aktionsprospekt 1·2·7면, EDEKA Buller·Prömpers·
 Vieler 지점 상품 카드를 다시 확인했다. 검토 CSV는 740행이며 `verified 240`,
 `held 499`, `held-form 1`이다. 별도 `coverage_2026-09-14.csv`는 실제 지점
-23개와 행 수를 고정하며, 이번 전 페이지 수집에서 44369 Netto와 40472·40489·
-44369·52064 Lidl을 `수집완료`로 갱신했다. 나머지 17개 지점은 계속
-`일부수집`으로 남긴다. 앞으로 coverage 파일이 없거나 지점·행 수·페이지
+23개와 행 수를 고정하며, 이번 전 페이지 수집에서 44369 Netto와 4개 Lidl,
+3개 METRO, 3개 Kaufland를 `수집완료`로 갱신했다. 공식 HTML 목록을 확인했지만
+레시피 연결 행만 공개한 ALDI Süd·EDEKA 7개 지점은 `일부수집`, HTTP 403으로
+접근할 수 없는 REWE 3개와 52062 Netto는 `접근실패`로 남겼다. 앞으로 coverage
+파일이 없거나 지점·행 수·페이지
 상태가 맞지 않으면 주간 release prepare 단계가 실패한다.
 
 ## 72·76면 전단 전수 수집
@@ -29,6 +31,23 @@ Lidl 뷰어는 마지막에 다음 전단 미리보기 경계 상태를 76면으
 현재 공개 CSV는 가격·단위·레시피 연결이 검토된 행만 게시하고, 페이지 전수
 수집 증거와 상품 행의 검토 범위를 서로 섞지 않는다.
 
+추가 지점 원문 증거는 `data/mohemeokji/store-source-evidence-2026-09-14.json`에
+있다. METRO 50면과 Kaufland 각 12면은 PDF 텍스트 추출 86면 전체가 확인됐고,
+ALDI Süd 69개·EDEKA 12개 또는 229개 HTML 상품 카드도 응답 해시와 함께
+기록했다. REWE 3개와 52062 Netto는 공식 URL HTTP 403을 그대로 남겼다.
+
+이번 보정에서 Lidl 주메뉴 후보 4개를 원문 후기와 조리 사실까지 재검토해
+승인 등록했다. 검토 기록은
+`data/mohemeokji/lidl-dinner-expansion-2026-09-15.json`에 있으며, 새
+correction 준비본은 `fd3eda485049ed44a460369d30847390d86c96a70b4a9cbafb3136a4c6fc2dde`다.
+승인 후 각 Lidl 지점에 닭날개 오븐구이, 고구마 수프, 오이미역냉국 2종이
+자동 저녁 후보로 들어간다.
+
+다음 주 `2026-09-21~09-27` 갱신 heartbeat는 매주 일요일 09:05
+(Europe/Berlin)에 등록했다. 전단이 없는 체인은 지난주 행을 복사하지 않고
+`미공개` 또는 `접근실패`로 남기며, 새 approvalDigest를 owner가 승인할 때까지
+게시하지 않는다. 자동화 ID는 `automation`이다.
+
 전단의 추가 확인 행 30개를 CSV에 반영해 총 740행(`verified 240`, `held 499`,
 `held-form 1`)이 되었다. 같은 CSV로 `recipe-full`을 읽기 전용 조회한 후보
 보고서는 23개 지점, 레시피 연결 행사 76개, 후보 5,000개이며 0건 identity는
@@ -42,8 +61,7 @@ Lidl 뷰어는 마지막에 다음 전단 미리보기 경계 상태를 76면으
 곁들임으로 분류되어 자동 저녁 주메뉴는 0개다. 이는 전단 수집 완성과
 레시피 승인 범위가 별도라는 사실을 보여준다.
 
-새 correction snapshot은
-이전 correction snapshot은
+이전 게시 correction snapshot은
 `126af7065fc3a8f7baffaac07b411317d6701a48844893079f478ebf5bd0c731`이며
 독립 빌드 327개 파일이 바이트 단위로 일치했다. 같은 공개 스냅샷을 읽는
 MCP 검증 결과는 다음과 같다.

@@ -1,0 +1,720 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-store-source-evidence",
+  "weekStart": "2026-09-14",
+  "collectedAt": "2026-09-15T08:00:00+02:00",
+  "sources": [
+    {
+      "id": "metro-kw38",
+      "chain": "METRO",
+      "postcodes": [
+        "40235",
+        "44149",
+        "52146"
+      ],
+      "url": "https://prospekte.metro.de/3985/3358171/pdfs/baab6bde-6878-4c62-ac20-a0e1ef09d3b9.pdf",
+      "type": "pdf",
+      "evidence": {
+        "sourceSha256": "fabae3bf1427e80ccbe67d015fbab3353b63d124fcc2adcb9fd919d099e2e07a",
+        "pageCount": 50,
+        "checkedPageCount": 50,
+        "extraction": {
+          "tool": "pdftotext -layout",
+          "textSha256": "7cc8a9fdcd8b942681d6355c4565770aeefa9df6f1725eaecc9cb9ff1e27d8b6",
+          "pages": [
+            {
+              "page": 1,
+              "textSha256": "9179955a3e050e9c198eba3c2b9b649d3de22ff4ecec1742bd21e69e6a47b54b",
+              "charCount": 3900
+            },
+            {
+              "page": 2,
+              "textSha256": "3827e3dc730381bcfa9dec83b72d772d26bd9ed3d50c089367199094fe9e60e2",
+              "charCount": 8747
+            },
+            {
+              "page": 3,
+              "textSha256": "3827e3dc730381bcfa9dec83b72d772d26bd9ed3d50c089367199094fe9e60e2",
+              "charCount": 8747
+            },
+            {
+              "page": 4,
+              "textSha256": "83c92f9592d0e8afbccda98be308c477662a7eb1543de39c2f348fcefbe10584",
+              "charCount": 9100
+            },
+            {
+              "page": 5,
+              "textSha256": "83c92f9592d0e8afbccda98be308c477662a7eb1543de39c2f348fcefbe10584",
+              "charCount": 9100
+            },
+            {
+              "page": 6,
+              "textSha256": "a8e512516dbbb7965235866db6312ad9e7f86c7321e4dee6a631bf76a007c4ed",
+              "charCount": 10641
+            },
+            {
+              "page": 7,
+              "textSha256": "a8e512516dbbb7965235866db6312ad9e7f86c7321e4dee6a631bf76a007c4ed",
+              "charCount": 10641
+            },
+            {
+              "page": 8,
+              "textSha256": "af9bddd17dc29f75b67443df214dda2ca3f20fb61bc6d2bc5243d8d4df0fd16f",
+              "charCount": 6307
+            },
+            {
+              "page": 9,
+              "textSha256": "af9bddd17dc29f75b67443df214dda2ca3f20fb61bc6d2bc5243d8d4df0fd16f",
+              "charCount": 6307
+            },
+            {
+              "page": 10,
+              "textSha256": "d9e7699eec322a31f8d1da9843a6337c4e5acf9efd4ebeff5dee2f96c46ed2ac",
+              "charCount": 4102
+            },
+            {
+              "page": 11,
+              "textSha256": "d9e7699eec322a31f8d1da9843a6337c4e5acf9efd4ebeff5dee2f96c46ed2ac",
+              "charCount": 4102
+            },
+            {
+              "page": 12,
+              "textSha256": "90a98da1b3897e2352df60cd13ad3ce537b16517b6a623febfbf8f90acc9df91",
+              "charCount": 8924
+            },
+            {
+              "page": 13,
+              "textSha256": "90a98da1b3897e2352df60cd13ad3ce537b16517b6a623febfbf8f90acc9df91",
+              "charCount": 8924
+            },
+            {
+              "page": 14,
+              "textSha256": "e7ca006b5e1aee1f4d19a365197e4dc2582dbc82d0ede1db22bf73b90059f751",
+              "charCount": 7968
+            },
+            {
+              "page": 15,
+              "textSha256": "e7ca006b5e1aee1f4d19a365197e4dc2582dbc82d0ede1db22bf73b90059f751",
+              "charCount": 7968
+            },
+            {
+              "page": 16,
+              "textSha256": "9044fb7279dd9840e7beec1e2c5485924a7cff10d8b60df3539a5c09873b89ce",
+              "charCount": 6437
+            },
+            {
+              "page": 17,
+              "textSha256": "9044fb7279dd9840e7beec1e2c5485924a7cff10d8b60df3539a5c09873b89ce",
+              "charCount": 6437
+            },
+            {
+              "page": 18,
+              "textSha256": "6a5f3d4f05da7b24c41bb4ee450de658f5e85eca415e678953313b3e7a277477",
+              "charCount": 9853
+            },
+            {
+              "page": 19,
+              "textSha256": "6a5f3d4f05da7b24c41bb4ee450de658f5e85eca415e678953313b3e7a277477",
+              "charCount": 9853
+            },
+            {
+              "page": 20,
+              "textSha256": "cea53125f0eac40f489ac0b61c848eb80dc1034c5f8e1f4f1e344779c3d28bac",
+              "charCount": 9814
+            },
+            {
+              "page": 21,
+              "textSha256": "cea53125f0eac40f489ac0b61c848eb80dc1034c5f8e1f4f1e344779c3d28bac",
+              "charCount": 9814
+            },
+            {
+              "page": 22,
+              "textSha256": "7e90eaa834870cca768e81f52584baed930c486da23c621ce15fce72b16db1d9",
+              "charCount": 4785
+            },
+            {
+              "page": 23,
+              "textSha256": "7e90eaa834870cca768e81f52584baed930c486da23c621ce15fce72b16db1d9",
+              "charCount": 4785
+            },
+            {
+              "page": 24,
+              "textSha256": "fa1a5aa293c4668b5d0ee5f7b4bfd4b68f8a0e2cd1d221d521d5c40306c6ffd0",
+              "charCount": 8806
+            },
+            {
+              "page": 25,
+              "textSha256": "fa1a5aa293c4668b5d0ee5f7b4bfd4b68f8a0e2cd1d221d521d5c40306c6ffd0",
+              "charCount": 8806
+            },
+            {
+              "page": 26,
+              "textSha256": "8fe47e9dddc33c447a75a062eefd33f0bb0a3f26cea21f2e0672ba2485ddb128",
+              "charCount": 10745
+            },
+            {
+              "page": 27,
+              "textSha256": "8fe47e9dddc33c447a75a062eefd33f0bb0a3f26cea21f2e0672ba2485ddb128",
+              "charCount": 10745
+            },
+            {
+              "page": 28,
+              "textSha256": "e8622e85b0df80bc8bf993836eaa17cb7367214dc56e7c21c2facc787e34897f",
+              "charCount": 10823
+            },
+            {
+              "page": 29,
+              "textSha256": "e8622e85b0df80bc8bf993836eaa17cb7367214dc56e7c21c2facc787e34897f",
+              "charCount": 10823
+            },
+            {
+              "page": 30,
+              "textSha256": "dd0906bcf9d0ac40e8133ae228783baf1a65de0cac4df1e2fc21eb7bacca4e7a",
+              "charCount": 8417
+            },
+            {
+              "page": 31,
+              "textSha256": "dd0906bcf9d0ac40e8133ae228783baf1a65de0cac4df1e2fc21eb7bacca4e7a",
+              "charCount": 8417
+            },
+            {
+              "page": 32,
+              "textSha256": "eecb181ef596798654b08f6d97b16ade168ebec099195e6198a7c1ce17344fa2",
+              "charCount": 12897
+            },
+            {
+              "page": 33,
+              "textSha256": "eecb181ef596798654b08f6d97b16ade168ebec099195e6198a7c1ce17344fa2",
+              "charCount": 12897
+            },
+            {
+              "page": 34,
+              "textSha256": "0cce84cbf68f91492cd58062f3fc8ee3b236aa7a3ee15a66a9dfdb32d88fde38",
+              "charCount": 8817
+            },
+            {
+              "page": 35,
+              "textSha256": "0cce84cbf68f91492cd58062f3fc8ee3b236aa7a3ee15a66a9dfdb32d88fde38",
+              "charCount": 8817
+            },
+            {
+              "page": 36,
+              "textSha256": "ad4f174aac862dcbdee2719644ca0f236dbe7361e6c4bc0c1eaf18890a26958a",
+              "charCount": 11335
+            },
+            {
+              "page": 37,
+              "textSha256": "ad4f174aac862dcbdee2719644ca0f236dbe7361e6c4bc0c1eaf18890a26958a",
+              "charCount": 11335
+            },
+            {
+              "page": 38,
+              "textSha256": "0021649e037365f741dd0804472eb46ad13ccd2b7888ebdf91fe8e8d61643670",
+              "charCount": 9268
+            },
+            {
+              "page": 39,
+              "textSha256": "0021649e037365f741dd0804472eb46ad13ccd2b7888ebdf91fe8e8d61643670",
+              "charCount": 9268
+            },
+            {
+              "page": 40,
+              "textSha256": "758154422d25dafdb593f04f013d304b81f3e897befa745fefcbe9d6e4d702a6",
+              "charCount": 6539
+            },
+            {
+              "page": 41,
+              "textSha256": "758154422d25dafdb593f04f013d304b81f3e897befa745fefcbe9d6e4d702a6",
+              "charCount": 6539
+            },
+            {
+              "page": 42,
+              "textSha256": "ddf92f6ed36b72216444bb0651f4e3f5bc24a8eda39440f5a617c205c2a5df9a",
+              "charCount": 6219
+            },
+            {
+              "page": 43,
+              "textSha256": "ddf92f6ed36b72216444bb0651f4e3f5bc24a8eda39440f5a617c205c2a5df9a",
+              "charCount": 6219
+            },
+            {
+              "page": 44,
+              "textSha256": "6785e753e6628b31d93b51705aa0065cd3c141b2bdb03204bc3e99930b882d4a",
+              "charCount": 10181
+            },
+            {
+              "page": 45,
+              "textSha256": "6785e753e6628b31d93b51705aa0065cd3c141b2bdb03204bc3e99930b882d4a",
+              "charCount": 10181
+            },
+            {
+              "page": 46,
+              "textSha256": "7a6e97f762c2aa1c9260440838ba6bb42cd438307e92d4119fe7b449d512796d",
+              "charCount": 8753
+            },
+            {
+              "page": 47,
+              "textSha256": "7a6e97f762c2aa1c9260440838ba6bb42cd438307e92d4119fe7b449d512796d",
+              "charCount": 8753
+            },
+            {
+              "page": 48,
+              "textSha256": "fb79b8436b409dbcb4f639d5a45fd7630679eb0fb8f6a40a653b956605083c15",
+              "charCount": 10044
+            },
+            {
+              "page": 49,
+              "textSha256": "fb79b8436b409dbcb4f639d5a45fd7630679eb0fb8f6a40a653b956605083c15",
+              "charCount": 10044
+            },
+            {
+              "page": 50,
+              "textSha256": "0a961bab0856258f8dd7efe7cbf714d633bbe4bd1d562be69c7fe5887682bd21",
+              "charCount": 491
+            }
+          ]
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "kaufland-40476-kw38",
+      "chain": "Kaufland",
+      "postcodes": [
+        "40476"
+      ],
+      "url": "https://assets.leaflets.schwarz/leaflets/pdfs/01a07b07-adc6-76c0-8b49-38246d0e6357/Prospekt-14-09-2026-16-09-2026-00.pdf",
+      "type": "pdf",
+      "evidence": {
+        "sourceSha256": "97919372f7ec8d542b8107e47be4394b4ae85132b499157164de74d2db66f05a",
+        "pageCount": 12,
+        "checkedPageCount": 12,
+        "extraction": {
+          "tool": "pdftotext -layout",
+          "textSha256": "296fb95b35e478c88f937bc7abab59695c9b1f2609d9350e83566288a1afc8a2",
+          "pages": [
+            {
+              "page": 1,
+              "textSha256": "212699f537ccdd20d1b01ffeddc4c996024dcdfde6b5883c4038f543a8d16e1f",
+              "charCount": 6229
+            },
+            {
+              "page": 2,
+              "textSha256": "8df31db383452bce546a8fae9399ec0f1ef36d2e5cee0126de07b5fe3d326267",
+              "charCount": 6206
+            },
+            {
+              "page": 3,
+              "textSha256": "253450e75fc237b39d85da74ce059b9859ddad411846654cab3b477cd4ca6485",
+              "charCount": 7493
+            },
+            {
+              "page": 4,
+              "textSha256": "f53e92e665203df317c42b43b517671863b6b697ecc7fd3ff71a6f7b908dac3e",
+              "charCount": 6167
+            },
+            {
+              "page": 5,
+              "textSha256": "aa3b2c445d20b7c3c905e0cbf2708f5c11d3577d0e83007d837e5deb139bc107",
+              "charCount": 5891
+            },
+            {
+              "page": 6,
+              "textSha256": "965e81aa966d13861e9af480c7b77c3835e1e5b501fc7d45d0f58ef12e545340",
+              "charCount": 3921
+            },
+            {
+              "page": 7,
+              "textSha256": "fa2f93c8fcd64c44b3f44aaa44387e66351ad0f11ccf42f303f2f492c2b90e41",
+              "charCount": 4946
+            },
+            {
+              "page": 8,
+              "textSha256": "7124f1f9dfee74ee711e539b44fb0a0df9c4ac7085cb525fb64d7353a4da42b0",
+              "charCount": 7868
+            },
+            {
+              "page": 9,
+              "textSha256": "1ded3009b7fb9da67f44de0b020955a22c21cf85278add9980cb56030a1cdef9",
+              "charCount": 3510
+            },
+            {
+              "page": 10,
+              "textSha256": "77ff1284ed0cba4a1b38aef6ea76aea10fcbdc385374bcc10d3da319fb163fa9",
+              "charCount": 2162
+            },
+            {
+              "page": 11,
+              "textSha256": "4e7b431855d5f784bbb82b86c574eb6b2a2ff3ac22e0e08f31691ba1a60925ea",
+              "charCount": 3290
+            },
+            {
+              "page": 12,
+              "textSha256": "f82fc00a289cc2af0e808ded3bf9f0334f8098d535c15a3ad20660e1c97211c5",
+              "charCount": 11970
+            }
+          ]
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "kaufland-44145-kw38",
+      "chain": "Kaufland",
+      "postcodes": [
+        "44145"
+      ],
+      "url": "https://assets.leaflets.schwarz/leaflets/pdfs/01a07b00-d190-7727-a471-2fec9cfef9bf/Prospekt-14-09-2026-16-09-2026-00.pdf",
+      "type": "pdf",
+      "evidence": {
+        "sourceSha256": "9e408415fb3fc81b9f3f3027e9e167698ccebe4bd511976193776090c6501738",
+        "pageCount": 12,
+        "checkedPageCount": 12,
+        "extraction": {
+          "tool": "pdftotext -layout",
+          "textSha256": "5a38b07de4367458f2430aa8f539edff036aeafa3af52f66320421d6a3fdba5d",
+          "pages": [
+            {
+              "page": 1,
+              "textSha256": "d746ec0e895e11e634e5d4696b1847140da8983770f8ee5fccb40271fb72703e",
+              "charCount": 6022
+            },
+            {
+              "page": 2,
+              "textSha256": "daa8ee154f052fa7fecc69326f4e7073063f10f58789f9e550ac917610387229",
+              "charCount": 6206
+            },
+            {
+              "page": 3,
+              "textSha256": "b87aee100a40334b5d2bd675545912124794e4fdb84e5acc7f59abe75e1af5a5",
+              "charCount": 7493
+            },
+            {
+              "page": 4,
+              "textSha256": "f53e92e665203df317c42b43b517671863b6b697ecc7fd3ff71a6f7b908dac3e",
+              "charCount": 6167
+            },
+            {
+              "page": 5,
+              "textSha256": "aa3b2c445d20b7c3c905e0cbf2708f5c11d3577d0e83007d837e5deb139bc107",
+              "charCount": 5891
+            },
+            {
+              "page": 6,
+              "textSha256": "965e81aa966d13861e9af480c7b77c3835e1e5b501fc7d45d0f58ef12e545340",
+              "charCount": 3921
+            },
+            {
+              "page": 7,
+              "textSha256": "fa2f93c8fcd64c44b3f44aaa44387e66351ad0f11ccf42f303f2f492c2b90e41",
+              "charCount": 4946
+            },
+            {
+              "page": 8,
+              "textSha256": "7124f1f9dfee74ee711e539b44fb0a0df9c4ac7085cb525fb64d7353a4da42b0",
+              "charCount": 7868
+            },
+            {
+              "page": 9,
+              "textSha256": "1ded3009b7fb9da67f44de0b020955a22c21cf85278add9980cb56030a1cdef9",
+              "charCount": 3510
+            },
+            {
+              "page": 10,
+              "textSha256": "77ff1284ed0cba4a1b38aef6ea76aea10fcbdc385374bcc10d3da319fb163fa9",
+              "charCount": 2162
+            },
+            {
+              "page": 11,
+              "textSha256": "4e7b431855d5f784bbb82b86c574eb6b2a2ff3ac22e0e08f31691ba1a60925ea",
+              "charCount": 3290
+            },
+            {
+              "page": 12,
+              "textSha256": "f82fc00a289cc2af0e808ded3bf9f0334f8098d535c15a3ad20660e1c97211c5",
+              "charCount": 11970
+            }
+          ]
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "kaufland-52068-kw38",
+      "chain": "Kaufland",
+      "postcodes": [
+        "52068"
+      ],
+      "url": "https://assets.leaflets.schwarz/leaflets/pdfs/01a07b01-1eec-7d3c-8054-53d4b48ce1b1/Prospekt-14-09-2026-16-09-2026-00.pdf",
+      "type": "pdf",
+      "evidence": {
+        "sourceSha256": "b7bd4faa0f0bf67d195b4424bc6cf094c8792bb0105089f70a32f0ddb34ec040",
+        "pageCount": 12,
+        "checkedPageCount": 12,
+        "extraction": {
+          "tool": "pdftotext -layout",
+          "textSha256": "40a7760ccdf2e41c089d89134a3ed71d5ac69deaca572c6e196ff3520a677cd1",
+          "pages": [
+            {
+              "page": 1,
+              "textSha256": "e94bc5cc555b8e26cee8cd717c87847c09fb4c884c575217d30c5fb1e1534b3f",
+              "charCount": 5883
+            },
+            {
+              "page": 2,
+              "textSha256": "8df31db383452bce546a8fae9399ec0f1ef36d2e5cee0126de07b5fe3d326267",
+              "charCount": 6206
+            },
+            {
+              "page": 3,
+              "textSha256": "253450e75fc237b39d85da74ce059b9859ddad411846654cab3b477cd4ca6485",
+              "charCount": 7493
+            },
+            {
+              "page": 4,
+              "textSha256": "df87be5c3a71df4204264a493c65d97264b78fa3e76cba254d40644426828377",
+              "charCount": 6167
+            },
+            {
+              "page": 5,
+              "textSha256": "4a8ee789ea903a4d51181d6924d17e95a5472e01ac8a56b260292b66e6a3fd85",
+              "charCount": 5892
+            },
+            {
+              "page": 6,
+              "textSha256": "965e81aa966d13861e9af480c7b77c3835e1e5b501fc7d45d0f58ef12e545340",
+              "charCount": 3921
+            },
+            {
+              "page": 7,
+              "textSha256": "fa2f93c8fcd64c44b3f44aaa44387e66351ad0f11ccf42f303f2f492c2b90e41",
+              "charCount": 4946
+            },
+            {
+              "page": 8,
+              "textSha256": "7124f1f9dfee74ee711e539b44fb0a0df9c4ac7085cb525fb64d7353a4da42b0",
+              "charCount": 7868
+            },
+            {
+              "page": 9,
+              "textSha256": "1ded3009b7fb9da67f44de0b020955a22c21cf85278add9980cb56030a1cdef9",
+              "charCount": 3510
+            },
+            {
+              "page": 10,
+              "textSha256": "77ff1284ed0cba4a1b38aef6ea76aea10fcbdc385374bcc10d3da319fb163fa9",
+              "charCount": 2162
+            },
+            {
+              "page": 11,
+              "textSha256": "4e7b431855d5f784bbb82b86c574eb6b2a2ff3ac22e0e08f31691ba1a60925ea",
+              "charCount": 3290
+            },
+            {
+              "page": 12,
+              "textSha256": "f82fc00a289cc2af0e808ded3bf9f0334f8098d535c15a3ad20660e1c97211c5",
+              "charCount": 11970
+            }
+          ]
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "aldi-sued-kw38",
+      "chain": "ALDI SÜD",
+      "postcodes": [
+        "40468",
+        "40474",
+        "52064"
+      ],
+      "url": "https://www.aldi-sued.de/angebote/2026-09-18",
+      "type": "html",
+      "recordCount": 69,
+      "checkedRecordCount": 69,
+      "selector": "[breadcrumb-product-count]",
+      "evidence": {
+        "sourceSha256": "fc06f2dad40e805163c632d49e45bc748fd7d35d1ce43385393a582e9c442f44",
+        "responseBytes": 999924,
+        "recordCount": 69,
+        "checkedRecordCount": 69,
+        "extraction": {
+          "tool": "server-rendered HTML evidence",
+          "selector": "[breadcrumb-product-count]"
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "edeka-071158",
+      "chain": "EDEKA",
+      "postcodes": [
+        "40472"
+      ],
+      "url": "https://www.edeka.de/maerkte/071158/",
+      "type": "html",
+      "recordCount": 12,
+      "checkedRecordCount": 12,
+      "selector": "article.group/card",
+      "evidence": {
+        "sourceSha256": "4be01e1fba15771c54f68609b7fb9d3c83771d21b2dcb2a96cc2e3dbf88e7df0",
+        "responseBytes": 169647,
+        "recordCount": 12,
+        "checkedRecordCount": 12,
+        "extraction": {
+          "tool": "server-rendered HTML evidence",
+          "selector": "article.group/card"
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "edeka-071065",
+      "chain": "EDEKA",
+      "postcodes": [
+        "40474"
+      ],
+      "url": "https://www.edeka.de/maerkte/071065/",
+      "type": "html",
+      "recordCount": 12,
+      "checkedRecordCount": 12,
+      "selector": "article.group/card",
+      "evidence": {
+        "sourceSha256": "17e7bd0b52b9d54e884ab664ad34a7a5b1bb78ca43b08d65645a3232ee4f0883",
+        "responseBytes": 174875,
+        "recordCount": 12,
+        "checkedRecordCount": 12,
+        "extraction": {
+          "tool": "server-rendered HTML evidence",
+          "selector": "article.group/card"
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "edeka-072249",
+      "chain": "EDEKA",
+      "postcodes": [
+        "44369"
+      ],
+      "url": "https://www.edeka.de/maerkte/072249/angebote/",
+      "type": "html",
+      "recordCount": 229,
+      "checkedRecordCount": 229,
+      "selector": "article.group/card",
+      "evidence": {
+        "sourceSha256": "8555fcc644363dae2e61c5c7c8af93906a9bfaba1ff0c2ac571588b7ab07d36e",
+        "responseBytes": 1303215,
+        "recordCount": 229,
+        "checkedRecordCount": 229,
+        "extraction": {
+          "tool": "server-rendered HTML evidence",
+          "selector": "article.group/card"
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "edeka-071409",
+      "chain": "EDEKA",
+      "postcodes": [
+        "52064"
+      ],
+      "url": "https://www.edeka.de/maerkte/071409/",
+      "type": "html",
+      "recordCount": 12,
+      "checkedRecordCount": 12,
+      "selector": "article.group/card",
+      "evidence": {
+        "sourceSha256": "f0b7adba7d83dcf9160329307846bd7f7662769e37d2d213700a0ea9d41c24ec",
+        "responseBytes": 173225,
+        "recordCount": 12,
+        "checkedRecordCount": 12,
+        "extraction": {
+          "tool": "server-rendered HTML evidence",
+          "selector": "article.group/card"
+        },
+        "status": "수집완료"
+      }
+    },
+    {
+      "id": "rewe-40468",
+      "chain": "REWE",
+      "postcodes": [
+        "40468"
+      ],
+      "url": "https://www.rewe.de/angebote/duesseldorf/8322016/rewe-markt-an-der-piwipp-120/",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "responseBytes": 251867,
+      "evidence": {
+        "sourceSha256": null,
+        "status": "접근실패",
+        "httpStatus": 403,
+        "responseBytes": 251867,
+        "checkedPageCount": 0
+      }
+    },
+    {
+      "id": "rewe-44369",
+      "chain": "REWE",
+      "postcodes": [
+        "44369"
+      ],
+      "url": "https://www.rewe.de/angebote/dortmund/1762800/rewe-markt-varziner-str-7-17/",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "responseBytes": 251858,
+      "evidence": {
+        "sourceSha256": null,
+        "status": "접근실패",
+        "httpStatus": 403,
+        "responseBytes": 251858,
+        "checkedPageCount": 0
+      }
+    },
+    {
+      "id": "rewe-52062",
+      "chain": "REWE",
+      "postcodes": [
+        "52062"
+      ],
+      "url": "https://www.rewe.de/angebote/aachen/1931021/rewe-markt-kaiserplatz-1-adalbertstr-100/",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "responseBytes": 251909,
+      "evidence": {
+        "sourceSha256": null,
+        "status": "접근실패",
+        "httpStatus": 403,
+        "responseBytes": 251909,
+        "checkedPageCount": 0
+      }
+    },
+    {
+      "id": "netto-52062",
+      "chain": "Netto Marken-Discount",
+      "postcodes": [
+        "52062"
+      ],
+      "url": "https://www.netto-online.de/angebote/",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "responseBytes": 390,
+      "evidence": {
+        "sourceSha256": null,
+        "status": "접근실패",
+        "httpStatus": 403,
+        "responseBytes": 390,
+        "checkedPageCount": 0
+      }
+    }
+  ],
+  "summary": {
+    "sourceCount": 13,
+    "complete": 9,
+    "partial": 0,
+    "accessFailed": 4,
+    "checkedPdfPages": 86
+  }
+}
