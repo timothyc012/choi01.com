@@ -12,6 +12,7 @@ import {inspectWeek} from './prepare-meal-week.mjs';
 import {verifyMealSnapshot} from './verify-meal-snapshot.mjs';
 
 const DIGEST=/^[a-f0-9]{64}$/;
+const RECEIPT_BODY_FIELDS=new Set(['schemaVersion','kind','status','releaseMode','weekStart','snapshotId','manifestPath','manifestSha256','sourceFileName','sourceSha256','dataTreeSha256']);
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const jsonBytes=(value)=>Buffer.from(canonicalJson(value)+'\n');
 const posix=(value)=>value.split(path.sep).join('/');
@@ -47,10 +48,20 @@ function receiptBody(options) {
   };
 }
 
+function validateReceiptBody(body) {
+  if(!body||typeof body!=='object'||Array.isArray(body)||Object.keys(body).length!==RECEIPT_BODY_FIELDS.size||Object.keys(body).some((key)=>!RECEIPT_BODY_FIELDS.has(key))) throw new Error('release receipt fields are invalid');
+  if(body.schemaVersion!==1||body.kind!=='mohemeokji-weekly-release'||body.status!=='awaiting-approval'||!['bootstrap','rollover','correction'].includes(body.releaseMode)) throw new Error('release receipt contract is invalid');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(body.weekStart||'')||!DIGEST.test(body.snapshotId||'')||!DIGEST.test(body.manifestSha256||'')||!DIGEST.test(body.sourceSha256||'')||!DIGEST.test(body.dataTreeSha256||'')) throw new Error('release receipt identity is invalid');
+  if(!/^[A-Za-z0-9._-]{1,200}\.csv$/.test(body.sourceFileName||'')) throw new Error('sourceFileName is invalid');
+  const expectedManifest=`snapshots/${body.weekStart}/${body.snapshotId}/manifest.json`;
+  if(body.manifestPath!==expectedManifest) throw new Error('manifestPath does not match the release identity');
+}
+
 export function buildApprovalReceipt(options) {
   if(!['bootstrap','rollover','correction'].includes(options.releaseMode)) throw new Error('releaseMode is invalid');
   if(!/^\d{4}-\d{2}-\d{2}$/.test(options.weekStart||'')||!DIGEST.test(options.snapshotId||'')||!DIGEST.test(options.manifestSha256||'')) throw new Error('release identity is invalid');
   const body=receiptBody(options);
+  validateReceiptBody(body);
   return {...body,approvalDigest:sha256(canonicalJson(body))};
 }
 
@@ -58,8 +69,8 @@ export function verifyApprovalReceipt({receipt,csvPath,dataDir,approvalDigest=nu
   if(!receipt||typeof receipt!=='object'||Array.isArray(receipt)) throw new Error('release receipt is invalid');
   const {approvalDigest:sealed,...body}=receipt;
   if(!DIGEST.test(sealed||'')||sha256(canonicalJson(body))!==sealed) throw new Error('approval digest does not match the release receipt');
+  validateReceiptBody(body);
   if(approvalDigest!==null&&approvalDigest!==sealed) throw new Error('provided approval digest does not match the release receipt');
-  if(receipt.schemaVersion!==1||receipt.kind!=='mohemeokji-weekly-release'||receipt.status!=='awaiting-approval') throw new Error('release receipt contract is invalid');
   if(path.basename(csvPath)!==receipt.sourceFileName||sha256(fs.readFileSync(csvPath))!==receipt.sourceSha256) throw new Error('source CSV digest does not match the release receipt');
   if(treeDigest(dataDir)!==receipt.dataTreeSha256) throw new Error('data tree digest does not match the release receipt');
   return {valid:true,approvalDigest:sealed};

@@ -72,6 +72,10 @@ test('approval digest cannot be reused after receipt fields change',t=>{
   });
 
   assert.throws(()=>verifyApprovalReceipt({receipt:{...receipt,weekStart:'2026-09-21'},csvPath,dataDir}),/approval digest/i);
+  assert.throws(()=>buildApprovalReceipt({
+    releaseMode:'bootstrap',weekStart:'2026-09-14',snapshotId:'a'.repeat(64),
+    manifestPath:'../../outside.json',manifestSha256:'b'.repeat(64),csvPath,dataDir,
+  }),/manifestPath/i);
 });
 
 test('prepare command creates verified twin snapshots and no public mutation',async t=>{
