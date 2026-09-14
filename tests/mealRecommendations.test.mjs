@@ -83,6 +83,13 @@ test('limited pools remain usable without fabricating seven recipes',()=>{
   assert.equal(engine.sequence([one],{catalog:{},history:[],date:'2026-09-08'},7).length,1);
 });
 
+test('browsing keeps general recipes visible and ranks current main offers first',()=>{
+  const potato=meal('potato',['감자'],'potato');
+  const salmon=meal('salmon',['연어'],'salmon');
+  assert.deepEqual([...engine.browse([potato,salmon],{catalog:{},history:[],date:'2026-09-14'})].map((item)=>item.id),['potato','salmon']);
+  assert.deepEqual([...engine.browse([salmon,potato],{catalog:{감자:price},history:[],date:'2026-09-14'})].map((item)=>item.id),['potato','salmon']);
+});
+
 test('store menu membership requires a current main-ingredient offer, not incidental matches',()=>{
   const chicken=meal('chicken',['닭고기'],'chicken',{sale:['닭고기','마늘'],missing:[]});
   const salmon=meal('salmon',['연어'],'salmon');

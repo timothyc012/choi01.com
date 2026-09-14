@@ -1,2 +1,5 @@
 # Offer CSVs are content-hashed inputs. Preserve their RFC 4180 CRLF bytes.
 public/offers/*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Snapshot JSON files are verified byte-for-byte in the browser.
+public/mohemeokji/data/**/*.json -text
