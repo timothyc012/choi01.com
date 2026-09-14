@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "snapshotId": "1a25cbb10b782ce393adfb30bd47991c4802fcf4f8fbf68a19702760e9bf9b4d",
+  "snapshotId": "a8d4a209bb920be18bbfba197dec79ae21a29d604fb7b5765190a46ece358d43",
   "csvSha256": "05784591df698541d71cd76a9ca30d50b329df65aedc6dce1ffeb50d49fbc6a2",
   "recipes": {
     "1041323": {
@@ -248,7 +248,7 @@
       "commentCount": 3,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "259118a506ac3cee21d395970380c8925c359232082c2347080ae2ed153d7cec"
+      "detailSha256": "de27a4dd67e6f117745effcb23f8b476d1ab076655ff815263d311b13f9637be"
     },
     "6894323": {
       "sourceRecipeId": "6894323",
@@ -326,7 +326,7 @@
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "c2f5e788b1f1193b504c0f07f9f2bd19e0bbf37e19de9e8076fce17c0ab6a431"
+      "detailSha256": "a44c74079a7e01617111c4e01273436909d460af5e13ce317d29a3826f54540f"
     },
     "6982749": {
       "sourceRecipeId": "6982749",
