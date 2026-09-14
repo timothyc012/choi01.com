@@ -224,7 +224,7 @@ export function publishWeeklyRelease(options) {
 function parseArgs(argv) {
   const command=argv.shift();
   if(command==='prepare') {
-    const options={csvPath:argv.shift(),db:'01ontology',tenant:'recipe-full',registryPath:'data/mohemeokji/recipe-publication-registry.json',releaseMode:null};
+    const options={csvPath:argv.shift(),db:'01ontology',tenant:'recipe-full',registryPath:'data/mohemeokji/recipe-publication-registry.json',releaseMode:null,candidateReportPath:null};
     for(let index=0;index<argv.length;index++) {
       const value=argv[index];
       if(value==='--week-start') options.weekStart=argv[++index];
@@ -233,12 +233,14 @@ function parseArgs(argv) {
       else if(value==='--database') options.db=argv[++index];
       else if(value==='--tenant') options.tenant=argv[++index];
       else if(value==='--registry') options.registryPath=argv[++index];
+      else if(value==='--candidate-report') options.candidateReportPath=argv[++index];
       else if(value==='--previous-manifest') options.previousManifestPath=argv[++index];
       else if(value==='--bootstrap') options.releaseMode='bootstrap';
       else if(value==='--rollover') options.releaseMode='rollover';
       else if(value==='--correction') options.releaseMode='correction';
       else throw new Error('Unknown argument: '+value);
     }
+    if(options.candidateReportPath) options.candidateReport=JSON.parse(fs.readFileSync(path.resolve(options.candidateReportPath),'utf8'));
     return {command,options};
   }
   if(command==='publish') {
@@ -249,7 +251,7 @@ function parseArgs(argv) {
     }
     return {command,options};
   }
-  throw new Error('Usage: mohemeokji-weekly-release.mjs prepare INPUT.csv --coverage COVERAGE.csv --week-start YYYY-MM-DD --staging-dir NEW_DIR (--bootstrap | --rollover --previous-manifest FILE | --correction --previous-manifest FILE) | publish STAGING_DIR --approval SHA256');
+  throw new Error('Usage: mohemeokji-weekly-release.mjs prepare INPUT.csv --coverage COVERAGE.csv --week-start YYYY-MM-DD --staging-dir NEW_DIR [--candidate-report REPORT.json] (--bootstrap | --rollover --previous-manifest FILE | --correction --previous-manifest FILE) | publish STAGING_DIR --approval SHA256');
 }
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href) {

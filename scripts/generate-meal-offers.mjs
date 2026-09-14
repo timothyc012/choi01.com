@@ -58,7 +58,7 @@ const rules = {
   '닭안심': [/^Hähnchen-Innenfilet$/i],
   '닭날개': [/Hähnchenflügel/i],
   '돼지안심': [/^Schweinefilet lang$/i],
-  '돼지목살': [/^Schweine-Nackensteaks$/i, /^Frischer Schweinenackenbraten$/i],
+  '돼지목살': [/^Schweine-Nackensteaks$/i, /^Frischer Schweinenackenbraten$/i, /^Schweine-Nacken$/i],
   '돼지등심': [/^Schweine-Rücken$/i],
   '돼지뒷다리살': [/^Schweine-Schnitzel$/i],
   '다진고기': [/^Hackfleisch gemischt$/i],
@@ -83,7 +83,7 @@ const rules = {
   '양상추': [/^Kopfsalat$/i, /Eisbergsalat/i, /Blattsalat/i],
   '레몬': [/^Bio Zitronen$/i, /^Zitronen/i, /^Zitrone/i],
   '아보카도': [/Avocado/i],
-  '바나나': [/^Bio Bananen$/i, /^Bananen$/i, /^Banane$/i, /^Ecuador - Bananen$/i],
+  '바나나': [/^Bio Bananen$/i, /^Bio Fairtrade Bananen/i, /^Bananen$/i, /^Banane$/i, /^Ecuador - Bananen$/i],
   '블루베리': [/Heidelbeeren/i, /Heidelbeere/i],
   '딸기': [/Erdbeeren/i, /Erdbeere/i],
   '복숭아': [/Pfirsiche/i, /Pfirsich/i],
@@ -187,7 +187,7 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
   const priceCents = cents(row['행사가격']);
   const period = parsePeriod(row['행사기간']);
   if (!identity || priceCents === null || !period) return null;
-  if (ingredient === '돼지목살' && /Nackenbraten/i.test(row['상품명'])) identity.form = 'whole-cut';
+  if (ingredient === '돼지목살' && /Nacken(?:braten)?$/i.test(row['상품명'])) identity.form = 'whole-cut';
   const detail = compact(row['상품정보']);
   const conditions = compact(row['할인조건']);
   const normalPriceCents = cents(row['정상가격']) ?? cents(row['정상가']) ?? null;

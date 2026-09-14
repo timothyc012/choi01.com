@@ -86,19 +86,23 @@ test('raw meat and processed cheese offers keep their exact recipe ingredient id
   for (const broad of ['닭고기','돼지고기','소고기','치즈']) assert.equal(catalog[broad],undefined);
 });
 
-test('current Lidl whole foods map to exact potato, onion, cucumber, sweet-potato and rye-bread identities',()=>{
+test('current flyer whole foods map to exact identities without broad aliases',()=>{
   const catalog=generateCatalog([
     row({상품명:'Deutsche Speisekartoffeln'}),
     row({상품명:'Deutsche gelbe Zwiebeln'}),
     row({상품명:'Bio Gurken'}),
     row({상품명:'Süßkartoffeln'}),
     row({상품명:'Graf-Schafter Pfundsschnitten Roggenmischbrot'}),
+    row({상품명:'Bio Fairtrade Bananen, lose'}),
+    row({상품명:'Schweine-Nacken'}),
   ],'/offers/next.csv').packageCatalog['10115'].Lidl;
   assert.ok(catalog['감자']);
   assert.ok(catalog['양파']);
   assert.ok(catalog['오이']);
   assert.ok(catalog['고구마']);
   assert.ok(catalog['호밀빵']);
+  assert.ok(catalog['바나나']);
+  assert.ok(catalog['돼지목살']);
 });
 
 test('latest reviewed week keeps the user priority postcode and store coverage non-empty',()=>{

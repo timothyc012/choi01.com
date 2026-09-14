@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "meal:release": "node scripts/mohemeokji-weekly-release.mjs",
+    "meal:flyer-evidence": "node scripts/collect-meal-flyer-evidence.mjs",
     "doctor": "react-doctor --no-supply-chain --no-dead-code --no-lint .",
     "verify:canvas-vendor": "node scripts/verify-canvas-vendor.mjs packages/canvas"
   },

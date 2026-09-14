@@ -10,11 +10,36 @@
 `supermarket_food_offers_2026-09-14-reviewed-v2.csv`로 분리했다.
 
 공식 Netto KW38 PDF, Lidl Aktionsprospekt 1·2·7면, EDEKA Buller·Prömpers·
-Vieler 지점 상품 카드를 다시 확인했다. 검토 CSV는 710행이며 `verified 210`,
+Vieler 지점 상품 카드를 다시 확인했다. 검토 CSV는 740행이며 `verified 240`,
 `held 499`, `held-form 1`이다. 별도 `coverage_2026-09-14.csv`는 실제 지점
-23개와 행 수를 고정하며, 전체 면을 확인하지 않은 22개 지점을
-`일부수집`으로 명시한다. 앞으로 coverage 파일이 없거나 지점·행 수·페이지
+23개와 행 수를 고정하며, 이번 전 페이지 수집에서 44369 Netto와 40472·40489·
+44369·52064 Lidl을 `수집완료`로 갱신했다. 나머지 17개 지점은 계속
+`일부수집`으로 남긴다. 앞으로 coverage 파일이 없거나 지점·행 수·페이지
 상태가 맞지 않으면 주간 release prepare 단계가 실패한다.
+
+## 72·76면 전단 전수 수집
+
+`scripts/collect-meal-flyer-evidence.mjs`가 공식 파일을 내려받아 두 번의
+독립 PDF 텍스트 추출과 페이지별 SHA-256을 생성한다. 이번 증거
+`data/mohemeokji/full-flyer-evidence-2026-09-14.json`에는 Netto 공식 PDF
+72면 중 72면, Lidl 공식 API·PDF 콘텐츠 75면 중 75면이 기록되어 있다.
+Lidl 뷰어는 마지막에 다음 전단 미리보기 경계 상태를 76면으로 노출하므로
+`viewerPageCount: 76`과 `viewerBoundary`로 별도 보존했다. 따라서 뷰어에서
+보이는 76면을 누락으로 세지 않으면서 실제 콘텐츠 75면을 모두 확인한다.
+현재 공개 CSV는 가격·단위·레시피 연결이 검토된 행만 게시하고, 페이지 전수
+수집 증거와 상품 행의 검토 범위를 서로 섞지 않는다.
+
+전단의 추가 확인 행 30개를 CSV에 반영해 총 740행(`verified 240`, `held 499`,
+`held-form 1`)이 되었다. 같은 CSV로 `recipe-full`을 읽기 전용 조회한 후보
+보고서는 23개 지점, 레시피 연결 행사 76개, 후보 5,000개이며 0건 identity는
+없다. 이 결과로 준비한 새 correction은
+`5052787385482d99c7e15d66cbf457c38be96b2dff0760469cf19da3be67d5b5`이고
+승인 다이제스트는
+`5808f1f05d3d4a35b3841fe12fb85086c69162bed50ae30daf3a146b8d088641`이다.
+승인 전에는 현재 공개 snapshot을 유지한다. 준비본에서 44369 Netto는
+19개 레시피(주메뉴 14개)로 늘었고, Lidl은 10개가 연결되지만 모두 아침·
+곁들임으로 분류되어 자동 저녁 주메뉴는 0개다. 이는 전단 수집 완성과
+레시피 승인 범위가 별도라는 사실을 보여준다.
 
 새 correction snapshot은
 `126af7065fc3a8f7baffaac07b411317d6701a48844893079f478ebf5bd0c731`이며
@@ -29,9 +54,9 @@ MCP 검증 결과는 다음과 같다.
 | 44369 | Lidl | 61 | 20 | 있음 |
 | 52062 | Netto Marken-Discount | 62 | 20 | 있음 |
 
-승인 영수증은 offer CSV와 coverage CSV를 모두 해시로 고정한다. 전체 전단을
-모두 수집했다는 뜻은 아니며, 현재 확인된 할인 식재료를 근거로 레시피를
-검색할 수 있다는 의미다. 상세 근거는
+승인 영수증은 offer CSV와 coverage CSV를 모두 해시로 고정한다. 페이지 전수
+수집 증거는 위의 별도 파일에 보존하고, 공개 CSV에는 가격·단위·레시피 연결을
+검토한 행만 포함한다. 상세 상품 복구 근거는
 `data/mohemeokji/offer-repair-2026-09-14.json`에 기록했다.
 
 2026-09-13 21:08 수집본(원격 `a565f30`) `supermarket_food_offers_2026-09-14.csv` 810행을 보존했다. 같은 실제 지점의 중복 검색 결과 124행을 합쳐 검토 CSV는 686행이며 `검색우편번호`와 `원본행`으로 출처를 추적한다. 공개 가격은 별도 `supermarket_food_offers_2026-09-14-reviewed.csv`에서 컴파일한다.

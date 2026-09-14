@@ -24,6 +24,10 @@ It never changes `public/` during `prepare`:
 npm run meal:release -- prepare INPUT.csv --coverage COVERAGE.csv --week-start YYYY-MM-DD --staging-dir NEW_STAGING_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --rollover --previous-manifest CURRENT_PUBLIC_MANIFEST.json
 ```
 
+When the read-only candidate query has already been reviewed, pass its private
+queue to the same command with `--candidate-report REPORT.json`; the report is
+still sealed into the snapshot lineage and is never copied into public data.
+
 Use `--bootstrap` only for the first immutable release. Use `--correction` with
 the current same-week manifest for a same-week correction. The staging directory
 contains `data/`, a private twin under `private/twin-data/`, two private review
@@ -37,6 +41,21 @@ data tree, snapshot pointer, and release mode. Coverage must include every actua
 branch present in the offer CSV with the exact row count. A PDF or digital flyer
 may be marked `수집완료` only when every source page was checked; first-page or
 selected-page extraction is `일부수집` with source and checked page counts.
+For the 2026-09-14 72/76-page correction, create page-level evidence before
+changing a branch to `수집완료`:
+
+```sh
+node scripts/collect-meal-flyer-evidence.mjs \
+  --week-start 2026-09-14 --collected-at ISO_TIMESTAMP \
+  --netto-pdf NETTO_PDF --lidl-pdf LIDL_PDF --lidl-api LIDL_API_JSON \
+  --viewer-page-count 76 \
+  --output data/mohemeokji/full-flyer-evidence-2026-09-14.json
+```
+
+The collector requires the official PDF page count and text extraction to
+agree for every page. Lidl's API/PDF currently contain 75 content pages while
+the viewer exposes a 76th next-flyer boundary state; retain both facts in the
+evidence and use 75/75 for the content-page columns in `coverage.csv`.
 Preview and submit the receipt through the 02Ontology action
 registry using pack `recipe`, action
 `recipe.publish_weekly_meal_snapshot`, and inputs
