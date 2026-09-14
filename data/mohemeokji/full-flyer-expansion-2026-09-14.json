@@ -37,7 +37,20 @@
     "snapshotId": "5052787385482d99c7e15d66cbf457c38be96b2dff0760469cf19da3be67d5b5",
     "manifestSha256": "128365cf9ecfd836643ffa87903c8275537cd7a67d1a9040d9cca72fbfcbe72c",
     "approvalDigest": "5808f1f05d3d4a35b3841fe12fb85086c69162bed50ae30daf3a146b8d088641",
-    "status": "awaiting-approval"
+    "status": "published",
+    "publishedCommit": "c0da3229eff6cfb8b1c678cb5090367e0beb96a8",
+    "cloudflareDeployment": "https://163a88ab.choi01-com.pages.dev"
+  },
+  "mcpVerification": {
+    "server": "02ontology-personal-action@47c60090",
+    "toolCount": 18,
+    "snapshotId": "5052787385482d99c7e15d66cbf457c38be96b2dff0760469cf19da3be67d5b5",
+    "priorityTotals": {
+      "44369|Netto Marken-Discount": 168,
+      "40474|EDEKA": 64,
+      "40489|Lidl": 61
+    },
+    "unauthenticatedStatus": 401
   },
   "note": "Lidl's official API/PDF have 75 content pages; the viewer's page 76 is a next-flyer boundary state and is retained in full-flyer-evidence. Public coverage uses 75/75 for content pages."
 }
