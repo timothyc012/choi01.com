@@ -43,8 +43,10 @@ function dietaryFilters(candidate) {
 }
 
 function eligibility(candidate,candidateReport) {
-  if(!/^\d{1,20}$/.test(idOf(candidate))) return {reason:'invalid-source-id'};
+  const sourceRecipeId=idOf(candidate);
+  if(!/^\d{1,20}$/.test(sourceRecipeId)) return {reason:'invalid-source-id'};
   if(!clean(candidate.title)||!clean(candidate.sourceUrl)||!clean(candidate.author)) return {reason:'missing-source-metadata'};
+  if(clean(candidate.sourceUrl)!=='https://www.10000recipe.com/recipe/'+sourceRecipeId) return {reason:'invalid-source-url'};
   if(!Array.isArray(candidate.ingredients)||candidate.ingredients.length<2) return {reason:'incomplete-ingredients'};
   if(!Array.isArray(candidate.steps)||candidate.steps.length<3) return {reason:'incomplete-steps'};
   const links=linkedOffers(candidate,candidateReport);

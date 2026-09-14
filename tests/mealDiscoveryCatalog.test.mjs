@@ -54,6 +54,18 @@ test('discovery catalog accepts complete meal sources without using an unverifie
   assert.equal(catalog.recipes[0].recommendationProfile.kind,'main');
 });
 
+test('discovery catalog rejects a recipe URL outside its exact source identity',()=>{
+  const source=candidate('7000099');
+  source.sourceUrl='https://example.test/recipe/7000099';
+  const catalog=buildDiscoveryCatalog({
+    candidateReport:report([source],[offer('offer-버섯','버섯')]),
+    snapshotId:'d'.repeat(64),weekStart:'2026-09-14',target:20,
+  });
+
+  assert.deepEqual(catalog.recipes,[]);
+  assert.equal(catalog.exclusionCounts['invalid-source-url'],1);
+});
+
 test('discovery catalog keeps sides out of dinner results and classifies vegetarian ingredients conservatively',()=>{
   const side=candidate('7000002',{title:'파프리카 무침',ingredient:'파프리카'});
   const vegetarian=candidate('7000003',{title:'버섯 두부 덮밥'});
