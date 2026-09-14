@@ -44,6 +44,15 @@ registry using pack `recipe`, action
 The declared workflow id is `recipe.weekly_mohemeokji_release`. It must pause in
 the approval queue. Resume it only after the owner approves that exact digest.
 
+When the connected `@02Ontology` personal-action profile is available, the same
+governed sequence is exposed as `meal_release_preview` →
+`meal_release_submit` → `meal_release_approve` → `meal_release_resume`, with
+`meal_release_status` for read-only progress. These five tools are fixed to the
+recipe publication action, use the authenticated server-bound reviewer, and do
+not accept paths, shell commands, arbitrary origins, or other action types. The
+profile therefore grows from the preserved 13-tool baseline to 18 tools; a tool
+list that drops any prior name is a release failure.
+
 After approval, publish exactly the sealed staging directory:
 
 ```sh
