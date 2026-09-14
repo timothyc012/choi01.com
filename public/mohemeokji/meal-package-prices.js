@@ -6,7 +6,7 @@ window.mealPackagePricesByArea = {
   "40468": {
     "REWE": {
       "닭가슴살": {
-        "offerId": "65f9c10e825b038e38bdae968c2198d0840393c09de46027ad873a7e4e77abcd",
+        "offerId": "d4b0be5d5ab0debe4abb8e22f1e99570b568bdbe3ae02c755c4ba6ccf3d14c6c",
         "postcode": "40468",
         "chain": "REWE",
         "branchId": "branch-79e3c0c20871fd23",
@@ -36,10 +36,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-20.09.2026",
         "branch": "REWE An der Piwipp 120, 40468 Düsseldorf (지점 확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "65f9c10e825b038e38bdae968c2198d0840393c09de46027ad873a7e4e77abcd"
+        "preferredPricingOfferId": "d4b0be5d5ab0debe4abb8e22f1e99570b568bdbe3ae02c755c4ba6ccf3d14c6c"
       },
       "파스타": {
-        "offerId": "b7a2d5e4a304bdb5e7a1d1076177036f4c98ac327cc02106432760dc9a624f4d",
+        "offerId": "443ba66490635a0b2f30bb42325622e16424ea1f96ef79d2536f34b71ffbadc6",
         "postcode": "40468",
         "chain": "REWE",
         "branchId": "branch-79e3c0c20871fd23",
@@ -69,12 +69,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-20.09.2026",
         "branch": "REWE An der Piwipp 120, 40468 Düsseldorf (지점 확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "b7a2d5e4a304bdb5e7a1d1076177036f4c98ac327cc02106432760dc9a624f4d"
+        "preferredPricingOfferId": "443ba66490635a0b2f30bb42325622e16424ea1f96ef79d2536f34b71ffbadc6"
       }
     },
     "ALDI SÜD": {
       "훈제연어": {
-        "offerId": "05c3977f5ed32e733a7e4a1f2a1f682d09267ec73161afd26bccc7ebfc32732b",
+        "offerId": "58b3597ba38a9ab732fe4f09226abc433b8de3faf2da9155bdf8bdd7d281d0ee",
         "postcode": "40468",
         "chain": "ALDI SÜD",
         "branchId": "branch-f2fe2ff148c4626c",
@@ -104,10 +104,10 @@ window.mealPackagePricesByArea = {
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, An der Piwipp 86, 40468 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "05c3977f5ed32e733a7e4a1f2a1f682d09267ec73161afd26bccc7ebfc32732b"
+        "preferredPricingOfferId": "58b3597ba38a9ab732fe4f09226abc433b8de3faf2da9155bdf8bdd7d281d0ee"
       },
       "모짜렐라치즈": {
-        "offerId": "0c22188c54bc486695983eaba01e99bcaff2bec0c6ac887b02cfdde407d9e73d",
+        "offerId": "50560be27c9d566b54237c06a558815b869a546a3b0a9761ad0d95089df650c6",
         "postcode": "40468",
         "chain": "ALDI SÜD",
         "branchId": "branch-f2fe2ff148c4626c",
@@ -137,14 +137,14 @@ window.mealPackagePricesByArea = {
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, An der Piwipp 86, 40468 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "0c22188c54bc486695983eaba01e99bcaff2bec0c6ac887b02cfdde407d9e73d"
+        "preferredPricingOfferId": "50560be27c9d566b54237c06a558815b869a546a3b0a9761ad0d95089df650c6"
       }
     }
   },
   "40472": {
     "EDEKA": {
       "돼지목살": {
-        "offerId": "5e7a4dd6195fa2444a6af66653353fa0c13c83e4a83c1ba4a188de62fe5ecc1c",
+        "offerId": "8f57710b0075ab28bd059b762a86b7f301565ea17c6cc15a9ad9e51b7c2cda46",
         "postcode": "40472",
         "chain": "EDEKA",
         "branchId": "branch-a33ba57e7791f9e4",
@@ -174,10 +174,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "5e7a4dd6195fa2444a6af66653353fa0c13c83e4a83c1ba4a188de62fe5ecc1c"
+        "preferredPricingOfferId": "8f57710b0075ab28bd059b762a86b7f301565ea17c6cc15a9ad9e51b7c2cda46"
       },
       "바나나": {
-        "offerId": "814b2174f557a00431c3544c02db865f25a2c8949a007a28cc6b03e320735362",
+        "offerId": "683036fb4cf12a19a4829927b92348a3d7f240d0483dfd013606731713fb1059",
         "postcode": "40472",
         "chain": "EDEKA",
         "branchId": "branch-a33ba57e7791f9e4",
@@ -207,12 +207,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Buller, Matthiaskirchweg 6, 40472 Düsseldorf (40468 근접 대표)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "814b2174f557a00431c3544c02db865f25a2c8949a007a28cc6b03e320735362"
+        "preferredPricingOfferId": "683036fb4cf12a19a4829927b92348a3d7f240d0483dfd013606731713fb1059"
       }
     },
     "Lidl": {
       "닭날개": {
-        "offerId": "2806563a0030665fde7790148617b06914aa45c8f4eba6fbb0e36ead66dfe212",
+        "offerId": "9bfd5eb8f7a6b2859413cd052fbf295a9d6ec1e884f2d16e21929bec3937adbb",
         "postcode": "40472",
         "chain": "Lidl",
         "branchId": "branch-7cd348bd92626483",
@@ -242,10 +242,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "2806563a0030665fde7790148617b06914aa45c8f4eba6fbb0e36ead66dfe212"
+        "preferredPricingOfferId": "9bfd5eb8f7a6b2859413cd052fbf295a9d6ec1e884f2d16e21929bec3937adbb"
       },
       "양파": {
-        "offerId": "a3bbb71411d7ded643d2a0b218e9ac5af5372b1917f897f34a2a669bd894db46",
+        "offerId": "33bfb6a60947e4c84c6117565095249d8afbeb9863379c38c0ec6311d2a248d3",
         "postcode": "40472",
         "chain": "Lidl",
         "branchId": "branch-7cd348bd92626483",
@@ -275,10 +275,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "a3bbb71411d7ded643d2a0b218e9ac5af5372b1917f897f34a2a669bd894db46"
+        "preferredPricingOfferId": "33bfb6a60947e4c84c6117565095249d8afbeb9863379c38c0ec6311d2a248d3"
       },
       "감자": {
-        "offerId": "97cec8081acd0ffd6458d905eeb0e525d7c3497a790b8597402f0b089b43b4a6",
+        "offerId": "d4efd67f55de1dbbadec948a9d32c440b3ec418bcef04159d66b9c25e4b5e5bd",
         "postcode": "40472",
         "chain": "Lidl",
         "branchId": "branch-7cd348bd92626483",
@@ -308,10 +308,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "97cec8081acd0ffd6458d905eeb0e525d7c3497a790b8597402f0b089b43b4a6"
+        "preferredPricingOfferId": "d4efd67f55de1dbbadec948a9d32c440b3ec418bcef04159d66b9c25e4b5e5bd"
       },
       "고구마": {
-        "offerId": "788ade9839c2f0e93edaa0e49d3c35fdb37f2a1f21f45d86564df510ca8c005e",
+        "offerId": "8bdb507cd3af956d5498d53d2f87d10b12ec3c48c2bfdc80d86fd2d9ef427af3",
         "postcode": "40472",
         "chain": "Lidl",
         "branchId": "branch-7cd348bd92626483",
@@ -341,10 +341,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "788ade9839c2f0e93edaa0e49d3c35fdb37f2a1f21f45d86564df510ca8c005e"
+        "preferredPricingOfferId": "8bdb507cd3af956d5498d53d2f87d10b12ec3c48c2bfdc80d86fd2d9ef427af3"
       },
       "오이": {
-        "offerId": "357517930a84b538e20ead4ae92486e7688be4d08fd47b0695e74660b8d3b442",
+        "offerId": "557bdaceae08516da0f7bab1c6120cda557b7bb605e9f1dd303d5de25b789264",
         "postcode": "40472",
         "chain": "Lidl",
         "branchId": "branch-7cd348bd92626483",
@@ -374,10 +374,43 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "357517930a84b538e20ead4ae92486e7688be4d08fd47b0695e74660b8d3b442"
+        "preferredPricingOfferId": "557bdaceae08516da0f7bab1c6120cda557b7bb605e9f1dd303d5de25b789264"
+      },
+      "바나나": {
+        "offerId": "df5ff2f6003983b802e945a423ca610874aedfd0a6e56968e9beea7bb7e0253b",
+        "postcode": "40472",
+        "chain": "Lidl",
+        "branchId": "branch-7cd348bd92626483",
+        "sourceRow": 724,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Fairtrade Bananen, lose",
+        "pack": "1 kg",
+        "priceCents": 179,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "바나나",
+          "species": "plant",
+          "cut": "banana",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "banana"
+        },
+        "ingredient": "바나나",
+        "product": "Bio Fairtrade Bananen, lose",
+        "appPriceCents": null,
+        "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "df5ff2f6003983b802e945a423ca610874aedfd0a6e56968e9beea7bb7e0253b"
       },
       "호밀빵": {
-        "offerId": "c062537f6ec4a596857dc3eb7d61b495c055b71d08a188ba93c3892f909a7264",
+        "offerId": "af2fa997432dc7ce2026916b488d2ce151f9c06204eb6c7f62ae9849056a6664",
         "postcode": "40472",
         "chain": "Lidl",
         "branchId": "branch-7cd348bd92626483",
@@ -407,14 +440,14 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "c062537f6ec4a596857dc3eb7d61b495c055b71d08a188ba93c3892f909a7264"
+        "preferredPricingOfferId": "af2fa997432dc7ce2026916b488d2ce151f9c06204eb6c7f62ae9849056a6664"
       }
     }
   },
   "40474": {
     "EDEKA": {
       "돼지목살": {
-        "offerId": "1522a62c33533a071e727ae3670db96a5a9d95935e3b97cd74c050d4fd712f24",
+        "offerId": "1d01c3e36c755974a5910a3463fd7a962e1c2341005b78c0d48a54781ee3b067",
         "postcode": "40474",
         "chain": "EDEKA",
         "branchId": "branch-269dad5325a916e4",
@@ -444,10 +477,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "1522a62c33533a071e727ae3670db96a5a9d95935e3b97cd74c050d4fd712f24"
+        "preferredPricingOfferId": "1d01c3e36c755974a5910a3463fd7a962e1c2341005b78c0d48a54781ee3b067"
       },
       "바나나": {
-        "offerId": "24337309b3cfbcbdff4d8ca7f71337e10fd62e750aabfd25340c2bd4e06b8ffe",
+        "offerId": "bbbe332bfd94a50f8c0cc53b3a71901ba6cc171c807a52a416b454dc7aeca47a",
         "postcode": "40474",
         "chain": "EDEKA",
         "branchId": "branch-269dad5325a916e4",
@@ -477,12 +510,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Prömpers, Niederrheinstraße 84-88, 40474 Düsseldorf",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "24337309b3cfbcbdff4d8ca7f71337e10fd62e750aabfd25340c2bd4e06b8ffe"
+        "preferredPricingOfferId": "bbbe332bfd94a50f8c0cc53b3a71901ba6cc171c807a52a416b454dc7aeca47a"
       }
     },
     "ALDI SÜD": {
       "훈제연어": {
-        "offerId": "1705bc82b7941043dc2807eef76f5c143f2d1aa79f1ca6f651d6ca40ee86216e",
+        "offerId": "74b86e705dd35171cfb3b07a01c8d8776e429f8a272dade813a9666339ec713d",
         "postcode": "40474",
         "chain": "ALDI SÜD",
         "branchId": "branch-17d4d8ed299690c5",
@@ -512,10 +545,10 @@ window.mealPackagePricesByArea = {
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Niederrheinstraße 158-166, 40474 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "1705bc82b7941043dc2807eef76f5c143f2d1aa79f1ca6f651d6ca40ee86216e"
+        "preferredPricingOfferId": "74b86e705dd35171cfb3b07a01c8d8776e429f8a272dade813a9666339ec713d"
       },
       "모짜렐라치즈": {
-        "offerId": "1639cc4b427e1ecefd9c0afd0938e53f1f4b46fded074ba961c7f8c04a1c3eac",
+        "offerId": "3e9cfb2f9a37797c54c0774a3799063e6e8b9515ee1654b0ddb929ee93f8364b",
         "postcode": "40474",
         "chain": "ALDI SÜD",
         "branchId": "branch-17d4d8ed299690c5",
@@ -545,14 +578,14 @@ window.mealPackagePricesByArea = {
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Niederrheinstraße 158-166, 40474 Düsseldorf (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "1639cc4b427e1ecefd9c0afd0938e53f1f4b46fded074ba961c7f8c04a1c3eac"
+        "preferredPricingOfferId": "3e9cfb2f9a37797c54c0774a3799063e6e8b9515ee1654b0ddb929ee93f8364b"
       }
     }
   },
   "40476": {
     "Kaufland": {
       "버터": {
-        "offerId": "660a3d9667c6f6c411a8ddede55ab61ddc5d7476f3fbfea04a656eac3b8a33e3",
+        "offerId": "e957d3261d2541e5e65cc5147432b9873a351d56e03b17c49c56ecef65517d1e",
         "postcode": "40476",
         "chain": "Kaufland",
         "branchId": "branch-0afb82785507a281",
@@ -582,14 +615,14 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-16.09.2026",
         "branch": "Kaufland Düsseldorf-Derendorf, Hilde-und-Joseph-Neyses-Platz 5, 40476 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "660a3d9667c6f6c411a8ddede55ab61ddc5d7476f3fbfea04a656eac3b8a33e3"
+        "preferredPricingOfferId": "e957d3261d2541e5e65cc5147432b9873a351d56e03b17c49c56ecef65517d1e"
       }
     }
   },
   "40489": {
     "Lidl": {
       "닭날개": {
-        "offerId": "2a8b7f86fa347fe925a82c5b23c97ef5f7976398f8e6763e0dfbc3d31cacc512",
+        "offerId": "1763805e0f0dd645253baf694878606dd97f18b7a6b17c23b37a0890573b80d3",
         "postcode": "40489",
         "chain": "Lidl",
         "branchId": "branch-063d7ebb9016057e",
@@ -619,10 +652,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "2a8b7f86fa347fe925a82c5b23c97ef5f7976398f8e6763e0dfbc3d31cacc512"
+        "preferredPricingOfferId": "1763805e0f0dd645253baf694878606dd97f18b7a6b17c23b37a0890573b80d3"
       },
       "양파": {
-        "offerId": "e9693da254bae07df787c1257b4082e32292103a42cae5affac6233a899f0832",
+        "offerId": "54673060941ba17d238eb6c042d71361a6d1a8eafc254ddae70e457fefbeb2fd",
         "postcode": "40489",
         "chain": "Lidl",
         "branchId": "branch-063d7ebb9016057e",
@@ -652,10 +685,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "e9693da254bae07df787c1257b4082e32292103a42cae5affac6233a899f0832"
+        "preferredPricingOfferId": "54673060941ba17d238eb6c042d71361a6d1a8eafc254ddae70e457fefbeb2fd"
       },
       "감자": {
-        "offerId": "09abf58b5d7f33afe36537dbf59001acac84a54ed2f7806469af6c3d7393cf54",
+        "offerId": "ee7b3cc8270705630ca71854128fba3bdb3e50700df48a6f1966025e3147b961",
         "postcode": "40489",
         "chain": "Lidl",
         "branchId": "branch-063d7ebb9016057e",
@@ -685,10 +718,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "09abf58b5d7f33afe36537dbf59001acac84a54ed2f7806469af6c3d7393cf54"
+        "preferredPricingOfferId": "ee7b3cc8270705630ca71854128fba3bdb3e50700df48a6f1966025e3147b961"
       },
       "고구마": {
-        "offerId": "9c3921373f1d3dd49e81d3f2172e08236010f2fd90021fcff576720379abb5cd",
+        "offerId": "9d1b548b254b5465774f69c43a5db70e9e1b995a67bdd615d92b4c1bb7e7bd2f",
         "postcode": "40489",
         "chain": "Lidl",
         "branchId": "branch-063d7ebb9016057e",
@@ -718,10 +751,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "9c3921373f1d3dd49e81d3f2172e08236010f2fd90021fcff576720379abb5cd"
+        "preferredPricingOfferId": "9d1b548b254b5465774f69c43a5db70e9e1b995a67bdd615d92b4c1bb7e7bd2f"
       },
       "오이": {
-        "offerId": "4039dc80878d5ceee862615b63feb3ca76592e9e905f6a90309f87d9ab03727a",
+        "offerId": "764108d97aa53b9a7be28812725d6c0c1df72f489a920e300de970f93c242e68",
         "postcode": "40489",
         "chain": "Lidl",
         "branchId": "branch-063d7ebb9016057e",
@@ -751,10 +784,43 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "4039dc80878d5ceee862615b63feb3ca76592e9e905f6a90309f87d9ab03727a"
+        "preferredPricingOfferId": "764108d97aa53b9a7be28812725d6c0c1df72f489a920e300de970f93c242e68"
+      },
+      "바나나": {
+        "offerId": "3691f788ab2b97cea5691de08db622b95bad73a589bcb1e109ce690a9d862bfe",
+        "postcode": "40489",
+        "chain": "Lidl",
+        "branchId": "branch-063d7ebb9016057e",
+        "sourceRow": 729,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Fairtrade Bananen, lose",
+        "pack": "1 kg",
+        "priceCents": 179,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "바나나",
+          "species": "plant",
+          "cut": "banana",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "banana"
+        },
+        "ingredient": "바나나",
+        "product": "Bio Fairtrade Bananen, lose",
+        "appPriceCents": null,
+        "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "3691f788ab2b97cea5691de08db622b95bad73a589bcb1e109ce690a9d862bfe"
       },
       "호밀빵": {
-        "offerId": "727a46d3cb23f7d49f3015b038645c8fbc9b602a98259f62ec515bb132470f38",
+        "offerId": "d1cf785466bf9e7cf75ffc6cd091950770d3f12e725d68d5d5191dd3241324b3",
         "postcode": "40489",
         "chain": "Lidl",
         "branchId": "branch-063d7ebb9016057e",
@@ -784,14 +850,14 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "727a46d3cb23f7d49f3015b038645c8fbc9b602a98259f62ec515bb132470f38"
+        "preferredPricingOfferId": "d1cf785466bf9e7cf75ffc6cd091950770d3f12e725d68d5d5191dd3241324b3"
       }
     }
   },
   "44145": {
     "Kaufland": {
       "버터": {
-        "offerId": "e06adb3265e4e343e6fda6a6c7055ceb593446ef81d0ca5bcd96a7577275f961",
+        "offerId": "d5ab24476e5d3d2802ce8c512983311252e2fd30d3a92aa173351d58c22bb691",
         "postcode": "44145",
         "chain": "Kaufland",
         "branchId": "branch-3bef4939a29657c1",
@@ -821,7 +887,7 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-16.09.2026",
         "branch": "Kaufland Dortmund-Innenstadt-Nord, Bornstraße 160 a, 44145 Dortmund (최근접 활성 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "e06adb3265e4e343e6fda6a6c7055ceb593446ef81d0ca5bcd96a7577275f961"
+        "preferredPricingOfferId": "d5ab24476e5d3d2802ce8c512983311252e2fd30d3a92aa173351d58c22bb691"
       }
     }
   },
@@ -832,7 +898,7 @@ window.mealPackagePricesByArea = {
     "REWE": {},
     "ALDI Nord": {
       "연어": {
-        "offerId": "957325f3bbcf007a774fa5f15b6e8c83ce83adffc5fd1063e59e867b92312bed",
+        "offerId": "faf490a9c14094b5ce72c0a6da3848a3a92d779777dead45459e5dacd13ca098",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -862,10 +928,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "957325f3bbcf007a774fa5f15b6e8c83ce83adffc5fd1063e59e867b92312bed"
+        "preferredPricingOfferId": "faf490a9c14094b5ce72c0a6da3848a3a92d779777dead45459e5dacd13ca098"
       },
       "파프리카": {
-        "offerId": "46b105374848d5d5d5ef85bd0aec6e1ab9e21b023a710da96bd1528bd8a0cb51",
+        "offerId": "1ad0c892cb7903969cf473aa0544c3ee110b25124e015d42c17a8511a858071a",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -895,10 +961,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "46b105374848d5d5d5ef85bd0aec6e1ab9e21b023a710da96bd1528bd8a0cb51"
+        "preferredPricingOfferId": "1ad0c892cb7903969cf473aa0544c3ee110b25124e015d42c17a8511a858071a"
       },
       "양파": {
-        "offerId": "22b125e5aa146e556b14e286c1f9e82c13245b58dfde17d6bbad32e445ed9751",
+        "offerId": "09eccb9182cad1ccb95f1abc487e1145171907d078bd5dd721d1722c657685a0",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -928,10 +994,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "22b125e5aa146e556b14e286c1f9e82c13245b58dfde17d6bbad32e445ed9751"
+        "preferredPricingOfferId": "09eccb9182cad1ccb95f1abc487e1145171907d078bd5dd721d1722c657685a0"
       },
       "버섯": {
-        "offerId": "fc38079415a367b58b181caab020e01effe519857e0e5a2e06482d33b810a935",
+        "offerId": "b1ea8e7db1a7eb28046599fd5d4f749992aa90217d9d9b4a43bf838043a9e961",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -961,10 +1027,10 @@ window.mealPackagePricesByArea = {
         "period": "17.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "fc38079415a367b58b181caab020e01effe519857e0e5a2e06482d33b810a935"
+        "preferredPricingOfferId": "b1ea8e7db1a7eb28046599fd5d4f749992aa90217d9d9b4a43bf838043a9e961"
       },
       "감자": {
-        "offerId": "db1eef7babce8e492ac553c350a027e3314aa7890f1bec6f8345f6fb685c831e",
+        "offerId": "08c04fe666f2246d07551dfba801410fab96e696dd0b4c33c046054bb2496039",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -994,10 +1060,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "db1eef7babce8e492ac553c350a027e3314aa7890f1bec6f8345f6fb685c831e"
+        "preferredPricingOfferId": "08c04fe666f2246d07551dfba801410fab96e696dd0b4c33c046054bb2496039"
       },
       "양상추": {
-        "offerId": "e136b8bcc1e704027404202e60658dbcdbf4370264e5c90e9aa5fd1e19f32cdf",
+        "offerId": "67d5122bd3b0d57b05b7abba3c0cbaeda1bab279269dece776da14f6391c904f",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1027,10 +1093,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "e136b8bcc1e704027404202e60658dbcdbf4370264e5c90e9aa5fd1e19f32cdf"
+        "preferredPricingOfferId": "67d5122bd3b0d57b05b7abba3c0cbaeda1bab279269dece776da14f6391c904f"
       },
       "레몬": {
-        "offerId": "bfbd5a5381d4e6fbf4dbc1888bf55c8fe0beb00a0c6f4c3d92b9b2346ca45d03",
+        "offerId": "0e3de352dc02037d257bf374105bccae54db041d71b2573122bd6f4df36b258d",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1060,10 +1126,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "bfbd5a5381d4e6fbf4dbc1888bf55c8fe0beb00a0c6f4c3d92b9b2346ca45d03"
+        "preferredPricingOfferId": "0e3de352dc02037d257bf374105bccae54db041d71b2573122bd6f4df36b258d"
       },
       "아보카도": {
-        "offerId": "a02825e54211946812d4a1a5d877740e94f80ece635ed59e1f89171bfd03da35",
+        "offerId": "8d26da53bfe79540adbfb6632def6e1dc1e83c088b46b44f6a299dda603dcbfe",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1093,10 +1159,10 @@ window.mealPackagePricesByArea = {
         "period": "17.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "a02825e54211946812d4a1a5d877740e94f80ece635ed59e1f89171bfd03da35"
+        "preferredPricingOfferId": "8d26da53bfe79540adbfb6632def6e1dc1e83c088b46b44f6a299dda603dcbfe"
       },
       "사과": {
-        "offerId": "e7d4d9cfb52fe69bb16242d8699cdaaaca17db188784dea04e4ff9ae846247cd",
+        "offerId": "5c251b55add565a3447edec3ba28f7f6054409572f6704a1639c9d2a7bc26f7b",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1126,10 +1192,10 @@ window.mealPackagePricesByArea = {
         "period": "17.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "e7d4d9cfb52fe69bb16242d8699cdaaaca17db188784dea04e4ff9ae846247cd"
+        "preferredPricingOfferId": "5c251b55add565a3447edec3ba28f7f6054409572f6704a1639c9d2a7bc26f7b"
       },
       "포도": {
-        "offerId": "9df18571c8d7b83ab5d795bc63522af5bc7a5cc1cdfb50abad0f80b43d12f8e3",
+        "offerId": "348486c58fca615e2a1b9d112c52192b6ceaa8db4d058ad15e52efc4145bb02d",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1159,10 +1225,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "9df18571c8d7b83ab5d795bc63522af5bc7a5cc1cdfb50abad0f80b43d12f8e3"
+        "preferredPricingOfferId": "348486c58fca615e2a1b9d112c52192b6ceaa8db4d058ad15e52efc4145bb02d"
       },
       "요거트": {
-        "offerId": "877ef013c00312851662ceed4f3add70be80fdad9960c4236241aa8dcded4358",
+        "offerId": "402f744404612fb9d9296392ca790cfae6f650cb4d6dc7c8901294cb92bbbd08",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1192,10 +1258,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "877ef013c00312851662ceed4f3add70be80fdad9960c4236241aa8dcded4358"
+        "preferredPricingOfferId": "402f744404612fb9d9296392ca790cfae6f650cb4d6dc7c8901294cb92bbbd08"
       },
       "달걀": {
-        "offerId": "6d4a202e24b2abf4ad25c5882a21c5a38867c601835eb1cf1cbf1092bd2d948f",
+        "offerId": "5a3a718092ecad46d9e2ff9c281b5b062ab89d9a4d6693d3a3f6bf38d16aad94",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1225,10 +1291,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "6d4a202e24b2abf4ad25c5882a21c5a38867c601835eb1cf1cbf1092bd2d948f"
+        "preferredPricingOfferId": "5a3a718092ecad46d9e2ff9c281b5b062ab89d9a4d6693d3a3f6bf38d16aad94"
       },
       "빵": {
-        "offerId": "95b1102926708b5fb2f8525c61615c8026c5a5b3ee51611acbee89ceba070b10",
+        "offerId": "74caffe5ff33732e99810ef08722ff011cbc1d0d1d445ec3990903b807878656",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1258,10 +1324,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "95b1102926708b5fb2f8525c61615c8026c5a5b3ee51611acbee89ceba070b10"
+        "preferredPricingOfferId": "74caffe5ff33732e99810ef08722ff011cbc1d0d1d445ec3990903b807878656"
       },
       "마늘": {
-        "offerId": "581cebfbd9999282ef84b702b3a439342ac860c1d1879ecdea0c65d381db56f7",
+        "offerId": "1701a5db14abb60ea246ea647b90b284e1be2fbadc4069b03e2def3f0f39704e",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1291,10 +1357,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "581cebfbd9999282ef84b702b3a439342ac860c1d1879ecdea0c65d381db56f7"
+        "preferredPricingOfferId": "1701a5db14abb60ea246ea647b90b284e1be2fbadc4069b03e2def3f0f39704e"
       },
       "대파": {
-        "offerId": "b40d981295dbb0cc8b517f65a61df921749e1b505250ca1c824c881d395de890",
+        "offerId": "ebe5d2b42da5c5b83b2be9978495c6b36cb68c3714f297c91d9cb031c846bc9c",
         "postcode": "44369",
         "chain": "ALDI Nord",
         "branchId": "branch-6b84e03681cde979",
@@ -1324,12 +1390,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "ALDI Nord Aspeystraße 75, 44369 Dortmund (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "b40d981295dbb0cc8b517f65a61df921749e1b505250ca1c824c881d395de890"
+        "preferredPricingOfferId": "ebe5d2b42da5c5b83b2be9978495c6b36cb68c3714f297c91d9cb031c846bc9c"
       }
     },
     "EDEKA": {
       "바나나": {
-        "offerId": "78c89b6522716be00881beea3ce2ff16cb7d8cc58fe4d66486a182d74f430117",
+        "offerId": "13260d01b390e5bccf2b3977aec4a11207932ac04f81b67deabc9d17f2cfa9f7",
         "postcode": "44369",
         "chain": "EDEKA",
         "branchId": "branch-bc5ba3d0d992ea68",
@@ -1359,12 +1425,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "EDEKA Nüsken, Rossbachstraße 21-23, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "78c89b6522716be00881beea3ce2ff16cb7d8cc58fe4d66486a182d74f430117"
+        "preferredPricingOfferId": "13260d01b390e5bccf2b3977aec4a11207932ac04f81b67deabc9d17f2cfa9f7"
       }
     },
     "Lidl": {
       "닭날개": {
-        "offerId": "e714ec95793bbaa666fc05604fa42482b46e767e77efad6c18f5c3ac0be8bb24",
+        "offerId": "0348c697baa64f77016cdd59c03fff8852c46cb1f14ba6ad430b2265264d6a39",
         "postcode": "44369",
         "chain": "Lidl",
         "branchId": "branch-d5a6ecc77d976fac",
@@ -1394,10 +1460,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "e714ec95793bbaa666fc05604fa42482b46e767e77efad6c18f5c3ac0be8bb24"
+        "preferredPricingOfferId": "0348c697baa64f77016cdd59c03fff8852c46cb1f14ba6ad430b2265264d6a39"
       },
       "양파": {
-        "offerId": "924e4f866f603885276e99ecaa118b0e8e549a1fc19990cde3462ce63db6af74",
+        "offerId": "f8870a81ad038b152707165e380be0a4d8c9d7c94a717cef88853275f3169794",
         "postcode": "44369",
         "chain": "Lidl",
         "branchId": "branch-d5a6ecc77d976fac",
@@ -1427,10 +1493,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "924e4f866f603885276e99ecaa118b0e8e549a1fc19990cde3462ce63db6af74"
+        "preferredPricingOfferId": "f8870a81ad038b152707165e380be0a4d8c9d7c94a717cef88853275f3169794"
       },
       "감자": {
-        "offerId": "b361886668e9e17404fc8f26e4ee39cc39d2d64998105c7cd70b64ff62d1c5cb",
+        "offerId": "9d46869a8b81600786929bcfe2efa633643e4f9ab8ba7b6a9066ae7a9e8ac9c9",
         "postcode": "44369",
         "chain": "Lidl",
         "branchId": "branch-d5a6ecc77d976fac",
@@ -1460,10 +1526,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "b361886668e9e17404fc8f26e4ee39cc39d2d64998105c7cd70b64ff62d1c5cb"
+        "preferredPricingOfferId": "9d46869a8b81600786929bcfe2efa633643e4f9ab8ba7b6a9066ae7a9e8ac9c9"
       },
       "고구마": {
-        "offerId": "3ef48cd034e89ac00e223a48e1a1c853ae14a87e5743c52b85a26da0c3dedeb0",
+        "offerId": "9e6d97aea0333b70709e8942a76e3ef76e618ab61fe368a7ddd22c3cdc58e0ef",
         "postcode": "44369",
         "chain": "Lidl",
         "branchId": "branch-d5a6ecc77d976fac",
@@ -1493,10 +1559,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "3ef48cd034e89ac00e223a48e1a1c853ae14a87e5743c52b85a26da0c3dedeb0"
+        "preferredPricingOfferId": "9e6d97aea0333b70709e8942a76e3ef76e618ab61fe368a7ddd22c3cdc58e0ef"
       },
       "오이": {
-        "offerId": "cfa3d25fd2ad06cf13753cd9ca192e531555d18a0ffd4e761187b5d1e227d27c",
+        "offerId": "c5517f87d3d97b1018ff5ccd3e3a85b78f360844247bf63f1e0770c73972e5c7",
         "postcode": "44369",
         "chain": "Lidl",
         "branchId": "branch-d5a6ecc77d976fac",
@@ -1526,10 +1592,43 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "cfa3d25fd2ad06cf13753cd9ca192e531555d18a0ffd4e761187b5d1e227d27c"
+        "preferredPricingOfferId": "c5517f87d3d97b1018ff5ccd3e3a85b78f360844247bf63f1e0770c73972e5c7"
+      },
+      "바나나": {
+        "offerId": "f58bb79483d35d2bfce9187ab61ec6cec62570da09162a054fcc08f41b582e7c",
+        "postcode": "44369",
+        "chain": "Lidl",
+        "branchId": "branch-d5a6ecc77d976fac",
+        "sourceRow": 734,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Fairtrade Bananen, lose",
+        "pack": "1 kg",
+        "priceCents": 179,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "바나나",
+          "species": "plant",
+          "cut": "banana",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "banana"
+        },
+        "ingredient": "바나나",
+        "product": "Bio Fairtrade Bananen, lose",
+        "appPriceCents": null,
+        "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "f58bb79483d35d2bfce9187ab61ec6cec62570da09162a054fcc08f41b582e7c"
       },
       "호밀빵": {
-        "offerId": "b01d1d31733b223048bf216dc374af30dd4f51b18e7de128ff48dc51971d00b1",
+        "offerId": "e6c744ef3c4bc6ef02596c26c7a459dc45a357707c611157b992678932c2ee54",
         "postcode": "44369",
         "chain": "Lidl",
         "branchId": "branch-d5a6ecc77d976fac",
@@ -1559,12 +1658,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "b01d1d31733b223048bf216dc374af30dd4f51b18e7de128ff48dc51971d00b1"
+        "preferredPricingOfferId": "e6c744ef3c4bc6ef02596c26c7a459dc45a357707c611157b992678932c2ee54"
       }
     },
     "Netto Marken-Discount": {
       "닭가슴살": {
-        "offerId": "7a2c4a8792a31fabd41424e5ff4af338d5cba27185bbb1c2a22322fb893231a7",
+        "offerId": "ac1f40d1de3531133131193801118a3170c622497de58f632494bcfbf3322ae8",
         "postcode": "44369",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-9b191c8340e1ab2e",
@@ -1594,10 +1693,43 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "7a2c4a8792a31fabd41424e5ff4af338d5cba27185bbb1c2a22322fb893231a7"
+        "preferredPricingOfferId": "ac1f40d1de3531133131193801118a3170c622497de58f632494bcfbf3322ae8"
+      },
+      "돼지목살": {
+        "offerId": "d9d405b7ae7645752c7e7ccc968544a5c1f9facae6aef70250881c167d583325",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 721,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Schweine-Nacken",
+        "pack": "1 kg",
+        "priceCents": 549,
+        "normalPriceCents": 799,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "돼지목살",
+          "species": "pork",
+          "cut": "neck",
+          "processingState": "raw",
+          "form": "whole-cut",
+          "composition": "pork"
+        },
+        "ingredient": "돼지목살",
+        "product": "Schweine-Nacken",
+        "appPriceCents": null,
+        "detail": "ohne Knochen, vakuumverpackt, ca. 2,4 kg; 1 kg",
+        "category": "Fleisch & Wurst",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "d9d405b7ae7645752c7e7ccc968544a5c1f9facae6aef70250881c167d583325"
       },
       "토마토": {
-        "offerId": "078533a6bab22a4b5927b0ad146aad922165723ddab815905677b462d4bdf60d",
+        "offerId": "0a478333c9ac3ca89ea8c9ded6fb8d01307019ae9430ee1aec2ea7377e79fce3",
         "postcode": "44369",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-9b191c8340e1ab2e",
@@ -1627,10 +1759,43 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "078533a6bab22a4b5927b0ad146aad922165723ddab815905677b462d4bdf60d"
+        "preferredPricingOfferId": "0a478333c9ac3ca89ea8c9ded6fb8d01307019ae9430ee1aec2ea7377e79fce3"
+      },
+      "파프리카": {
+        "offerId": "ac1345c897e296501fbfdb9ef0052bbe8ff4898e59df9ae0e4da829b9f56b3ee",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 715,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Paprika rot",
+        "pack": "500 g",
+        "priceCents": 149,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "파프리카",
+          "species": "plant",
+          "cut": "pepper",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "pepper"
+        },
+        "ingredient": "파프리카",
+        "product": "Paprika rot",
+        "appPriceCents": null,
+        "detail": "Niederlande/Spanien, Kl. I; 500 g",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "ac1345c897e296501fbfdb9ef0052bbe8ff4898e59df9ae0e4da829b9f56b3ee"
       },
       "양파": {
-        "offerId": "8408713afe9607f6ba873c42c7b8f9d2d3680eb1bf4e777f0596bccccc96e335",
+        "offerId": "7d59e49d1fc8481323a012fa4e8d51a032f01bb5558bdc498fb2362f14b2988c",
         "postcode": "44369",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-9b191c8340e1ab2e",
@@ -1660,10 +1825,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "8408713afe9607f6ba873c42c7b8f9d2d3680eb1bf4e777f0596bccccc96e335"
+        "preferredPricingOfferId": "7d59e49d1fc8481323a012fa4e8d51a032f01bb5558bdc498fb2362f14b2988c"
       },
       "버섯": {
-        "offerId": "3452f5cfc723ec162732b1fa105403f9328c7e2524a9900d6f2bd1d4a976b9d8",
+        "offerId": "ef491b6a4d0adfe4ce4760d9bc80a0ce0e5ecadb456dbc850a74dec1f33d8f8a",
         "postcode": "44369",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-9b191c8340e1ab2e",
@@ -1693,10 +1858,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "3452f5cfc723ec162732b1fa105403f9328c7e2524a9900d6f2bd1d4a976b9d8"
+        "preferredPricingOfferId": "ef491b6a4d0adfe4ce4760d9bc80a0ce0e5ecadb456dbc850a74dec1f33d8f8a"
       },
       "감자": {
-        "offerId": "618f7dcef11500e2efc938ebbc72b995a9f007dfba1ee310c2f2d4c76c4856eb",
+        "offerId": "b53be55cecaa5d16021d00092cbbfeee5742e3f03c81c9027d91654440855bde",
         "postcode": "44369",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-9b191c8340e1ab2e",
@@ -1726,10 +1891,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "618f7dcef11500e2efc938ebbc72b995a9f007dfba1ee310c2f2d4c76c4856eb"
+        "preferredPricingOfferId": "b53be55cecaa5d16021d00092cbbfeee5742e3f03c81c9027d91654440855bde"
       },
       "양상추": {
-        "offerId": "f02152bde53666af69af7b95f3a2c2d78732af6ec013b36ce02f9ce10319e49f",
+        "offerId": "4b13786230f700f8abb8535d862730ee0674489e1d97f2f5c18d39316e65984f",
         "postcode": "44369",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-9b191c8340e1ab2e",
@@ -1759,7 +1924,106 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "f02152bde53666af69af7b95f3a2c2d78732af6ec013b36ce02f9ce10319e49f"
+        "preferredPricingOfferId": "4b13786230f700f8abb8535d862730ee0674489e1d97f2f5c18d39316e65984f"
+      },
+      "아보카도": {
+        "offerId": "c14b47eda50e584fbb831a1162aa9720db03746fd6dded2101fd3a478a18de08",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 713,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Avocado",
+        "pack": "1 Stück",
+        "priceCents": 99,
+        "normalPriceCents": 119,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "아보카도",
+          "species": "plant",
+          "cut": "avocado",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "avocado"
+        },
+        "ingredient": "아보카도",
+        "product": "Avocado",
+        "appPriceCents": null,
+        "detail": "Peru/Südafrika, Kl. I; Stück",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "c14b47eda50e584fbb831a1162aa9720db03746fd6dded2101fd3a478a18de08"
+      },
+      "사과": {
+        "offerId": "8a8947a6d13a61938a2b86380483d1310e51cebbd021c1ad7346077fadb4ffcb",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 712,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Äpfel rot",
+        "pack": "1 kg",
+        "priceCents": 199,
+        "normalPriceCents": 249,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "사과",
+          "species": "plant",
+          "cut": "apple",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "apple"
+        },
+        "ingredient": "사과",
+        "product": "Äpfel rot",
+        "appPriceCents": null,
+        "detail": "Deutschland, Kl. I; 1 kg Schale",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "8a8947a6d13a61938a2b86380483d1310e51cebbd021c1ad7346077fadb4ffcb"
+      },
+      "포도": {
+        "offerId": "346a3ec14831ed096f88824b22a2728130a9af058b78e748d1d6aaac72e09471",
+        "postcode": "44369",
+        "chain": "Netto Marken-Discount",
+        "branchId": "branch-9b191c8340e1ab2e",
+        "sourceRow": 714,
+        "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Trauben hell",
+        "pack": "400 g",
+        "priceCents": 199,
+        "normalPriceCents": 249,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "포도",
+          "species": "plant",
+          "cut": "grape",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "grape"
+        },
+        "ingredient": "포도",
+        "product": "Trauben hell",
+        "appPriceCents": null,
+        "detail": "Italien/Spanien, Kl. I; 400 g Schale; kernlos",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "346a3ec14831ed096f88824b22a2728130a9af058b78e748d1d6aaac72e09471"
       }
     }
   },
@@ -1767,7 +2031,7 @@ window.mealPackagePricesByArea = {
     "REWE": {},
     "Netto Marken-Discount": {
       "닭가슴살": {
-        "offerId": "8d03191fe621026161dfb2c8a14d97f3800b6858a3f9de92e44e6d5217878309",
+        "offerId": "4902fd2b26f954fc66e59cd70793f3e9f2d9bd29b67a0e50ca29f256f060ea82",
         "postcode": "52062",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-e3266a13232a4d10",
@@ -1797,10 +2061,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "8d03191fe621026161dfb2c8a14d97f3800b6858a3f9de92e44e6d5217878309"
+        "preferredPricingOfferId": "4902fd2b26f954fc66e59cd70793f3e9f2d9bd29b67a0e50ca29f256f060ea82"
       },
       "양상추": {
-        "offerId": "b70e6455700b5e82ea3f493aa306ff08f6dbcfc177dce1219bce31680ef2cb5f",
+        "offerId": "8c98a713b606c54c534a7503b4f02b5c3a0e150174cd986b1acd28435ca62e4a",
         "postcode": "52062",
         "chain": "Netto Marken-Discount",
         "branchId": "branch-e3266a13232a4d10",
@@ -1830,14 +2094,14 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Netto Peterstraße 50, 52062 Aachen (전단 기준, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "b70e6455700b5e82ea3f493aa306ff08f6dbcfc177dce1219bce31680ef2cb5f"
+        "preferredPricingOfferId": "8c98a713b606c54c534a7503b4f02b5c3a0e150174cd986b1acd28435ca62e4a"
       }
     }
   },
   "52064": {
     "EDEKA": {
       "돼지목살": {
-        "offerId": "345b0c65bb97df90b0ed619605193591b5292047bce404698365900e2c330718",
+        "offerId": "2fd6e85f613ed99449618ffaa6d1462caebbead2097cd2e32bfc3794f97b140b",
         "postcode": "52064",
         "chain": "EDEKA",
         "branchId": "branch-b7a2687c1ad4f878",
@@ -1867,10 +2131,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "345b0c65bb97df90b0ed619605193591b5292047bce404698365900e2c330718"
+        "preferredPricingOfferId": "2fd6e85f613ed99449618ffaa6d1462caebbead2097cd2e32bfc3794f97b140b"
       },
       "바나나": {
-        "offerId": "8965cf81da45cd47e355c017f146f3b1fe9d23c24f9429224f2589301078118b",
+        "offerId": "fe17d07a12fdd0be0c7b9e31ed329c95a73e7e85d6e2436a9080adb0e118da1e",
         "postcode": "52064",
         "chain": "EDEKA",
         "branchId": "branch-b7a2687c1ad4f878",
@@ -1900,12 +2164,12 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "E center Vieler, Schillerstraße 20-40, 52064 Aachen (52062 근접 대표)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "8965cf81da45cd47e355c017f146f3b1fe9d23c24f9429224f2589301078118b"
+        "preferredPricingOfferId": "fe17d07a12fdd0be0c7b9e31ed329c95a73e7e85d6e2436a9080adb0e118da1e"
       }
     },
     "ALDI SÜD": {
       "훈제연어": {
-        "offerId": "7ffa09c2913e332aac1aeb570a3942324f105b8852bb3484c673e8f3dce82543",
+        "offerId": "08d48078f43d64af2506506e825e8f95d74e066f5ef8e0a8c7f0eeeb67bb37e8",
         "postcode": "52064",
         "chain": "ALDI SÜD",
         "branchId": "branch-44ec9a9b7a4cab8a",
@@ -1935,10 +2199,10 @@ window.mealPackagePricesByArea = {
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Franzstraße 2, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "7ffa09c2913e332aac1aeb570a3942324f105b8852bb3484c673e8f3dce82543"
+        "preferredPricingOfferId": "08d48078f43d64af2506506e825e8f95d74e066f5ef8e0a8c7f0eeeb67bb37e8"
       },
       "모짜렐라치즈": {
-        "offerId": "eab2a5024a357385a69a2bed62ba245fa4c040f7460c2652bded83b3f9900353",
+        "offerId": "4d029269f02f0b861b7fd2dffa624307a1435fd73838f42ab6597a3600eecb6e",
         "postcode": "52064",
         "chain": "ALDI SÜD",
         "branchId": "branch-44ec9a9b7a4cab8a",
@@ -1968,12 +2232,12 @@ window.mealPackagePricesByArea = {
         "period": "18.09.2026-19.09.2026",
         "branch": "ALDI SÜD, Franzstraße 2, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "eab2a5024a357385a69a2bed62ba245fa4c040f7460c2652bded83b3f9900353"
+        "preferredPricingOfferId": "4d029269f02f0b861b7fd2dffa624307a1435fd73838f42ab6597a3600eecb6e"
       }
     },
     "Lidl": {
       "닭날개": {
-        "offerId": "304b107436a42db01f9a47f7b95d0f87e0bf6a614423ab2653126a391fb2befe",
+        "offerId": "b95baaa61f40069a51c4223aa479046412cc7f8b24644e66b7865590a2e42e23",
         "postcode": "52064",
         "chain": "Lidl",
         "branchId": "branch-902eeb90994abf6d",
@@ -2003,10 +2267,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "304b107436a42db01f9a47f7b95d0f87e0bf6a614423ab2653126a391fb2befe"
+        "preferredPricingOfferId": "b95baaa61f40069a51c4223aa479046412cc7f8b24644e66b7865590a2e42e23"
       },
       "양파": {
-        "offerId": "96aaf7f2bda2aca6d69002f3b09edfd346d7b73635629b269cea96901037a2a9",
+        "offerId": "4b81579cbaf4db15f6b57419031e4c991ce73082de4d8f3ca1bd89448040008b",
         "postcode": "52064",
         "chain": "Lidl",
         "branchId": "branch-902eeb90994abf6d",
@@ -2036,10 +2300,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "96aaf7f2bda2aca6d69002f3b09edfd346d7b73635629b269cea96901037a2a9"
+        "preferredPricingOfferId": "4b81579cbaf4db15f6b57419031e4c991ce73082de4d8f3ca1bd89448040008b"
       },
       "감자": {
-        "offerId": "ca768b5cda9a1e68a2b36a9f81f65b50050cb80a6ee5095288013c1621f51cf3",
+        "offerId": "81c64d80b63c36a81f606e476e70c00c978ff924ec10084e59ee1892293e0bf1",
         "postcode": "52064",
         "chain": "Lidl",
         "branchId": "branch-902eeb90994abf6d",
@@ -2069,10 +2333,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "ca768b5cda9a1e68a2b36a9f81f65b50050cb80a6ee5095288013c1621f51cf3"
+        "preferredPricingOfferId": "81c64d80b63c36a81f606e476e70c00c978ff924ec10084e59ee1892293e0bf1"
       },
       "고구마": {
-        "offerId": "66d4c0f78162d5cf022c41f0a64c2aee30e286696d1ef5a1e3b0b51a9e4b095a",
+        "offerId": "2ddcdb7392f28987811f469f3512bd87b7b4d18dc495c443639f0deed4f7afdd",
         "postcode": "52064",
         "chain": "Lidl",
         "branchId": "branch-902eeb90994abf6d",
@@ -2102,10 +2366,10 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "66d4c0f78162d5cf022c41f0a64c2aee30e286696d1ef5a1e3b0b51a9e4b095a"
+        "preferredPricingOfferId": "2ddcdb7392f28987811f469f3512bd87b7b4d18dc495c443639f0deed4f7afdd"
       },
       "오이": {
-        "offerId": "f1d0dfa9d1d6372d9460f0e905adc14aa61817f1566dad74400cc5d596f3c923",
+        "offerId": "1143da56ddec1bf51a1f8a21467a7c96fbe87502400501eff557945c8e14cdfc",
         "postcode": "52064",
         "chain": "Lidl",
         "branchId": "branch-902eeb90994abf6d",
@@ -2135,10 +2399,43 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "f1d0dfa9d1d6372d9460f0e905adc14aa61817f1566dad74400cc5d596f3c923"
+        "preferredPricingOfferId": "1143da56ddec1bf51a1f8a21467a7c96fbe87502400501eff557945c8e14cdfc"
+      },
+      "바나나": {
+        "offerId": "f25a575c287b82d24b5829dcd51b53210aa7b8406979395e751332ad8fc952e3",
+        "postcode": "52064",
+        "chain": "Lidl",
+        "branchId": "branch-902eeb90994abf6d",
+        "sourceRow": 739,
+        "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+        "validFrom": "2026-09-14",
+        "validThrough": "2026-09-19",
+        "productDe": "Bio Fairtrade Bananen, lose",
+        "pack": "1 kg",
+        "priceCents": 179,
+        "normalPriceCents": 199,
+        "conditions": "없음",
+        "autoPriceEligible": true,
+        "identity": {
+          "ingredientId": "바나나",
+          "species": "plant",
+          "cut": "banana",
+          "processingState": "fresh",
+          "form": "whole",
+          "composition": "banana"
+        },
+        "ingredient": "바나나",
+        "product": "Bio Fairtrade Bananen, lose",
+        "appPriceCents": null,
+        "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+        "category": "Obst & Gemüse",
+        "period": "14.09.2026-19.09.2026",
+        "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+        "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+        "preferredPricingOfferId": "f25a575c287b82d24b5829dcd51b53210aa7b8406979395e751332ad8fc952e3"
       },
       "호밀빵": {
-        "offerId": "bb5a5d82565c06bd5878592bb8aaac0303675b06f52d88989a2d9379ec8651cf",
+        "offerId": "dcae4bb4418a77e6b41eee67017c18b6e44583c02ea54e7cd008293b2483aba8",
         "postcode": "52064",
         "chain": "Lidl",
         "branchId": "branch-902eeb90994abf6d",
@@ -2168,14 +2465,14 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-19.09.2026",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "bb5a5d82565c06bd5878592bb8aaac0303675b06f52d88989a2d9379ec8651cf"
+        "preferredPricingOfferId": "dcae4bb4418a77e6b41eee67017c18b6e44583c02ea54e7cd008293b2483aba8"
       }
     }
   },
   "52068": {
     "Kaufland": {
       "버터": {
-        "offerId": "9945271234a7b507d21a178f0fafbb1093db03dd04277bb1ce161212041e2654",
+        "offerId": "376de85f9c8898cc9a97642e899a0eb71f5e0249d308545eb59e2540737dfa1c",
         "postcode": "52068",
         "chain": "Kaufland",
         "branchId": "branch-1618bf3ae78c257c",
@@ -2205,7 +2502,7 @@ window.mealPackagePricesByArea = {
         "period": "14.09.2026-16.09.2026",
         "branch": "Kaufland Aachen, Breslauer Straße 35, 52068 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-        "preferredPricingOfferId": "9945271234a7b507d21a178f0fafbb1093db03dd04277bb1ce161212041e2654"
+        "preferredPricingOfferId": "376de85f9c8898cc9a97642e899a0eb71f5e0249d308545eb59e2540737dfa1c"
       }
     }
   },
@@ -2216,7 +2513,7 @@ window.mealPackagePricesByArea = {
 window.mealPackagePrices = window.mealPackagePricesByArea["40235"];
 window.mealOffersByIdentity = [
   {
-    "offerId": "65f9c10e825b038e38bdae968c2198d0840393c09de46027ad873a7e4e77abcd",
+    "offerId": "d4b0be5d5ab0debe4abb8e22f1e99570b568bdbe3ae02c755c4ba6ccf3d14c6c",
     "postcode": "40468",
     "chain": "REWE",
     "branchId": "branch-79e3c0c20871fd23",
@@ -2248,7 +2545,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b7a2d5e4a304bdb5e7a1d1076177036f4c98ac327cc02106432760dc9a624f4d",
+    "offerId": "443ba66490635a0b2f30bb42325622e16424ea1f96ef79d2536f34b71ffbadc6",
     "postcode": "40468",
     "chain": "REWE",
     "branchId": "branch-79e3c0c20871fd23",
@@ -2280,7 +2577,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "05c3977f5ed32e733a7e4a1f2a1f682d09267ec73161afd26bccc7ebfc32732b",
+    "offerId": "58b3597ba38a9ab732fe4f09226abc433b8de3faf2da9155bdf8bdd7d281d0ee",
     "postcode": "40468",
     "chain": "ALDI SÜD",
     "branchId": "branch-f2fe2ff148c4626c",
@@ -2312,7 +2609,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "0c22188c54bc486695983eaba01e99bcaff2bec0c6ac887b02cfdde407d9e73d",
+    "offerId": "50560be27c9d566b54237c06a558815b869a546a3b0a9761ad0d95089df650c6",
     "postcode": "40468",
     "chain": "ALDI SÜD",
     "branchId": "branch-f2fe2ff148c4626c",
@@ -2344,7 +2641,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "5e7a4dd6195fa2444a6af66653353fa0c13c83e4a83c1ba4a188de62fe5ecc1c",
+    "offerId": "8f57710b0075ab28bd059b762a86b7f301565ea17c6cc15a9ad9e51b7c2cda46",
     "postcode": "40472",
     "chain": "EDEKA",
     "branchId": "branch-a33ba57e7791f9e4",
@@ -2376,7 +2673,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "814b2174f557a00431c3544c02db865f25a2c8949a007a28cc6b03e320735362",
+    "offerId": "683036fb4cf12a19a4829927b92348a3d7f240d0483dfd013606731713fb1059",
     "postcode": "40472",
     "chain": "EDEKA",
     "branchId": "branch-a33ba57e7791f9e4",
@@ -2408,7 +2705,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "2806563a0030665fde7790148617b06914aa45c8f4eba6fbb0e36ead66dfe212",
+    "offerId": "9bfd5eb8f7a6b2859413cd052fbf295a9d6ec1e884f2d16e21929bec3937adbb",
     "postcode": "40472",
     "chain": "Lidl",
     "branchId": "branch-7cd348bd92626483",
@@ -2440,7 +2737,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "a3bbb71411d7ded643d2a0b218e9ac5af5372b1917f897f34a2a669bd894db46",
+    "offerId": "33bfb6a60947e4c84c6117565095249d8afbeb9863379c38c0ec6311d2a248d3",
     "postcode": "40472",
     "chain": "Lidl",
     "branchId": "branch-7cd348bd92626483",
@@ -2472,7 +2769,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "97cec8081acd0ffd6458d905eeb0e525d7c3497a790b8597402f0b089b43b4a6",
+    "offerId": "d4efd67f55de1dbbadec948a9d32c440b3ec418bcef04159d66b9c25e4b5e5bd",
     "postcode": "40472",
     "chain": "Lidl",
     "branchId": "branch-7cd348bd92626483",
@@ -2504,7 +2801,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "788ade9839c2f0e93edaa0e49d3c35fdb37f2a1f21f45d86564df510ca8c005e",
+    "offerId": "8bdb507cd3af956d5498d53d2f87d10b12ec3c48c2bfdc80d86fd2d9ef427af3",
     "postcode": "40472",
     "chain": "Lidl",
     "branchId": "branch-7cd348bd92626483",
@@ -2536,7 +2833,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "357517930a84b538e20ead4ae92486e7688be4d08fd47b0695e74660b8d3b442",
+    "offerId": "557bdaceae08516da0f7bab1c6120cda557b7bb605e9f1dd303d5de25b789264",
     "postcode": "40472",
     "chain": "Lidl",
     "branchId": "branch-7cd348bd92626483",
@@ -2568,7 +2865,39 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "c062537f6ec4a596857dc3eb7d61b495c055b71d08a188ba93c3892f909a7264",
+    "offerId": "df5ff2f6003983b802e945a423ca610874aedfd0a6e56968e9beea7bb7e0253b",
+    "postcode": "40472",
+    "chain": "Lidl",
+    "branchId": "branch-7cd348bd92626483",
+    "sourceRow": 724,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Fairtrade Bananen, lose",
+    "pack": "1 kg",
+    "priceCents": 179,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "바나나",
+      "species": "plant",
+      "cut": "banana",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "banana"
+    },
+    "ingredient": "바나나",
+    "product": "Bio Fairtrade Bananen, lose",
+    "appPriceCents": null,
+    "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "af2fa997432dc7ce2026916b488d2ce151f9c06204eb6c7f62ae9849056a6664",
     "postcode": "40472",
     "chain": "Lidl",
     "branchId": "branch-7cd348bd92626483",
@@ -2600,7 +2929,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "1522a62c33533a071e727ae3670db96a5a9d95935e3b97cd74c050d4fd712f24",
+    "offerId": "1d01c3e36c755974a5910a3463fd7a962e1c2341005b78c0d48a54781ee3b067",
     "postcode": "40474",
     "chain": "EDEKA",
     "branchId": "branch-269dad5325a916e4",
@@ -2632,7 +2961,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "24337309b3cfbcbdff4d8ca7f71337e10fd62e750aabfd25340c2bd4e06b8ffe",
+    "offerId": "bbbe332bfd94a50f8c0cc53b3a71901ba6cc171c807a52a416b454dc7aeca47a",
     "postcode": "40474",
     "chain": "EDEKA",
     "branchId": "branch-269dad5325a916e4",
@@ -2664,7 +2993,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "1705bc82b7941043dc2807eef76f5c143f2d1aa79f1ca6f651d6ca40ee86216e",
+    "offerId": "74b86e705dd35171cfb3b07a01c8d8776e429f8a272dade813a9666339ec713d",
     "postcode": "40474",
     "chain": "ALDI SÜD",
     "branchId": "branch-17d4d8ed299690c5",
@@ -2696,7 +3025,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "1639cc4b427e1ecefd9c0afd0938e53f1f4b46fded074ba961c7f8c04a1c3eac",
+    "offerId": "3e9cfb2f9a37797c54c0774a3799063e6e8b9515ee1654b0ddb929ee93f8364b",
     "postcode": "40474",
     "chain": "ALDI SÜD",
     "branchId": "branch-17d4d8ed299690c5",
@@ -2728,7 +3057,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "660a3d9667c6f6c411a8ddede55ab61ddc5d7476f3fbfea04a656eac3b8a33e3",
+    "offerId": "e957d3261d2541e5e65cc5147432b9873a351d56e03b17c49c56ecef65517d1e",
     "postcode": "40476",
     "chain": "Kaufland",
     "branchId": "branch-0afb82785507a281",
@@ -2760,7 +3089,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "2a8b7f86fa347fe925a82c5b23c97ef5f7976398f8e6763e0dfbc3d31cacc512",
+    "offerId": "1763805e0f0dd645253baf694878606dd97f18b7a6b17c23b37a0890573b80d3",
     "postcode": "40489",
     "chain": "Lidl",
     "branchId": "branch-063d7ebb9016057e",
@@ -2792,7 +3121,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e9693da254bae07df787c1257b4082e32292103a42cae5affac6233a899f0832",
+    "offerId": "54673060941ba17d238eb6c042d71361a6d1a8eafc254ddae70e457fefbeb2fd",
     "postcode": "40489",
     "chain": "Lidl",
     "branchId": "branch-063d7ebb9016057e",
@@ -2824,7 +3153,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "09abf58b5d7f33afe36537dbf59001acac84a54ed2f7806469af6c3d7393cf54",
+    "offerId": "ee7b3cc8270705630ca71854128fba3bdb3e50700df48a6f1966025e3147b961",
     "postcode": "40489",
     "chain": "Lidl",
     "branchId": "branch-063d7ebb9016057e",
@@ -2856,7 +3185,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "9c3921373f1d3dd49e81d3f2172e08236010f2fd90021fcff576720379abb5cd",
+    "offerId": "9d1b548b254b5465774f69c43a5db70e9e1b995a67bdd615d92b4c1bb7e7bd2f",
     "postcode": "40489",
     "chain": "Lidl",
     "branchId": "branch-063d7ebb9016057e",
@@ -2888,7 +3217,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "4039dc80878d5ceee862615b63feb3ca76592e9e905f6a90309f87d9ab03727a",
+    "offerId": "764108d97aa53b9a7be28812725d6c0c1df72f489a920e300de970f93c242e68",
     "postcode": "40489",
     "chain": "Lidl",
     "branchId": "branch-063d7ebb9016057e",
@@ -2920,7 +3249,39 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "727a46d3cb23f7d49f3015b038645c8fbc9b602a98259f62ec515bb132470f38",
+    "offerId": "3691f788ab2b97cea5691de08db622b95bad73a589bcb1e109ce690a9d862bfe",
+    "postcode": "40489",
+    "chain": "Lidl",
+    "branchId": "branch-063d7ebb9016057e",
+    "sourceRow": 729,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Fairtrade Bananen, lose",
+    "pack": "1 kg",
+    "priceCents": 179,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "바나나",
+      "species": "plant",
+      "cut": "banana",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "banana"
+    },
+    "ingredient": "바나나",
+    "product": "Bio Fairtrade Bananen, lose",
+    "appPriceCents": null,
+    "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "d1cf785466bf9e7cf75ffc6cd091950770d3f12e725d68d5d5191dd3241324b3",
     "postcode": "40489",
     "chain": "Lidl",
     "branchId": "branch-063d7ebb9016057e",
@@ -2952,7 +3313,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e06adb3265e4e343e6fda6a6c7055ceb593446ef81d0ca5bcd96a7577275f961",
+    "offerId": "d5ab24476e5d3d2802ce8c512983311252e2fd30d3a92aa173351d58c22bb691",
     "postcode": "44145",
     "chain": "Kaufland",
     "branchId": "branch-3bef4939a29657c1",
@@ -2984,7 +3345,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "957325f3bbcf007a774fa5f15b6e8c83ce83adffc5fd1063e59e867b92312bed",
+    "offerId": "faf490a9c14094b5ce72c0a6da3848a3a92d779777dead45459e5dacd13ca098",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3016,7 +3377,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "46b105374848d5d5d5ef85bd0aec6e1ab9e21b023a710da96bd1528bd8a0cb51",
+    "offerId": "1ad0c892cb7903969cf473aa0544c3ee110b25124e015d42c17a8511a858071a",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3048,7 +3409,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "22b125e5aa146e556b14e286c1f9e82c13245b58dfde17d6bbad32e445ed9751",
+    "offerId": "09eccb9182cad1ccb95f1abc487e1145171907d078bd5dd721d1722c657685a0",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3080,7 +3441,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "fc38079415a367b58b181caab020e01effe519857e0e5a2e06482d33b810a935",
+    "offerId": "b1ea8e7db1a7eb28046599fd5d4f749992aa90217d9d9b4a43bf838043a9e961",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3112,7 +3473,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "db1eef7babce8e492ac553c350a027e3314aa7890f1bec6f8345f6fb685c831e",
+    "offerId": "08c04fe666f2246d07551dfba801410fab96e696dd0b4c33c046054bb2496039",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3144,7 +3505,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e136b8bcc1e704027404202e60658dbcdbf4370264e5c90e9aa5fd1e19f32cdf",
+    "offerId": "67d5122bd3b0d57b05b7abba3c0cbaeda1bab279269dece776da14f6391c904f",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3176,7 +3537,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "bfbd5a5381d4e6fbf4dbc1888bf55c8fe0beb00a0c6f4c3d92b9b2346ca45d03",
+    "offerId": "0e3de352dc02037d257bf374105bccae54db041d71b2573122bd6f4df36b258d",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3208,7 +3569,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "a02825e54211946812d4a1a5d877740e94f80ece635ed59e1f89171bfd03da35",
+    "offerId": "8d26da53bfe79540adbfb6632def6e1dc1e83c088b46b44f6a299dda603dcbfe",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3240,7 +3601,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e7d4d9cfb52fe69bb16242d8699cdaaaca17db188784dea04e4ff9ae846247cd",
+    "offerId": "5c251b55add565a3447edec3ba28f7f6054409572f6704a1639c9d2a7bc26f7b",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3272,7 +3633,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "9df18571c8d7b83ab5d795bc63522af5bc7a5cc1cdfb50abad0f80b43d12f8e3",
+    "offerId": "348486c58fca615e2a1b9d112c52192b6ceaa8db4d058ad15e52efc4145bb02d",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3304,7 +3665,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "07792bc6f521519eae52795631179d680a49a580d4058a4dc535338eceb00cc2",
+    "offerId": "851cc7d4f81de0bf41fa10fbf8a35f65960bfc5ab21cad5357f15c47cebdb71a",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3336,7 +3697,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "877ef013c00312851662ceed4f3add70be80fdad9960c4236241aa8dcded4358",
+    "offerId": "402f744404612fb9d9296392ca790cfae6f650cb4d6dc7c8901294cb92bbbd08",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3368,7 +3729,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "6d4a202e24b2abf4ad25c5882a21c5a38867c601835eb1cf1cbf1092bd2d948f",
+    "offerId": "5a3a718092ecad46d9e2ff9c281b5b062ab89d9a4d6693d3a3f6bf38d16aad94",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3400,7 +3761,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "95b1102926708b5fb2f8525c61615c8026c5a5b3ee51611acbee89ceba070b10",
+    "offerId": "74caffe5ff33732e99810ef08722ff011cbc1d0d1d445ec3990903b807878656",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3432,7 +3793,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e47d3b67e96cbe76134290d028e690a219da1776cbeb35389a77fa5151d9d803",
+    "offerId": "31e9e9a6f03889a0e7e28afe401d46e82ab07fefbdbc6dc07dffa55bb48f7531",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3464,7 +3825,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "581cebfbd9999282ef84b702b3a439342ac860c1d1879ecdea0c65d381db56f7",
+    "offerId": "1701a5db14abb60ea246ea647b90b284e1be2fbadc4069b03e2def3f0f39704e",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3496,7 +3857,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b40d981295dbb0cc8b517f65a61df921749e1b505250ca1c824c881d395de890",
+    "offerId": "ebe5d2b42da5c5b83b2be9978495c6b36cb68c3714f297c91d9cb031c846bc9c",
     "postcode": "44369",
     "chain": "ALDI Nord",
     "branchId": "branch-6b84e03681cde979",
@@ -3528,7 +3889,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "78c89b6522716be00881beea3ce2ff16cb7d8cc58fe4d66486a182d74f430117",
+    "offerId": "13260d01b390e5bccf2b3977aec4a11207932ac04f81b67deabc9d17f2cfa9f7",
     "postcode": "44369",
     "chain": "EDEKA",
     "branchId": "branch-bc5ba3d0d992ea68",
@@ -3560,7 +3921,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "e714ec95793bbaa666fc05604fa42482b46e767e77efad6c18f5c3ac0be8bb24",
+    "offerId": "0348c697baa64f77016cdd59c03fff8852c46cb1f14ba6ad430b2265264d6a39",
     "postcode": "44369",
     "chain": "Lidl",
     "branchId": "branch-d5a6ecc77d976fac",
@@ -3592,7 +3953,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "924e4f866f603885276e99ecaa118b0e8e549a1fc19990cde3462ce63db6af74",
+    "offerId": "f8870a81ad038b152707165e380be0a4d8c9d7c94a717cef88853275f3169794",
     "postcode": "44369",
     "chain": "Lidl",
     "branchId": "branch-d5a6ecc77d976fac",
@@ -3624,7 +3985,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b361886668e9e17404fc8f26e4ee39cc39d2d64998105c7cd70b64ff62d1c5cb",
+    "offerId": "9d46869a8b81600786929bcfe2efa633643e4f9ab8ba7b6a9066ae7a9e8ac9c9",
     "postcode": "44369",
     "chain": "Lidl",
     "branchId": "branch-d5a6ecc77d976fac",
@@ -3656,7 +4017,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "3ef48cd034e89ac00e223a48e1a1c853ae14a87e5743c52b85a26da0c3dedeb0",
+    "offerId": "9e6d97aea0333b70709e8942a76e3ef76e618ab61fe368a7ddd22c3cdc58e0ef",
     "postcode": "44369",
     "chain": "Lidl",
     "branchId": "branch-d5a6ecc77d976fac",
@@ -3688,7 +4049,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "cfa3d25fd2ad06cf13753cd9ca192e531555d18a0ffd4e761187b5d1e227d27c",
+    "offerId": "c5517f87d3d97b1018ff5ccd3e3a85b78f360844247bf63f1e0770c73972e5c7",
     "postcode": "44369",
     "chain": "Lidl",
     "branchId": "branch-d5a6ecc77d976fac",
@@ -3720,7 +4081,39 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b01d1d31733b223048bf216dc374af30dd4f51b18e7de128ff48dc51971d00b1",
+    "offerId": "f58bb79483d35d2bfce9187ab61ec6cec62570da09162a054fcc08f41b582e7c",
+    "postcode": "44369",
+    "chain": "Lidl",
+    "branchId": "branch-d5a6ecc77d976fac",
+    "sourceRow": 734,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Fairtrade Bananen, lose",
+    "pack": "1 kg",
+    "priceCents": 179,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "바나나",
+      "species": "plant",
+      "cut": "banana",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "banana"
+    },
+    "ingredient": "바나나",
+    "product": "Bio Fairtrade Bananen, lose",
+    "appPriceCents": null,
+    "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "e6c744ef3c4bc6ef02596c26c7a459dc45a357707c611157b992678932c2ee54",
     "postcode": "44369",
     "chain": "Lidl",
     "branchId": "branch-d5a6ecc77d976fac",
@@ -3752,7 +4145,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "7a2c4a8792a31fabd41424e5ff4af338d5cba27185bbb1c2a22322fb893231a7",
+    "offerId": "ac1f40d1de3531133131193801118a3170c622497de58f632494bcfbf3322ae8",
     "postcode": "44369",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-9b191c8340e1ab2e",
@@ -3784,7 +4177,39 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "078533a6bab22a4b5927b0ad146aad922165723ddab815905677b462d4bdf60d",
+    "offerId": "d9d405b7ae7645752c7e7ccc968544a5c1f9facae6aef70250881c167d583325",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 721,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Schweine-Nacken",
+    "pack": "1 kg",
+    "priceCents": 549,
+    "normalPriceCents": 799,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "돼지목살",
+      "species": "pork",
+      "cut": "neck",
+      "processingState": "raw",
+      "form": "whole-cut",
+      "composition": "pork"
+    },
+    "ingredient": "돼지목살",
+    "product": "Schweine-Nacken",
+    "appPriceCents": null,
+    "detail": "ohne Knochen, vakuumverpackt, ca. 2,4 kg; 1 kg",
+    "category": "Fleisch & Wurst",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "0a478333c9ac3ca89ea8c9ded6fb8d01307019ae9430ee1aec2ea7377e79fce3",
     "postcode": "44369",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-9b191c8340e1ab2e",
@@ -3816,7 +4241,39 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "8408713afe9607f6ba873c42c7b8f9d2d3680eb1bf4e777f0596bccccc96e335",
+    "offerId": "ac1345c897e296501fbfdb9ef0052bbe8ff4898e59df9ae0e4da829b9f56b3ee",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 715,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Paprika rot",
+    "pack": "500 g",
+    "priceCents": 149,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "파프리카",
+      "species": "plant",
+      "cut": "pepper",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "pepper"
+    },
+    "ingredient": "파프리카",
+    "product": "Paprika rot",
+    "appPriceCents": null,
+    "detail": "Niederlande/Spanien, Kl. I; 500 g",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "7d59e49d1fc8481323a012fa4e8d51a032f01bb5558bdc498fb2362f14b2988c",
     "postcode": "44369",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-9b191c8340e1ab2e",
@@ -3848,7 +4305,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "3452f5cfc723ec162732b1fa105403f9328c7e2524a9900d6f2bd1d4a976b9d8",
+    "offerId": "ef491b6a4d0adfe4ce4760d9bc80a0ce0e5ecadb456dbc850a74dec1f33d8f8a",
     "postcode": "44369",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-9b191c8340e1ab2e",
@@ -3880,7 +4337,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "618f7dcef11500e2efc938ebbc72b995a9f007dfba1ee310c2f2d4c76c4856eb",
+    "offerId": "b53be55cecaa5d16021d00092cbbfeee5742e3f03c81c9027d91654440855bde",
     "postcode": "44369",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-9b191c8340e1ab2e",
@@ -3912,7 +4369,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "f02152bde53666af69af7b95f3a2c2d78732af6ec013b36ce02f9ce10319e49f",
+    "offerId": "4b13786230f700f8abb8535d862730ee0674489e1d97f2f5c18d39316e65984f",
     "postcode": "44369",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-9b191c8340e1ab2e",
@@ -3944,7 +4401,103 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "8d03191fe621026161dfb2c8a14d97f3800b6858a3f9de92e44e6d5217878309",
+    "offerId": "c14b47eda50e584fbb831a1162aa9720db03746fd6dded2101fd3a478a18de08",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 713,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Avocado",
+    "pack": "1 Stück",
+    "priceCents": 99,
+    "normalPriceCents": 119,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "아보카도",
+      "species": "plant",
+      "cut": "avocado",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "avocado"
+    },
+    "ingredient": "아보카도",
+    "product": "Avocado",
+    "appPriceCents": null,
+    "detail": "Peru/Südafrika, Kl. I; Stück",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "8a8947a6d13a61938a2b86380483d1310e51cebbd021c1ad7346077fadb4ffcb",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 712,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Äpfel rot",
+    "pack": "1 kg",
+    "priceCents": 199,
+    "normalPriceCents": 249,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "사과",
+      "species": "plant",
+      "cut": "apple",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "apple"
+    },
+    "ingredient": "사과",
+    "product": "Äpfel rot",
+    "appPriceCents": null,
+    "detail": "Deutschland, Kl. I; 1 kg Schale",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "346a3ec14831ed096f88824b22a2728130a9af058b78e748d1d6aaac72e09471",
+    "postcode": "44369",
+    "chain": "Netto Marken-Discount",
+    "branchId": "branch-9b191c8340e1ab2e",
+    "sourceRow": 714,
+    "evidenceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Trauben hell",
+    "pack": "400 g",
+    "priceCents": 199,
+    "normalPriceCents": 249,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "포도",
+      "species": "plant",
+      "cut": "grape",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "grape"
+    },
+    "ingredient": "포도",
+    "product": "Trauben hell",
+    "appPriceCents": null,
+    "detail": "Italien/Spanien, Kl. I; 400 g Schale; kernlos",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "4902fd2b26f954fc66e59cd70793f3e9f2d9bd29b67a0e50ca29f256f060ea82",
     "postcode": "52062",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-e3266a13232a4d10",
@@ -3976,7 +4529,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "b70e6455700b5e82ea3f493aa306ff08f6dbcfc177dce1219bce31680ef2cb5f",
+    "offerId": "8c98a713b606c54c534a7503b4f02b5c3a0e150174cd986b1acd28435ca62e4a",
     "postcode": "52062",
     "chain": "Netto Marken-Discount",
     "branchId": "branch-e3266a13232a4d10",
@@ -4008,7 +4561,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "345b0c65bb97df90b0ed619605193591b5292047bce404698365900e2c330718",
+    "offerId": "2fd6e85f613ed99449618ffaa6d1462caebbead2097cd2e32bfc3794f97b140b",
     "postcode": "52064",
     "chain": "EDEKA",
     "branchId": "branch-b7a2687c1ad4f878",
@@ -4040,7 +4593,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "8965cf81da45cd47e355c017f146f3b1fe9d23c24f9429224f2589301078118b",
+    "offerId": "fe17d07a12fdd0be0c7b9e31ed329c95a73e7e85d6e2436a9080adb0e118da1e",
     "postcode": "52064",
     "chain": "EDEKA",
     "branchId": "branch-b7a2687c1ad4f878",
@@ -4072,7 +4625,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "7ffa09c2913e332aac1aeb570a3942324f105b8852bb3484c673e8f3dce82543",
+    "offerId": "08d48078f43d64af2506506e825e8f95d74e066f5ef8e0a8c7f0eeeb67bb37e8",
     "postcode": "52064",
     "chain": "ALDI SÜD",
     "branchId": "branch-44ec9a9b7a4cab8a",
@@ -4104,7 +4657,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "eab2a5024a357385a69a2bed62ba245fa4c040f7460c2652bded83b3f9900353",
+    "offerId": "4d029269f02f0b861b7fd2dffa624307a1435fd73838f42ab6597a3600eecb6e",
     "postcode": "52064",
     "chain": "ALDI SÜD",
     "branchId": "branch-44ec9a9b7a4cab8a",
@@ -4136,7 +4689,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "304b107436a42db01f9a47f7b95d0f87e0bf6a614423ab2653126a391fb2befe",
+    "offerId": "b95baaa61f40069a51c4223aa479046412cc7f8b24644e66b7865590a2e42e23",
     "postcode": "52064",
     "chain": "Lidl",
     "branchId": "branch-902eeb90994abf6d",
@@ -4168,7 +4721,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "96aaf7f2bda2aca6d69002f3b09edfd346d7b73635629b269cea96901037a2a9",
+    "offerId": "4b81579cbaf4db15f6b57419031e4c991ce73082de4d8f3ca1bd89448040008b",
     "postcode": "52064",
     "chain": "Lidl",
     "branchId": "branch-902eeb90994abf6d",
@@ -4200,7 +4753,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "ca768b5cda9a1e68a2b36a9f81f65b50050cb80a6ee5095288013c1621f51cf3",
+    "offerId": "81c64d80b63c36a81f606e476e70c00c978ff924ec10084e59ee1892293e0bf1",
     "postcode": "52064",
     "chain": "Lidl",
     "branchId": "branch-902eeb90994abf6d",
@@ -4232,7 +4785,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "66d4c0f78162d5cf022c41f0a64c2aee30e286696d1ef5a1e3b0b51a9e4b095a",
+    "offerId": "2ddcdb7392f28987811f469f3512bd87b7b4d18dc495c443639f0deed4f7afdd",
     "postcode": "52064",
     "chain": "Lidl",
     "branchId": "branch-902eeb90994abf6d",
@@ -4264,7 +4817,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "f1d0dfa9d1d6372d9460f0e905adc14aa61817f1566dad74400cc5d596f3c923",
+    "offerId": "1143da56ddec1bf51a1f8a21467a7c96fbe87502400501eff557945c8e14cdfc",
     "postcode": "52064",
     "chain": "Lidl",
     "branchId": "branch-902eeb90994abf6d",
@@ -4296,7 +4849,39 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "bb5a5d82565c06bd5878592bb8aaac0303675b06f52d88989a2d9379ec8651cf",
+    "offerId": "f25a575c287b82d24b5829dcd51b53210aa7b8406979395e751332ad8fc952e3",
+    "postcode": "52064",
+    "chain": "Lidl",
+    "branchId": "branch-902eeb90994abf6d",
+    "sourceRow": 739,
+    "evidenceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/6?_ab=1&lf=HHZ",
+    "validFrom": "2026-09-14",
+    "validThrough": "2026-09-19",
+    "productDe": "Bio Fairtrade Bananen, lose",
+    "pack": "1 kg",
+    "priceCents": 179,
+    "normalPriceCents": 199,
+    "conditions": "없음",
+    "autoPriceEligible": true,
+    "identity": {
+      "ingredientId": "바나나",
+      "species": "plant",
+      "cut": "banana",
+      "processingState": "fresh",
+      "form": "whole",
+      "composition": "banana"
+    },
+    "ingredient": "바나나",
+    "product": "Bio Fairtrade Bananen, lose",
+    "appPriceCents": null,
+    "detail": "Ursprung Dominikanische Republik/Kolumbien/Peru/Ecuador, Klasse I; kg-Preis",
+    "category": "Obst & Gemüse",
+    "period": "14.09.2026-19.09.2026",
+    "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
+    "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
+  },
+  {
+    "offerId": "dcae4bb4418a77e6b41eee67017c18b6e44583c02ea54e7cd008293b2483aba8",
     "postcode": "52064",
     "chain": "Lidl",
     "branchId": "branch-902eeb90994abf6d",
@@ -4328,7 +4913,7 @@ window.mealOffersByIdentity = [
     "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
   },
   {
-    "offerId": "9945271234a7b507d21a178f0fafbb1093db03dd04277bb1ce161212041e2654",
+    "offerId": "376de85f9c8898cc9a97642e899a0eb71f5e0249d308545eb59e2540737dfa1c",
     "postcode": "52068",
     "chain": "Kaufland",
     "branchId": "branch-1618bf3ae78c257c",
@@ -4362,7 +4947,7 @@ window.mealOffersByIdentity = [
 ];
 window.mealOfferMeta = {
   "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
-  "snapshotId": "3426ad8257edf76dc5f4d11752c8a19fb0d57e037020edfabae25d1ce32f94c0",
+  "snapshotId": "624c6d378e53f3e0f15b3ec776c3cc9c2bbb61aac4a807399c020154fd676af9",
   "collectedAt": "2026-09-13 21:08 Europe/Berlin",
   "profiles": {
     "40235": {
@@ -4415,7 +5000,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 40472 · Düsseldorf",
         "branch": "Lidl, Marler Str. 4, 40472 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "branchId": "branch-7cd348bd92626483",
-        "offerCount": "10행",
+        "offerCount": "15행",
         "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
@@ -4461,7 +5046,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 40489 · Düsseldorf",
         "branch": "Lidl, Pfarrer-Holl-Weg 21, 40489 Düsseldorf (최근접 전단 지점, 지점별 가격 미확인)",
         "branchId": "branch-063d7ebb9016057e",
-        "offerCount": "10행",
+        "offerCount": "15행",
         "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
@@ -4527,7 +5112,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 44369 · Dortmund",
         "branch": "Lidl, Huckarder Allee 27, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "branchId": "branch-d5a6ecc77d976fac",
-        "offerCount": "10행",
+        "offerCount": "15행",
         "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
@@ -4537,9 +5122,9 @@ window.mealOfferMeta = {
         "label": "Netto Marken-Discount · 44369 · Dortmund",
         "branch": "Netto Marken-Discount, Rahmer Str. 8, 44369 Dortmund (공식 전단 기준, 지점별 가격 미확인)",
         "branchId": "branch-9b191c8340e1ab2e",
-        "offerCount": "11행",
-        "offerSummary": "닭가슴살 · 토마토 · 양파 · 버섯 · 감자 · 14.09.2026-19.09.2026",
-        "period": "14.09.2026-19.09.2026",
+        "offerCount": "21행",
+        "offerSummary": "닭가슴살 · 돼지목살 · 토마토 · 파프리카 · 양파 · 14.09.2026-19.09.2026",
+        "period": "14.09.2026-19.09.2026 / 15.09.2026-15.09.2026 / 16.09.2026-16.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
       }
     },
@@ -4591,7 +5176,7 @@ window.mealOfferMeta = {
         "label": "Lidl · 52064 · Aachen",
         "branch": "Lidl, Eynattener Str. 26, 52064 Aachen (최근접 전단 지점, 지점별 가격 미확인)",
         "branchId": "branch-902eeb90994abf6d",
-        "offerCount": "10행",
+        "offerCount": "15행",
         "offerSummary": "닭날개 · 양파 · 감자 · 고구마 · 오이 · 14.09.2026-19.09.2026",
         "period": "14.09.2026-19.09.2026",
         "source": "/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv"
