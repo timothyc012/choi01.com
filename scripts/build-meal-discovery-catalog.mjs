@@ -148,7 +148,7 @@ export function run(argv=process.argv.slice(2)) {
     candidateReportSha256:crypto.createHash('sha256').update(raw).digest('hex'),
   });
   fs.mkdirSync(path.dirname(path.resolve(args.output)),{recursive:true});
-  fs.writeFileSync(args.output,JSON.stringify(catalog,null,2)+'\n');
+  fs.writeFileSync(args.output,JSON.stringify(catalog)+'\n');
   console.log(JSON.stringify({recipes:catalog.recipeCount,coverage:catalog.coverage,output:args.output}));
   return catalog;
 }
