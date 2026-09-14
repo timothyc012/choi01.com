@@ -8,7 +8,7 @@ const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const digest=/^[a-f0-9]{64}$/;
 const SCHEMAS={
   current:['schemaVersion','snapshotId','weekStart','collectionTimestamp','manifestPath','manifestSha256'],
-  manifest:['schemaVersion','snapshotId','weekStart','collectionTimestamp','policyVersion','tenant','source','locations','coveragePath','recipeIndexPath','fileHashes','previousSnapshot'],
+  manifest:['schemaVersion','snapshotId','weekStart','collectionTimestamp','policyVersion','tenant','source','locations','coveragePath','recipeIndexPath','discoveryCatalogPath','fileHashes','previousSnapshot'],
   source:['inputLogicalName','csvSha256','database','tenant','discoverySha256','discoveryAlgorithm'],
   previous:['snapshotId','manifestPath','manifestSha256','mode'],
   manifestLocation:['id','postcode','store','branch','branchId','path','recipeCount'],
@@ -23,6 +23,10 @@ const SCHEMAS={
   locationCoverage:['target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds'],
   warning:['code','published','target','added','cap'],
   detail:['schemaVersion','sourceRecipeId','sourceContentHash','sourceTitle','sourceUrl','sourceAuthor','sourceServingText','rating','ratingNumber','reviewCount','title','detailIngredients','steps','recommendationProfile','transformVersion'],
+  discovery:['schemaVersion','catalogVersion','snapshotId','weekStart','source','recipeCount','recipes','coverage','exclusionCounts','limitation'],
+  discoverySource:['database','tenant','candidateReportSha256'],
+  discoveryRecipe:['sourceRecipeId','title','sourceUrl','sourceAuthor','sourceServingText','ingredients','recommendationProfile','dietaryFilters','locations','detailStatus'],
+  discoveryLocation:['postcode','store','branchId'],
 };
 
 function allowOnly(value,allowed,prefix,errors) {
@@ -45,13 +49,13 @@ function containsSymbolicLink(root,relative) {
   return false;
 }
 
-function findForbiddenKey(value,trail='') {
+function findForbiddenKey(value,trail='',allowedKeys=new Set()) {
   if(!value||typeof value!=='object') return null;
   if(Array.isArray(value)&&value.some((entry)=>entry&&typeof entry==='object'&&!Array.isArray(entry)&&'recipeId' in entry&&'reason' in entry&&'locationIds' in entry)) return `${trail||'root'} (review queue payload)`;
   for(const [key,child] of Object.entries(value)) {
     const current=trail?trail+'.'+key:key;
-    if(['instruction','instructionText','sourceImage','sourceImages','imageUrl','images','html','reviewQueue','heldForReview','recipeCandidates','candidateReport','candidateId','recipeId','locationIds','rawText','ingredients','matches'].includes(key)) return `${current}${/review|heldForReview|recipeCandidates|candidateReport|candidateId|recipeId|locationIds|rawText/i.test(key)?' (review queue payload)':''}`;
-    const nested=findForbiddenKey(child,current);
+    if(!allowedKeys.has(key)&&['instruction','instructionText','sourceImage','sourceImages','imageUrl','images','html','reviewQueue','heldForReview','recipeCandidates','candidateReport','candidateId','recipeId','locationIds','rawText','ingredients','matches'].includes(key)) return `${current}${/review|heldForReview|recipeCandidates|candidateReport|candidateId|recipeId|locationIds|rawText/i.test(key)?' (review queue payload)':''}`;
+    const nested=findForbiddenKey(child,current,allowedKeys);
     if(nested) return nested;
   }
   return null;
@@ -162,7 +166,7 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
       try {
         const json=JSON.parse(fs.readFileSync(target,'utf8'));
         parsedArtifacts.set(relative,json);
-        const forbidden=findForbiddenKey(json);
+        const forbidden=findForbiddenKey(json,'',relative.includes('/recipes/discovery.')?new Set(['ingredients']):new Set());
         if(forbidden) errors.push(`forbidden public source field ${forbidden}: ${relative}`);
       } catch { errors.push('artifact is invalid JSON: '+relative); }
     }
@@ -176,6 +180,7 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
     return true;
   };
   for(const field of ['coveragePath','recipeIndexPath']) declare(field,manifest[field]);
+  if(manifest.discoveryCatalogPath!==undefined) declare('discoveryCatalogPath',manifest.discoveryCatalogPath);
   const coverage=parsedArtifacts.get(manifest.coveragePath);
   if(!coverage||!Array.isArray(coverage.locations)) errors.push('coveragePath does not contain location coverage');
   else {
@@ -185,6 +190,34 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
   const recipeIndex=declare('recipeIndexPath',manifest.recipeIndexPath)?parsedArtifacts.get(manifest.recipeIndexPath):null;
   if(!recipeIndex||!Array.isArray(recipeIndex.recipes)) errors.push('recipeIndexPath does not contain a recipe index');
   else allowOnly(recipeIndex,SCHEMAS.recipeIndex,'recipeIndex',errors);
+  const discovery=manifest.discoveryCatalogPath===undefined?null:parsedArtifacts.get(manifest.discoveryCatalogPath);
+  if(manifest.discoveryCatalogPath!==undefined&&!discovery) errors.push('discoveryCatalogPath does not contain a discovery catalog');
+  else if(discovery) {
+    allowOnly(discovery,SCHEMAS.discovery,'discovery',errors);
+    allowOnly(discovery.source,SCHEMAS.discoverySource,'discovery.source',errors);
+    if(discovery.schemaVersion!==1||discovery.catalogVersion!=='exploration-v1'||discovery.snapshotId!==manifest.snapshotId||discovery.weekStart!==manifest.weekStart) errors.push('discovery catalog identity does not match manifest');
+    if(discovery.recipeCount!==discovery.recipes.length||discovery.recipes.length>1000) errors.push('discovery recipeCount is invalid');
+    if(discovery.source?.candidateReportSha256!==manifest.source?.discoverySha256) errors.push('discovery source lineage does not match manifest');
+    if(!new RegExp(`^snapshots/${manifest.weekStart}/${manifest.snapshotId}/recipes/discovery\\.([a-f0-9]{64})\\.json$`).test(manifest.discoveryCatalogPath||'')||manifest.fileHashes?.[manifest.discoveryCatalogPath]!==manifest.discoveryCatalogPath?.match(/discovery\.([a-f0-9]{64})\.json$/)?.[1]) errors.push('discoveryCatalogPath must include its manifest hash');
+    const ids=new Set();
+    discovery.recipes.forEach((recipe,index)=>{
+      const prefix=`discovery.recipes[${index}]`;
+      allowOnly(recipe,SCHEMAS.discoveryRecipe,prefix,errors);
+      allowOnly(recipe?.recommendationProfile,SCHEMAS.profile,`${prefix}.recommendationProfile`,errors);
+      if(!/^\d{1,20}$/.test(recipe?.sourceRecipeId||'')||ids.has(recipe.sourceRecipeId)) errors.push(`${prefix}.sourceRecipeId must be present and unique`);
+      else ids.add(recipe.sourceRecipeId);
+      if(recipe?.sourceUrl!==`https://www.10000recipe.com/recipe/${recipe?.sourceRecipeId}`) errors.push(`${prefix}.sourceUrl must match the approved recipe host and id`);
+      if(!Array.isArray(recipe?.ingredients)||recipe.ingredients.length<2||recipe.ingredients.some((value)=>typeof value!=='string'||!value.trim())) errors.push(`${prefix}.ingredients must contain public ingredient lines`);
+      if(recipe?.recommendationProfile?.kind!=='main'||!Array.isArray(recipe?.recommendationProfile?.primaryIngredients)||!recipe.recommendationProfile.primaryIngredients.length) errors.push(`${prefix}.recommendationProfile must describe a main meal`);
+      if(!Array.isArray(recipe?.dietaryFilters)||recipe.dietaryFilters.some((value)=>value!=='vegetarian')) errors.push(`${prefix}.dietaryFilters is invalid`);
+      if(!Array.isArray(recipe?.locations)||!recipe.locations.length) errors.push(`${prefix}.locations must be non-empty`);
+      else recipe.locations.forEach((location,locationIndex)=>{
+        allowOnly(location,SCHEMAS.discoveryLocation,`${prefix}.locations[${locationIndex}]`,errors);
+        if(!location||['postcode','store','branchId'].some((key)=>typeof location[key]!=='string'||!location[key])) errors.push(`${prefix}.locations[${locationIndex}] is invalid`);
+      });
+      if(recipe?.detailStatus!=='source-link-only') errors.push(`${prefix}.detailStatus is invalid`);
+    });
+  }
   const recipesById=new Map();
   for(const [index,recipe] of (recipeIndex?.recipes||[]).entries()) {
     const prefix=`recipeIndex.recipes[${index}]`;

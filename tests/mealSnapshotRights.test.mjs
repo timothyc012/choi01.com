@@ -86,6 +86,46 @@ test('compiled output is byte-identical, hash-valid, and contains no raw source 
   assert.equal(/sourceImage|imageUrl|"images"/.test(bytes),false);
 });
 
+test('compiler publishes one hash-pinned discovery catalog for website and MCP consumers',async(t)=>{
+  const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-discovery-contract-'));
+  t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));
+  const data=fixture();
+  data.candidateReport.candidates[0].title='닭가슴살 덮밥';
+  const manifest=await compileMealWeek({
+    outputDir,candidateReport:data.candidateReport,registry:data.registry,
+    weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',
+    policyVersion:'selection-v1',discoveryTarget:240,
+  });
+
+  assert.match(manifest.discoveryCatalogPath,/^snapshots\/2026-09-07\/[a-f0-9]{64}\/recipes\/discovery\.[a-f0-9]{64}\.json$/);
+  const catalogBytes=fs.readFileSync(path.join(outputDir,manifest.discoveryCatalogPath));
+  assert.equal(manifest.fileHashes[manifest.discoveryCatalogPath],sha256(catalogBytes));
+  const catalog=JSON.parse(catalogBytes);
+  assert.equal(catalog.snapshotId,manifest.snapshotId);
+  assert.equal(catalog.weekStart,manifest.weekStart);
+  assert.equal(catalog.recipeCount,1);
+  assert.equal(catalog.recipes[0].sourceRecipeId,'7000001');
+  assert.equal('steps' in catalog.recipes[0],false);
+  assert.deepEqual(validateMealSnapshotDirectory(outputDir),{valid:true,errors:[]});
+});
+
+test('validator rejects a tampered discovery catalog even after its file hash is changed alone',async(t)=>{
+  const outputDir=fs.mkdtempSync(path.join(os.tmpdir(),'meal-discovery-tamper-'));
+  t.after(()=>fs.rmSync(outputDir,{recursive:true,force:true}));
+  const data=fixture();
+  data.candidateReport.candidates[0].title='닭가슴살 덮밥';
+  await compileMealWeek({outputDir,candidateReport:data.candidateReport,registry:data.registry,weekStart:'2026-09-07',collectionTimestamp:'2026-09-06T09:00:00+02:00',policyVersion:'selection-v1'});
+  const snapshot=readSnapshot(outputDir);
+  const catalogPath=path.join(outputDir,snapshot.manifest.discoveryCatalogPath);
+  const catalog=JSON.parse(fs.readFileSync(catalogPath,'utf8'));
+  catalog.recipes[0].sourceUrl='https://evil.example/recipe';
+  snapshot.manifest.fileHashes[snapshot.manifest.discoveryCatalogPath]=rewriteJson(catalogPath,catalog);
+  rewriteManifest(snapshot);
+  const validation=validateMealSnapshotDirectory(outputDir);
+  assert.equal(validation.valid,false);
+  assert.match(validation.errors.join('\n'),/discovery.*sourceUrl/i);
+});
+
 test('validator rejects a location title that differs from its hash-pinned approved detail',async(t)=>{
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-title-integrity-'));
   t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
