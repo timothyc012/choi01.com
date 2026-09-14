@@ -21,7 +21,7 @@ verifies the retained rollback chain, and writes an immutable approval receipt.
 It never changes `public/` during `prepare`:
 
 ```sh
-npm run meal:release -- prepare INPUT.csv --week-start YYYY-MM-DD --staging-dir NEW_STAGING_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --rollover --previous-manifest CURRENT_PUBLIC_MANIFEST.json
+npm run meal:release -- prepare INPUT.csv --coverage COVERAGE.csv --week-start YYYY-MM-DD --staging-dir NEW_STAGING_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --rollover --previous-manifest CURRENT_PUBLIC_MANIFEST.json
 ```
 
 Use `--bootstrap` only for the first immutable release. Use `--correction` with
@@ -32,8 +32,12 @@ entire staging directory outside `public/` and out of git.
 
 Review the preflight warnings, store coverage, private queues, registry changes,
 and source evidence before requesting publication approval. The receipt's
-`approvalDigest` seals the CSV hash, complete public data tree, snapshot pointer,
-and release mode. Preview and submit the receipt through the 02Ontology action
+`approvalDigest` seals the offer CSV and coverage CSV hashes, complete public
+data tree, snapshot pointer, and release mode. Coverage must include every actual
+branch present in the offer CSV with the exact row count. A PDF or digital flyer
+may be marked `수집완료` only when every source page was checked; first-page or
+selected-page extraction is `일부수집` with source and checked page counts.
+Preview and submit the receipt through the 02Ontology action
 registry using pack `recipe`, action
 `recipe.publish_weekly_meal_snapshot`, and inputs
 `{"receipt": <release-receipt.json>, "website_origin": "https://choi01.com/mohemeokji/"}`.
@@ -69,6 +73,12 @@ and exclusion filters, one detail lookup, and a tampered/unavailable-source case
 
 The lower-level commands below remain diagnosis and repair tools. Do not mix
 their output manually into a prepared release or bypass the approval receipt.
+
+Before preparing, compare the newest reviewed week with the previous week by
+requested postcode, actual branch postcode and chain. A sudden drop such as 175
+to 7 rows is a collection regression to investigate, even when those seven rows
+are valid. Run the latest-reviewed priority coverage test; 44369 Netto, 40474
+EDEKA and 40489 Lidl must not silently fall to zero recipe-compatible offers.
 
 Run from the repo root, replacing placeholders with verified paths and the intended Monday:
 

@@ -1,5 +1,39 @@
 # 2026-09-14 모해먹지 갱신 검증
 
+## 9월 14일 매장 누락 correction
+
+초기 검토본은 72면 Netto 전단과 76면 Lidl 전단에서 첫 면의 일부 상품만
+남긴 뒤 이를 완전한 지점 결과처럼 게시했다. 그 결과 44369 Netto,
+40474 EDEKA, 40489 Lidl이 위치 목록에는 있어도 추천 메뉴가 0개로 보였다.
+이 상태로 만든 승인 영수증은 폐기했다. 기존 검토 CSV는 이전 snapshot의
+계보를 위해 바이트 그대로 보존하고, 복구본은
+`supermarket_food_offers_2026-09-14-reviewed-v2.csv`로 분리했다.
+
+공식 Netto KW38 PDF, Lidl Aktionsprospekt 1·2·7면, EDEKA Buller·Prömpers·
+Vieler 지점 상품 카드를 다시 확인했다. 검토 CSV는 710행이며 `verified 210`,
+`held 499`, `held-form 1`이다. 별도 `coverage_2026-09-14.csv`는 실제 지점
+23개와 행 수를 고정하며, 전체 면을 확인하지 않은 22개 지점을
+`일부수집`으로 명시한다. 앞으로 coverage 파일이 없거나 지점·행 수·페이지
+상태가 맞지 않으면 주간 release prepare 단계가 실패한다.
+
+새 correction snapshot은
+`126af7065fc3a8f7baffaac07b411317d6701a48844893079f478ebf5bd0c731`이며
+독립 빌드 327개 파일이 바이트 단위로 일치했다. 같은 공개 스냅샷을 읽는
+MCP 검증 결과는 다음과 같다.
+
+| 우편번호 | 마트 | 현재 추천 가능 | 첫 페이지 | 다음 페이지 |
+| --- | --- | ---: | ---: | --- |
+| 44369 | Netto Marken-Discount | 91 | 20 | `offset=20` 확인 |
+| 40474 | EDEKA | 64 | 20 | 있음 |
+| 40489 | Lidl | 61 | 20 | 있음 |
+| 44369 | Lidl | 61 | 20 | 있음 |
+| 52062 | Netto Marken-Discount | 62 | 20 | 있음 |
+
+승인 영수증은 offer CSV와 coverage CSV를 모두 해시로 고정한다. 전체 전단을
+모두 수집했다는 뜻은 아니며, 현재 확인된 할인 식재료를 근거로 레시피를
+검색할 수 있다는 의미다. 상세 근거는
+`data/mohemeokji/offer-repair-2026-09-14.json`에 기록했다.
+
 2026-09-13 21:08 수집본(원격 `a565f30`) `supermarket_food_offers_2026-09-14.csv` 810행을 보존했다. 같은 실제 지점의 중복 검색 결과 124행을 합쳐 검토 CSV는 686행이며 `검색우편번호`와 `원본행`으로 출처를 추적한다. 공개 가격은 별도 `supermarket_food_offers_2026-09-14-reviewed.csv`에서 컴파일한다.
 
 - 검토 CSV 기준 공식 원문 재검증 통과 175행, 원문 재검증 보류 510행, 상품 형태 보류 1행. 검토되지 않은 값을 일반 행사가격으로 사용하지 않는다.

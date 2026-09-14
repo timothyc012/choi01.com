@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "weekStart": "2026-09-14",
+  "reason": "The first reviewed snapshot left 44369 Netto, 40474 EDEKA and 40489 Lidl without recipe-compatible offers despite current official flyer evidence.",
+  "sourceCsv": {
+    "path": "public/offers/supermarket_food_offers_2026-09-14-reviewed-v2.csv",
+    "sha256": "aab8076906641ae8320b119b8aec11a0a47fdbd7c1f8e5175227f6ee0e567847",
+    "rows": 710,
+    "verified": 210,
+    "held": 499,
+    "heldForm": 1
+  },
+  "coverage": {
+    "path": "public/offers/coverage_2026-09-14.csv",
+    "sha256": "eb530774a399f699e7dac41cb5fa709803e1ed13ed9855a6d780a9e4bb236fa0",
+    "branches": 23,
+    "complete": 1,
+    "partial": 22
+  },
+  "evidence": [
+    {
+      "store": "Netto Marken-Discount",
+      "postcode": "44369",
+      "url": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+      "sourceSha256": "5606795ddbd73fa812a22566ad5717b919b9a8ffd9d632320a5979cd601cc68c",
+      "sourcePages": 72,
+      "checkedPages": 4,
+      "verifiedIngredients": ["닭가슴살", "양상추", "양파", "감자", "버섯", "토마토"]
+    },
+    {
+      "store": "Lidl",
+      "postcodes": ["40472", "40489", "44369", "52064"],
+      "url": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+      "sourcePages": 76,
+      "checkedPages": [1, 2, 7],
+      "verifiedIngredients": ["닭날개", "양파", "감자", "고구마", "오이", "호밀빵"]
+    },
+    {
+      "store": "EDEKA",
+      "postcodes": ["40472", "40474", "52064"],
+      "urls": [
+        "https://www.edeka.de/maerkte/071158/",
+        "https://www.edeka.de/maerkte/071065/",
+        "https://www.edeka.de/maerkte/071409/"
+      ],
+      "verifiedIngredient": "돼지목살",
+      "product": "Frischer Schweinenackenbraten",
+      "pack": "1 kg",
+      "priceCents": 599
+    }
+  ],
+  "candidateReport": {
+    "sha256": "d59a84ce8797addfb1f1758925bfc5e4903685336274de25c6c3f41c67206ded",
+    "database": "01ontology",
+    "tenant": "recipe-full",
+    "locations": 23,
+    "offers": 67,
+    "candidates": 5000,
+    "zeroCandidateIdentities": 0
+  },
+  "expectedMcpTotals": {
+    "44369|Netto Marken-Discount": 91,
+    "40474|EDEKA": 64,
+    "40489|Lidl": 61,
+    "44369|Lidl": 61,
+    "52062|Netto Marken-Discount": 62
+  },
+  "limitations": "The repair verifies recipe-compatible ingredients from current official pages. It does not claim complete extraction of every 72/76-page flyer; coverage.csv records those branches as partial."
+}

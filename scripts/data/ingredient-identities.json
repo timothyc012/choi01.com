@@ -1,6 +1,7 @@
 {
   "닭가슴살": { "ingredientId": "닭가슴살", "species": "chicken", "cut": "breast", "processingState": "raw", "form": "fillet", "composition": "chicken" },
   "닭안심": { "ingredientId": "닭안심", "species": "chicken", "cut": "tenderloin", "processingState": "raw", "form": "fillet", "composition": "chicken" },
+  "닭날개": { "ingredientId": "닭날개", "species": "chicken", "cut": "wing", "processingState": "raw", "form": "whole", "composition": "chicken" },
   "돼지안심": { "ingredientId": "돼지안심", "species": "pork", "cut": "tenderloin", "processingState": "raw", "form": "whole-cut", "composition": "pork" },
   "돼지목살": { "ingredientId": "돼지목살", "species": "pork", "cut": "neck", "processingState": "raw", "form": "steak", "composition": "pork" },
   "돼지등심": { "ingredientId": "돼지등심", "species": "pork", "cut": "loin", "processingState": "raw", "form": "whole-cut", "composition": "pork" },
@@ -20,6 +21,7 @@
   "양파": { "ingredientId": "양파", "species": "plant", "cut": "onion", "processingState": "fresh", "form": "whole", "composition": "onion" },
   "버섯": { "ingredientId": "버섯", "species": "fungus", "cut": "mushroom", "processingState": "fresh", "form": "whole", "composition": "mushroom" },
   "감자": { "ingredientId": "감자", "species": "plant", "cut": "potato", "processingState": "fresh", "form": "whole", "composition": "potato" },
+  "고구마": { "ingredientId": "고구마", "species": "plant", "cut": "sweet-potato", "processingState": "fresh", "form": "whole", "composition": "sweet-potato" },
   "당근": { "ingredientId": "당근", "species": "plant", "cut": "carrot", "processingState": "fresh", "form": "whole", "composition": "carrot" },
   "주키니": { "ingredientId": "주키니", "species": "plant", "cut": "zucchini", "processingState": "fresh", "form": "whole", "composition": "zucchini" },
   "오이": { "ingredientId": "오이", "species": "plant", "cut": "cucumber", "processingState": "fresh", "form": "whole", "composition": "cucumber" },
@@ -46,6 +48,7 @@
   "달걀": { "ingredientId": "달걀", "species": "chicken", "cut": "egg", "processingState": "raw", "form": "whole", "composition": "egg" },
   "쌀": { "ingredientId": "쌀", "species": "grain", "cut": "rice", "processingState": "dried", "form": "pack", "composition": "rice" },
   "빵": { "ingredientId": "빵", "species": "grain", "cut": "bread", "processingState": "baked", "form": "whole", "composition": "wheat" },
+  "호밀빵": { "ingredientId": "호밀빵", "species": "grain", "cut": "bread", "processingState": "baked", "form": "sliced", "composition": "rye-wheat" },
   "또띠아": { "ingredientId": "또띠아", "species": "grain", "cut": "tortilla", "processingState": "baked", "form": "pack", "composition": "wheat" },
   "올리브유": { "ingredientId": "올리브유", "species": "plant", "cut": "olive", "processingState": "pressed", "form": "bottle", "composition": "olive" },
   "마늘": { "ingredientId": "마늘", "species": "plant", "cut": "garlic", "processingState": "fresh", "form": "whole", "composition": "garlic" },

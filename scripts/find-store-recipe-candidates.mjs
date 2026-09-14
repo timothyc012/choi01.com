@@ -8,6 +8,7 @@ import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
 export const recipeSearchSpec = {
   '닭가슴살': {ingredientLabels:['닭가슴살'],titleTerms:['닭가슴살']},
   '닭안심': {ingredientLabels:['닭안심','닭안심살'],titleTerms:['닭안심']},
+  '닭날개': {ingredientLabels:['닭날개','닭 날개','닭봉','치킨윙'],titleTerms:['닭날개','닭봉','치킨윙']},
   '돼지안심': {ingredientLabels:['돼지고기 안심','돼지고기안심','돼지안심','돼지 안심'],titleTerms:['돼지안심','돼지고기 안심']},
   '돼지목살': {ingredientLabels:['돼지고기 목살','돼지고기목살','돼지목살','돼지 목살'],titleTerms:['목살']},
   '돼지등심': {ingredientLabels:['돼지고기 등심','돼지고기등심','돼지등심','돼지 등심'],titleTerms:['등심']},
@@ -20,6 +21,7 @@ export const recipeSearchSpec = {
   '파프리카': {ingredientLabels:['파프리카'],titleTerms:['파프리카']},
   '버섯': {ingredientLabels:['버섯','새송이버섯','표고버섯','느타리버섯'],titleTerms:['버섯']},
   '감자': {ingredientLabels:['감자'],titleTerms:['감자']},
+  '고구마': {ingredientLabels:['고구마'],titleTerms:['고구마']},
   '당근': {ingredientLabels:['당근'],titleTerms:['당근']},
   '주키니': {ingredientLabels:['주키니','애호박'],titleTerms:['주키니','애호박']},
   '오이': {ingredientLabels:['오이'],titleTerms:['오이']},
@@ -33,6 +35,7 @@ export const recipeSearchSpec = {
   '슬라이스치즈': {ingredientLabels:['슬라이스치즈','체다슬라이스치즈','체다 슬라이스치즈'],titleTerms:['슬라이스치즈','치즈 오믈렛']},
   '파스타': {ingredientLabels:['파스타면','스파게티면'],titleTerms:['파스타','스파게티']},
   '쌀': {ingredientLabels:['쌀','밥'],titleTerms:['밥','덮밥','볶음밥']},
+  '호밀빵': {ingredientLabels:['호밀빵','호밀 빵'],titleTerms:['호밀빵','샌드위치','토스트']},
 };
 
 const identityFields=['ingredientId','species','cut','processingState','form','composition'];

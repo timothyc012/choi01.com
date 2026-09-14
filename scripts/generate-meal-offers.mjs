@@ -11,7 +11,7 @@ import { createHash } from 'node:crypto';
 import ingredientIdentities from './data/ingredient-identities.json' with { type: 'json' };
 import { canonicalJson } from './lib/meal-snapshot-schema.mjs';
 
-export function parseCsv(text) {
+export function parseCsvTable(text,requiredColumns=[]) {
   text = text.replace(/^\uFEFF/, '');
   const rows = [];
   let row = [], cell = '', quoted = false, closed = false;
@@ -32,13 +32,17 @@ export function parseCsv(text) {
   if (cell || row.length) { row.push(cell.replace(/\r$/, '')); rows.push(row); }
   const [header, ...body] = rows;
   if (!header) throw new Error('CSV is empty');
-  for (const key of ['수집시각', '체인', '지점', '우편번호', '행사기간', '상품명', '상품정보', '행사가격', '출처']) {
+  for (const key of requiredColumns) {
     if (!header.includes(key)) throw new Error('Missing CSV column: ' + key);
   }
   return body.filter((values) => values.some(Boolean)).map((values, index) => {
     if (values.length !== header.length) throw new Error('CSV field count mismatch at row ' + (index + 2));
     return Object.fromEntries(header.map((key, i) => [key, values[i] || '']));
   });
+}
+
+export function parseCsv(text) {
+  return parseCsvTable(text,['수집시각','체인','지점','우편번호','행사기간','상품명','상품정보','행사가격','출처']);
 }
 
 const legacyAreas = {
@@ -50,10 +54,11 @@ const legacyAreas = {
 };
 
 const rules = {
-  '닭가슴살': [/(?:^|\s)Hähnchenbrustfilets?$/i, /^Frisches Hähnchen Brustfilet$/i],
+  '닭가슴살': [/(?:^|\s)Hähnchen-?brustfilets?$/i, /^Frisches Hähnchen Brustfilet$/i],
   '닭안심': [/^Hähnchen-Innenfilet$/i],
+  '닭날개': [/Hähnchenflügel/i],
   '돼지안심': [/^Schweinefilet lang$/i],
-  '돼지목살': [/^Schweine-Nackensteaks$/i],
+  '돼지목살': [/^Schweine-Nackensteaks$/i, /^Frischer Schweinenackenbraten$/i],
   '돼지등심': [/^Schweine-Rücken$/i],
   '돼지뒷다리살': [/^Schweine-Schnitzel$/i],
   '다진고기': [/^Hackfleisch gemischt$/i],
@@ -70,7 +75,8 @@ const rules = {
   '파프리카': [/^Paprika/i],
   '양파': [/Zwiebel/i, /Onion/i],
   '버섯': [/^Champignon/i, /Pilze/i],
-  '감자': [/^Pfanni Speisekartoffeln$/i, /^Speisekartoffeln/i],
+  '감자': [/^Pfanni Speisekartoffeln$/i, /^(?:Deutsche )?Speisekartoffeln/i],
+  '고구마': [/^Süßkartoffeln$/i],
   '당근': [/Möhren/i, /Karotten/i],
   '주키니': [/Zucchini/i],
   '오이': [/Gurke/i],
@@ -97,6 +103,7 @@ const rules = {
   '달걀': [/Eier/i, /^Ei\b/i],
   '쌀': [/Reis/i, /Basmati/i],
   '빵': [/^Kürbiskernbrot$/i, /^Proteinbrötchen$/i, /Brötchen/i, /Broetchen/i],
+  '호밀빵': [/Roggenmischbrot/i],
   '또띠아': [/Wrap/i, /Tortilla/i],
   '올리브유': [/Olivenöl/i, /Olivenoel/i],
   '마늘': [/Knoblauch/i],
@@ -180,6 +187,7 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
   const priceCents = cents(row['행사가격']);
   const period = parsePeriod(row['행사기간']);
   if (!identity || priceCents === null || !period) return null;
+  if (ingredient === '돼지목살' && /Nackenbraten/i.test(row['상품명'])) identity.form = 'whole-cut';
   const detail = compact(row['상품정보']);
   const conditions = compact(row['할인조건']);
   const normalPriceCents = cents(row['정상가격']) ?? cents(row['정상가']) ?? null;
