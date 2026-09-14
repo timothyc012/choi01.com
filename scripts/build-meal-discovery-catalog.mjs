@@ -51,6 +51,9 @@ function eligibility(candidate,candidateReport) {
   if(!Array.isArray(candidate.steps)||candidate.steps.length<3) return {reason:'incomplete-steps'};
   const links=linkedOffers(candidate,candidateReport);
   if(!links.length) return {reason:'no-exact-store-offer'};
+  const rawConsumptionTitle=/타르타르|사시미|육회|회덮밥|회무침|회국수|세비체|카르파초/u;
+  const rawAnimalOffer=links.some(({offer})=>offer.identity?.processingState==='raw'&&offer.identity?.species!=='plant');
+  if(rawAnimalOffer&&rawConsumptionTitle.test(candidate.title)) return {reason:'raw-consumption-unverified'};
   const risk=sourceOfferRisk(candidate,links.map(({match})=>match),new Map(links.map(({offer})=>[offer.offerId,offer])));
   if(risk) return {reason:risk};
   const primaryLinks=definingOfferLinks(candidate,links);

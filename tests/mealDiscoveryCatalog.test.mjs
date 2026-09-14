@@ -66,6 +66,21 @@ test('discovery catalog rejects a recipe URL outside its exact source identity',
   assert.equal(catalog.exclusionCounts['invalid-source-url'],1);
 });
 
+test('discovery catalog rejects raw-consumption dishes for a raw protein offer',()=>{
+  const source=candidate('7000098',{title:'연어 스테이크와 연어 타르타르',ingredient:'연어'});
+  const salmonOffer={
+    ...offer('offer-연어','연어'),
+    identity:{ingredientId:'연어',species:'salmon',cut:'fillet',processingState:'raw',form:'fillet',composition:'salmon'},
+  };
+  const catalog=buildDiscoveryCatalog({
+    candidateReport:report([source],[salmonOffer]),
+    snapshotId:'e'.repeat(64),weekStart:'2026-09-14',target:20,
+  });
+
+  assert.deepEqual(catalog.recipes,[]);
+  assert.equal(catalog.exclusionCounts['raw-consumption-unverified'],1);
+});
+
 test('discovery catalog keeps sides out of dinner results and classifies vegetarian ingredients conservatively',()=>{
   const side=candidate('7000002',{title:'파프리카 무침',ingredient:'파프리카'});
   const vegetarian=candidate('7000003',{title:'버섯 두부 덮밥'});
