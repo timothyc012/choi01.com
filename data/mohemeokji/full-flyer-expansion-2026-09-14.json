@@ -50,7 +50,14 @@
       "40474|EDEKA": 64,
       "40489|Lidl": 61
     },
-    "unauthenticatedStatus": 401
+    "unauthenticatedStatus": 401,
+    "naturalLanguageCheck": {
+      "query": "내일 저녁 44369",
+      "resolvedDate": "2026-09-15",
+      "mealTime": "dinner",
+      "status": "ready",
+      "returned": 5
+    }
   },
   "note": "Lidl's official API/PDF have 75 content pages; the viewer's page 76 is a next-flyer boundary state and is retained in full-flyer-evidence. Public coverage uses 75/75 for content pages."
 }
