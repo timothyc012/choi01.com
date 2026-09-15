@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-next-week-refresh",
+  "weekStart": "2026-09-21",
+  "targetWeekEnd": "2026-09-27",
+  "status": "scheduled-source-wait",
+  "automationId": "automation",
+  "sourceEvidence": {
+    "path": "data/mohemeokji/next-week-source-evidence-2026-09-21.json",
+    "sha256": "385980d239c3839e2ef6bcceb437432f83045fc8ab7a77cef9fbba1add3738ce",
+    "lidl": {"contentPages": 69, "checkedPages": 69, "pdfSha256": "af100f997a1cee0289e50ef2f1e312bb15bac50d937b9fac7681d46190021b63"}
+  },
+  "availableSources": ["Lidl"],
+  "notYetPublished": ["ALDI Nord", "ALDI SÜD", "EDEKA", "Kaufland", "METRO", "Netto Marken-Discount", "REWE"],
+  "policy": "Do not copy 2026-09-14 rows. The Sunday heartbeat rechecks official sources and records missing chains as 미공개 or 접근실패 before preparing a release."
+}

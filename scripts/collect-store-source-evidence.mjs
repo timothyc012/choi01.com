@@ -32,7 +32,9 @@ function collectPdf(source) {
 
 function collectHtml(source) {
   const bytes=fs.readFileSync(source.localPath);
-  return {sourceSha256:sha256(bytes),responseBytes:bytes.length,recordCount:source.recordCount??null,checkedRecordCount:source.checkedRecordCount??null,extraction:{tool:source.extractionTool||'server-rendered HTML evidence',selector:source.selector||null}};
+  const recordCount=Number.isSafeInteger(source.recordCount)&&source.recordCount>=0?source.recordCount:null;
+  const checkedRecordCount=Number.isSafeInteger(source.checkedRecordCount)&&source.checkedRecordCount>=0?source.checkedRecordCount:null;
+  return {sourceSha256:sha256(bytes),responseBytes:bytes.length,recordCount,checkedRecordCount,extraction:{tool:source.extractionTool||'server-rendered HTML evidence',selector:source.selector||null}};
 }
 
 export function buildStoreSourceEvidence({weekStart,collectedAt,sources}) {
@@ -44,7 +46,10 @@ export function buildStoreSourceEvidence({weekStart,collectedAt,sources}) {
     let evidence;
     if(source.status==='접근실패') evidence={sourceSha256:null,status:'접근실패',httpStatus:source.httpStatus??null,responseBytes:source.responseBytes??null,checkedPageCount:0};
     else if(source.type==='pdf') evidence={...collectPdf(source),status:'수집완료'};
-    else if(source.type==='html') evidence={...collectHtml(source),status:source.checkedRecordCount===source.recordCount?'수집완료':'일부수집'};
+    else if(source.type==='html') {
+      evidence=collectHtml(source);
+      evidence.status=evidence.recordCount!==null&&evidence.checkedRecordCount!==null&&evidence.recordCount===evidence.checkedRecordCount?'수집완료':'일부수집';
+    }
     else throw new Error(`${source.id}: unsupported source type`);
     return {...source,evidence,localPath:undefined};
   });

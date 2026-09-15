@@ -26,7 +26,8 @@
     "snapshotId": "fd3eda485049ed44a460369d30847390d86c96a70b4a9cbafb3136a4c6fc2dde",
     "coverageSha256": "6eb6f76cd5de21f88ff213158a9a38c6fa3f96fbc7dd0759b097b58d5acd5252",
     "approvalDigest": "1211be37e707f3a86c2c1c5c154cb380a2b4036185dae10b88dde45aa3a6056f",
-    "status": "awaiting-approval"
+    "status": "published",
+    "approvalUid": "appr_89e52ecec8a7"
   },
   "note": "The four transforms preserve source quantities and cooking facts after editorial validation. Other candidates remain unapproved when their own source review evidence is missing or conflicting."
 }

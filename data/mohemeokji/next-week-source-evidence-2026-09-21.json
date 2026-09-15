@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-store-source-evidence",
+  "weekStart": "2026-09-21",
+  "collectedAt": "2026-09-15T08:30:00+02:00",
+  "sources": [
+    {
+      "id": "lidl-kw39",
+      "chain": "Lidl",
+      "postcodes": [
+        "40472",
+        "40489",
+        "44369",
+        "52064"
+      ],
+      "url": "https://www.lidl.de/l/prospekte/aktionsprospekt-21-09-2026-26-09-2026-00ff72/ar/10?_ab=1&lf=HHZ",
+      "type": "pdf",
+      "evidence": {
+        "sourceSha256": "af100f997a1cee0289e50ef2f1e312bb15bac50d937b9fac7681d46190021b63",
+        "pageCount": 69,
+        "checkedPageCount": 69,
+        "extraction": {
+          "tool": "pdftotext -layout",
+          "textSha256": "3c00c3f3dbf75e4994db393799038dfaa4468e5c530ea767e1f5f820938ef956",
+          "pages": [
+            {
+              "page": 1,
+              "textSha256": "32b94ca562bdd1163b860f682c15b02c3c82eb6260db17ecc94d4337d240c516",
+              "charCount": 4776
+            },
+            {
+              "page": 2,
+              "textSha256": "bd391cc3279bae477ec727e8f523c8f7d097bbdb41965f01a3f2ff8bff8b8f8a",
+              "charCount": 6049
+            },
+            {
+              "page": 3,
+              "textSha256": "0353aaa4a25a63d369755c1f21b96c4476f6fc3b1bab0816f0449483a58087d3",
+              "charCount": 11375
+            },
+            {
+              "page": 4,
+              "textSha256": "c125034340eb9619964c02d00fd18da12853be9b51ed63aa170071adaab1cd46",
+              "charCount": 8365
+            },
+            {
+              "page": 5,
+              "textSha256": "e3b7d51b6877baedddee1c18fb701133dc7a8d9c53612359a1b7e58017d7647f",
+              "charCount": 9108
+            },
+            {
+              "page": 6,
+              "textSha256": "d832856e2ca68d891327ab3b7a5fe630d76e34dbbbf7ac6068f2ce4ff64280a3",
+              "charCount": 5349
+            },
+            {
+              "page": 7,
+              "textSha256": "5721cadc585cde3f1219c08a5f18f5cac5e597b4df9ffe64487dc77f0118056f",
+              "charCount": 9039
+            },
+            {
+              "page": 8,
+              "textSha256": "29570d5856e2fb6a0e2a1437b6ba7c87493a93e55f9dfa955a45f526e28b1f02",
+              "charCount": 4722
+            },
+            {
+              "page": 9,
+              "textSha256": "f36a416bf1e26a082e692474395ccd511cc14626315e7377fbfe1b08b73a3682",
+              "charCount": 1085
+            },
+            {
+              "page": 10,
+              "textSha256": "ca3dfd02f7d2d9a170ffc2ecc2f0b28c49c324a1c7ddb21f4d668e96646669c9",
+              "charCount": 10038
+            },
+            {
+              "page": 11,
+              "textSha256": "82f52b799a4cc2dc273274e5af272cb30d262d76fedf44219199a842532edc8d",
+              "charCount": 10510
+            },
+            {
+              "page": 12,
+              "textSha256": "b9ff6418becb1ad242d9c0df34102c567d6f4ceb3cf10d5ea5100004b381d63f",
+              "charCount": 10021
+            },
+            {
+              "page": 13,
+              "textSha256": "df2a935a80660d71e54a5f2f4f7c4cafdf1316cc3bfa870514997a8277cdef30",
+              "charCount": 12791
+            },
+            {
+              "page": 14,
+              "textSha256": "a6d928a12b4705e2721a5bb22652f8f795c6ece9b149751fa3b9e8b62d648ac5",
+              "charCount": 4596
+            },
+            {
+              "page": 15,
+              "textSha256": "f11086b57e8c2d587ef423f3d8be47383a7a912a9150c61529ac57ae268902df",
+              "charCount": 11860
+            },
+            {
+              "page": 16,
+              "textSha256": "46eaf2e602dc8b37517a6ffe0dde34b3283b0de6120a0cb22ef38a9ee1e8e4a8",
+              "charCount": 7593
+            },
+            {
+              "page": 17,
+              "textSha256": "806da3e41120681965b0abe6bab543caa5f0c0ff65e71f122a0b93b734629eb1",
+              "charCount": 9846
+            },
+            {
+              "page": 18,
+              "textSha256": "6a81f6d3fe8109be90d7ee993969250dccc768eda992a7133568812ed4ab4674",
+              "charCount": 7318
+            },
+            {
+              "page": 19,
+              "textSha256": "2e8e0720b3f4dc6a7c64fc7b0192a050d4bcd1f1dd91e3458db50c9b4531a4e8",
+              "charCount": 8707
+            },
+            {
+              "page": 20,
+              "textSha256": "6d5d279b3f5690b6c7311c9836b99f65bd151099287a0e3d28c3ccb1acf576ac",
+              "charCount": 6654
+            },
+            {
+              "page": 21,
+              "textSha256": "da78c8e8cbe4da19222485c62e3823410c8f034a466974df1675157e19632042",
+              "charCount": 5327
+            },
+            {
+              "page": 22,
+              "textSha256": "9562138785250a204d3702f13f86486c2f78192ca8ce69c516ae6695812e6940",
+              "charCount": 2697
+            },
+            {
+              "page": 23,
+              "textSha256": "901137f75f5d9522b38d69ba8a337f23e9196e3076f7262df3afa771814f0f0c",
+              "charCount": 3325
+            },
+            {
+              "page": 24,
+              "textSha256": "ff95d4f404edf68e451bf53e1136726d5ce918599d7652be6eca1183da39411e",
+              "charCount": 2477
+            },
+            {
+              "page": 25,
+              "textSha256": "4626b91d9845fa659069dcb47abdc2438c6a2d1c6ad7ab5655713207e83c9986",
+              "charCount": 4656
+            },
+            {
+              "page": 26,
+              "textSha256": "74f34116f9ce1e5bef48b76e95c023d56387f7f6ad41d83db82aaa42d1aa791a",
+              "charCount": 2618
+            },
+            {
+              "page": 27,
+              "textSha256": "702c9abde3e39596518a01f5dee58ea44d9da123916b0d85be1585f6e9a3a7dc",
+              "charCount": 4912
+            },
+            {
+              "page": 28,
+              "textSha256": "2f8f3193a1ec57f3bede7becd51b8fb408e4e585beeef3910247265f02d9a4e3",
+              "charCount": 9062
+            },
+            {
+              "page": 29,
+              "textSha256": "28447201850b16873fb3f87e753ddfd9404fa9fc1ef2388388ea8f628e5cd2f9",
+              "charCount": 9043
+            },
+            {
+              "page": 30,
+              "textSha256": "4f3fee675f929a4715439a491ef942162e9757ec4546799cab2d814fe9807587",
+              "charCount": 7588
+            },
+            {
+              "page": 31,
+              "textSha256": "040417c226a2236feec1e727ac1b1cc004ebae151c58cfe3775447a9f6aa302c",
+              "charCount": 10751
+            },
+            {
+              "page": 32,
+              "textSha256": "c4159fe2cd2d055dbcbe2280593eedfb656b4b51554a6b0b5d885f725e2c465c",
+              "charCount": 8150
+            },
+            {
+              "page": 33,
+              "textSha256": "539868e86e45b950a44b5d7514a74ca2588dbb886f400ba370df25d2871f171f",
+              "charCount": 7805
+            },
+            {
+              "page": 34,
+              "textSha256": "a68349102359964e62ce2ac924cfedbd73d35a608f659ff5eff0d93b75371d90",
+              "charCount": 12318
+            },
+            {
+              "page": 35,
+              "textSha256": "4955313d7e3d3bf34b966627e11c3f978aeb0e9ae8132e407adf88778cfc210a",
+              "charCount": 788
+            },
+            {
+              "page": 36,
+              "textSha256": "2248a7c272ba328518c7062c7fa8e7eb70e5873eba2795b7872db2f7d039dc49",
+              "charCount": 6062
+            },
+            {
+              "page": 37,
+              "textSha256": "54f11202757e0e543dec1a272d72298cb64addc1d98fdcabf9ae63329dcf1db0",
+              "charCount": 5345
+            },
+            {
+              "page": 38,
+              "textSha256": "59a959504e384f0704fb16389fa19b964d7fc2e77d3536543dd03081d274f935",
+              "charCount": 7725
+            },
+            {
+              "page": 39,
+              "textSha256": "31c996e20ee6a1804538697281d90c691a6bf85f554922320694b58a931d278c",
+              "charCount": 7591
+            },
+            {
+              "page": 40,
+              "textSha256": "4bc28a2e40e687a7c68073b025e3618f18727655fb859b7ed20ed106e07194ca",
+              "charCount": 8481
+            },
+            {
+              "page": 41,
+              "textSha256": "8f3710b9df311fa519ff3257da4acf00bb176d17a3b281cef16b38f8f4c125b2",
+              "charCount": 6748
+            },
+            {
+              "page": 42,
+              "textSha256": "2cb10d497fb762e436b327a9a7f6d92c0eb0323b7e433cab8bb6cce4919d5329",
+              "charCount": 6606
+            },
+            {
+              "page": 43,
+              "textSha256": "3de011faa0356801ed6e6ba9aabc67c5ff4ad9824c877ac86c6f0710cadf2d56",
+              "charCount": 6635
+            },
+            {
+              "page": 44,
+              "textSha256": "1f8d5f13c9d00c12f2281d850db6a5c46f4895cb250c170be8d1f451a6b2b69d",
+              "charCount": 950
+            },
+            {
+              "page": 45,
+              "textSha256": "fade0380d3562ed2ae75dfbb6e320f977c4507a83e3d1eb2defb9586a44e7f44",
+              "charCount": 9917
+            },
+            {
+              "page": 46,
+              "textSha256": "8ea09af244c43a4fe278a382d9a71b5cc08d92791728f1014b7ef942f78145f5",
+              "charCount": 9718
+            },
+            {
+              "page": 47,
+              "textSha256": "de3f6f554ec9a19d0df142e620692d9a0201c0577666787e739651f9a67b18f7",
+              "charCount": 5234
+            },
+            {
+              "page": 48,
+              "textSha256": "0e1c4c04e1e851105dcf18424df81429c18f93db477054fdf3992c7c884355c0",
+              "charCount": 8998
+            },
+            {
+              "page": 49,
+              "textSha256": "f5b7fd281e90c98d3109019738fc99eef0e2d78720b884f0b2ab6eb6ddb2cce9",
+              "charCount": 9161
+            },
+            {
+              "page": 50,
+              "textSha256": "6c1614ab37e83b6c2ca76645efd18eb819751016e8818733dd6ab5af47496ceb",
+              "charCount": 9111
+            },
+            {
+              "page": 51,
+              "textSha256": "29e74d2c717adbaeacbf878e5422db76c332d0f52b599c3691e1c3da0464b348",
+              "charCount": 6585
+            },
+            {
+              "page": 52,
+              "textSha256": "e4acf9e17655d7951cecd1678fb75c42bcad02687a31886e3bcf84d79f5e2093",
+              "charCount": 8782
+            },
+            {
+              "page": 53,
+              "textSha256": "64a66334bd95896a98efc0f04c90ba3a831ae8394acb661dd4ecfede027f623d",
+              "charCount": 8012
+            },
+            {
+              "page": 54,
+              "textSha256": "336cdecc20fa2526cee3aadc48dc8306b5a7e9aa3f40de9fd01a5a7ee9f40974",
+              "charCount": 4711
+            },
+            {
+              "page": 55,
+              "textSha256": "c4fa1a43cafde3cf3ba56d93c1e5139f7550d81c1406c209c62d196339f0e807",
+              "charCount": 7539
+            },
+            {
+              "page": 56,
+              "textSha256": "7355fb905058966c941ecb6f539dcffcc7e8951411f0b55e161d690a8f6c6c30",
+              "charCount": 6968
+            },
+            {
+              "page": 57,
+              "textSha256": "ece5565068015a3d5414f641b218088894c803dff1844cdc109f8da6ecdbe675",
+              "charCount": 10295
+            },
+            {
+              "page": 58,
+              "textSha256": "29c553af7c11e6a62efc9f7409f258f17a0b2d8f3c9caf951ca175414b9a162f",
+              "charCount": 3885
+            },
+            {
+              "page": 59,
+              "textSha256": "84c1aad7576ed5f52e539625cb2eda8ac3ee0cbc3ae192db75eac11263779638",
+              "charCount": 2968
+            },
+            {
+              "page": 60,
+              "textSha256": "4ed049481e857a4b83ce62d3b8f24cb35e29350258ea6ae39983a64e79a5f7cd",
+              "charCount": 7225
+            },
+            {
+              "page": 61,
+              "textSha256": "46a24f7a9d89f14ce411cb23a48470a5e8f425755cdf9650424e2b8cdbdfe13e",
+              "charCount": 9660
+            },
+            {
+              "page": 62,
+              "textSha256": "9e0245bb3db93269e9a34b906d5e2623fd27caaf549589774e12c86d1b70152c",
+              "charCount": 2088
+            },
+            {
+              "page": 63,
+              "textSha256": "22daa1c4ed8bd4bc65cbed2925e355a536c627d12192081bc9184954fa924df2",
+              "charCount": 9615
+            },
+            {
+              "page": 64,
+              "textSha256": "1835aaddf4c9d6acfc79372724cb602a7932f8bef5c9e953fa09b00b072bd010",
+              "charCount": 6012
+            },
+            {
+              "page": 65,
+              "textSha256": "702a5d4cae52853a02ffbe8bdfb2f41b034f40d97b984b5a9df1c68c5fb71244",
+              "charCount": 8863
+            },
+            {
+              "page": 66,
+              "textSha256": "d677c4304a424871230fd98fe786ea726fc3a3c1993a7b99b96e2afaaed98729",
+              "charCount": 6820
+            },
+            {
+              "page": 67,
+              "textSha256": "cbb293a8a0acaf9003293951d1ff0a16f502fd3994d4f6569cb18d889d888c2e",
+              "charCount": 157
+            },
+            {
+              "page": 68,
+              "textSha256": "a35c45683b2731b4c69f6177ddce49c73f5c8765320fb69f08295ce863dc748a",
+              "charCount": 10986
+            },
+            {
+              "page": 69,
+              "textSha256": "da92688985f38273c93b010ee1564da5be5ba51c81ec0b8a23e43892b828db8c",
+              "charCount": 2056
+            }
+          ]
+        },
+        "status": "수집완료"
+      }
+    }
+  ],
+  "summary": {
+    "sourceCount": 1,
+    "complete": 1,
+    "partial": 0,
+    "accessFailed": 0,
+    "checkedPdfPages": 69
+  }
+}
