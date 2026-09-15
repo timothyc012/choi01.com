@@ -9,6 +9,7 @@ import {parseCsv,generateCatalog} from './generate-meal-offers.mjs';
 import {buildDiscoveryCatalog} from './build-meal-discovery-catalog.mjs';
 import {buildStoreCandidateReport,discoverStoreRecipeCandidates} from './find-store-recipe-candidates.mjs';
 import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
+import {INGREDIENT_AVAILABILITY_POLICY_VERSION} from './lib/ingredient-availability.mjs';
 import {selectStoreRecipes} from './lib/select-store-recipes.mjs';
 import {validateMealSnapshotDirectory} from './lib/validate-meal-snapshot.mjs';
 
@@ -234,7 +235,7 @@ function compareDirectories(left,right) {
 }
 
 export async function compileMealWeek(options) {
-  const {outputDir,db='01ontology',tenant='recipe-full',policyVersion='selection-v1'}=options;
+  const {outputDir,db='01ontology',tenant='recipe-full',policyVersion=INGREDIENT_AVAILABILITY_POLICY_VERSION}=options;
   if(!outputDir) throw new Error('outputDir is required');
   const registry=readRegistry(options.registry,options.registryPath);
   let candidateReport=options.candidateReport;
@@ -289,7 +290,7 @@ export async function compileMealWeek(options) {
 }
 
 function parseArgs(argv) {
-  const args={csvPath:null,outputDir:null,db:'01ontology',tenant:'recipe-full',policyVersion:'selection-v1',registryPath:null,weekStart:null,auditOutputPath:null,releaseMode:null,previousManifestPath:null};
+  const args={csvPath:null,outputDir:null,db:'01ontology',tenant:'recipe-full',policyVersion:INGREDIENT_AVAILABILITY_POLICY_VERSION,registryPath:null,weekStart:null,auditOutputPath:null,releaseMode:null,previousManifestPath:null};
   for(let index=0;index<argv.length;index++) {
     const value=argv[index];
     if(!args.csvPath&&!value.startsWith('--')) args.csvPath=value;

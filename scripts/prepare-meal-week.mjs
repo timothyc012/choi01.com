@@ -5,6 +5,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { parseCsv, parsePeriod, generateCatalog, cents } from './generate-meal-offers.mjs';
+import { INGREDIENT_AVAILABILITY_POLICY_VERSION } from './lib/ingredient-availability.mjs';
 
 function validTimestamp(value) {
   const match = String(value).match(/^(\d{4}-\d{2}-\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?(Z|[+-]\d{2}:\d{2}| Europe\/Berlin)$/);
@@ -67,7 +68,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     report.matchedIngredients=Object.fromEntries(Object.entries(packageCatalog).flatMap(([area,stores])=>Object.entries(stores).map(([store,offers])=>[area+'/'+store,Object.keys(offers).length])));
     report.snapshotCompile={
       registry:'data/mohemeokji/recipe-publication-registry.json',
-      policyVersion:'selection-v1',
+      policyVersion:INGREDIENT_AVAILABILITY_POLICY_VERSION,
       requiresReadOnlyRecipeFull:true,
     };
     fs.mkdirSync(output,{recursive:true});

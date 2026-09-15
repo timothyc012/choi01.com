@@ -8,6 +8,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {compileMealWeek} from './compile-meal-week.mjs';
 import {parseCsv,parseCsvTable,renderMealPackagePrices} from './generate-meal-offers.mjs';
 import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
+import {INGREDIENT_AVAILABILITY_POLICY_VERSION} from './lib/ingredient-availability.mjs';
 import {inspectWeek} from './prepare-meal-week.mjs';
 import {verifyMealSnapshot} from './verify-meal-snapshot.mjs';
 
@@ -116,7 +117,7 @@ function compileOptions(options,outputDir,auditOutputPath) {
     outputDir,csvPath:options.csvPath,db:options.db||'01ontology',tenant:options.tenant||'recipe-full',
     registry:options.registry,registryPath:options.registryPath,
     weekStart:options.weekStart,collectionTimestamp:options.collectionTimestamp,
-    policyVersion:options.policyVersion||'selection-v1',candidateReport:options.candidateReport,
+    policyVersion:options.policyVersion||INGREDIENT_AVAILABILITY_POLICY_VERSION,candidateReport:options.candidateReport,
     releaseMode:options.releaseMode,previousManifestPath:options.previousManifestPath,
     auditOutputPath,discoveryTarget:options.discoveryTarget??240,
   };

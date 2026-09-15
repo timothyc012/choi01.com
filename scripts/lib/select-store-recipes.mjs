@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import {canonicalJson,validRecipeSourceUrl} from './meal-snapshot-schema.mjs';
 import {offerIdentityKey,recipeSearchSpec} from '../find-store-recipe-candidates.mjs';
 import {sourceProfileMatches} from './main-ingredient-gate.mjs';
+import {unavailableIngredientMatches} from './ingredient-availability.mjs';
 
 const DEFAULT_POLICY={target:48,kindCaps:{main:36,breakfast:6,side:6},identityCap:6,familyCap:8,methodCap:12,authorCap:4};
 export const PUBLICATION_APPROVAL_METHOD='owner-authorized-editorial-transform';
@@ -348,6 +349,11 @@ export function selectStoreRecipes({store,offers,candidates,registry={recipes:{}
   const eligible=[];
   for(const candidate of [...(candidates||[])].sort((a,b)=>String(a.sourceRecipeId??a.recipeId).localeCompare(String(b.sourceRecipeId??b.recipeId)))) {
     const id=String(candidate.sourceRecipeId??candidate.recipeId??'');
+    const unavailable=unavailableIngredientMatches(candidate);
+    if(unavailable.length) {
+      heldForReview.push({recipeId:id,reason:'unavailable-ingredient',ingredients:unavailable.map((entry)=>entry.key)});
+      continue;
+    }
     const entries=approved.get(id)||[];
     const currentHash=sourceContentHash(candidate);
     const entry=entries.find((candidateEntry)=>candidateEntry.sourceContentHash===currentHash)||entries[0];

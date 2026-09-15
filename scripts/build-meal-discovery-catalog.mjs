@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 import {derivePublicationProfile} from './select-meal-publication-expansion.mjs';
 import {definingOfferLinks,ingredientLabelsMatch} from './lib/main-ingredient-gate.mjs';
 import {sourceOfferRisk} from './lib/select-store-recipes.mjs';
+import {unavailableIngredientMatches} from './lib/ingredient-availability.mjs';
 
 const clean=(value)=>String(value??'').normalize('NFKC').replace(/<[^>]*>/g,' ').replace(/&nbsp;|&#160;/gi,' ').replace(/\s+/g,' ').trim();
 const idOf=(candidate)=>String(candidate?.sourceRecipeId??candidate?.recipeId??'');
@@ -77,6 +78,11 @@ export function buildDiscoveryCatalog({candidateReport,snapshotId,weekStart,targ
   const exclusions=[];
   const eligible=[];
   for(const candidate of [...(candidateReport.candidates||[])].sort((left,right)=>idOf(left).localeCompare(idOf(right)))) {
+    const unavailable=unavailableIngredientMatches(candidate);
+    if(unavailable.length) {
+      exclusions.push({sourceRecipeId:idOf(candidate),reason:'unavailable-ingredient',ingredients:unavailable.map((entry)=>entry.key)});
+      continue;
+    }
     const result=eligibility(candidate,candidateReport);
     if(result.reason) { exclusions.push({sourceRecipeId:idOf(candidate),reason:result.reason}); continue; }
     const locations=[...new Map(result.links.map(({location})=>{

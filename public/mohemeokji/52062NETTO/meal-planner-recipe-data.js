@@ -2,7 +2,9 @@
    supports saved plans; available menus are filtered against current branch offers. */
 (function () {
   const quality = window.ontologyRecipeQualityById || {};
-  const details = [...(window.ontologyRecipeDetails || []), ...(window.ontologyPopularRecipeAdditions || [])].map((detail) => ({
+  const details = [...(window.ontologyRecipeDetails || []), ...(window.ontologyPopularRecipeAdditions || [])].filter((detail) =>
+    !window.mealIngredientAvailability || window.mealIngredientAvailability.isAvailable(detail)
+  ).map((detail) => ({
     ...detail,
     ratingValue: quality[detail.sourceRecipeId]?.ratingValue ?? detail.ratingValue ?? null,
     reviewCount: quality[detail.sourceRecipeId]?.reviewCount ?? detail.reviewCount ?? null

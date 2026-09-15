@@ -9,6 +9,7 @@ import {
 } from './find-store-recipe-candidates.mjs';
 import {definingOfferLinks, ingredientLabelsMatch} from './lib/main-ingredient-gate.mjs';
 import {PUBLICATION_APPROVAL_METHOD, PUBLICATION_VALIDATION_VERSION, rankByQuality, representsUnknownActionIngredient, sourceContentHash, sourceOfferRisk, unquantifiedActionIngredients} from './lib/select-store-recipes.mjs';
+import {unavailableIngredientMatches} from './lib/ingredient-availability.mjs';
 
 export const APPROVAL_METHOD=PUBLICATION_APPROVAL_METHOD;
 export const VALIDATION_VERSION=PUBLICATION_VALIDATION_VERSION;
@@ -40,6 +41,8 @@ function linkedOffers(candidate,candidateReport) {
 }
 
 function eligibilityReason(candidate,candidateReport,reviewEvidenceById=null) {
+  const unavailable=unavailableIngredientMatches(candidate);
+  if(unavailable.length) return 'unavailable-ingredient';
   if(reviewEvidenceById) {
     const evidence=reviewEvidenceById[idOf(candidate)];
     if(evidence?.status!=='verified') return 'review-unverified';
