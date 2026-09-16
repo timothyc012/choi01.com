@@ -2,15 +2,15 @@
 
 기본 화면은 `public/mohemeokji/data/current.json`이 가리키는 해시 고정 manifest를 읽고, 사용자가 고른 우편번호·마트·지점의 location 파일만 불러옵니다. 레시피 상세는 사용자가 열 때만 content-hashed detail 파일을 가져옵니다. 공개 디렉터리와 manifest에는 원본 CSV나 DB 후보 review queue가 없으며, 브라우저는 다른 마트 location도 읽지 않습니다. 검증 전 상세 번들을 사용하던 `?snapshot=legacy` 경로는 데이터를 읽기 전에 명시적으로 중단하고 이번 주 자료 링크만 제공합니다.
 
-현재 게시 스냅샷은 2026-09-14 주간 검토 CSV와 읽기 전용 `01ontology`의 `recipe-full`에서 만든 23개 지역/마트 조합 자료입니다. 원본 810행을 보존하고 공식 근거와 상품 형태가 확인된 할인재료만 추천에 사용합니다. 고유 승인 레시피 27개를 지점별로 53회 참조합니다. 추가 레시피 7개 중 5개는 달걀·유제품 허용 채식으로 검토했습니다. 행사 유효일에 따라 실제 보이는 메뉴는 달라집니다. 영양·다이어트는 계량 영양 근거, 가성비는 완전한 구매비 근거가 없어 사용할 수 없다고 표시합니다. 상세 결과와 지점별 범위는 [9월 14일 검증 기록](../../docs/mohemeokji-week-2026-09-14.md)을 참고하세요.
+현재 게시 스냅샷은 2026-09-14 주간 검토 CSV와 읽기 전용 `01ontology`의 `recipe-full`에서 만든 23개 지역/마트 조합 자료입니다. 원본 810행을 보존하고 공식 근거와 상품 형태가 확인된 할인재료만 할인·가성비 추천에 사용합니다. 고유 승인 레시피 27개를 지점별로 53회 참조하고, 검수한 정적 레시피 100개를 모든 지점의 기본 보관함으로 제공합니다. 행사 유효일과 지점에 따라 할인 연결 개수는 달라지지만 보관함 자체는 사라지지 않습니다. 상세 결과와 지점별 범위는 [9월 14일 검증 기록](../../docs/mohemeokji-week-2026-09-14.md)을 참고하세요.
 
 All six HTML entry pages share `meal-shopping.js`, `meal-package-prices.js`, and
 the snapshot runtime. Existing postcode/store paths remain valid, while
 the page presents a postcode selector followed by the supermarkets found under
-that postcode in the CSV. The legacy source archive contains 52 recipes; it is
-not the default visible catalog.
-Each supermarket shows only dishes whose defining ingredients have a current
-offer in that postcode/store, so menu membership and counts vary by location.
+that postcode in the CSV. The source archive contains 100 reviewed recipes and
+is the default visible catalog; snapshot-only recipes for the selected location
+are merged into it. Recipes with an exact current primary-ingredient offer appear
+first, while recipes without one remain browsable and are labelled accordingly.
 Run `node scripts/sync-meal-pages.mjs` after changing shared assets or the
 canonical HTML. It synchronizes legacy entry pages and content-hashed asset URLs.
 
@@ -75,14 +75,15 @@ The selected static recipe catalog is not a live search over the entire ontology
 Source timing metadata and estimated ready-to-eat times are identified separately.
 Recommendations use `meal-recommendations.js` and editorial
 `recommendationProfile` fields (named primary ingredients, family, cooking method,
-and main/side/breakfast role). A current primary-ingredient offer is required for
-visible menus and automatic meals; incidental garlic or carrot matches cannot
-qualify an unrelated dish. Automatic weekly selection prefers at most two
+and main/side/breakfast role). A current primary-ingredient offer moves a recipe
+to the front of the library; incidental garlic or carrot matches cannot qualify
+as a primary-ingredient discount. Balanced automatic meals can use the full
+reviewed catalog, while value, nutrition, and diet modes still require their
+verified snapshot facts. Automatic weekly selection prefers at most two
 of one family and avoids consecutive repeats when another family is available;
 it relaxes that constraint only when the remaining pool cannot satisfy it.
 Eligible sides and breakfast snacks remain in the manual library, outside automatic
-meals. A short main-meal pool leaves days empty; snack-only stores show an explicit
-no-main-meal state. Stores with the same offers can legitimately share menus.
+meals. Stores with the same offers can legitimately share discounted menus.
 `createMealRecipes(store)` creates the selected store's source archive. Saved plans
 resolve against that archive, including dishes no longer discounted, which are
 labelled as having no current primary-ingredient offer.

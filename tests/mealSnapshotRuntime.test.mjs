@@ -86,6 +86,11 @@ function loadRecipeData(search = '') {
   return {api:context.window.MealRecipeData,window:context.window,search};
 }
 
+test('snapshot JSON keeps byte-exact line endings across platforms',()=>{
+  const attributes=fs.readFileSync(new URL('../.gitattributes',import.meta.url),'utf8');
+  assert.match(attributes,/^public\/mohemeokji\/data\/\*\*\/\*\.json -text$/m);
+});
+
 test('snapshot offer dates govern pricing while source recipe references remain restorable',()=>{
   const {api}=loadRecipeData();
   const location={store:'ALDI Nord',offers:[
@@ -247,6 +252,26 @@ test('snapshot recipes restore menu categories from approved profile and title f
   assert.equal(recipes[1].filter.includes('vegetarian'),false);
 });
 
+test('browse catalog keeps the reviewed archive and merges selected-location snapshot recipes',()=>{
+  const {api,window}=loadRecipeData();
+  window.createMealRecipes=(store)=>[
+    {id:'edeka-recipe-1',sourceRecipeId:'1',store,title:'보관함 감자요리',time:25,sale:['감자'],missing:['양파'],tags:[],filter:['korean'],requiredAmounts:{},detailIngredients:['감자 2개','양파 1개'],steps:['손질한다.'],sourceUrl:'https://www.10000recipe.com/recipe/1',sourceTitle:'원문 감자요리',sourceAuthor:'작성자',sourceCorpus:'test',recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'braise',kind:'main'}},
+    {id:'edeka-recipe-2',sourceRecipeId:'2',store,title:'보관함 연어요리',time:20,sale:['연어'],missing:[],tags:[],filter:['western'],requiredAmounts:{},detailIngredients:['연어 1팩'],steps:['굽는다.'],sourceUrl:'https://www.10000recipe.com/recipe/2',sourceTitle:'원문 연어요리',sourceAuthor:'작성자',sourceCorpus:'test',recommendationProfile:{primaryIngredients:['연어'],family:'salmon',method:'grill',kind:'main'}}
+  ];
+  const offers=[{offerId:'potato-offer',identity:{ingredientId:'감자'},productDe:'Kartoffeln',pack:'1 kg',priceCents:199,evidenceUrl:'https://example.com/potato'}];
+  const live=api.fromSnapshotLocation({store:'EDEKA',branchId:'branch-a',offers,recipes:[
+    {sourceRecipeId:'1',title:'승인된 감자요리',offerIds:['potato-offer'],primaryIngredientIds:['감자'],detailPath:'snapshots/recipe-1.json',detailSha256:'a'.repeat(64),recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'braise',kind:'main'}},
+    {sourceRecipeId:'3',title:'지점 전용 요리',offerIds:['potato-offer'],primaryIngredientIds:['감자'],detailPath:'snapshots/recipe-3.json',detailSha256:'b'.repeat(64),recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'stirfry',kind:'main'}}
+  ]});
+  const result=api.buildBrowseCatalog('EDEKA','branch-a',live,offers);
+  assert.deepEqual(result.map((meal)=>meal.sourceRecipeId),['1','2','3']);
+  assert.equal(result[0].title,'승인된 감자요리');
+  assert.deepEqual(result[0].detailIngredients,['감자 2개','양파 1개']);
+  assert.equal(result[1].catalogOnly,true);
+  assert.equal(result[1].matchedOffers.length,0);
+  assert.equal(result[2].detailPath,'snapshots/recipe-3.json');
+});
+
 test('manifest-only selection maps every direct route and chooses the first branch deterministically',()=>{
   const {api}=loadRecipeData();
   const locations=[
@@ -359,7 +384,9 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   const calls=[];
   const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=99999&store=NeueMarkt&branch=branch-b',runScripts:'outside-only',pretendToBeVisual:true});
   useFixtureDate(dom.window);
-  assert.equal([...dom.window.document.querySelectorAll('script[src]')].some((script)=>/ontology-recipe-details|meal-package-prices/.test(script.src)),false);
+  const pageScripts=[...dom.window.document.querySelectorAll('script[src]')].map((script)=>script.src);
+  assert.equal(pageScripts.some((src)=>/ontology-recipe-details/.test(src)),true);
+  assert.equal(pageScripts.some((src)=>/meal-package-prices/.test(src)),false);
   Object.defineProperty(dom.window,'crypto',{value:crypto.webcrypto});
   dom.window.TextEncoder=TextEncoder;
   dom.window.TextDecoder=TextDecoder;

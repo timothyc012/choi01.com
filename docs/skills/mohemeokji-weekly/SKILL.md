@@ -15,6 +15,99 @@ The website contains imported snapshots, not live store prices. `행사가격` i
 
 ## Validate before publishing
 
+Use the governed release command as the canonical entry point. It validates the
+CSV, performs two independent recipe discoveries/compiles, compares every byte,
+verifies the retained rollback chain, and writes an immutable approval receipt.
+It never changes `public/` during `prepare`:
+
+```sh
+npm run meal:release -- prepare INPUT.csv --coverage COVERAGE.csv --week-start YYYY-MM-DD --staging-dir NEW_STAGING_DIRECTORY --database VERIFIED_DATABASE --tenant recipe-full --registry data/mohemeokji/recipe-publication-registry.json --rollover --previous-manifest CURRENT_PUBLIC_MANIFEST.json
+```
+
+When the read-only candidate query has already been reviewed, pass its private
+queue to the same command with `--candidate-report REPORT.json`; the report is
+still sealed into the snapshot lineage and is never copied into public data.
+
+Use `--bootstrap` only for the first immutable release. Use `--correction` with
+the current same-week manifest for a same-week correction. The staging directory
+contains `data/`, a private twin under `private/twin-data/`, two private review
+queues, `preflight.json`, the untouched CSV, and `release-receipt.json`. Keep the
+entire staging directory outside `public/` and out of git.
+
+Review the preflight warnings, store coverage, private queues, registry changes,
+and source evidence before requesting publication approval. The receipt's
+`approvalDigest` seals the offer CSV and coverage CSV hashes, complete public
+data tree, snapshot pointer, and release mode. Coverage must include every actual
+branch present in the offer CSV with the exact row count. A PDF or digital flyer
+may be marked `수집완료` only when every source page was checked; first-page or
+selected-page extraction is `일부수집` with source and checked page counts.
+For the 2026-09-14 72/76-page correction, create page-level evidence before
+changing a branch to `수집완료`:
+
+```sh
+node scripts/collect-meal-flyer-evidence.mjs \
+  --week-start 2026-09-14 --collected-at ISO_TIMESTAMP \
+  --netto-pdf NETTO_PDF --lidl-pdf LIDL_PDF --lidl-api LIDL_API_JSON \
+  --viewer-page-count 76 \
+  --output data/mohemeokji/full-flyer-evidence-2026-09-14.json
+```
+
+The collector requires the official PDF page count and text extraction to
+agree for every page. Lidl's API/PDF currently contain 75 content pages while
+the viewer exposes a 76th next-flyer boundary state; retain both facts in the
+evidence and use 75/75 for the content-page columns in `coverage.csv`.
+Preview and submit the receipt through the 02Ontology action
+registry using pack `recipe`, action
+`recipe.publish_weekly_meal_snapshot`, and inputs
+`{"receipt": <release-receipt.json>, "website_origin": "https://choi01.com/mohemeokji/"}`.
+The declared workflow id is `recipe.weekly_mohemeokji_release`. It must pause in
+the approval queue. Resume it only after the owner approves that exact digest.
+
+When the connected `@02Ontology` personal-action profile is available, the same
+governed sequence is exposed as `meal_release_preview` →
+`meal_release_submit` → `meal_release_approve` → `meal_release_resume`, with
+`meal_release_status` for read-only progress. These five tools are fixed to the
+recipe publication action, use the authenticated server-bound reviewer, and do
+not accept paths, shell commands, arbitrary origins, or other action types. The
+profile therefore grows from the preserved 13-tool baseline to 18 tools; a tool
+list that drops any prior name is a release failure.
+
+After approval, publish exactly the sealed staging directory:
+
+```sh
+npm run meal:release -- publish NEW_STAGING_DIRECTORY --approval APPROVED_SHA256
+```
+
+`publish` rechecks the receipt, CSV, full data tree, snapshot hashes, rollback
+chain, and approval digest before replacing the generated public data, copying
+the dated CSV, regenerating `meal-package-prices.js`, and syncing all existing
+routes. Any byte change after approval invalidates the command. This updates the
+repository only; continue through tests, commit, push, Cloudflare deployment and
+production verification below.
+
+The snapshot manifest's optional `discoveryCatalogPath` is the shared website/MCP
+contract. New releases must contain a content-hashed
+`recipes/discovery.<sha256>.json` entry listed in `fileHashes`. 02Ontology fetches
+and verifies this remote artifact, so the website and MCP expose the same
+exploration catalog. The checked-in MCP discovery file is legacy fallback for
+older snapshots only; do not rebuild or redeploy the MCP package for ordinary
+weekly data changes.
+
+Before any 02Ontology deployment, record the live plugin tool names and count.
+After deployment the tool list must be a superset of that baseline. Never deploy
+an older release that removes unrelated personal, calendar, or action tools.
+Verify `meal_recommend` with `limit: 20`, a second page using `offset`, vegetarian
+and exclusion filters, one detail lookup, and a tampered/unavailable-source case.
+
+The lower-level commands below remain diagnosis and repair tools. Do not mix
+their output manually into a prepared release or bypass the approval receipt.
+
+Before preparing, compare the newest reviewed week with the previous week by
+requested postcode, actual branch postcode and chain. A sudden drop such as 175
+to 7 rows is a collection regression to investigate, even when those seven rows
+are valid. Run the latest-reviewed priority coverage test; 44369 Netto, 40474
+EDEKA and 40489 Lidl must not silently fall to zero recipe-compatible offers.
+
 Run from the repo root, replacing placeholders with verified paths and the intended Monday:
 
 ```sh

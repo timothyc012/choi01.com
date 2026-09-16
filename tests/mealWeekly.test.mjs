@@ -62,8 +62,11 @@ test('mince recipes distinguish pure pork, verified equal pork/beef blends and p
 test('raw meat and processed cheese offers keep their exact recipe ingredient identity', () => {
   const rows = [
     row({상품명:'Hähnchenbrustfilet'}),
+    row({상품명:'Hähnchen-Brustfilet'}),
+    row({상품명:'METZGERFRISCH Frische Hähnchenflügel'}),
     row({상품명:'Schweinefilet lang'}),
     row({상품명:'Schweine-Nackensteaks'}),
+    row({상품명:'Frischer Schweinenackenbraten'}),
     row({상품명:'Schweine-Rücken'}),
     row({상품명:'Schweine-Schnitzel',상품정보:'500 g | aus der Oberschale'}),
     row({상품명:'Rib-Eye-Steak'}),
@@ -71,13 +74,50 @@ test('raw meat and processed cheese offers keep their exact recipe ingredient id
   ];
   const catalog = generateCatalog(rows,'/offers/next.csv').packageCatalog['10115'].Lidl;
   assert.ok(catalog['닭가슴살']);
+  assert.ok(catalog['닭날개']);
   assert.ok(catalog['돼지안심']);
   assert.ok(catalog['돼지목살']);
   assert.ok(catalog['돼지등심']);
   assert.ok(catalog['돼지뒷다리살']);
   assert.ok(catalog['소고기등심']);
   assert.ok(catalog['슬라이스치즈']);
+  const neckOffers=generateCatalog(rows,'/offers/next.csv').offersByIdentity.filter((offer)=>offer.ingredient==='돼지목살');
+  assert.deepEqual(neckOffers.map((offer)=>offer.identity.form),['steak','whole-cut']);
   for (const broad of ['닭고기','돼지고기','소고기','치즈']) assert.equal(catalog[broad],undefined);
+});
+
+test('current flyer whole foods map to exact identities without broad aliases',()=>{
+  const catalog=generateCatalog([
+    row({상품명:'Deutsche Speisekartoffeln'}),
+    row({상품명:'Deutsche gelbe Zwiebeln'}),
+    row({상품명:'Bio Gurken'}),
+    row({상품명:'Süßkartoffeln'}),
+    row({상품명:'Graf-Schafter Pfundsschnitten Roggenmischbrot'}),
+    row({상품명:'Bio Fairtrade Bananen, lose'}),
+    row({상품명:'Schweine-Nacken'}),
+  ],'/offers/next.csv').packageCatalog['10115'].Lidl;
+  assert.ok(catalog['감자']);
+  assert.ok(catalog['양파']);
+  assert.ok(catalog['오이']);
+  assert.ok(catalog['고구마']);
+  assert.ok(catalog['호밀빵']);
+  assert.ok(catalog['바나나']);
+  assert.ok(catalog['돼지목살']);
+});
+
+test('latest reviewed week keeps the user priority postcode and store coverage non-empty',()=>{
+  const latest=fs.readdirSync(new URL('../public/offers/',import.meta.url)).map((name)=>{
+    const match=name.match(/^supermarket_food_offers_(\d{4}-\d{2}-\d{2})-reviewed(?:-v(\d+))?\.csv$/);
+    return match?{name,date:match[1],version:Number(match[2]||1)}:null;
+  }).filter(Boolean).sort((left,right)=>left.date.localeCompare(right.date)||left.version-right.version).at(-1)?.name;
+  assert.ok(latest);
+  const rows=parseCsv(fs.readFileSync(new URL('../public/offers/'+latest,import.meta.url),'utf8'));
+  const catalog=generateCatalog(rows,'/offers/'+latest).packageCatalog;
+  for(const [postcode,store] of [
+    ['44369','Netto Marken-Discount'],['40474','EDEKA'],['40489','Lidl'],
+  ]) {
+    assert.ok(Object.keys(catalog[postcode]?.[store]||{}).length>0,`${postcode} ${store} lost all reviewed recipe-compatible offers`);
+  }
 });
 
 test('keeps all identity-resolved offers while retaining one preferred pricing offer for legacy totals', () => {

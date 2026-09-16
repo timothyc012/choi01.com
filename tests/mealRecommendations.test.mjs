@@ -6,7 +6,7 @@ import {generateCatalog,parseCsv} from '../scripts/generate-meal-offers.mjs';
 import {basketReadiness,nutritionReadiness} from '../scripts/lib/meal-ranking-facts.mjs';
 const context=vm.createContext({window:{}});
 const root=new URL('../public/mohemeokji/',import.meta.url);
-for(const f of ['ontology-recipe-details.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) {
+for(const f of ['ontology-recipe-details.js','ontology-recipe-popular.js','meal-package-prices.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) {
   vm.runInContext(fs.readFileSync(new URL(f,root),'utf8'),context);
 }
 const engine=context.window.MealRecommendations;
@@ -24,7 +24,7 @@ test('browser recommendation policy artifact matches the versioned source',()=>{
 });
 
 test('each source recipe has explicit editorial main-ingredient and variety metadata',()=>{
-  for(const recipe of context.window.ontologyRecipeDetails){
+  for(const recipe of context.window.ontologyRecipeCatalog){
     const info=recipe.recommendationProfile;
     assert.ok(info.primaryIngredients.length>0,recipe.title);
     assert.ok(info.primaryIngredients.every(name=>[...recipe.sale,...recipe.missing].includes(name)),recipe.title);
@@ -83,6 +83,13 @@ test('limited pools remain usable without fabricating seven recipes',()=>{
   assert.equal(engine.sequence([one],{catalog:{},history:[],date:'2026-09-08'},7).length,1);
 });
 
+test('browsing keeps general recipes visible and ranks current main offers first',()=>{
+  const potato=meal('potato',['감자'],'potato');
+  const salmon=meal('salmon',['연어'],'salmon');
+  assert.deepEqual([...engine.browse([potato,salmon],{catalog:{},history:[],date:'2026-09-14'})].map((item)=>item.id),['potato','salmon']);
+  assert.deepEqual([...engine.browse([salmon,potato],{catalog:{감자:price},history:[],date:'2026-09-14'})].map((item)=>item.id),['potato','salmon']);
+});
+
 test('store menu membership requires a current main-ingredient offer, not incidental matches',()=>{
   const chicken=meal('chicken',['닭고기'],'chicken',{sale:['닭고기','마늘'],missing:[]});
   const salmon=meal('salmon',['연어'],'salmon');
@@ -108,7 +115,7 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   // This archived yogurt offer does not establish the plain form.
   assert.equal(aldi.length,0);
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
-  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,3);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,7);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
     assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
   }

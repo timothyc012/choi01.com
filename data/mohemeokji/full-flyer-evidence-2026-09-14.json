@@ -1,0 +1,1777 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-full-flyer-evidence",
+  "weekStart": "2026-09-14",
+  "collectedAt": "2026-09-14T20:15:00+02:00",
+  "sources": [
+    {
+      "chain": "Netto Marken-Discount",
+      "postcodeScope": [
+        "44369"
+      ],
+      "sourceType": "pdf",
+      "sourceUrl": "https://wochenprospekt.netto-online.de/100989/3357087/pdfs/56b6be76-4fb6-47dd-86d1-af56179c18e6.pdf",
+      "sourceSha256": "5606795ddbd73fa812a22566ad5717b919b9a8ffd9d632320a5979cd601cc68c",
+      "pageCount": 72,
+      "checkedPageCount": 72,
+      "extraction": {
+        "tool": "pdftotext -layout",
+        "textSha256": "bbed1ee4e128616791348429594454842246af349316ad7e9944fd7a60259a0f",
+        "pages": [
+          {
+            "page": 1,
+            "textSha256": "ccd37876acb7e577ef93b7df28ebe1f5cee1c5af991c48f0eac59b6f0242a871",
+            "charCount": 11747
+          },
+          {
+            "page": 2,
+            "textSha256": "dcc7284ec792fda3abc85306f115a3c0c1f2e93df49a82f66e86b98452e76c96",
+            "charCount": 14404
+          },
+          {
+            "page": 3,
+            "textSha256": "8120959ca47f0eb101172287d22da8021982c4f54fc745c163e70a4a21c5024a",
+            "charCount": 5621
+          },
+          {
+            "page": 4,
+            "textSha256": "3e94331f0c338ce2e75a89b4fb34158da90dc5fde4be581f57d3c832a03ad0fe",
+            "charCount": 1065
+          },
+          {
+            "page": 5,
+            "textSha256": "a0788c1fbedbaca2532210d1334295e565fa4975b19d6b9bbbd610f401aa5260",
+            "charCount": 1117
+          },
+          {
+            "page": 6,
+            "textSha256": "074e3136b1f2ef8956ea1011cd532856ea84a5af819534343e075d43ecdf61a1",
+            "charCount": 8942
+          },
+          {
+            "page": 7,
+            "textSha256": "494438b41ef78de46a9ed598e296c7645baab4e3d296fac05471c99352e8f08f",
+            "charCount": 2328
+          },
+          {
+            "page": 8,
+            "textSha256": "db755dee42db96d49df2859afa515312586c743663b318237a8e5d7a77c6414d",
+            "charCount": 5856
+          },
+          {
+            "page": 9,
+            "textSha256": "89430ae829ed312e8193f700c0692710b360f2ba5c51db70fd87f0881829dfc7",
+            "charCount": 3201
+          },
+          {
+            "page": 10,
+            "textSha256": "54236c171168d208b43a8cfea27f7d8e8d37d17b17bbdcb75e874af978e32363",
+            "charCount": 685
+          },
+          {
+            "page": 11,
+            "textSha256": "2687e4cb544b2d6d24c122882dcf40c5ed62959777874b41abfc5660b3d13d17",
+            "charCount": 849
+          },
+          {
+            "page": 12,
+            "textSha256": "938c8b248c0503741110a70a667135606eb9da78fca65267733049bee7f30367",
+            "charCount": 7557
+          },
+          {
+            "page": 13,
+            "textSha256": "4acb596310d90904772f7d662c5b48f8346a48feafd3b84c97902173cd69af04",
+            "charCount": 7817
+          },
+          {
+            "page": 14,
+            "textSha256": "aabeea0e61cec2c7632b42fe9b9c0acc1f09f879adf42f6f944e232d7d0d936d",
+            "charCount": 6903
+          },
+          {
+            "page": 15,
+            "textSha256": "3d5439d3021594ac83f2fef6607e8d055f977fc888774f7cfb4f55a466a4f7d7",
+            "charCount": 5826
+          },
+          {
+            "page": 16,
+            "textSha256": "5682fde6c98006716ab9154e993b2eb227d38f946c6a08d86f77dd9561eaf031",
+            "charCount": 2869
+          },
+          {
+            "page": 17,
+            "textSha256": "03c288ec9a0f09674b3dd82ea1ea80ea3f67599c9a2139c6ee37d23e09a06bea",
+            "charCount": 2438
+          },
+          {
+            "page": 18,
+            "textSha256": "c54e4be70d9815402fa5c78fda1cfc1ff8a9fd78b086630aac9792dee8b9763a",
+            "charCount": 6084
+          },
+          {
+            "page": 19,
+            "textSha256": "a239ae12a1d727424f9d2491fbcf0450e1384c9b737e6cc8f98b0b175099d388",
+            "charCount": 3474
+          },
+          {
+            "page": 20,
+            "textSha256": "df9e0b7d32d44d8950d7ae5cbd12a74ec74935081d908783681c6417b99ee79d",
+            "charCount": 2319
+          },
+          {
+            "page": 21,
+            "textSha256": "806913634a63a9259a0c5e4025f9c94588a15059cf589eca2302da1818b82ed6",
+            "charCount": 3856
+          },
+          {
+            "page": 22,
+            "textSha256": "85e4b571ff7bd404f3abdd786e76080e43f455ce8eb19400dad95a47f2b594a4",
+            "charCount": 4988
+          },
+          {
+            "page": 23,
+            "textSha256": "3a430f4a2da61fb7534092125cbc8d2c408aafed2a560539b7d99042c0f119e0",
+            "charCount": 3465
+          },
+          {
+            "page": 24,
+            "textSha256": "cfa335a7c965ffcf08a4a9972b4c763df87657ee91f1ead09c1f76519ed4b5cf",
+            "charCount": 6301
+          },
+          {
+            "page": 25,
+            "textSha256": "cec78140319ca91e099662d2a3a50c178fa9f529220dbfa3d40a18d43723911e",
+            "charCount": 7192
+          },
+          {
+            "page": 26,
+            "textSha256": "94e3a298b22c817e273a720763a7034013ca86349bfa8babbe61f3773aef8b44",
+            "charCount": 875
+          },
+          {
+            "page": 27,
+            "textSha256": "c58a4e1e06faa1666c39a041e25ab6f9b2c856bb893a88467e59451bd9f84f10",
+            "charCount": 890
+          },
+          {
+            "page": 28,
+            "textSha256": "5c8a61b28f5fbd8688f4dd52547b72503346583752a4599eed687be2f538b74d",
+            "charCount": 626
+          },
+          {
+            "page": 29,
+            "textSha256": "7568e864b9fd06ed68efbe2561369fc8e938a1039db884e1d69eaa785c98b9d4",
+            "charCount": 6114
+          },
+          {
+            "page": 30,
+            "textSha256": "c1f9838fe02106b998f539d3d5aaa903ec6358c2782a33c81ce94e2c2c66f854",
+            "charCount": 5880
+          },
+          {
+            "page": 31,
+            "textSha256": "6518fc1aa4f9f519240fc5b3bd17a448ef2f6f09eaa063ea37b4009380cf80d2",
+            "charCount": 1981
+          },
+          {
+            "page": 32,
+            "textSha256": "4efa1458f8e748c8a75d4e880c1c7feb66f08e5f442e1ae2707e41e8a6dd31e7",
+            "charCount": 6293
+          },
+          {
+            "page": 33,
+            "textSha256": "e38ffa19c57b8ffa82d391f6a0bbe21151b1b241cfd4776520e97f34714228af",
+            "charCount": 5020
+          },
+          {
+            "page": 34,
+            "textSha256": "c5fbf0a2ee2bfe9cc469c9b3f266b000322c7ecd3f76e86655bb4f2b21d68363",
+            "charCount": 5078
+          },
+          {
+            "page": 35,
+            "textSha256": "2da9eed38521e1e1272f095a1e490a90860ea47ee2f8680902eff0551993f1e8",
+            "charCount": 8043
+          },
+          {
+            "page": 36,
+            "textSha256": "f814cf42db0193221f1752f6925d429abee513a9ae1e276914b5419abbeeb4ae",
+            "charCount": 6871
+          },
+          {
+            "page": 37,
+            "textSha256": "d171b811cd4c3beead96e72dc1ffe520f5ee8c69b15af8fb3fa4c49d0606794d",
+            "charCount": 3746
+          },
+          {
+            "page": 38,
+            "textSha256": "fa7a5e89ba9c248ca6b9dcba3d683862b425b24411c83584b796fbbf9feb0eb2",
+            "charCount": 4340
+          },
+          {
+            "page": 39,
+            "textSha256": "642fae1c40dd749d22a05c826369125e04352edb07b352c457510bfc21bc5ea4",
+            "charCount": 8583
+          },
+          {
+            "page": 40,
+            "textSha256": "40acd5cbe1522e065f24aa2f155df4481a403516cdef577b2e7b16a5e5fc0453",
+            "charCount": 4385
+          },
+          {
+            "page": 41,
+            "textSha256": "33cd9d3817795e62d7c8d0c1e7acb8b79bd35c5007988176c0e2efdcff1bf4b1",
+            "charCount": 5618
+          },
+          {
+            "page": 42,
+            "textSha256": "ce765c40c3d6a9434a0bbfaa4b9a5976143ee7b65fafe897db283f53c9875f9b",
+            "charCount": 9968
+          },
+          {
+            "page": 43,
+            "textSha256": "8493a28602c212b7abcd5547290d9c2a585e143b9b19339cf0614c74102668a3",
+            "charCount": 10595
+          },
+          {
+            "page": 44,
+            "textSha256": "8fa1d47d7225bc472c49a992cf231a5721669df4dc788755494fd6184b9ac54c",
+            "charCount": 9202
+          },
+          {
+            "page": 45,
+            "textSha256": "deb1a9824f43f991cce3457927577fe6228cca68d519457650bf97b29f632221",
+            "charCount": 14971
+          },
+          {
+            "page": 46,
+            "textSha256": "c939e6bcf2af4111ad239dcc5e36d70bbf577ffa3189c6820da7e850d11edfae",
+            "charCount": 15896
+          },
+          {
+            "page": 47,
+            "textSha256": "f65d264c5fafe82ab05a56dc51926ecc4f5353e371c2b9a71a6df6586c7649a5",
+            "charCount": 11955
+          },
+          {
+            "page": 48,
+            "textSha256": "f08ebd5011bdecae2c4001dc06a9fff650c97d1558574fa1872699cdde4541ed",
+            "charCount": 4830
+          },
+          {
+            "page": 49,
+            "textSha256": "14ff467380aa6f047d819c82a319d25aec9bda0cb6758246366962c790cc241f",
+            "charCount": 7112
+          },
+          {
+            "page": 50,
+            "textSha256": "7a5b30230174125d0911aedbe112dcafa7494e8bd7d3c980c7a9744b6ea253d1",
+            "charCount": 9627
+          },
+          {
+            "page": 51,
+            "textSha256": "1a3e1e0a360df7f512b71105a5b2359ebc96e7412904542ee440825c6c0bce54",
+            "charCount": 2067
+          },
+          {
+            "page": 52,
+            "textSha256": "5a38146057447307dbf8458cd90d2841d512f060d9d56ce56730d46310653405",
+            "charCount": 5130
+          },
+          {
+            "page": 53,
+            "textSha256": "544c58d9a33fb01c0e54580e12bc10978f0c7f9ce2a69821b13764295c73d4b3",
+            "charCount": 4812
+          },
+          {
+            "page": 54,
+            "textSha256": "3b663cbdc593eb18bad80a63656b72859a5f66ca8dc46327c264a6edfa2c39df",
+            "charCount": 6009
+          },
+          {
+            "page": 55,
+            "textSha256": "c13421b2cd73f0c272f4a4226adfc06ed4ab33c54aeb271dbd15e7da28ef81eb",
+            "charCount": 5393
+          },
+          {
+            "page": 56,
+            "textSha256": "074165f4fc1d06903f9e5ace1a36fcafca2b9973cccdcd6e747d7d91c523d460",
+            "charCount": 5315
+          },
+          {
+            "page": 57,
+            "textSha256": "e2d1aca510a8c6448963f38a82d41b3011172e3bca37059449553cb4e334e127",
+            "charCount": 4037
+          },
+          {
+            "page": 58,
+            "textSha256": "85f87c7bd3c29160b15212107dce3566b88f805414865a57b86a32f178b4c5e5",
+            "charCount": 5866
+          },
+          {
+            "page": 59,
+            "textSha256": "b2af59b3e19f66051c46480649d09b9421a1da99bc431090c721dfb3f4cd9b39",
+            "charCount": 5013
+          },
+          {
+            "page": 60,
+            "textSha256": "3f5cedd4e5b9f256ee08000ab7b61d8e5a5f61a0fa652fa8a06de9539f730647",
+            "charCount": 7596
+          },
+          {
+            "page": 61,
+            "textSha256": "56ce9084f55d186847177ef75e0074f6f68678563c69a863bacf9691be9b06d9",
+            "charCount": 5766
+          },
+          {
+            "page": 62,
+            "textSha256": "891dbd478f23a9da96e7f44bf8dee4f54dc6d9ae8910f6d9d7c52a0cb32dc1cb",
+            "charCount": 3923
+          },
+          {
+            "page": 63,
+            "textSha256": "b6714587576abe2980319d36691f0eceba7c7c82ac34cb9740b7a54e843683e4",
+            "charCount": 7941
+          },
+          {
+            "page": 64,
+            "textSha256": "603f3df78f8d294c614b18508f6df63038befa407f3e6336995e989c9895a5ea",
+            "charCount": 931
+          },
+          {
+            "page": 65,
+            "textSha256": "38434bdd48a2e169a55fdb8847123080a932447f2dcfd7ce0eb9dd9b1d1decc9",
+            "charCount": 2107
+          },
+          {
+            "page": 66,
+            "textSha256": "deba69e64bcf9fd47efe06b9020d621936668dde1e1ea3c93c8e0b523eac1c71",
+            "charCount": 816
+          },
+          {
+            "page": 67,
+            "textSha256": "83c44e76ce901ca10a893d59e7d6ef4155f340ae1501502de78b5b9bba294806",
+            "charCount": 1984
+          },
+          {
+            "page": 68,
+            "textSha256": "82838acdc8dcf8ad412b97ccf6c199b0be157f63b29db6322d21d165a4fcd48d",
+            "charCount": 8218
+          },
+          {
+            "page": 69,
+            "textSha256": "8295af26fd39fce6fce1ea4effd5067d32b363375072b863c4ff1ae256c9aed5",
+            "charCount": 1697
+          },
+          {
+            "page": 70,
+            "textSha256": "35cd5fc3da93ea90ea5853ef15ff1a6832e7c42b6aa45d5f8dbab6354f94155d",
+            "charCount": 3728
+          },
+          {
+            "page": 71,
+            "textSha256": "e54df05b25928abd8ee483ab4e2eb318616e3518d17a4060d5fa7e8019999b36",
+            "charCount": 6075
+          },
+          {
+            "page": 72,
+            "textSha256": "08f28b0b6360b2156ddb67b90bf03f33998bb47bf8804a7c508b2203bb8077d6",
+            "charCount": 4686
+          }
+        ]
+      }
+    },
+    {
+      "chain": "Lidl",
+      "postcodeScope": [
+        "40472",
+        "40489",
+        "44369",
+        "52064"
+      ],
+      "sourceType": "api+pdf",
+      "sourceUrl": "https://www.lidl.de/l/prospekte/aktionsprospekt-14-09-2026-19-09-2026-6e9cc6/view/flyer/page/1?_ab=1&lf=HHZ",
+      "apiUrl": "https://endpoints.leaflets.schwarz/v4/flyer?flyer_identifier=01a07b69-437d-7086-9cf6-99e0c021d99b",
+      "pdfUrl": "https://assets.leaflets.schwarz/leaflets/pdfs/01a07b69-437d-7086-9cf6-99e0c021d99b/Aktionsprospekt-14-09-2026-19-09-2026-01.pdf",
+      "apiSha256": "ad704ba80b914ae72552574c080b5e3b85401be1c12d03442775f2bc5fd4de04",
+      "sourceSha256": "1b904155a22e64f277ca756dc2c3c624c628d5ae3726023559f74c8329e48d47",
+      "pageCount": 75,
+      "checkedPageCount": 75,
+      "viewerPageCount": 76,
+      "viewerBoundary": {
+        "page": 76,
+        "checked": true,
+        "kind": "next-flyer-preview-boundary"
+      },
+      "extraction": {
+        "tool": "pdftotext -layout",
+        "textSha256": "98cfeb5c595067ebaace5f14b17fca7621687e16e0eaaf01ccdcd81885a3f5cb",
+        "pages": [
+          {
+            "page": 1,
+            "textSha256": "f482bca30690980a4988a0249abfda9ed62f94829edba6cb3adbd485de38adb5",
+            "charCount": 4789
+          },
+          {
+            "page": 2,
+            "textSha256": "e33f9fec66f1aa718ffdf605abeaef635054f81bb4a7a9081e57ab764c2fbf40",
+            "charCount": 5452
+          },
+          {
+            "page": 3,
+            "textSha256": "5bdc460ee450be8b8cb931d51d80290eb9352bd8fd913a6fce75df12ec7082f5",
+            "charCount": 13286
+          },
+          {
+            "page": 4,
+            "textSha256": "de8e4e40beb33f496fcbe6e276fee489dc454d55b6460fa54b35a83c5c3aa85a",
+            "charCount": 8851
+          },
+          {
+            "page": 5,
+            "textSha256": "946583f7145d5c2ea8ba25af53fe795fe1fb38825aa29a6700a33294eedc5d49",
+            "charCount": 6816
+          },
+          {
+            "page": 6,
+            "textSha256": "c9b6c610dc041dda5ebfb766af07cb1e7456873233378abaa3c220cdc828c50e",
+            "charCount": 6526
+          },
+          {
+            "page": 7,
+            "textSha256": "0c6c025d6a3d451d2a6f99363d41ad93968d0bb4221e8aec3dd5c1f6cd2a1dec",
+            "charCount": 6844
+          },
+          {
+            "page": 8,
+            "textSha256": "9daf5ea6425fe427c00b038dc31e772eb73c278e28d35bca08f4e71dc732df6b",
+            "charCount": 3920
+          },
+          {
+            "page": 9,
+            "textSha256": "004364447618eb0be5f88d2691634ecf1399e5d2e636376eb1e5c7ed7b6d0580",
+            "charCount": 2460
+          },
+          {
+            "page": 10,
+            "textSha256": "49df28c39c97351803e6ff54a461ba8653adf1dc1044b3afc4d0d08a6bbcdb3a",
+            "charCount": 1600
+          },
+          {
+            "page": 11,
+            "textSha256": "925f679dd0f001c8173bcd52424144ac1679335ed201578e6669cf44494078ea",
+            "charCount": 968
+          },
+          {
+            "page": 12,
+            "textSha256": "65b1a6271ac05837d25b6377f251cca039659a535d6a347a963ed16069faae1a",
+            "charCount": 6702
+          },
+          {
+            "page": 13,
+            "textSha256": "393ab4f8ed58faa6a4f2aea90ed8293e0605e5af79b3c3817510e2297134eb23",
+            "charCount": 6216
+          },
+          {
+            "page": 14,
+            "textSha256": "750cb34863c4aa8453f7aa0356bd371bbe7e9e692ba45b8d157e6527b0185e89",
+            "charCount": 3433
+          },
+          {
+            "page": 15,
+            "textSha256": "a6e74948db7565074b35a9bff8c6761d0373a37c9e6e26edcceaff83b3366e00",
+            "charCount": 3639
+          },
+          {
+            "page": 16,
+            "textSha256": "29798f13ce0c1a1a8597acbb05d351d22886529d5020f27db185b550ab5305f8",
+            "charCount": 3652
+          },
+          {
+            "page": 17,
+            "textSha256": "7baf636cd317ac0491839d4fcda96e1e36d012cf4b2746841b988efddf5d331b",
+            "charCount": 9329
+          },
+          {
+            "page": 18,
+            "textSha256": "16ae327951ec444450eb599884131455d29e1def20e913379b93c4640888dd90",
+            "charCount": 6226
+          },
+          {
+            "page": 19,
+            "textSha256": "6dd6a5a3925a6890b88c4516952c6a43eb906982ca5e261bbbee9a16796d8e8b",
+            "charCount": 11114
+          },
+          {
+            "page": 20,
+            "textSha256": "f5df874a16638a15ef82ddc3a2c008b8bf589b6998211a96fe0ef0922871aede",
+            "charCount": 5601
+          },
+          {
+            "page": 21,
+            "textSha256": "c0b6c5d761265789d7acd6f9d27bfbe3cb7685957ec64220e79986c328452c63",
+            "charCount": 6319
+          },
+          {
+            "page": 22,
+            "textSha256": "d8e2caa323f6e1b9f5cda553f8f6d27784623a9b5578dde807b77c43268bd572",
+            "charCount": 5693
+          },
+          {
+            "page": 23,
+            "textSha256": "62b5ec732e7a2a1861ecee97af72f99f5eb0a7937796f82d52e1e44696c8662d",
+            "charCount": 9651
+          },
+          {
+            "page": 24,
+            "textSha256": "52b01d36c0db254a7969c3ddb01b3f7bef223bff04d7cb535d2f88a3343c8f55",
+            "charCount": 4173
+          },
+          {
+            "page": 25,
+            "textSha256": "9a1a04c7061afe12dcb795ae745b43d660874a88db5bf67d879c7d0750eb3136",
+            "charCount": 4639
+          },
+          {
+            "page": 26,
+            "textSha256": "a87b62c722670131f8012fe19c3be8e422587c141f7a573ad2ca49c66caed19d",
+            "charCount": 7423
+          },
+          {
+            "page": 27,
+            "textSha256": "e64f53278332d830095ce7b04fa6c1345de6aa9619d4822e02ee370248100ce9",
+            "charCount": 4604
+          },
+          {
+            "page": 28,
+            "textSha256": "6a999757a3b6ae62a172aa3e901f5a3fb77cf4f17aca1e0abca96b11e5674477",
+            "charCount": 9378
+          },
+          {
+            "page": 29,
+            "textSha256": "38fa13bb1b12968c4692395396e278b169ebd1a7d8c74a2252e54f568916b4e5",
+            "charCount": 11026
+          },
+          {
+            "page": 30,
+            "textSha256": "60db4eed4798dfa8b154ddcd793ed49a6752672dc73e4c9cea664e848ae40f72",
+            "charCount": 2531
+          },
+          {
+            "page": 31,
+            "textSha256": "3b126fabe6db13b3f02098fa124afc99be51413d78790b7bbc8f9d4f4364e321",
+            "charCount": 4118
+          },
+          {
+            "page": 32,
+            "textSha256": "6bfe30f5b6bac7b95d4f5421642060603ae96b05ac85b5df24fc6ba333f49198",
+            "charCount": 7178
+          },
+          {
+            "page": 33,
+            "textSha256": "572a2973612a1b1cbdd35919651109a39cedb69ab7fff94be0ca1906dada68a9",
+            "charCount": 9446
+          },
+          {
+            "page": 34,
+            "textSha256": "88505f69adfedab6dca8ba1eb0887fbc4929a0f2e246aad5a9925f682ce01756",
+            "charCount": 7533
+          },
+          {
+            "page": 35,
+            "textSha256": "1dc6df55727d708b4f599ad9d3d42caaf3b266b9ae35bf952cf33b47b840bb9e",
+            "charCount": 8860
+          },
+          {
+            "page": 36,
+            "textSha256": "f8fead9e6d9ecd0992a63c93472e00e59c43e46336a36eca595957db78444068",
+            "charCount": 7077
+          },
+          {
+            "page": 37,
+            "textSha256": "d2bd8b0acc753364d76e3de75edf5dd5c9686f58d4d7f21ab02beb8cf01ec250",
+            "charCount": 11144
+          },
+          {
+            "page": 38,
+            "textSha256": "55efb4a5d392227d1debb6228eaac96646981d1afcbf5798c29c65d66f410784",
+            "charCount": 7688
+          },
+          {
+            "page": 39,
+            "textSha256": "24edeeefa924ebd190fe2932a70d9c3dcb1d636e3aa2396baaf20a1e7d5779f5",
+            "charCount": 5272
+          },
+          {
+            "page": 40,
+            "textSha256": "4b0091e51fcb7c40615b2d51b68995c92b2d5187bb5cd483fbefc1b681a9f0c8",
+            "charCount": 5918
+          },
+          {
+            "page": 41,
+            "textSha256": "2e87a4183d93ed23173af7237abdc68f76fd4b6e33152235b7ac7ea816275342",
+            "charCount": 10627
+          },
+          {
+            "page": 42,
+            "textSha256": "49b9a64fff8092014c0bd59cf222b50b3398becabc2bc6809234ec20a61f6095",
+            "charCount": 5986
+          },
+          {
+            "page": 43,
+            "textSha256": "eb06801c69bfdd7209597bbcb9ebfa7d6b531d829669bb99970bc0a9588426bd",
+            "charCount": 6072
+          },
+          {
+            "page": 44,
+            "textSha256": "9585d959fb81481d47e8ecca77129000eaab7450b1f9dece1575b701c77d86fb",
+            "charCount": 10402
+          },
+          {
+            "page": 45,
+            "textSha256": "5f07912e722ffd49c7a15e996cac016aa74d6eea7bc58bc5eacb672f98022752",
+            "charCount": 6210
+          },
+          {
+            "page": 46,
+            "textSha256": "e98b1b609c0395dcf99c7ab577feba2602233325fa1cfa70108b6ea304592b5e",
+            "charCount": 3016
+          },
+          {
+            "page": 47,
+            "textSha256": "d63dd391876bb70fc90a45d73e649ab8c9baf2a6a8a06c8ae959b7a5942d5b6e",
+            "charCount": 6607
+          },
+          {
+            "page": 48,
+            "textSha256": "4c0fc7d1ad4b4d611a13d3bdbcf3b98314e6b2372a4eeca73c3b11a8ad45ee70",
+            "charCount": 5623
+          },
+          {
+            "page": 49,
+            "textSha256": "79dcfe5c793635bc05faceca3183ab4439be5eddfc6ce663bde6b7c46ec5cd91",
+            "charCount": 5836
+          },
+          {
+            "page": 50,
+            "textSha256": "80966b59ef607cbfb42797e0dee231f7bd2782bc43c020cd99bfe9da1430349f",
+            "charCount": 11383
+          },
+          {
+            "page": 51,
+            "textSha256": "5c4c789f2d5d784e37571c8f5be206e55c17cdfad79cfdb597f1bf4921a2ef79",
+            "charCount": 10881
+          },
+          {
+            "page": 52,
+            "textSha256": "e342f7000b7103c1507fa4bed79c0c329bb532337f3265db14cf3d248ce0a722",
+            "charCount": 10093
+          },
+          {
+            "page": 53,
+            "textSha256": "83187070ba540e7352625f8c35c742248a57544b8771123648e2b6ff4a641b98",
+            "charCount": 9235
+          },
+          {
+            "page": 54,
+            "textSha256": "b59fdc66db5a1002a097e65f85721981d8343cbf42279552cda52562b04bcc21",
+            "charCount": 4224
+          },
+          {
+            "page": 55,
+            "textSha256": "5a78f6eb339fe3fc24c91765a784ec66e059dab7573994247bd07080db093876",
+            "charCount": 9492
+          },
+          {
+            "page": 56,
+            "textSha256": "c4e59bd933c6ff0580efbd6dd035124c36c5ff8ee927d81a4c97a6e85b1d0342",
+            "charCount": 6921
+          },
+          {
+            "page": 57,
+            "textSha256": "6a656c16895a392bae4b490f64c18f61ba46275ec94cd7bb6a878db68f56ffc5",
+            "charCount": 8904
+          },
+          {
+            "page": 58,
+            "textSha256": "5eb2828d5bc4f639cbfeae838fd9c3c5b14c06acb501c35a1df0181870717e42",
+            "charCount": 8480
+          },
+          {
+            "page": 59,
+            "textSha256": "a10a16056318ce64d77b35f8093ec027e868dbec0fa414c72a9d7ecce7725fdc",
+            "charCount": 4993
+          },
+          {
+            "page": 60,
+            "textSha256": "0a71f63b3ab8eb646bbfcb118cb905278480a730d95ec9f6ba7dc281ef59e702",
+            "charCount": 7503
+          },
+          {
+            "page": 61,
+            "textSha256": "38157d7004b816ea1f9efa4c2fd5f4018609bda7362e8df892010c1d1c40f47e",
+            "charCount": 10108
+          },
+          {
+            "page": 62,
+            "textSha256": "4ebe9ff2e4d21c41220db880d8d20629c3d84aa6a65a6af28407950b602f0a4b",
+            "charCount": 4083
+          },
+          {
+            "page": 63,
+            "textSha256": "085eb74640991c2a48461dcb26385171a4590cb6f22f50904a081ab7b9ee365a",
+            "charCount": 5158
+          },
+          {
+            "page": 64,
+            "textSha256": "c0bb3c594903552334fd6402b6d612af9300cac686828659158e2a831b3cc20e",
+            "charCount": 7365
+          },
+          {
+            "page": 65,
+            "textSha256": "7c6773aa928f52e6c63e94b346c9e230e371eafabdee36528c6f52fb912712d1",
+            "charCount": 5926
+          },
+          {
+            "page": 66,
+            "textSha256": "e0c1a3b2121dc21a022e996c2e1bf8803483891dc0c11d65048a6e0e623b0ffa",
+            "charCount": 4912
+          },
+          {
+            "page": 67,
+            "textSha256": "a01934b57867a25494b61314fdf510f1163423e3fcadc41e2a4594c23c994ca6",
+            "charCount": 3162
+          },
+          {
+            "page": 68,
+            "textSha256": "8a5073d678010e9057748338aba9c885fb2ac933a0a4cf815e4d586bd8c2dce9",
+            "charCount": 4950
+          },
+          {
+            "page": 69,
+            "textSha256": "e8b018c328efaff8fed6619784fa0f1f7b76a6ef86aaaee1abe522244b5ec5a1",
+            "charCount": 9484
+          },
+          {
+            "page": 70,
+            "textSha256": "b55f7c6d287142028c9c28e81872a9c94e4074b5f884899789dee9f02268ed49",
+            "charCount": 5916
+          },
+          {
+            "page": 71,
+            "textSha256": "b2a560ad5cb5bdbe3fadd4ba069de0fe12c67c8c8d6faccda379cfda1b75cc4a",
+            "charCount": 9418
+          },
+          {
+            "page": 72,
+            "textSha256": "366d71b6560a1e7ebdca18e949ca9b75bcaa378b71762adf734f0c3a68d8a5b8",
+            "charCount": 12729
+          },
+          {
+            "page": 73,
+            "textSha256": "62ed5bbd29ce9e12c258ef4d8f78a901598cce38d63874211d58318308941b0d",
+            "charCount": 3589
+          },
+          {
+            "page": 74,
+            "textSha256": "f96f7c33e04be40fbe550cb1b652f2388934441ac797181e4b3f5cab336050df",
+            "charCount": 127
+          },
+          {
+            "page": 75,
+            "textSha256": "c981fe39b2a4599cb014afaf22239b18e50972f0a94ad301885982a840a1f790",
+            "charCount": 927
+          }
+        ]
+      },
+      "pages": [
+        {
+          "page": 1,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58278f1175",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/4SybDlKA7mSTpwhtxY71_FSmGOUa_TtmGEfvrEfYsB4/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDFfNGYwYTAwMDBiYmEyNWY3OTA1YTk1YjUzYjU1ZWNjNjQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/nhuluJxsXNfSKHGd8TAOR-Wu3b5hPnCesNYJw6WP4r4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDFfNGYwYTAwMDBiYmEyNWY3OTA1YTk1YjUzYjU1ZWNjNjQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/kaxIY7p_arGPjBi8GVsv4xA8DYhGJgcVZQ157mamJWY/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDFfNGYwYTAwMDBiYmEyNWY3OTA1YTk1YjUzYjU1ZWNjNjQucG5n.jpg",
+          "altText": "Werbeprospekt von Lidl mit verschiedenen Rabattaktionen auf Lebensmittel wie Pils, Currywurst, Ketchup und Fischstäbchen.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 2,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582887be8e",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/bKP9ZNczx2ay4jUIBqFdNhxU-GLLe_xM-AnQZ4oINas/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDJfNTg1NzAxZDM1ZmI1YTA0YmVjMjUwMDk0NjY5ZTQwZGIucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/9z5RLkOlpRWRNC7JNsZOLg84LU_Fa_tXhuKOEqlj8DM/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDJfNTg1NzAxZDM1ZmI1YTA0YmVjMjUwMDk0NjY5ZTQwZGIucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/EBX5RG5bVQ4n0ZreXfIkL-KqgAFesT8QXoLjyYYcwZI/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDJfNTg1NzAxZDM1ZmI1YTA0YmVjMjUwMDk0NjY5ZTQwZGIucG5n.jpg",
+          "altText": "Lidl-Plus-Angebote mit Rabatten auf Parfum, Weizenmehl, Hähnchenflügel und Speisekartoffeln unter dem Motto „Deutschlands Preisfavoriten“.",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 3,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58294e0ef3",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/Ei1Wp_RiUwAr_qUF2enN1hWx2RMFiifLgogJxSSttVY/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDNfNmJiODkxZmZmNDUxM2IzZmQzZWRjNjczMWNiNjkwNGEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/iA-9_Aab-JAfC8afMCJH2_mZXhS98Ugxx8AlNHfiDtA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDNfNmJiODkxZmZmNDUxM2IzZmQzZWRjNjczMWNiNjkwNGEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/wtc45vdqNVjf1x_Rly5c-t62DbZC7A0-95VaexB9dzs/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDNfNmJiODkxZmZmNDUxM2IzZmQzZWRjNjczMWNiNjkwNGEucG5n.jpg",
+          "altText": "Übersicht über Lidl-Plus-Coupons für Snacks, Kekse, Gewürzgurken und Essig sowie Informationen zur „Happy Hour“-Aktion am Dienstag.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 4,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5829d685b4",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/be9cxN-UNlAdurnTwxvOpMJ_4EhLc_m9tF3soDJzRq8/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDRfZDk2MTBkNDIwODY5ZGU1NDJiMjEyYTcwYmQzOGMzNjcucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/Na7s3UZAjB3MiLWWa8GGF-9zMx6FMtxt0LiDCXjGRKQ/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDRfZDk2MTBkNDIwODY5ZGU1NDJiMjEyYTcwYmQzOGMzNjcucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/nnlNyXmOzZUMJ4TeZbTemN0NnFqjBTUVhyblYh1idoU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDRfZDk2MTBkNDIwODY5ZGU1NDJiMjEyYTcwYmQzOGMzNjcucG5n.jpg",
+          "altText": "Lidl-Plus-Highlights mit reduzierten Preisen für Müller Froop, Börek, Kondensmilch, Powerade und Trockenshampoo.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 5,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582a1c9114",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/RxJQUP-08dG-tkMCxzecY6L7xrhaoMANsXTKOGIfcTE/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDVfODEzMjE5ODU5N2M0NTI1YjM2YTkzZmQxNzhhZDc0ZTMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/geqma_QlTIQyF78dhtiqyp622wiMSH-yXJzuzSjT3lE/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDVfODEzMjE5ODU5N2M0NTI1YjM2YTkzZmQxNzhhZDc0ZTMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/HvxleUGzUwAgiMRbHZSqdx26B8PHquti_J--PKWKxg8/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDVfODEzMjE5ODU5N2M0NTI1YjM2YTkzZmQxNzhhZDc0ZTMucG5n.jpg",
+          "altText": "Sonderangebote für Jack Daniel's Whiskey, Parkside Werkzeuge, einen WC-Sitz, Orangen und Milka-Schokolade.",
+          "linkCount": 5,
+          "recipeLinkCount": 1,
+          "productLinkCount": 4
+        },
+        {
+          "page": 6,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582a2a12ff",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/53cnUhYew4d9vBFBa5WGR0_9oXwpD_xHJ8TiJXk1wYA/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDZfOTU5ZTMwZjRiOWM5ZWRkNDI1OTZlYTRjZjg4MTgzZjAucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/9FqR4fdT2eddAyUwikHKphH8rATpqeHncVcSfsguvxM/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDZfOTU5ZTMwZjRiOWM5ZWRkNDI1OTZlYTRjZjg4MTgzZjAucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/dWneNVrGf1XmgJeTaTD8jN56gFvFhtjFf0mbxbNt1sk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDZfOTU5ZTMwZjRiOWM5ZWRkNDI1OTZlYTRjZjg4MTgzZjAucG5n.jpg",
+          "altText": "Auszeichnung von Lidl als „Großer Frische-Sieger“ im Bereich Obst und Gemüse mit Angeboten für Orangen, Zwetschgen und Bio-Bananen.",
+          "linkCount": 3,
+          "recipeLinkCount": 3,
+          "productLinkCount": 0
+        },
+        {
+          "page": 7,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582ab1135c",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/DsC59Tv1avH6S3V5NvJXI3YbYTfcEQm3OZdpRuDNIJw/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDdfZjQ4YTU3ZjRkNjNhMzdkMGQ5MzNiM2E2YzEwZTU1MGMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/uZqHMUtewiIitziVHpG9-stbk_cW8o5gfMYGWisDc8M/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDdfZjQ4YTU3ZjRkNjNhMzdkMGQ5MzNiM2E2YzEwZTU1MGMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/FGVWtT9WFawtg2fWqO5UrcnDJZLmAbCXWd4iLdIOsC4/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDdfZjQ4YTU3ZjRkNjNhMzdkMGQ5MzNiM2E2YzEwZTU1MGMucG5n.jpg",
+          "altText": "Rezepttipp für Süßkartoffel-Erdnuss-Curry sowie Angebote für Zierkürbisse, Alpenveilchen, Heidekraut und frisches Gemüse.",
+          "linkCount": 5,
+          "recipeLinkCount": 5,
+          "productLinkCount": 0
+        },
+        {
+          "page": 8,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582af19cac",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/6cp1f4-EwmoMBsQQSI9_F7J-FF4SZoBpAUqGUfyunhU/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDhfMGZhYzBjMDhhNTdmNGIzZmFlOTlmMWM5M2U0YmMyYTMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/KE1TqpJ_JOf8z3f_ATbAuFBViLs1U11Z0fHvCFKLm6E/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDhfMGZhYzBjMDhhNTdmNGIzZmFlOTlmMWM5M2U0YmMyYTMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/ctNrnGGUxHDWXigu68pZ1bz5F2hTSoG0rLoVTLv1tIc/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDhfMGZhYzBjMDhhNTdmNGIzZmFlOTlmMWM5M2U0YmMyYTMucG5n.jpg",
+          "altText": "Werbeseite zur Auszeichnung von Lidl als Frische-Sieger in der Kategorie Obst und Gemüse bei den Retail Awards.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 9,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582bba171f",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/cwhhwDdw-ucb88yO3scTVR3PaffXk7P948j2t8ziX4c/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDlfZDBiZDAyY2YwMGJlOTJkZWE2N2NlMGE5ZDk0OGVjNWUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/iJ76BbCvZNQSa6o2OkCZFmuXZ4KzmzanCC2AwkZCQuI/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDlfZDBiZDAyY2YwMGJlOTJkZWE2N2NlMGE5ZDk0OGVjNWUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/hVn7226z0_obrfQ1FIGniK1wvu_322YELC-2KHOfs5I/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMDlfZDBiZDAyY2YwMGJlOTJkZWE2N2NlMGE5ZDk0OGVjNWUucG5n.jpg",
+          "altText": "Informationen über die täglichen Frischekontrollen bei Lidl und den Fokus auf Bio-Anbau sowie umweltfreundliche Verpackungen.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 10,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582c99bb56",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/IzWok8wxfDRrk77B7-bs8fs8ASOQ8R2JnnPcwfokySo/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTBfOGZkOThkZmNlNWIzYjBjN2NjOWQ5ZWQ4ZmUwMGJjYzMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/kJ_XSEm7f06EfAPiEMiDOgyjzDqcgiHr9vUPZbIFYvc/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTBfOGZkOThkZmNlNWIzYjBjN2NjOWQ5ZWQ4ZmUwMGJjYzMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/IgaSi-yFu2BOU9TW97sQOQk9asuGYxeG5myqMQiFE5k/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTBfOGZkOThkZmNlNWIzYjBjN2NjOWQ5ZWQ4ZmUwMGJjYzMucG5n.jpg",
+          "altText": "Übersicht über die dauerhaften Sparvorteile und exklusiven Rabatte der Lidl-Plus-App für Non-Food-Artikel.",
+          "linkCount": 1,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 11,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582d932dfe",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/NzdJYkwjzWc8MigYu7Rp8yUCLD5PTQtt3rmqg-6tuXM/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTFfODUxMDVlMTU5ZDFmMDg3MGYzYjg5NGY0NzVmNzNhMjMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/RhrN0zu_eaXF6IS6rgApS5p5iy7yS37wEhBzTWtUTqU/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTFfODUxMDVlMTU5ZDFmMDg3MGYzYjg5NGY0NzVmNzNhMjMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/rH25FV5Sp_PFmDkBel1NVrp3goircqYUfvh0CcSuPlU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTFfODUxMDVlMTU5ZDFmMDg3MGYzYjg5NGY0NzVmNzNhMjMucG5n.jpg",
+          "altText": "Vorstellung von proteinreichen Fertiggerichten der Marke Chef Select High Protein für eine fitnessorientierte Ernährung.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 12,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582e8b62f3",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/MucMkb3upqJkyG6s4Y7BSEu6dTDDRzeCogzbZteBIFA/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTJfYTQ1Zjc3NWNkYjcxMzgyMzA0MjNhYzkyMjUyYWIxYTcucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/zZCsfBKfHdLjGOeBqgw8SUMM-jBasazamNDekuQiy1M/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTJfYTQ1Zjc3NWNkYjcxMzgyMzA0MjNhYzkyMjUyYWIxYTcucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/ov3Dynzdp0UeK0OATkzeYrSuZ0AN5PMfadO4b5K-_QE/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTJfYTQ1Zjc3NWNkYjcxMzgyMzA0MjNhYzkyMjUyYWIxYTcucG5n.jpg",
+          "altText": "Küchengeräte im Angebot, darunter eine Silvercrest Premium-Espressomaschine, ein Einkochautomat und ein Geschirr-Set.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 13,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582f773dc0",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/yA4pXQSZUlDcjQoit_zg6tEgMZpuJI-iSAQt7bB5b0U/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTNfYWEyMjU0MTYxMDJiMjgwYjMxZTBkMGJkM2M1MDc1ZTUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/j6mu2IU1qzEbSBKLYLMw_bZkth8qEEZByvULBgD4SfE/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTNfYWEyMjU0MTYxMDJiMjgwYjMxZTBkMGJkM2M1MDc1ZTUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/XAAjhd4WbIGqZt2FEsdvD-ucxwmiDkWopSRbF72NbC8/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTNfYWEyMjU0MTYxMDJiMjgwYjMxZTBkMGJkM2M1MDc1ZTUucG5n.jpg",
+          "altText": "Haushalts- und Küchenhelfer wie ein Induktionskochfeld, ein Severin Entsafter, ein Braun Wasserkocher und ein Sahnespender.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 14,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d582fc36c2c",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/H2Dxn07Of5zTzBVUA00DLpJeyPhSE33HTzyVlhW3i3E/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTRfMTk3YzczNmZhYjVmMjEzYzA2NDliMTBhYTgyOWIzZWQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/9jjxYL_50hBDyukP0VH4e4nJ-2HMxshxR_WEENyfj68/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTRfMTk3YzczNmZhYjVmMjEzYzA2NDliMTBhYTgyOWIzZWQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/00GpHrkveH10zllI_ACtf3fx_N82ygn00ITxEVKD1R0/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTRfMTk3YzczNmZhYjVmMjEzYzA2NDliMTBhYTgyOWIzZWQucG5n.jpg",
+          "altText": "Badezimmermöbel und Heimtextilien, darunter ein Waschbeckenunterschrank, Handtücher, Badematten und ein Langflor-Teppich.",
+          "linkCount": 7,
+          "recipeLinkCount": 0,
+          "productLinkCount": 7
+        },
+        {
+          "page": 15,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58301489d3",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/-51clAlZSpreeMZTjEkqaMlELeHlbRaUSmbIJUlhcrc/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTVfOWJjMzUwZjNlYmJlMDJlYzFhYTUxZGIyOWY5NzQ3YTYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/xS6X2p9Wd7tEtiP-TgqAbpwIWjkgzxrfJZFgJNRjzfs/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTVfOWJjMzUwZjNlYmJlMDJlYzFhYTUxZGIyOWY5NzQ3YTYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/2x7Lkw5mStxer4e9i9z-PJc2cAVnukkTxlvhVaNms9s/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTVfOWJjMzUwZjNlYmJlMDJlYzFhYTUxZGIyOWY5NzQ3YTYucG5n.jpg",
+          "altText": "Frische Backwaren aus dem Lidl-Backshop wie Cronuts, Donuts, Apfeltaschen und Croissants mit Hinweis auf eine Kundenzufriedenheitsstudie.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 16,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5830aec95f",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/-eLbpN8795aqbu3SFNm8hmQ0ZEgjtG_TG3Z0HmozyTk/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTZfYzkxN2Q2MmI1MmM1NTU5Yjg1NDAxMGQ3ZTdkY2RhYWUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/j39ZKE31XyaoiwkEiWG7intjYO-cvD7irOPVEjFXAPk/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTZfYzkxN2Q2MmI1MmM1NTU5Yjg1NDAxMGQ3ZTdkY2RhYWUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/RPhpv5eyl85KmkDHu1mhlOCM91aa6yTtC3tlgLKJzcU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTZfYzkxN2Q2MmI1MmM1NTU5Yjg1NDAxMGQ3ZTdkY2RhYWUucG5n.jpg",
+          "altText": "Fleisch- und Fischspezialitäten im Angebot, darunter Rindergulasch, Putenschnitzel, Hackfleisch und eine frische Lachsseite.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 17,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58318f9e38",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/9lO8V3yxK_NzKrRcVqI7SUTETcRQSHWnv5Cv9yPZ0oM/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTdfN2YzZjFiYWUwMTBkNGVmOWVhMGEwOGZhYTAwYzIwMWUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/alnz_NjDm6vJ5iLDbqWolewipymlom9j2BCfBGDlzh8/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTdfN2YzZjFiYWUwMTBkNGVmOWVhMGEwOGZhYTAwYzIwMWUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/KJSloYQWy_lJlmkEdWrfI9V3ijJHgU5BClN9ltKmQq4/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTdfN2YzZjFiYWUwMTBkNGVmOWVhMGEwOGZhYTAwYzIwMWUucG5n.jpg",
+          "altText": "Rabattierte Markenprodukte wie Wagner Piccolinis, Milbona Vollmilch, Lenor Waschmittel und Müller Shake.",
+          "linkCount": 8,
+          "recipeLinkCount": 6,
+          "productLinkCount": 1
+        },
+        {
+          "page": 18,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5832198de1",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/8bQtNwya8KWQxAWtEMDw9dcX6oEpGgbSlNNYI5ozvWs/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMThfOGE5NDExZjg5OWJjNjc3MGNjNTE3NjM3NmM3OWIwOTQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/Xr6Y6x408MrLa_uF8x19FCWss1z9vzSw53OElTCjDHc/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMThfOGE5NDExZjg5OWJjNjc3MGNjNTE3NjM3NmM3OWIwOTQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/hJ99vBvdx5h7Zm6QZJ2_4iQ2d4x_9zR8rKdInvn34n8/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMThfOGE5NDExZjg5OWJjNjc3MGNjNTE3NjM3NmM3OWIwOTQucG5n.jpg",
+          "altText": "Großpackungen und Süßwaren im Angebot, darunter Milka Bonbons, Volvic Tee, McCain Pommes und M&M's.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 19,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5832fb5085",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/DAJFozKNVL6RxZLN8e1TaxgX343hVAfAjniWN4V4M5c/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTlfMGIzNDY1YzZjM2E2MDBlZWJhNDE0ZmJjYzkzMWJlOWYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/UVFG-7FLUlPSVl5H0yBoVMW2D9xig7t56bkIQMarMh4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTlfMGIzNDY1YzZjM2E2MDBlZWJhNDE0ZmJjYzkzMWJlOWYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/SD0tVp98Na3OpbChBMvMfxgvN6xh5qMiqplpVg3_kNI/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMTlfMGIzNDY1YzZjM2E2MDBlZWJhNDE0ZmJjYzkzMWJlOWYucG5n.jpg",
+          "altText": "Haushalts- und Genussprodukte wie Pringles, Leerdammer Käse, Fairy Spülmittel, Beck's Pils und Absolut Vodka.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 20,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58334af915",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/Q2JvGz-wHHLhEUzLLOjRjx4rhs9sdfOaj5oKnHQ9Sxs/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjBfODdhYmZhM2U3NzhlYjM2NGY3N2ZkMWExYzU1ZjA4Y2UucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/qo0OtZ5sof3xjhMpjHNoh1UBlSGkZw08JxNbp8dzc6A/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjBfODdhYmZhM2U3NzhlYjM2NGY3N2ZkMWExYzU1ZjA4Y2UucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/hnj9k-NXfF9rHTgfQrKe8ZcRPscDiW1ljEpjKrtQfG8/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjBfODdhYmZhM2U3NzhlYjM2NGY3N2ZkMWExYzU1ZjA4Y2UucG5n.jpg",
+          "altText": "Drogerie- und Vorratsartikel im Angebot, darunter Ariel Waschmittel, Batterien, Allzweck-Papiertücher und Kinder Bueno.",
+          "linkCount": 2,
+          "recipeLinkCount": 1,
+          "productLinkCount": 1
+        },
+        {
+          "page": 21,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5833ef24ef",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/44RvJwC5ACSFDLHszMUk9ql2-nj98hqKIJegEsHL9pU/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjFfZjVhZTFhZmM0ODI1MTVkOTQwZTkwNjA2MDRmZDViZDEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/Pe_KwCRHBwuwrgCvgLh5pd5ieUJGTTMNri7ryuxUu68/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjFfZjVhZTFhZmM0ODI1MTVkOTQwZTkwNjA2MDRmZDViZDEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/4w0bWlII0k-MtbpEkWPF5zkzEwV-dzAaT9u0M5LCRRU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjFfZjVhZTFhZmM0ODI1MTVkOTQwZTkwNjA2MDRmZDViZDEucG5n.jpg",
+          "altText": "Markenrabatte auf Arla Kaergarden, Prinzenrolle, Krombacher Spezi, Heinz Baked Beanz und Choco Nussa Creme.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 22,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5834a71024",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/pfAS4ZjCt_4RJklW4SMzKnEBNrt5I1K93MqBQYgIMak/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjJfNTk4MDk5YzFhYjAyZDQ5YzU5OGNjNmIwNmI0NGM2NmEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/glRtXO_-P3dI-TOQ1jicQCoMHHs-MVBVPfH5g7JhUqQ/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjJfNTk4MDk5YzFhYjAyZDQ5YzU5OGNjNmIwNmI0NGM2NmEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/crSF_16ueeVp2yqSEgqFuRuSgjmSrxejVJGeowYKAgU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjJfNTk4MDk5YzFhYjAyZDQ5YzU5OGNjNmIwNmI0NGM2NmEucG5n.jpg",
+          "altText": "Lebensmittel-Angebote wie Zott Jogobella, Rügener Badejunge, Cornetto Eis und Nordsee Matjesfilets.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 23,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5835186281",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/BWaq7jmIQNUusj0czyKoWNu2JkOerrkpj5T-YN5J0EM/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjNfMzVkZDE5MWYyYTVkNTRlODYxOWI0NmUxM2ZmNjZjYzAucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/iTdEzAM3fNYjEIIzslLyiA5_hLeHOiCEVLuHMcrplAA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjNfMzVkZDE5MWYyYTVkNTRlODYxOWI0NmUxM2ZmNjZjYzAucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/UYbQ98xsdHFOHZyZtSel76YuZbbvdGdvak1QZF36coo/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjNfMzVkZDE5MWYyYTVkNTRlODYxOWI0NmUxM2ZmNjZjYzAucG5n.jpg",
+          "altText": "Haushaltsreiniger und Drogerieartikel von Sagrotan, Viss, Bertolli Olivenöl und Kölln Müsli.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 24,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d583588a56f",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/Se2fZnBKxEWymQd0dA3NDCh3Ayg6vVNEp7JXW__G5vE/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjRfNTA5NDE1MjBiNDBhNzhmOWU3NTcyNGY4OGI0N2ExZTgucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/LZgiW2y2SWpJX_MkqclV3AloyEIoT3aX_zqMk7jlnZA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjRfNTA5NDE1MjBiNDBhNzhmOWU3NTcyNGY4OGI0N2ExZTgucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/lzyzSg6Cc2rTO6fcY1IczzwfAji14w_BQ1tkvHNeHIk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjRfNTA5NDE1MjBiNDBhNzhmOWU3NTcyNGY4OGI0N2ExZTgucG5n.jpg",
+          "altText": "Molkereiprodukte und vegane Alternativen von Vemondo, Milbona und Landliebe im Dauersortiment.",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 25,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58368044c7",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/GMrrZa6WBKHuzC4uCSTou4TbGGBGCRrVKSTfi06dD6k/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjVfMDhiYWQwYTVhZGY1MGUwMjMxNzQzYjUzYjg0Y2NjZjYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/bCVE6Pi2cp2R2iGW_1slmDFYVX7QEYyZJcNf7FbW7xs/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjVfMDhiYWQwYTVhZGY1MGUwMjMxNzQzYjUzYjg0Y2NjZjYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/v7HUsH1RN-p5Gpxkb4Xx1exEHaSfU-s-AszTZ07Da2w/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjVfMDhiYWQwYTVhZGY1MGUwMjMxNzQzYjUzYjg0Y2NjZjYucG5n.jpg",
+          "altText": "Eine Auswahl an Milchprodukten wie Schlagsahne, Speisequark, Joghurt und Weißkäse.",
+          "linkCount": 5,
+          "recipeLinkCount": 5,
+          "productLinkCount": 0
+        },
+        {
+          "page": 26,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5837562bcc",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/UZQBtZ_NyUG0aNBYL1CzkWeAiYSKd8gc9hSD66A7LDY/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjZfYWU4Yjk0NDk0ZDM5NjE5MGUxYTczMGNjMGE0YTQ1MGQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/lKesK7wcUExmJS8Y5D2cs0cH0jnc7jSJ6waC2OK3NV0/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjZfYWU4Yjk0NDk0ZDM5NjE5MGUxYTczMGNjMGE0YTQ1MGQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/GIznGnDlolPQz4EUxldwo5v7eY0z2OtUSV0aTZCuthg/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjZfYWU4Yjk0NDk0ZDM5NjE5MGUxYTczMGNjMGE0YTQ1MGQucG5n.jpg",
+          "altText": "Farbenfrohe Blumen- und Pflanzenangebote für drinnen und draußen, darunter Fairtrade-Rosen und Chrysanthemen.",
+          "linkCount": 5,
+          "recipeLinkCount": 5,
+          "productLinkCount": 0
+        },
+        {
+          "page": 27,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5837b9df8e",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/jY4F5vwdq-7OPndiI0KW5_BN6gi_5Dg7wtTfiXdhG4U/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjdfYTAzMjkzMmNkOWZiNmJjNzQyNjU0NzhlZmVhNDZkZjAucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/P5ROIz1sbOkzlSXoGgkJxXp-RnNi5zIRKWMTdOo7_JA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjdfYTAzMjkzMmNkOWZiNmJjNzQyNjU0NzhlZmVhNDZkZjAucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/_lgXDueKh-D9a4Si6-Q1ASXuDf017v1cYTjBVWBe7hw/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjdfYTAzMjkzMmNkOWZiNmJjNzQyNjU0NzhlZmVhNDZkZjAucG5n.jpg",
+          "altText": "Eine Auswahl an erlesenen Weinen, darunter Primitivo, Pinot Grigio, Sauvignon Blanc und Champagner.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 28,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5837df0abb",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/2Ab6KGAHH-F7Fl2gHL-FH5dm9YxjTZKZg-gk8LVss8o/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjhfM2U3OWM2Zjc5ZGYyZDljZmMwMTliZTNjYmM2ZjlhNzYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/zO-D1uwEgXQjmpbVjFkyOhQNNLIUgvKt4JN02z99kkQ/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjhfM2U3OWM2Zjc5ZGYyZDljZmMwMTliZTNjYmM2ZjlhNzYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/wu3LZb9KH7jGHOdKrLSKuK8MS-XmJPzJSsy5_ExBid0/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjhfM2U3OWM2Zjc5ZGYyZDljZmMwMTliZTNjYmM2ZjlhNzYucG5n.jpg",
+          "altText": "Hochwertige Spirituosen wie gereifter Rum, Bombay Sapphire Gin, Single Malt Whisky und Weinpakete.",
+          "linkCount": 8,
+          "recipeLinkCount": 0,
+          "productLinkCount": 7
+        },
+        {
+          "page": 29,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d58384472a9",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/8mpCf4YyMdI5FjdqHyhk9uO9VjI0sqCTJ0SaYuZ4ANo/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjlfZTdjYTI0NWYyYmM2NjNmZDllZGI5MzkwODNmZTAxYTYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/sPm9epUbE_fBp_Yi-Ga9rUua0ilvk6j_X1UIDlx1uB4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjlfZTdjYTI0NWYyYmM2NjNmZDllZGI5MzkwODNmZTAxYTYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/M6csusiS5zwl260amROYDqMP6z8oH4lj3NfK1mC9C0s/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMjlfZTdjYTI0NWYyYmM2NjNmZDllZGI5MzkwODNmZTAxYTYucG5n.jpg",
+          "altText": "Vorbereitung auf die Weihnachtszeit mit Lebkuchen, Gewürz-Spekulatius und Butterspekulatius der Marke Favorina.",
+          "linkCount": 9,
+          "recipeLinkCount": 0,
+          "productLinkCount": 9
+        },
+        {
+          "page": 30,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5838b587cb",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/SYyHlvAJHuiRgaVOJ8PNcCnKD2eo4xIeTwIECkoukQ0/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzBfNTM2Njk3YWYzOWMxZDQ4NzI3NTYzNWJlZjY2ZWY5NTkucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/KzMwoeRHenV6kNPlCpMtSBugzkBg4Pc1fDOJ086g_jQ/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzBfNTM2Njk3YWYzOWMxZDQ4NzI3NTYzNWJlZjY2ZWY5NTkucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/59P4vIhHAZU2j06C32DGuMFE6LXNfR0_V_x6-OgODiM/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzBfNTM2Njk3YWYzOWMxZDQ4NzI3NTYzNWJlZjY2ZWY5NTkucG5n.jpg",
+          "altText": "Festliche Süßwaren wie Baumkuchen, Edelmarzipan-Baumstämme, Dominosteine und Stollenkonfekt.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 31,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5838df1997",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/4XQ-rQSJIjNUgerYofygXupVpLzwzK-DuNzF4n2ZiG8/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzFfY2VhZThlYzI0MmFkYTJmMGMxNWYxZjNjYTNkY2M5ZTMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/I0eilI95Ld6ob9inaWYsReRINx_NhVeH85MaRWznCtw/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzFfY2VhZThlYzI0MmFkYTJmMGMxNWYxZjNjYTNkY2M5ZTMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/yQo60wG3sJ3cED2WvJmLLLWY1xonyJpGVEDtQZt4FJo/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzFfY2VhZThlYzI0MmFkYTJmMGMxNWYxZjNjYTNkY2M5ZTMucG5n.jpg",
+          "altText": "Modische Herbstkleidung für Damen und Herren, darunter Flanellhemden, Cargohosen, Bomberjacken und Sneaker.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 32,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5839682962",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/4-fagDLPv2i-1vw52X66fE86Hlj8DKQaJAyz-skS9rk/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzJfMGMyYTI3NGY5ZTNiMzE2M2ZjODk4MDcxMDA3MGExMDEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/1KEhACMQerDfCGihNQZe83L5huw4x23FiST7KsmvGg4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzJfMGMyYTI3NGY5ZTNiMzE2M2ZjODk4MDcxMDA3MGExMDEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/dQw7Aa-VsdxDXoyEU6p8YTzKUHhAFq2IeocErZJ1UOk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzJfMGMyYTI3NGY5ZTNiMzE2M2ZjODk4MDcxMDA3MGExMDEucG5n.jpg",
+          "altText": "Bequeme Freizeitkleidung wie Leggings, Jeans, Socken und ein flauschiger Wellnessanzug.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 33,
+          "pageId": "01a0a07d-1d13-7585-b33c-6d5839a67801",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/1FIEETNSQdt6lzrAU3QuVtD8Qfgjs5FKyKK_ht3inHE/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzNfZmZkNWYyNTAyZmIxZWU2OGRmODkwY2ViZjQ4YzQyNDUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/q7_f_egMgbiRxRODmGZNNpJuo-31lJlx3LsA3v9oTv8/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzNfZmZkNWYyNTAyZmIxZWU2OGRmODkwY2ViZjQ4YzQyNDUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/LcNnFDW1CGyWfrdsrH2NsaxkR1v2PQ7pk8W3QAbu8M0/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzNfZmZkNWYyNTAyZmIxZWU2OGRmODkwY2ViZjQ4YzQyNDUucG5n.jpg",
+          "altText": "Elegante Damenmode, darunter gerippte Tops, Strickpullover, eine Wide-Leg-Hose und ein Trenchcoat.",
+          "linkCount": 7,
+          "recipeLinkCount": 0,
+          "productLinkCount": 7
+        },
+        {
+          "page": 34,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d785a37a31",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/JhgueMDl9nOiH-iZHUpK11O8qA0S-E92Fj92ZBoRPjE/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzRfYzA5NjAxZmQ3NTdhNDJiNDk0YTc4MTY1OWI1YjJmOWEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/Sa9gWUuDPK0XYYcBLAWOtHEPWpmGBUhqmhTtRpjYtvw/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzRfYzA5NjAxZmQ3NTdhNDJiNDk0YTc4MTY1OWI1YjJmOWEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/Yypx-LiNU938SmkOmgHStGBQyURQ3r79AZKYjkEigdk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzRfYzA5NjAxZmQ3NTdhNDJiNDk0YTc4MTY1OWI1YjJmOWEucG5n.jpg",
+          "altText": "Stilvolle Herbstmode wie Stiefeletten in Lammfelloptik, Strickkleider, Mäntel und Troyer-Pullover.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 35,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d786168f49",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/FkdoPS4zS0m3OVE_72u4-uQnkkrAC7yYvTdlHFziabU/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzVfM2U1ZTQxOGI4NmMyNzUyMTFlMzRhMDZhNjEwOGI1MGMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/f6W2AMWYxLVnsBczp3aJb8TlctFwZ5Riz9GGgdbJRH0/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzVfM2U1ZTQxOGI4NmMyNzUyMTFlMzRhMDZhNjEwOGI1MGMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/7KJ8AfuL0eldO6QESldGu5ameRIapqlLaNuuVabWNHk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzVfM2U1ZTQxOGI4NmMyNzUyMTFlMzRhMDZhNjEwOGI1MGMucG5n.jpg",
+          "altText": "Sport- und Freizeitartikel für Kinder, darunter Fußball-Fanbekleidung, Rucksäcke, Trinkflaschen und ein Crivit Gartentrampolin.",
+          "linkCount": 8,
+          "recipeLinkCount": 0,
+          "productLinkCount": 8
+        },
+        {
+          "page": 36,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d786efecc7",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/En3OyEXLHW2Cy83n-GiuZV48oyS9tGI4oKFWyg37vPg/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzZfNWVkYjU5ZGIwM2U0YTg2NTA5YjIwZmYyZjRmOWE3YTAucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/w3GUO0-V0fKcWtJZENb9eZ4OShVmeVBKZRQE-zIGV44/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzZfNWVkYjU5ZGIwM2U0YTg2NTA5YjIwZmYyZjRmOWE3YTAucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/cKsiPQHVaPAxI8ixqMl4Oj4D9bI7xSWkLtnG35v_330/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzZfNWVkYjU5ZGIwM2U0YTg2NTA5YjIwZmYyZjRmOWE3YTAucG5n.jpg",
+          "altText": "Baby- und Kinderausstattung, darunter eine Babytrage, ein Treppenhochstuhl, ein Kinderwagen und verschiedene Auto-Kindersitze.",
+          "linkCount": 7,
+          "recipeLinkCount": 0,
+          "productLinkCount": 7
+        },
+        {
+          "page": 37,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d787eb3e11",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/IWKntdICwrX6bsu2boo55hoioj2-7_tSG4eqan_y1kA/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzdfZmZjNGM3ZTI0OTk3ZWE0NjVkMTRkODZjNjFmYjBhYWQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/pYCb_UgxL1UaMWzXgfV-LHhLc6XMQFR9fd3DAwOAxPU/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzdfZmZjNGM3ZTI0OTk3ZWE0NjVkMTRkODZjNjFmYjBhYWQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/7cqzvU3pG3RpMaj8EYS93_iZUAdJJkpYRJSmTdQ53t4/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzdfZmZjNGM3ZTI0OTk3ZWE0NjVkMTRkODZjNjFmYjBhYWQucG5n.jpg",
+          "altText": "Kreative Bastelsets für den Herbst, darunter Laternen-Bastelsets, Klebstoffe, Fotokarton und Washi-Tape.",
+          "linkCount": 6,
+          "recipeLinkCount": 0,
+          "productLinkCount": 6
+        },
+        {
+          "page": 38,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d788d577ea",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/VmbuMeOBtvrS-KiA64tvuBeF50AlA6OYIf5Edz5Immo/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzhfNTYzZmQ5N2QwOGMwMjEwY2NmZDY0MzdjYmQ0OTNlMWMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/ji7AItTqkeHcrwbM5Lyvcz78sh0A4V1ZqiGmhwRyZJs/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzhfNTYzZmQ5N2QwOGMwMjEwY2NmZDY0MzdjYmQ0OTNlMWMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/L_2KGnSlcFIq3owKr5H590o2sq9PkDaoSJj4e5WeAxk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzhfNTYzZmQ5N2QwOGMwMjEwY2NmZDY0MzdjYmQ0OTNlMWMucG5n.jpg",
+          "altText": "Künstlerbedarf wie Acrylfarben, Window-Color-Sets, Keilrahmen und Glitzerkleber für kreative Projekte.",
+          "linkCount": 2,
+          "recipeLinkCount": 0,
+          "productLinkCount": 2
+        },
+        {
+          "page": 39,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7894153dc",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/x7Yc8gLBeGCdMjYQBjE1fF3zEbBturs4TPbnS71H3r8/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzlfYWZiODg2NjllYWFhNDJlZGZkM2FhNTIyNmE1YzRhMjUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/T3gy5UeVPokjYWzml_N4Xx6sQ7_RxuE2aIpgF-30u_8/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzlfYWZiODg2NjllYWFhNDJlZGZkM2FhNTIyNmE1YzRhMjUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/6KvuO3h2ZEXctcf7Gsdy2T9WKKsWSMYFd51RXP4GKKo/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtMzlfYWZiODg2NjllYWFhNDJlZGZkM2FhNTIyNmE1YzRhMjUucG5n.jpg",
+          "altText": "Parkside Werkzeuge für Heimwerker, darunter Stichsägen, Winkelschleifer, Elektrohobel und Trennscheiben.",
+          "linkCount": 1,
+          "recipeLinkCount": 0,
+          "productLinkCount": 1
+        },
+        {
+          "page": 40,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78a1af691",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/OCf-P6vfZX13ngUDGoPprxCfpf9j_mDJHsJqvCNWq2A/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDBfNTQ4OWQ4MjcwYzZhMzQ4ZDc5N2UzZWE1YjU5ZGRlZDMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/C38JltNnwf1SepI2lj5UV46hn4PBHkRZ8iI-oAh1F_Y/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDBfNTQ4OWQ4MjcwYzZhMzQ4ZDc5N2UzZWE1YjU5ZGRlZDMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/4rzTSprcMOwTRUpG0So3zFQXiIzXDifd7AjM3ud-ujc/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDBfNTQ4OWQ4MjcwYzZhMzQ4ZDc5N2UzZWE1YjU5ZGRlZDMucG5n.jpg",
+          "altText": "Schwere Werkzeuge und Zubehör von Parkside, darunter eine Tischkreissäge, eine Säbelsäge, ein Kettenzug und ein Arbeitsbock.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 41,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78aa23b44",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/E7k1pu-w6b7Wk8vcY2fJ1l73hFJPnvowUtwN_vKLC-w/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDFfNWUyNzdkOWRjMjQ3YTkzMWE5ZGMxZTY4ZmQxMzY2MWYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/njK9rX32XAwxELdZywDmzxZrXtF5T80pKXJ1mUOWi-4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDFfNWUyNzdkOWRjMjQ3YTkzMWE5ZGMxZTY4ZmQxMzY2MWYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/SCnKPjXqbkxJJZtaN3L0Rmh8i4bJd7X3AE1qR6KjOiY/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDFfNWUyNzdkOWRjMjQ3YTkzMWE5ZGMxZTY4ZmQxMzY2MWYucG5n.jpg",
+          "altText": "Praktisches Werkstattzubehör wie ein Nass- und Trockensauger, Werkzeugtaschen, Ösenzangen und robuste Arbeitshosen.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 42,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78b84cc96",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/etFX6H_-k43JRe6cQcyphyMxDk9j4DO6euA8VvZVDBw/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDJfMTcyMDA5OTIzZDRhOTg2MDRjYzQ1MzA3NDE1ZDIzOWUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/gCzbwsjbPW_70qjHlJ_fsSiAcmGCa-qcdCG3hmxtltA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDJfMTcyMDA5OTIzZDRhOTg2MDRjYzQ1MzA3NDE1ZDIzOWUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/JKl75oxrPWc229od7LQMudf4sA-lZUfijk-bshSzWH8/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDJfMTcyMDA5OTIzZDRhOTg2MDRjYzQ1MzA3NDE1ZDIzOWUucG5n.jpg",
+          "altText": "Kleinteile und Handwerkzeuge wie Cutter-Messer, Sekundenkleber, Schleifpapier-Sets und Multifunktionsspachtel.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 43,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78bfefb6c",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/ZexsXRCZesaTB-uDJiIj32O2dyLrtlbUyX0BtrbB2L4/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDNfNDU0ZWE4ZmM4MjkyZmJlZTk5NjY2YTkyNDI4YzM3NGQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/c7RyZ1kzSrWuavKVCsA5KbPeZHiOK-6ROLzZGLAn4ic/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDNfNDU0ZWE4ZmM4MjkyZmJlZTk5NjY2YTkyNDI4YzM3NGQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/Ru7cSSJHuu-S3KRrHHUKFIkOHAa8hQrDhAdk2ygqo7k/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDNfNDU0ZWE4ZmM4MjkyZmJlZTk5NjY2YTkyNDI4YzM3NGQucG5n.jpg",
+          "altText": "Schwere Baugeräte von Parkside, darunter ein Bohr- und Meißelhammer, eine Oberfräse, ein Farb- und Mörtelrührer sowie Unterstellböcke.",
+          "linkCount": 1,
+          "recipeLinkCount": 0,
+          "productLinkCount": 1
+        },
+        {
+          "page": 44,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78c8834e9",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/klqlgXwO_rHoI4_CQeSS-r7359FVnobsPaSzxQ4SSMY/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDRfNTYxYTczYzE4OTg0MjE3MmJhYzBlYTVmZTJjOWM0NmQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/TazB4DgXKABr2mVp37t4XoDVQs51uSfym8oP1IASFRU/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDRfNTYxYTczYzE4OTg0MjE3MmJhYzBlYTVmZTJjOWM0NmQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/IoYCoC3xUbJ8zjdkqNTc-wTu1seEhw4I-aKEGf6EY7E/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDRfNTYxYTczYzE4OTg0MjE3MmJhYzBlYTVmZTJjOWM0NmQucG5n.jpg",
+          "altText": "Gartengeräte für den Herbst, darunter eine Benzin-Kettensäge, ein Elektro-Rasenlüfter, ein Benzin-Rasenmäher und ein Laubbläser.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 45,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78c8fdb30",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/_e8sx_pXJlR_WChFflmrp0AZjvnKXJMxY79FwXjR-ls/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDVfNTEzZTk0YTE5NjFkNWU3NWIzNWMzNDQwMmM0OGNiNjgucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/mosgc-jNIW43Is-qu7Ylf2V29gyZVmu5i0UnLmaqaZI/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDVfNTEzZTk0YTE5NjFkNWU3NWIzNWMzNDQwMmM0OGNiNjgucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/t47pRUnfLFC9HVl_Y0EBS0a-l8q-GirWTxFpKF8Yohw/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDVfNTEzZTk0YTE5NjFkNWU3NWIzNWMzNDQwMmM0OGNiNjgucG5n.jpg",
+          "altText": "Gewinnspiel-Ankündigung für eine Parkside Mystery-Box im Wert von 500 Euro inklusive eines Lidl-Einkaufsgutscheins.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 46,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78d7a912e",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/_0FbRCzYgg7yPlnKmUprlZA__Tpd1tnYH0Ff24jqbDo/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDZfNDllMDZkYTBhYzQyZTM0OTY3YTE1MTFiYjg0MmRkYjIucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/zIwKMnXMNEFOnz03HWO0_lyjzTUC0nF2cUw_CuhaTEw/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDZfNDllMDZkYTBhYzQyZTM0OTY3YTE1MTFiYjg0MmRkYjIucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/uD8ygD1hAGk1Tydmaj-RH2XNCeZx4QfzNUdVXQZZX88/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDZfNDllMDZkYTBhYzQyZTM0OTY3YTE1MTFiYjg0MmRkYjIucG5n.jpg",
+          "altText": "Wohnaccessoires und Deko-Artikel wie Tischdecken, Beistelltische, ein Samt-Sitzpouf, Wanduhren und ein Ultraschall-Diffuser.",
+          "linkCount": 1,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 47,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78d9f447e",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/ICrfezhzfSiA75EubO4RbYMocSZJAOegN3cDclYiB8g/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDdfNmExMzgyZTQ5NmJkMjBkNThmYjhlMzNmZDllODI1NjYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/df4VtEmgX-SgXcK2RTB0EFr26GSvLCYWWebgaK7Smag/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDdfNmExMzgyZTQ5NmJkMjBkNThmYjhlMzNmZDllODI1NjYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/cSsZTTJS1m77x3HHRMKZxXiGKGJ_hbIWaS7cXnPxYgc/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDdfNmExMzgyZTQ5NmJkMjBkNThmYjhlMzNmZDllODI1NjYucG5n.jpg",
+          "altText": "Gemütliche Heimtextilien wie Mikrofaser-Satin-Bettwäsche, Spannbettlaken, ein Leseknochen und eine Kuscheldecke.",
+          "linkCount": 4,
+          "recipeLinkCount": 0,
+          "productLinkCount": 4
+        },
+        {
+          "page": 48,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78dfada7f",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/r9rlrm721LahQKNxjhcEPHAWGwhROVftyntRp68E12o/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDhfNjUzMDgwMDMyMjM4OTI3ODU3Zjk5YzEzOTc3MzU1ODgucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/6FV2XIqd3nFbSvftUQS5_uHptThvH30_u8BaP2pMPeA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDhfNjUzMDgwMDMyMjM4OTI3ODU3Zjk5YzEzOTc3MzU1ODgucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/KpHOqvrTq5xnOuXX2P2Ta5AickosIVw_OFCbbnRY-BQ/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDhfNjUzMDgwMDMyMjM4OTI3ODU3Zjk5YzEzOTc3MzU1ODgucG5n.jpg",
+          "altText": "Hochwertige Bettwaren, darunter eine Daunen-Kassettenbettdecke, ein 3-Kammer-Kopfkissen und ergonomische Nackenstützkissen.",
+          "linkCount": 3,
+          "recipeLinkCount": 0,
+          "productLinkCount": 3
+        },
+        {
+          "page": 49,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78e8a7bcf",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/SwCoFngAfLKZBli9qQt195P5pkN9llmsz9zCjgn-Tmg/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDlfYTU0MTM1NGQxY2Y5NDM0NDFlNmZkYzAzM2ZmZjExZmEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/b9yjX8omvO51zvIBj88sUHAFLBD5wtfT0WJsK_kXFas/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDlfYTU0MTM1NGQxY2Y5NDM0NDFlNmZkYzAzM2ZmZjExZmEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/EWiEMrYuUMKMZ5LcqBeUx_PPj_53Zmu6YxZP3iCsJVE/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNDlfYTU0MTM1NGQxY2Y5NDM0NDFlNmZkYzAzM2ZmZjExZmEucG5n.jpg",
+          "altText": "Komfortable Schlafsysteme, darunter eine 7-Zonen-Taschenfederkernmatratze, ein Gelschaum-Topper und ein Relaxsessel.",
+          "linkCount": 3,
+          "recipeLinkCount": 0,
+          "productLinkCount": 3
+        },
+        {
+          "page": 50,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78f08093d",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/X7K-4czX3ANy4smVrh4A64XvKnnX6JpNTZhVn9Hzelg/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTBfNTc3OTlmM2MzMzVlNDYzZGNhZTU1MjI5NWY3NTU0Y2IucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/Wd1VCvqdH4qfAKS3OF38qMVmXQAmk0kBYwxsct_9q0k/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTBfNTc3OTlmM2MzMzVlNDYzZGNhZTU1MjI5NWY3NTU0Y2IucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/btf71frCespYe-OeYtqg-GecccMsx09FTKIpK_jFmLQ/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTBfNTc3OTlmM2MzMzVlNDYzZGNhZTU1MjI5NWY3NTU0Y2IucG5n.jpg",
+          "altText": "Büromöbel und Wohnzimmer-Ausstattung, darunter ein Schreibtischstuhl, ein Schlafsessel, ein Büroschrank und Thermo-Rollos.",
+          "linkCount": 6,
+          "recipeLinkCount": 0,
+          "productLinkCount": 6
+        },
+        {
+          "page": 51,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78f53514b",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/bzvo0-Jq0I-jHVF9y3aPifbFyPws1qDE0ejs1qwUwu8/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTFfYTU1MDUzZWM2MGY0NjQzYzc5YWUxODhlYzgzMzVhZTgucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/s-XFPy9DrGsLPTnTaLVirp9rXnoEsOIs9JjP-Nh5CqQ/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTFfYTU1MDUzZWM2MGY0NjQzYzc5YWUxODhlYzgzMzVhZTgucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/XZP50yX2ym86A0JBVdaHL8eCMu4-uiHG2Msb5X7mqxU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTFfYTU1MDUzZWM2MGY0NjQzYzc5YWUxODhlYzgzMzVhZTgucG5n.jpg",
+          "altText": "Badezimmer-Zubehör wie ein Duschbrause-Set, rutschhemmende Badematten, Seiden-Kissenbezüge und ein WC-Sitz mit Absenkautomatik.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 52,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78f8e0d5f",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/veOZbaRaYo_7eIA5ZSa_CAQu9PD26fBcHUq8s1m2URI/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTJfMTgzNjA5MTExODE1ZDczMWY1ZjA2MDdkODkyMjYwOGYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/PoxqF-bFFMVQEE_2ODHT6z80ud4VkzbBsInx5dgS9CI/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTJfMTgzNjA5MTExODE1ZDczMWY1ZjA2MDdkODkyMjYwOGYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/0HDO_zbNDySvope4s7YRbq-AfNWPRcfRIZEt9aQksXg/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTJfMTgzNjA5MTExODE1ZDczMWY1ZjA2MDdkODkyMjYwOGYucG5n.jpg",
+          "altText": "Beauty- und Pflegegeräte wie ein Haartrockner, ein Warmluftstyler, ein Barttrimmer und ein LED-Schminkspiegel mit Bluetooth-Lautsprecher.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 53,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d78ff5995b",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/m2mLeihBMyPChU3OlrlETmcdGhr3VpZ2h7H4rigkwfg/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTNfMWMyNDY1NWZjNWJiOGQzZmNjNjE2MWI2YzcwY2ViNDkucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/2D7HQmUF70IYRoxos9QB9a2h12NEJemVPqZdJJpmECM/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTNfMWMyNDY1NWZjNWJiOGQzZmNjNjE2MWI2YzcwY2ViNDkucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/L0eyJeYfbX1eQBFcr-jTBep67J5RTndg3wOpZuSIRU8/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTNfMWMyNDY1NWZjNWJiOGQzZmNjNjE2MWI2YzcwY2ViNDkucG5n.jpg",
+          "altText": "Reiseangebote für Center Parcs mit verschiedenen Inklusivleistungen für einen erholsamen Familienurlaub.",
+          "linkCount": 6,
+          "recipeLinkCount": 0,
+          "productLinkCount": 6
+        },
+        {
+          "page": 54,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7900fad3d",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/6PR8fqX595CnjG65CbFyxZ_vwA5T9T8cz8i_UVU9nGQ/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTRfYzM2Mzk4ZTcyNDJlMTE3ODc0OTBkN2JlNjdjNjNlMWQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/utYrK2S3cUamNMzV-IsrSkoHNbvyO4O3ei6lOunhHaU/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTRfYzM2Mzk4ZTcyNDJlMTE3ODc0OTBkN2JlNjdjNjNlMWQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/LAju32j--YA3Cp89LCHGkcyolYR0geK_QNRWWem9poU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTRfYzM2Mzk4ZTcyNDJlMTE3ODc0OTBkN2JlNjdjNjNlMWQucG5n.jpg",
+          "altText": "Haushaltshelfer und Küchen-Organizer, darunter Frischhaltedosen, Aufschnittboxen, Besteckkästen und eine Heißluftfritteuse.",
+          "linkCount": 1,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 55,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7909c1785",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/O5I5s-dj2fTo5qy5B1Zo2J48bnaKEX8fPCZd4ZzlXQk/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTVfN2VhODVhZmUxZjFjYTU3ZDUwZTMyYTMxM2JkNGQ4MmUucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/JUDhcU2KpkUXvSWpQTNzXtqcrewjNCa8ZbB9SUz9LHc/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTVfN2VhODVhZmUxZjFjYTU3ZDUwZTMyYTMxM2JkNGQ4MmUucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/Kh29y2IDGYfN38MpHCesswkbZFcRXXXyO2e-a5EfD4Q/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTVfN2VhODVhZmUxZjFjYTU3ZDUwZTMyYTMxM2JkNGQ4MmUucG5n.jpg",
+          "altText": "Praktische Reinigungs- und Haushaltsgeräte wie ein Milbensauger, ein Akku-Staubsauger, ein Einkaufstrolley und Müllsackständer.",
+          "linkCount": 4,
+          "recipeLinkCount": 2,
+          "productLinkCount": 2
+        },
+        {
+          "page": 56,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7917ea78b",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/ChdGLLo921hx2_nG7tZd0ON9Xf9Rz-vjnpzRQwl4iHg/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTZfNzI3ZDA0MTVmZWU3MjRiZGRjOWY4MWEzNjA3ZTE4MzcucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/iivfe_68eFCCJCTf-v_Dyodw_JWvGlYnALolrQtK4dg/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTZfNzI3ZDA0MTVmZWU3MjRiZGRjOWY4MWEzNjA3ZTE4MzcucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/6w4nMdfVzPIJsQsOyzuSYDD4Fz7scvcdZih0h1bWaDs/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTZfNzI3ZDA0MTVmZWU3MjRiZGRjOWY4MWEzNjA3ZTE4MzcucG5n.jpg",
+          "altText": "Herzhafte Grillspezialitäten und Fleischgerichte, darunter Schweinesteaks, mariniertes Hähnchen, Rindersteaks und Forellen.",
+          "linkCount": 6,
+          "recipeLinkCount": 0,
+          "productLinkCount": 6
+        },
+        {
+          "page": 57,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d791c19372",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/hcQOq89hNUUTU9fqDVACPZu20hvALQItoNji0NHicuE/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTdfMDFmMTg4MWMxNDRhYWZhZTVhMTU5ZmQ4MGI0MGU5ZGMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/O5QRAREsKnajvl5IRAXJoZY9hyi9V04at7GDV5zVahg/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTdfMDFmMTg4MWMxNDRhYWZhZTVhMTU5ZmQ4MGI0MGU5ZGMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/RsAKg8g7gqEIWsW6YsrQZMEwA3WjUQh_bZrQVXdh0-Q/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTdfMDFmMTg4MWMxNDRhYWZhZTVhMTU5ZmQ4MGI0MGU5ZGMucG5n.jpg",
+          "altText": "Bayerische Spezialitäten im Oktoberfest-Stil, darunter Leberkäse, Weißwurst, Knödel, Haxen und passendes Helles Bier.",
+          "linkCount": 5,
+          "recipeLinkCount": 0,
+          "productLinkCount": 5
+        },
+        {
+          "page": 58,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d79246cf88",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/3XbTsVZJuTJp2yHFi12gp2ZrWR0g4m7Tw_aBUSesapg/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNThfN2ZlOTI4MTEzMGZkZTMzMDc3YTgyZTAwZThlODMzNWQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/AasJlqbKjuQOr2vTOk3tjw6ssTAtNW8D3Aem0_F01o4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNThfN2ZlOTI4MTEzMGZkZTMzMDc3YTgyZTAwZThlODMzNWQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/NWwIOctAR6nfccpklJwHWh3Opj_6C1NP7tV09YzjHts/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNThfN2ZlOTI4MTEzMGZkZTMzMDc3YTgyZTAwZThlODMzNWQucG5n.jpg",
+          "altText": "Wellness-Reiseangebot für einen erholsamen Urlaub in einem Wellnesshotel im Zillertal.",
+          "linkCount": 3,
+          "recipeLinkCount": 0,
+          "productLinkCount": 3
+        },
+        {
+          "page": 59,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d792b8c4bd",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/NpFxCYnkLeeLew1hAtCc-45tLu0ASuxp-DmEVGkwWVc/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTlfMjlkOGE3MmU3YjY0NWMxZDZhNjA0NWQ4ZmI4YjAzODYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/AGfDXNH3zAr7lNa6bieaAyaIOLCkLiFsph4P4xKlh80/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTlfMjlkOGE3MmU3YjY0NWMxZDZhNjA0NWQ4ZmI4YjAzODYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/aTHABVdfLV5Hs2KLCp7_oOEfbD5UOVLcHYivli3FR6I/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNTlfMjlkOGE3MmU3YjY0NWMxZDZhNjA0NWQ4ZmI4YjAzODYucG5n.jpg",
+          "altText": "Oktoberfest-Schmankerl wie Rauchkäse, Germknödel, Wurstplatten, Rösti und süße Krapfen.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 60,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d792cb9507",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/ZSwbOfVMRCPmsZLCLSizSrIygqr2yUH3Y0XdxPUQ8B0/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjBfNDNiZjJkNWI3NWZkZjA1Yzg5MzVkM2JjODFjMTgwYmYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/khHugH4wKiXn46m-SIzPm5YvIh9KhGGAaY26ekD1jPQ/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjBfNDNiZjJkNWI3NWZkZjA1Yzg5MzVkM2JjODFjMTgwYmYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/-j9T_Wb6qDYvPX5U6789m-WtSLm-M9zzGHdDYRi4ZNo/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjBfNDNiZjJkNWI3NWZkZjA1Yzg5MzVkM2JjODFjMTgwYmYucG5n.jpg",
+          "altText": "Beliebte Markenprodukte im Angebot, darunter Mövenpick Kaffee, Funny-Frisch Chips, Delverde Pasta und Rama Culinesse.",
+          "linkCount": 2,
+          "recipeLinkCount": 1,
+          "productLinkCount": 1
+        },
+        {
+          "page": 61,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d793231861",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/GYpRze9ZGVwiqGN463gqpn2HB6ENX7jqaj8MT6U3wi0/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjFfZTk4ZDlmYWIzM2VjMDRmMjBmNjJlYWY2ZmJkOTk5YWEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/Bh8UXIidEyHDFeKiPwH9MXJmnguTYZ_sWcxNnyAV8jM/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjFfZTk4ZDlmYWIzM2VjMDRmMjBmNjJlYWY2ZmJkOTk5YWEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/INCjHJF8GUM_t11IlTY69uuGg5tVt5nSVSpn952WK9Q/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjFfZTk4ZDlmYWIzM2VjMDRmMjBmNjJlYWY2ZmJkOTk5YWEucG5n.jpg",
+          "altText": "Vielfältige Haushalts- und Lebensmittelangebote, darunter Just Spices Gewürze, Febreze, Oetker Backmischungen und Lipton Ice Tea.",
+          "linkCount": 5,
+          "recipeLinkCount": 5,
+          "productLinkCount": 0
+        },
+        {
+          "page": 62,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d79331ce5b",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/0QXP9oCoqnbLvS4Ak0avkBkWEVqEoWBS_6Gi2iBWKjw/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjJfMjgzMDcyNjUxMTc4YzI1MTk2OWY1NzEwNTI4NGNmMDIucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/hXteJPxgzic7geQlH9tMzakIAaNs8B6STsYneMOSMb0/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjJfMjgzMDcyNjUxMTc4YzI1MTk2OWY1NzEwNTI4NGNmMDIucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/1Esq5GthEmDywoTX7mqGeEg3r9-b-3nqF_9JswbdZLY/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjJfMjgzMDcyNjUxMTc4YzI1MTk2OWY1NzEwNTI4NGNmMDIucG5n.jpg",
+          "altText": "Eine Auswahl an Lebensmitteln wie Pfannen-Gnocchi, Thunfisch-Salat, Nesquik, Veganes von Rügenwalder und Schafskäse.",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 63,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d793ada4ea",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/3VBK3RU1hGHZ4KVT7spLUjEJObVkY00iUiJsLU8csnc/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjNfNTljZDMwZmNiMjA5MWU0OTQzNGZkMTc3MDg3ZTNjYTgucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/L-EkWcYGvSJCrPm11MDqPXk0pCPMmL6ZgDkTKnQDdMI/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjNfNTljZDMwZmNiMjA5MWU0OTQzNGZkMTc3MDg3ZTNjYTgucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/vBovYSZsbjUho0eQ4FM_yeU8FtN6hGyt2wT6-fTteuw/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjNfNTljZDMwZmNiMjA5MWU0OTQzNGZkMTc3MDg3ZTNjYTgucG5n.jpg",
+          "altText": "Drogerie- und Genussartikel im Angebot, darunter Vanish Oxi Action, Rotkäppchen Fruchtsecco, Cashewkerne und Haribo Fruchtgummi.",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 64,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7943e6053",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/yLJzYC1Dp07xQjB8pmBhqgoalyVYEOtJsEp1iB4sjbI/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjRfNDE4NTA1MmVkOGU0MGQ5M2U3MjBlMTlmZDRiYjE4NjMucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/OSYzrRvr6HR33g9J8s6392nq9rbR9pBX8NIBY-rXfFA/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjRfNDE4NTA1MmVkOGU0MGQ5M2U3MjBlMTlmZDRiYjE4NjMucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/N3ODcmbfnh5qMJ4CRu9gTFNRVdaPuEy6hjDOfPmzLOQ/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjRfNDE4NTA1MmVkOGU0MGQ5M2U3MjBlMTlmZDRiYjE4NjMucG5n.jpg",
+          "altText": "Wochenend-Angebote mit Rabatten auf Tafelspitz, Schmutzfangmatten, Pyjamas und gemütliche Cardigans.",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 65,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7953b80c2",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/2sHuemzMI4ovkQz6xjG5B4ORfW8_tkwTg3IlvRTFvwA/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjVfMmFjNGM5Y2FmMjQ0ZDU5ZDZmNTEzMmU3MTkyYjgxN2UucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/IdifroTCAQNRIqCkfdmFjxPZpk_pR9V5tuyqvsViSz4/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjVfMmFjNGM5Y2FmMjQ0ZDU5ZDZmNTEzMmU3MTkyYjgxN2UucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/gJ0sxy0JcrN3P-e6FjtPI5jHre4qA6137gFdYCIwM-M/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjVfMmFjNGM5Y2FmMjQ0ZDU5ZDZmNTEzMmU3MTkyYjgxN2UucG5n.jpg",
+          "altText": "Informationen zu exklusiven Partnervorteilen wie Tankrabatten bei Shell und den V-Label Awards für pflanzliche Produkte.",
+          "linkCount": 3,
+          "recipeLinkCount": 1,
+          "productLinkCount": 2
+        },
+        {
+          "page": 66,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d79598e033",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/GfmmjyNivVbTm8Mytl6H0PQA-IvGzPFZhsjIKDH7Emk/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjZfNGNiY2E1MGEzYmI0ZTJiODJkYWE5YWE5MzM4ZGI0YzEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/zpNY7SpTyVAt3yzJRGbTX85QYPOHW6CFGnsD1LD9GQM/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjZfNGNiY2E1MGEzYmI0ZTJiODJkYWE5YWE5MzM4ZGI0YzEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/KEKVLejLo5yTQrzxSuk_ThZz0dtaohFeNTG0pbZUn48/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjZfNGNiY2E1MGEzYmI0ZTJiODJkYWE5YWE5MzM4ZGI0YzEucG5n.jpg",
+          "altText": "Vorstellung der fair gehandelten „Way To Go“-Schokolade zur Unterstützung von Kakaobäuerinnen und -bauern in Ghana.",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 67,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7966dcb47",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/qpehgOeROiXCWNLnEyW2XacTbasPlTkjNwXXBgBWEzI/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjdfYzFhOTliODAzODA5ZjdiM2UzYzk4ZGRhNWViYWRjMTgucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/PYvPB_7us8divCexkyKOWbc--jokcZwJbXH4lVkMiHU/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjdfYzFhOTliODAzODA5ZjdiM2UzYzk4ZGRhNWViYWRjMTgucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/em4O0sMCAoBVhzlme8xZRjed3ufCqjUqdkPw7KQy_cA/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjdfYzFhOTliODAzODA5ZjdiM2UzYzk4ZGRhNWViYWRjMTgucG5n.jpg",
+          "altText": "Seite 67 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 68,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d796ed4fef",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/0iOe-b0K7js9rcwXWxNfa4nYtoy-z28Lg1EDJorwsgQ/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjhfN2NlM2U5NTk5ZDM0MzhmYmY0MjY0MWM5N2Y2YzVlOWYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/vxuxqT_7usguSD4MsJ9INiKQka-OklvGMxew0Hfo0gE/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjhfN2NlM2U5NTk5ZDM0MzhmYmY0MjY0MWM5N2Y2YzVlOWYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/9SmVAVnTB0LeZdKIAnqtzvthULECdDKC7pCbIiGg-vU/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjhfN2NlM2U5NTk5ZDM0MzhmYmY0MjY0MWM5N2Y2YzVlOWYucG5n.jpg",
+          "altText": "Seite 68 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 69,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d79763db34",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/HMUCuHFXMSzeSJ-5N-sYHxsCOEapZ5Ja3T0Nky6Iuw4/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjlfMmVlY2MwMzNlZjZhMTM2OWM5NGI2M2YwNzNmOTdlODcucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/3sIHD6i0L1k270_NDdzhtnDhFODEpTSApf89nIWbl8s/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjlfMmVlY2MwMzNlZjZhMTM2OWM5NGI2M2YwNzNmOTdlODcucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/LNC8yLfB8UCF_RhZbTmWRNjPzIfU8uTNEaY0GYR2J_E/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNjlfMmVlY2MwMzNlZjZhMTM2OWM5NGI2M2YwNzNmOTdlODcucG5n.jpg",
+          "altText": "Seite 69 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 70,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d797ff486a",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/JH0X9zaXVst8HP6XcB6-CSJCJaTThKZBKJw3hpq4PvQ/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzBfZDRiNjk5YWIyODIxMmZkZGVhYTFiMWFiODQ2NGMyZTQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/4uV5RrdjGb3Zq3WRtfSRSygCHGOSt6Bmp2YViS34eE8/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzBfZDRiNjk5YWIyODIxMmZkZGVhYTFiMWFiODQ2NGMyZTQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/L98BZfsCKmIlEKxreeqwJHv_t7Yp9PPJETXi38oOfbg/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzBfZDRiNjk5YWIyODIxMmZkZGVhYTFiMWFiODQ2NGMyZTQucG5n.jpg",
+          "altText": "Seite 70 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 2,
+          "recipeLinkCount": 2,
+          "productLinkCount": 0
+        },
+        {
+          "page": 71,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d79825e98a",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/YFwWSvMrwOZUqYUv0tfvIQgg01ZzgBD-lQO3QJkT7Ac/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzFfODlkMTJmMTYyNjc0ZmQ3MTMwZjJjYWY5YjU1ZDQzOGEucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/EEB_HOx2tdyphHg2xnsfqBYKMi--GXhWainkiEeZqKs/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzFfODlkMTJmMTYyNjc0ZmQ3MTMwZjJjYWY5YjU1ZDQzOGEucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/-6dFT8jkNdNPgXm0iK-waLYn3qqf8sTKj4xMAvE1OZk/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzFfODlkMTJmMTYyNjc0ZmQ3MTMwZjJjYWY5YjU1ZDQzOGEucG5n.jpg",
+          "altText": "Seite 71 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        },
+        {
+          "page": 72,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7987150c3",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/yObnfOEG-1Jck0gZqkINPZFxiIX6S0F0hYj_WR_yzN8/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzJfYzljOGZkYzMyZjNkOGY5OGMzNDc0ZmVmYWZlYTMxNDYucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/MHON-_AIR7GGM7dLXkspqhjcF9m3owvm_76NTXqnh9E/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzJfYzljOGZkYzMyZjNkOGY5OGMzNDc0ZmVmYWZlYTMxNDYucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/m2jEgl20IqpcyeEw87fBIYj8skJMb2-uqFhfc6wE108/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzJfYzljOGZkYzMyZjNkOGY5OGMzNDc0ZmVmYWZlYTMxNDYucG5n.jpg",
+          "altText": "Seite 72 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 4,
+          "recipeLinkCount": 3,
+          "productLinkCount": 1
+        },
+        {
+          "page": 73,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d7990aa578",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/_6TtPK7o4a9E1l0CNyPcBOK9TVL2CgQwAHlYIdw2y7E/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzNfZjMzM2IyYjNhNGY3NGUyZWY2NTA5MDQwNGJlMTZmMGQucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/B5NR51DwbXD5hlZbivA7L19I93HUDPQaf-ntjtHP-Qc/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzNfZjMzM2IyYjNhNGY3NGUyZWY2NTA5MDQwNGJlMTZmMGQucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/sp5l2aPquVPCfAtjWCezB5v-Du2gV3NZYU2HPqmrpfA/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzNfZjMzM2IyYjNhNGY3NGUyZWY2NTA5MDQwNGJlMTZmMGQucG5n.jpg",
+          "altText": "Seite 73 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 1,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 74,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d799d04db1",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/Zu5eQfUy2cmWrpzBO-4AnXLgQz7zFpXrk9kcfqPjA9U/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzRfMTk5YTcyMDhmMjE0ODFkYjdkNTAzMDQ4Y2UxOTFiNTIucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/ZMZj_YWsq3s5Fq7Mkxcuisd4G84_9rJiu5LJVARnwOc/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzRfMTk5YTcyMDhmMjE0ODFkYjdkNTAzMDQ4Y2UxOTFiNTIucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/IjVpw0x3vX25gFOl0LJO1y2e1PB9TZTsl3zHQvnK4Mw/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzRfMTk5YTcyMDhmMjE0ODFkYjdkNTAzMDQ4Y2UxOTFiNTIucG5n.jpg",
+          "altText": "Seite 74 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 0,
+          "recipeLinkCount": 0,
+          "productLinkCount": 0
+        },
+        {
+          "page": 75,
+          "pageId": "01a0a07d-1d14-7df2-b48f-48d79a775eca",
+          "width": 1415,
+          "height": 2400,
+          "imageUrl": "https://imgproxy.leaflets.schwarz/K92qePnxH6sak3kR2aPQvPUNQoY1K7ln67PKaFqH0j8/rs:fit:1200:1200:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzVfN2Q3OGJlMTY3Y2Y5MGI2N2MwZTZmZmIzYmVhNmQ4ZTkucG5n.jpg",
+          "zoomUrl": "https://imgproxy.leaflets.schwarz/y0eXbsSXeOarhuWCb8Bp4-1hZMgVn7UsUmtG7HurY8M/rs:fit:2400:2400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzVfN2Q3OGJlMTY3Y2Y5MGI2N2MwZTZmZmIzYmVhNmQ4ZTkucG5n.jpg",
+          "thumbnailUrl": "https://imgproxy.leaflets.schwarz/WQTBHeK8Sa80R18JxBcWQpvv3Vq-VVJPJRybBCsCz-I/rs:fit:400:400:1/g:no/czM6Ly9sZWFmbGV0cy9pbWFnZXMvMDFhMDdiNjktNDM3ZC03MDg2LTljZjYtOTllMGMwMjFkOTliL3BhZ2UtNzVfN2Q3OGJlMTY3Y2Y5MGI2N2MwZTZmZmIzYmVhNmQ4ZTkucG5n.jpg",
+          "altText": "Seite 75 - Aktionsprospekt - 14.09.2026 – 19.09.2026",
+          "linkCount": 1,
+          "recipeLinkCount": 1,
+          "productLinkCount": 0
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "sourceCount": 2,
+    "contentPages": 147,
+    "checkedContentPages": 147,
+    "viewerBoundaryPages": [
+      {
+        "chain": "Lidl",
+        "page": 76
+      }
+    ]
+  }
+}

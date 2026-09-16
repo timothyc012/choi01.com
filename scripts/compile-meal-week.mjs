@@ -6,6 +6,7 @@ import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 
 import {parseCsv,generateCatalog} from './generate-meal-offers.mjs';
+import {buildDiscoveryCatalog} from './build-meal-discovery-catalog.mjs';
 import {buildStoreCandidateReport,discoverStoreRecipeCandidates} from './find-store-recipe-candidates.mjs';
 import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
 import {selectStoreRecipes} from './lib/select-store-recipes.mjs';
@@ -104,7 +105,7 @@ function retainedSnapshot(previousManifestPath,nextWeekStart,mode) {
   return {pointer:{snapshotId:manifest.snapshotId,manifestPath,manifestSha256,mode},files};
 }
 
-function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source,previousSnapshot,retainedFiles}) {
+function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source,previousSnapshot,retainedFiles,discoveryTarget=240}) {
   const locations=[];
   const coverageLocations=[];
   const details=new Map();
@@ -147,11 +148,25 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   const reviewQueueEntries=[...reviewQueue.values()].map((entry)=>({...entry,locationIds:[...new Set(entry.locationIds)].sort()}))
     .sort((a,b)=>[a.recipeId,a.reason].join('|').localeCompare([b.recipeId,b.reason].join('|')));
   const publicDetailHashes=Object.fromEntries([...details].sort(([a],[b])=>a.localeCompare(b)).map(([sourceRecipeId,detail])=>[sourceRecipeId,sha256(jsonBytes(detail))]));
-  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes,...(previousSnapshot?{previousSnapshot}:{})};
+  const discoveryDraft=buildDiscoveryCatalog({
+    candidateReport,snapshotId:'0'.repeat(64),weekStart,target:discoveryTarget,
+    candidateReportSha256:source.discoverySha256,
+  });
+  const {snapshotId:_draftSnapshotId,...discoveryIdentity}=discoveryDraft;
+  const discoveryIdentitySha256=sha256(canonicalJson(discoveryIdentity));
+  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes,discoveryIdentitySha256,...(previousSnapshot?{previousSnapshot}:{})};
   const snapshotId=sha256(canonicalJson(seed));
   const snapshotRoot=`snapshots/${weekStart}/${snapshotId}`;
   const files=new Map();
   const recipeIndex=[];
+  const discoveryCatalog=buildDiscoveryCatalog({
+    candidateReport,snapshotId,weekStart,target:discoveryTarget,
+    candidateReportSha256:source.discoverySha256,
+  });
+  const discoveryBytes=jsonBytes(discoveryCatalog);
+  const discoverySha256=sha256(discoveryBytes);
+  const discoveryCatalogPath=`${snapshotRoot}/recipes/discovery.${discoverySha256}.json`;
+  files.set(discoveryCatalogPath,discoveryBytes);
   for(const [sourceRecipeId,detail] of [...details].sort(([a],[b])=>a.localeCompare(b))) {
     const bytes=jsonBytes(detail);
     const contentHash=sha256(bytes);
@@ -172,7 +187,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   files.set(recipeIndexPath,jsonBytes({schemaVersion:1,snapshotId,recipes:recipeIndex}));
   const manifestLocations=locations.map((location)=>({id:location.id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,path:`${snapshotRoot}/locations/${location.id}.json`,recipeCount:location.recipes.length}));
   const fileHashes=Object.fromEntries([...files].sort(([a],[b])=>a.localeCompare(b)).map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,fileHashes,...(previousSnapshot?{previousSnapshot}:{})};
+  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,discoveryCatalogPath,fileHashes,...(previousSnapshot?{previousSnapshot}:{})};
   const manifestPath=`${snapshotRoot}/manifest.json`;
   const manifestBytes=jsonBytes(manifest);
   const current={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)};
@@ -245,7 +260,9 @@ export async function compileMealWeek(options) {
   if(!['bootstrap','rollover','correction'].includes(releaseMode)) throw new Error('releaseMode must be bootstrap, rollover, or correction');
   if(releaseMode==='bootstrap'&&options.previousManifestPath) throw new Error('Bootstrap must not include a previous manifest');
   const previous=releaseMode!=='bootstrap'?retainedSnapshot(options.previousManifestPath,weekStart,releaseMode):null;
-  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source,previousSnapshot:previous?.pointer||null,retainedFiles:previous?.files||new Map()};
+  const discoveryTarget=options.discoveryTarget??240;
+  if(!Number.isInteger(discoveryTarget)||discoveryTarget<1||discoveryTarget>1000) throw new Error('discoveryTarget must be 1..1000');
+  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source,previousSnapshot:previous?.pointer||null,retainedFiles:previous?.files||new Map(),discoveryTarget};
   const first=buildFiles(input);
   const second=buildFiles(structuredClone(input));
   compareBuilds(first,second);

@@ -135,7 +135,8 @@
         if(!policy) { eligible=false; reasons.push('추천 정책 자료를 불러오지 못했습니다.'); }
         else reasons.push('1인분 근거: '+nutrient.facts.kcal+' kcal · 단백질 '+nutrient.facts.proteinGrams+' g · 식이섬유 '+nutrient.facts.fiberGrams+' g · 나트륨 '+nutrient.facts.sodiumMg+' mg · 정책 가중치 열량 '+policy.weights.kcal+'%·단백질 '+policy.weights.proteinGrams+'%·식이섬유 '+policy.weights.fiberGrams+'%·나트륨 '+policy.weights.sodiumMg+'%');
       }
-    } else reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
+    } else if(explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length) reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
+    else reasons.push('전체 레시피의 주재료와 메뉴 다양성을 기준으로 추천합니다.');
     return {eligible,readiness,scoreComponents,reasons};
   }
 
@@ -235,10 +236,20 @@
     return result;
   }
 
+  function browse(meals, options = {}) {
+    const current = available(meals,options);
+    const currentIds = new Set(current.map(identity));
+    const general = meals.filter((meal)=>!currentIds.has(identity(meal)));
+    return [
+      ...sequence(current,{...options,requireMainOffer:false},current.length),
+      ...sequence(general,{...options,requireMainOffer:false},general.length)
+    ];
+  }
+
   function current(meals, options, selectedId = null) {
     // A deliberate library choice may be a side; automatic meals may not.
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {available,rank,sequence,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
+  window.MealRecommendations = {available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
 }());
