@@ -15,6 +15,7 @@ const AFTER_DEBOUNCE_MS = 500;
 let container;
 let root;
 let server;
+let MarkdownPreviewPage;
 
 async function type(value) {
   const editor = container.querySelector('.mp-editor');
@@ -34,7 +35,7 @@ before(async () => {
     appType: 'custom',
     optimizeDeps: { noDiscovery: true },
   });
-  const { MarkdownPreviewPage } = await server.ssrLoadModule('/src/markdown/MarkdownPreviewPage.tsx');
+  ({ MarkdownPreviewPage } = await server.ssrLoadModule('/src/markdown/MarkdownPreviewPage.tsx'));
   container = document.createElement('div');
   document.body.appendChild(container);
   root = createRoot(container);
@@ -50,8 +51,13 @@ after(async () => {
 it('shows both panes with the sample document already rendered', () => {
   assert.ok(container.querySelector('.mp-pane-editor'), 'editor pane');
   assert.ok(container.querySelector('.mp-pane-preview'), 'preview pane');
-  assert.equal(container.querySelector('.mp-markdown h1')?.textContent, '마크다운 라이브 프리뷰');
+  assert.equal(container.querySelector('.mp-markdown h1')?.textContent, '마크다운 프리뷰 사용법');
   assert.ok(container.querySelector('.mp-markdown table'), 'the sample table should render');
+  assert.match(container.querySelector('.mp-markdown')?.textContent ?? '', /가운데 구분선/);
+  assert.doesNotMatch(
+    container.querySelector('.mp-markdown')?.textContent ?? '',
+    /Stiftung|환급액|회사 귀속|보육료/i,
+  );
 });
 
 it('updates the preview after the user stops typing', async () => {
@@ -82,6 +88,37 @@ it('keeps the draft in localStorage so a refresh does not lose it', async () => 
   assert.equal(window.localStorage.getItem('choi01:markdown-preview:draft'), '저장되어야 하는 초안');
 });
 
+it('resizes the split view with the keyboard-accessible divider', async () => {
+  const divider = container.querySelector('.mp-resizer');
+  const stage = container.querySelector('.mp-stage');
+  assert.ok(divider, 'expected a draggable divider');
+  assert.equal(divider.getAttribute('role'), 'separator');
+  assert.equal(divider.getAttribute('aria-valuenow'), '50');
+
+  await act(async () => {
+    divider.dispatchEvent(new window.KeyboardEvent('keydown', {
+      key: 'ArrowRight',
+      bubbles: true,
+    }));
+  });
+
+  assert.equal(divider.getAttribute('aria-valuenow'), '55');
+  assert.equal(stage.style.getPropertyValue('--mp-editor-size'), '55%');
+});
+
+it('swaps the editor and preview without losing the split ratio', async () => {
+  const stage = container.querySelector('.mp-stage');
+  const swap = container.querySelector('[aria-label="편집기와 미리보기 좌우 바꾸기"]');
+  assert.ok(swap, 'expected a pane swap control');
+  assert.equal(stage.querySelector(':scope > .mp-pane')?.getAttribute('aria-label'), '마크다운 편집');
+
+  await act(async () => { swap.click(); });
+
+  assert.equal(stage.querySelector(':scope > .mp-pane')?.getAttribute('aria-label'), '미리보기');
+  assert.equal(stage.getAttribute('data-editor-side'), 'right');
+  assert.equal(stage.style.getPropertyValue('--mp-editor-size'), '55%');
+});
+
 it('switches to a single pane when a view is selected', async () => {
   const preview = [...container.querySelectorAll('.mp-segment')]
     .find(button => button.textContent?.includes('미리보기'));
@@ -105,4 +142,21 @@ it('gives a mermaid fence its own block instead of folding it into the prose', a
     'expected either a drawn diagram or its code-block fallback',
   );
   assert.match(container.querySelector('.mp-markdown')?.textContent ?? '', /뒤 문단\./);
+});
+
+it('replaces the previously bundled tax example without deleting ordinary drafts', async () => {
+  await act(async () => { root.unmount(); });
+  window.localStorage.setItem('choi01:markdown-preview:draft', [
+    '# 마크다운 라이브 프리뷰',
+    'title 예상 환급액 배분 (단위: EUR)',
+    '"회사 귀속" : 25410',
+    '"2023 보육료" : 1450',
+  ].join('\n'));
+  root = createRoot(container);
+
+  await act(async () => { root.render(React.createElement(MarkdownPreviewPage)); });
+  await act(async () => { await delay(AFTER_DEBOUNCE_MS); });
+
+  assert.equal(container.querySelector('.mp-markdown h1')?.textContent, '마크다운 프리뷰 사용법');
+  assert.equal(window.localStorage.getItem('choi01:markdown-preview:draft'), null);
 });

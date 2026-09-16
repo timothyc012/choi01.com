@@ -1,8 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback, useEffect, useMemo, useRef, useState,
+  type CSSProperties, type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
+} from 'react';
 import {
   ArrowLeft, PenLine, Columns2, Eye,
   Copy, Check, Download, FileCode, RotateCcw,
-  ArrowDownUp, ShieldAlert, Sun, Moon,
+  ArrowDownUp, ArrowLeftRight, ShieldAlert, Sun, Moon,
 } from 'lucide-react';
 import { renderMarkdown, type MarkdownBlock, type MarkdownRenderResult } from './renderMarkdown';
 import { renderMermaid, type MermaidResult } from './renderMermaid';
@@ -11,70 +15,70 @@ import { buildHtmlDocument } from './exportHtmlDocument';
 const DRAFT_KEY = 'choi01:markdown-preview:draft';
 const RENDER_DEBOUNCE_MS = 300;
 const NARROW_QUERY = '(max-width: 900px)';
+const MIN_EDITOR_SIZE = 20;
+const MAX_EDITOR_SIZE = 80;
+const KEYBOARD_RESIZE_STEP = 5;
 
 type PaneView = 'edit' | 'split' | 'preview';
 
 const SAMPLE_DOCUMENT = [
-  '# 마크다운 라이브 프리뷰',
+  '# 마크다운 프리뷰 사용법',
   '',
-  '왼쪽에 쓰면 오른쪽에 바로 보입니다. **서버로 아무것도 보내지 않고**, 브라우저 안에서만',
-  '변환합니다.',
+  '편집창에 마크다운을 입력하면 미리보기창에서 결과를 바로 확인할 수 있습니다.',
+  '작성한 내용은 서버로 전송되지 않고 이 브라우저에만 임시 저장됩니다.',
   '',
-  '## 쓸 수 있는 것',
+  '## 빠르게 시작하기',
   '',
-  '- **굵게**, *기울임*, ~~취소선~~, `인라인 코드`',
-  '- [링크](https://choi01.com) — 바깥 링크는 새 탭에서 열립니다',
-  '- 중첩 목록',
-  '  1. 순서 있는 항목',
-  '  2. 그 다음 항목',
+  '1. 편집창에 내용을 쓰거나 기존 마크다운을 붙여넣으세요.',
+  '2. 가운데 구분선을 드래그해 두 영역의 너비를 조절하세요.',
+  '3. 상단 버튼으로 편집·나란히·미리보기 화면을 전환할 수 있습니다.',
+  '4. 좌우 바꾸기 버튼을 누르면 편집창과 미리보기창의 위치가 바뀝니다.',
   '',
-  '### 할 일 목록',
+  '## 기본 문법',
   '',
-  '- [x] GFM 표와 체크박스',
-  '- [ ] 여기에 직접 써 보기',
+  '- `# 제목`, `## 소제목`',
+  '- `**굵게**`, `*기울임*`, `` `코드` ``',
+  '- `[링크 이름](https://example.com)`',
+  '- `- 항목` 또는 `1. 항목`으로 목록 만들기',
+  '- `- [ ] 할 일`, `- [x] 완료한 일`',
   '',
-  '### 표',
+  '### 예시 표',
   '',
-  '| 기능 | 지원 |',
-  '| --- | :---: |',
-  '| 표 | O |',
-  '| 각주 | X |',
+  '| 문법 | 결과 |',
+  '| --- | --- |',
+  '| `**중요**` | **중요** |',
+  '| `> 인용문` | 인용문 |',
   '',
-  '### 코드',
+  '### 코드 블록',
   '',
-  '```ts',
-  'export function greet(name: string): string {',
-  '  return `안녕하세요, ${name}`;',
-  '}',
+  '```js',
+  'console.log("안녕하세요!");',
   '```',
   '',
   '### 다이어그램',
   '',
-  '세 칸따옴표 뒤에 `mermaid`를 쓰면 그대로 그려줍니다.',
-  '',
-  '```mermaid',
-  'pie showData',
-  '    title 예상 환급액 배분 (단위: EUR)',
-  '    "회사 귀속" : 25410',
-  '    "2023 보육료" : 1450',
-  '    "2024 보육료" : 1890',
-  '```',
+  '코드 블록의 언어를 `mermaid`로 지정하면 다이어그램도 그릴 수 있습니다.',
   '',
   '```mermaid',
   'flowchart LR',
-  '    A[마크다운 입력] --> B{코드펜스?}',
-  '    B -- mermaid --> C[다이어그램으로 렌더링]',
-  '    B -- 그 외 --> D[코드 블록으로 표시]',
+  '    A[마크다운 입력] --> B[미리보기 확인]',
   '```',
-  '',
-  '> 인용문은 이렇게 보입니다.',
   '',
   '---',
   '',
-  '붙여넣은 HTML은 렌더링되기 전에 소독됩니다. `<script>` 나 `onerror` 같은 것은',
-  '조용히 제거되고, 무엇이 지워졌는지 미리보기 머리말에 알려 줍니다.',
+  '완성한 문서는 상단에서 `.md` 또는 HTML 파일로 저장할 수 있습니다.',
   '',
 ].join('\n');
+
+const LEGACY_SAMPLE_SIGNATURES = [
+  'title 예상 환급액 배분 (단위: EUR)',
+  '"회사 귀속" : 25410',
+  '"2023 보육료" : 1450',
+] as const;
+
+function isBundledLegacySample(source: string): boolean {
+  return LEGACY_SAMPLE_SIGNATURES.every(signature => source.includes(signature));
+}
 
 function downloadBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
@@ -87,7 +91,12 @@ function downloadBlob(blob: Blob, filename: string): void {
 
 function readDraft(): string {
   try {
-    return window.localStorage.getItem(DRAFT_KEY) ?? SAMPLE_DOCUMENT;
+    const draft = window.localStorage.getItem(DRAFT_KEY);
+    if (draft && isBundledLegacySample(draft)) {
+      window.localStorage.removeItem(DRAFT_KEY);
+      return SAMPLE_DOCUMENT;
+    }
+    return draft ?? SAMPLE_DOCUMENT;
   } catch {
     // Private mode / blocked storage: the page still works, it just forgets.
     return SAMPLE_DOCUMENT;
@@ -107,6 +116,10 @@ function documentName(source: string): string {
 function countWords(source: string): number {
   const matches = source.trim().match(/\S+/g);
   return matches ? matches.length : 0;
+}
+
+function clampEditorSize(value: number): number {
+  return Math.min(MAX_EDITOR_SIZE, Math.max(MIN_EDITOR_SIZE, value));
 }
 
 /**
@@ -154,20 +167,27 @@ export function MarkdownPreviewPage() {
   const [scrollSync, setScrollSync] = useState(true);
   const [copied, setCopied] = useState(false);
   const [diagrams, setDiagrams] = useState<ReadonlyMap<string, MermaidResult>>(new Map());
+  const [editorSize, setEditorSize] = useState(50);
+  const [editorSide, setEditorSide] = useState<'left' | 'right'>('left');
+  const [isResizing, setIsResizing] = useState(false);
 
+  const stageRef = useRef<HTMLElement>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const scrollOwnerRef = useRef<'editor' | 'preview' | null>(null);
+  const hasUserEditedRef = useRef(false);
 
   // Render off the critical typing path: keystrokes stay cheap, the preview
   // catches up once the user pauses.
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setRendered(renderMarkdown(source));
-      try {
-        window.localStorage.setItem(DRAFT_KEY, source);
-      } catch {
-        // Storage unavailable — the preview is the part that matters.
+      if (hasUserEditedRef.current) {
+        try {
+          window.localStorage.setItem(DRAFT_KEY, source);
+        } catch {
+          // Storage unavailable — the preview is the part that matters.
+        }
       }
     }, RENDER_DEBOUNCE_MS);
     return () => window.clearTimeout(timer);
@@ -243,6 +263,7 @@ export function MarkdownPreviewPage() {
 
   const handleReset = useCallback(() => {
     if (!window.confirm('작성한 내용을 지우고 예시 문서로 되돌릴까요?')) return;
+    hasUserEditedRef.current = false;
     setSource(SAMPLE_DOCUMENT);
     try {
       window.localStorage.removeItem(DRAFT_KEY);
@@ -292,8 +313,118 @@ export function MarkdownPreviewPage() {
     { value: 'preview', label: '미리보기', Icon: Eye },
   ];
 
+  const resizeFromPointer = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!isResizing) return;
+    const stage = stageRef.current;
+    if (!stage) return;
+    const bounds = stage.getBoundingClientRect();
+    if (bounds.width <= 0) return;
+    const pointerPercent = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const percent = editorSide === 'left' ? pointerPercent : 100 - pointerPercent;
+    setEditorSize(clampEditorSize(percent));
+  }, [editorSide, isResizing]);
+
+  const handleResizeKeyDown = useCallback((event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const direction = editorSide === 'left' ? 1 : -1;
+    const sizeByKey: Partial<Record<string, (current: number) => number>> = {
+      ArrowLeft: current => current - (KEYBOARD_RESIZE_STEP * direction),
+      ArrowRight: current => current + (KEYBOARD_RESIZE_STEP * direction),
+      Home: () => editorSide === 'left' ? MIN_EDITOR_SIZE : MAX_EDITOR_SIZE,
+      End: () => editorSide === 'left' ? MAX_EDITOR_SIZE : MIN_EDITOR_SIZE,
+    };
+    const resize = sizeByKey[event.key];
+    if (!resize) return;
+    event.preventDefault();
+    setEditorSize(current => clampEditorSize(resize(current)));
+  }, [editorSide]);
+
+  const editorPane = (
+    <section key="editor" id="mp-editor-pane" className="mp-pane mp-pane-editor" aria-label="마크다운 편집">
+      <div className="mp-pane-head">
+        <span>Markdown</span>
+        <span className="mp-stats">
+          {stats.characters.toLocaleString()}자 · {stats.words.toLocaleString()}단어 · {stats.lines.toLocaleString()}줄
+        </span>
+      </div>
+      <textarea
+        ref={editorRef}
+        className="mp-editor"
+        value={source}
+        onChange={event => {
+          hasUserEditedRef.current = true;
+          setSource(event.target.value);
+        }}
+        onScroll={() => syncScrollFrom('editor')}
+        spellCheck={false}
+        placeholder="여기에 마크다운을 쓰거나 붙여넣으세요."
+        aria-label="마크다운 원본"
+      />
+    </section>
+  );
+
+  const resizeHandle = (
+    <div
+      key="resizer"
+      className="mp-resizer"
+      role="separator"
+      tabIndex={0}
+      aria-label="편집 영역 너비 조절"
+      aria-controls="mp-editor-pane mp-preview-pane"
+      aria-orientation="vertical"
+      aria-valuemin={MIN_EDITOR_SIZE}
+      aria-valuemax={MAX_EDITOR_SIZE}
+      aria-valuenow={Math.round(editorSize)}
+      aria-valuetext={`편집 영역 ${Math.round(editorSize)}%`}
+      onKeyDown={handleResizeKeyDown}
+      onPointerDown={event => {
+        event.currentTarget.setPointerCapture?.(event.pointerId);
+        setIsResizing(true);
+      }}
+      onPointerMove={resizeFromPointer}
+      onPointerUp={event => {
+        if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }
+        setIsResizing(false);
+      }}
+      onPointerCancel={() => setIsResizing(false)}
+    >
+      <span className="mp-resizer-line" aria-hidden="true" />
+    </div>
+  );
+
+  const previewPane = (
+    <section key="preview" id="mp-preview-pane" className="mp-pane mp-pane-preview" aria-label="미리보기">
+      <div className="mp-pane-head">
+        <span>Preview</span>
+        {rendered.removed.length > 0 && (
+          <span className="mp-removed" title={`제거됨: ${rendered.removed.join(', ')}`}>
+            <ShieldAlert className="mp-icon" />
+            위험한 항목 {rendered.removed.length}개 제거
+          </span>
+        )}
+      </div>
+      <div
+        ref={previewRef}
+        className="mp-preview"
+        onScroll={() => syncScrollFrom('preview')}
+        tabIndex={0}
+        aria-label="변환 결과"
+      >
+        <div className="mp-markdown">
+          {rendered.blocks.map(block => block.kind === 'html'
+            ? (
+              // Safe by construction: renderMarkdown puts every string through DOMPurify.
+              <div key={block.key} className="mp-block" dangerouslySetInnerHTML={{ __html: block.html }} />
+            )
+            : <MermaidBlock key={block.key} block={block} result={diagrams.get(block.key)} />)}
+        </div>
+      </div>
+    </section>
+  );
+
   return (
-    <div className={`mp-root${isDarkMode ? ' dark' : ''}`}>
+    <div className={`mp-root${isDarkMode ? ' dark' : ''}${isResizing ? ' is-resizing' : ''}`}>
       <header className="mp-header">
         <div className="mp-header-left">
           <a className="mp-home-link" href="/" title="Choi01 홈으로" aria-label="Choi01 홈으로">
@@ -324,6 +455,20 @@ export function MarkdownPreviewPage() {
               </button>
             ))}
           </div>
+
+          {!isNarrow && (
+            <button
+              type="button"
+              className="mp-button mp-button-quiet"
+              onClick={() => setEditorSide(current => current === 'left' ? 'right' : 'left')}
+              disabled={effectiveView !== 'split'}
+              title="편집기와 미리보기 위치 바꾸기"
+              aria-label="편집기와 미리보기 좌우 바꾸기"
+            >
+              <ArrowLeftRight className="mp-icon" />
+              <span>좌우 바꾸기</span>
+            </button>
+          )}
 
           <div className="mp-header-divider" />
 
@@ -367,53 +512,16 @@ export function MarkdownPreviewPage() {
         </div>
       </header>
 
-      <main className="mp-stage" data-view={effectiveView}>
-        <section className="mp-pane mp-pane-editor" aria-label="마크다운 편집">
-          <div className="mp-pane-head">
-            <span>Markdown</span>
-            <span className="mp-stats">
-              {stats.characters.toLocaleString()}자 · {stats.words.toLocaleString()}단어 · {stats.lines.toLocaleString()}줄
-            </span>
-          </div>
-          <textarea
-            ref={editorRef}
-            className="mp-editor"
-            value={source}
-            onChange={event => setSource(event.target.value)}
-            onScroll={() => syncScrollFrom('editor')}
-            spellCheck={false}
-            placeholder="여기에 마크다운을 쓰거나 붙여넣으세요."
-            aria-label="마크다운 원본"
-          />
-        </section>
-
-        <section className="mp-pane mp-pane-preview" aria-label="미리보기">
-          <div className="mp-pane-head">
-            <span>Preview</span>
-            {rendered.removed.length > 0 && (
-              <span className="mp-removed" title={`제거됨: ${rendered.removed.join(', ')}`}>
-                <ShieldAlert className="mp-icon" />
-                위험한 항목 {rendered.removed.length}개 제거
-              </span>
-            )}
-          </div>
-          <div
-            ref={previewRef}
-            className="mp-preview"
-            onScroll={() => syncScrollFrom('preview')}
-            tabIndex={0}
-            aria-label="변환 결과"
-          >
-            <div className="mp-markdown">
-              {rendered.blocks.map(block => block.kind === 'html'
-                ? (
-                  // Safe by construction: renderMarkdown puts every string through DOMPurify.
-                  <div key={block.key} className="mp-block" dangerouslySetInnerHTML={{ __html: block.html }} />
-                )
-                : <MermaidBlock key={block.key} block={block} result={diagrams.get(block.key)} />)}
-            </div>
-          </div>
-        </section>
+      <main
+        ref={stageRef}
+        className="mp-stage"
+        data-view={effectiveView}
+        data-editor-side={editorSide}
+        style={{ '--mp-editor-size': `${editorSize}%` } as CSSProperties}
+      >
+        {editorSide === 'left'
+          ? [editorPane, resizeHandle, previewPane]
+          : [previewPane, resizeHandle, editorPane]}
       </main>
     </div>
   );

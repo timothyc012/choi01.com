@@ -16,6 +16,7 @@
   --mp-red: #a43d45;
   --mp-amber: #9a6a12;
   --mp-amber-soft: rgba(154, 106, 18, 0.10);
+  --mp-resizer-size: 10px;
   /* Reading measure for rendered markdown. Kept in sync with the standalone
      .html export in exportHtmlDocument.ts, so a download looks like what the
      preview showed. */
@@ -164,6 +165,8 @@ body {
 }
 
 .mp-button:hover { background: var(--mp-surface-soft); border-color: var(--mp-accent); }
+.mp-button:disabled { opacity: 0.45; cursor: not-allowed; }
+.mp-button:disabled:hover { border-color: var(--mp-border); background: var(--mp-surface); }
 
 .mp-button-primary {
   border-color: var(--mp-accent);
@@ -224,15 +227,51 @@ body {
   display: grid;
   flex: 1;
   min-height: 0;
-  gap: 1px;
-  background: var(--mp-border);
-  grid-template-columns: 1fr 1fr;
+  background: var(--mp-surface);
+  grid-template-columns: minmax(0, var(--mp-editor-size)) var(--mp-resizer-size) minmax(0, 1fr);
+}
+
+.mp-stage[data-editor-side='right'] {
+  grid-template-columns: minmax(0, 1fr) var(--mp-resizer-size) minmax(0, var(--mp-editor-size));
 }
 
 .mp-stage[data-view='edit'] { grid-template-columns: 1fr; }
 .mp-stage[data-view='preview'] { grid-template-columns: 1fr; }
 .mp-stage[data-view='edit'] .mp-pane-preview { display: none; }
 .mp-stage[data-view='preview'] .mp-pane-editor { display: none; }
+.mp-stage[data-view='edit'] .mp-resizer,
+.mp-stage[data-view='preview'] .mp-resizer { display: none; }
+
+.mp-resizer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: var(--mp-resizer-size);
+  background: var(--mp-surface);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.mp-resizer-line {
+  width: 1px;
+  background: var(--mp-border);
+  transition: width 120ms ease, background 120ms ease;
+}
+
+.mp-resizer:hover .mp-resizer-line,
+.mp-resizer:focus-visible .mp-resizer-line,
+.mp-root.is-resizing .mp-resizer-line {
+  width: 3px;
+  background: var(--mp-accent);
+}
+
+.mp-root.is-resizing,
+.mp-root.is-resizing * {
+  cursor: col-resize;
+  user-select: none;
+}
 
 .mp-pane {
   display: flex;
