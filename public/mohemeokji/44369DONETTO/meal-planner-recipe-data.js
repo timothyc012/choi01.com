@@ -325,11 +325,28 @@
         return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['recipe:'+meal.id+':full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable'};
       };
       const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate});
-      const modeContext=()=>preferences.mode==='balanced'
+      const contextForMode=(mode)=>mode==='balanced'
         ? {...recommendationContext(),requireMainOffer:false,requireCompilerBasketFacts:false,offerIds:null}
         : recommendationContext();
-      const modeMeals=()=>preferences.mode==='balanced'?libraryMeals:meals;
-      const modePool=()=>recommendations.rankForMode(modeMeals(),modeContext(),preferences.mode);
+      const mealsForMode=(mode)=>mode==='balanced'?libraryMeals:meals;
+      const poolForMode=(mode)=>recommendations.rankForMode(mealsForMode(mode),contextForMode(mode),mode);
+      const modeContext=()=>contextForMode(preferences.mode);
+      const modeMeals=()=>mealsForMode(preferences.mode);
+      const modePool=()=>poolForMode(preferences.mode);
+      const modeReadiness=()=>{
+        const structuralContext={...recommendationContext(),requireCompilerBasketFacts:false};
+        const verifiedScope=meals.filter((meal)=>recommendations.evaluateRecipeForMode(meal,structuralContext,'balanced').eligible);
+        const balancedCount=poolForMode('balanced').length;
+        return Object.fromEntries(['balanced','value','nutrition','diet'].map((mode)=>{
+          const eligible=mode==='balanced'?balancedCount:poolForMode(mode).length;
+          return [mode,{eligible,total:mode==='balanced'?balancedCount:verifiedScope.length,available:eligible>0}];
+        }));
+      };
+      const savedMode=preferences.mode;
+      if(!modeReadiness()[preferences.mode]?.available) {
+        preferences.mode='balanced';
+        storage.set(preferenceStorageKey,recommendations.serializePreferences(preferences));
+      }
       let autoCoverage={eligible:0,filled:0,totalSlots:14,limited:true};
       const buildAutoPlans=(currentPlans=null)=>{
         const planned=recommendations.planAutoSlots(modeMeals(),{plans:currentPlans||{},days:days.map(([day])=>day),moments:['점심','저녁'],mode:preferences.mode,context:modeContext()});
@@ -361,6 +378,7 @@
       let detailRequestVersion=0;
       let detailReturnFocus=null;
       const stateNotices=[];
+      if(savedMode!==preferences.mode)stateNotices.push('검증 자료가 없는 저장 추천 기준 대신 다양하게를 선택했습니다.');
       if(branchPlan!==null&&!branchPlanData)stateNotices.push('손상된 저장 식단은 안전하게 건너뛰었습니다.');
       if(restored.snapshotChanged)stateNotices.push('새 할인 주차에 맞춰 자동 식단만 갱신했습니다.');
       if(restored.stale.length)stateNotices.push('이전 주 수동 메뉴 '+restored.stale.length+'개는 선택을 보존했습니다.');
@@ -473,7 +491,7 @@
         const evaluation=meal?recommendations.evaluateRecipeForMode(meal,modeContext(),preferences.mode):null;
         byId('todayReason').textContent=meal
           ? (evaluation?.reasons[0]||'현재 지점의 할인 주재료와 메뉴 다양성을 기준으로 추천합니다.')+' · '+qualitySummary(meal)
-          : (preferences.mode==='balanced'?'현재 기준에 맞는 다음 메뉴가 없습니다.':'선택한 기준에 필요한 검증 자료가 부족합니다.');
+          : (preferences.mode==='balanced'?'다양하게 기준에 맞는 다음 메뉴가 없습니다.':'선택한 기준에 필요한 검증 자료가 부족합니다.');
         byId('todayTime').textContent=meal?(Number.isFinite(meal.time)?meal.time+'분':'상세 확인'):'—';
         const leadOffer=meal?.matchedOffers?.[0];
         byId('todayPrimaryOffer').innerHTML=leadOffer?'<strong>'+escapeHtml(leadOffer.identity.ingredientId)+'</strong> · <span lang="de">'+escapeHtml(leadOffer.productDe)+'</span> · '+escapeHtml(leadOffer.pack)+' · '+shopping.euro(leadOffer.priceCents)+' · '+escapeHtml(leadOffer.validFrom)+' ~ '+escapeHtml(leadOffer.validThrough):'<strong>일반 레시피</strong> · 현재 주재료 할인 없음';
@@ -489,10 +507,25 @@
         ['acceptToday','todayShopping'].forEach((id)=>{byId(id).disabled=!meal;});
         byId('nextRecommendation').disabled=modePool().length<2;
         byId('modeReadiness').textContent=preferences.mode==='balanced'
-          ? '균형 모드는 전체 레시피에서 고르되, 현재 지점의 주재료 할인 메뉴를 먼저 추천합니다.'
+          ? '다양하게는 주재료·조리법·최근 식사 반복을 줄입니다.'
           : preferences.mode==='value'
             ? (modePool().length?'가성비 모드는 '+preferences.targetServings+'인분의 확인된 포장 구매 합계만 비교합니다.':'가성비 비교에 필요한 가격·포장 수량·원문 인분 자료가 부족합니다.')
-            : (modePool().length?'출처가 확인된 1인분 영양 수치만 사용합니다.':'영양 근거가 완전한 메뉴가 없어 이 기준의 추천을 표시하지 않습니다.');
+            : preferences.mode==='nutrition'
+              ? (modePool().length?'영양은 출처가 확인된 1인분 영양 수치만 비교합니다.':'영양 근거가 완전한 메뉴가 없어 이 기준의 추천을 표시하지 않습니다.')
+              : (modePool().length?'가볍게는 검증된 열량·단백질·식이섬유·나트륨만 비교합니다.':'영양 근거가 완전한 메뉴가 없어 가볍게 추천을 표시하지 않습니다.');
+      }
+
+      function renderModeControls() {
+        const readiness=modeReadiness();
+        document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{
+          const state=readiness[input.value]||{eligible:0,total:0,available:false};
+          input.disabled=!state.available;
+          input.checked=input.value===preferences.mode;
+          const status=document.querySelector('[data-mode-status="'+input.value+'"]');
+          if(status)status.textContent=input.value==='balanced'
+            ? (state.available?'사용 가능 · 후보 '+state.eligible+'개':'준비 중 · 후보 0개')
+            : (state.available?'사용 가능 · 검증 '+state.eligible+'/'+state.total:'준비 중 · 검증 0/'+state.total);
+        });
       }
 
       function renderMealMomentControls() {
@@ -568,7 +601,7 @@
       }
 
       function showPlanCoverage() {
-        const label={balanced:'균형',value:'가성비',nutrition:'영양',diet:'다이어트'}[preferences.mode];
+        const label={balanced:'다양하게',value:'가성비',nutrition:'영양',diet:'가볍게'}[preferences.mode];
         byId('planStatus').textContent=label+' 후보 '+autoCoverage.eligible+'개 · 자동 식단 '+autoCoverage.filled+'칸'+(autoCoverage.limited?' · 나머지는 조건에 맞는 후보가 부족해 비워둡니다.':'')+(stateNotices.length?' · '+stateNotices.join(' '):'');
       }
 
@@ -726,9 +759,8 @@
         if(detailReturnFocus?.isConnected)detailReturnFocus.focus();
       }
 
-      document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{input.checked=input.value===preferences.mode;});
       byId('targetServings').value=String(preferences.targetServings);
-      renderMealMomentControls();renderToday();renderPlanAndBind();renderPantry();showPlanCoverage();renderMenu();bindDetailTriggers();bindMenuActions();renderGroceries();
+      renderModeControls();renderMealMomentControls();renderToday();renderPlanAndBind();renderPantry();showPlanCoverage();renderMenu();bindDetailTriggers();bindMenuActions();renderGroceries();
       byId('sourceStatus').textContent=activeArea+' · '+activeStore+' · 게시 메뉴 '+meals.length+'개';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
       if(berlinDate<manifest.weekStart)byId('sourceCheck').textContent+=' · '+manifest.weekStart+'부터 시작하는 다음 주 자료입니다.';
@@ -737,6 +769,8 @@
       if(lastOfferDay&&lastOfferDay<berlinDate){byId('sourceStatus').dataset.snapshotState='expired';byId('sourceCheck').textContent+=' · 행사기간 종료, 가격 재확인 필요';}
       byId('savePlan').addEventListener('click',savePlans);
       const refreshForPreferences=()=>{
+        const readiness=modeReadiness();
+        if(!readiness[preferences.mode]?.available)preferences.mode='balanced';
         closeDetail();selectedMeal=null;
         for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
         autoPlans=buildAutoPlans(plans);
@@ -744,9 +778,9 @@
         for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];
         recommendationIndex=0;
         storage.set(preferenceStorageKey,recommendations.serializePreferences(preferences));
-        renderToday();renderPlanAndBind();showPlanCoverage();savePlans();
+        renderModeControls();renderToday();renderPlanAndBind();showPlanCoverage();savePlans();
       };
-      document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>input.addEventListener('change',()=>{if(input.checked){preferences.mode=input.value;refreshForPreferences();}}));
+      document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>input.addEventListener('change',()=>{if(input.checked&&!input.disabled){preferences.mode=input.value;refreshForPreferences();}}));
       byId('targetServings').addEventListener('change',(event)=>{preferences.targetServings=Number(event.target.value);refreshForPreferences();});
       byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();showPlanCoverage();savePlans();});
       byId('clearPlan').addEventListener('click',()=>{for(const moment of ['점심','저녁'])plans[moment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});

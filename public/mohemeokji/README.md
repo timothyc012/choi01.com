@@ -77,9 +77,10 @@ Recommendations use `meal-recommendations.js` and editorial
 `recommendationProfile` fields (named primary ingredients, family, cooking method,
 and main/side/breakfast role). A current primary-ingredient offer moves a recipe
 to the front of the library; incidental garlic or carrot matches cannot qualify
-as a primary-ingredient discount. Balanced automatic meals can use the full
-reviewed catalog, while value, nutrition, and diet modes still require their
-verified snapshot facts. Automatic weekly selection prefers at most two
+as a primary-ingredient discount. Diverse automatic meals (stored internally as
+the backward-compatible `balanced` mode) can use the full reviewed catalog,
+while value, nutrition, and light modes still require their verified snapshot
+facts. Automatic weekly selection prefers at most two
 of one family and avoids consecutive repeats when another family is available;
 it relaxes that constraint only when the remaining pool cannot satisfy it.
 Eligible sides and breakfast snacks remain in the manual library, outside automatic

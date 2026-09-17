@@ -183,9 +183,12 @@
       }
       .meal-toggle button.active { background: var(--ink-soft); color: #fff; }
       .goal-controls { display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; margin:18px 0 22px; padding:14px 16px; border:1px solid var(--border); border-radius:12px; background:var(--canvas); }
-      .goal-controls fieldset { display:flex; flex-wrap:wrap; gap:10px; margin:0; padding:0; border:0; }
+      .goal-controls fieldset { display:flex; flex-wrap:wrap; gap:8px; margin:0; padding:0; border:0; }
       .goal-controls legend { margin:0 12px 0 0; font-weight:700; float:left; }
-      .goal-controls label { display:flex; gap:6px; align-items:center; font-size:13px; }
+      .goal-controls [data-mode-label] { min-width:112px; display:grid; grid-template-columns:auto 1fr; gap:2px 6px; align-items:center; padding:7px 9px; border:1px solid var(--border); border-radius:var(--radius); font-size:13px; cursor:pointer; }
+      .goal-controls [data-mode-label]:has(input:checked) { border-color:var(--green); background:var(--green-wash); color:var(--green); }
+      .goal-controls [data-mode-label]:has(input:disabled) { background:var(--surface); color:var(--muted); cursor:not-allowed; }
+      .mode-status { grid-column:2; color:var(--faint); font-size:10px; line-height:1.35; }
       .goal-controls select { min-height:36px; }
       .goal-readiness { flex-basis:100%; margin:0; color:var(--faint); font-size:12px; }
       .decision-card h2 {
@@ -705,17 +708,17 @@
         <div class="goal-controls" aria-label="추천 설정">
           <fieldset id="recommendationModes" role="radiogroup" aria-labelledby="recommendationModeLegend">
             <legend id="recommendationModeLegend">추천 기준</legend>
-            <label><input type="radio" name="recommendationMode" value="balanced" checked> 균형</label>
-            <label><input type="radio" name="recommendationMode" value="value"> 가성비</label>
-            <label><input type="radio" name="recommendationMode" value="nutrition"> 영양</label>
-            <label><input type="radio" name="recommendationMode" value="diet"> 다이어트</label>
+            <label data-mode-label="balanced"><input type="radio" name="recommendationMode" value="balanced" checked><span>다양하게</span><small class="mode-status" data-mode-status="balanced">확인 중</small></label>
+            <label data-mode-label="value"><input type="radio" name="recommendationMode" value="value"><span>가성비</span><small class="mode-status" data-mode-status="value">확인 중</small></label>
+            <label data-mode-label="nutrition"><input type="radio" name="recommendationMode" value="nutrition"><span>영양</span><small class="mode-status" data-mode-status="nutrition">확인 중</small></label>
+            <label data-mode-label="diet"><input type="radio" name="recommendationMode" value="diet"><span>가볍게</span><small class="mode-status" data-mode-status="diet">확인 중</small></label>
           </fieldset>
           <label for="targetServings">몇 인분</label>
           <select id="targetServings" aria-label="추천 인분 수">
             <option value="1">1인분</option><option value="2" selected>2인분</option><option value="3">3인분</option>
             <option value="4">4인분</option><option value="5">5인분</option><option value="6">6인분</option>
           </select>
-          <p class="goal-readiness" id="modeReadiness" role="status" aria-live="polite">균형 모드는 전체 레시피에서 고르되 현재 지점의 할인 메뉴를 먼저 추천합니다.</p>
+          <p class="goal-readiness" id="modeReadiness" role="status" aria-live="polite">다양하게는 주재료와 조리법의 반복을 줄여 추천합니다.</p>
         </div>
         <div class="snapshot-recovery" id="snapshotRecovery" role="alert" hidden>
           <span>이번 주 자료를 열 수 없습니다.</span>
@@ -945,14 +948,14 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="/mohemeokji/ontology-recipe-details.js?v=7f91995b310f"></script>
-    <script src="/mohemeokji/ontology-recipe-popular.js?v=7f91995b310f"></script>
-    <script src="/mohemeokji/meal-verified-evidence.js?v=7f91995b310f"></script>
-    <script src="./meal-planner-recipe-data.js?v=7f91995b310f"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=7f91995b310f"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=7f91995b310f"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=7f91995b310f"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/ontology-recipe-popular.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/meal-verified-evidence.js?v=880fa1fe0d46"></script>
+    <script src="./meal-planner-recipe-data.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=880fa1fe0d46"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
