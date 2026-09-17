@@ -374,7 +374,7 @@
         }
       };
       const savePlans=()=>{archiveManualDetails();return storage.set(planStorageKey,shopping.serializePlansV2(plans,{mealMoment,activeArea,activeStore,activeBranchId:activeBranch.branchId,snapshotId:manifest.snapshotId,archivedDetails}));};
-      const weeklyPlanMeals=()=>Object.values(plans).flatMap((plan)=>Object.values(plan)).map((slot)=>{
+      const weeklyPlanMeals=()=>days.flatMap(([day])=>['점심','저녁'].map((moment)=>plans[moment]?.[day])).filter(Boolean).map((slot)=>{
         if(weeklyUnavailableIds.has(slot.recipeId))return null;
         const meal=mealById(slot.recipeId),archived=archivedDetails[slot.recipeId];
         const useArchived=slot.origin==='manual'&&archiveInScope(archived)&&(!meal||archived.detailSha256!==meal.detailSha256);
@@ -581,9 +581,15 @@
           const offer=catalog[item.store]?.[item.name];
           const product=item.product||offer?.product||'독어 상품명 미확인';
           const source=item.source||offer?.source;
-          return '<li class="grocery-item'+(item.completed?' completed':'')+'"><label class="grocery-check"><input type="checkbox" data-grocery-key="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 구매 완료"'+(item.completed?' checked':'')+'><span><strong>'+escapeHtml(item.name)+'</strong><small lang="de">'+escapeHtml(product)+'</small><small>'+escapeHtml(item.store+' · '+item.pack+(item.quantityNeedsCheck?' · 구매 수량 확인':' × '+item.quantity))+' · '+(source?'할인 근거 연결됨':'가격·근거 확인 필요')+'</small></span></label><span class="grocery-item-cost">'+(item.priceCents===null?(item.quantityNeedsCheck?'가격 미확인 · 수량 확인':'가격 미확인'):item.quantityNeedsCheck?'수량 확인':shopping.euro(item.priceCents*item.quantity))+'</span><button class="icon-button" data-grocery-remove="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 장보기 목록에서 삭제">×</button></li>';
+          const usage=item.menuCount>1?'<small class="grocery-usage">'+item.menuCount+'개 메뉴에 사용</small>':'';
+          return '<li class="grocery-item'+(item.completed?' completed':'')+'"><label class="grocery-check"><input type="checkbox" data-grocery-key="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 구매 완료"'+(item.completed?' checked':'')+'><span><strong>'+escapeHtml(item.name)+'</strong>'+usage+'<small lang="de">'+escapeHtml(product)+'</small><small>'+escapeHtml(item.store+' · '+item.pack+(item.quantityNeedsCheck?' · 구매 수량 확인':' × '+item.quantity))+' · '+(source?'할인 근거 연결됨':'가격·근거 확인 필요')+'</small></span></label><span class="grocery-item-cost">'+(item.priceCents===null?(item.quantityNeedsCheck?'가격 미확인 · 수량 확인':'가격 미확인'):item.quantityNeedsCheck?'수량 확인':shopping.euro(item.priceCents*item.quantity))+'</span><button class="icon-button" data-grocery-remove="'+escapeHtml(item.key)+'" aria-label="'+escapeHtml(item.name)+' 장보기 목록에서 삭제">×</button></li>';
         };
-        byId('groceryPending').innerHTML=shoppingState.list.filter((item)=>!item.completed).map(row).join('');
+        const orderedMenus=[...weeklyPlanMeals(),...libraryMeals];
+        const groups=shopping.groupListByMenu(shoppingState.list.filter((item)=>!item.completed),orderedMenus);
+        byId('groceryPending').innerHTML=groups.map((group)=>{
+          const groupProgress=shopping.listProgress(group.items);
+          return '<details class="grocery-group" data-grocery-group="'+escapeHtml(group.key)+'"><summary><span><strong>'+escapeHtml(group.title)+'</strong><small>'+group.items.length+'종 · '+escapeHtml(shopping.summary(groupProgress))+'</small></span><span class="grocery-group-action" aria-hidden="true">펼치기</span></summary><ul class="grocery-list" aria-label="'+escapeHtml(group.title)+' 구매하지 않은 재료">'+group.items.map(row).join('')+'</ul></details>';
+        }).join('');
         byId('groceryCompleted').innerHTML=shoppingState.list.filter((item)=>item.completed).map(row).join('');
         byId('groceryCompletedSection').hidden=progress.completedCount===0;
         byId('groceryCompletedLabel').textContent='구매 완료 '+progress.completedCount+'종';

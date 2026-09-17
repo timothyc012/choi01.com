@@ -518,12 +518,25 @@
       .grocery-panel { padding: 20px; }
       .grocery-summary { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
       .grocery-summary span { color: var(--muted); font-size: 12px; }
+      .grocery-groups { display: grid; gap: 10px; margin-top: 16px; }
+      .grocery-group { border: 1px solid var(--border); border-radius: var(--radius); background: var(--canvas); }
+      .grocery-group summary { min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 14px; cursor: pointer; list-style: none; }
+      .grocery-group summary::-webkit-details-marker { display: none; }
+      .grocery-group summary::marker { content: ""; }
+      .grocery-group summary strong, .grocery-group summary small { display: block; }
+      .grocery-group summary strong { font-size: 14px; }
+      .grocery-group summary small { margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 400; }
+      .grocery-group-action { color: var(--green); font-size: 11px; font-weight: 700; }
+      .grocery-group[open] .grocery-group-action { font-size: 0; }
+      .grocery-group[open] .grocery-group-action::after { content: "접기"; font-size: 11px; }
+      .grocery-group > .grocery-list { padding: 0 14px; border-top: 1px solid var(--border-soft); }
       .grocery-list { list-style: none; margin: 0; padding: 0; }
       .grocery-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border-soft); }
       .grocery-check { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; min-height: 44px; cursor: pointer; }
       .grocery-check input { width: 22px; height: 22px; flex-shrink: 0; accent-color: var(--green); }
       .grocery-check strong { display: block; font-size: 15px; }
       .grocery-check small { display: block; margin-top: 5px; font-size: 11px; line-height: 1.5; color: var(--muted); }
+      .grocery-check .grocery-usage { color: var(--green); font-weight: 650; }
       .grocery-item-cost { font-size: 12px; white-space: nowrap; }
       .grocery-item.completed .grocery-check strong { text-decoration: line-through; color: var(--muted); }
       #groceryCompletedSection { margin-top: 20px; }
@@ -842,7 +855,7 @@
             <span id="groceryCost"></span>
           </div>
           <p class="panel-copy" id="groceryEmpty">아직 장보기 목록이 비어 있어요. 메뉴의 ‘구매할 재료와 가격 보기’에서 없는 재료를 추가해보세요.</p>
-          <ul class="grocery-list" id="groceryPending" aria-label="아직 구매하지 않은 재료"></ul>
+          <div class="grocery-groups" id="groceryPending" aria-label="메뉴별 아직 구매하지 않은 재료"></div>
           <details id="groceryCompletedSection" hidden>
             <summary id="groceryCompletedLabel">구매 완료</summary>
             <ul class="grocery-list" id="groceryCompleted" aria-label="구매 완료한 재료"></ul>
@@ -932,14 +945,14 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="/mohemeokji/ontology-recipe-details.js?v=3f97becafcaa"></script>
-    <script src="/mohemeokji/ontology-recipe-popular.js?v=3f97becafcaa"></script>
-    <script src="/mohemeokji/meal-verified-evidence.js?v=3f97becafcaa"></script>
-    <script src="./meal-planner-recipe-data.js?v=3f97becafcaa"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=3f97becafcaa"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=3f97becafcaa"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=3f97becafcaa"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=3f97becafcaa"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/ontology-recipe-popular.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/meal-verified-evidence.js?v=7f91995b310f"></script>
+    <script src="./meal-planner-recipe-data.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=7f91995b310f"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=7f91995b310f"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {

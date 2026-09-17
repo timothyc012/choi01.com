@@ -373,7 +373,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   ]});
   const currentBody=JSON.stringify({schemaVersion:1,snapshotId:'snapshot-new',weekStart:'2026-09-07',manifestPath,manifestSha256:sha256(manifestBody)});
   const archivedDetailPath='snapshots/2026-08-31/snapshot-old/recipes/8000001.hash.json';
-  const archivedDetail=JSON.stringify({schemaVersion:1,sourceRecipeId:'8000001',title:'지난주 수동 메뉴',detailIngredients:['감자 2개'],steps:['씻는다.','익힌다.','담는다.']});
+  const archivedDetail=JSON.stringify({schemaVersion:1,sourceRecipeId:'8000001',title:'지난주 수동 메뉴',detailIngredients:['감자 2개','올리브유 1큰술'],steps:['씻는다.','익힌다.','담는다.']});
   const archivedSamePath='snapshots/2026-08-31/snapshot-old/recipes/9000001.oldhash.json';
   const archivedSameDetail=JSON.stringify({schemaVersion:1,sourceRecipeId:'9000001',title:'지난주 같은 ID 메뉴',detailIngredients:['양파 1개'],steps:['썬다.','익힌다.','담는다.']});
   const badArchivedPath='snapshots/2026-08-31/snapshot-old/recipes/7000001.badhash.json';
@@ -561,6 +561,15 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.HTMLElement.prototype.scrollIntoView=()=>{};
   dom.window.document.getElementById('prepareShopping').click();
   await new Promise((resolve)=>setTimeout(resolve,50));
+  const groceryGroups=[...dom.window.document.querySelectorAll('#groceryPending .grocery-group')];
+  assert.deepEqual(groceryGroups.map((group)=>group.dataset.groceryGroup),[
+    'menu:neuemarkt-recipe-9000001','menu:neuemarkt-recipe-8000001','shared'
+  ]);
+  assert.match(groceryGroups[0].querySelector('summary').textContent,/새 지점 닭가슴살 볶음.*1종/);
+  assert.match(groceryGroups[1].querySelector('summary').textContent,/지난주 수동 메뉴.*1종/);
+  assert.match(groceryGroups[2].querySelector('summary').textContent,/여러 메뉴에 공통.*1종/);
+  assert.equal(groceryGroups[2].querySelectorAll('[data-grocery-key="NeueMarkt:식용유"]').length,1);
+  assert.match(groceryGroups[2].textContent,/2개 메뉴에 사용/);
   assert.match(dom.window.document.getElementById('groceryPending').textContent,/식용유.*가격 미확인/);
   assert.match(dom.window.document.getElementById('groceryPending').textContent,/감자.*가격 미확인/);
   assert.equal(dom.window.document.querySelectorAll('[data-grocery-key="NeueMarkt:닭가슴살"]').length,1);
