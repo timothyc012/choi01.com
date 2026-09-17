@@ -574,6 +574,32 @@ test('adds only missing ingredients and does not duplicate shared ingredients on
   assert.ok(list.some((item) => item.name === '간장' && item.priceCents === null));
 });
 
+test('groups shopping rows by meal order while keeping shared and unknown ingredients single', () => {
+  const item=(key,name,contributions)=>({key,name,store:'Netto',pack:'1팩',quantity:1,priceCents:100,quantityNeedsCheck:false,completed:false,contributions});
+  const list=[
+    item('Netto:두부','두부',{'meal-b':{amount:200,unit:'g'}}),
+    item('Netto:닭고기','닭고기',{'meal-a':{amount:300,unit:'g'}}),
+    item('Netto:양파','양파',{'meal-a':{amount:100,unit:'g'},'meal-b':{amount:150,unit:'g'}}),
+    item('Netto:후추','후추',{'missing-meal':null}),
+    item('Netto:소금','소금',{})
+  ];
+  const groups=shopping.groupListByMenu(list,[
+    {id:'meal-b',title:'두부조림'},
+    {id:'meal-a',title:'닭볶음'}
+  ]);
+  assert.deepEqual(Array.from(groups,(group)=>[group.key,group.title]),[
+    ['menu:meal-b','두부조림'],
+    ['menu:meal-a','닭볶음'],
+    ['shared','여러 메뉴에 공통'],
+    ['other','기타 재료']
+  ]);
+  assert.deepEqual(Array.from(groups,(group)=>Array.from(group.items,(entry)=>entry.name)),[
+    ['두부'],['닭고기'],['양파'],['후추','소금']
+  ]);
+  assert.equal(groups[2].items[0].menuCount,2);
+  assert.deepEqual(Array.from(groups[2].items[0].menuTitles),['두부조림','닭볶음']);
+});
+
 test('checking purchases reduces remaining costs and unchecking restores them', () => {
   const list = shopping.addToList([], shopping.basket([rice], { catalog: fixtureCatalog }));
   list.find((item) => item.name === '닭고기').completed = true;

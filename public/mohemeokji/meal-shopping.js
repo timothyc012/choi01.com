@@ -356,6 +356,32 @@
     };
   }
 
+  function groupListByMenu(list, meals = []) {
+    const menuOrder=[];
+    const menuById=new Map();
+    for(const meal of meals) {
+      const id=typeof (meal?.id||meal?.sourceRecipeId)==='string'&&(meal.id||meal.sourceRecipeId)?String(meal.id||meal.sourceRecipeId):null;
+      if(!id||menuById.has(id))continue;
+      const menu={id,title:typeof meal.title==='string'&&meal.title.trim()?meal.title.trim():'이름을 확인할 메뉴'};
+      menuById.set(id,menu);menuOrder.push(menu);
+    }
+    const byMenu=new Map(menuOrder.map((menu)=>[menu.id,[]]));
+    const shared=[],other=[];
+    for(const item of list) {
+      const contributionIds=Object.keys(item?.contributions&&typeof item.contributions==='object'?item.contributions:{}).filter((id)=>id!=='legacy-unknown');
+      const contributionSet=new Set(contributionIds);
+      const menus=menuOrder.filter((menu)=>contributionSet.has(menu.id));
+      const decorated={...item,menuCount:menus.length,menuTitles:menus.map((menu)=>menu.title)};
+      if(menus.length===1&&contributionIds.length===1)byMenu.get(menus[0].id).push(decorated);
+      else if(menus.length>1&&menus.length===contributionIds.length)shared.push(decorated);
+      else other.push(decorated);
+    }
+    const groups=menuOrder.filter((menu)=>byMenu.get(menu.id).length).map((menu)=>({key:'menu:'+menu.id,title:menu.title,kind:'menu',items:byMenu.get(menu.id)}));
+    if(shared.length)groups.push({key:'shared',title:'여러 메뉴에 공통',kind:'shared',items:shared});
+    if(other.length)groups.push({key:'other',title:'기타 재료',kind:'other',items:other});
+    return groups;
+  }
+
   function restoreState(serialized, snapshot = null, options = {}) {
     const state = { pantry: new Set(), prices: {}, quantities: {}, list: [] };
     try {
@@ -414,5 +440,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, groupListByMenu, listProgress, restoreState, serializeState };
 }());
