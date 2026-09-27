@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-weekly-source-check",
+  "weekStart": "2026-09-21",
+  "targetWeekEnd": "2026-09-27",
+  "checkedAt": "2026-09-20T09:06:29+02:00",
+  "status": "partial-source-check",
+  "releasePrepared": false,
+  "publicationAllowed": false,
+  "policy": "No previous-week rows copied. No web/MCP mutation performed. Full release remains blocked until an input CSV and branch coverage pass the governed preflight.",
+  "officialSources": [
+    {
+      "chain": "ALDI Nord",
+      "url": "https://www.aldi-nord.de/de/angebote.html",
+      "status": "접근가능-일부수집",
+      "httpStatus": 200,
+      "responseBytes": 585258,
+      "responseSha256": "59bc8a268513aadf79be38db14b748f052a33bb84eb7caa97c4be5c3dc485ec8",
+      "evidence": "공식 페이지에 2026-09-21 및 2026-09-24 시작 행사 섹션이 확인됨. 전체 전단 페이지 전수 확인과 행별 CSV 추출은 아직 하지 않음."
+    },
+    {
+      "chain": "Lidl",
+      "url": "https://www.lidl.de/c/online-prospekte/s10005610/",
+      "status": "수집완료-원문증거기존",
+      "httpStatus": 200,
+      "responseBytes": 203935,
+      "responseSha256": "7a313e96ba62bb8699de8ccd92c172c92cee1a324f229e54f5205a7450121c77",
+      "evidence": "2026-09-21~2026-09-26 공식 Aktionsprospekt가 확인됨. 기존 source evidence의 PDF 69면/69면 확인 해시를 유지함."
+    },
+    {
+      "chain": "ALDI SÜD",
+      "url": "https://www.aldi-sued.de/angebote",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 사이트가 현재 실행 환경의 직접 요청을 거부함. 검색 결과만으로 가격·행사 행을 확정하지 않음."
+    },
+    {
+      "chain": "EDEKA",
+      "url": "https://www.edeka.de/angebote/?view=desktop",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 사이트가 현재 실행 환경의 직접 요청을 거부함. 앱 가격과 일반 행사 가격을 분리 검증할 수 없어 행을 만들지 않음."
+    },
+    {
+      "chain": "Netto Marken-Discount",
+      "url": "https://www.netto-online.de/angebote/c-N07",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 사이트가 현재 실행 환경의 직접 요청을 거부함. 검색 결과만으로 상품·지점별 가격을 확정하지 않음."
+    },
+    {
+      "chain": "REWE",
+      "url": "https://www.rewe.de/marktseite/duesseldorf/260001/rewe-markt-blanckertzstr-2/",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 지점 페이지가 현재 실행 환경의 직접 요청을 거부함. 21.09~27.09 탭 존재만 확인되고 상품 행은 만들지 않음."
+    },
+    {
+      "chain": "Kaufland",
+      "url": "https://www.kaufland.de/prospekte.html",
+      "status": "미공개-검증대기",
+      "httpStatus": null,
+      "evidence": "다음 주 지점·전단 원문을 이 실행에서 확인하지 못함. 지난주 상품을 복사하지 않음."
+    },
+    {
+      "chain": "METRO",
+      "url": "https://prospekte.metro.de/",
+      "status": "미공개-검증대기",
+      "httpStatus": null,
+      "evidence": "다음 주 지점·전단 원문을 이 실행에서 확인하지 못함. 지난주 상품을 복사하지 않음."
+    }
+  ],
+  "branchScope": {
+    "requestedPostcodes": ["44369", "40468", "40474", "40489", "52062", "52064"],
+    "previousReviewedBranchCount": 23,
+    "nextReleaseCsvRows": 0,
+    "reason": "접근가능한 공식 페이지가 일부이고, 행별 원문·지점·단위 검증이 완료되지 않아 release CSV를 만들지 않음"
+  },
+  "recipeCandidates": {
+    "executed": false,
+    "reason": "새 주간 CSV가 없어 recipe-full 후보 조회를 실행하지 않음"
+  },
+  "nextAction": "공식 전단 원문을 전체 페이지 확인할 수 있는 지점부터 행별 CSV·coverage를 만든 뒤 두 번 컴파일과 approvalDigest를 생성"
+}

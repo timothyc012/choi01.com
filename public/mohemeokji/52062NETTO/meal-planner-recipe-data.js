@@ -482,7 +482,7 @@
           card.addEventListener('dragend',()=>card.classList.remove('dragging'));
         });
         byId('offerDirectorySummary').textContent=activeStore+' 레시피 연결 가능 상품 독어 원문명 '+location.offers.length+'종'+(collected?' · 수집자료 '+collected.collectedRows+'건 중':'');
-        byId('offerDirectoryList').innerHTML=location.offers.map((offer)=>'<li><strong>'+escapeHtml(offer.identity.ingredientId)+'</strong><span lang="de">'+escapeHtml(offer.productDe)+'</span><small>'+escapeHtml(offer.pack)+' · '+shopping.euro(offer.priceCents)+' · '+escapeHtml(offer.validFrom)+' ~ '+escapeHtml(offer.validThrough)+'</small></li>').join('');
+        byId('offerDirectoryList').innerHTML=location.offers.map((offer)=>'<li><strong>'+escapeHtml(offer.identity.ingredientId)+'</strong><span lang="de">'+escapeHtml(offer.productDe)+'</span><small>'+escapeHtml(offer.pack)+' · '+shopping.euro(offer.priceCents)+' · '+escapeHtml(offer.validFrom)+' ~ '+escapeHtml(offer.validThrough)+'</small>'+(offer.evidenceUrl?'<a class="offer-source-link" href="'+escapeHtml(offer.evidenceUrl)+'" target="_blank" rel="noopener noreferrer">원본 링크 ↗</a>':'<small class="offer-source-missing">원본 링크 없음</small>')+'</li>').join('');
       }
 
       function renderToday() {

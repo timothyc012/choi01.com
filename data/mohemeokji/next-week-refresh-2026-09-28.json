@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-next-week-refresh",
+  "weekStart": "2026-09-28",
+  "targetWeekEnd": "2026-10-04",
+  "status": "partial-source-check",
+  "automationId": "automation",
+  "sourceEvidence": {
+    "path": "data/mohemeokji/store-source-evidence-2026-09-28.json",
+    "sha256": "19758be40506d1a7797977ccad766ab5279b0b0ea787c66351335975e978af49",
+    "lidl": {"contentPages": 73, "checkedPages": 73, "pdfSha256": "ee4f9deb3b5cff4cc181ea74fbffa4b339e26f6191dff1ec934f1fd6fbefe8a9"}
+  },
+  "sourceCheck": {
+    "path": "data/mohemeokji/weekly-source-check-2026-09-28.json",
+    "status": "partial-source-check",
+    "releasePrepared": false
+  },
+  "availableSources": ["Lidl", "ALDI Nord"],
+  "notYetPublished": ["ALDI SÜD", "EDEKA", "Kaufland", "METRO", "Netto Marken-Discount", "REWE"],
+  "policy": "Do not copy 2026-09-21 rows. Lidl full 73-page evidence is recorded; ALDI Nord is only a partial HTML check; other chains remain 접근실패 or 미공개-검증대기. No web/MCP publication before owner approval of an exact approvalDigest."
+}

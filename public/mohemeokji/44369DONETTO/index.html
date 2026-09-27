@@ -336,6 +336,9 @@
       .offer-original-list strong { color: var(--muted); font-size: 11px; }
       .offer-original-list span { margin-top: 3px; color: var(--ink); font-size: 13px; font-weight: 650; }
       .offer-original-list small { margin-top: 2px; color: var(--faint); font-size: 10px; }
+      .offer-source-link { display: inline-block; margin-top: 6px; color: var(--blue); font-size: 11px; font-weight: 700; }
+      .offer-source-link:hover { text-decoration: underline; }
+      .offer-source-missing { color: var(--faint); }
       .pantry-editor { margin-bottom: 12px; border: 1px solid var(--border); background: var(--canvas); }
       .pantry-editor summary { min-height: 44px; display: flex; align-items: center; padding: 0 14px; cursor: pointer; color: var(--ink-soft); font-size: 13px; font-weight: 700; }
       .pantry-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0; margin: 0; padding: 0; border-top: 1px solid var(--border-soft); list-style: none; }
@@ -948,14 +951,14 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="/mohemeokji/ontology-recipe-details.js?v=880fa1fe0d46"></script>
-    <script src="/mohemeokji/ontology-recipe-popular.js?v=880fa1fe0d46"></script>
-    <script src="/mohemeokji/meal-verified-evidence.js?v=880fa1fe0d46"></script>
-    <script src="./meal-planner-recipe-data.js?v=880fa1fe0d46"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=880fa1fe0d46"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=880fa1fe0d46"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=880fa1fe0d46"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=880fa1fe0d46"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=668b8d9c18c4"></script>
+    <script src="/mohemeokji/ontology-recipe-popular.js?v=668b8d9c18c4"></script>
+    <script src="/mohemeokji/meal-verified-evidence.js?v=668b8d9c18c4"></script>
+    <script src="./meal-planner-recipe-data.js?v=668b8d9c18c4"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=668b8d9c18c4"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=668b8d9c18c4"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=668b8d9c18c4"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=668b8d9c18c4"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {
@@ -1110,9 +1113,10 @@
           ? "연결 상품 독어 원문명: " + germanNames.slice(0,2).join(" · ") + (germanNames.length>2 ? " 외 " + (germanNames.length-2) + "종" : "")
           : "현재 유효한 독어 상품 원문명이 없습니다.";
         byId("offerDirectorySummary").textContent = activeStore + " 레시피 연결 할인상품 독어 원문명 " + offers.length + "종 전체 보기";
-        byId("offerDirectoryList").innerHTML = offers.map(([name,offer])=>
-          '<li><strong>' + escapeHtml(name) + '</strong><span lang="de">' + escapeHtml(offer.product) + '</span><small>' + escapeHtml(offer.pack) + ' · ' + shopping.euro(offer.priceCents) + '</small></li>'
-        ).join("");
+        byId("offerDirectoryList").innerHTML = offers.map(([name,offer])=>{
+          const source=offer.source||offer.evidenceUrl;
+          return '<li><strong>' + escapeHtml(name) + '</strong><span lang="de">' + escapeHtml(offer.product) + '</span><small>' + escapeHtml(offer.pack) + ' · ' + shopping.euro(offer.priceCents) + '</small>' + (source ? '<a class="offer-source-link" href="' + escapeHtml(source) + '" target="_blank" rel="noopener noreferrer">원본 링크 ↗</a>' : '<small class="offer-source-missing">원본 링크 없음</small>') + '</li>';
+        }).join("");
       }
       function renderHistoryStatus() {
         byId('recentMealSummary').textContent = mealHistory.length ? '최근 14일 '+mealHistory.length+'끼의 먹은 기록을 반영합니다.' : '먹은 기록이 아직 없어요. 실제로 먹은 메뉴의 ‘먹었어요’를 눌러주세요.';

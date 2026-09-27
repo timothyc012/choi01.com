@@ -91,6 +91,7 @@ test('current flyer whole foods map to exact identities without broad aliases',(
     row({상품명:'Deutsche Speisekartoffeln'}),
     row({상품명:'Deutsche gelbe Zwiebeln'}),
     row({상품명:'Bio Gurken'}),
+    row({상품명:'Rote Paprika'}),
     row({상품명:'Süßkartoffeln'}),
     row({상품명:'Graf-Schafter Pfundsschnitten Roggenmischbrot'}),
     row({상품명:'Bio Fairtrade Bananen, lose'}),
@@ -99,15 +100,16 @@ test('current flyer whole foods map to exact identities without broad aliases',(
   assert.ok(catalog['감자']);
   assert.ok(catalog['양파']);
   assert.ok(catalog['오이']);
+  assert.ok(catalog['파프리카']);
   assert.ok(catalog['고구마']);
   assert.ok(catalog['호밀빵']);
   assert.ok(catalog['바나나']);
   assert.ok(catalog['돼지목살']);
 });
 
-test('latest reviewed week keeps the user priority postcode and store coverage non-empty',()=>{
+test('latest weekly source keeps the user priority postcode and store coverage non-empty',()=>{
   const latest=fs.readdirSync(new URL('../public/offers/',import.meta.url)).map((name)=>{
-    const match=name.match(/^supermarket_food_offers_(\d{4}-\d{2}-\d{2})-reviewed(?:-v(\d+))?\.csv$/);
+    const match=name.match(/^supermarket_food_offers_(\d{4}-\d{2}-\d{2})(?:-reviewed(?:-v(\d+))?)?\.csv$/);
     return match?{name,date:match[1],version:Number(match[2]||1)}:null;
   }).filter(Boolean).sort((left,right)=>left.date.localeCompare(right.date)||left.version-right.version).at(-1)?.name;
   assert.ok(latest);

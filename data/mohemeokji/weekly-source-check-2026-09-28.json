@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-weekly-source-check",
+  "weekStart": "2026-09-28",
+  "targetWeekEnd": "2026-10-04",
+  "checkedAt": "2026-09-27T09:06:28+02:00",
+  "status": "partial-source-check",
+  "releasePrepared": false,
+  "publicationAllowed": false,
+  "policy": "No previous-week rows copied. No web/MCP mutation performed. Full release remains blocked until an input CSV and branch coverage pass the governed preflight.",
+  "officialSources": [
+    {
+      "chain": "Lidl",
+      "url": "https://www.lidl.de/l/prospekte/aktionsprospekt-28-09-2026-03-10-2026-918b16/ar/0?_ab=1&lf=HHZ",
+      "status": "수집완료",
+      "httpStatus": 200,
+      "sourcePdfUrl": "https://assets.leaflets.schwarz/leaflets/pdfs/01a0cd6c-981f-789f-91a0-503709cdfdcd/Aktionsprospekt-28-09-2026-03-10-2026-01.pdf",
+      "pageCount": 73,
+      "checkedPageCount": 73,
+      "pdfSha256": "ee4f9deb3b5cff4cc181ea74fbffa4b339e26f6191dff1ec934f1fd6fbefe8a9",
+      "textSha256": "1bbd67b6ab07b809b028a59d3626d1901c171c1a564678a681e043e0c35b5c41",
+      "evidencePath": "data/mohemeokji/store-source-evidence-2026-09-28.json",
+      "evidenceSha256": "19758be40506d1a7797977ccad766ab5279b0b0ea787c66351335975e978af49"
+    },
+    {
+      "chain": "ALDI Nord",
+      "url": "https://www.aldi-nord.de/de/angebote.html",
+      "status": "접근가능-일부수집",
+      "httpStatus": 200,
+      "responseBytes": 578368,
+      "responseSha256": "70e89a38860d6c03cbd3c411d8722978b75de5892f06cb942a0c6d99c35f29ad",
+      "evidence": "공식 페이지에서 2026-09-28 시작 행사 표시는 확인했지만 전체 전단 페이지 전수 확인과 행별 CSV 추출은 하지 않음"
+    },
+    {
+      "chain": "ALDI SÜD",
+      "url": "https://www.aldi-sued.de/angebote",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 사이트 직접 요청이 현재 실행 환경에서 거부됨. 검색 결과만으로 가격·행사 행을 확정하지 않음"
+    },
+    {
+      "chain": "EDEKA",
+      "url": "https://www.edeka.de/angebote/?view=desktop",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 사이트 직접 요청이 현재 실행 환경에서 거부됨. 앱 가격과 일반 행사 가격을 분리 검증할 수 없어 행을 만들지 않음"
+    },
+    {
+      "chain": "Netto Marken-Discount",
+      "url": "https://www.netto-online.de/angebote/c-N07",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 사이트 직접 요청이 현재 실행 환경에서 거부됨. 검색 결과만으로 상품·지점별 가격을 확정하지 않음"
+    },
+    {
+      "chain": "REWE",
+      "url": "https://www.rewe.de/marktseite/duesseldorf/260001/rewe-markt-blanckertzstr-2/",
+      "status": "접근실패",
+      "httpStatus": 403,
+      "evidence": "공식 지점 페이지 직접 요청이 현재 실행 환경에서 거부됨. 28.09~04.10 탭 존재만 확인되고 상품 행은 만들지 않음"
+    },
+    {
+      "chain": "Kaufland",
+      "url": "https://www.kaufland.de/prospekte.html",
+      "status": "미공개-검증대기",
+      "httpStatus": null,
+      "evidence": "다음 주 지점·전단 원문을 이 실행에서 확인하지 못함. 지난주 상품을 복사하지 않음"
+    },
+    {
+      "chain": "METRO",
+      "url": "https://prospekte.metro.de/",
+      "status": "미공개-검증대기",
+      "httpStatus": null,
+      "evidence": "다음 주 지점·전단 원문을 이 실행에서 확인하지 못함. 지난주 상품을 복사하지 않음"
+    }
+  ],
+  "branchScope": {
+    "requestedPostcodes": ["44369", "40468", "40474", "40489", "52062", "52064"],
+    "nextReleaseCsvRows": 0,
+    "reason": "전체 행별 원문·지점·단위 검증이 완료되지 않아 release CSV를 만들지 않음"
+  },
+  "recipeCandidates": {
+    "executed": false,
+    "reason": "새 주간 CSV가 없어 recipe-full 후보 조회를 실행하지 않음"
+  },
+  "nextAction": "Lidl 73면에서 조리 식재료 행을 추출하고, 나머지 체인의 공식 전단 원문 접근을 재시도한 뒤 CSV·coverage를 준비"
+}

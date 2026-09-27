@@ -72,7 +72,7 @@ const rules = {
   '새우': [/Garnelen/i, /Garnele/i, /Shrimp/i],
   '참치': [/Thunfisch/i, /Tuna/i],
   '토마토': [/Tomaten/i, /Tomato/i],
-  '파프리카': [/^Paprika/i],
+  '파프리카': [/\bPaprika\b/i],
   '양파': [/Zwiebel/i, /Onion/i],
   '버섯': [/^Champignon/i, /Pilze/i],
   '감자': [/^Pfanni Speisekartoffeln$/i, /^(?:Deutsche )?Speisekartoffeln/i],
