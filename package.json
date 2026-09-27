@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "meal:release": "node scripts/mohemeokji-weekly-release.mjs",
+    "meal:pipeline": "node scripts/mohemeokji-weekly-pipeline.mjs",
     "meal:flyer-evidence": "node scripts/collect-meal-flyer-evidence.mjs",
     "meal:store-evidence": "node scripts/collect-store-source-evidence.mjs",
     "doctor": "react-doctor --no-supply-chain --no-dead-code --no-lint .",
