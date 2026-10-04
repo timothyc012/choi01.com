@@ -122,7 +122,7 @@ const excluded = {
   '요거트': [/pudding|dessert|frucht|alternative|soja|mit der ecke|quarkbällchen/i],
   '빵': [/Brotaufstrich/i, /Brotzeit/i, /Frikadellenbrötchen/i, /Käsebrötchen/i],
   '토스트': [/brötchen|broetchen/i],
-  '버터': [/Buttermilch/i, /Buttercroissant/i, /Butterkäse|Butterkaese/i],
+  '버터': [/Butternut|Kürbis|Kuerbis/i, /Buttermilch/i, /Buttercroissant/i, /Butterkäse|Butterkaese/i],
   '모짜렐라치즈': [/piccolini|pizza|tomate-mozzarella/i],
   '쌀': [/milchreis|milch-reis|pudding|express|vorgegart|gekocht/i],
   '또띠아': [/nacho|chips|110[ -]?g|\bchio\b/i],
@@ -259,7 +259,7 @@ export function generateCatalog(rows, sourcePublicPath) {
       const name = compact(row['상품명']);
       const productText = name + ' ' + compact(row['상품정보']);
       const conditions = compact(row['할인조건']);
-      return matchers.some((matcher) => matcher.test(name)) && !(excluded[ingredient] || []).some((bad) => bad.test(productText))
+      return (!row['검토상태'] || /^(verified|공식확인|검토완료)$/.test(row['검토상태'])) && matchers.some((matcher) => matcher.test(name)) && !(excluded[ingredient] || []).some((bad) => bad.test(productText))
         && (ingredient !== '요거트' || /natur|plain|ungesüßt|ungesuesst/i.test(productText))
         && cents(row['행사가격']) !== null && (!conditions || /^(없음|none|unconditional)$/i.test(conditions))
         && (!row['최소구매수량'] || Number(row['최소구매수량']) === 1)

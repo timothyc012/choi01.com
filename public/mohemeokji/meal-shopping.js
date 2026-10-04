@@ -148,8 +148,8 @@
   }
 
   function metricAmount(value) {
-    const text = String(value || "").trim().replace(",", ".");
-    if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
+    const text = String(value || "").trim().replace(",", ".").replace(/(\d)-(?=(?:kg|g|ml|l)\b)/gi,"$1 ");
+    if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]\s*\d|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
     const bundle = text.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     const match = bundle || text.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     if (!match) return null;

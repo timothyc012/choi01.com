@@ -10,6 +10,64 @@
   const modes = new Set(['balanced','value','nutrition','diet']);
   const runtimeRankingPolicy=window.mealNutritionPolicy||null;
 
+  const normalized = (value) => String(value||'').normalize('NFKC').replace(/\s/g,'').replaceAll('계란','달걀').toLowerCase();
+  const ingredientLabels = (meal) => meal.detailIngredients || meal.ingredients?.map(item=>typeof item==='string'?item:[item.ingredient||item.label,item.quantity].filter(Boolean).join(' ')) || [];
+  function recipeAllowed(meal) {
+    // Owner-selected fresh herbs; processed forms and unrelated compound words remain distinct.
+    return ![meal.title,...ingredientLabels(meal)].some(value=>
+      /(?:^|[\s,·(])(?:냉이|달래|두릅|엄나무순|참나물|곰취|머위|방풍나물|세발나물|돌나물)(?:\s|\d|$)/u.test(String(value))
+      && !/건조|냉동|말린|양념|선택|대체/.test(String(value)));
+  }
+  function mealKind(meal) {
+    if(/냉국|스무디|요거트볼|요거트\s*샐러드|라페|달걀찜|계란찜|초절임|양파절임|물김치|스프|수프|계란국|달걀국|케익|케이크|맛탕/.test(meal?.title||'')) return 'side';
+    if(meal?.detailStatus==='source-link-only'&&!/볶음밥|비빔밥|덮밥|오므라이스|국밥|카레|파스타|스파게티|국수|수제비|라면|우동|전골|찌개|스테이크|피자/.test(meal.title||''))return 'side';
+    return profile(meal||{}).kind || 'main';
+  }
+  function matchesConditions(meal, context={}) {
+    if(!recipeAllowed(meal)) return false;
+    const labels=ingredientLabels(meal);
+    const dietary=context.dietary||'any';
+    if(dietary!=='any') {
+      const flags=[...(meal.filter||[]),...(meal.filters||[]),...(meal.dietaryFilters||[]),...(meal.recommendationProfile?.filters||[])];
+      if(!flags.includes(dietary)) return false;
+      // Flags are not allowed to override contradictory full ingredient evidence.
+      if(labels.some(x=>/돼지|쇠고기|소고기|닭|연어|참치|새우|멸치|액젓|굴소스|치킨스톡|베이컨|소시지|스팸|젓갈/.test(x)&&!/식물성|비건/.test(x)))return false;
+    }
+    const excluded=(context.excludeIngredients||[]).map(normalized).filter(Boolean);
+    if(excluded.length&&!labels.length) return false;
+    if(excluded.some(word=>[meal.title,...labels].some(label=>normalized(label).includes(word))))return false;
+    if(context.maxMinutes&&(!Number.isFinite(meal.time)||meal.time>context.maxMinutes))return false;
+    return true;
+  }
+  function safeOffer(offer) {
+    return !(offer.identity?.ingredientId==='버터'&&/butternut|kürbis|kuerbis/i.test(offer.productDe||offer.product||''));
+  }
+  function offerMatchesRecipe(offer, meal) {
+    if(!safeOffer(offer))return false;
+    const labels=[meal.title,...ingredientLabels(meal)].join(' ');
+    if(/champignon/i.test(offer.productDe||offer.product||'') && /새송이|느타리|표고|팽이|목이/.test(labels) && !/양송이|버섯\s*종류\s*무관/.test(labels))return false;
+    return true;
+  }
+  function recipeQuantities(meal, targetServings) {
+    const servingText=meal.sourceServingText||meal.servingsText||'';
+    const servingMatch=String(servingText).match(/^\s*(\d+(?:\.\d+)?)\s*인분\s*$/);
+    const sourceServings=Number.isFinite(meal.sourceServings)&&meal.sourceServings>0?meal.sourceServings:(servingMatch?Number(servingMatch[1]):null);
+    const target=Number.isFinite(targetServings)&&targetServings>0?targetServings:sourceServings;
+    const scale=sourceServings&&target?target/sourceServings:1;
+    const requiredAmounts={},unquantified=[];
+    const labels=ingredientLabels(meal).map(label=>{
+      const match=String(label).match(/^(.+?)\s+(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)\s*(kg|ml|g|l|개|공기|큰술|작은술|스푼|T|t|장|쪽|모|봉|캔)\s*$/);
+      if(!match){unquantified.push(String(label));return String(label)+(sourceServings&&scale!==1?' (원문량 · 환산 확인 필요)':'');}
+      const parts=match[2].split(/\s+/),amount=parts.reduce((sum,part)=>{const [n,d]=part.split('/').map(Number);return sum+n/(d||1);},0)*scale;
+      const name=match[1].trim(),unit=match[3];
+      if(['g','kg','ml','l'].includes(unit)&&Number.isFinite(amount))requiredAmounts[name]={amount:amount*(unit==='kg'||unit==='l'?1000:1),unit:unit==='kg'?'g':unit==='l'?'ml':unit};
+      return name+' '+Number(amount.toFixed(3))+unit;
+    });
+    // Editorial structured quantities are fallback only; never overwrite source amounts.
+    for(const [name,value] of Object.entries(meal.requiredAmounts||{}))if(!requiredAmounts[name]&&Number.isFinite(value.amount))requiredAmounts[name]={...value,amount:value.amount*scale};
+    return {sourceServings,targetServings:target,scalable:Boolean(sourceServings),requiredAmounts:!sourceServings&&targetServings!==undefined?{}:requiredAmounts,labels,unquantified};
+  }
+
   function restorePreferences(serialized) {
     try {
       const value=JSON.parse(serialized);
@@ -55,7 +113,7 @@
   function explain(meal, catalog = {}) {
     const mainIngredients = profile(meal).primaryIngredients;
     const names = [...new Set([...meal.sale,...meal.missing])];
-    const mainOffers = mainIngredients.filter((name)=>Object.hasOwn(catalog,name)).map((name)=>({name,product:catalog[name].product || name,pack:catalog[name].pack || '',priceCents:catalog[name].priceCents}));
+    const mainOffers = mainIngredients.filter((name)=>Object.hasOwn(catalog,name)&&offerMatchesRecipe({...catalog[name],identity:{ingredientId:name}},meal)).map((name)=>({name,product:catalog[name].product || name,pack:catalog[name].pack || '',priceCents:catalog[name].priceCents}));
     const secondaryOffers = names.filter((name)=>!mainIngredients.includes(name) && Object.hasOwn(catalog,name));
     const substitutionNotes = [];
     if (mainIngredients.includes('닭가슴살') && meal.detailIngredients?.some((label)=>label.includes('닭가슴살')) && !catalog['닭가슴살'] && catalog['닭안심']) {
@@ -88,7 +146,7 @@
   }
 
   function available(meals, {catalog = {}}) {
-    return meals.filter((meal)=>explain(meal,catalog).mainOffers.length>0);
+    return meals.filter((meal)=>recipeAllowed(meal)&&explain(meal,catalog).mainOffers.length>0);
   }
 
   function nutritionReadiness(meal) {
@@ -113,9 +171,10 @@
     const reasons=[];
     let eligible=Boolean(meal&&typeof identity(meal)==='string'&&identity(meal));
     if(!eligible) reasons.push('출처 레시피 식별자가 없습니다.');
+    if(meal&&!matchesConditions(meal,context)){eligible=false;reasons.push('식단 조건 또는 제외 재료 기준에 맞지 않습니다.');}
     if(context.store&&meal?.store!==context.store) { eligible=false; reasons.push('선택한 마트의 메뉴가 아닙니다.'); }
     if(context.branchId&&meal?.branchId!==context.branchId) { eligible=false; reasons.push('선택한 지점의 메뉴가 아닙니다.'); }
-    if(context.mealOnly&&['side','breakfast'].includes(profile(meal||{}).kind)) { eligible=false; reasons.push('점심·저녁 자동 추천용 주식 메뉴가 아닙니다.'); }
+    if(context.mealOnly&&['side','breakfast'].includes(mealKind(meal))) { eligible=false; reasons.push('점심·저녁 자동 추천용 주식 메뉴가 아닙니다.'); }
     if(context.requireMainOffer&&explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length===0) { eligible=false; reasons.push('현재 지점의 정확한 주재료 할인과 연결되지 않습니다.'); }
     if(typeof context.offerIds?.has==='function'&&!((meal?.offerIds||[]).some((offerId)=>context.offerIds.has(offerId)))) { eligible=false; reasons.push('현재 지점의 할인상품 ID와 일치하지 않습니다.'); }
     const readiness={cost:'unknown',savings:'unavailable',nutrition:'unknown'};
@@ -211,7 +270,8 @@
 
   function sequence(meals, options, count = meals.length) {
     const matched = options.requireMainOffer ? available(meals,options) : meals;
-    const eligible = options.mealOnly ? matched.filter((meal)=>!['side','breakfast'].includes(profile(meal).kind)) : matched;
+    const conditioned=matched.filter((meal)=>matchesConditions(meal,options));
+    const eligible = options.mealOnly ? conditioned.filter((meal)=>!['side','breakfast'].includes(mealKind(meal))) : conditioned;
     const remaining = [...new Map(eligible.map((meal)=>[identity(meal),meal])).values()];
     const result = [], families = new Map(), methods = new Map(), relaxations=[];
     while (remaining.length && result.length < count) {
@@ -239,7 +299,7 @@
   function browse(meals, options = {}) {
     const current = available(meals,options);
     const currentIds = new Set(current.map(identity));
-    const general = meals.filter((meal)=>!currentIds.has(identity(meal)));
+    const general = meals.filter((meal)=>recipeAllowed(meal)&&matchesConditions(meal,options)&&!currentIds.has(identity(meal)));
     return [
       ...sequence(current,{...options,requireMainOffer:false},current.length),
       ...sequence(general,{...options,requireMainOffer:false},general.length)
@@ -251,5 +311,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
+  window.MealRecommendations = {recipeAllowed,mealKind,matchesConditions,safeOffer,offerMatchesRecipe,recipeQuantities,available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
 }());

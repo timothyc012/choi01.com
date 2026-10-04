@@ -115,7 +115,7 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   // This archived yogurt offer does not establish the plain form.
   assert.equal(aldi.length,0);
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
-  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,7);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,4);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
     assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
   }

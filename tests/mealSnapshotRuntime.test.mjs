@@ -209,7 +209,7 @@ test('legacy recipe runtime stays disabled while snapshot refs remain detail-laz
   assert.equal(summaries[0].sourceRecipeId,'7000001');
   assert.equal(summaries[0].title,'승인된 닭가슴살 볶음');
   assert.equal('steps' in summaries[0],false);
-  assert.equal('detailIngredients' in summaries[0],false);
+  assert.deepEqual([...summaries[0].detailIngredients],[]);
   const catalog=api.offerCatalogFromSnapshot({offers:[{
     offerId:'offer-a',chain:'EDEKA',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,normalPriceCents:799,
     validFrom:'2026-09-07',validThrough:'2026-09-13',evidenceUrl:'https://example.com/offer'
@@ -252,7 +252,7 @@ test('snapshot recipes restore menu categories from approved profile and title f
   assert.equal(recipes[1].filter.includes('vegetarian'),false);
 });
 
-test('browse catalog keeps the reviewed archive and merges selected-location snapshot recipes',()=>{
+test('browse catalog never resurrects the archive outside the current snapshot',()=>{
   const {api,window}=loadRecipeData();
   window.createMealRecipes=(store)=>[
     {id:'edeka-recipe-1',sourceRecipeId:'1',store,title:'보관함 감자요리',time:25,sale:['감자'],missing:['양파'],tags:[],filter:['korean'],requiredAmounts:{},detailIngredients:['감자 2개','양파 1개'],steps:['손질한다.'],sourceUrl:'https://www.10000recipe.com/recipe/1',sourceTitle:'원문 감자요리',sourceAuthor:'작성자',sourceCorpus:'test',recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'braise',kind:'main'}},
@@ -264,12 +264,11 @@ test('browse catalog keeps the reviewed archive and merges selected-location sna
     {sourceRecipeId:'3',title:'지점 전용 요리',offerIds:['potato-offer'],primaryIngredientIds:['감자'],detailPath:'snapshots/recipe-3.json',detailSha256:'b'.repeat(64),recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'stirfry',kind:'main'}}
   ]});
   const result=api.buildBrowseCatalog('EDEKA','branch-a',live,offers);
-  assert.deepEqual(result.map((meal)=>meal.sourceRecipeId),['1','2','3']);
+  assert.deepEqual([...result].map((meal)=>meal.sourceRecipeId),['1','3']);
   assert.equal(result[0].title,'승인된 감자요리');
-  assert.deepEqual(result[0].detailIngredients,['감자 2개','양파 1개']);
-  assert.equal(result[1].catalogOnly,true);
-  assert.equal(result[1].matchedOffers.length,0);
-  assert.equal(result[2].detailPath,'snapshots/recipe-3.json');
+  assert.deepEqual([...result[0].detailIngredients],[]);
+  assert.equal(result[1].catalogOnly,false);
+  assert.equal(result[1].detailPath,'snapshots/recipe-3.json');
 });
 
 test('manifest-only selection maps every direct route and chooses the first branch deterministically',()=>{
@@ -403,7 +402,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
     'neuemarkt-recipe-bad':{sourceRecipeId:'7000001',title:'깨진 보관 메뉴',detailPath:badArchivedPath,detailSha256:'2'.repeat(64),area:'99999',store:'NeueMarkt',branchId:'branch-b',snapshotId:'snapshot-old'}
   }}));
   dom.window.localStorage.setItem('choi01-today-meal-plan:99999:NeueMarkt:branch-b','{malformed');
-  dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'diet',targetServings:2}));
+  dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'balanced',targetServings:2}));
   for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   dom.window.eval(dom.window.document.querySelector('script[data-workspace-controller]').textContent);
   dom.window.HTMLElement.prototype.scrollIntoView=()=>{};
@@ -433,8 +432,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.querySelector('[data-mode-status="nutrition"]').textContent,/준비 중.*검증 0\/4/);
   assert.match(dom.window.document.querySelector('[data-mode-status="diet"]').textContent,/준비 중.*검증 0\/4/);
   assert.equal(modeRadios.find((input)=>input.value==='value').disabled,false);
-  assert.equal(modeRadios.find((input)=>input.value==='nutrition').disabled,true);
-  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,true);
+  assert.equal(modeRadios.find((input)=>input.value==='nutrition').disabled,false);
+  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,false);
   assert.equal(dom.window.document.getElementById('targetServings').options.length,6);
   const lunchControl=dom.window.document.querySelector('[data-moment="점심"]');
   const dinnerControl=dom.window.document.querySelector('[data-moment="저녁"]');
@@ -467,7 +466,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   modeRadios.find((input)=>input.value==='balanced').click();
   const plansBeforeMode=JSON.parse(JSON.stringify(runtime.plans));
   const manualBeforeMode=runtime.plans.저녁.mon.recipeId;
-  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,true);
+  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,false);
   dom.window.document.querySelector('[data-moment="점심"]').click();
   const replaceButton=[...dom.window.document.querySelectorAll('[data-replace-slot]')].find((button)=>runtime.plans[button.dataset.replaceMoment][button.dataset.replaceSlot].origin==='auto');
   assert.ok(replaceButton);

@@ -131,5 +131,14 @@
     return detail;
   }
 
-  window.MealDataLoader = {loadCurrentSnapshot, loadLocationSnapshot, loadRecipeDetail, loadRecipeDetailReference};
+  async function loadDiscoveryCatalog(manifest,fetcher=window.fetch.bind(window)) {
+    if(!manifest.discoveryCatalogPath)return {recipes:[]};
+    const path=artifactPath(manifest.discoveryCatalogPath);
+    const bytes=await fetchBytes(path,fetcher);await verify(bytes,manifest.fileHashes[path],'discovery');
+    const data=parseJson(bytes);
+    if(data.snapshotId!==manifest.snapshotId||!Array.isArray(data.recipes))throw unavailable('invalid discovery catalog');
+    return data;
+  }
+
+  window.MealDataLoader = {loadDiscoveryCatalog,loadCurrentSnapshot, loadLocationSnapshot, loadRecipeDetail, loadRecipeDetailReference};
 }());

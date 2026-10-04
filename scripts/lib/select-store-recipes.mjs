@@ -1,3 +1,4 @@
+import {mealPolicy} from './meal-policy.mjs';
 import crypto from 'node:crypto';
 
 import {canonicalJson,validRecipeSourceUrl} from './meal-snapshot-schema.mjs';
@@ -105,6 +106,7 @@ export function representsUnknownActionIngredient(detailIngredients,ingredient) 
 
 function sourceOfferMismatch(candidate,primaryMatches,offersById) {
   const ingredientEvidence=(candidate.ingredients||[]).map((ingredient)=>[ingredient.ingredient,ingredient.label,ingredient.quantity].filter(Boolean).join(' ')).join(' ');
+  if(!mealPolicy.recipeAllowed(candidate)) return true;
   const sourceEvidence=[candidate.title,ingredientEvidence,(candidate.steps||[]).map((step)=>step.instruction).join(' ')].filter(Boolean).join(' ');
   const smokedSalmonSource=/훈제연어/.test(sourceEvidence);
   const compatibleSmokedSalmon=primaryMatches.some((match)=>{
@@ -114,6 +116,7 @@ function sourceOfferMismatch(candidate,primaryMatches,offersById) {
   if(smokedSalmonSource&&!compatibleSmokedSalmon) return true;
   return primaryMatches.some((match)=>{
     const offer=offersById.get(match.offerId);
+    if(offer&&!mealPolicy.offerMatchesRecipe(offer,candidate))return true;
     const label=String(match.ingredientLabel||'').replace(/\s+/g,'');
     const speciesTitleTerms={chicken:/닭|치킨|chicken/iu,pork:/돼지|삼겹|목살|돈육|포크|pork/iu,beef:/소고기|쇠고기|등심|갈비|차돌|beef/iu,turkey:/칠면조|turkey/iu,trout:/송어|trout/iu,mixed:/다짐육|혼합육/iu};
     if(offer?.identity?.processingState==='raw'&&RAW_ANIMAL_SPECIES.has(offer.identity.species)&&PROCESSED_ANIMAL_FORM.test(String(candidate.title||''))&&speciesTitleTerms[offer.identity.species]?.test(String(candidate.title||''))) return true;
@@ -308,11 +311,13 @@ function publicRecipe(candidate,storeOffers,registryEntry) {
     ratingNumber:Number.isFinite(candidate.ratingNumber)?candidate.ratingNumber:null,
     reviewCount:Number.isInteger(candidate.reviewCount)?candidate.reviewCount:null,
     title:registryEntry.title,
+    ...(registryEntry.nutritionFacts?{nutritionFacts:registryEntry.nutritionFacts}:{}),
+    ...(registryEntry.basketFacts?{basketFacts:registryEntry.basketFacts}:{}),
     detailIngredients:registryEntry.detailIngredients.slice(),
     steps:registryEntry.steps.slice(),
     recommendationProfile:{
       primaryIngredients:Array.isArray(profile.primaryIngredients)?profile.primaryIngredients.slice().sort():[],
-      family:text(profile.family)||'other',method:text(profile.method)||'other',kind:['main','breakfast','side'].includes(profile.kind)?profile.kind:'main',
+      family:text(profile.family)||'other',method:text(profile.method)||'other',kind:mealPolicy.mealKind({title:registryEntry.title,recommendationProfile:profile}),
       ...(Array.isArray(registryEntry.recommendationProfile?.filters)&&registryEntry.recommendationProfile.filters.includes('vegetarian')?{filters:['vegetarian']}:{}),
     },
     offerIds:matchedOffers.map((offer)=>offer.offerId),
@@ -332,6 +337,8 @@ function selectedPublicRecipe(recipe) {
     offerIds:recipe.offerIds.slice(),offerIdentityKeys:recipe.offerIdentityKeys.slice(),
     primaryIngredientIds:recipe.primaryIngredientIds.slice(),transformVersion:recipe.transformVersion,
     qualityScore:recipe.qualityScore,qualityFacts:{...recipe.qualityFacts},
+    ...(recipe.nutritionFacts?{nutritionFacts:recipe.nutritionFacts}:{}),
+    ...(recipe.basketFacts?{basketFacts:recipe.basketFacts}:{}),
   };
 }
 

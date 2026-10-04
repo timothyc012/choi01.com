@@ -10,7 +10,7 @@
   window.ontologyRecipeCatalog = details;
   const storeSlug = (store) => store.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-  window.createMealRecipes = (store) => details.map((detail) => ({
+  window.createMealRecipes = (store) => details.filter((detail)=>!window.MealRecommendations||window.MealRecommendations.recipeAllowed(detail)).map((detail) => ({
     ...detail,
     id: storeSlug(store) + '-recipe-' + detail.sourceRecipeId,
     store,
@@ -49,8 +49,8 @@
 
   function fromSnapshotLocation(location) {
     const offersById=Object.fromEntries((location?.offers||[]).map((offer)=>[offer.offerId,offer]));
-    return (location?.recipes || []).map((recipe) => {
-      const matchedOffers=(recipe.offerIds||[]).map((offerId)=>offersById[offerId]).filter(Boolean);
+    return (location?.recipes || []).filter((recipe)=>!window.MealRecommendations||window.MealRecommendations.recipeAllowed(recipe)).map((recipe) => {
+      const matchedOffers=(recipe.offerIds||[]).map((offerId)=>offersById[offerId]).filter((offer)=>offer&&(!window.MealRecommendations||window.MealRecommendations.offerMatchesRecipe(offer,recipe)));
       const grouped=new Map();
       for(const offer of matchedOffers) {
         const ingredientId=offer.identity?.ingredientId;
@@ -80,7 +80,9 @@
       missing: [],
       tags: [],
       filter: recipeFilterKeys(recipe),
-      requiredAmounts: {},
+      requiredAmounts: recipe.requiredAmounts || {},
+      detailIngredients: recipe.detailIngredients || [],
+      sourceServingText: recipe.sourceServingText || null,
       offerIds: Array.isArray(recipe.offerIds) ? recipe.offerIds.slice() : [],
       primaryIngredientIds: Array.isArray(recipe.primaryIngredientIds) ? recipe.primaryIngredientIds.slice() : [],
       recommendationProfile: recipe.recommendationProfile || {},
@@ -98,53 +100,28 @@
     });
   }
 
-  function buildBrowseCatalog(store,branchId,snapshotMeals,offers=[]) {
-    const liveBySourceId=new Map((snapshotMeals||[]).map((meal)=>[meal.sourceRecipeId,meal]));
-    const offersByIngredient=new Map();
-    for(const offer of offers) {
-      const ingredientId=offer?.identity?.ingredientId;
-      if(!ingredientId)continue;
-      if(!offersByIngredient.has(ingredientId))offersByIngredient.set(ingredientId,[]);
-      offersByIngredient.get(ingredientId).push(offer);
+  function buildBrowseCatalog(store,branchId,snapshotMeals,offers=[],discoveryRecipes=[]) {
+    const policy=window.MealRecommendations;
+    const pool=new Map((snapshotMeals||[]).map(meal=>[meal.sourceRecipeId,{...meal,catalogOnly:false}]));
+    for(const recipe of discoveryRecipes) {
+      if(!recipe.locations?.some(location=>location.store===store&&location.branchId===branchId))continue;
+      if(pool.has(recipe.sourceRecipeId))continue;
+      const primary=recipe.recommendationProfile?.primaryIngredients||[];
+      const matchedOffers=offers.filter(offer=>primary.includes(offer.identity?.ingredientId)&&(!policy||policy.offerMatchesRecipe(offer,recipe)));
+      const detailIngredients=recipe.ingredients||[];
+      const quantities=policy?.recipeQuantities({...recipe,detailIngredients});
+      pool.set(recipe.sourceRecipeId,{...recipe,id:storeSlug(store)+'-recipe-'+recipe.sourceRecipeId,
+        store,branchId,sourceTitle:recipe.title,detailIngredients,sourceServings:quantities?.sourceServings,
+        requiredAmounts:quantities?.requiredAmounts||{},steps:[],sale:primary,missing:detailIngredients.map(label=>window.MealShopping?.ingredientName(label)||label),tags:[],
+        filter:recipeFilterKeys({...recipe,filters:recipe.dietaryFilters||[]}),time:null,matchedOffers,offerIds:matchedOffers.map(offer=>offer.offerId),
+        offerCatalog:offerCatalogFromSnapshot({offers:matchedOffers}),catalogOnly:true,detailStatus:'source-link-only',
+      });
     }
-    const archive=typeof window.createMealRecipes==='function'?window.createMealRecipes(store):[];
-    const merged=archive.map((catalogMeal)=>{
-      const live=liveBySourceId.get(catalogMeal.sourceRecipeId);
-      if(live) {
-        liveBySourceId.delete(catalogMeal.sourceRecipeId);
-        return {
-          ...catalogMeal,...live,
-          time:catalogMeal.time??live.time,
-          filter:[...new Set([...(catalogMeal.filter||[]),...(live.filter||[])])],
-          tags:(catalogMeal.tags||[]).slice(),
-          missing:(catalogMeal.missing||[]).slice(),
-          requiredAmounts:{...(catalogMeal.requiredAmounts||{})},
-          detailIngredients:(catalogMeal.detailIngredients||[]).slice(),
-          steps:(catalogMeal.steps||[]).slice(),
-          sourceUrl:catalogMeal.sourceUrl,
-          sourceTitle:catalogMeal.sourceTitle,
-          sourceAuthor:catalogMeal.sourceAuthor,
-          sourceCorpus:catalogMeal.sourceCorpus,
-          catalogOnly:false
-        };
-      }
-      const primary=(catalogMeal.recommendationProfile?.primaryIngredients||catalogMeal.sale||[]).slice();
-      const matchedOffers=primary.flatMap((ingredientId)=>offersByIngredient.get(ingredientId)||[]);
-      return {
-        ...catalogMeal,branchId,
-        offerIds:matchedOffers.map((offer)=>offer.offerId),
-        primaryIngredientIds:primary,
-        matchedOffers,
-        offerCatalog:offerCatalogFromSnapshot({offers:matchedOffers}),
-        reviewEvidence:null,basketFacts:null,nutritionFacts:null,
-        catalogOnly:true
-      };
-    });
-    return merged.concat([...liveBySourceId.values()].map((meal)=>({...meal,catalogOnly:false})));
+    return [...pool.values()].filter(meal=>!policy||policy.recipeAllowed(meal));
   }
 
   function currentOfferLocation(location,date) {
-    return {...location,offers:(location.offers||[]).filter((offer)=>offer.validFrom&&offer.validThrough&&offer.validFrom<=date&&date<=offer.validThrough)};
+    return {...location,offers:(location.offers||[]).filter((offer)=>offer.validFrom&&offer.validThrough&&offer.validFrom<=date&&date<=offer.validThrough&&(!window.MealRecommendations||window.MealRecommendations.safeOffer(offer)))};
   }
 
   function offerCatalogFromSnapshot(location) {
@@ -277,6 +254,7 @@
 
       const openLocation=(postcode,store,branchId)=>{
         const next=new URLSearchParams({postcode,store});
+        if(params.get('date'))next.set('date',params.get('date'));
         if(branchId) next.set('branch',branchId);
         window.location.href='/mohemeokji/?'+next.toString();
       };
@@ -290,12 +268,17 @@
       });
       byId('branchSelect').addEventListener('change',(event)=>openLocation(activeArea,activeStore,event.target.value));
 
-      const berlinDate=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      const actualDate=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      const requestedDate=params.get('date');
+      const berlinDate=/^\d{4}-\d{2}-\d{2}$/.test(requestedDate||'')&&Number.isFinite(Date.parse(requestedDate))?requestedDate:actualDate;
       const sourceLocation=await loader.loadLocationSnapshot(manifest,{postcode:activeArea,store:activeStore,branchId:activeBranch.branchId});
       const location=currentOfferLocation(sourceLocation,berlinDate);
       const collected=window.mealVerifiedEvidence?.snapshotId===manifest.snapshotId&&window.mealVerifiedEvidence?.csvSha256===manifest.source?.csvSha256?window.mealVerifiedEvidence.locations?.[location.id]:null;
       const snapshotMeals=fromSnapshotLocation(location);
-      const libraryMeals=buildBrowseCatalog(activeStore,activeBranch.branchId,snapshotMeals,location.offers);
+      const storedConditions=safeJson(storage.get('choi01-meal-conditions-v1'))||{};
+      if(storedConditions.excludeIngredients?.length)await Promise.all(snapshotMeals.filter(meal=>!meal.detailIngredients.length).map(async meal=>{try{const detail=await loader.loadRecipeDetail(location,meal.sourceRecipeId);meal.detailIngredients=detail.detailIngredients||[];}catch{/* Unverified ingredients remain excluded. */}}));
+      const discovery=typeof loader.loadDiscoveryCatalog==='function'?await loader.loadDiscoveryCatalog(manifest):{recipes:[]};
+      const libraryMeals=buildBrowseCatalog(activeStore,activeBranch.branchId,snapshotMeals,location.offers,discovery.recipes);
       const libraryById=new Map(libraryMeals.map((meal)=>[meal.id,meal]));
       const meals=snapshotMeals.map((meal)=>libraryById.get(meal.id)||meal);
       const mealById=(id)=>libraryById.get(id);
@@ -314,20 +297,19 @@
       const preferences=recommendations.restorePreferences(storage.get(preferenceStorageKey));
       const mealHistory=recommendations.restoreHistory(storage.get('choi01-meal-history-v1'),berlinDate);
       const offerIds=new Set(location.offers.map((offer)=>offer.offerId));
-      const scaledMeal=(meal)=>{
-        if(!(Number.isFinite(meal.sourceServings)&&meal.sourceServings>0)) return meal;
-        const scale=preferences.targetServings/meal.sourceServings;
-        return {...meal,requiredAmounts:Object.fromEntries(Object.entries(meal.requiredAmounts||{}).map(([name,value])=>[name,{...value,amount:value.amount*scale}]))};
-      };
+      const scaledMeal=(meal)=>({...meal,...recommendations.recipeQuantities(meal,preferences.targetServings)});
+      const savedConditions=safeJson(storage.get('choi01-meal-conditions-v1'))||{};
+      let dietary=savedConditions.dietary==='vegetarian'?'vegetarian':'any',excludeIngredients=Array.isArray(savedConditions.excludeIngredients)?savedConditions.excludeIngredients.filter(x=>typeof x==='string'&&x.length<=60).slice(0,20):[];
+      if(byId('dietaryChoice'))byId('dietaryChoice').value=dietary;
+      if(byId('excludeIngredients'))byId('excludeIngredients').value=excludeIngredients.join(', ');
+      const eligibleForDiet=(meal)=>recommendations.matchesConditions(meal,{dietary,excludeIngredients});
       const modeBasket=(meal)=>{
         const facts=meal.basketFacts;
         if(facts?.sourceCoverage==='complete'&&facts.targetServings===preferences.targetServings)return shopping.marginalBasketFacts(facts,shoppingState.pantry);
         return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['recipe:'+meal.id+':full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable'};
       };
-      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate});
-      const contextForMode=(mode)=>mode==='balanced'
-        ? {...recommendationContext(),requireMainOffer:false,requireCompilerBasketFacts:false,offerIds:null}
-        : recommendationContext();
+      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate,dietary,excludeIngredients});
+      const contextForMode=()=>recommendationContext();
       const mealsForMode=(mode)=>mode==='balanced'?libraryMeals:meals;
       const poolForMode=(mode)=>recommendations.rankForMode(mealsForMode(mode),contextForMode(mode),mode);
       const modeContext=()=>contextForMode(preferences.mode);
@@ -343,10 +325,6 @@
         }));
       };
       const savedMode=preferences.mode;
-      if(!modeReadiness()[preferences.mode]?.available) {
-        preferences.mode='balanced';
-        storage.set(preferenceStorageKey,recommendations.serializePreferences(preferences));
-      }
       let autoCoverage={eligible:0,filled:0,totalSlots:14,limited:true};
       const buildAutoPlans=(currentPlans=null)=>{
         const planned=recommendations.planAutoSlots(modeMeals(),{plans:currentPlans||{},days:days.map(([day])=>day),moments:['점심','저녁'],mode:preferences.mode,context:modeContext()});
@@ -429,7 +407,7 @@
           slot.addEventListener('drop',(event)=>{
             event.preventDefault();slot.classList.remove('drop-target');
             const meal=mealById(event.dataTransfer?.getData('text/plain')||'');
-            if(!meal)return;
+            if(!meal||!eligibleForDiet(meal)){byId('planStatus').textContent='선택한 식단 조건과 맞지 않는 메뉴입니다.';return;}
             const moment=slot.dataset.momentSlot,day=slot.dataset.day;
             plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
             selectedPlanTarget=null;
@@ -456,14 +434,14 @@
 
       function renderMenu() {
         const query=byId('menuSearch').value.trim().toLowerCase();
-        const browseMeals=recommendations.browse(libraryMeals,{catalog:catalog[activeStore],history:mealHistory,date:berlinDate,moment:mealMoment});
+        const browseMeals=recommendations.browse(libraryMeals.filter(eligibleForDiet),{catalog:catalog[activeStore],history:mealHistory,date:berlinDate,moment:mealMoment});
         const discountedMeals=recommendations.available(libraryMeals,{catalog:catalog[activeStore]});
         const visible=browseMeals.filter((meal)=>{
           const matchesFilter=activeFilter==='all'||(activeFilter==='quick'?Number.isFinite(meal.time)&&meal.time<=20:meal.filter.includes(activeFilter));
           const matchesQuery=!query||[meal.title,...meal.sale,...meal.missing,...(meal.detailIngredients||[]),...meal.matchedOffers.map((offer)=>offer.productDe)].join(' ').toLowerCase().includes(query);
-          return matchesFilter&&matchesQuery;
+          return matchesFilter&&matchesQuery&&(!byId('discountOnly')?.checked||recommendations.explain(meal,catalog[activeStore]).mainOffers.length>0);
         });
-        byId('menuCount').textContent=String(browseMeals.length);
+        byId('menuCount').textContent=String(visible.length);
         byId('offerCount').textContent=collected?'수집 '+collected.collectedRows+'건 · 연결 '+collected.linkedProducts+'종':'재료 연결 '+location.offers.length+'종';
         byId('menuCountNote').textContent='전체 레시피 '+browseMeals.length+'개 · '+berlinDate+' 이 지점 할인 연결 '+discountedMeals.length+'개'+(collected?.unmatchedRows?' · 수집 상품 '+collected.unmatchedRows+'건은 재료 매칭 미완료':'');
         byId('menuList').innerHTML=visible.length?visible.map((meal)=>{
@@ -471,11 +449,11 @@
           const isDiscounted=recommendations.explain(meal,catalog[activeStore]).mainOffers.length>0;
           const offerNames=isDiscounted&&meal.matchedOffers.length?meal.matchedOffers.map((entry)=>entry.productDe).join(' · '):'현재 연결된 할인상품 없음';
           const cost=modeBasket(meal);
-          const nutrition=meal.nutritionFacts?.status==='complete'?'영양 근거 완전':'영양 근거 미확인';
+          const nutrition=meal.nutritionFacts?.status==='complete'?'영양 계산 가능':'영양 미계산';
           const costLabel=cost.costStatus==='complete'?'구매비 근거 완전':cost.costStatus==='partial'?'구매비 일부 확인':'구매비 근거 미확인';
           const evidence=isDiscounted?(offer?.evidenceUrl?'할인 근거 연결됨':'할인 근거 주소 미확인'):'일반 레시피 · 현재 할인 없음';
           const reason=isDiscounted?'현재 지점의 정확한 주재료 할인과 연결됩니다.':'할인과 관계없이 둘러보고 직접 고를 수 있는 레시피입니다.';
-          return '<article class="menu-item" data-id="'+escapeHtml(meal.id)+'" tabindex="0" draggable="true"><div class="menu-top"><h4 class="menu-title">'+escapeHtml(meal.title)+'</h4><span class="match">'+(isDiscounted?'이번 주 할인':'일반 레시피')+'</span></div><p class="menu-sub">'+reason+'</p><p class="menu-offer"><b>'+(isDiscounted?'연결된 독어 상품':'현재 주재료 할인 없음')+'</b><br><span lang="de">'+escapeHtml(offerNames)+'</span></p><div class="menu-facts"><span>'+escapeHtml(offer?.pack||'포장 정보 없음')+' · '+(Number.isSafeInteger(offer?.priceCents)?shopping.euro(offer.priceCents):'가격 미확인')+'</span><span>'+escapeHtml(activeBranch.branch||activeBranch.branchId)+' · '+escapeHtml(manifest.weekStart)+'</span><span>'+evidence+' · '+costLabel+' · '+nutrition+'</span></div><p class="menu-quality">선정 근거 · '+escapeHtml(qualitySummary(meal))+'</p><div class="menu-bottom"><span class="menu-price">'+escapeHtml(meal.sale.join(' · ')||'주재료 확인 필요')+'</span><div class="menu-actions"><button class="button button-small detail-trigger" data-id="'+escapeHtml(meal.id)+'">레시피 보기</button><button class="button button-small" data-add-menu="'+escapeHtml(meal.id)+'">식단에 넣기</button></div></div></article>';
+          return '<article class="menu-item" data-id="'+escapeHtml(meal.id)+'" tabindex="0" draggable="true"><div class="menu-top"><h4 class="menu-title">'+escapeHtml(meal.title)+'</h4><span class="match">'+(isDiscounted?'할인 연결':'일반 레시피')+'</span></div><p class="menu-sub">'+(meal.catalogOnly?'원문에서 조리법 확인':'앱에서 조리법 확인')+' · '+(recommendations.mealKind(meal)==='main'?'식사 후보':'곁들임')+'</p><p class="menu-offer">'+(offer?'<span lang="de">'+escapeHtml(offerNames)+'</span><br>'+escapeHtml(offer.pack)+' · '+shopping.euro(offer.priceCents):'선택 날짜의 주재료 할인 없음')+'</p><details class="menu-source"><summary>할인 근거·지점</summary><p>'+escapeHtml(activeBranch.branch||activeBranch.branchId)+' · '+escapeHtml(manifest.weekStart)+' · '+evidence+'</p><p class="menu-quality">선정 근거 · '+escapeHtml(qualitySummary(meal))+'</p></details><div class="menu-ingredients">'+escapeHtml(meal.sale.join(' · '))+'</div><div class="menu-actions"><button class="button button-small detail-trigger" data-id="'+escapeHtml(meal.id)+'">재료·레시피</button><button class="button button-small" data-add-menu="'+escapeHtml(meal.id)+'">식단에 넣기</button></div></article>' ;
         }).join(''):'<p class="panel-copy" role="status">검색어나 필터에 맞는 레시피가 없습니다. 조건을 바꿔보세요.</p>';
         document.querySelectorAll('.menu-item').forEach((card)=>{
           card.addEventListener('dragstart',(event)=>{if(!event.dataTransfer)return;event.dataTransfer.setData('text/plain',card.dataset.id);event.dataTransfer.effectAllowed='copy';card.classList.add('dragging');});
@@ -487,14 +465,15 @@
 
       function renderToday() {
         const meal=currentMeal();
-        byId('todayTitle').textContent=meal?meal.title:'현재 승인된 메뉴를 준비 중입니다';
+        byId('todayTitle').textContent=meal?meal.title:preferences.mode==='balanced'?'선택 날짜의 할인 추천이 없어요':preferences.mode==='value'?'전체 구매비용을 아직 계산할 수 없어요':'영양 계산 자료가 더 필요해요';
+        byId('decisionLabel').textContent=(berlinDate===actualDate?'오늘':berlinDate)+' '+mealMoment+' 추천';
         const evaluation=meal?recommendations.evaluateRecipeForMode(meal,modeContext(),preferences.mode):null;
         byId('todayReason').textContent=meal
           ? (evaluation?.reasons[0]||'현재 지점의 할인 주재료와 메뉴 다양성을 기준으로 추천합니다.')+' · '+qualitySummary(meal)
-          : (preferences.mode==='balanced'?'다양하게 기준에 맞는 다음 메뉴가 없습니다.':'선택한 기준에 필요한 검증 자료가 부족합니다.');
+          : (preferences.mode==='balanced'?'다른 날짜나 마트를 선택하거나, 아래 레시피에서 직접 식단을 만들어 보세요.':'선택한 기준에 필요한 검증 자료가 부족합니다.');
         byId('todayTime').textContent=meal?(Number.isFinite(meal.time)?meal.time+'분':'상세 확인'):'—';
         const leadOffer=meal?.matchedOffers?.[0];
-        byId('todayPrimaryOffer').innerHTML=leadOffer?'<strong>'+escapeHtml(leadOffer.identity.ingredientId)+'</strong> · <span lang="de">'+escapeHtml(leadOffer.productDe)+'</span> · '+escapeHtml(leadOffer.pack)+' · '+shopping.euro(leadOffer.priceCents)+' · '+escapeHtml(leadOffer.validFrom)+' ~ '+escapeHtml(leadOffer.validThrough):'<strong>일반 레시피</strong> · 현재 주재료 할인 없음';
+        byId('todayPrimaryOffer').innerHTML=leadOffer?'<strong>'+escapeHtml(leadOffer.identity.ingredientId)+'</strong> · <span lang="de">'+escapeHtml(leadOffer.productDe)+'</span> · '+escapeHtml(leadOffer.pack)+' · '+shopping.euro(leadOffer.priceCents)+' · '+escapeHtml(leadOffer.validFrom)+' ~ '+escapeHtml(leadOffer.validThrough):(meal?'<strong>일반 레시피</strong> · 현재 주재료 할인 없음':'');
         const basket=meal?modeBasket(meal):null;
         byId('todayCost').textContent=basket?.costStatus==='complete'?shopping.euro(basket.knownSubtotalCents):(meal?'가격 미확인':'—');
         byId('todayCostNote').textContent=meal?(leadOffer?'할인상품 한 포장 가격과 전체 재료 구매 합계는 다릅니다. 상세에서 수량과 미확인 가격을 확인하세요.':'현재 할인 가격이 없는 재료는 금액 미확인으로 남습니다.') : '';
@@ -507,7 +486,7 @@
         ['acceptToday','todayShopping'].forEach((id)=>{byId(id).disabled=!meal;});
         byId('nextRecommendation').disabled=modePool().length<2;
         byId('modeReadiness').textContent=preferences.mode==='balanced'
-          ? '다양하게는 주재료·조리법·최근 식사 반복을 줄입니다.'
+          ? '다양하게는 선택한 장보기 날짜의 할인 주재료를 사용합니다. 아래 식단은 이 날 구매하는 재료를 기준으로 합니다.'
           : preferences.mode==='value'
             ? (modePool().length?'가성비 모드는 '+preferences.targetServings+'인분의 확인된 포장 구매 합계만 비교합니다.':'가성비 비교에 필요한 가격·포장 수량·원문 인분 자료가 부족합니다.')
             : preferences.mode==='nutrition'
@@ -521,6 +500,7 @@
           const state=readiness[input.value]||{eligible:0,total:0,available:false};
           input.disabled=!state.available;
           input.checked=input.value===preferences.mode;
+          input.disabled=false;
           const status=document.querySelector('[data-mode-status="'+input.value+'"]');
           if(status)status.textContent=input.value==='balanced'
             ? (state.available?'사용 가능 · 후보 '+state.eligible+'개':'준비 중 · 후보 0개')
@@ -560,7 +540,7 @@
           const currentIndex=pool.findIndex((meal)=>meal.id===slot.recipeId);
           const rotated=currentIndex<0?pool:[...pool.slice(currentIndex+1),...pool.slice(0,currentIndex+1)];
           const usedRecipeIds=Object.entries(plans).flatMap(([planMoment,plan])=>Object.entries(plan).filter(([planDay])=>planMoment!==moment||planDay!==day).map(([,entry])=>entry.recipeId)).filter(Boolean);
-          const next=recommendations.nextCandidate(rotated,{dismissedRecipeIds:[...slot.dismissedRecipeIds,slot.recipeId].filter(Boolean),usedRecipeIds,mode:preferences.mode,context:recommendationContext()});
+          const next=recommendations.nextCandidate(rotated,{dismissedRecipeIds:[...slot.dismissedRecipeIds,slot.recipeId].filter(Boolean),usedRecipeIds,mode:preferences.mode,context:modeContext()});
           plans[moment][day]=shopping.replaceAutoSlot(slot,next?.id||null);
           byId('planStatus').textContent=next?'다음 후보로 바꿨습니다.':'이 조건에서 남은 다음 후보가 없어 메뉴 칸을 비워두었습니다.';
           } else {
@@ -592,7 +572,7 @@
           const button=event.target.closest('[data-add-menu]');
           if(!button)return;
           const meal=mealById(button.dataset.addMenu);
-          if(!meal)return;
+          if(!meal||!eligibleForDiet(meal))return;
           const {moment,day}=takePlanDestination();
           plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
           savePlans();renderPlanAndBind();
@@ -632,6 +612,7 @@
         const compact=(value)=>String(value).replace(/\s+/g,'');
         const ingredientNames=(detail.detailIngredients||[]).map(shopping.ingredientName).filter(Boolean).map((name)=>meal.sale.find((primary)=>compact(primary)===compact(name))||name);
         Object.assign(meal,detail,{title:detail.title||meal.title});
+        const amounts=recommendations.recipeQuantities(meal);meal.sourceServings=amounts.sourceServings;meal.requiredAmounts=amounts.requiredAmounts;
         meal.missing=[...new Set([...(meal.missing||[]),...ingredientNames.filter((name)=>!meal.sale.includes(name))])];
         return meal;
       }
@@ -677,7 +658,7 @@
           if(item.quantityNeedsCheck)return '확인된 1팩 가격 '+shopping.euro(item.subtotalCents)+' · 수량 확인';
           return shopping.euro(item.subtotalCents);
         };
-        byId('detailIngredients').innerHTML=cart.items.length?cart.items.map((item)=>'<li class="shopping-item'+(item.owned?' owned':'')+'"><div class="shopping-item-head"><strong>'+escapeHtml(item.name)+'</strong><label><input type="checkbox" data-shopping-key="'+escapeHtml(item.key)+'" data-shopping-field="owned"'+(item.owned?' checked':'')+'> 집에 있음</label></div><small>'+escapeHtml((item.product?item.product+' · ':'')+item.pack)+'</small><div class="shopping-controls"><strong>'+itemAmount(item)+'</strong></div></li>').join(''):'<li class="footer-note">구매할 재료가 없습니다.</li>';
+        byId('detailIngredients').innerHTML=cart.items.length?cart.items.map((item)=>'<li class="shopping-item'+(item.owned?' owned':'')+'"><div class="shopping-item-head"><strong>'+escapeHtml(item.name)+'</strong><label><input type="checkbox" data-shopping-key="'+escapeHtml(item.key)+'" data-shopping-field="owned"'+(item.owned?' checked':'')+'> 집에 있음</label></div><small>'+escapeHtml((item.requiredAmount?'필요 '+Number(item.requiredAmount.amount.toFixed(3))+item.requiredAmount.unit+' · ':'')+(item.product?item.product+' · ':'')+item.pack)+'</small><div class="shopping-controls"><strong>'+itemAmount(item)+'</strong></div></li>').join(''):'<li class="footer-note">구매할 재료가 없습니다.</li>';
         const evidence=(selectedMeal?.matchedOffers||[]).map((offer)=>offer.evidenceUrl?'<a href="'+escapeHtml(offer.evidenceUrl)+'" target="_blank" rel="noreferrer">'+escapeHtml(offer.productDe)+' 할인 근거</a>':escapeHtml(offer.productDe)).join(' · ');
         byId('shoppingSource').innerHTML=evidence||(selectedMeal?.catalogOnly?'현재 할인상품과 연결되지 않은 일반 레시피입니다.':'선택한 스냅샷의 검증된 할인상품 기준입니다.');
         byId('shoppingTitle').textContent='구매할 재료 · '+cart.purchaseCount+'종';
@@ -701,7 +682,9 @@
           if(requestVersion!==detailRequestVersion)return hydrated;
           selectedMeal=hydrated;
           byId('detailTitle').textContent=selectedMeal.title;
-          byId('detailIntro').textContent=detail.recipeNote||'검증된 원문 정보를 바탕으로 정리한 상세입니다.';
+          byId('detailIntro').textContent=detail.recipeNote||(inlineCatalog?'재료와 원문 링크를 확인한 탐색 후보입니다. 조리 순서는 원문에서 확인하세요.':'검토한 원문을 바탕으로 정리한 레시피입니다.');
+          const quantityView=recommendations.recipeQuantities(selectedMeal,preferences.targetServings);
+          if(byId('scaledIngredients'))byId('scaledIngredients').innerHTML='<strong>'+preferences.targetServings+'인분 조리량</strong><p>'+(quantityView.scalable?'원문 '+quantityView.sourceServings+'인분에서 환산했습니다. 직접 계산할 수 없는 수량은 원문량과 확인 필요 표시를 남겼습니다.':'원문 인분이 없어 자동 환산할 수 없습니다.')+'</p><ul>'+quantityView.labels.map(label=>'<li>'+escapeHtml(label)+'</li>').join('')+'</ul>';
           byId('recipeAmounts').innerHTML=(detail.detailIngredients||[]).map((item)=>'<li>'+escapeHtml(item)+'</li>').join('');
           byId('detailSteps').innerHTML=(detail.steps||[]).length?(detail.steps||[]).map((step)=>'<li>'+escapeHtml(step)+'</li>').join(''):'<li>'+escapeHtml(detail.recipeNote||'자세한 조리 순서는 원문에서 확인하세요.')+'</li>';
           const sourceUrl=safeRecipeSourceUrl(detail.sourceUrl,detail.sourceRecipeId);
@@ -710,7 +693,7 @@
           byId('recipeSource').hidden=!sourceUrl;
           byId('recipeStepsBlock').hidden=false;
           const detailEvidence=inlineCatalog?null:reviewEvidenceFor({...detail,detailSha256:reference.detailSha256},reference===meal?manifest.snapshotId:reference.snapshotId);
-          byId('recipeMeta').textContent=(detail.sourceServingText||'원문 인분 미표기')+' · '+(Number.isFinite(detail.time)?detail.time+'분 · ':'')+reviewSummary({reviewEvidence:detailEvidence});
+          byId('recipeMeta').textContent='원문 '+(detail.sourceServingText||'원문 인분 미표기')+' · '+(Number.isFinite(detail.time)?detail.time+'분 · ':'')+reviewSummary({reviewEvidence:detailEvidence});
           byId('recipeProvenance').textContent='원문: '+(detail.sourceTitle||'상세 참조')+' · 작성자: '+(detail.sourceAuthor||'미상');
           byId('addShoppingItems').disabled=false;
           byId('eatFromDetail').disabled=false;
@@ -761,7 +744,7 @@
 
       byId('targetServings').value=String(preferences.targetServings);
       renderModeControls();renderMealMomentControls();renderToday();renderPlanAndBind();renderPantry();showPlanCoverage();renderMenu();bindDetailTriggers();bindMenuActions();renderGroceries();
-      byId('sourceStatus').textContent=activeArea+' · '+activeStore+' · 게시 메뉴 '+meals.length+'개';
+      byId('sourceStatus').textContent=activeArea+' · '+activeStore+' · '+berlinDate+' 기준';
       byId('sourceCheck').textContent='· 스냅샷 '+manifest.weekStart+' · '+(activeBranch.branch||activeBranch.branchId);
       if(berlinDate<manifest.weekStart)byId('sourceCheck').textContent+=' · '+manifest.weekStart+'부터 시작하는 다음 주 자료입니다.';
       byId('sourceStatus').dataset.snapshotState=location.coverage?.sparse?'sparse':'ready';
@@ -770,7 +753,7 @@
       byId('savePlan').addEventListener('click',savePlans);
       const refreshForPreferences=()=>{
         const readiness=modeReadiness();
-        if(!readiness[preferences.mode]?.available)preferences.mode='balanced';
+        // Keep the requested mode and explain missing evidence instead of changing goals.
         closeDetail();selectedMeal=null;
         for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
         autoPlans=buildAutoPlans(plans);
@@ -778,14 +761,28 @@
         for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];
         recommendationIndex=0;
         storage.set(preferenceStorageKey,recommendations.serializePreferences(preferences));
-        renderModeControls();renderToday();renderPlanAndBind();showPlanCoverage();savePlans();
+        renderModeControls();renderToday();renderPlanAndBind();showPlanCoverage();renderMenu();bindDetailTriggers();bindMenuActions();savePlans();
       };
       document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>input.addEventListener('change',()=>{if(input.checked&&!input.disabled){preferences.mode=input.value;refreshForPreferences();}}));
+      if(byId('mealDate')){byId('mealDate').value=berlinDate;byId('mealDate').addEventListener('change',event=>{const next=new URLSearchParams(window.location.search);next.set('date',event.target.value);window.location.search=next.toString();});}
+      if(byId('viewSourceWeek'))byId('viewSourceWeek').addEventListener('click',()=>{const next=new URLSearchParams(window.location.search);next.set('date',manifest.weekStart);window.location.search=next.toString();});
+      const applyConditions=async()=>{
+        dietary=byId('dietaryChoice')?.value||'any';excludeIngredients=(byId('excludeIngredients')?.value||'').split(/[,，]/).map(x=>x.trim()).filter(Boolean).slice(0,20);
+        storage.set('choi01-meal-conditions-v1',JSON.stringify({dietary,excludeIngredients}));
+        activeFilter='all';document.querySelectorAll('.filter').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filter==='all')));
+        if(excludeIngredients.length)await Promise.all(meals.filter(meal=>!meal.detailIngredients.length).map(async meal=>{try{hydrateMeal(meal,await detailFor(meal,true));}catch{/* Full ingredients remain unavailable. */}}));
+        refreshForPreferences();
+        const conflicts=weeklyPlanMeals().filter(meal=>!eligibleForDiet(meal));
+        if(conflicts.length)byId('planStatus').textContent='직접 저장한 메뉴 '+conflicts.length+'개가 변경한 조건과 다릅니다. 해당 메뉴를 바꿔주세요.';
+      };
+      byId('dietaryChoice')?.addEventListener('change',applyConditions);
+      byId('applyConditions')?.addEventListener('click',applyConditions);
+      byId('discountOnly')?.addEventListener('change',()=>{renderMenu();bindDetailTriggers();bindMenuActions();});
       byId('targetServings').addEventListener('change',(event)=>{preferences.targetServings=Number(event.target.value);refreshForPreferences();});
       byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();showPlanCoverage();savePlans();});
       byId('clearPlan').addEventListener('click',()=>{for(const moment of ['점심','저녁'])plans[moment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});
       document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;selectedPlanTarget=null;renderMealMomentControls();renderToday();renderPlanAndBind();}));
-      const acceptMeal=(meal)=>{if(!meal)return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();};
+      const acceptMeal=(meal)=>{if(!meal||!eligibleForDiet(meal))return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();};
       const acceptCurrent=()=>acceptMeal(currentMeal());
       byId('acceptToday').addEventListener('click',acceptCurrent);
       byId('todayShopping').addEventListener('click',()=>{const meal=currentMeal();if(meal)requestDetail(meal.id);});
@@ -794,7 +791,7 @@
       byId('shoppingList').addEventListener('click',()=>{document.querySelector('[data-context-target="shop"]')?.click();byId('groceries').scrollIntoView({behavior:'smooth'});});
       byId('prepareShopping').addEventListener('click',async()=>{const button=byId('prepareShopping');button.disabled=true;try{const result=await hydratePlannedMeals();shoppingState.list=shopping.addToList(shoppingState.list,weekBasket());saveShopping();renderGroceries();byId('grocerySaveState').textContent=result.unavailableCount?'검증하지 못한 메뉴 '+result.unavailableCount+'개를 제외하고 확인된 재료를 저장했습니다.':'계획한 메뉴의 상세 재료까지 확인해 저장했습니다.';document.querySelector('[data-context-target="shop"]')?.click();byId('groceries').scrollIntoView({behavior:'smooth'});}finally{button.disabled=false;}});
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
-      byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal){const {moment,day}=takePlanDestination();plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
+      byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal&&eligibleForDiet(meal)){const {moment,day}=takePlanDestination();plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
       byId('markEaten').disabled=true;
       byId('markEaten').title='먹은 기록은 새 추천 화면에서 다시 연결됩니다.';
@@ -805,6 +802,7 @@
         button.dataset.snapshotFilterBound='true';
         button.addEventListener('click',()=>{
           activeFilter=button.dataset.filter||'all';
+          if(activeFilter==='vegetarian'){dietary='vegetarian';storage.set('choi01-meal-conditions-v1',JSON.stringify({dietary,excludeIngredients}));if(byId('dietaryChoice'))byId('dietaryChoice').value=dietary;refreshForPreferences();}
           document.querySelectorAll('.filter').forEach((item)=>{const selected=item.dataset.filter===activeFilter;item.classList.toggle('active',selected);item.setAttribute('aria-pressed',String(selected));});
           renderMenu();bindDetailTriggers();bindMenuActions();
         });

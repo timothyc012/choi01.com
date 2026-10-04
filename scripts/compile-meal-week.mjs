@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import crypto from 'node:crypto';
+import {mealPolicy} from './lib/meal-policy.mjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -36,12 +37,21 @@ function publicOffer(offer) {
   };
 }
 
+function recipeCalculationFacts(recipe) {
+  const quantities=mealPolicy.recipeQuantities(recipe);
+  return {sourceServings:quantities.sourceServings,requiredAmounts:quantities.requiredAmounts,
+    ...(recipe.nutritionFacts?.status==='complete'?{nutritionFacts:recipe.nutritionFacts}:{}),
+    ...(recipe.basketFacts?.sourceCoverage==='complete'?{basketFacts:recipe.basketFacts}:{}),
+  };
+}
+
 function detailRecipe(recipe) {
   return {
     schemaVersion:1,sourceRecipeId:recipe.sourceRecipeId,sourceContentHash:recipe.sourceContentHash,
     sourceTitle:recipe.sourceTitle,sourceUrl:recipe.sourceUrl,sourceAuthor:recipe.sourceAuthor,
     sourceServingText:recipe.sourceServingText,rating:recipe.rating,ratingNumber:recipe.ratingNumber,
     reviewCount:recipe.reviewCount,title:recipe.title,detailIngredients:recipe.detailIngredients,
+    ...recipeCalculationFacts(recipe),
     steps:recipe.steps,recommendationProfile:recipe.recommendationProfile,transformVersion:recipe.transformVersion,
   };
 }
@@ -124,6 +134,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
         sourceRecipeId:recipe.sourceRecipeId,title:recipe.title,offerIds:recipe.offerIds,offerIdentityKeys:recipe.offerIdentityKeys,
         primaryIngredientIds:recipe.primaryIngredientIds,recommendationProfile:recipe.recommendationProfile,
         qualityScore:recipe.qualityScore,qualityFacts:recipe.qualityFacts,
+        detailIngredients:recipe.detailIngredients,...recipeCalculationFacts(recipe),
       };
     });
     const zeroCandidateOfferIds=location.offers.filter((offer)=>(offer.recipeCandidateIds||[]).length===0).map((offer)=>offer.offerId).sort();
