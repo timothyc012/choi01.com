@@ -583,7 +583,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   detailOpener.focus();detailOpener.click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
-  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'2인분 · 리뷰 수 미확인');
+  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'원문 2인분 · 리뷰 수 미확인');
   assert.doesNotMatch(dom.window.document.getElementById('recipeMeta').textContent,/1,234|평점/);
   assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
   assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
