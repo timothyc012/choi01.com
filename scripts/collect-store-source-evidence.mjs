@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import crypto from 'node:crypto';
+import {pdfPageEvidence} from './lib/pdf-page-evidence.mjs';
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -25,9 +26,8 @@ function collectPdf(source) {
   const pdfBytes=fs.readFileSync(source.localPath);
   const pageCount=pdfPageCount(source.localPath);
   const text=execFileSync('pdftotext',['-layout',source.localPath,'-'],{encoding:'utf8',maxBuffer:64*1024*1024});
-  const pages=splitPdfText(text).map((page,index)=>({page:index+1,textSha256:sha256(page),charCount:page.length}));
-  if(pages.length!==pageCount) throw new Error(`${source.id}: extracted ${pages.length} pages but PDF reports ${pageCount}`);
-  return {sourceSha256:sha256(pdfBytes),pageCount,checkedPageCount:pages.length,extraction:{tool:'pdftotext -layout',textSha256:sha256(text),pages}};
+  const analysis=pdfPageEvidence(text,pageCount,source.pageReviews||[]);
+  return {sourceSha256:sha256(pdfBytes),...analysis,extraction:{tool:'pdftotext -layout',textSha256:sha256(text),pages:analysis.pages}};
 }
 
 function collectHtml(source) {
@@ -45,7 +45,7 @@ export function buildStoreSourceEvidence({weekStart,collectedAt,sources}) {
     if(!source.id||!source.chain||!Array.isArray(source.postcodes)||!source.url) throw new Error('source identity is incomplete');
     let evidence;
     if(source.status==='접근실패') evidence={sourceSha256:null,status:'접근실패',httpStatus:source.httpStatus??null,responseBytes:source.responseBytes??null,checkedPageCount:0};
-    else if(source.type==='pdf') evidence={...collectPdf(source),status:'수집완료'};
+    else if(source.type==='pdf') evidence=collectPdf(source);
     else if(source.type==='html') {
       evidence=collectHtml(source);
       evidence.status=evidence.recordCount!==null&&evidence.checkedRecordCount!==null&&evidence.recordCount===evidence.checkedRecordCount?'수집완료':'일부수집';

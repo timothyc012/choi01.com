@@ -1,3 +1,4 @@
+import {preparePipeline,publishPipeline} from '../scripts/mohemeokji-weekly-pipeline.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -114,4 +115,13 @@ test('prepare command creates verified twin snapshots and no public mutation',as
     csvPath,stagingDir:path.join(root,'missing-coverage'),weekStart:'2026-09-14',releaseMode:'bootstrap',
     registry:{schemaVersion:1,recipes:{}},candidateReport:candidateReport(),
   }),/coveragePath/i);
+});
+
+test('pipeline prepare reaches approval wait and refuses implicit publication',async t=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-pipeline-prepare-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+ const csvPath=path.join(root,'offers.csv'),coveragePath=path.join(root,'coverage.csv'),stagingDir=path.join(root,'staging');
+ fs.writeFileSync(csvPath,weeklyCsv);fs.writeFileSync(coveragePath,weeklyCoverage);
+ const result=await preparePipeline({csvPath,coveragePath,stagingDir,weekStart:'2026-09-14',releaseMode:'bootstrap',registry:{schemaVersion:1,recipes:{}},candidateReport:candidateReport()});
+ assert.equal(result.manifest.status,'awaiting-ontology-review');assert.equal(result.verification.twoBuildComparison.status,'identical');
+ assert.throws(()=>publishPipeline(stagingDir),/Explicit owner-approved digest/);
 });

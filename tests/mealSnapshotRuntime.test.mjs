@@ -209,7 +209,7 @@ test('legacy recipe runtime stays disabled while snapshot refs remain detail-laz
   assert.equal(summaries[0].sourceRecipeId,'7000001');
   assert.equal(summaries[0].title,'승인된 닭가슴살 볶음');
   assert.equal('steps' in summaries[0],false);
-  assert.equal('detailIngredients' in summaries[0],false);
+  assert.deepEqual([...summaries[0].detailIngredients],[]);
   const catalog=api.offerCatalogFromSnapshot({offers:[{
     offerId:'offer-a',chain:'EDEKA',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,normalPriceCents:799,
     validFrom:'2026-09-07',validThrough:'2026-09-13',evidenceUrl:'https://example.com/offer'
@@ -252,7 +252,7 @@ test('snapshot recipes restore menu categories from approved profile and title f
   assert.equal(recipes[1].filter.includes('vegetarian'),false);
 });
 
-test('browse catalog keeps the reviewed archive and merges selected-location snapshot recipes',()=>{
+test('browse catalog never resurrects the archive outside the current snapshot',()=>{
   const {api,window}=loadRecipeData();
   window.createMealRecipes=(store)=>[
     {id:'edeka-recipe-1',sourceRecipeId:'1',store,title:'보관함 감자요리',time:25,sale:['감자'],missing:['양파'],tags:[],filter:['korean'],requiredAmounts:{},detailIngredients:['감자 2개','양파 1개'],steps:['손질한다.'],sourceUrl:'https://www.10000recipe.com/recipe/1',sourceTitle:'원문 감자요리',sourceAuthor:'작성자',sourceCorpus:'test',recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'braise',kind:'main'}},
@@ -264,12 +264,11 @@ test('browse catalog keeps the reviewed archive and merges selected-location sna
     {sourceRecipeId:'3',title:'지점 전용 요리',offerIds:['potato-offer'],primaryIngredientIds:['감자'],detailPath:'snapshots/recipe-3.json',detailSha256:'b'.repeat(64),recommendationProfile:{primaryIngredients:['감자'],family:'potato',method:'stirfry',kind:'main'}}
   ]});
   const result=api.buildBrowseCatalog('EDEKA','branch-a',live,offers);
-  assert.deepEqual(result.map((meal)=>meal.sourceRecipeId),['1','2','3']);
+  assert.deepEqual([...result].map((meal)=>meal.sourceRecipeId),['1','3']);
   assert.equal(result[0].title,'승인된 감자요리');
-  assert.deepEqual(result[0].detailIngredients,['감자 2개','양파 1개']);
-  assert.equal(result[1].catalogOnly,true);
-  assert.equal(result[1].matchedOffers.length,0);
-  assert.equal(result[2].detailPath,'snapshots/recipe-3.json');
+  assert.deepEqual([...result[0].detailIngredients],[]);
+  assert.equal(result[1].catalogOnly,false);
+  assert.equal(result[1].detailPath,'snapshots/recipe-3.json');
 });
 
 test('manifest-only selection maps every direct route and chooses the first branch deterministically',()=>{
@@ -352,7 +351,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   const locationPath='snapshots/2026-09-07/snapshot-new/locations/99999-neuemarkt-branch-b.json';
   const offer={offerId:'offer-new',chain:'NeueMarkt',branchId:'branch-b',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,validFrom:'2026-09-07',validThrough:'2026-09-13',evidenceUrl:'https://example.com/offer-new'};
   const sameIdentityAlternative={...offer,offerId:'offer-other',productDe:'Hähnchenbrust Innenfilet',priceCents:799};
-  const compilerBasket=(key,priceCents)=>({sourceCoverage:'complete',targetServings:2,items:[{key,priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true}],savingsStatus:'unavailable'});
+  const compilerBasket=(key,priceCents)=>({sourceCoverage:'complete',postcode:'99999',store:'NeueMarkt',branchId:'branch-b',date:'2026-09-13',targetServings:2,items:[{key:'food-'+key,name:key.split(':')[1],pantryKeys:[key],pack:{amount:500,unit:'g'},requiredAmount:{amount:300,unit:'g'},priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true,sourceURL:'https://example.com/reviewed-price',sourceSha256:'a'.repeat(64),validFrom:'2026-09-07',validThrough:'2026-09-13'}],savingsStatus:'unavailable'});
   const reference={sourceRecipeId:'9000001',detailPath,detailSha256:sha256(detail),offerIds:['offer-new','offer-other'],preferredPricingOfferId:'offer-new',primaryIngredientIds:['닭가슴살'],recommendationProfile:{primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'},qualityScore:0.9,basketFacts:compilerBasket('NeueMarkt:닭가슴살',150)};
   const badReference={...reference,sourceRecipeId:'9000002',detailPath:badCurrentPath,detailSha256:sha256(badCurrent),basketFacts:compilerBasket('NeueMarkt:후추',100)};
   const slowReference={...reference,sourceRecipeId:'9000003',detailPath:slowCurrentPath,detailSha256:sha256(slowCurrent),basketFacts:null};
@@ -403,7 +402,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
     'neuemarkt-recipe-bad':{sourceRecipeId:'7000001',title:'깨진 보관 메뉴',detailPath:badArchivedPath,detailSha256:'2'.repeat(64),area:'99999',store:'NeueMarkt',branchId:'branch-b',snapshotId:'snapshot-old'}
   }}));
   dom.window.localStorage.setItem('choi01-today-meal-plan:99999:NeueMarkt:branch-b','{malformed');
-  dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'diet',targetServings:2}));
+  dom.window.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'balanced',targetServings:2}));
   for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
   dom.window.eval(dom.window.document.querySelector('script[data-workspace-controller]').textContent);
   dom.window.HTMLElement.prototype.scrollIntoView=()=>{};
@@ -433,8 +432,8 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.querySelector('[data-mode-status="nutrition"]').textContent,/준비 중.*검증 0\/4/);
   assert.match(dom.window.document.querySelector('[data-mode-status="diet"]').textContent,/준비 중.*검증 0\/4/);
   assert.equal(modeRadios.find((input)=>input.value==='value').disabled,false);
-  assert.equal(modeRadios.find((input)=>input.value==='nutrition').disabled,true);
-  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,true);
+  assert.equal(modeRadios.find((input)=>input.value==='nutrition').disabled,false);
+  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,false);
   assert.equal(dom.window.document.getElementById('targetServings').options.length,6);
   const lunchControl=dom.window.document.querySelector('[data-moment="점심"]');
   const dinnerControl=dom.window.document.querySelector('[data-moment="저녁"]');
@@ -467,7 +466,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   modeRadios.find((input)=>input.value==='balanced').click();
   const plansBeforeMode=JSON.parse(JSON.stringify(runtime.plans));
   const manualBeforeMode=runtime.plans.저녁.mon.recipeId;
-  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,true);
+  assert.equal(modeRadios.find((input)=>input.value==='diet').disabled,false);
   dom.window.document.querySelector('[data-moment="점심"]').click();
   const replaceButton=[...dom.window.document.querySelectorAll('[data-replace-slot]')].find((button)=>runtime.plans[button.dataset.replaceMoment][button.dataset.replaceSlot].origin==='auto');
   assert.ok(replaceButton);
@@ -506,7 +505,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(dom.window.document.getElementById('menuList').textContent,/Hähnchenbrustfilet.*Hähnchenbrust Innenfilet/);
   assert.match(dom.window.document.getElementById('menuList').textContent,/500 g.*5,99€.*Second branch.*2026-09-07.*할인 근거/s);
   assert.ok(dom.window.document.querySelector('[data-add-menu]'));
-  assert.deepEqual([...dom.window.document.querySelectorAll('.filter')].map((button)=>button.textContent.trim()),['전체','한식','중식·아시아','양식','20분 안','채식 (달걀·유제품 허용)']);
+  assert.deepEqual([...dom.window.document.querySelectorAll('.filter')].map((button)=>button.textContent.trim()),['전체','한식','중식·아시아','양식','20분 안 · 시간 미확인','채식 (달걀·유제품 허용)']);
   assert.equal([...dom.window.document.querySelectorAll('.filter')].every((button)=>button.hidden===false),true);
   assert.equal(dom.window.document.querySelector('.menu-item')?.getAttribute('draggable'),'true');
   assert.match(dom.window.document.querySelector('.menu-quality')?.textContent||'',/선정 근거/);
@@ -573,7 +572,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   persistedChoice.product='Persisted chosen fillet';persistedChoice.source='https://example.com/persisted-choice';
   const persistedCheckbox=dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭가슴살"]');
   persistedCheckbox.checked=true;persistedCheckbox.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
-  assert.match(dom.window.document.getElementById('groceryCompleted').textContent,/Persisted chosen fillet.*할인 근거 연결됨/s);
+  assert.match(dom.window.document.getElementById('groceryCompleted').textContent,/Persisted chosen fillet.*가격 근거 연결됨/s);
   dom.window.document.querySelectorAll('[data-grocery-remove]').forEach((button)=>button.click());
   dom.window.document.getElementById('acceptToday').click();
   assert.ok(Object.values(runtime.plans.저녁).filter((slot)=>slot.origin==='manual').length>=1);
@@ -584,14 +583,14 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   detailOpener.focus();detailOpener.click();
   await new Promise((resolve)=>setTimeout(resolve,0));
   assert.equal(dom.window.document.getElementById('detailTitle').textContent,'새 지점 닭가슴살 볶음');
-  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'2인분 · 리뷰 수 미확인');
+  assert.equal(dom.window.document.getElementById('recipeMeta').textContent,'원문 2인분 · 리뷰 수 미확인');
   assert.doesNotMatch(dom.window.document.getElementById('recipeMeta').textContent,/1,234|평점/);
   assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
   assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
-  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*Hähnchenbrustfilet/);
-  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*5,99€.*수량 확인/s);
-  assert.match(dom.window.document.getElementById('shoppingSource').textContent,/example.com|할인 근거/);
-  assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'확인된 금액 5,99€ · 수량 확인');
+  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*필요 300g.*500 g/);
+  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*1,50€/s);
+  assert.match(dom.window.document.getElementById('shoppingSource').textContent,/닭가슴살 가격 근거/);
+  assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'1,50€');
   assert.equal(calls.filter((url)=>url===('/mohemeokji/data/'+detailPath)).length,1);
   assert.equal(dom.window.document.activeElement,dom.window.document.getElementById('closeDetail'));
   dom.window.document.getElementById('detailDrawer').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
@@ -729,4 +728,102 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.match(reloadDom.window.document.getElementById('groceryCompleted').textContent,/닭가슴살/);
   reloadDom.window.close();
   dom.window.close();
+});
+
+function nutritionGoalFixture({tamperSource=false}={}) {
+  const snapshotId='snapshot-goal',weekStart='2026-10-05',base='snapshots/'+weekStart+'/'+snapshotId;
+  const bodies=new Map(),fileHashes={},calls=[];
+  const add=(path,value)=>{const text=JSON.stringify(value);bodies.set('/mohemeokji/data/'+path,text);fileHashes[path]=sha256(text);return text;};
+  const refs=['main','side'].map((kind,index)=>{
+    const sourceRecipeId=String(9900001+index),sourceContentHash=(index?'b':'a').repeat(64),detailPath=base+'/recipes/'+sourceRecipeId+'.json';
+    const nutritionFacts={status:'complete',source:'reviewed-food-record-calculation-v1',sourceRecipeId,sourceContentHash,sourceServings:2,perServing:{kcal:500,proteinGrams:35,fiberGrams:6,sodiumMg:500},sources:[{foodId:'fixture-food',sourceURL:'https://example.test/food'}]};
+    const detail={schemaVersion:1,sourceRecipeId,sourceContentHash,title:kind==='main'?'연어 카레':'오이 무침',sourceUrl:'https://www.10000recipe.com/recipe/'+sourceRecipeId,sourceServingText:'2인분',sourceTimeText:'20분 이내',detailIngredients:['연어 200g','양파 100g'],steps:['손질한다.','조리한다.','담는다.'],nutritionFacts};
+    const text=add(detailPath,detail);
+    return {...detail,detailPath,detailSha256:sha256(text),saleLinked:false,automaticMealEligible:kind==='main',offerIds:[],primaryIngredientIds:['연어'],recommendationProfile:{primaryIngredients:['연어'],kind,family:'salmon',method:'curry'}};
+  });
+  if(tamperSource)refs[0].sourceContentHash='c'.repeat(64);
+  const locationPath=base+'/locations/44369-netto.json';
+  add(locationPath,{schemaVersion:1,snapshotId,weekStart,id:'44369-netto',postcode:'44369',store:'Netto',branchId:'branch-a',offers:[],recipes:[],coverage:{sparse:false}});
+  const nutritionCatalogPath=base+'/recipes/nutrition-general.json';
+  add(nutritionCatalogPath,{schemaVersion:1,catalogVersion:'nutrition-general-v1',scope:'nutrition-general',snapshotId,weekStart,recipes:refs});
+  const coveragePath=base+'/coverage.json',recipeIndexPath=base+'/recipes/index.json';add(coveragePath,{});add(recipeIndexPath,{});
+  const manifestPath=base+'/manifest.json',manifest={schemaVersion:1,snapshotId,weekStart,coveragePath,recipeIndexPath,nutritionCatalogPath,fileHashes,locations:[{id:'44369-netto',postcode:'44369',store:'Netto',branchId:'branch-a',path:locationPath,recipeCount:0}]};
+  const manifestText=JSON.stringify(manifest);bodies.set('/mohemeokji/data/'+manifestPath,manifestText);
+  bodies.set('/mohemeokji/data/current.json',JSON.stringify({schemaVersion:1,snapshotId,weekStart,manifestPath,manifestSha256:sha256(manifestText)}));
+  const fetcher=async(url)=>{calls.push(url);return bodies.has(url)?response(bodies.get(url)):response('',false);};
+  return {manifest,bodies,calls,fetcher,refs,nutritionCatalogPath};
+}
+
+test('nutrition goal catalog is lazy, hash pinned and tied to public recipe source identities',async()=>{
+  const loader=loadRuntime(),fixture=nutritionGoalFixture();
+  const manifest=await loader.loadCurrentSnapshot(fixture.fetcher);
+  await loader.loadLocationSnapshot(manifest,{postcode:'44369',store:'Netto',branchId:'branch-a'},fixture.fetcher);
+  assert.equal(fixture.calls.some(url=>url.endsWith('nutrition-general.json')),false);
+  const catalog=await loader.loadNutritionCatalog(manifest,fixture.fetcher);assert.equal(catalog.recipes.length,2);
+  assert.equal(fixture.calls.length,4);assert.equal(fixture.calls.some(url=>/\.csv|other-location/.test(url)),false);
+  const detail=await loader.loadRecipeDetailReference(catalog.recipes[0],fixture.fetcher);assert.equal(detail.sourceContentHash,catalog.recipes[0].sourceContentHash);
+  await assert.rejects(loader.loadRecipeDetailReference({...catalog.recipes[0],sourceContentHash:'f'.repeat(64)},fixture.fetcher),/boundary mismatch/);
+  fixture.bodies.set('/mohemeokji/data/'+fixture.nutritionCatalogPath,'{}');
+  await assert.rejects(loader.loadNutritionCatalog(manifest,fixture.fetcher),/hash mismatch/);
+  const stale=nutritionGoalFixture({tamperSource:true});
+  await assert.rejects(loader.loadNutritionCatalog(stale.manifest,stale.fetcher),/invalid nutrition recipe reference/);
+  assert.equal(stale.calls.length,1);
+  const wrongScope=nutritionGoalFixture();
+  await assert.rejects(loader.loadNutritionCatalog({...wrongScope.manifest,nutritionCatalogPath:wrongScope.manifest.locations[0].path},wrongScope.fetcher),/invalid nutrition catalog reference/);
+  assert.equal(wrongScope.calls.length,0);
+  const unpinned=nutritionGoalFixture();delete unpinned.manifest.fileHashes[unpinned.nutritionCatalogPath];
+  await assert.rejects(loader.loadNutritionCatalog(unpinned.manifest,unpinned.fetcher),/invalid nutrition catalog reference/);
+  assert.equal(unpinned.calls.length,0);
+  const mismatchedWeek=nutritionGoalFixture();
+  const pointer=JSON.parse(mismatchedWeek.bodies.get('/mohemeokji/data/current.json'));pointer.weekStart='2026-09-28';
+  mismatchedWeek.bodies.set('/mohemeokji/data/current.json',JSON.stringify(pointer));
+  await assert.rejects(loader.loadCurrentSnapshot(mismatchedWeek.fetcher),/invalid manifest/);
+  pointer.weekStart='2026-02-30';mismatchedWeek.bodies.set('/mohemeokji/data/current.json',JSON.stringify(pointer));
+  await assert.rejects(loader.loadCurrentSnapshot(mismatchedWeek.fetcher),/invalid current pointer/);
+});
+
+test('nutrition and diet can choose an approved ordinary menu without adding fake discounts or side auto meals',async t=>{
+  const fixture=nutritionGoalFixture(),dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=44369&store=Netto&date=2026-10-05',runScripts:'outside-only',pretendToBeVisual:true});t.after(()=>dom.window.close());
+  let releaseGoal;
+  const w=dom.window;Object.defineProperty(w,'crypto',{value:crypto.webcrypto});w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;
+  w.fetch=async url=>url==='/mohemeokji/data/'+fixture.nutritionCatalogPath?new Promise(resolve=>{releaseGoal=()=>resolve(fixture.fetcher(url));}):fixture.fetcher(url);
+  w.HTMLElement.prototype.scrollIntoView=()=>{};
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js'])w.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  const runtime=await w.MealRecipeData.startSnapshotApp();assert.equal(runtime.status,'ready',runtime.error?.stack);
+  assert.equal(fixture.calls.length,3);assert.equal(runtime.weeklyPlanMeals().length,0);
+  w.document.querySelector('[name="recommendationMode"][value="nutrition"]').click();
+  w.document.querySelector('[name="recommendationMode"][value="diet"]').click();
+  assert.equal(typeof releaseGoal,'function');releaseGoal();
+  for(let attempt=0;attempt<50&&!runtime.weeklyPlanMeals().length;attempt+=1)await new Promise(resolve=>setTimeout(resolve,5));
+  assert.equal(fixture.calls.length,4);assert.ok(runtime.weeklyPlanMeals().length>0);
+  assert.equal(JSON.parse(w.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'diet');
+  w.document.querySelector('[name="recommendationMode"][value="nutrition"]').click();
+  assert.ok(runtime.weeklyPlanMeals().every(meal=>meal.sourceRecipeId==='9900001'&&meal.nutritionGeneral&&meal.sale.length===0&&meal.matchedOffers.length===0));
+  assert.match(w.document.querySelector('#todayPrimaryOffer').textContent,/영양 계산된 일반 메뉴.*할인 연결 없음.*구매비 미확인/);
+  assert.equal(w.document.querySelector('#todayCost').textContent,'가격 미확인');
+  assert.equal(w.document.querySelectorAll('.menu-item').length,2);
+  assert.match(w.document.querySelector('#menuList').textContent,/오이 무침/);
+  assert.equal(fixture.calls.some(url=>url.includes('9900001.json')),false);
+  await runtime.openDetail('nutrition-general-recipe-9900001');assert.equal(fixture.calls.length,5);
+  assert.match(w.document.querySelector('#detailNutrition').textContent,/500 kcal/);
+  assert.equal(w.document.querySelector('#recipeSource').href,'https://www.10000recipe.com/recipe/9900001');
+  assert.match(w.document.querySelector('#shoppingNote').textContent,/가격 미확인/);
+  w.document.querySelector('[name="recommendationMode"][value="diet"]').click();assert.equal(fixture.calls.length,5);assert.ok(runtime.weeklyPlanMeals().length>0);
+  w.document.querySelector('[name="recommendationMode"][value="balanced"]').click();assert.equal(runtime.weeklyPlanMeals().length,0);
+  w.document.querySelector('[name="recommendationMode"][value="value"]').click();assert.equal(runtime.weeklyPlanMeals().length,0);
+  assert.equal(JSON.parse(w.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'value');
+  await runtime.openDetail('nutrition-general-recipe-9900002');assert.equal(w.document.querySelector('#detailTitle').textContent,'오이 무침');
+});
+
+test('a rejected ordinary nutrition catalog leaves the selected mode explicit without archive fallback',async t=>{
+  const fixture=nutritionGoalFixture({tamperSource:true}),dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=44369&store=Netto&date=2026-10-05',runScripts:'outside-only'});t.after(()=>dom.window.close());
+  const w=dom.window;Object.defineProperty(w,'crypto',{value:crypto.webcrypto});w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.fetch=fixture.fetcher;w.HTMLElement.prototype.scrollIntoView=()=>{};
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js'])w.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  const runtime=await w.MealRecipeData.startSnapshotApp();assert.equal(runtime.status,'ready');
+  w.document.querySelector('[name="recommendationMode"][value="nutrition"]').click();
+  for(let attempt=0;attempt<50&&!w.document.querySelector('#modeReadiness').textContent.includes('검증에 실패');attempt+=1)await new Promise(resolve=>setTimeout(resolve,5));
+  assert.equal(JSON.parse(w.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'nutrition');
+  assert.equal(runtime.weeklyPlanMeals().length,0);assert.equal(w.document.querySelectorAll('.menu-item').length,0);
+  assert.match(w.document.querySelector('#modeReadiness').textContent,/일반 메뉴 자료 검증에 실패/);
+  assert.equal(fixture.calls.length,4);assert.equal(fixture.calls.some(url=>url.includes('9900001.json')),false);
 });

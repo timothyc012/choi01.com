@@ -46,13 +46,13 @@ test('workspace navigation changes the visible task and preserves page state',()
   dom.window.eval(controller.textContent);
   const document=dom.window.document;
   assert.equal(document.getElementById('today').hidden,false);
-  assert.equal(document.getElementById('week').hidden,true);
+  assert.equal(document.getElementById('week').hidden,false);
   assert.equal(document.getElementById('groceries').hidden,true);
   const search=document.getElementById('menuSearch');
   search.value='닭가슴살';
   document.querySelector('[data-mobile-target="recipes"]').click();
   assert.equal(document.getElementById('today').hidden,false);
-  assert.equal(document.getElementById('week').hidden,true);
+  assert.equal(document.getElementById('week').hidden,false);
   assert.equal(document.getElementById('groceries').hidden,true);
   document.querySelector('[data-mobile-target="week"]').click();
   assert.equal(document.getElementById('today').hidden,true);
@@ -103,5 +103,13 @@ test('legacy meal-time controls update visual and pressed state together',()=>{
   assert.equal(lunch.getAttribute('aria-pressed'),'true');
   assert.equal(dinner.classList.contains('active'),false);
   assert.equal(dinner.getAttribute('aria-pressed'),'false');
+  dom.window.close();
+});
+
+test('mobile Menu view exposes its recipe search instead of hiding its parent',()=>{
+  const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'http://localhost/mohemeokji/',runScripts:'outside-only'});
+  dom.window.matchMedia=()=>({matches:true});
+  dom.window.eval(dom.window.document.querySelector('script[data-workspace-controller]').textContent);
+  assert.equal(dom.window.document.getElementById('menuSearch').closest('[hidden]'),null);
   dom.window.close();
 });

@@ -115,7 +115,7 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   // This archived yogurt offer does not establish the plain form.
   assert.equal(aldi.length,0);
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
-  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,7);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,4);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
     assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
   }
@@ -205,14 +205,15 @@ test('snapshot value mode requires compiler-proven full basket coverage, not pri
 
 test('value ranking applies pantry ownership only through compiler-proven per-item basket facts',()=>{
   const shopping=context.window.MealShopping;
-  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',targetServings:2,items:[{key,priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true}],savingsStatus:'unavailable'});
-  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',basketFacts:basketFacts('Netto:닭고기',150)});
-  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',basketFacts:basketFacts('Netto:당근',100)});
+  const basketContext={postcode:'44369',store:'Netto',branchId:'branch-a',date:'2026-09-08',targetServings:2};
+  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',...basketContext,items:[{key:'food-'+key,name:key.split(':')[1],pantryKeys:[key],pack:{amount:500,unit:'g'},requiredAmount:{amount:300,unit:'g'},priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true,sourceURL:'https://example.com/reviewed-price',sourceSha256:'a'.repeat(64),validFrom:'2026-09-07',validThrough:'2026-09-13'}],savingsStatus:'unavailable'});
+  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',branchId:'branch-a',basketFacts:basketFacts('Netto:닭고기',150)});
+  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',branchId:'branch-a',basketFacts:basketFacts('Netto:당근',100)});
   const pantry=new Set(['Netto:닭고기']);
-  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)};
+  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,...basketContext,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry,basketContext)};
   assert.equal(engine.rankForMode([vegetable,chicken],options,'value')[0].id,'chicken-value');
   const aggregateOnly={...chicken,basketFacts:{sourceCoverage:'complete',targetServings:2,costStatus:'complete',knownSubtotalCents:150,unknownItemKeys:[],quantityCheckKeys:[]}};
-  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)},'value').eligible,false);
+  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry,basketContext)},'value').eligible,false);
 });
 
 test('nutrition and diet reject recipes without complete sourced serving nutrients',()=>{

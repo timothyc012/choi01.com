@@ -1,9 +1,9 @@
-import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {generateCatalog,parseCsv} from './generate-meal-offers.mjs';
 import {canonicalJson} from './lib/meal-snapshot-schema.mjs';
+import {createMealSourceDatabase} from './lib/meal-source-reader.mjs';
 
 export const recipeSearchSpec = {
   '닭가슴살': {ingredientLabels:['닭가슴살'],titleTerms:['닭가슴살']},
@@ -86,6 +86,7 @@ export function normalizeCandidateExport(candidate) {
     ingredientCount:nonNegativeInteger(candidate.ingredientCount),
     measuredIngredientCount:nonNegativeInteger(candidate.measuredIngredientCount),
     sourceServingText:candidate.sourceServingText??null,
+    sourceTimeText:candidate.sourceTimeText??candidate.profile?.cookTimeText??null,
     ingredients:ordered(candidate.ingredients,true).map((item)=>({
       ordinal:item.ordinal,
       label:item.label??null,
@@ -168,28 +169,8 @@ export function searchRequestForCatalog(packageCatalog) {
   return [...keys].filter((key)=>recipeSearchSpec[key]).sort().map((key)=>({key,...recipeSearchSpec[key]}));
 }
 
-function rowsFromPsql(database,sql,variables) {
-  const args=['-X','-qAt','-w','-d',database,'-v','ON_ERROR_STOP=1'];
-  for(const [key,value] of Object.entries(variables)) args.push('-v',key+'='+value);
-  args.push('-f',sql);
-  const stdout=execFileSync('psql',args,{encoding:'utf8',maxBuffer:128*1024*1024});
-  return stdout.split(/\r?\n/).filter(Boolean).map((line)=>JSON.parse(line));
-}
-
 function psqlDatabase(database) {
-  return {
-    findCandidateMetadata({searchSpec,tenant,perIdentityLimit}) {
-      return rowsFromPsql(database,fileURLToPath(new URL('./find-store-recipe-candidates.sql',import.meta.url)),{
-        search_spec_json:JSON.stringify(searchSpec),tenant,candidate_limit:perIdentityLimit,
-      });
-    },
-    exportCandidateFacts(recipeIds,{tenant}) {
-      if(!recipeIds.length) return [];
-      return rowsFromPsql(database,fileURLToPath(new URL('./export-store-recipe-candidates.sql',import.meta.url)),{
-        recipe_ids_json:JSON.stringify(recipeIds),tenant,
-      });
-    },
-  };
+  return createMealSourceDatabase(database);
 }
 
 function candidateOrder(left,right) {
