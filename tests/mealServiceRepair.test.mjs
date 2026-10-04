@@ -62,6 +62,7 @@ test('real snapshot UI applies shared conditions, scales amounts and adds only m
  const serving=w.document.querySelector('#targetServings');serving.value='6';serving.dispatchEvent(new w.Event('change'));
  const meal=await runtime.openDetail('netto-marken-discount-recipe-1032061');assert.ok(meal);
  assert.match(w.document.querySelector('#scaledIngredients').textContent,/파스타면 560g/);
+ assert.match(w.document.querySelector('#recipeStepsBasis').textContent,/원문 3인분 기준.*선택한 6인분.*환산 목록/);
  const owned=w.document.querySelector('#detailIngredients [data-shopping-key]');assert.ok(owned);owned.checked=true;owned.dispatchEvent(new w.Event('change',{bubbles:true}));
  w.document.querySelector('#addShoppingItems').click();assert.ok(runtime.shoppingState.list.length>0);
  assert.equal(runtime.shoppingState.list.some(item=>item.key===owned.dataset.shoppingKey),false);

@@ -8,6 +8,8 @@ import path from 'node:path';
 import {
   buildApprovalReceipt,
   prepareWeeklyRelease,
+  publishWeeklyRelease,
+  treeDigest,
   verifyApprovalReceipt,
 } from '../scripts/mohemeokji-weekly-release.mjs';
 
@@ -124,4 +126,64 @@ test('pipeline prepare reaches approval wait and refuses implicit publication',a
  const result=await preparePipeline({csvPath,coveragePath,stagingDir,weekStart:'2026-09-14',releaseMode:'bootstrap',registry:{schemaVersion:1,recipes:{}},candidateReport:candidateReport()});
  assert.equal(result.manifest.status,'awaiting-ontology-review');assert.equal(result.verification.twoBuildComparison.status,'identical');
  assert.throws(()=>publishPipeline(stagingDir),/Explicit owner-approved digest/);
+});
+
+test('direct publication requires an explicit exact owner-approved digest before public mutation',async t=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'meal-release-publish-approval-'));
+  t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+  const csvPath=path.join(root,'offers.csv');
+  const coveragePath=path.join(root,'coverage.csv');
+  const stagingDir=path.join(root,'staging');
+  fs.writeFileSync(csvPath,weeklyCsv);
+  fs.writeFileSync(coveragePath,weeklyCoverage);
+  const {receipt}=await prepareWeeklyRelease({
+    csvPath,coveragePath,stagingDir,weekStart:'2026-09-14',releaseMode:'bootstrap',
+    registry:{schemaVersion:1,recipes:{}},candidateReport:candidateReport(),
+  });
+  const dataDir=path.join(stagingDir,'data');
+  const stagedCsv=path.join(stagingDir,'input',receipt.sourceFileName);
+  const stagedCoverage=path.join(stagingDir,'input',receipt.coverageFileName);
+  // Read-only inspection remains available without claiming owner approval.
+  assert.equal(verifyApprovalReceipt({receipt,csvPath:stagedCsv,coveragePath:stagedCoverage,dataDir}).valid,true);
+
+  function publicTarget(name) {
+    const repoRoot=path.join(root,name);
+    const publicDataDir=path.join(repoRoot,'public/mohemeokji/data');
+    const publicOffersDir=path.join(repoRoot,'public/offers');
+    const packagePricesPath=path.join(repoRoot,'public/mohemeokji/meal-package-prices.js');
+    fs.mkdirSync(publicDataDir,{recursive:true});
+    fs.mkdirSync(publicOffersDir,{recursive:true});
+    fs.writeFileSync(path.join(publicDataDir,'current.json'),'previous data\n');
+    fs.writeFileSync(path.join(publicOffersDir,receipt.sourceFileName),'previous offers\n');
+    fs.writeFileSync(path.join(publicOffersDir,receipt.coverageFileName),'previous coverage\n');
+    fs.writeFileSync(packagePricesPath,'previous prices\n');
+    return {stagingDir,repoRoot,publicDataDir,publicOffersDir,packagePricesPath,syncPages:false};
+  }
+  const invalidApprovals=[
+    ['missing',{},/Explicit owner-approved digest/],
+    ['undefined',{approvalDigest:undefined},/Explicit owner-approved digest/],
+    ['null',{approvalDigest:null},/Explicit owner-approved digest/],
+    ['empty',{approvalDigest:''},/Explicit owner-approved digest/],
+    ['short',{approvalDigest:'a'.repeat(63)},/Explicit owner-approved digest/],
+    ['invalid-hex',{approvalDigest:'g'.repeat(64)},/Explicit owner-approved digest/],
+    ['uppercase',{approvalDigest:receipt.approvalDigest.toUpperCase()},/Explicit owner-approved digest/],
+    ['array',{approvalDigest:[receipt.approvalDigest]},/Explicit owner-approved digest/],
+    ['wrong',{approvalDigest:(receipt.approvalDigest[0]==='0'?'1':'0')+receipt.approvalDigest.slice(1)},/provided approval digest does not match/],
+  ];
+  for(const [name,approval,error] of invalidApprovals) await t.test(name,()=>{
+    const target=publicTarget(name);
+    const before=treeDigest(target.repoRoot);
+    assert.throws(()=>publishWeeklyRelease({...target,...approval}),error);
+    assert.equal(treeDigest(target.repoRoot),before,'rejected publication must preserve every public file');
+  });
+  await t.test('valid exact digest publishes the verified release',()=>{
+    const target=publicTarget('approved');
+    const result=publishWeeklyRelease({...target,approvalDigest:receipt.approvalDigest});
+    assert.equal(result.published,true);
+    assert.equal(result.approvalDigest,receipt.approvalDigest);
+    assert.equal(treeDigest(target.publicDataDir),receipt.dataTreeSha256);
+    assert.deepEqual(fs.readFileSync(path.join(target.publicOffersDir,receipt.sourceFileName)),fs.readFileSync(stagedCsv));
+    assert.deepEqual(fs.readFileSync(path.join(target.publicOffersDir,receipt.coverageFileName)),fs.readFileSync(stagedCoverage));
+    assert.notEqual(fs.readFileSync(target.packagePricesPath,'utf8'),'previous prices\n');
+  });
 });

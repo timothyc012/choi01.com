@@ -408,7 +408,8 @@
       });
       byId('branchSelect').addEventListener('change',(event)=>openLocation(activeArea,activeStore,event.target.value));
 
-      const actualDate=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      const dateInBerlin=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+      let actualDate=dateInBerlin();
       const requestedDate=params.get('date');
       const berlinDate=/^\d{4}-\d{2}-\d{2}$/.test(requestedDate||'')&&Number.isFinite(Date.parse(requestedDate))?requestedDate:actualDate;
       const sourceLocation=await loader.loadLocationSnapshot(manifest,{postcode:activeArea,store:activeStore,branchId:activeBranch.branchId});
@@ -454,7 +455,8 @@
         return nutritionCatalogPromise;
       };
       if(nutritionModes.has(preferences.mode))await ensureNutritionCatalog();
-      const mealHistory=recommendations.restoreHistory(storage.get('choi01-meal-history-v1'),berlinDate);
+      const historyStorageKey='choi01-meal-history-v1';
+      let mealHistory=recommendations.restoreHistory(storage.get(historyStorageKey),actualDate),historySaved=true,historyNotice='';
       const offerIds=new Set(location.offers.map((offer)=>offer.offerId));
       const scaledMeal=(meal)=>({...meal,...recommendations.recipeQuantities(meal,preferences.targetServings)});
       const savedConditions=safeJson(storage.get('choi01-meal-conditions-v1'))||{};
@@ -468,7 +470,7 @@
         if(shopping.matchesBasketContext(facts,basketContext()))return shopping.marginalBasketFacts(facts,shoppingState.pantry,basketContext());
         return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['recipe:'+meal.id+':full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable'};
       };
-      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,postcode:location.postcode,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,date:berlinDate,dietary,excludeIngredients});
+      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,postcode:location.postcode,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,historyDate:actualDate,date:berlinDate,dietary,excludeIngredients});
       const contextForMode=(mode)=>{
         const context=recommendationContext();
         if(nutritionModes.has(mode)){context.requireMainOffer=false;delete context.offerIds;}
@@ -528,6 +530,7 @@
       let activeFilter='all';
       let recommendationIndex=0;
       let detailRequestVersion=0;
+      let detailLoading=false;
       let detailReturnFocus=null;
       let pointerDrag=null;
       const dragControlSelector='button,a,input,select,textarea,summary,[contenteditable],[role="button"]';
@@ -713,7 +716,7 @@
           quickFilter.title=knownTime?'원문에 표시된 조리 시간 기준':'원문 조리 시간이 확인되면 사용할 수 있습니다.';
         }
         const query=byId('menuSearch').value.trim().toLowerCase();
-        const storeBrowse=recommendations.browse(libraryMeals.filter(meal=>!meal.nutritionGeneral).filter(eligibleForDiet),{catalog:catalog[activeStore],history:mealHistory,date:berlinDate,moment:mealMoment});
+        const storeBrowse=recommendations.browse(libraryMeals.filter(meal=>!meal.nutritionGeneral).filter(eligibleForDiet),{catalog:catalog[activeStore],history:mealHistory,historyDate:actualDate,date:berlinDate,moment:mealMoment});
         const sourceIds=new Set(storeBrowse.map(meal=>meal.sourceRecipeId));
         const browseMeals=[...storeBrowse,...nutritionGeneralMeals.filter(meal=>!sourceIds.has(meal.sourceRecipeId)&&eligibleForDiet(meal))];
         const discountedMeals=recommendations.available(libraryMeals.filter(meal=>!meal.nutritionGeneral),{catalog:catalog[activeStore]});
@@ -747,6 +750,7 @@
       }
 
       function renderToday() {
+        actualDate=dateInBerlin();
         const meal=currentMeal();
         byId('todayTitle').textContent=meal?meal.title:preferences.mode==='balanced'?'선택 날짜의 할인 추천이 없어요':preferences.mode==='value'?'전체 구매비용을 아직 계산할 수 없어요':'영양 계산 자료가 더 필요해요';
         byId('decisionLabel').textContent=(berlinDate===actualDate?'오늘':berlinDate)+' '+mealMoment+' 추천';
@@ -760,7 +764,10 @@
         const basket=meal?modeBasket(meal):null;
         byId('todayCost').textContent=basket?.costStatus==='complete'?shopping.euro(basket.knownSubtotalCents):(meal?'가격 미확인':'—');
         byId('todayCostNote').textContent=meal?(basket?.sourceCoverage==='complete'?'전체 재료를 선택한 인분과 이 지점의 판매 포장 단위로 계산했습니다. 집에 있는 재료는 구매에서 제외합니다.':leadOffer?'할인상품 한 포장 가격과 전체 재료 구매 합계는 다릅니다. 상세에서 수량과 미확인 가격을 확인하세요.':'현재 할인 가격이 없는 재료는 금액 미확인으로 남습니다.') : '';
-        const firstReason=leadOffer?'<b>지금 유효한 주재료 행사</b><span>'+escapeHtml(meal.sale.join(' · '))+'</span>':'<b>전체 레시피 후보</b><span>현재 할인은 없지만 식사 메뉴와 다양성 기준에 맞습니다.</span>';
+        const nutrientComparison=nutritionModes.has(preferences.mode)&&['complete','estimated'].includes(evaluation?.readiness.nutrition);
+        const firstReason=nutrientComparison
+          ? '<b>'+(evaluation.readiness.nutrition==='estimated'?'환산 가정을 포함한 영양 비교':'확인된 영양값 비교')+'</b><span>1인분 기준 '+Object.keys(nutrientLabels).map(key=>nutrientLabels[key].label+' '+nutrientText(meal.nutritionFacts.perServing[key],key)).map(escapeHtml).join(' · ')+'</span>'
+          : leadOffer?'<b>지금 유효한 주재료 행사</b><span>'+escapeHtml(meal.sale.join(' · '))+'</span>':'<b>전체 레시피 후보</b><span>현재 할인은 없지만 식사 메뉴와 다양성 기준에 맞습니다.</span>';
         byId('whyList').innerHTML=meal?'<div class="why-item"><span class="why-index">01</span><div>'+firstReason+'</div></div><div class="why-item"><span class="why-index">02</span><div><b>원문과 검토 근거</b><span>'+escapeHtml(reviewSummary(meal))+'</span></div></div><div class="why-item"><span class="why-index">03</span><div><b>메뉴 다양성</b><span>주재료와 조리 방식, 최근 먹은 기록을 함께 봅니다.</span></div></div>':'<p class="panel-copy">현재 날짜와 조건에 맞는 검토된 주메뉴가 없습니다.</p>';
         const alternatives=modePool().filter((item)=>item.id!==meal?.id).slice(0,2);
         byId('alternativeList').innerHTML=alternatives.length?'<ul>'+alternatives.map((item)=>'<li>'+escapeHtml(item.title)+'</li>').join('')+'</ul>':'<p class="panel-copy">조건에 맞는 다른 주메뉴가 없습니다.</p>';
@@ -779,11 +786,33 @@
           if(nutritionCatalogState==='loading')byId('modeReadiness').textContent='영양 계산된 일반 메뉴 자료를 검증해 불러오는 중입니다.';
           else if(nutritionCatalogState==='failed')byId('modeReadiness').textContent+=' 일반 메뉴 자료 검증에 실패해 해당 자료는 사용하지 않았습니다.';
           else if(nutritionCatalogState==='ready')byId('modeReadiness').textContent+=' 할인과 관계없는 영양 계산 메뉴도 포함합니다. 구매 비용이 확인되었다는 뜻은 아닙니다.';
+          byId('modeReadiness').textContent+=' 개인의 하루 영양 필요량이나 다이어트 목표 충족 여부를 판단하지 않습니다.';
         }
+        renderHistoryStatus();
+      }
+
+      function canRecordMeal(meal) {
+        return Boolean(!detailLoading&&meal&&safeRecipeSourceUrl(meal.sourceUrl,meal.sourceRecipeId)&&/^[a-zA-Z0-9-]{1,64}$/.test(meal.sourceRecipeId)
+          &&(/^[a-f0-9]{64}$/.test(meal.sourceContentHash||'')||/^[a-f0-9]{64}$/.test(meal.detailSha256||'')));
+      }
+
+      function renderHistoryStatus() {
+        actualDate=dateInBerlin();mealHistory=recommendations.restoreHistory(JSON.stringify(mealHistory),actualDate);
+        const button=byId('markEaten'),note=byId('eatenNote');
+        const valid=canRecordMeal(selectedMeal);
+        const already=valid&&mealHistory.some(row=>row.sourceRecipeId===selectedMeal.sourceRecipeId&&row.date===actualDate&&row.moment===mealMoment);
+        button.disabled=!valid;button.textContent=already?'먹은 기록 취소':'먹었어요';
+        button.title=valid?actualDate+' '+mealMoment+'에 실제로 먹은 메뉴 기록':'원문이 확인된 레시피 상세를 열어 기록하세요.';
+        const savedNotice=historySaved?'':' 기록을 브라우저에 저장하지 못해 현재 화면에서만 반영됩니다.';
+        note.textContent=historyNotice?historyNotice+savedNotice:valid
+          ? (already?actualDate+' '+mealMoment+'에 먹은 기록이 있습니다. 취소하면 해당 끼니의 이 메뉴 기록만 삭제합니다.':actualDate+' '+mealMoment+'에 실제로 먹은 뒤 기록하세요. 식단에 넣는 동작은 먹은 기록을 만들지 않습니다.')+savedNotice
+          : '원문이 확인된 레시피 상세를 열면 실제로 먹은 메뉴를 기록할 수 있습니다.';
+        if(byId('recentMealSummary'))byId('recentMealSummary').textContent=(mealHistory.length?'최근 14일 먹은 기록 '+mealHistory.length+'회 · 반복 추천에 반영합니다.':'최근 14일 먹은 기록이 없습니다.')+savedNotice;
       }
 
       function renderModeControls() {
         const readiness=modeReadiness();
+        byId('autoPlan').textContent=nutritionModes.has(preferences.mode)?'추천 메뉴로 채우기':'할인 메뉴로 채우기';
         document.querySelectorAll('input[name="recommendationMode"]').forEach((input)=>{
           const state=readiness[input.value]||{eligible:0,total:0,available:false};
           input.disabled=!state.available;
@@ -988,6 +1017,7 @@
 
       async function openDetail(id,useArchived=false) {
         const requestVersion=++detailRequestVersion;
+        detailLoading=true;renderHistoryStatus();
         try {
           const meal=mealById(id);
           const archived=archivedDetails[id];
@@ -998,7 +1028,9 @@
           const detail=inlineCatalog?reference:await detailFor(reference,reference===meal);
           const baseMeal=reference===meal?meal:{id,store:activeStore,nutritionGeneral:Boolean(reference.nutritionGeneral),sale:[],missing:[],requiredAmounts:{},matchedOffers:[]};
           const hydrated=hydrateMeal(baseMeal,detail);
+          if(reference.detailSha256)hydrated.detailSha256=reference.detailSha256;
           if(requestVersion!==detailRequestVersion)return hydrated;
+          detailLoading=false;
           selectedMeal=hydrated;
           restoreNutritionEdits(selectedMeal);
           byId('detailTitle').textContent=selectedMeal.title;
@@ -1011,6 +1043,11 @@
           renderDetailNutrition();
           byId('recipeAmounts').innerHTML=(detail.detailIngredients||[]).map((item)=>'<li>'+escapeHtml(item)+'</li>').join('');
           byId('detailSteps').innerHTML=(detail.steps||[]).length?(detail.steps||[]).map((step)=>'<li>'+escapeHtml(step)+'</li>').join(''):'<li>'+escapeHtml(detail.recipeNote||'자세한 조리 순서는 원문에서 확인하세요.')+'</li>';
+          let stepsBasis=byId('recipeStepsBasis');
+          if(!stepsBasis){stepsBasis=document.createElement('p');stepsBasis.id='recipeStepsBasis';stepsBasis.className='footer-note';byId('detailSteps').before(stepsBasis);}
+          stepsBasis.textContent=quantityView.sourceServings
+            ? '조리 순서의 분량은 원문 '+quantityView.sourceServings+'인분 기준입니다. 선택한 '+preferences.targetServings+'인분의 재료량은 위 환산 목록을 참고하세요.'
+            : '조리 순서의 분량은 원문 그대로입니다. 원문 인분이 확인되지 않아 선택 인분으로 환산하지 않았습니다.';
           const sourceUrl=safeRecipeSourceUrl(detail.sourceUrl,detail.sourceRecipeId);
           if(sourceUrl)byId('recipeSource').href=sourceUrl;
           else byId('recipeSource').removeAttribute('href');
@@ -1024,10 +1061,12 @@
           byId('addFromDetail').disabled=!meal;
           renderDetailShopping();
           byId('detailDrawer').classList.add('open');
+          historyNotice='';renderHistoryStatus();
           byId('closeDetail').focus();
           return selectedMeal;
         } catch(error) {
           if(requestVersion!==detailRequestVersion)return null;
+          detailLoading=false;
           error.detailRequestVersion=requestVersion;
           throw error;
         }
@@ -1043,6 +1082,7 @@
 
       function showDetailError() {
         detailRequestVersion+=1;
+        detailLoading=false;
         selectedMeal=null;
         byId('detailTitle').textContent='레시피 상세를 열 수 없습니다';
         byId('detailIntro').textContent='저장된 상세의 지점 또는 해시를 검증하지 못했습니다.';
@@ -1050,8 +1090,10 @@
         byId('recipeSource').removeAttribute('href');
         byId('recipeSource').hidden=true;
         byId('recipeStepsBlock').hidden=true;
+        if(byId('recipeStepsBasis'))byId('recipeStepsBasis').textContent='';
         if(byId('detailNutrition'))byId('detailNutrition').textContent='';
         for(const id of ['addShoppingItems','eatFromDetail','addFromDetail'])byId(id).disabled=true;
+        historyNotice='';renderHistoryStatus();
         byId('detailDrawer').classList.add('open');
         byId('closeDetail').focus();
       }
@@ -1063,6 +1105,7 @@
 
       function closeDetail() {
         detailRequestVersion+=1;
+        detailLoading=false;
         byId('detailDrawer').classList.remove('open');
         if(detailReturnFocus?.isConnected)detailReturnFocus.focus();
       }
@@ -1114,7 +1157,7 @@
       byId('targetServings').addEventListener('change',(event)=>{preferences.targetServings=Number(event.target.value);refreshForPreferences();});
       byId('autoPlan').addEventListener('click',()=>{autoPlans=buildAutoPlans(plans);const refreshed=shopping.refreshAutoPlans(plans,autoPlans);for(const moment of Object.keys(refreshed))plans[moment]=refreshed[moment];renderPlanAndBind();showPlanCoverage();savePlans();});
       byId('clearPlan').addEventListener('click',()=>{for(const moment of ['점심','저녁'])plans[moment]=Object.fromEntries(days.map(([day])=>[day,shopping.clearPlanSlot()]));renderPlanAndBind();savePlans();});
-      document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;selectedPlanTarget=null;renderMealMomentControls();renderToday();renderPlanAndBind();}));
+      document.querySelectorAll('[data-moment]').forEach((button)=>button.addEventListener('click',()=>{mealMoment=button.dataset.moment;selectedPlanTarget=null;historyNotice='';renderMealMomentControls();renderToday();renderPlanAndBind();}));
       const acceptMeal=(meal)=>{if(!meal||!eligibleForDiet(meal))return;plans[mealMoment][todayId]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();};
       const acceptCurrent=()=>acceptMeal(currentMeal());
       byId('acceptToday').addEventListener('click',acceptCurrent);
@@ -1126,8 +1169,17 @@
       byId('addShoppingItems').addEventListener('click',()=>{if(!selectedMeal)return;shoppingState.list=shopping.addToList(shoppingState.list,basketFor([selectedMeal]));saveShopping();renderGroceries();});
       byId('addFromDetail').addEventListener('click',()=>{if(!selectedMeal)return;const meal=mealById(selectedMeal.id);if(meal&&eligibleForDiet(meal)){const {moment,day}=takePlanDestination();plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');savePlans();renderPlanAndBind();}});
       byId('eatFromDetail').addEventListener('click',()=>acceptMeal(selectedMeal));
-      byId('markEaten').disabled=true;
-      byId('markEaten').title='먹은 기록은 새 추천 화면에서 다시 연결됩니다.';
+      byId('eatFromDetail').textContent='오늘 식단에 넣기';
+      byId('markEaten').addEventListener('click',()=>{
+        if(!canRecordMeal(selectedMeal)){historyNotice='원문을 확인할 수 없어 먹은 기록을 저장하지 않았습니다.';renderHistoryStatus();return;}
+        actualDate=dateInBerlin();mealHistory=recommendations.restoreHistory(JSON.stringify(mealHistory),actualDate);
+        const already=mealHistory.some(row=>row.sourceRecipeId===selectedMeal.sourceRecipeId&&row.date===actualDate&&row.moment===mealMoment);
+        mealHistory=already?mealHistory.filter(row=>!(row.sourceRecipeId===selectedMeal.sourceRecipeId&&row.date===actualDate&&row.moment===mealMoment))
+          : recommendations.recordMeal(mealHistory,selectedMeal,actualDate,mealMoment);
+        historySaved=storage.set(historyStorageKey,JSON.stringify(mealHistory));
+        historyNotice=already?actualDate+' '+mealMoment+'의 먹은 기록을 취소했습니다.':actualDate+' '+mealMoment+'에 먹은 메뉴를 기록했습니다. 다음 추천에 반영합니다.';
+        recommendationIndex=0;renderToday();renderMenu();bindDetailTriggers();bindMenuActions();renderHistoryStatus();
+      });
       document.querySelectorAll('.filter').forEach((button)=>{
         button.hidden=false;
         button.setAttribute('aria-pressed',String(button.dataset.filter==='all'));
