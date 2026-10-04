@@ -193,6 +193,7 @@ function writeAtomic(target,bytes) {
 }
 
 export function publishWeeklyRelease(options) {
+  if(typeof options?.approvalDigest!=='string'||!DIGEST.test(options.approvalDigest)) throw new Error('Explicit owner-approved digest is required: provide 64 lowercase hexadecimal characters');
   const stagingDir=path.resolve(options.stagingDir||'');
   const receiptPath=path.join(stagingDir,'release-receipt.json');
   const receipt=JSON.parse(fs.readFileSync(receiptPath,'utf8'));
