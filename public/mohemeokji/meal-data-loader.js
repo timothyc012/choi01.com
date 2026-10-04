@@ -48,8 +48,15 @@
     }
   }
 
+  function validDate(value) {
+    if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(value))return false;
+    const date=new Date(value+'T00:00:00Z');
+    return Number.isFinite(date.getTime())&&date.toISOString().slice(0,10)===value;
+  }
+
   function assertManifest(manifest, current) {
     if (!manifest || manifest.schemaVersion !== 1 || manifest.snapshotId !== current.snapshotId
+      || !validDate(manifest.weekStart) || manifest.weekStart!==current.weekStart
       || !Array.isArray(manifest.locations) || !manifest.locations.length
       || !manifest.fileHashes || typeof manifest.fileHashes !== 'object' || Array.isArray(manifest.fileHashes)) {
       throw unavailable('invalid manifest');
@@ -75,7 +82,7 @@
     const currentBytes = await fetchBytes('current.json', fetcher);
     const current = parseJson(currentBytes);
     if (!current || current.schemaVersion !== 1 || typeof current.snapshotId !== 'string'
-      || !current.snapshotId || !DIGEST.test(current.manifestSha256 || '')) {
+      || !current.snapshotId || !validDate(current.weekStart) || !DIGEST.test(current.manifestSha256 || '')) {
       throw unavailable('invalid current pointer');
     }
     const manifestPath = artifactPath(current.manifestPath);
@@ -125,7 +132,8 @@
     const bytes = await fetchBytes(path, fetcher);
     await verify(bytes, reference.detailSha256, 'recipe detail');
     const detail = parseJson(bytes);
-    if (detail.schemaVersion !== 1 || detail.sourceRecipeId !== reference.sourceRecipeId) {
+    if (detail.schemaVersion !== 1 || detail.sourceRecipeId !== reference.sourceRecipeId
+      || (reference.sourceContentHash&&detail.sourceContentHash!==reference.sourceContentHash)) {
       throw unavailable('recipe detail boundary mismatch');
     }
     return detail;
@@ -140,5 +148,28 @@
     return data;
   }
 
-  window.MealDataLoader = {loadDiscoveryCatalog,loadCurrentSnapshot, loadLocationSnapshot, loadRecipeDetail, loadRecipeDetailReference};
+  async function loadNutritionCatalog(manifest,fetcher=window.fetch.bind(window)) {
+    if(manifest.nutritionCatalogPath===undefined)return {recipes:[]};
+    const path=artifactPath(manifest.nutritionCatalogPath);
+    const recipeRoot='snapshots/'+manifest.weekStart+'/'+manifest.snapshotId+'/recipes/';
+    if(!path.startsWith(recipeRoot)||!DIGEST.test(manifest.fileHashes?.[path]||''))throw unavailable('invalid nutrition catalog reference');
+    const bytes=await fetchBytes(path,fetcher);await verify(bytes,manifest.fileHashes[path],'nutrition catalog');
+    const data=parseJson(bytes);
+    if(data.schemaVersion!==1||data.catalogVersion!=='nutrition-general-v1'||data.scope!=='nutrition-general'
+      ||data.snapshotId!==manifest.snapshotId||data.weekStart!==manifest.weekStart||!Array.isArray(data.recipes))throw unavailable('invalid nutrition catalog');
+    const identities=new Set();
+    for(const reference of data.recipes) {
+      const detailPath=artifactPath(reference?.detailPath);
+      if(typeof reference.sourceRecipeId!=='string'||identities.has(reference.sourceRecipeId)||!DIGEST.test(reference.sourceContentHash||'')
+        ||reference.saleLinked!==false||typeof reference.automaticMealEligible!=='boolean'
+        ||!detailPath.startsWith(recipeRoot)||!DIGEST.test(reference.detailSha256||'')||manifest.fileHashes?.[detailPath]!==reference.detailSha256
+        ||reference.nutritionFacts?.sourceRecipeId!==reference.sourceRecipeId||reference.nutritionFacts?.sourceContentHash!==reference.sourceContentHash
+        ||!['complete','estimated'].includes(reference.nutritionFacts?.status)
+        ||(Array.isArray(reference.offerIds)&&reference.offerIds.length))throw unavailable('invalid nutrition recipe reference');
+      identities.add(reference.sourceRecipeId);
+    }
+    return data;
+  }
+
+  window.MealDataLoader = {loadNutritionCatalog,loadDiscoveryCatalog,loadCurrentSnapshot, loadLocationSnapshot, loadRecipeDetail, loadRecipeDetailReference};
 }());

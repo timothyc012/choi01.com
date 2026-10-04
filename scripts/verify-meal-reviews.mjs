@@ -60,14 +60,14 @@ export function collectionEvidence(rows,locations) {
   }));
 }
 
-async function main() {
-  const root=path.resolve('public/mohemeokji/data');
+async function main(options={}) {
+  const root=path.resolve(options.root||'public/mohemeokji/data');
   const validation=validateMealSnapshotDirectory(root);
   if(!validation.valid)throw new Error(validation.errors.join('; '));
   const current=JSON.parse(fs.readFileSync(path.join(root,'current.json')));
   const manifest=JSON.parse(fs.readFileSync(path.join(root,current.manifestPath)));
   const index=JSON.parse(fs.readFileSync(path.join(root,manifest.recipeIndexPath)));
-  const csv=fs.readFileSync(path.join('public/offers',manifest.source.inputLogicalName));
+  const csv=fs.readFileSync(options.csvPath||path.join('public/offers',manifest.source.inputLogicalName));
   if(hash(csv)!==manifest.source.csvSha256)throw new Error('CSV lineage mismatch');
   const entries={};let cursor=0;
   // Three requests at a time, once for each of the published recipes, never the whole DB.
@@ -83,7 +83,20 @@ async function main() {
     }
   }));
   const output={schemaVersion:1,snapshotId:current.snapshotId,csvSha256:manifest.source.csvSha256,recipes:Object.fromEntries(Object.entries(entries).sort(([a],[b])=>a.localeCompare(b))),locations:collectionEvidence(parseCsv(csv.toString()),manifest.locations.map(l=>JSON.parse(fs.readFileSync(path.join(root,l.path)))))};
-  fs.writeFileSync('data/mohemeokji/verified-reviews.json',JSON.stringify(output,null,2)+'\n');
+  const outputPath=options.outputPath||'data/mohemeokji/verified-reviews.json';
+  if(path.resolve(outputPath).startsWith(root+path.sep))throw new Error('Private review evidence must stay outside public snapshot data');
+  fs.mkdirSync(path.dirname(outputPath),{recursive:true});
+  fs.writeFileSync(outputPath,JSON.stringify(output,null,2)+'\n');
   console.log(JSON.stringify({verified:Object.values(entries).filter(r=>r.status==='verified').length,unverified:Object.values(entries).filter(r=>r.status!=='verified').length}));
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href)await main();
+if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href) {
+  const options={};
+  for(let index=2;index<process.argv.length;index++) {
+    const flag=process.argv[index];
+    if(flag==='--data-root')options.root=process.argv[++index];
+    else if(flag==='--csv')options.csvPath=process.argv[++index];
+    else if(flag==='--output')options.outputPath=process.argv[++index];
+    else throw new Error('Unknown review verification argument');
+  }
+  await main(options);
+}

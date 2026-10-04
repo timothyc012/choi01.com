@@ -7,6 +7,7 @@ import {pathToFileURL} from 'node:url';
 import {derivePublicationProfile} from './select-meal-publication-expansion.mjs';
 import {definingOfferLinks,ingredientLabelsMatch} from './lib/main-ingredient-gate.mjs';
 import {sourceOfferRisk} from './lib/select-store-recipes.mjs';
+import {mealPolicy} from './lib/meal-policy.mjs';
 
 const clean=(value)=>String(value??'').normalize('NFKC').replace(/<[^>]*>/g,' ').replace(/&nbsp;|&#160;/gi,' ').replace(/\s+/g,' ').trim();
 const idOf=(candidate)=>String(candidate?.sourceRecipeId??candidate?.recipeId??'');
@@ -77,6 +78,7 @@ export function buildDiscoveryCatalog({candidateReport,snapshotId,weekStart,targ
   const exclusions=[];
   const eligible=[];
   for(const candidate of [...(candidateReport.candidates||[])].sort((left,right)=>idOf(left).localeCompare(idOf(right)))) {
+    if(!mealPolicy.recipeAllowed(candidate)){exclusions.push({sourceRecipeId:idOf(candidate),reason:'unavailable-fresh-ingredient'});continue;}
     const result=eligibility(candidate,candidateReport);
     if(result.reason) { exclusions.push({sourceRecipeId:idOf(candidate),reason:result.reason}); continue; }
     const locations=[...new Map(result.links.map(({location})=>{
@@ -113,7 +115,7 @@ export function buildDiscoveryCatalog({candidateReport,snapshotId,weekStart,targ
 
   const recipes=selected.map(({candidate,profile,locations})=>({
     sourceRecipeId:idOf(candidate),title:clean(candidate.title),sourceUrl:clean(candidate.sourceUrl),
-    sourceAuthor:clean(candidate.author),sourceServingText:clean(candidate.sourceServingText),
+    sourceAuthor:clean(candidate.author),sourceServingText:clean(candidate.sourceServingText),sourceTimeText:clean(candidate.profile?.cookTimeText??candidate.sourceTimeText),
     ingredients:(candidate.ingredients||[]).map(ingredientText).filter(Boolean),
     recommendationProfile:profile,dietaryFilters:dietaryFilters(candidate),locations,
     detailStatus:'source-link-only',

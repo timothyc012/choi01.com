@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import crypto from 'node:crypto';
-import {mealPolicy} from './lib/meal-policy.mjs';
+import {mealPolicy,mealShoppingPolicy} from './lib/meal-policy.mjs';
+import {publicNutritionFacts,validCalculationHash} from './lib/public-meal-calculations.mjs';
+import {buildNutritionGoalCatalog} from './lib/nutrition-goal-catalog.mjs';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -37,11 +39,19 @@ function publicOffer(offer) {
   };
 }
 
-function recipeCalculationFacts(recipe) {
+function recipeCalculationFacts(recipe,context) {
   const quantities=mealPolicy.recipeQuantities(recipe);
+  const nutrition=publicNutritionFacts(recipe.nutritionFacts,recipe);
+  const basket=(recipe.basketEvidenceByContext||[]).find(value=>context&&value.postcode===context.location.postcode&&value.store===context.location.store&&value.branchId===context.location.branchId&&value.date===context.weekStart&&value.targetServings===2);
   return {sourceServings:quantities.sourceServings,requiredAmounts:quantities.requiredAmounts,
-    ...(recipe.nutritionFacts?.status==='complete'?{nutritionFacts:recipe.nutritionFacts}:{}),
-    ...(recipe.basketFacts?.sourceCoverage==='complete'?{basketFacts:recipe.basketFacts}:{}),
+    ...(nutrition?{nutritionFacts:nutrition}:{}),
+    ...(validCalculationHash(basket,recipe)&&basket.inventoryReview?.complete===true&&basket.inventoryReview?.stepIngredientsChecked===true&&!basket.issues.length&&basket.sourceCoverage==='complete'?{basketFacts:{
+      sourceCoverage:basket.sourceCoverage,costStatus:basket.costStatus,postcode:basket.postcode,store:basket.store,branchId:basket.branchId,date:basket.date,targetServings:basket.targetServings,sourceRecipeId:basket.sourceRecipeId,sourceContentHash:basket.sourceContentHash,calculationSha256:basket.calculationSha256,
+      knownSubtotalCents:basket.knownSubtotalCents,unknownItemKeys:basket.unknownItemKeys,quantityCheckKeys:basket.quantityCheckKeys,savingsStatus:basket.savingsStatus,items:basket.items.map(item=>{
+        const names=basket.lineage.filter(line=>item.ingredientOrdinals.includes(line.ingredientOrdinal)).map(line=>line.ingredientLabel);
+        return {key:item.key,name:names.join(' · '),pantryKeys:[...new Set(names.map(name=>mealShoppingPolicy.keyFor(basket.store,name)))],pack:item.pack,requiredAmount:item.requiredAmount,priceCents:item.priceCents,quantity:item.packCount,subtotalCents:item.subtotalCents,quantityComplete:true,sourceURL:item.sourceURL,sourceSha256:item.sourceSha256,validFrom:item.validFrom,validThrough:item.validThrough};
+      }),
+    }}:{}),
   };
 }
 
@@ -50,6 +60,7 @@ function detailRecipe(recipe) {
     schemaVersion:1,sourceRecipeId:recipe.sourceRecipeId,sourceContentHash:recipe.sourceContentHash,
     sourceTitle:recipe.sourceTitle,sourceUrl:recipe.sourceUrl,sourceAuthor:recipe.sourceAuthor,
     sourceServingText:recipe.sourceServingText,rating:recipe.rating,ratingNumber:recipe.ratingNumber,
+    sourceTimeText:recipe.sourceTimeText,
     reviewCount:recipe.reviewCount,title:recipe.title,detailIngredients:recipe.detailIngredients,
     ...recipeCalculationFacts(recipe),
     steps:recipe.steps,recommendationProfile:recipe.recommendationProfile,transformVersion:recipe.transformVersion,
@@ -68,9 +79,32 @@ function discoveryProvenance(candidateReport) {
 function sourceMetadata({candidateReport,csvPath,db,tenant}) {
   const inputLogicalName=path.basename(csvPath||candidateReport.input||'');
   const csvSha256=csvPath?sha256(fs.readFileSync(csvPath)):candidateReport.csvSha256;
-  const database=typeof candidateReport.database==='string'&&candidateReport.database?candidateReport.database:(typeof db==='string'?db:null);
+  const databaseReference=typeof candidateReport.database==='string'&&candidateReport.database?candidateReport.database:(typeof db==='string'?db:null);
+  let database=databaseReference;
+  if(typeof databaseReference==='string'&&/^postgres(?:ql)?:\/\//.test(databaseReference)) {
+    try { database=decodeURIComponent(new URL(databaseReference).pathname.slice(1)); }
+    catch { database=null; }
+  }
+  if(typeof database!=='string'||!/^[a-zA-Z0-9_.-]{1,64}$/.test(database))database=null;
   if(!inputLogicalName||!digest(csvSha256)||!database||!tenant) throw new Error('Complete source lineage is required: input logical name, CSV SHA-256, database, and tenant');
   return {inputLogicalName,csvSha256,database,tenant,discoverySha256:sha256(canonicalJson(discoveryProvenance(candidateReport))),discoveryAlgorithm:'canonical-candidate-report-v1'};
+}
+
+function withSourceCoverage(report,rows) {
+  if(!Array.isArray(rows))return report;
+  const result=structuredClone(report);
+  const byBranch=new Map(result.locations.map(location=>[[location.postcode,location.store,location.branch].join('|'),location]));
+  for(const row of rows) {
+    const key=[row['실제우편번호'],row['체인'],row['지점']].join('|');
+    let location=byBranch.get(key);
+    if(location&&location.branchId!==row['지점ID'])throw new Error('Coverage branch identity mismatch: '+key);
+    if(!location) {
+      location={postcode:row['실제우편번호'],store:row['체인'],branch:row['지점'],branchId:row['지점ID'],offers:[]};
+      result.locations.push(location);byBranch.set(key,location);
+    }
+    location.sourceCoverage={status:row['상태'],collectedProducts:Number(row['수집상품수']),sourcePageCount:row['원문페이지수']?Number(row['원문페이지수']):null,checkedPageCount:row['확인페이지수']?Number(row['확인페이지수']):null,evidenceURL:row['확인한URL'].split(/\s/)[0],note:row['누락이유']};
+  }
+  return result;
 }
 
 function digest(value) { return typeof value==='string'&&/^[a-f0-9]{64}$/.test(value); }
@@ -115,11 +149,15 @@ function retainedSnapshot(previousManifestPath,nextWeekStart,mode) {
   return {pointer:{snapshotId:manifest.snapshotId,manifestPath,manifestSha256,mode},files};
 }
 
-function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,policyVersion,source,previousSnapshot,retainedFiles,discoveryTarget=240}) {
+function buildFiles({candidateReport,registry,nutritionCandidates,weekStart,collectionTimestamp,policyVersion,source,previousSnapshot,retainedFiles,discoveryTarget=240}) {
   const locations=[];
   const coverageLocations=[];
   const details=new Map();
   const reviewQueue=new Map();
+  const goalCandidates=new Map((candidateReport.candidates||[]).map(candidate=>[String(candidate.sourceRecipeId??candidate.recipeId),candidate]));
+  for(const candidate of nutritionCandidates||[])goalCandidates.set(String(candidate.sourceRecipeId??candidate.recipeId),candidate);
+  const nutritionGoal=buildNutritionGoalCatalog({candidateReport:{candidates:[...goalCandidates.values()]},registry});
+  for(const detail of nutritionGoal.details)details.set(detail.sourceRecipeId,detail);
   for(const location of [...candidateReport.locations].sort((a,b)=>
     [a.postcode,a.store,a.branchId].join('|').localeCompare([b.postcode,b.store,b.branchId].join('|'))
   )) {
@@ -131,10 +169,10 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
     const refs=selection.recipes.map((recipe)=>{
       details.set(recipe.sourceRecipeId,detailRecipe(recipe));
       return {
-        sourceRecipeId:recipe.sourceRecipeId,title:recipe.title,offerIds:recipe.offerIds,offerIdentityKeys:recipe.offerIdentityKeys,
+        sourceRecipeId:recipe.sourceRecipeId,title:recipe.title,sourceTimeText:recipe.sourceTimeText,offerIds:recipe.offerIds,offerIdentityKeys:recipe.offerIdentityKeys,
         primaryIngredientIds:recipe.primaryIngredientIds,recommendationProfile:recipe.recommendationProfile,
         qualityScore:recipe.qualityScore,qualityFacts:recipe.qualityFacts,
-        detailIngredients:recipe.detailIngredients,...recipeCalculationFacts(recipe),
+        detailIngredients:recipe.detailIngredients,...recipeCalculationFacts(recipe,{location,weekStart}),
       };
     });
     const zeroCandidateOfferIds=location.offers.filter((offer)=>(offer.recipeCandidateIds||[]).length===0).map((offer)=>offer.offerId).sort();
@@ -153,7 +191,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
       if(!reviewQueue.has(key)) reviewQueue.set(key,{...entry,locationIds:[]});
       reviewQueue.get(key).locationIds.push(id);
     });
-    locations.push({id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,offers:location.offers.map(publicOffer).sort((a,b)=>a.offerId.localeCompare(b.offerId)),recipes:refs,coverage,warnings:selection.warnings});
+    locations.push({id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,...(location.sourceCoverage?{sourceCoverage:location.sourceCoverage}:{}),offers:location.offers.map(publicOffer).sort((a,b)=>a.offerId.localeCompare(b.offerId)),recipes:refs,coverage,warnings:selection.warnings});
     coverageLocations.push({locationId:id,postcode:location.postcode,store:location.store,branchId:location.branchId,...coverage,warnings:selection.warnings});
   }
   const reviewQueueEntries=[...reviewQueue.values()].map((entry)=>({...entry,locationIds:[...new Set(entry.locationIds)].sort()}))
@@ -165,7 +203,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   });
   const {snapshotId:_draftSnapshotId,...discoveryIdentity}=discoveryDraft;
   const discoveryIdentitySha256=sha256(canonicalJson(discoveryIdentity));
-  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes,discoveryIdentitySha256,...(previousSnapshot?{previousSnapshot}:{})};
+  const seed={schemaVersion:1,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations,coverageLocations,publicDetailHashes,discoveryIdentitySha256,nutritionGoalCatalog:nutritionGoal.catalog,...(previousSnapshot?{previousSnapshot}:{})};
   const snapshotId=sha256(canonicalJson(seed));
   const snapshotRoot=`snapshots/${weekStart}/${snapshotId}`;
   const files=new Map();
@@ -185,6 +223,14 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
     files.set(relative,bytes);
     recipeIndex.push({sourceRecipeId,path:relative,sha256:contentHash,sourceContentHash:detail.sourceContentHash});
   }
+  const goalRecipes=nutritionGoal.catalog.recipes.map(recipe=>{
+    const indexed=recipeIndex.find(entry=>entry.sourceRecipeId===recipe.sourceRecipeId),detail=details.get(recipe.sourceRecipeId);
+    return {...recipe,recommendationProfile:detail.recommendationProfile,nutritionFacts:detail.nutritionFacts,sourceUrl:detail.sourceUrl,sourceAuthor:detail.sourceAuthor,sourceServingText:detail.sourceServingText,detailPath:indexed.path,detailSha256:indexed.sha256,offerIds:[],primaryIngredientIds:[]};
+  });
+  const nutritionBytes=jsonBytes({...nutritionGoal.catalog,snapshotId,weekStart,recipes:goalRecipes});
+  const nutritionSha256=sha256(nutritionBytes);
+  const nutritionCatalogPath=`${snapshotRoot}/recipes/nutrition.${nutritionSha256}.json`;
+  files.set(nutritionCatalogPath,nutritionBytes);
   for(const location of locations) {
     location.recipes=location.recipes.map((recipe)=>{
       const detail=recipeIndex.find((entry)=>entry.sourceRecipeId===recipe.sourceRecipeId);
@@ -198,7 +244,7 @@ function buildFiles({candidateReport,registry,weekStart,collectionTimestamp,poli
   files.set(recipeIndexPath,jsonBytes({schemaVersion:1,snapshotId,recipes:recipeIndex}));
   const manifestLocations=locations.map((location)=>({id:location.id,postcode:location.postcode,store:location.store,branch:location.branch,branchId:location.branchId,path:`${snapshotRoot}/locations/${location.id}.json`,recipeCount:location.recipes.length}));
   const fileHashes=Object.fromEntries([...files].sort(([a],[b])=>a.localeCompare(b)).map(([relative,bytes])=>[relative,sha256(bytes)]));
-  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,discoveryCatalogPath,fileHashes,...(previousSnapshot?{previousSnapshot}:{})};
+  const manifest={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,policyVersion,tenant:candidateReport.tenant,source,locations:manifestLocations,coveragePath,recipeIndexPath,discoveryCatalogPath,nutritionCatalogPath,fileHashes,...(previousSnapshot?{previousSnapshot}:{})};
   const manifestPath=`${snapshotRoot}/manifest.json`;
   const manifestBytes=jsonBytes(manifest);
   const current={schemaVersion:1,snapshotId,weekStart,collectionTimestamp,manifestPath,manifestSha256:sha256(manifestBytes)};
@@ -266,6 +312,7 @@ export async function compileMealWeek(options) {
   const auditTarget=options.auditOutputPath?path.resolve(options.auditOutputPath):null;
   if(auditTarget&&(auditTarget===publicOutputDir||auditTarget.startsWith(publicOutputDir+path.sep))) throw new Error('Private audit output must be outside the public snapshot directory');
   if(auditTarget&&fs.existsSync(auditTarget)) throw new Error('Private audit output must not already exist: '+auditTarget);
+  candidateReport=withSourceCoverage(candidateReport,options.sourceCoverageRows);
   const source=sourceMetadata({candidateReport,csvPath:options.csvPath,db,tenant});
   const releaseMode=options.releaseMode||'bootstrap';
   if(!['bootstrap','rollover','correction'].includes(releaseMode)) throw new Error('releaseMode must be bootstrap, rollover, or correction');
@@ -273,7 +320,7 @@ export async function compileMealWeek(options) {
   const previous=releaseMode!=='bootstrap'?retainedSnapshot(options.previousManifestPath,weekStart,releaseMode):null;
   const discoveryTarget=options.discoveryTarget??240;
   if(!Number.isInteger(discoveryTarget)||discoveryTarget<1||discoveryTarget>1000) throw new Error('discoveryTarget must be 1..1000');
-  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),weekStart,collectionTimestamp,policyVersion,source,previousSnapshot:previous?.pointer||null,retainedFiles:previous?.files||new Map(),discoveryTarget};
+  const input={candidateReport:structuredClone(candidateReport),registry:structuredClone(registry),nutritionCandidates:structuredClone(options.nutritionCandidates||[]),weekStart,collectionTimestamp,policyVersion,source,previousSnapshot:previous?.pointer||null,retainedFiles:previous?.files||new Map(),discoveryTarget};
   const first=buildFiles(input);
   const second=buildFiles(structuredClone(input));
   compareBuilds(first,second);
@@ -308,6 +355,7 @@ function parseArgs(argv) {
     else if(value==='--database') args.db=argv[++index];
     else if(value==='--tenant') args.tenant=argv[++index];
     else if(value==='--registry') args.registryPath=argv[++index];
+    else if(value==='--nutrition-candidates') args.nutritionCandidatesPath=argv[++index];
     else if(value==='--policy-version') args.policyVersion=argv[++index];
     else if(value==='--week-start') args.weekStart=argv[++index];
     else if(value==='--audit-output') args.auditOutputPath=argv[++index];
@@ -319,6 +367,7 @@ function parseArgs(argv) {
   }
   if(!args.csvPath||!args.outputDir||!args.registryPath||!args.releaseMode) throw new Error('Usage: node scripts/compile-meal-week.mjs INPUT.csv --output-dir DIR --database DB --tenant TENANT --registry REGISTRY.json (--bootstrap | --rollover --previous-manifest MANIFEST.json | --correction --previous-manifest MANIFEST.json) [--audit-output PRIVATE.json]');
   if(['rollover','correction'].includes(args.releaseMode)&&!args.previousManifestPath) throw new Error(`--${args.releaseMode} requires --previous-manifest`);
+  if(args.nutritionCandidatesPath)args.nutritionCandidates=fs.readFileSync(path.resolve(args.nutritionCandidatesPath),'utf8').split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line));
   return args;
 }
 

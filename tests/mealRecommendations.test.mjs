@@ -205,14 +205,15 @@ test('snapshot value mode requires compiler-proven full basket coverage, not pri
 
 test('value ranking applies pantry ownership only through compiler-proven per-item basket facts',()=>{
   const shopping=context.window.MealShopping;
-  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',targetServings:2,items:[{key,priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true}],savingsStatus:'unavailable'});
-  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',basketFacts:basketFacts('Netto:닭고기',150)});
-  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',basketFacts:basketFacts('Netto:당근',100)});
+  const basketContext={postcode:'44369',store:'Netto',branchId:'branch-a',date:'2026-09-08',targetServings:2};
+  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',...basketContext,items:[{key:'food-'+key,name:key.split(':')[1],pantryKeys:[key],pack:{amount:500,unit:'g'},requiredAmount:{amount:300,unit:'g'},priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true,sourceURL:'https://example.com/reviewed-price',sourceSha256:'a'.repeat(64),validFrom:'2026-09-07',validThrough:'2026-09-13'}],savingsStatus:'unavailable'});
+  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',branchId:'branch-a',basketFacts:basketFacts('Netto:닭고기',150)});
+  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',branchId:'branch-a',basketFacts:basketFacts('Netto:당근',100)});
   const pantry=new Set(['Netto:닭고기']);
-  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)};
+  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,...basketContext,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry,basketContext)};
   assert.equal(engine.rankForMode([vegetable,chicken],options,'value')[0].id,'chicken-value');
   const aggregateOnly={...chicken,basketFacts:{sourceCoverage:'complete',targetServings:2,costStatus:'complete',knownSubtotalCents:150,unknownItemKeys:[],quantityCheckKeys:[]}};
-  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)},'value').eligible,false);
+  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry,basketContext)},'value').eligible,false);
 });
 
 test('nutrition and diet reject recipes without complete sourced serving nutrients',()=>{

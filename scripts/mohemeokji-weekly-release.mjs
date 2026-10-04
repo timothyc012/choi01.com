@@ -82,7 +82,7 @@ export function verifyApprovalReceipt({receipt,csvPath,coveragePath,dataDir,appr
 }
 
 export function inspectCoverage(offerRows,coverageRows,weekStart) {
-  const allowed=new Set(['수집완료','일부수집','미공개','접근실패','지점없음']);
+  const allowed=new Set(['수집완료','일부수집','미수집','미공개','접근실패','지점없음']);
   const errors=[];
   const expected=new Map();
   for(const row of offerRows) {
@@ -119,6 +119,8 @@ function compileOptions(options,outputDir,auditOutputPath) {
     policyVersion:options.policyVersion||'selection-v1',candidateReport:options.candidateReport,
     releaseMode:options.releaseMode,previousManifestPath:options.previousManifestPath,
     auditOutputPath,discoveryTarget:options.discoveryTarget??240,
+    sourceCoverageRows:options.sourceCoverageRows,
+    nutritionCandidates:options.nutritionCandidates,
   };
 }
 
@@ -135,6 +137,7 @@ export async function prepareWeeklyRelease(options) {
   const coverageRows=parseCsvTable(coverageBytes.toString('utf8'),['대상주간','수집시각','요청우편번호','실제우편번호','체인','지점ID','지점','확인한URL','상태','수집상품수','누락이유','원문페이지수','확인페이지수']);
   const coverage=inspectCoverage(rows,coverageRows,options.weekStart);
   if(!coverage.valid) throw new Error('weekly coverage validation failed: '+coverage.errors.join('; '));
+  options={...options,sourceCoverageRows:coverageRows};
 
   fs.mkdirSync(path.join(stagingDir,'input'),{recursive:true});
   fs.mkdirSync(path.join(stagingDir,'private'),{recursive:true});
@@ -234,6 +237,7 @@ function parseArgs(argv) {
       else if(value==='--tenant') options.tenant=argv[++index];
       else if(value==='--registry') options.registryPath=argv[++index];
       else if(value==='--candidate-report') options.candidateReportPath=argv[++index];
+      else if(value==='--nutrition-candidates') options.nutritionCandidatesPath=argv[++index];
       else if(value==='--previous-manifest') options.previousManifestPath=argv[++index];
       else if(value==='--bootstrap') options.releaseMode='bootstrap';
       else if(value==='--rollover') options.releaseMode='rollover';
@@ -241,6 +245,7 @@ function parseArgs(argv) {
       else throw new Error('Unknown argument: '+value);
     }
     if(options.candidateReportPath) options.candidateReport=JSON.parse(fs.readFileSync(path.resolve(options.candidateReportPath),'utf8'));
+    if(options.nutritionCandidatesPath)options.nutritionCandidates=fs.readFileSync(path.resolve(options.nutritionCandidatesPath),'utf8').split(/\r?\n/).filter(Boolean).map(line=>JSON.parse(line));
     return {command,options};
   }
   if(command==='publish') {

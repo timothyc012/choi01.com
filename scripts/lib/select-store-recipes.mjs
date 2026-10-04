@@ -307,12 +307,14 @@ function publicRecipe(candidate,storeOffers,registryEntry) {
     sourceUrl:candidate.sourceUrl,
     sourceAuthor:candidate.author??null,
     sourceServingText:candidate.sourceServingText??null,
+    sourceTimeText:candidate.profile?.cookTimeText??candidate.sourceTimeText??null,
     rating:candidate.rating??null,
     ratingNumber:Number.isFinite(candidate.ratingNumber)?candidate.ratingNumber:null,
     reviewCount:Number.isInteger(candidate.reviewCount)?candidate.reviewCount:null,
     title:registryEntry.title,
     ...(registryEntry.nutritionFacts?{nutritionFacts:registryEntry.nutritionFacts}:{}),
     ...(registryEntry.basketFacts?{basketFacts:registryEntry.basketFacts}:{}),
+    ...(registryEntry.basketEvidenceByContext?{basketEvidenceByContext:registryEntry.basketEvidenceByContext}:{}),
     detailIngredients:registryEntry.detailIngredients.slice(),
     steps:registryEntry.steps.slice(),
     recommendationProfile:{
@@ -331,7 +333,7 @@ function selectedPublicRecipe(recipe) {
   return {
     sourceRecipeId:recipe.sourceRecipeId,sourceContentHash:recipe.sourceContentHash,
     sourceTitle:recipe.sourceTitle,sourceUrl:recipe.sourceUrl,sourceAuthor:recipe.sourceAuthor,
-    sourceServingText:recipe.sourceServingText,rating:recipe.rating,ratingNumber:recipe.ratingNumber,
+    sourceServingText:recipe.sourceServingText,sourceTimeText:recipe.sourceTimeText,rating:recipe.rating,ratingNumber:recipe.ratingNumber,
     reviewCount:recipe.reviewCount,title:recipe.title,detailIngredients:recipe.detailIngredients.slice(),
     steps:recipe.steps.slice(),recommendationProfile:{...recipe.recommendationProfile,primaryIngredients:recipe.recommendationProfile.primaryIngredients.slice()},
     offerIds:recipe.offerIds.slice(),offerIdentityKeys:recipe.offerIdentityKeys.slice(),
@@ -339,6 +341,7 @@ function selectedPublicRecipe(recipe) {
     qualityScore:recipe.qualityScore,qualityFacts:{...recipe.qualityFacts},
     ...(recipe.nutritionFacts?{nutritionFacts:recipe.nutritionFacts}:{}),
     ...(recipe.basketFacts?{basketFacts:recipe.basketFacts}:{}),
+    ...(recipe.basketEvidenceByContext?{basketEvidenceByContext:recipe.basketEvidenceByContext}:{}),
   };
 }
 

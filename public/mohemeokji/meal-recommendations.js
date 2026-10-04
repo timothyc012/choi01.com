@@ -11,12 +11,16 @@
   const runtimeRankingPolicy=window.mealNutritionPolicy||null;
 
   const normalized = (value) => String(value||'').normalize('NFKC').replace(/\s/g,'').replaceAll('계란','달걀').toLowerCase();
-  const ingredientLabels = (meal) => meal.detailIngredients || meal.ingredients?.map(item=>typeof item==='string'?item:[item.ingredient||item.label,item.quantity].filter(Boolean).join(' ')) || [];
+  const ratingArtifact = (value) => /(?:^|\s)[0-5]\.\d+\s*\(\d+\)\s*$/.test(String(value||''));
+  const ingredientLabels = (meal) => (meal.detailIngredients || meal.ingredients?.map(item=>typeof item==='string'?item:item.label&&item.quantity&&item.label.includes(item.quantity)?item.label:[item.ingredient||item.label,item.quantity].filter(Boolean).join(' ')) || []).filter(value=>!ratingArtifact(value));
   function recipeAllowed(meal) {
     // Owner-selected fresh herbs; processed forms and unrelated compound words remain distinct.
-    return ![meal.title,...ingredientLabels(meal)].some(value=>
-      /(?:^|[\s,·(])(?:냉이|달래|두릅|엄나무순|참나물|곰취|머위|방풍나물|세발나물|돌나물)(?:\s|\d|$)/u.test(String(value))
-      && !/건조|냉동|말린|양념|선택|대체/.test(String(value)));
+    const labels=ingredientLabels(meal),terms=['냉이','달래','두릅','엄나무순','참나물','곰취','머위','방풍나물','세발나물','돌나물'];
+    const contains=(value)=>terms.find(term=>String(value||'').replace(/고추\s*냉이/gu,'').includes(term));
+    const processed=(value,term)=>new RegExp('(?:건조|냉동|말린)\\s*'+term+'|'+term+'\\s*(?:가루|분말)','u').test(value)||/(?:선택|대체)/u.test(value);
+    if(labels.some(value=>{const term=contains(value);return term&&!processed(String(value),term);}))return false;
+    const titleTerm=contains(meal.title);
+    return !titleTerm||labels.some(value=>contains(value)&&processed(String(value),titleTerm));
   }
   function mealKind(meal) {
     if(/냉국|스무디|요거트볼|요거트\s*샐러드|라페|달걀찜|계란찜|초절임|양파절임|물김치|스프|수프|계란국|달걀국|케익|케이크|맛탕/.test(meal?.title||'')) return 'side';
@@ -48,23 +52,38 @@
     if(/champignon/i.test(offer.productDe||offer.product||'') && /새송이|느타리|표고|팽이|목이/.test(labels) && !/양송이|버섯\s*종류\s*무관/.test(labels))return false;
     return true;
   }
+  function sourceMinutes(value) {
+    const match=/^\s*([1-9]\d*)\s*분(?:\s*이내)?\s*$/u.exec(String(value||''));
+    const minutes=match?Number(match[1]):null;
+    return Number.isSafeInteger(minutes)&&minutes>0?minutes:null;
+  }
+
   function recipeQuantities(meal, targetServings) {
     const servingText=meal.sourceServingText||meal.servingsText||'';
     const servingMatch=String(servingText).match(/^\s*(\d+(?:\.\d+)?)\s*인분\s*$/);
-    const sourceServings=Number.isFinite(meal.sourceServings)&&meal.sourceServings>0?meal.sourceServings:(servingMatch?Number(servingMatch[1]):null);
+    const statedServings=servingMatch&&Number(servingMatch[1])>0?Number(servingMatch[1]):null;
+    const structuredServings=Number.isFinite(meal.sourceServings)&&meal.sourceServings>0?meal.sourceServings:null;
+    const sourceServings=structuredServings&&statedServings&&structuredServings!==statedServings?null:(statedServings||(!servingText?structuredServings:null));
     const target=Number.isFinite(targetServings)&&targetServings>0?targetServings:sourceServings;
     const scale=sourceServings&&target?target/sourceServings:1;
     const requiredAmounts={},unquantified=[];
     const labels=ingredientLabels(meal).map(label=>{
-      const match=String(label).match(/^(.+?)\s+(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)\s*(kg|ml|g|l|개|공기|큰술|작은술|스푼|T|t|장|쪽|모|봉|캔)\s*$/);
+      const match=String(label).match(/^(.+?)\s+(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:\.\d+)?)\s*(kg|ml|g|l|개|공기|큰술|작은술|스푼|T|t|장|쪽|모|봉|캔|대|줄기)\s*$/);
       if(!match){unquantified.push(String(label));return String(label)+(sourceServings&&scale!==1?' (원문량 · 환산 확인 필요)':'');}
-      const parts=match[2].split(/\s+/),amount=parts.reduce((sum,part)=>{const [n,d]=part.split('/').map(Number);return sum+n/(d||1);},0)*scale;
+      const parts=match[2].split(/\s+/),amount=parts.reduce((sum,part)=>{const [n,d]=part.split('/').map(Number);return sum+(d===undefined?n:d>0?n/d:NaN);},0)*scale;
+      if(!Number.isFinite(amount)||amount<=0){unquantified.push(String(label));return String(label)+(sourceServings&&scale!==1?' (원문량 · 환산 확인 필요)':'');}
       const name=match[1].trim(),unit=match[3];
-      if(['g','kg','ml','l'].includes(unit)&&Number.isFinite(amount))requiredAmounts[name]={amount:amount*(unit==='kg'||unit==='l'?1000:1),unit:unit==='kg'?'g':unit==='l'?'ml':unit};
+      if(['g','kg','ml','l'].includes(unit)) {
+        const canonicalUnit=unit==='kg'?'g':unit==='l'?'ml':unit;
+        const canonicalAmount=amount*(unit==='kg'||unit==='l'?1000:1);
+        if(requiredAmounts[name]&&requiredAmounts[name].unit!==canonicalUnit){delete requiredAmounts[name];unquantified.push(String(label));}
+        else requiredAmounts[name]={amount:canonicalAmount+(requiredAmounts[name]?.amount||0),unit:canonicalUnit};
+      }
       return name+' '+Number(amount.toFixed(3))+unit;
     });
     // Editorial structured quantities are fallback only; never overwrite source amounts.
-    for(const [name,value] of Object.entries(meal.requiredAmounts||{}))if(!requiredAmounts[name]&&Number.isFinite(value.amount))requiredAmounts[name]={...value,amount:value.amount*scale};
+    // Only source labels establish purchasable quantities. A legacy estimate cannot
+    // turn an ambiguous label into a measured requirement.
     return {sourceServings,targetServings:target,scalable:Boolean(sourceServings),requiredAmounts:!sourceServings&&targetServings!==undefined?{}:requiredAmounts,labels,unquantified};
   }
 
@@ -152,10 +171,12 @@
   function nutritionReadiness(meal) {
     const facts=meal?.nutritionFacts,perServing=facts?.perServing;
     const fields=['kcal','proteinGrams','fiberGrams','sodiumMg'];
-    const ready=facts?.status==='complete'&&typeof facts.source==='string'&&facts.source.trim()
+    const estimated=facts?.status==='estimated'&&facts.assumptionsComplete===true&&facts.uncertaintyKind==='reviewed-scenario-interval'&&Array.isArray(facts.assumptions)&&facts.assumptions.length>0
+      &&fields.every(field=>Number.isFinite(facts.perServingRange?.[field]?.min)&&facts.perServingRange[field].min>=0&&Number.isFinite(facts.perServingRange[field].max)&&facts.perServingRange[field].max>=facts.perServingRange[field].min&&perServing?.[field]>=facts.perServingRange[field].min&&perServing[field]<=facts.perServingRange[field].max);
+    const ready=(facts?.status==='complete'||estimated)&&typeof facts.source==='string'&&facts.source.trim()
       &&Number.isFinite(facts.sourceServings)&&facts.sourceServings>0
       &&perServing&&fields.every((field)=>Number.isFinite(perServing[field])&&perServing[field]>=0);
-    return {ready:Boolean(ready),status:ready?'complete':'unknown',facts:ready?perServing:null};
+    return {ready:Boolean(ready),status:ready?facts.status:'unknown',facts:ready?perServing:null};
   }
 
   function costReadiness(cart) {
@@ -181,6 +202,7 @@
     const scoreComponents={qualityScore:Number.isFinite(meal?.qualityScore)?meal.qualityScore:null};
     if(selectedMode==='value') {
       if(context.requireCompilerBasketFacts&&(meal?.basketFacts?.sourceCoverage!=='complete'||meal.basketFacts.targetServings!==context.targetServings)) { eligible=false; reasons.push('선택한 인분 수의 전체 재료 범위가 검증된 구매 바구니 자료가 없습니다.'); }
+      if(context.requireCompilerBasketFacts&&context.date&&['date','postcode','store','branchId'].some(key=>context[key]&&meal?.basketFacts?.[key]!==context[key])) { eligible=false; reasons.push('구매비용 근거의 날짜 또는 지점이 현재 선택과 다릅니다.'); }
       const cost=costReadiness(typeof context.basketFor==='function'?context.basketFor(meal,context.targetServings||2):meal?.basketFacts);
       readiness.cost=cost.status;readiness.savings=cost.savingsStatus;scoreComponents.knownSubtotalCents=cost.knownSubtotalCents;
       if(!cost.ready) { eligible=false; reasons.push('가격 또는 필요한 포장 수량이 모두 확인되지 않았습니다.'); }
@@ -192,7 +214,7 @@
         Object.assign(scoreComponents,nutrient.facts);
         const policy=(context.rankingPolicy||runtimeRankingPolicy)?.modes?.[selectedMode];
         if(!policy) { eligible=false; reasons.push('추천 정책 자료를 불러오지 못했습니다.'); }
-        else reasons.push('1인분 근거: '+nutrient.facts.kcal+' kcal · 단백질 '+nutrient.facts.proteinGrams+' g · 식이섬유 '+nutrient.facts.fiberGrams+' g · 나트륨 '+nutrient.facts.sodiumMg+' mg · 정책 가중치 열량 '+policy.weights.kcal+'%·단백질 '+policy.weights.proteinGrams+'%·식이섬유 '+policy.weights.fiberGrams+'%·나트륨 '+policy.weights.sodiumMg+'%');
+        else reasons.push((nutrient.status==='estimated'?'환산 가정에 따른 추정 1인분: ':'재료 투입량 기준 1인분: ')+Math.round(nutrient.facts.kcal)+' kcal · 단백질 '+nutrient.facts.proteinGrams.toFixed(1)+' g · 식이섬유 '+nutrient.facts.fiberGrams.toFixed(1)+' g · 나트륨 '+Math.round(nutrient.facts.sodiumMg)+' mg · 정책 가중치 열량 '+policy.weights.kcal+'%·단백질 '+policy.weights.proteinGrams+'%·식이섬유 '+policy.weights.fiberGrams+'%·나트륨 '+policy.weights.sodiumMg+'%');
       }
     } else if(explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length) reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
     else reasons.push('전체 레시피의 주재료와 메뉴 다양성을 기준으로 추천합니다.');
@@ -311,5 +333,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {recipeAllowed,mealKind,matchesConditions,safeOffer,offerMatchesRecipe,recipeQuantities,available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
+  window.MealRecommendations = {sourceMinutes,recipeAllowed,mealKind,matchesConditions,safeOffer,offerMatchesRecipe,recipeQuantities,available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
 }());

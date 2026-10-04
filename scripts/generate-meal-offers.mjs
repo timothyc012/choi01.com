@@ -83,7 +83,7 @@ const rules = {
   '양상추': [/^Kopfsalat$/i, /Eisbergsalat/i, /Blattsalat/i],
   '레몬': [/^Bio Zitronen$/i, /^Zitronen/i, /^Zitrone/i],
   '아보카도': [/Avocado/i],
-  '바나나': [/^Bio Bananen$/i, /^Bio Fairtrade Bananen/i, /^Bananen$/i, /^Banane$/i, /^Ecuador - Bananen$/i],
+  '바나나': [/^Bio Bananen$/i, /^Bio Fairtrade Bananen/i, /^Bananen$/i, /^Bananen, lose$/i, /^Banane$/i, /^Ecuador - Bananen$/i],
   '블루베리': [/Heidelbeeren/i, /Heidelbeere/i],
   '딸기': [/Erdbeeren/i, /Erdbeere/i],
   '복숭아': [/Pfirsiche/i, /Pfirsich/i],
@@ -97,7 +97,7 @@ const rules = {
   '파마산치즈': [/Parmesan/i],
   '버터': [/Butter/i],
   '허브 쿼크': [/Kräuterquark/i, /Kraeuterquark/i],
-  '파스타': [/^3 Glocken.*Teigwaren$/i, /^3 Glocken Genuss Pur Pasta$/i, /^Combino Spaghetti$/i, /^Spaghetti/i, /^Pasta(?!sauce)/i],
+  '파스타': [/^3 Glocken.*Teigwaren$/i, /^3 Glocken Genuss Pur Pasta$/i, /^Combino Spaghetti$/i, /^Spaghetti/i, /^Pasta(?!sauce)/i, /^BARILLA Pasta$/i],
   '토스트': [/Toast/i],
   '식빵': [/Toastbrot/i],
   '달걀': [/Eier/i, /^Ei\b/i],
@@ -121,9 +121,9 @@ const excluded = {
   '레몬': [/limonade/i, /eistee/i],
   '요거트': [/pudding|dessert|frucht|alternative|soja|mit der ecke|quarkbällchen/i],
   '빵': [/Brotaufstrich/i, /Brotzeit/i, /Frikadellenbrötchen/i, /Käsebrötchen/i],
-  '토스트': [/brötchen|broetchen/i],
+  '토스트': [/brötchen|broetchen/i, /\bToasty\b/i],
   '버터': [/Butternut|Kürbis|Kuerbis/i, /Buttermilch/i, /Buttercroissant/i, /Butterkäse|Butterkaese/i],
-  '모짜렐라치즈': [/piccolini|pizza|tomate-mozzarella/i],
+  '모짜렐라치즈': [/piccolini|pizza|tomate-mozzarella/i, /\bsticks?\b|\bnuggets?\b|paniert/i],
   '쌀': [/milchreis|milch-reis|pudding|express|vorgegart|gekocht/i],
   '또띠아': [/nacho|chips|110[ -]?g|\bchio\b/i],
   '사과': [/Apfeltasche/i],
@@ -192,6 +192,9 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
   const conditions = compact(row['할인조건']);
   const normalPriceCents = cents(row['정상가격']) ?? cents(row['정상가']) ?? null;
   const rowWithSource = { ...row, __sourceRow: sourceRow };
+  const rawPack=compact(row['가격적용단위']) || compact(detail.split('|')[0]) || '판매 단위 확인';
+  const variableWeight=/\b(?:lose|pro\s*(?:1\s*)?kg|je\s*(?:100\s*g|1\s*kg))\b/i.test(detail+' '+rawPack);
+  const pack=variableWeight?rawPack+' · 구매 중량 확인':rawPack;
   return {
     offerId: createOfferId(rowWithSource, sourceSha),
     postcode: compact(row['우편번호']),
@@ -202,7 +205,7 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
     validFrom: period.validFrom,
     validThrough: period.validThrough,
     productDe: compact(row['상품명']),
-    pack: compact(row['가격적용단위']) || compact(detail.split('|')[0]) || '판매 단위 확인',
+    pack,
     priceCents,
     normalPriceCents,
     conditions,

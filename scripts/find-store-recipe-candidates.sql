@@ -1,7 +1,12 @@
 BEGIN READ ONLY;
 SET LOCAL statement_timeout = '60s';
 
-WITH search_spec AS (
+WITH active_recipe_facts AS NOT MATERIALIZED (
+  SELECT subject_id, relation, object_id
+  FROM fact
+  WHERE tenant_id = :'tenant'
+    AND superseded_by IS NULL
+), search_spec AS (
   SELECT
     COALESCE(item->>'identityId', item->>'key') AS identity_id,
     COALESCE(item->>'identityKey', item->>'identityId', item->>'key') AS identity_key,
@@ -25,10 +30,10 @@ WITH search_spec AS (
     ON ingredient.tenant_id = :'tenant'
    AND ingredient.class_name = 'https://01ontology.org/pack/recipe#Ingredient'
    AND ingredient.label = ANY(spec.ingredient_labels)
-  JOIN triples quantity_ingredient
+  JOIN active_recipe_facts quantity_ingredient
     ON quantity_ingredient.object_id = ingredient.id
    AND quantity_ingredient.relation = 'https://01ontology.org/pack/recipe#quantityOfIngredient'
-  JOIN triples recipe_quantity
+  JOIN active_recipe_facts recipe_quantity
     ON recipe_quantity.object_id = quantity_ingredient.subject_id
    AND recipe_quantity.relation = 'https://01ontology.org/pack/recipe#hasIngredientQuantity'
   JOIN individuals r
@@ -81,7 +86,7 @@ WITH search_spec AS (
   ) step_count ON true
   LEFT JOIN LATERAL (
     SELECT p.value AS servings_text
-    FROM triples t
+    FROM active_recipe_facts t
     JOIN properties p ON p.individual_id = t.object_id AND p.key = 'servingsText'
     WHERE t.subject_id = matched.internal_recipe_id
       AND t.relation = 'https://01ontology.org/pack/recipe#hasServingProfile'
@@ -89,7 +94,7 @@ WITH search_spec AS (
   ) serving ON true
   LEFT JOIN LATERAL (
     SELECT p.value AS source_url
-    FROM triples t
+    FROM active_recipe_facts t
     JOIN properties p ON p.individual_id = t.object_id AND p.key = 'sourceUrl'
     WHERE t.subject_id = matched.internal_recipe_id
       AND t.relation = 'https://01ontology.org/pack/recipe#supportedByPage'
@@ -97,7 +102,7 @@ WITH search_spec AS (
   ) source_page ON true
   LEFT JOIN LATERAL (
     SELECT a.label
-    FROM triples t
+    FROM active_recipe_facts t
     JOIN individuals a ON a.id = t.object_id
     WHERE t.subject_id = matched.internal_recipe_id
       AND t.relation = 'https://01ontology.org/pack/recipe#authoredBy'
@@ -107,7 +112,7 @@ WITH search_spec AS (
     SELECT
       count(*)::int AS ingredient_count,
       count(quantity.value)::int AS measured_ingredient_count
-    FROM triples t
+    FROM active_recipe_facts t
     JOIN individuals q ON q.id = t.object_id
     LEFT JOIN properties quantity ON quantity.individual_id = q.id AND quantity.key = 'quantityText'
     WHERE t.subject_id = matched.internal_recipe_id

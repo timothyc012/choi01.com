@@ -697,6 +697,28 @@
       .scaled-ingredients { padding:16px; border:1px solid var(--border); background:var(--green-wash); margin-bottom:16px; border-radius:var(--radius); }
       .scaled-ingredients p { font-size:12px; line-height:1.6; color:var(--ink-soft); }
       .scaled-ingredients ul { display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; padding-left:20px; font-size:13px; }
+      .detail-nutrition { margin:16px 0; padding:16px; border:1px solid var(--border); border-radius:var(--radius); }
+      .detail-nutrition h4 { margin:0 0 8px; }
+      .nutrition-status,.nutrition-note { color:var(--ink-soft); font-size:12px; line-height:1.6; margin:8px 0; }
+      .nutrition-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0; }
+      .nutrition-grid div { padding:10px; background:var(--surface); border-radius:var(--radius); }
+      .nutrition-grid dt { font-size:12px; color:var(--muted); }
+      .nutrition-grid dd { margin:4px 0 0; font-size:17px; font-weight:700; }
+      .nutrition-grid small { display:block; color:var(--ink-soft); font-size:11px; font-weight:400; line-height:1.6; margin-top:4px; }
+      .nutrition-evidence { font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+      .nutrition-evidence summary { cursor:pointer; font-weight:600; }
+      .nutrition-evidence ul,.nutrition-missing { padding-left:20px; margin:8px 0; }
+      .nutrition-evidence li { margin:8px 0; }
+      .nutrition-editor { border:0; border-top:1px solid var(--border-soft); margin:16px 0 0; padding:16px 0 0; }
+      .nutrition-editor legend { padding-top:16px; font-size:13px; font-weight:600; }
+      .nutrition-editor label { display:flex; gap:12px; align-items:center; justify-content:space-between; padding:8px 0; font-size:13px; }
+      .nutrition-editor label small { display:block; color:var(--muted); font-size:11px; line-height:1.6; }
+      .nutrition-gram-input { flex-shrink:0; display:flex; gap:4px; align-items:center; }
+      .nutrition-gram-input input { width:85px; padding:6px; border:1px solid var(--border); border-radius:var(--radius); background:var(--canvas); color:var(--ink); font-size:13px; }
+      .nutrition-editor-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+      .nutrition-calculation-scope { border-left:3px solid var(--amber); padding:8px 12px; margin:12px 0; font-size:12px; line-height:1.65; background:var(--canvas); }
+      .nutrition-calculation-scope ul { padding-left:18px; margin:6px 0; }
+      .nutrition-calculation-scope p { margin:6px 0; }
       #detailDrawer .shopping-controls { display:block; }
       .source-bar:has([data-snapshot-state="expired"]) .status-line { color:var(--amber); }
       @media(max-width:1100px) { .planning-desk { grid-template-columns:1fr; } .recipe-ledger { position:static; order:2; } #weekGrid { grid-template-columns:repeat(7,minmax(90px,1fr)); min-width:630px; } }
@@ -942,7 +964,9 @@
         <p class="primary-offer" id="detailOfferInfo"></p>
         <div class="detail-block" id="recipeStepsBlock">
           <p class="recipe-meta" id="recipeMeta"></p>
-          <section id="scaledIngredients" class="scaled-ingredients" aria-live="polite"></section><details class="original-amounts"><summary>원문 기준 재료 보기</summary>
+          <section id="scaledIngredients" class="scaled-ingredients" aria-live="polite"></section>
+          <section id="detailNutrition" class="detail-nutrition" aria-label="영양 계산" aria-live="polite"></section>
+          <details class="original-amounts"><summary>원문 기준 재료 보기</summary>
           <ul class="ingredient-list recipe-amounts" id="recipeAmounts"></ul></details>
           <h4 style="margin-top:22px">자세한 조리 순서</h4>
           <ol class="step-list" id="detailSteps"></ol>
@@ -1013,14 +1037,14 @@
         else showContext(location.hash==='#groceries'?'shop':'plan');
       })();
     </script>
-    <script src="/mohemeokji/ontology-recipe-details.js?v=4585d02ceb58"></script>
-    <script src="/mohemeokji/ontology-recipe-popular.js?v=4585d02ceb58"></script>
-    <script src="/mohemeokji/meal-verified-evidence.js?v=4585d02ceb58"></script>
-    <script src="./meal-planner-recipe-data.js?v=4585d02ceb58"></script>
-    <script src="/mohemeokji/meal-data-loader.js?v=4585d02ceb58"></script>
-    <script src="/mohemeokji/meal-shopping.js?v=4585d02ceb58"></script>
-    <script src="/mohemeokji/meal-nutrition-policy.js?v=4585d02ceb58"></script>
-    <script src="/mohemeokji/meal-recommendations.js?v=4585d02ceb58"></script>
+    <script src="/mohemeokji/ontology-recipe-details.js?v=40dd7f3091c2"></script>
+    <script src="/mohemeokji/ontology-recipe-popular.js?v=40dd7f3091c2"></script>
+    <script src="/mohemeokji/meal-verified-evidence.js?v=40dd7f3091c2"></script>
+    <script src="./meal-planner-recipe-data.js?v=40dd7f3091c2"></script>
+    <script src="/mohemeokji/meal-data-loader.js?v=40dd7f3091c2"></script>
+    <script src="/mohemeokji/meal-shopping.js?v=40dd7f3091c2"></script>
+    <script src="/mohemeokji/meal-nutrition-policy.js?v=40dd7f3091c2"></script>
+    <script src="/mohemeokji/meal-recommendations.js?v=40dd7f3091c2"></script>
     <script>
       const legacySnapshot = window.MealRecipeData.legacyEnabled(location.search);
       if (!legacySnapshot) {

@@ -149,6 +149,8 @@
 
   function metricAmount(value) {
     const text = String(value || "").trim().replace(",", ".").replace(/(\d)-(?=(?:kg|g|ml|l)\b)/gi,"$1 ");
+    // A quoted weight rate is not the weight of a purchasable package.
+    if(/\b(?:je|pro|per)\s*(?:\d+(?:\.\d+)?\s*)?(?:kg|g|ml|l)\b|(?:kg|g|ml|l)\s*당|구매\s*중량\s*확인/i.test(text))return null;
     if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]\s*\d|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
     const bundle = text.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     const match = bundle || text.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
@@ -183,7 +185,7 @@
         seenInMeal.add(key);
         const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name];
         const required = candidate && Number.isFinite(candidate.amount) && candidate.amount > 0 && ['g', 'ml'].includes(candidate.unit) ? candidate : null;
-        const offer = meal.offerCatalog?.[originalName] || catalog[meal.store]?.[originalName] || meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
+        const offer = meal.disableOfferPricing?null:(meal.offerCatalog?.[originalName] || catalog[meal.store]?.[originalName] || meal.offerCatalog?.[name] || catalog[meal.store]?.[name]);
         const existing = ingredients.get(key);
         if (existing) {
           if(!alreadySeen)existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
@@ -271,15 +273,79 @@
     return {recipeId:null,origin:'manual',dismissedRecipeIds:[]};
   }
 
-  function marginalBasketFacts(facts, pantry = new Set()) {
-    if(facts?.sourceCoverage!=='complete'||!Number.isInteger(facts.targetServings)||facts.targetServings<1||!Array.isArray(facts.items)||!facts.items.length) {
-      return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+  function matchesBasketContext(facts, context) {
+    return Boolean(context && facts?.sourceCoverage==='complete'
+      && ['postcode','store','branchId','date','targetServings'].every((key)=>context[key]!==undefined&&facts[key]===context[key])
+      && /^\d{5}$/.test(context.postcode) && /^\d{4}-\d{2}-\d{2}$/.test(context.date)
+      && typeof context.store==='string'&&context.store&&typeof context.branchId==='string'&&context.branchId
+      && Number.isSafeInteger(context.targetServings)&&context.targetServings>0);
+  }
+
+  function pantryOwns(item, pantry) {
+    const keys=Array.isArray(item.pantryKeys)&&item.pantryKeys.length?item.pantryKeys:[item.key];
+    return keys.every((key)=>pantry.has(key));
+  }
+
+  // Compiler prices include ordinary ingredients as well as offers. Combine
+  // measured requirements before buying packs, rather than adding recipe totals.
+  function compilerBasket(factsList, {context, pantry=new Set(), recipeIds=[]}={}) {
+    if(!Array.isArray(factsList)||!factsList.length)return null;
+    const groups=new Map(),aliasGroups=new Map();
+    const money=(value)=>Number.isSafeInteger(value)&&value>=0;
+    for(let index=0;index<factsList.length;index+=1) {
+      const facts=factsList[index];
+      if(!matchesBasketContext(facts,context)||!Array.isArray(facts.items)||!facts.items.length)return null;
+      for(const item of facts.items) {
+        const required=item.requiredAmount,pack=item.pack,keys=item.pantryKeys;
+        if(typeof item.key!=='string'||!item.key||!Array.isArray(keys)||!keys.length
+          ||keys.some((key)=>typeof key!=='string'||!key.startsWith(context.store+':')||key===context.store+':')
+          ||!required||!Number.isFinite(required.amount)||required.amount<=0||!['g','ml'].includes(required.unit)
+          ||!pack||!Number.isFinite(pack.amount)||pack.amount<=0||pack.unit!==required.unit
+          ||!money(item.priceCents)||!Number.isSafeInteger(item.quantity)||item.quantity<1||item.quantityComplete!==true
+          ||item.subtotalCents!==item.priceCents*item.quantity||!money(item.subtotalCents)
+          ||typeof item.sourceURL!=='string'||!/^https:\/\//.test(item.sourceURL)||!/^([a-f0-9]{64})$/.test(item.sourceSha256||'')
+          ||!item.validFrom||!item.validThrough||item.validFrom>context.date||item.validThrough<context.date)return null;
+        for(const key of keys) {
+          if(aliasGroups.has(key)&&aliasGroups.get(key)!==item.key)return null;
+          aliasGroups.set(key,item.key);
+        }
+        let group=groups.get(item.key);
+        if(group&&(group.pack.amount!==pack.amount||group.pack.unit!==pack.unit||group.priceCents!==item.priceCents
+          ||group.sourceURL!==item.sourceURL||group.sourceSha256!==item.sourceSha256))return null;
+        if(!group) {
+          group={...item,pack:{...pack},requiredAmount:{amount:0,unit:required.unit},pantryKeys:[],contributions:{}};
+          groups.set(item.key,group);
+        }
+        group.requiredAmount.amount+=required.amount;
+        group.pantryKeys=[...new Set([...group.pantryKeys,...keys])];
+        const recipeId=recipeIds[index]||facts.sourceRecipeId;
+        if(recipeId) {
+          const previous=group.contributions[recipeId];
+          group.contributions[recipeId]={amount:(previous?.amount||0)+required.amount,unit:required.unit};
+        }
+      }
     }
-    const valid=facts.items.every((item)=>typeof item?.key==='string'&&item.key&&Number.isSafeInteger(item.priceCents)&&item.priceCents>=0&&Number.isSafeInteger(item.quantity)&&item.quantity>0&&item.quantityComplete===true&&item.subtotalCents===item.priceCents*item.quantity);
-    if(!valid)return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
-    const purchases=facts.items.filter((item)=>!pantry.has(item.key));
-    const comparable=purchases.length>0&&purchases.every((item)=>Number.isSafeInteger(item.normalPriceCents)&&item.normalPriceCents>=item.priceCents);
-    return {sourceCoverage:'complete',targetServings:facts.targetServings,costStatus:'complete',knownSubtotalCents:purchases.reduce((sum,item)=>sum+item.subtotalCents,0),unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:comparable?'complete':'unavailable',savingsCents:comparable?purchases.reduce((sum,item)=>sum+(item.normalPriceCents-item.priceCents)*item.quantity,0):null};
+    const items=[];
+    for(const group of groups.values()) {
+      const ratio=group.requiredAmount.amount/group.pack.amount;
+      const quantity=Math.max(1,Math.ceil(ratio-Number.EPSILON*Math.max(1,Math.abs(ratio))*8));
+      if(!Number.isSafeInteger(quantity)||!money(quantity*group.priceCents))return null;
+      const key=group.pantryKeys[0],name=key.slice(context.store.length+1);
+      items.push({...group,key,name,label:group.name,store:context.store,
+        pack:String(group.pack.amount)+' '+group.pack.unit,source:group.sourceURL,product:'',
+        owned:pantryOwns(group,pantry),quantity,quantityCalculated:true,quantityNeedsCheck:false,
+        requiredLabel:formatRequired(group.requiredAmount),subtotalCents:quantity*group.priceCents});
+    }
+    const purchases=items.filter((item)=>!item.owned),knownSubtotalCents=purchases.reduce((sum,item)=>sum+item.subtotalCents,0);
+    if(!money(knownSubtotalCents))return null;
+    return {...context,sourceCoverage:'complete',items,totalCents:knownSubtotalCents,knownSubtotalCents,
+      unknownItemKeys:[],quantityCheckKeys:[],costStatus:'complete',savingsStatus:'unavailable',savingsCents:null,
+      unknownCount:0,quantityCheckCount:0,purchaseCount:purchases.length};
+  }
+
+  function marginalBasketFacts(facts, pantry = new Set(), context) {
+    return compilerBasket([facts],{context,pantry})
+      || {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
   }
 
   function amount(cart) {
@@ -334,6 +400,7 @@
       const quantityNeedsCheck=contributionValues.length?contributionQuantity===null:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck);
       merged.set(item.key, {
         key: item.key, name: item.name, store: item.store, pack: previous?.product?previous.pack:item.pack,
+        pantryKeys:[...new Set([...(previous?.pantryKeys||[item.key]),...(item.pantryKeys||[item.key])])],
         product:previous?.product||item.product||'',source:previous?.source||item.source||'',
         quantity, priceCents: previous?.product?previous.priceCents:item.priceCents, quantityNeedsCheck,contributions,
         completed: Boolean(previous?.completed && quantity === previous.quantity)
@@ -417,10 +484,11 @@
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
             || (item.product!==undefined&&typeof item.product!=="string") || (item.source!==undefined&&typeof item.source!=="string")
             || (item.contributions!==undefined&&!validContributions(item.contributions))
-            || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
+            || (item.pantryKeys!==undefined&&(!Array.isArray(item.pantryKeys)||!item.pantryKeys.length||item.pantryKeys.some((key)=>!validKey(key))))
+            || typeof item.completed !== "boolean" || pantryOwns(item,state.pantry) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{} }));
+        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions, pantryKeys }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{},pantryKeys:(pantryKeys||[key]).map(canonicalKey) }));
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
@@ -440,5 +508,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, groupListByMenu, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, compilerBasket, matchesBasketContext, pantryOwns, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, groupListByMenu, listProgress, restoreState, serializeState };
 }());

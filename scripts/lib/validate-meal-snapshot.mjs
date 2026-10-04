@@ -3,35 +3,104 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {offerIdentityKey} from '../find-store-recipe-candidates.mjs';
 import {validRecipeSourceUrl} from './meal-snapshot-schema.mjs';
+import {nutritionReadiness,basketReadiness} from './meal-ranking-facts.mjs';
+import {assumptionFields,componentFields,nutrientFields} from './public-meal-calculations.mjs';
+import {mealPolicy} from './meal-policy.mjs';
 
 const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const digest=/^[a-f0-9]{64}$/;
 const SCHEMAS={
   current:['schemaVersion','snapshotId','weekStart','collectionTimestamp','manifestPath','manifestSha256'],
-  manifest:['schemaVersion','snapshotId','weekStart','collectionTimestamp','policyVersion','tenant','source','locations','coveragePath','recipeIndexPath','discoveryCatalogPath','fileHashes','previousSnapshot'],
+  manifest:['schemaVersion','snapshotId','weekStart','collectionTimestamp','policyVersion','tenant','source','locations','coveragePath','recipeIndexPath','discoveryCatalogPath','nutritionCatalogPath','fileHashes','previousSnapshot'],
   source:['inputLogicalName','csvSha256','database','tenant','discoverySha256','discoveryAlgorithm'],
   previous:['snapshotId','manifestPath','manifestSha256','mode'],
   manifestLocation:['id','postcode','store','branch','branchId','path','recipeCount'],
   coverage:['schemaVersion','snapshotId','locations','identityStats','overflow','zeroCandidateIdentities','zeroCandidateOfferIds'],
   coverageLocation:['locationId','postcode','store','branchId','target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds','warnings'],
   recipeIndex:['schemaVersion','snapshotId','recipes'],indexEntry:['sourceRecipeId','path','sha256','sourceContentHash'],
-  location:['schemaVersion','snapshotId','weekStart','id','postcode','store','branch','branchId','offers','recipes','coverage','warnings'],
+  location:['schemaVersion','snapshotId','weekStart','id','postcode','store','branch','branchId','sourceCoverage','offers','recipes','coverage','warnings'],
   offer:['offerId','postcode','chain','branchId','evidenceUrl','validFrom','validThrough','productDe','pack','priceCents','normalPriceCents','conditions','autoPriceEligible','identity'],
   identity:['ingredientId','species','cut','processingState','form','composition'],
-  recipeRef:['sourceServings','requiredAmounts','detailIngredients','nutritionFacts','basketFacts','sourceRecipeId','title','offerIds','offerIdentityKeys','primaryIngredientIds','recommendationProfile','qualityScore','qualityFacts','detailPath','detailSha256'],
+  recipeRef:['sourceTimeText','sourceServings','requiredAmounts','detailIngredients','nutritionFacts','basketFacts','sourceRecipeId','title','offerIds','offerIdentityKeys','primaryIngredientIds','recommendationProfile','qualityScore','qualityFacts','detailPath','detailSha256'],
   profile:['primaryIngredients','family','method','kind','filters'],quality:['adjustedRating','popularity','completeness','priorStrength','globalMean'],
   locationCoverage:['target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds'],
   warning:['code','published','target','added','cap'],
-  detail:['sourceServings','requiredAmounts','nutritionFacts','basketFacts','schemaVersion','sourceRecipeId','sourceContentHash','sourceTitle','sourceUrl','sourceAuthor','sourceServingText','rating','ratingNumber','reviewCount','title','detailIngredients','steps','recommendationProfile','transformVersion'],
+  detail:['sourceTimeText','sourceServings','requiredAmounts','nutritionFacts','basketFacts','schemaVersion','sourceRecipeId','sourceContentHash','sourceTitle','sourceUrl','sourceAuthor','sourceServingText','rating','ratingNumber','reviewCount','title','detailIngredients','steps','recommendationProfile','transformVersion'],
   discovery:['schemaVersion','catalogVersion','snapshotId','weekStart','source','recipeCount','recipes','coverage','exclusionCounts','limitation'],
   discoverySource:['database','tenant','candidateReportSha256'],
-  discoveryRecipe:['sourceRecipeId','title','sourceUrl','sourceAuthor','sourceServingText','ingredients','recommendationProfile','dietaryFilters','locations','detailStatus'],
+  discoveryRecipe:['sourceTimeText','sourceRecipeId','title','sourceUrl','sourceAuthor','sourceServingText','ingredients','recommendationProfile','dietaryFilters','locations','detailStatus'],
   discoveryLocation:['postcode','store','branchId'],
 };
 
 function allowOnly(value,allowed,prefix,errors) {
   if(!value||typeof value!=='object'||Array.isArray(value)) return;
   for(const key of Object.keys(value)) if(!allowed.includes(key)) errors.push(`unknown public field ${prefix}.${key}`);
+}
+
+function calculationFacts(recipe,detail,prefix,errors,location,weekStart) {
+  const nutrition=recipe?.nutritionFacts;
+  if(nutrition!==undefined) {
+    allowOnly(nutrition,['status','source','sourceServings','sourceRecipeId','sourceContentHash','basis','perServing','calculationSha256','sources','knownTotals','coverage','missingIngredients','components','perServingRange','centralScenarioPerServing','uncertaintyKind','assumptionsComplete','assumptions','unquantifiedUncertainty','calculationScope'],prefix+'.nutritionFacts',errors);
+    allowOnly(nutrition?.perServing,['kcal','proteinGrams','fiberGrams','sodiumMg'],prefix+'.nutritionFacts.perServing',errors);
+    if(!['complete','estimated','partial','unknown'].includes(nutrition.status)||(['complete','estimated'].includes(nutrition.status)?!nutritionReadiness(recipe).ready:nutrition.perServing!==null)||nutrition.sourceRecipeId!==detail?.sourceRecipeId||nutrition.sourceContentHash!==detail?.sourceContentHash||nutrition.sourceServings!==detail?.sourceServings||nutrition.basis!=='ingredient-inputs'||!digest.test(nutrition.calculationSha256||''))errors.push(prefix+' has invalid or stale nutrition calculation');
+    if(!Array.isArray(nutrition?.sources)||['complete','estimated'].includes(nutrition.status)&&!nutrition.sources.length) errors.push(prefix+' nutrition sources are required');
+    else for(const source of nutrition.sources) {
+      allowOnly(source,['foodId','version','preparation','sourceURL','sourceSha256'],prefix+'.nutritionFacts.sources',errors);
+      if(!source||['foodId','version','preparation'].some(key=>typeof source[key]!=='string'||!source[key])||!digest.test(source.sourceSha256||'')||!/^https:\/\//.test(source.sourceURL||'')) errors.push(prefix+' has invalid nutrient source');
+    }
+    if(nutrition.coverage!==undefined) {
+      allowOnly(nutrition.coverage,['resolvedIngredientCount','totalIngredientCount','inventoryReviewed'],prefix+'.nutritionFacts.coverage',errors);
+      if(!Number.isSafeInteger(nutrition.coverage.resolvedIngredientCount)||nutrition.coverage.resolvedIngredientCount<0||!Number.isSafeInteger(nutrition.coverage.totalIngredientCount)||nutrition.coverage.totalIngredientCount<1||nutrition.coverage.resolvedIngredientCount>nutrition.coverage.totalIngredientCount||typeof nutrition.coverage.inventoryReviewed!=='boolean')errors.push(prefix+' has invalid nutrition coverage');
+      if(['complete','estimated'].includes(nutrition.status)&&nutrition.coverage.inventoryReviewed!==true)errors.push(prefix+' nutrition inventory is not reviewed');
+    }
+    for(const missing of nutrition.missingIngredients||[])allowOnly(missing,['ingredientOrdinal','ingredientLabel','reason'],prefix+'.nutritionFacts.missingIngredients',errors);
+    for(const component of nutrition.components||[]) {
+      allowOnly(component,componentFields,prefix+'.nutritionFacts.components',errors);
+      allowOnly(component.per100g,nutrientFields,prefix+'.nutritionFacts.components.per100g',errors);
+      allowOnly(component.per100gRange,nutrientFields,prefix+'.nutritionFacts.components.per100gRange',errors);
+      for(const key of nutrientFields) {
+        if(component.per100g?.[key]!==null&&(!Number.isFinite(component.per100g?.[key])||component.per100g[key]<0))errors.push(prefix+' has invalid food component nutrient');
+        if(component.per100gRange?.[key]!==null)allowOnly(component.per100gRange?.[key],['min','max'],prefix+'.nutritionFacts.components.per100gRange.'+key,errors);
+      }
+      if(component.gramsRange!==null)allowOnly(component.gramsRange,['min','max'],prefix+'.nutritionFacts.components.gramsRange',errors);
+    }
+    for(const assumption of nutrition.assumptions||[]) {
+      allowOnly(assumption,assumptionFields,prefix+'.nutritionFacts.assumptions',errors);
+      if(assumption.grams!==null)allowOnly(assumption.grams,['central','min','max'],prefix+'.nutritionFacts.assumptions.grams',errors);
+      if(assumption.valuesPer100g!==null)allowOnly(assumption.valuesPer100g,['central','min','max'],prefix+'.nutritionFacts.assumptions.valuesPer100g',errors);
+    }
+    for(const uncertainty of nutrition.unquantifiedUncertainty||[])if(typeof uncertainty!=='string')allowOnly(uncertainty,['ingredientOrdinal','ingredientLabel','kind','description'],prefix+'.nutritionFacts.unquantifiedUncertainty',errors);
+    if(nutrition.calculationScope) {
+      const scope=nutrition.calculationScope;
+      allowOnly(scope,['disclosures','excludedAccompaniments'],prefix+'.nutritionFacts.calculationScope',errors);
+      if(!Array.isArray(scope.disclosures)||scope.disclosures.some(value=>typeof value!=='string')||!Array.isArray(scope.excludedAccompaniments))errors.push(prefix+' has invalid nutrition calculation scope');
+      else for(const value of scope.excludedAccompaniments) {
+        allowOnly(value,['ingredientLabel','stepOrdinals','disclosure'],prefix+'.nutritionFacts.calculationScope.excludedAccompaniments',errors);
+        if(typeof value.ingredientLabel!=='string'||typeof value.disclosure!=='string'||!Array.isArray(value.stepOrdinals)||value.stepOrdinals.some(ordinal=>!Number.isSafeInteger(ordinal)||ordinal<1))errors.push(prefix+' has invalid excluded accompaniment disclosure');
+      }
+    }
+    if(nutrition.status==='estimated')for(const field of nutrientFields) {
+      allowOnly(nutrition.perServingRange?.[field],['min','max'],prefix+'.nutritionFacts.perServingRange.'+field,errors);
+    }
+  }
+  const basket=recipe?.basketFacts;
+  if(basket!==undefined) {
+    allowOnly(basket,['sourceCoverage','costStatus','postcode','store','branchId','date','targetServings','sourceRecipeId','sourceContentHash','calculationSha256','knownSubtotalCents','unknownItemKeys','quantityCheckKeys','savingsStatus','items'],prefix+'.basketFacts',errors);
+    if(!location||basket?.sourceCoverage!=='complete'||!basketReadiness(basket).ready||basket.sourceRecipeId!==detail?.sourceRecipeId||basket.sourceContentHash!==detail?.sourceContentHash||!digest.test(basket.calculationSha256||'')||basket.postcode!==location.postcode||basket.store!==location.store||basket.branchId!==location.branchId||basket.date!==weekStart||basket.targetServings!==2)errors.push(prefix+' has invalid or unscoped basket calculation');
+    if(!Array.isArray(basket?.items)||!basket.items.length)errors.push(prefix+' basket items are required');
+    else {
+      let sum=0;const keys=new Set();
+      for(const item of basket.items) {
+        allowOnly(item,['key','name','pantryKeys','pack','requiredAmount','priceCents','quantity','subtotalCents','quantityComplete','sourceURL','sourceSha256','validFrom','validThrough'],prefix+'.basketFacts.items',errors);
+        allowOnly(item?.pack,['amount','unit'],prefix+'.basketFacts.items.pack',errors);
+        allowOnly(item?.requiredAmount,['amount','unit'],prefix+'.basketFacts.items.requiredAmount',errors);
+        if(typeof item?.name!=='string'||!item.name||!Array.isArray(item.pantryKeys)||!item.pantryKeys.length||item.pantryKeys.some(key=>typeof key!=='string'||!key.startsWith(basket.store+':'))||!Number.isFinite(item.pack?.amount)||item.pack.amount<=0||!['g','ml'].includes(item.pack?.unit)||!Number.isFinite(item.requiredAmount?.amount)||item.requiredAmount.amount<=0||item.requiredAmount.unit!==item.pack.unit)errors.push(prefix+' has invalid basket quantity or pantry mapping');
+        if(!item||keys.has(item.key)||typeof item.key!=='string'||!item.key||!Number.isSafeInteger(item.priceCents)||item.priceCents<0||!Number.isSafeInteger(item.quantity)||item.quantity<1||item.quantityComplete!==true||!Number.isSafeInteger(item.subtotalCents)||item.subtotalCents!==item.priceCents*item.quantity||!digest.test(item.sourceSha256||'')||!/^https:\/\//.test(item.sourceURL||'')||!/^\d{4}-\d{2}-\d{2}$/.test(item.validFrom||'')||!/^\d{4}-\d{2}-\d{2}$/.test(item.validThrough||'')||basket.date<item.validFrom||basket.date>item.validThrough) errors.push(prefix+' has invalid basket item');
+        keys.add(item?.key);sum+=item?.subtotalCents||0;
+      }
+      if(!Number.isSafeInteger(sum)||sum!==basket.knownSubtotalCents)errors.push(prefix+' basket subtotal does not match its items');
+    }
+  }
 }
 
 function safePath(root,relative) {
@@ -181,6 +250,7 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
   };
   for(const field of ['coveragePath','recipeIndexPath']) declare(field,manifest[field]);
   if(manifest.discoveryCatalogPath!==undefined) declare('discoveryCatalogPath',manifest.discoveryCatalogPath);
+  if(manifest.nutritionCatalogPath!==undefined)declare('nutritionCatalogPath',manifest.nutritionCatalogPath);
   const coverage=parsedArtifacts.get(manifest.coveragePath);
   if(!coverage||!Array.isArray(coverage.locations)) errors.push('coveragePath does not contain location coverage');
   else {
@@ -242,6 +312,14 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
     const locationArtifact=locationDeclared?parsedArtifacts.get(location.path):null;
     if(!locationArtifact||!Array.isArray(locationArtifact.recipes)) { errors.push(`${prefix}.path does not contain a location snapshot`); continue; }
     allowOnly(locationArtifact,SCHEMAS.location,`${prefix}.artifact`,errors);
+    if(locationArtifact?.sourceCoverage!==undefined) {
+      const source=locationArtifact.sourceCoverage;
+      allowOnly(source,['status','collectedProducts','sourcePageCount','checkedPageCount','evidenceURL','note'],`${prefix}.artifact.sourceCoverage`,errors);
+      if(!['수집완료','일부수집','미수집','미공개','접근실패','지점없음'].includes(source?.status)||!Number.isSafeInteger(source?.collectedProducts)||source.collectedProducts<0||!/^https:\/\//.test(source?.evidenceURL||'')||typeof source?.note!=='string')errors.push(prefix+' has invalid source coverage');
+      if(source?.sourcePageCount!==null&&(!Number.isSafeInteger(source?.sourcePageCount)||source.sourcePageCount<1)||source?.checkedPageCount!==null&&(!Number.isSafeInteger(source?.checkedPageCount)||source.checkedPageCount<0||source.sourcePageCount===null||source.checkedPageCount>source.sourcePageCount))errors.push(prefix+' has invalid source page coverage');
+      if(source?.status==='수집완료'&&source.sourcePageCount!==null&&source.checkedPageCount!==source.sourcePageCount)errors.push(prefix+' claims full collection with unchecked pages');
+      if(['미수집','미공개','접근실패','지점없음'].includes(source?.status)&&((locationArtifact.offers||[]).length||source.collectedProducts))errors.push(prefix+' mixes unavailable source with current offers');
+    }
     allowOnly(locationArtifact.coverage,SCHEMAS.locationCoverage,`${prefix}.artifact.coverage`,errors);
     for(const [warningIndex,warning] of (locationArtifact.warnings||[]).entries()) allowOnly(warning,SCHEMAS.warning,`${prefix}.artifact.warnings[${warningIndex}]`,errors);
     if(locationArtifact.postcode!==location.postcode||locationArtifact.store!==location.store||locationArtifact.branchId!==location.branchId) errors.push(`${prefix}.path location boundary does not match manifest`);
@@ -270,6 +348,8 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
       const indexed=recipesById.get(recipeRef.sourceRecipeId);
       if(!indexed||indexed.path!==recipeRef.detailPath||indexed.sha256!==recipeRef.detailSha256) errors.push(`${refPrefix} must match the recipe index`);
       const detail=parsedArtifacts.get(recipeRef.detailPath);
+      calculationFacts(recipeRef,detail,refPrefix,errors,location,manifest.weekStart);
+      for(const field of ['sourceTimeText','sourceServings','requiredAmounts','nutritionFacts'])if(recipeRef[field]!==undefined&&JSON.stringify(recipeRef[field])!==JSON.stringify(detail?.[field]))errors.push(`${refPrefix}.${field} must match its approved detail`);
       if(typeof recipeRef.title!=='string'||!recipeRef.title.trim()||recipeRef.title!==detail?.title) errors.push(`${refPrefix}.title must match its approved detail title`);
     }
   }
@@ -277,7 +357,24 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
     const detail=parsedArtifacts.get(indexed.path);
     allowOnly(detail,SCHEMAS.detail,`recipes.${sourceRecipeId}`,errors);
     allowOnly(detail?.recommendationProfile,SCHEMAS.profile,`recipes.${sourceRecipeId}.recommendationProfile`,errors);
+    calculationFacts(detail,detail,`recipes.${sourceRecipeId}`,errors);
     if(!validRecipeSourceUrl(detail?.sourceUrl,sourceRecipeId)) errors.push(`recipes.${sourceRecipeId}.sourceUrl must match the approved recipe host and id`);
+  }
+  if(manifest.nutritionCatalogPath!==undefined) {
+    const catalog=parsedArtifacts.get(manifest.nutritionCatalogPath);
+    allowOnly(catalog,['schemaVersion','catalogVersion','scope','snapshotId','weekStart','recipes'],'nutritionCatalog',errors);
+    if(!catalog||catalog.schemaVersion!==1||catalog.catalogVersion!=='nutrition-general-v1'||catalog.scope!=='nutrition-general'||catalog.snapshotId!==manifest.snapshotId||catalog.weekStart!==manifest.weekStart||!Array.isArray(catalog.recipes))errors.push('nutrition catalog identity is invalid');
+    if(!new RegExp(`^snapshots/${manifest.weekStart}/${manifest.snapshotId}/recipes/nutrition\\.([a-f0-9]{64})\\.json$`).test(manifest.nutritionCatalogPath)||manifest.fileHashes[manifest.nutritionCatalogPath]!==manifest.nutritionCatalogPath.match(/nutrition\.([a-f0-9]{64})\.json$/)?.[1])errors.push('nutrition catalog path must include its manifest hash');
+    const seen=new Set();
+    for(const recipe of catalog?.recipes||[]) {
+      const prefix='nutritionCatalog.recipes.'+recipe?.sourceRecipeId;
+      allowOnly(recipe,['sourceRecipeId','sourceContentHash','title','sourceTimeText','sourceServings','requiredAmounts','detailIngredients','recommendationProfile','nutritionFacts','saleLinked','automaticMealEligible','sourceUrl','sourceAuthor','sourceServingText','detailPath','detailSha256','offerIds','primaryIngredientIds'],prefix,errors);
+      const indexed=recipesById.get(recipe?.sourceRecipeId),detail=parsedArtifacts.get(indexed?.path);
+      if(!recipe||seen.has(recipe.sourceRecipeId)||!indexed||!detail||recipe.detailPath!==indexed.path||recipe.detailSha256!==indexed.sha256||recipe.sourceContentHash!==detail.sourceContentHash||!validRecipeSourceUrl(recipe.sourceUrl,recipe.sourceRecipeId)||recipe.saleLinked!==false||!Array.isArray(recipe.offerIds)||recipe.offerIds.length||!Array.isArray(recipe.primaryIngredientIds)||recipe.primaryIngredientIds.length)errors.push(prefix+' is not an approved unlinked recipe detail');
+      seen.add(recipe?.sourceRecipeId);
+      for(const field of ['title','recommendationProfile','nutritionFacts','sourceServingText','sourceServings','requiredAmounts','detailIngredients'])if(JSON.stringify(recipe?.[field])!==JSON.stringify(detail?.[field]))errors.push(prefix+'.'+field+' must match the approved detail');
+      if(!nutritionReadiness(recipe).ready||recipe.automaticMealEligible!==(mealPolicy.mealKind(recipe)==='main'))errors.push(prefix+' has incomplete nutrition or wrong meal classification');
+    }
   }
   const coverageLocationKeys=new Set((coverage?.locations||[]).map((location)=>[location.postcode,location.store,location.branchId].join('|')));
   if(locationKeys.size!==coverageLocationKeys.size||[...locationKeys].some((key)=>!coverageLocationKeys.has(key))) errors.push('manifest.locations must match coverage locations');
