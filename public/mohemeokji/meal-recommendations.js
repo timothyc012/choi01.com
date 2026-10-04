@@ -141,9 +141,9 @@
     return {mainIngredients,mainOffers,secondaryOffers,substitutionNotes};
   }
 
-  function score(meal, {catalog = {}, history = [], date, moment = '저녁', offerFrequency = {}}) {
+  function score(meal, {catalog = {}, history = [], date, historyDate, moment = '저녁', offerFrequency = {}}) {
     const info = explain(meal,catalog), meta = profile(meal);
-    const recent = restoreHistory(JSON.stringify(history),date);
+    const recent = restoreHistory(JSON.stringify(history),historyDate||date);
     const sameDish = recent.some((row)=>row.sourceRecipeId === identity(meal));
     const familyRecent = recent.slice(0,2).filter((row)=>row.family === meta.family).length;
     const mainCoverage = info.mainIngredients.length ? info.mainOffers.length / info.mainIngredients.length : 0;

@@ -730,24 +730,26 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   dom.window.close();
 });
 
-function nutritionGoalFixture({tamperSource=false}={}) {
+function nutritionGoalFixture({tamperSource=false,estimated=false,bothMain=false,store='Netto'}={}) {
   const snapshotId='snapshot-goal',weekStart='2026-10-05',base='snapshots/'+weekStart+'/'+snapshotId;
   const bodies=new Map(),fileHashes={},calls=[];
   const add=(path,value)=>{const text=JSON.stringify(value);bodies.set('/mohemeokji/data/'+path,text);fileHashes[path]=sha256(text);return text;};
-  const refs=['main','side'].map((kind,index)=>{
+  const refs=(bothMain?['main','main']:['main','side']).map((kind,index)=>{
     const sourceRecipeId=String(9900001+index),sourceContentHash=(index?'b':'a').repeat(64),detailPath=base+'/recipes/'+sourceRecipeId+'.json';
     const nutritionFacts={status:'complete',source:'reviewed-food-record-calculation-v1',sourceRecipeId,sourceContentHash,sourceServings:2,perServing:{kcal:500,proteinGrams:35,fiberGrams:6,sodiumMg:500},sources:[{foodId:'fixture-food',sourceURL:'https://example.test/food'}]};
-    const detail={schemaVersion:1,sourceRecipeId,sourceContentHash,title:kind==='main'?'연어 카레':'오이 무침',sourceUrl:'https://www.10000recipe.com/recipe/'+sourceRecipeId,sourceServingText:'2인분',sourceTimeText:'20분 이내',detailIngredients:['연어 200g','양파 100g'],steps:['손질한다.','조리한다.','담는다.'],nutritionFacts};
+    if(estimated)Object.assign(nutritionFacts,{status:'estimated',assumptionsComplete:true,uncertaintyKind:'reviewed-scenario-interval',assumptions:[{ingredientLabel:'연어',grams:{central:200,min:180,max:220}}],perServingRange:{kcal:{min:450,max:550},proteinGrams:{min:30,max:40},fiberGrams:{min:5,max:7},sodiumMg:{min:450,max:550}}});
+    const ingredient=bothMain&&index?'닭고기':'연어';
+    const detail={schemaVersion:1,sourceRecipeId,sourceContentHash,title:bothMain&&index?'닭고기 카레':kind==='main'?'연어 카레':'오이 무침',sourceUrl:'https://www.10000recipe.com/recipe/'+sourceRecipeId,sourceServingText:'2인분',sourceTimeText:'20분 이내',detailIngredients:[ingredient+' 200g','양파 100g'],steps:['손질한다.','조리한다.','담는다.'],nutritionFacts};
     const text=add(detailPath,detail);
-    return {...detail,detailPath,detailSha256:sha256(text),saleLinked:false,automaticMealEligible:kind==='main',offerIds:[],primaryIngredientIds:['연어'],recommendationProfile:{primaryIngredients:['연어'],kind,family:'salmon',method:'curry'}};
+    return {...detail,detailPath,detailSha256:sha256(text),saleLinked:false,automaticMealEligible:kind==='main',offerIds:[],primaryIngredientIds:[ingredient],recommendationProfile:{primaryIngredients:[ingredient],kind,family:bothMain&&index?'chicken':'salmon',method:'curry'}};
   });
   if(tamperSource)refs[0].sourceContentHash='c'.repeat(64);
   const locationPath=base+'/locations/44369-netto.json';
-  add(locationPath,{schemaVersion:1,snapshotId,weekStart,id:'44369-netto',postcode:'44369',store:'Netto',branchId:'branch-a',offers:[],recipes:[],coverage:{sparse:false}});
+  add(locationPath,{schemaVersion:1,snapshotId,weekStart,id:'44369-netto',postcode:'44369',store,branchId:'branch-a',offers:[],recipes:[],coverage:{sparse:false}});
   const nutritionCatalogPath=base+'/recipes/nutrition-general.json';
   add(nutritionCatalogPath,{schemaVersion:1,catalogVersion:'nutrition-general-v1',scope:'nutrition-general',snapshotId,weekStart,recipes:refs});
   const coveragePath=base+'/coverage.json',recipeIndexPath=base+'/recipes/index.json';add(coveragePath,{});add(recipeIndexPath,{});
-  const manifestPath=base+'/manifest.json',manifest={schemaVersion:1,snapshotId,weekStart,coveragePath,recipeIndexPath,nutritionCatalogPath,fileHashes,locations:[{id:'44369-netto',postcode:'44369',store:'Netto',branchId:'branch-a',path:locationPath,recipeCount:0}]};
+  const manifestPath=base+'/manifest.json',manifest={schemaVersion:1,snapshotId,weekStart,coveragePath,recipeIndexPath,nutritionCatalogPath,fileHashes,locations:[{id:'44369-netto',postcode:'44369',store,branchId:'branch-a',path:locationPath,recipeCount:0}]};
   const manifestText=JSON.stringify(manifest);bodies.set('/mohemeokji/data/'+manifestPath,manifestText);
   bodies.set('/mohemeokji/data/current.json',JSON.stringify({schemaVersion:1,snapshotId,weekStart,manifestPath,manifestSha256:sha256(manifestText)}));
   const fetcher=async(url)=>{calls.push(url);return bodies.has(url)?response(bodies.get(url)):response('',false);};
@@ -791,13 +793,17 @@ test('nutrition and diet can choose an approved ordinary menu without adding fak
   for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js'])w.eval(fs.readFileSync(new URL(file,root),'utf8'));
   const runtime=await w.MealRecipeData.startSnapshotApp();assert.equal(runtime.status,'ready',runtime.error?.stack);
   assert.equal(fixture.calls.length,3);assert.equal(runtime.weeklyPlanMeals().length,0);
+  assert.equal(w.document.querySelector('#autoPlan').textContent,'할인 메뉴로 채우기');
   w.document.querySelector('[name="recommendationMode"][value="nutrition"]').click();
+  assert.equal(w.document.querySelector('#autoPlan').textContent,'추천 메뉴로 채우기');
+  assert.match(w.document.querySelector('#modeReadiness').textContent,/개인의 하루 영양 필요량이나 다이어트 목표 충족 여부를 판단하지 않습니다/);
   w.document.querySelector('[name="recommendationMode"][value="diet"]').click();
   assert.equal(typeof releaseGoal,'function');releaseGoal();
   for(let attempt=0;attempt<50&&!runtime.weeklyPlanMeals().length;attempt+=1)await new Promise(resolve=>setTimeout(resolve,5));
   assert.equal(fixture.calls.length,4);assert.ok(runtime.weeklyPlanMeals().length>0);
   assert.equal(JSON.parse(w.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'diet');
   w.document.querySelector('[name="recommendationMode"][value="nutrition"]').click();
+  assert.match(w.document.querySelector('#whyList .why-item').textContent,/확인된 영양값 비교.*1인분 기준.*열량 500 kcal.*단백질 35\.0 g.*식이섬유 6\.0 g.*나트륨 500 mg/);
   assert.ok(runtime.weeklyPlanMeals().every(meal=>meal.sourceRecipeId==='9900001'&&meal.nutritionGeneral&&meal.sale.length===0&&meal.matchedOffers.length===0));
   assert.match(w.document.querySelector('#todayPrimaryOffer').textContent,/영양 계산된 일반 메뉴.*할인 연결 없음.*구매비 미확인/);
   assert.equal(w.document.querySelector('#todayCost').textContent,'가격 미확인');
@@ -809,7 +815,11 @@ test('nutrition and diet can choose an approved ordinary menu without adding fak
   assert.equal(w.document.querySelector('#recipeSource').href,'https://www.10000recipe.com/recipe/9900001');
   assert.match(w.document.querySelector('#shoppingNote').textContent,/가격 미확인/);
   w.document.querySelector('[name="recommendationMode"][value="diet"]').click();assert.equal(fixture.calls.length,5);assert.ok(runtime.weeklyPlanMeals().length>0);
+  assert.equal(w.document.querySelector('#autoPlan').textContent,'추천 메뉴로 채우기');
+  assert.match(w.document.querySelector('#whyList .why-item').textContent,/1인분 기준.*열량 500 kcal.*나트륨 500 mg/);
+  assert.match(w.document.querySelector('#modeReadiness').textContent,/다이어트 목표 충족 여부를 판단하지 않습니다/);
   w.document.querySelector('[name="recommendationMode"][value="balanced"]').click();assert.equal(runtime.weeklyPlanMeals().length,0);
+  assert.equal(w.document.querySelector('#autoPlan').textContent,'할인 메뉴로 채우기');
   w.document.querySelector('[name="recommendationMode"][value="value"]').click();assert.equal(runtime.weeklyPlanMeals().length,0);
   assert.equal(JSON.parse(w.localStorage.getItem('choi01-recommendation-preferences-v1')).mode,'value');
   await runtime.openDetail('nutrition-general-recipe-9900002');assert.equal(w.document.querySelector('#detailTitle').textContent,'오이 무침');
@@ -826,4 +836,79 @@ test('a rejected ordinary nutrition catalog leaves the selected mode explicit wi
   assert.equal(runtime.weeklyPlanMeals().length,0);assert.equal(w.document.querySelectorAll('.menu-item').length,0);
   assert.match(w.document.querySelector('#modeReadiness').textContent,/일반 메뉴 자료 검증에 실패/);
   assert.equal(fixture.calls.length,4);assert.equal(fixture.calls.some(url=>url.includes('9900001.json')),false);
+});
+
+test('estimated nutrition recommendation explains actual per-serving values without judging personal targets',async t=>{
+  const fixture=nutritionGoalFixture({estimated:true}),dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=44369&store=Netto&date=2026-10-05',runScripts:'outside-only'});t.after(()=>dom.window.close());
+  const w=dom.window;Object.defineProperty(w,'crypto',{value:crypto.webcrypto});w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.fetch=fixture.fetcher;w.HTMLElement.prototype.scrollIntoView=()=>{};
+  w.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'nutrition',targetServings:2}));
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js'])w.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  const runtime=await w.MealRecipeData.startSnapshotApp();assert.equal(runtime.status,'ready');assert.ok(runtime.weeklyPlanMeals().length>0);
+  assert.equal(w.document.querySelector('#autoPlan').textContent,'추천 메뉴로 채우기');
+  const why=w.document.querySelector('#whyList .why-item').textContent;
+  assert.match(why,/환산 가정을 포함한 영양 비교.*1인분 기준.*열량 500 kcal.*단백질 35\.0 g.*식이섬유 6\.0 g.*나트륨 500 mg/);
+  assert.doesNotMatch(why,/전체 레시피 후보|현재 할인/);
+  assert.match(w.document.querySelector('#modeReadiness').textContent,/개인의 하루 영양 필요량이나 다이어트 목표 충족 여부를 판단하지 않습니다/);
+});
+
+async function historyRuntime(t,{store='Netto',rows=[],blockWrites=false,archive=false}={}) {
+  const fixture=nutritionGoalFixture({bothMain:true,store}),dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'https://choi01.com/mohemeokji/?postcode=44369&store='+store+'&date=2026-11-02',runScripts:'outside-only',pretendToBeVisual:true});t.after(()=>dom.window.close());
+  const w=dom.window,NativeDate=w.Date;
+  w.Date=class extends NativeDate {constructor(...args){super(...(args.length?args:['2026-10-04T22:30:00Z']));}static now(){return new NativeDate('2026-10-04T22:30:00Z').getTime();}};
+  Object.defineProperty(w,'crypto',{value:crypto.webcrypto});w.TextEncoder=TextEncoder;w.TextDecoder=TextDecoder;w.fetch=fixture.fetcher;w.HTMLElement.prototype.scrollIntoView=()=>{};
+  w.localStorage.setItem('choi01-recommendation-preferences-v1',JSON.stringify({mode:'nutrition',targetServings:2}));
+  if(rows.length)w.localStorage.setItem('choi01-meal-history-v1',JSON.stringify(rows));
+  if(archive) {
+    const detailPath='snapshots/2026-09-28/archive-old/recipes/8888888.json';
+    const detail=JSON.stringify({schemaVersion:1,sourceRecipeId:'8888888',title:'이전 주 구이',sourceUrl:'https://www.10000recipe.com/recipe/8888888',sourceServingText:'4인분',detailIngredients:['연어 500g','양파 2개'],steps:['연어 500g과 양파 2개를 손질한다.','굽는다.','담는다.']});
+    fixture.bodies.set('/mohemeokji/data/'+detailPath,detail);
+    w.localStorage.setItem('choi01-today-meal-plan:44369:'+store+':branch-a',JSON.stringify({version:2,activeArea:'44369',activeStore:store,activeBranchId:'branch-a',snapshotId:'old',plans:{저녁:{mon:{recipeId:'archived-recipe',origin:'manual',dismissedRecipeIds:[]}}},archivedDetails:{'archived-recipe':{sourceRecipeId:'8888888',title:'이전 주 구이',detailPath,detailSha256:sha256(detail),area:'44369',store,branchId:'branch-a',snapshotId:'old'}}}));
+  }
+  if(blockWrites)w.Storage.prototype.setItem=function(){throw new w.DOMException('Blocked','QuotaExceededError');};
+  for(const file of ['meal-data-loader.js','meal-planner-recipe-data.js','meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js'])w.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  const runtime=await w.MealRecipeData.startSnapshotApp();assert.equal(runtime.status,'ready',runtime.error?.stack);
+  return {w,runtime,fixture};
+}
+
+test('explicit eating history uses actual Berlin date, demotes immediately and cancels only its date/meal slot',async t=>{
+  const previous={sourceRecipeId:'7777777',family:'other',method:'braise',date:'2026-10-04',moment:'점심'};
+  const {w,runtime,fixture}=await historyRuntime(t,{rows:[previous]});
+  assert.equal(w.document.querySelector('#todayTitle').textContent,'연어 카레');
+  w.document.querySelector('#acceptToday').click();assert.equal(JSON.parse(w.localStorage.getItem('choi01-meal-history-v1')).length,1);
+  await runtime.openDetail('nutrition-general-recipe-9900001');
+  assert.equal(w.document.querySelector('#markEaten').disabled,false);
+  w.document.querySelector('#eatFromDetail').click();assert.equal(JSON.parse(w.localStorage.getItem('choi01-meal-history-v1')).length,1);
+  w.document.querySelector('#markEaten').click();
+  let rows=JSON.parse(w.localStorage.getItem('choi01-meal-history-v1'));
+  assert.equal(rows.length,2);assert.deepEqual(rows.find(row=>row.sourceRecipeId==='9900001'),{sourceRecipeId:'9900001',family:'salmon',method:'curry',date:'2026-10-05',moment:'저녁'});
+  assert.equal(w.document.querySelector('#todayTitle').textContent,'닭고기 카레');
+  assert.equal(w.document.querySelector('#markEaten').textContent,'먹은 기록 취소');
+  w.document.querySelector('#markEaten').click();assert.deepEqual(JSON.parse(w.localStorage.getItem('choi01-meal-history-v1')),[previous]);
+  assert.equal(w.document.querySelector('#todayTitle').textContent,'연어 카레');
+  w.document.querySelector('#markEaten').click();w.document.querySelector('[data-moment="점심"]').click();w.document.querySelector('#markEaten').click();
+  assert.equal(JSON.parse(w.localStorage.getItem('choi01-meal-history-v1')).length,3);
+  w.document.querySelector('#markEaten').click();rows=JSON.parse(w.localStorage.getItem('choi01-meal-history-v1'));
+  assert.equal(rows.length,2);assert.ok(rows.some(row=>row.date==='2026-10-05'&&row.moment==='저녁'));assert.ok(rows.some(row=>row.sourceRecipeId==='7777777'));
+  const other=await historyRuntime(t,{store:'EDEKA',rows});
+  assert.equal(other.w.document.querySelector('#todayTitle').textContent,'닭고기 카레');
+  await other.runtime.openDetail('nutrition-general-recipe-9900001');assert.equal(other.w.document.querySelector('#markEaten').textContent,'먹은 기록 취소');
+  fixture.bodies.set('/mohemeokji/data/'+fixture.refs[1].detailPath,'{}');await runtime.requestDetail('nutrition-general-recipe-9900002');
+  assert.equal(w.document.querySelector('#markEaten').disabled,true);w.document.querySelector('#markEaten').click();
+  assert.deepEqual(JSON.parse(w.localStorage.getItem('choi01-meal-history-v1')),rows);
+});
+
+test('blocked eating-history storage remains current-screen only and a verified archived detail can be recorded',async t=>{
+  const blocked=await historyRuntime(t,{blockWrites:true});
+  await blocked.runtime.openDetail('nutrition-general-recipe-9900001');blocked.w.document.querySelector('#markEaten').click();
+  assert.equal(blocked.w.localStorage.getItem('choi01-meal-history-v1'),null);
+  assert.equal(blocked.w.document.querySelector('#todayTitle').textContent,'닭고기 카레');
+  assert.match(blocked.w.document.querySelector('#eatenNote').textContent,/브라우저에 저장하지 못해 현재 화면에서만 반영/);
+  blocked.w.document.querySelector('#markEaten').click();assert.equal(blocked.w.document.querySelector('#todayTitle').textContent,'연어 카레');
+  const archived=await historyRuntime(t,{archive:true});await archived.runtime.openDetail('archived-recipe',true);
+  assert.equal(archived.w.document.querySelector('#markEaten').disabled,false);
+  assert.match(archived.w.document.querySelector('#recipeStepsBasis').textContent,/원문 4인분 기준.*선택한 2인분/);
+  assert.match(archived.w.document.querySelector('#detailSteps').textContent,/연어 500g과 양파 2개/);
+  assert.match(archived.w.document.querySelector('#scaledIngredients').textContent,/연어 250g/);
+  archived.w.document.querySelector('#markEaten').click();
+  assert.equal(JSON.parse(archived.w.localStorage.getItem('choi01-meal-history-v1'))[0].sourceRecipeId,'8888888');
 });

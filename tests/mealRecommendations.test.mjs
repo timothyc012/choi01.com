@@ -72,6 +72,10 @@ test('eaten source IDs are demoted across stores for 14 days, future/expired/cor
   const one=meal('one',['감자'],'potato'),two=meal('two',['감자'],'potato');
   const recent=[{sourceRecipeId:'one',family:'potato',method:'stirfry',date:'2026-09-07',moment:'저녁'}];
   assert.equal(engine.rank([one,two],{catalog:{감자:price},history:recent,date:'2026-09-08'})[0].id,'two');
+  for(const date of ['2026-09-01','2026-10-08']) {
+    assert.equal(engine.rank([one,two],{catalog:{감자:price},history:recent,date,historyDate:'2026-09-08'})[0].id,'two');
+    assert.equal(engine.rank([one,two],{catalog:{감자:price},history:recent,date})[0].id,'one');
+  }
   assert.equal(engine.restoreHistory(JSON.stringify([{...recent[0],date:'2026-08-01'}, {...recent[0],date:'2026-09-10'},{}]),'2026-09-08').length,0);
   const next=engine.recordMeal(recent,two,'2026-09-07','저녁');
   assert.equal(next.length,1);
