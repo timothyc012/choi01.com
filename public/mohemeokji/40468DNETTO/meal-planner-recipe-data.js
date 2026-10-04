@@ -529,6 +529,8 @@
       let recommendationIndex=0;
       let detailRequestVersion=0;
       let detailReturnFocus=null;
+      let pointerDrag=null;
+      const dragControlSelector='button,a,input,select,textarea,summary,[contenteditable],[role="button"]';
       const stateNotices=[];
       if(savedMode!==preferences.mode)stateNotices.push('검증 자료가 없는 저장 추천 기준 대신 다양하게를 선택했습니다.');
       if(branchPlan!==null&&!branchPlanData)stateNotices.push('손상된 저장 식단은 안전하게 건너뛰었습니다.');
@@ -569,7 +571,96 @@
       saveShopping();
       savePlans();
 
+      function placeManualMeal(recipeId,moment,day) {
+        const meal=mealById(recipeId);
+        if(!meal||!eligibleForDiet(meal)){byId('planStatus').textContent='선택한 식단 조건과 맞지 않는 메뉴입니다.';return;}
+        if(!plans[moment]?.[day])return;
+        plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
+        selectedPlanTarget=null;
+        savePlans();renderPlanAndBind();
+        byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+moment+'에 메뉴를 넣었습니다.';
+      }
+
+      function cancelPointerDrag() {
+        const drag=pointerDrag;
+        if(!drag)return;
+        pointerDrag=null;
+        document.removeEventListener('pointermove',movePointerDrag,true);
+        document.removeEventListener('pointerup',finishPointerDrag,true);
+        document.removeEventListener('pointercancel',cancelPointerEvent,true);
+        document.removeEventListener('keydown',cancelPointerKey,true);
+        window.removeEventListener('blur',cancelPointerDrag);
+        window.removeEventListener('pagehide',cancelPointerDrag);
+        drag.card.removeEventListener('lostpointercapture',cancelPointerEvent);
+        drag.card.setAttribute('draggable',drag.draggable);
+        drag.card.classList.remove('dragging');
+        drag.target?.classList.remove('drop-target');
+        drag.ghost?.remove();
+        drag.observer?.disconnect();
+        try { drag.card.releasePointerCapture?.(drag.pointerId); } catch { /* Capture may already have ended. */ }
+      }
+
+      function pointerDropTarget(event) {
+        const target=document.elementFromPoint?.(event.clientX,event.clientY)?.closest('#weekGrid .slot');
+        return target&&byId('weekGrid').contains(target)?target:null;
+      }
+
+      function movePointerDrag(event) {
+        const drag=pointerDrag;
+        if(!drag||event.pointerId!==drag.pointerId)return;
+        if(!drag.card.isConnected){cancelPointerDrag();return;}
+        if(!drag.started&&Math.hypot(event.clientX-drag.x,event.clientY-drag.y)<8)return;
+        event.preventDefault();
+        if(!drag.started) {
+          drag.started=true;
+          drag.card.classList.add('dragging');
+          drag.ghost=document.createElement('div');
+          drag.ghost.className='menu-item';
+          drag.ghost.dataset.mealDragGhost='true';
+          drag.ghost.setAttribute('aria-hidden','true');
+          drag.ghost.textContent=drag.card.querySelector('.menu-title')?.textContent||'메뉴';
+          Object.assign(drag.ghost.style,{position:'fixed',pointerEvents:'none',zIndex:'10000',width:'240px',maxWidth:'40vw',padding:'14px',opacity:'.9',boxShadow:'0 6px 18px rgba(0,0,0,.2)'});
+          document.body.append(drag.ghost);
+        }
+        drag.ghost.style.left=(event.clientX+14)+'px';
+        drag.ghost.style.top=(event.clientY+14)+'px';
+        const target=pointerDropTarget(event);
+        if(target!==drag.target){drag.target?.classList.remove('drop-target');drag.target=target;target?.classList.add('drop-target');}
+      }
+
+      function finishPointerDrag(event) {
+        const drag=pointerDrag;
+        if(!drag||event.pointerId!==drag.pointerId)return;
+        const target=drag.started&&drag.card.isConnected?pointerDropTarget(event):null;
+        if(drag.started)event.preventDefault();
+        cancelPointerDrag();
+        if(target)placeManualMeal(drag.recipeId,target.dataset.momentSlot,target.dataset.day);
+      }
+
+      function cancelPointerEvent(event) { if(event.pointerId===pointerDrag?.pointerId)cancelPointerDrag(); }
+      function cancelPointerKey(event) { if(event.key==='Escape'){event.preventDefault();cancelPointerDrag();} }
+
+      function beginPointerDrag(event,card) {
+        if(event.pointerType!=='mouse'||event.button!==0||event.isPrimary===false||event.target.closest(dragControlSelector))return;
+        cancelPointerDrag();
+        pointerDrag={card,recipeId:card.dataset.id,pointerId:event.pointerId,x:event.clientX,y:event.clientY,draggable:card.getAttribute('draggable'),started:false,target:null,ghost:null};
+        pointerDrag.observer=new MutationObserver(()=>{if(!card.isConnected)cancelPointerDrag();});
+        pointerDrag.observer.observe(document.body,{childList:true,subtree:true});
+        // Keep the mouse stream on WebKit instead of handing it to native HTML drag.
+        // A short movement still produces the ordinary click; touch keeps native scrolling.
+        card.setAttribute('draggable','false');
+        document.addEventListener('pointermove',movePointerDrag,true);
+        document.addEventListener('pointerup',finishPointerDrag,true);
+        document.addEventListener('pointercancel',cancelPointerEvent,true);
+        document.addEventListener('keydown',cancelPointerKey,true);
+        window.addEventListener('blur',cancelPointerDrag);
+        window.addEventListener('pagehide',cancelPointerDrag);
+        card.addEventListener('lostpointercapture',cancelPointerEvent);
+        try { card.setPointerCapture?.(event.pointerId); } catch { /* Document listeners also cover browsers without capture. */ }
+      }
+
       function renderPlan() {
+        cancelPointerDrag();
         const dayNames={mon:'월요일',tue:'화요일',wed:'수요일',thu:'목요일',fri:'금요일',sat:'토요일',sun:'일요일'};
         const slotBody=(moment,day,label)=>{
           const slot=plans[moment][day];
@@ -587,17 +678,12 @@
           return '<div class="week-row"><div class="day"><span aria-hidden="true">'+label+'</span><span class="sr-only">'+dayNames[day]+'</span></div>'+slotBody('점심',day,label)+slotBody('저녁',day,label)+'</div>';
         }).join('');
         document.querySelectorAll('#weekGrid .slot').forEach((slot)=>{
-          slot.addEventListener('dragover',(event)=>{event.preventDefault();slot.classList.add('drop-target');if(event.dataTransfer)event.dataTransfer.dropEffect='copy';});
+          slot.addEventListener('dragover',(event)=>{if(pointerDrag)return;event.preventDefault();slot.classList.add('drop-target');if(event.dataTransfer)event.dataTransfer.dropEffect='copy';});
           slot.addEventListener('dragleave',()=>slot.classList.remove('drop-target'));
           slot.addEventListener('drop',(event)=>{
             event.preventDefault();slot.classList.remove('drop-target');
-            const meal=mealById(event.dataTransfer?.getData('text/plain')||'');
-            if(!meal||!eligibleForDiet(meal)){byId('planStatus').textContent='선택한 식단 조건과 맞지 않는 메뉴입니다.';return;}
-            const moment=slot.dataset.momentSlot,day=slot.dataset.day;
-            plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
-            selectedPlanTarget=null;
-            savePlans();renderPlanAndBind();renderMenu();bindDetailTriggers();
-            byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+moment+'에 메뉴를 넣었습니다.';
+            if(pointerDrag)return;
+            placeManualMeal(event.dataTransfer?.getData('text/plain')||'',slot.dataset.momentSlot,slot.dataset.day);
           });
         });
         const cart=weekBasket();
@@ -618,6 +704,7 @@
       }
 
       function renderMenu() {
+        cancelPointerDrag();
         const quickFilter=document.querySelector('[data-filter="quick"]');
         if(quickFilter) {
           const knownTime=libraryMeals.some(meal=>Number.isFinite(meal.time));
@@ -650,7 +737,9 @@
           return '<article class="menu-item" data-id="'+escapeHtml(meal.id)+'" tabindex="0" draggable="true"><div class="menu-top"><h4 class="menu-title">'+escapeHtml(meal.title)+'</h4><span class="match">'+(isDiscounted?'할인 연결':'일반 레시피')+'</span></div><p class="menu-sub">'+(meal.nutritionGeneral?'영양 계산된 일반 메뉴 · 할인 연결 없음 · 구매비 미확인 · '+(meal.automaticMealEligible?'식사 후보':'곁들임 · 직접 선택용'):(meal.catalogOnly?'원문에서 조리법 확인':'앱에서 조리법 확인')+' · '+(recommendations.mealKind(meal)==='main'?'식사 후보':'곁들임'))+'</p><p class="menu-offer">'+(offer?'<span lang="de">'+escapeHtml(offerNames)+'</span><br>'+escapeHtml(offer.pack)+' · '+shopping.euro(offer.priceCents):'선택 날짜의 주재료 할인 없음')+'</p><details class="menu-source"><summary>할인 근거·지점</summary><p>'+escapeHtml(activeBranch.branch||activeBranch.branchId)+' · '+escapeHtml(manifest.weekStart)+' · '+evidence+'</p><p class="menu-quality">선정 근거 · '+escapeHtml(qualitySummary(meal))+'</p></details><div class="menu-ingredients">'+escapeHtml(meal.sale.join(' · '))+'</div><div class="menu-actions"><button class="button button-small detail-trigger" data-id="'+escapeHtml(meal.id)+'">재료·레시피</button><button class="button button-small" data-add-menu="'+escapeHtml(meal.id)+'">식단에 넣기</button></div></article>' ;
         }).join(''):'<p class="panel-copy" role="status">검색어나 필터에 맞는 레시피가 없습니다. 조건을 바꿔보세요.</p>';
         document.querySelectorAll('.menu-item').forEach((card)=>{
-          card.addEventListener('dragstart',(event)=>{if(!event.dataTransfer)return;event.dataTransfer.setData('text/plain',card.dataset.id);event.dataTransfer.effectAllowed='copy';card.classList.add('dragging');});
+          let nativeDragBlocked=false;
+          card.addEventListener('pointerdown',(event)=>{nativeDragBlocked=Boolean(event.target.closest(dragControlSelector));beginPointerDrag(event,card);});
+          card.addEventListener('dragstart',(event)=>{if(pointerDrag||nativeDragBlocked||event.target.closest(dragControlSelector)){event.preventDefault();return;}if(!event.dataTransfer)return;event.dataTransfer.setData('text/plain',card.dataset.id);event.dataTransfer.effectAllowed='copy';card.classList.add('dragging');});
           card.addEventListener('dragend',()=>card.classList.remove('dragging'));
         });
         byId('offerDirectorySummary').textContent=activeStore+' 레시피 연결 가능 상품 독어 원문명 '+location.offers.length+'종'+(collected?' · 수집자료 '+collected.collectedRows+'건 중':'');
@@ -775,9 +864,7 @@
           const meal=mealById(button.dataset.addMenu);
           if(!meal||!eligibleForDiet(meal))return;
           const {moment,day}=takePlanDestination();
-          plans[moment][day]=shopping.normalizePlanSlot(meal.id,'manual');
-          savePlans();renderPlanAndBind();
-          byId('planStatus').textContent=({mon:'월',tue:'화',wed:'수',thu:'목',fri:'금',sat:'토',sun:'일'})[day]+'요일 '+moment+'에 넣었습니다.';
+          placeManualMeal(meal.id,moment,day);
         });
       }
 

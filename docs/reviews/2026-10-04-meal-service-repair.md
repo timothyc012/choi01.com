@@ -16,14 +16,15 @@ The active browser previously combined retired static recipes with current store
 
 ## UI
 
-Shared shopping date, people, diet and exclusion controls; shorter recipe cards with expandable provenance; calendar on the left and recipe library on the right at desktop widths. Mobile Menu now exposes the recipe library (its parent was previously hidden), with Plan and Shop tabs retained. The existing drag/drop and button-based placement remain.
+Shared shopping date, people, diet and exclusion controls; shorter recipe cards with expandable provenance; calendar on the left and recipe library on the right at desktop widths. Mobile Menu now exposes the recipe library (its parent was previously hidden), with Plan and Shop tabs retained. Desktop mouse dragging uses pointer events so WebKit delivers the selected card to the exact calendar slot; button-based placement and touch scrolling remain. Interactive controls do not initiate dragging, and cancellation/removal/re-render cleans up the ghost and pointer capture.
 
 ## Validation
 
-- On 2026-10-05, all 423 website tests passed in a separate release checkout based on production commit `9f7fa5fb7c8a98b6a92213bf4a5950d925c922c8` with exactly 55 hashed meal source overlays. The normal production build passed with its unchanged 54-file Canvas vendor guard, as did TypeScript, six-route synchronization and diff checks. Logs and the overlay manifest are retained privately with the release evidence.
+- On 2026-10-05, all 430 website tests passed in a separate release checkout based on production commit `9f7fa5fb7c8a98b6a92213bf4a5950d925c922c8` with exactly 56 hashed meal source overlays. The normal production build passed with its unchanged 54-file Canvas vendor guard, as did TypeScript, six-route synchronization and diff checks. Logs and the overlay manifest are retained privately with the release evidence.
 - The PR branch includes the later main merge `e2ea625`, whose 18 preexisting Canvas vendor differences still fail that guard. The successful isolated build is **not** a successful build of the PR branch or latest main. No vendor guard, vendor fingerprint, dependency or unrelated Canvas source was changed for the meal build.
 - Regression tests cover real September 21 snapshot data, vegetarian/excluded ingredients, quantity scaling, pantry exclusion, pumpkin identity, held rows, mushroom species, PDF empty pages and successful pipeline preparation.
 - Browser checks at 1280×900, 390×844 and 320×844; observed no document-level horizontal overflow on mobile. Real in-app browsing confirmed shared conditions and source-only detail behavior.
+- Real in-app mouse dragging replaced a Tuesday lunch slot with the selected tomato/chicken recipe, persisted the manual selection and left no drag ghost or pointer capture. Seven pointer regressions and an independent review cover interactive-control exclusion, focus preservation and cleanup.
 - Local MCP replay uses the same source bytes and returns 69 candidates for 44369 Netto on September 21, matching the website's automatic pool count. It is not an assertion about the deployed remote MCP runtime.
 
 ## Release boundary
