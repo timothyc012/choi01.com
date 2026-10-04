@@ -171,6 +171,7 @@ export interface InfiniteCanvasHandle {
   addText: () => void;
   addShape: (type: 'rect' | 'ellipse', color: CanvasColorKey, text?: string) => void;
   addArrow: () => void;
+  addImages: (images: readonly { readonly src: string; readonly fileName: string; readonly w: number; readonly h: number }[]) => void;
   addImage: (src: string, fileName: string, w: number, h: number) => void;
   addFileCard: (fileName: string, src: string, label: string) => void;
   updateShapeText: (id: string, text: string) => void;
@@ -180,10 +181,14 @@ export interface InfiniteCanvasHandle {
   setTool: (tool: CoreCanvasTool) => void;
   undo: () => void;
   redo: () => void;
+  copySelected: () => void;
+  pasteClipboard: () => Promise<void>;
   deleteSelected: () => void;
   duplicateSelected: () => void;
+  rotateSelected: (deltaRadians: number) => void;
   group: () => void;
   ungroup: () => void;
+  reorderSelected: (direction: 'forward' | 'backward' | 'front' | 'back') => void;
   zoomBy: (factor: number) => void;
   zoomTo: (zoom: number) => void;
   resetZoom: () => void;
@@ -302,6 +307,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     queuedDrawIdsRef,
     commitDrawBatch,
   } = useCanvasEditorState({ boardIdentity, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, controlledShapes, onShapesChange, onDirty });
+  const clipboardRef = React.useRef<CanvasShape[] | null>(null);
 
   useLayoutEffect(() => {
     const canvas = liveStrokeCanvasRef.current;
@@ -330,6 +336,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
   const selectionActions = useCanvasSelectionActions({
     containerRef,
     shapesRef,
+    clipboardRef,
     selectedRef,
     commit,
     deleteSelection,
@@ -616,6 +623,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         {announcement}
       </div>
 
+      <div className="absolute inset-0" style={{ isolation: 'isolate', zIndex: 0 }}>
       <CanvasVectorLayer
         visiblePaintOrder={visiblePaintOrder}
         selected={selected}
@@ -630,7 +638,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         strokeColorOf={strokeColorOf}
       />
 
-      <canvas ref={liveStrokeCanvasRef} aria-hidden="true" data-canvas-live-strokes="true" className="absolute inset-0 w-full h-full pointer-events-none" />
+      <canvas style={{ zIndex: visiblePaintOrder.length + 1 }} ref={liveStrokeCanvasRef} aria-hidden="true" data-canvas-live-strokes="true" className="absolute inset-0 w-full h-full pointer-events-none" />
 
       {/* DOM layer: everything with text, so it stays selectable and editable. */}
       <CanvasObjectLayer
@@ -653,12 +661,13 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         onArrowEndpointDown={onArrowEndpointDown}
       />
 
+      </div>
       {/*
         Pen mode shows the pen palette instead. The inspector's popovers hold
         text inputs (HEX colour, card TYPE, custom font). Keep these inactive
         while drawing instead of exposing nearby native handwriting targets.
       */}
-      {inspectorShape && !isPenMode && (
+      {inspectorShape && tool !== 'draw' && tool !== 'highlighter' && tool !== 'eraser' && (
         <CanvasInspector
           shape={inspectorShape}
           selection={inspectorSelection}

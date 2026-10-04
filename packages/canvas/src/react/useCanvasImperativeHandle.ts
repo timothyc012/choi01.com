@@ -110,7 +110,7 @@ export function useCanvasImperativeHandle({
   useImperativeHandle(ref, () => ({
     addNote: (color) => {
       const created = addAtCentre({ type: 'note', w: 180, h: 180, color, text: '' });
-      setEditingId(created.id);
+      setEditingId(null);
     },
     addCard: (label, category, cardStyle, color) => {
       addAtCentre({ type: 'card', w: 260, h: 150, text: label, category, cardStyle, color });
@@ -133,6 +133,21 @@ export function useCanvasImperativeHandle({
       const created: CanvasShape = { id: createId(), type: 'arrow', x: c.x - 140, y: c.y, w: 280, h: 0 };
       commit(prev => [...prev, created]);
       selectNow(new Set([created.id]));
+      onToolChange('select');
+    },
+    addImages: images => {
+      const centre = viewportCentre();
+      let y = centre.y;
+      const created = images.map(image => {
+        const shape = sanitizeShapeForCanvas({ id: createId(), type: 'image', ...image, x: centre.x - image.w / 2, y });
+        if (!shape) throw new Error('Invalid canvas image.');
+        y += image.h + 32;
+        return shape;
+      });
+      commit(previous => [...previous, ...created]);
+      shapesRef.current = [...shapesRef.current, ...created];
+      selectNow(new Set(created.map(shape => shape.id)));
+      setEditingId(null);
       onToolChange('select');
     },
     addImage: (src, fileName, w, h) => {
@@ -174,10 +189,14 @@ export function useCanvasImperativeHandle({
       onDirty();
       setAnnouncement('다시 실행');
     },
+    copySelected: selectionActions.copySelected,
+    pasteClipboard: selectionActions.pasteClipboard,
     deleteSelected: selectionActions.deleteSelected,
     duplicateSelected: selectionActions.duplicateSelected,
+    rotateSelected: selectionActions.rotateSelected,
     group: selectionActions.group,
     ungroup: selectionActions.ungroup,
+    reorderSelected: selectionActions.reorderSelected,
     zoomBy: (factor) => {
       setCamera(cam => {
         const rect = containerRef.current?.getBoundingClientRect();

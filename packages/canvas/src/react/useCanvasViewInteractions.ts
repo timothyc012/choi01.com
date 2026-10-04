@@ -96,7 +96,7 @@ export function useCanvasViewInteractions({
       return editing && editing.type !== 'image' && editing.type !== 'draw' ? [editing] : [];
     }
     const picked = shapes.filter(s => selected.has(s.id));
-    if (picked.length === 1) return picked[0].type === 'image' ? [] : picked;
+    if (picked.length === 1) return picked;
     return picked;
   }, [editingId, selected, shapes]);
 
@@ -104,7 +104,7 @@ export function useCanvasViewInteractions({
     if (inspectorSelection.length === 0) return null;
     // Images carry no colour or text state, so a mixed selection reads its
     // displayed values off a shape that actually has them.
-    return inspectorSelection.find(s => s.type !== 'image') ?? null;
+    return inspectorSelection[0] ?? null;
   }, [inspectorSelection]);
 
   const cursorReportTimer = useRef<number>(0);

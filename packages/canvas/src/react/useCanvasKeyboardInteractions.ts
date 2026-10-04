@@ -3,6 +3,7 @@ import type { Dispatch, RefObject, SetStateAction } from 'react';
 import type { CanvasShapeType, CanvasTool } from '../core/index.ts';
 import { historyShortcutFromKeyboardEvent, toolShortcutFromKeyboardEvent } from './keyboardShortcuts';
 import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 import { shapePlainText } from './canvasGeometry';
 
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
@@ -27,6 +28,7 @@ interface KeyboardInteractionOptions {
   onDirty: () => void;
   onToolChange: (tool: CanvasTool) => void;
   createId: (prefix?: string) => string;
+  selectionActions: CanvasSelectionActions;
 }
 
 /** Installs keyboard shortcuts and canvas-level editing/navigation semantics. */
@@ -50,6 +52,7 @@ export function useCanvasKeyboardInteractions({
   onDirty,
   onToolChange,
   createId,
+  selectionActions,
 }: KeyboardInteractionOptions): void {
   const nudge = useCallback((dx: number, dy: number) => {
     const sel = selectedRef.current;
@@ -129,6 +132,21 @@ export function useCanvasKeyboardInteractions({
       }
 
       const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        selectionActions.copySelected();
+        return;
+      }
+      if (mod && e.key.toLowerCase() === 'v') {
+        e.preventDefault();
+        void selectionActions.pasteClipboard();
+        return;
+      }
+      if (mod && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        selectionActions.duplicateSelected();
+        return;
+      }
       if (mod && e.key.toLowerCase() === 'g') {
         e.preventDefault();
         if (e.shiftKey) {
@@ -225,5 +243,5 @@ export function useCanvasKeyboardInteractions({
     };
   }, [commit, containerRef, createId, deleteSelection, editingIdRef, editorRef, future, nudge, onDirty,
     onToolChange, past, selectNow, selectedRef, setAnnouncement, setEditingId, setIsSpaceDown, setShapes,
-    shapesRef, textualTypes, toolRef]);
+    selectionActions, shapesRef, textualTypes, toolRef]);
 }
