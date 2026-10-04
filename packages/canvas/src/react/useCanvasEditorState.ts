@@ -303,7 +303,7 @@ export function useCanvasEditorState({
     // leaves a visually orphaned line that falls back to its stale 0,0
     // geometry on the next render.
     commit(prev => prev.filter(s => {
-      if (sel.has(s.id)) return false;
+      if (sel.has(s.id) || (s.parentId && sel.has(s.parentId))) return false;
       if (s.type !== 'arrow') return true;
       return !(s.fromId && sel.has(s.fromId)) && !(s.toId && sel.has(s.toId));
     }));

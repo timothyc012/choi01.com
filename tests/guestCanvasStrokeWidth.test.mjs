@@ -106,3 +106,24 @@ it('does not let a drag that starts on the floating toolbar become a native brow
   assert.equal(toolbar.getAttribute('draggable'), 'false');
   assert.equal(dragStart.defaultPrevented, true, 'toolbar drag must be cancelled before it can move a tool');
 });
+
+it('keeps object actions in the selection popup and exposes movable toolbar grips', async () => {
+  const noticeButton = button('알겠어요');
+  if (noticeButton) await click(noticeButton);
+  const canvasToolbar = container.querySelector('.gc-toolbar');
+  const canvasGrip = canvasToolbar?.querySelector('button[aria-label="캔버스 도구 모음 이동"]');
+  const headerGrip = container.querySelector('button[aria-label="상단 도구 모음 이동"]');
+  assert.ok(canvasGrip, 'the canvas tool column has a move grip');
+  assert.ok(headerGrip, 'the header action bar has a move grip');
+  assert.equal(canvasToolbar?.querySelector('button[aria-label="선택 항목 복제"]'), null);
+  assert.equal(canvasToolbar?.querySelector('button[aria-label="선택 항목 삭제 (Delete)"]'), null);
+
+  const canvasLeftBefore = canvasToolbar.style.left;
+  const headerLeftBefore = headerGrip.parentElement?.style.left;
+  await act(async () => {
+    canvasGrip.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    headerGrip.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+  });
+  assert.notEqual(canvasToolbar?.style.left, canvasLeftBefore, 'arrow keys move the canvas toolbar');
+  assert.notEqual(headerGrip.parentElement?.style.left, headerLeftBefore, 'arrow keys move the header toolbar');
+});

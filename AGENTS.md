@@ -17,3 +17,6 @@ Stats: 4 obs (1,555t read) | 116,279t work | 99% savings
 
 Access 116k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
+
+# Session Startup Guidelines
+- **Git Sync on New Session**: At the start of every new session or before initiating changes on a task, always verify `git status` and synchronize with the remote repository (`git fetch` / `git pull` or prompt/confirm with the user if local uncommitted changes exist) to ensure the workspace is aligned with the latest remote commit.

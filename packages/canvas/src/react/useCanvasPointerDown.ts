@@ -124,28 +124,41 @@ export function useCanvasPointerDown({
   const uid = createId;
   const lastClickRef = useRef<{ id: string; time: number } | null>(null);
   const placeTextualShape = (clientX: number, clientY: number) => {
-    const activeTool = containerRef.current?.dataset.canvasActiveTool === 'text'
-      ? 'text'
-      : toolRef.current;
+    const activeTool = toolRef.current;
     if (activeTool !== 'note' && activeTool !== 'text') return;
     const p = toPage(clientX, clientY);
+    if (activeTool === 'text') {
+      const byId = new Map(shapesRef.current.map(shape => [shape.id, shape]));
+      const existing = [...shapesRef.current].reverse().find(shape =>
+        textualTypes.includes(shape.type) && hitTest(shape, p.x, p.y, cameraRef.current.z, byId, shapesRef.current));
+      if (existing) {
+        selectNow(new Set([existing.id]));
+        setEditingId(existing.id);
+        toolRef.current = 'select';
+        onToolChange('select');
+        return;
+      }
+    }
     const created: CanvasShape = activeTool === 'note'
       ? { id: uid(), type: 'note', x: p.x - 90, y: p.y - 90, w: 180, h: 180, color: 'yellow', text: '' }
       : { id: uid(), type: 'text', x: p.x, y: p.y - 22, w: 220, h: 44, text: '' };
     commit(prev => [...prev, created]);
     selectNow(new Set([created.id]));
-    setEditingId(created.id);
+    setEditingId(activeTool === 'text' ? created.id : null);
+    toolRef.current = 'select';
     onToolChange('select');
   };
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
+      if (penModeRef.current) return;
       if (!containerRef.current?.contains(e.target as Node)) return;
       if (e.target instanceof Element && e.target.closest('[role="textbox"], [data-canvas-inspector]')) return;
       placeTextualShape(e.clientX, e.clientY);
     };
     const preventNativeSelection = (event: Event) => {
       if (!penModeRef.current) return;
+      if (event.target instanceof Element && event.target.closest('[data-canvas-editor]')) return;
       event.preventDefault();
       window.getSelection()?.removeAllRanges();
     };
@@ -172,7 +185,7 @@ export function useCanvasPointerDown({
   };
 
   const onPointerDown = (e: ReactPointerEvent) => {
-    let activeTool = toolRef.current;
+    const activeTool = toolRef.current;
     const target = e.target instanceof Element ? e.target : e.currentTarget;
     const hadImplicitCaptureBeforeExplicitCapture = e.currentTarget.hasPointerCapture(e.pointerId)
       || target.hasPointerCapture(e.pointerId);
@@ -188,11 +201,6 @@ export function useCanvasPointerDown({
         window.devicePixelRatio || 1,
       );
       applyInteraction({ kind: 'none' });
-      if (activeTool !== 'draw' && activeTool !== 'highlighter' && activeTool !== 'eraser') {
-        activeTool = 'draw';
-        toolRef.current = 'draw';
-        onToolChange('draw');
-      }
       setIsPenMode(true);
     }
     if (penModeRef.current && e.pointerType === 'touch') {
@@ -268,6 +276,9 @@ export function useCanvasPointerDown({
     }
 
     if (activeTool === 'draw' || activeTool === 'highlighter') {
+      const byId = new Map(shapes.map(shape => [shape.id, shape]));
+      const parentNote = [...shapes].reverse().find(shape =>
+        shape.type === 'note' && hitTest(shape, p.x, p.y, camera.z, byId, shapes));
       const created: CanvasShape = {
         id: uid(),
         type: 'draw',
@@ -280,6 +291,7 @@ export function useCanvasPointerDown({
         strokeWidth: drawStrokeWidth,
         inkStyle: drawInkStyle,
         drawMode: activeTool === 'highlighter' ? 'highlighter' : 'pen',
+        ...(parentNote ? { parentId: parentNote.id } : {}),
       };
       // The stroke stays out of React state until the pen lifts: every
       // sample would otherwise cost a full board re-render, which is what
@@ -304,7 +316,10 @@ export function useCanvasPointerDown({
       return;
     }
 
-    if (activeTool === 'note' || activeTool === 'text') return;
+    if (activeTool === 'note' || activeTool === 'text') {
+      placeTextualShape(e.clientX, e.clientY);
+      return;
+    }
 
     if (activeTool === 'eraser') {
       // Held down and dragged, so a stroke can be rubbed out progressively.
@@ -360,7 +375,9 @@ export function useCanvasPointerDown({
       selectNow(nextSelected);
 
       const origin = new Map<string, CanvasShape>();
-      for (const s of shapes) if (nextSelected.has(s.id)) origin.set(s.id, s);
+      for (const s of shapes) {
+        if (nextSelected.has(s.id) || (s.parentId && nextSelected.has(s.parentId))) origin.set(s.id, s);
+      }
 
       // Dragging a frame carries whatever sits inside it, decided once at
       // gesture start so shapes don't join or leave mid-drag.

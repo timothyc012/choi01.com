@@ -270,6 +270,8 @@
 .invoicex-canvas .canvas-color-hex-input { min-width: 0; flex: 1; height: 26px; border: 0; outline: 0; background: transparent; color: var(--canvas-slate-800); font: inherit; letter-spacing: 0.08em; }
 .invoicex-canvas .canvas-color-hex-input:focus-visible { outline-offset: -1px; }
 .invoicex-canvas .bg-slate-100 { background-color: var(--canvas-slate-100); }
+.invoicex-canvas .canvas-selection-action-buttons { min-width: 0; }
+.invoicex-canvas .canvas-selection-action-buttons > button { flex: 0 0 auto; }
 .invoicex-canvas .canvas-rich-text ul, .invoicex-canvas .canvas-rich-text ol { margin: 0; padding-left: 0; list-style: none; }
 .invoicex-canvas [data-canvas-text-view] ul, .invoicex-canvas [data-canvas-text-view] ol, .invoicex-canvas [data-canvas-text-view] li { pointer-events: none; }
 .invoicex-canvas [data-canvas-text-view] li a { pointer-events: auto; }
@@ -279,6 +281,21 @@
 .invoicex-canvas .canvas-rich-text ol > li { counter-increment: canvas-list-item; }
 .invoicex-canvas .canvas-rich-text ol > li::before { content: counter(canvas-list-item) ". "; }
 
+@media (max-width: 400px) {
+  .invoicex-canvas .canvas-selection-actions { flex-direction: column; align-items: stretch; gap: 0.25rem; }
+  .invoicex-canvas .canvas-selection-label { padding-left: 0.25rem; }
+  .invoicex-canvas .canvas-selection-action-buttons { flex-wrap: nowrap; gap: 0.125rem; overflow-x: auto; scrollbar-width: none; }
+  .invoicex-canvas .canvas-selection-action-buttons::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 360px) {
+  .invoicex-canvas .canvas-selection-action-buttons > button { width: 1.75rem; height: 1.75rem; flex-basis: 1.75rem; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .invoicex-canvas, .invoicex-canvas *, .invoicex-canvas *::before, .invoicex-canvas *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
+
+:where(.invoicex-canvas) button { border: 0 solid; background-color: transparent; font-family: inherit; cursor: pointer; }
+
+:where(.invoicex-canvas) .bg-current { background-color: currentColor; }

@@ -38,8 +38,8 @@ export function CanvasObjectLayer({
 }: CanvasObjectLayerProps) {
   return (
     <>
-      <div className="absolute top-0 left-0 origin-top-left" style={{ transform: `scale(${camera.z}) translate(${-camera.x}px, ${-camera.y}px)` }}>
-        {visiblePaintOrder.map(s => {
+        {visiblePaintOrder.map((s, index) => {
+          const layerStyle = { zIndex: index + 1, transform: `scale(${camera.z}) translate(${-camera.x}px, ${-camera.y}px)` };
           if (s.type === 'draw') return null;
           if (s.type === 'arrow') {
             const geometry = arrowGeometry(s, shapeById, allShapes);
@@ -55,7 +55,7 @@ export function CanvasObjectLayer({
             const displayLabel = label || (isSelected ? '관계 입력' : '');
             if (!displayLabel && !isEditing) return null;
             return (
-              <React.Fragment key={s.id}>
+              <div key={s.id} data-canvas-paint-id={s.id} className="absolute top-0 left-0 origin-top-left" style={layerStyle}>
               <div data-canvas-arrow-label-hit-area className="absolute flex items-center justify-center" style={{ left: mid.x - 90, top: mid.y - 18, width: 180, height: 36 }} onDoubleClick={event => { event.stopPropagation(); setEditingId(s.id); }}>
                 {(displayLabel || isEditing) && <div
                   data-canvas-arrow-label="true"
@@ -74,14 +74,14 @@ export function CanvasObjectLayer({
                   {isEditing ? renderEditor('text-center whitespace-nowrap') : <span key="canvas-view" dangerouslySetInnerHTML={{ __html: displayLabel }} />}
                 </div>}
               </div>
-              </React.Fragment>
+              </div>
             );
           }
           const isSelected = selected.has(s.id);
           const box = rawBounds(s);
           return (
+            <div key={s.id} data-canvas-paint-id={s.id} className="absolute top-0 left-0 origin-top-left" style={layerStyle}>
             <div
-              key={s.id}
               data-canvas-shape-id={s.id}
               data-canvas-shape-type={s.type}
               data-canvas-selected={isSelected ? 'true' : undefined}
@@ -101,18 +101,23 @@ export function CanvasObjectLayer({
               onDoubleClick={event => { event.stopPropagation(); if (TEXTUAL.has(s.type)) setEditingId(s.id); }}
             >
               {renderShapeBody(s)}
-              {isSelected && <>
-                <div data-canvas-selection-box="true" className="absolute -inset-0.5 pointer-events-none" style={{ outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
-                {selected.size === 1 && <>
-                  {(['nw', 'ne', 'sw', 'se'] as const).map(handle => <div key={handle} data-canvas-resize-handle={handle} onPointerDown={event => onResizeHandleDown(event, s, handle)} className="absolute z-20 bg-white border-2 border-blue-600 rounded-sm" style={{ width: 10 / camera.z, height: 10 / camera.z, cursor: `${handle}-resize`, left: handle.includes('w') ? -5 / camera.z : undefined, right: handle.includes('e') ? -5 / camera.z : undefined, top: handle.includes('n') ? -5 / camera.z : undefined, bottom: handle.includes('s') ? -5 / camera.z : undefined }} />)}
-                  <div onPointerDown={event => onRotateHandleDown(event, s)} title="회전 (Shift로 15도 단위)" className="absolute z-20 bg-blue-600 rounded-full" style={{ width: 12 / camera.z, height: 12 / camera.z, left: '50%', marginLeft: -6 / camera.z, top: -28 / camera.z, cursor: 'grab' }} />
-                  {CONNECTABLE.has(s.type) && (['n', 's', 'w', 'e'] as const).map(key => <div key={`plus-${key}`} onPointerDown={event => onConnectHandleDown(event, s)} title="드래그해서 연결 (관계 생성)" className="absolute z-20 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500" style={{ ...(key === 'n' ? { left: '50%', top: -30 / camera.z, marginLeft: -9 / camera.z } : key === 's' ? { left: '50%', bottom: -30 / camera.z, marginLeft: -9 / camera.z } : key === 'w' ? { top: '50%', left: -30 / camera.z, marginTop: -9 / camera.z } : { top: '50%', right: -30 / camera.z, marginTop: -9 / camera.z }), width: 18 / camera.z, height: 18 / camera.z, fontSize: 13 / camera.z, lineHeight: 1, cursor: 'crosshair' }}>+</div>)}
-                </>}
-              </>}
+            </div>
             </div>
           );
         })}
-      </div>
+      {visiblePaintOrder.filter(s => s.type !== 'draw' && s.type !== 'arrow' && selected.has(s.id)).map(s => {
+        const box = rawBounds(s);
+        return <div key={`selection-${s.id}`} data-canvas-selection-id={s.id} className="absolute top-0 left-0 origin-top-left pointer-events-none" style={{ zIndex: visiblePaintOrder.length + 3, transform: `scale(${camera.z}) translate(${-camera.x}px, ${-camera.y}px)` }}>
+          <div className="absolute" style={{ left: box.minX, top: box.minY, width: box.maxX - box.minX, height: box.maxY - box.minY, transform: s.rotation ? `rotate(${s.rotation}rad)` : undefined, transformOrigin: 'center' }}>
+                <div data-canvas-selection-box="true" className="absolute -inset-0.5 pointer-events-none" style={{ outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
+                {selected.size === 1 && <>
+                  {(['nw', 'ne', 'sw', 'se'] as const).map(handle => <div key={handle} data-canvas-resize-handle={handle} onPointerDown={event => onResizeHandleDown(event, s, handle)} className="absolute pointer-events-auto z-20 bg-white border-2 border-blue-600 rounded-sm" style={{ width: 10 / camera.z, height: 10 / camera.z, cursor: `${handle}-resize`, left: handle.includes('w') ? -5 / camera.z : undefined, right: handle.includes('e') ? -5 / camera.z : undefined, top: handle.includes('n') ? -5 / camera.z : undefined, bottom: handle.includes('s') ? -5 / camera.z : undefined }} />)}
+                  <div onPointerDown={event => onRotateHandleDown(event, s)} title="회전 (Shift로 15도 단위)" className="absolute pointer-events-auto z-20 bg-blue-600 rounded-full" style={{ width: 12 / camera.z, height: 12 / camera.z, left: '50%', marginLeft: -6 / camera.z, top: -28 / camera.z, cursor: 'grab' }} />
+                  {CONNECTABLE.has(s.type) && (['n', 's', 'w', 'e'] as const).map(key => <div key={`plus-${key}`} onPointerDown={event => onConnectHandleDown(event, s)} title="드래그해서 연결 (관계 생성)" className="absolute pointer-events-auto z-20 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500" style={{ ...(key === 'n' ? { left: '50%', top: -30 / camera.z, marginLeft: -9 / camera.z } : key === 's' ? { left: '50%', bottom: -30 / camera.z, marginLeft: -9 / camera.z } : key === 'w' ? { top: '50%', left: -30 / camera.z, marginTop: -9 / camera.z } : { top: '50%', right: -30 / camera.z, marginTop: -9 / camera.z }), width: 18 / camera.z, height: 18 / camera.z, fontSize: 13 / camera.z, lineHeight: 1, cursor: 'crosshair' }}>+</div>)}
+                </>}
+          </div>
+        </div>;
+      })}
       {selected.size === 1 && allShapes.filter(shape => shape.type === 'arrow' && selected.has(shape.id)).map(shape => {
         const geometry = arrowGeometry(shape, shapeById, allShapes);
         const screenPoint = (point: { x: number; y: number }, size: number) => ({
@@ -126,17 +131,17 @@ export function CanvasObjectLayer({
                 const next = geometry.pathPoints?.[index + 1];
                 if (!next) return null;
                 const midpoint = { x: (point.x + next.x) / 2, y: (point.y + next.y) / 2 };
-                return <div key={`segment-${index}`} data-canvas-arrow-segment-handle={index} onPointerDown={event => onOrthogonalSegmentHandleDown(event, shape, index)} title="드래그해서 직각선 구간 이동" className="absolute z-50 pointer-events-auto rounded-sm bg-white border-2 border-blue-600" style={{ width: 12, height: 12, ...screenPoint(midpoint, 12), cursor: point.x === next.x ? 'ew-resize' : 'ns-resize' }} />;
+                return <div key={`segment-${index}`} data-canvas-arrow-segment-handle={index} onPointerDown={event => onOrthogonalSegmentHandleDown(event, shape, index)} title="드래그해서 직각선 구간 이동" className="absolute z-50 pointer-events-auto rounded-sm bg-white border-2 border-blue-600" style={{ zIndex: visiblePaintOrder.length + 3, width: 12, height: 12, ...screenPoint(midpoint, 12), cursor: point.x === next.x ? 'ew-resize' : 'ns-resize' }} />;
               })
-              : geometry.routing === 'curved' && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, shape)} title="드래그해서 곡선 휘기" className="absolute z-50 pointer-events-auto rounded-full bg-white border-2 border-blue-600" style={{ width: 10, height: 10, left: (geometry.start.x + geometry.end.x) / 2 * camera.z - camera.x * camera.z - 5, top: (geometry.start.y + geometry.end.y) / 2 * camera.z - camera.y * camera.z - 10, cursor: 'grab' }} />}
+              : geometry.routing === 'curved' && <div data-canvas-arrow-bend-handle onPointerDown={event => onBendHandleDown(event, shape)} title="드래그해서 곡선 휘기" className="absolute z-50 pointer-events-auto rounded-full bg-white border-2 border-blue-600" style={{ zIndex: visiblePaintOrder.length + 3, width: 10, height: 10, left: (geometry.start.x + geometry.end.x) / 2 * camera.z - camera.x * camera.z - 5, top: (geometry.start.y + geometry.end.y) / 2 * camera.z - camera.y * camera.z - 10, cursor: 'grab' }} />}
             {(['start', 'end'] as const).map(endpoint => {
               const point = endpoint === 'start' ? geometry.start : geometry.end;
-              return <div key={endpoint} data-canvas-arrow-endpoint={endpoint} onPointerDown={event => onArrowEndpointDown(event, shape, endpoint)} title="드래그해서 끝점 이동 (노드 위에 놓으면 연결)" className="absolute z-50 pointer-events-auto bg-white border-2 border-blue-600 rounded-full" style={{ width: 12, height: 12, ...screenPoint(point, 12), cursor: 'grab' }} />;
+              return <div key={endpoint} data-canvas-arrow-endpoint={endpoint} onPointerDown={event => onArrowEndpointDown(event, shape, endpoint)} title="드래그해서 끝점 이동 (노드 위에 놓으면 연결)" className="absolute z-50 pointer-events-auto bg-white border-2 border-blue-600 rounded-full" style={{ zIndex: visiblePaintOrder.length + 3, width: 12, height: 12, ...screenPoint(point, 12), cursor: 'grab' }} />;
             })}
           </React.Fragment>
         );
       })}
-      {peerCursors?.map(peer => <div key={peer.id} className="absolute pointer-events-none z-40" style={{ left: (peer.x - camera.x) * camera.z, top: (peer.y - camera.y) * camera.z, transform: 'translate(-2px, -2px)' }}>
+      {peerCursors?.map(peer => <div key={peer.id} className="absolute pointer-events-none z-40" style={{ zIndex: visiblePaintOrder.length + 4, left: (peer.x - camera.x) * camera.z, top: (peer.y - camera.y) * camera.z, transform: 'translate(-2px, -2px)' }}>
         <svg width="20" height="24" viewBox="0 0 20 24"><path d="M 1 1 L 1 18 L 6 13 L 9 20 L 12 19 L 9 12 L 15 12 Z" fill={peer.color} stroke={CANVAS_UI_COLORS.white} strokeWidth="1.5" strokeLinejoin="round" /></svg>
         <div className="mt-1 px-1.5 py-0.5 rounded text-[11px] font-medium text-white whitespace-nowrap" style={{ background: peer.color }}>{peer.name}</div>
       </div>)}

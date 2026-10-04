@@ -56,29 +56,13 @@ export function polygonPoints(type: CanvasShapeType, w: number, h: number): stri
   }
 }
 
-/**
- * Build a smooth SVG path from raw freehand points using quadratic Bézier
- * through midpoints. Used for export and as a fallback.
- */
+/** Preserve every captured point, including sharp corners. */
 export function strokePath(points: [number, number][]): string {
   if (points.length === 0) return '';
   if (points.length === 1) return `M ${points[0][0]} ${points[0][1]} L ${points[0][0] + 0.1} ${points[0][1]}`;
-  let d = `M ${points[0][0]} ${points[0][1]}`;
-  for (let i = 1; i < points.length - 1; i++) {
-    const [cx, cy] = points[i], [nx, ny] = points[i + 1];
-    d += ` Q ${cx} ${cy} ${(cx + nx) / 2} ${(cy + ny) / 2}`;
-  }
-  const last = points[points.length - 1];
-  return `${d} L ${last[0]} ${last[1]}`;
+  return points.map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ');
 }
 
-/**
- * Build a filled SVG outline path using perfect-freehand. This produces a
- * variable-width, pressure-sensitive stroke outline (polygon) that looks
- * like a natural pen stroke — thick on slow curves, thin on fast flicks.
- *
- * The caller fills (not strokes) the resulting path.
- */
 import getStroke from 'perfect-freehand';
 
 /**
@@ -88,9 +72,8 @@ import getStroke from 'perfect-freehand';
  * stroke is replaced by the committed one.
  */
 export function freehandStrokeOptions(strokeWidth: number, mode: 'pen' | 'highlighter') {
-  return mode === 'highlighter'
-    ? { size: strokeWidth * 2.5, thinning: 0, smoothing: 0.5, streamline: 0.5, last: true }
-    : { size: strokeWidth, thinning: 0.5, smoothing: 0.62, streamline: 0.62, last: true };
+  return { size: mode === 'highlighter' ? strokeWidth * 2.5 : strokeWidth,
+    thinning: 0, smoothing: 0, streamline: 0, simulatePressure: false, last: true };
 }
 
 /** Radius of the dot a single-point tap leaves behind. */
@@ -127,22 +110,7 @@ export function freehandOutlinePath(
   }
   const outline = freehandOutlinePoints(points, strokeWidth, mode);
   if (outline.length === 0) return '';
-  if (outline.length < 4) {
-    return outline.reduce(
-      (path, [x, y], index) => path + (index === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`),
-      '',
-    ) + ' Z';
-  }
-  const first = outline[0];
-  const control = outline[1];
-  const next = outline[2];
-  let path = `M ${first[0]} ${first[1]} Q ${control[0]} ${control[1]} ${(control[0] + next[0]) / 2} ${(control[1] + next[1]) / 2} T `;
-  for (let index = 2; index < outline.length - 1; index += 1) {
-    const point = outline[index];
-    const following = outline[index + 1];
-    path += `${(point[0] + following[0]) / 2} ${(point[1] + following[1]) / 2} `;
-  }
-  return `${path}Z`;
+  return outline.map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ') + ' Z';
 }
 
 const outlinePathCache = new WeakMap<CanvasShape, string>();
@@ -160,8 +128,8 @@ const outlinePathCache = new WeakMap<CanvasShape, string>();
 export function shapeOutlinePath(s: CanvasShape): string {
   const cached = outlinePathCache.get(s);
   if (cached !== undefined) return cached;
-  const points = s.points as [number, number][] | undefined;
-  const d = s.type === 'draw' && points && points.length >= 2
+  const points = s.points;
+  const d = s.type === 'draw' && points && points.length >= 1
     ? freehandOutlinePath(points, s.strokeWidth ?? 3, s.drawMode ?? 'pen')
     : '';
   outlinePathCache.set(s, d);

@@ -9,6 +9,7 @@ node_modules/
 .omo/
 .gjc/
 .sisyphus/
+telegram_bridge/config.json
 
 
 # Cloudflare local dev

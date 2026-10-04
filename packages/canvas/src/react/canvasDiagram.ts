@@ -10,7 +10,7 @@ export function isDiagramShape(shape: CanvasShapeLike): boolean {
 }
 
 export function getInspectorGroups(shape: CanvasShapeLike): readonly InspectorGroup[] {
-  const groups: InspectorGroup[] = ['color'];
+  const groups: InspectorGroup[] = shape.type === 'image' ? [] : ['color'];
   if (shape.type === 'arrow') groups.push('arrow');
   else if (shape.type !== 'image' && shape.type !== 'draw') groups.push('text');
   groups.push('arrange');

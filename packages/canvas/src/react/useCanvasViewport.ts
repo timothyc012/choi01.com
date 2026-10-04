@@ -73,11 +73,7 @@ export function useCanvasViewport({
   }, [boardIdentity, containerRef]);
 
   const shapeById = useMemo(() => new Map(shapes.map(s => [s.id, s])), [shapes]);
-  // Frames paint first so they read as containers behind their contents.
-  const paintOrder = useMemo(
-    () => [...shapes].sort((a, b) => (a.type === 'frame' ? -1 : 0) - (b.type === 'frame' ? -1 : 0)),
-    [shapes]
-  );
+  const paintOrder = shapes;
 
   /**
    * Viewport culling: only render shapes whose bounding box (or, for arrows, the

@@ -111,3 +111,13 @@ Strategy: borders plus tonal shift. Cards use 1px borders and at most 8px radius
 Target WCAG 2.2 AA. Body contrast must exceed 4.5:1. All interactive elements need visible focus. Korean and English text should wrap naturally without narrow containers. Reduced motion is respected.
 
 Accepted debt: none for this draft.
+
+## Canvas revision interactions
+
+- Toolbar grip uses existing gc-tool surface; pointer movement is immediate and clamped to the stage. Arrow keys move 8px, Shift+arrows 32px, Home resets. Mobile wraps horizontally.
+- Selected objects expose copy/delete and layer-order controls. Color, text, line, and arrange tabs show relevant controls only. Stylus follows the explicit tool; touch palm rejection remains.
+- Sticky notes begin selected; text tool or double click edits text; pen writes strokes associated with the note. Moving or duplicating the note carries its ink.
+- Document array order governs both SVG and DOM shapes; scene isolation keeps controls above content. Ink has uniform width without smoothing or simulated pressure.
+- Attachment button uses gc-button. Progress/error status uses gc-surface, gc-text, gc-border; max width 360px with 16px gutters and 12px padding. PDF pages rasterize locally to embedded PNG, preserving images in JSON export.
+
+Mobile pen palette sits 76px above the bottom edge to avoid the wrapping toolbar. At widths <=480px the header retains the logo and icon actions; text labels remain accessible through titles/ARIA. Canvas buttons reset browser default borders/backgrounds before token utility styles.

@@ -3,7 +3,7 @@ import {
   MousePointer, Hand, StickyNote, RectangleHorizontal, Circle, Triangle, Diamond, Hexagon, Star,
   Frame, Type, GitCommit, PenTool, Eraser,
   Highlighter, Minus,
-  Undo2, Redo2, Copy, Trash2, Group, Ungroup,
+  Undo2, Redo2, Group, Ungroup, GripHorizontal,
   ZoomIn, ZoomOut, Maximize2, Locate, Sparkles,
   Sun, Moon, Download, FolderOpen, ArrowLeft, Image as ImageIcon, FileCode,
 } from 'lucide-react';
@@ -21,6 +21,7 @@ import { AuthControls } from './canvas/AuthControls';
 import { createCloudflareBoardClient } from './canvas/cloudflareBoardClient';
 import { useBoardPersistence } from './canvas/useBoardPersistence';
 import { useCanvasAuth } from './canvas/useCanvasAuth';
+import { useToolbarPosition } from './useToolbarPosition';
 
 type CanvasStrokeWidth = 2 | 4 | 6 | 8;
 type GuestCanvasTool = CanvasTool | 'highlighter';
@@ -101,8 +102,18 @@ export const GuestCanvasPage: React.FC = () => {
   const [showStickyPalette, setShowStickyPalette] = useState(false);
   const [showShapesMenu, setShowShapesMenu] = useState(false);
   const [showStrokeWidths, setShowStrokeWidths] = useState(false);
+  const headerToolbarPosition = useToolbarPosition(null);
+  const canvasToolbarMenu = showStickyPalette ? 'sticky' : showShapesMenu ? 'shapes' : showStrokeWidths ? 'width' : null;
+  const canvasToolbarPosition = useToolbarPosition(canvasToolbarMenu);
   const [showDiagramComposer, setShowDiagramComposer] = useState(false);
   const [openDiagramId, setOpenDiagramId] = useState<string | null>(null);
+
+  const chooseTool = useCallback((tool: GuestCanvasTool) => {
+    setActiveTool(tool);
+    setShowStickyPalette(false);
+    setShowShapesMenu(false);
+    setShowStrokeWidths(false);
+  }, []);
 
   // Signed-in visitors get a server-backed board; everyone else keeps the
   // ephemeral guest canvas described above. Without the /api functions (plain
@@ -241,7 +252,7 @@ export const GuestCanvasPage: React.FC = () => {
           </a>
           <a className="gc-brand" href="/" title="Choi01 Lab 홈으로">
             <span className="gc-brand-mark">01</span>
-            캔버스 메모보드
+            <span className="gc-brand-label">캔버스 메모보드</span>
           </a>
           {!isPersisted && (
             <span className="gc-ephemeral-badge" title="이 페이지는 서버에 아무것도 저장하지 않습니다">
@@ -250,7 +261,10 @@ export const GuestCanvasPage: React.FC = () => {
           )}
         </div>
 
-        <div className="gc-header-right">
+        <div className="gc-header-right gc-header-toolbar" ref={headerToolbarPosition.ref} style={headerToolbarPosition.style}>
+          <button type="button" className="gc-button gc-header-grip" aria-label="상단 도구 모음 이동" title="드래그 또는 방향키로 상단 도구 모음 이동 · Home: 원래 위치" {...headerToolbarPosition.gripProps}>
+            <GripHorizontal className="gc-icon" />
+          </button>
           <AuthControls auth={auth} persistence={persistence} />
           {auth.configured && !auth.loading && <div className="gc-header-divider" />}
           <button type="button" className="gc-button" onClick={() => importInputRef.current?.click()} title="내려받았던 .json 작업 파일 불러오기 (Ctrl+O)">
@@ -298,7 +312,7 @@ export const GuestCanvasPage: React.FC = () => {
           isDarkMode={isDarkMode}
           tool={activeTool}
           drawStrokeWidth={drawStrokeWidth}
-          onToolChange={setActiveTool}
+          onToolChange={chooseTool}
           onDirty={markDirty}
           onZoomChange={setZoom}
           onSelectionChange={handleSelectionChange}
@@ -308,13 +322,18 @@ export const GuestCanvasPage: React.FC = () => {
         {/* Floating toolbar */}
         <div
           className="gc-toolbar"
+          ref={canvasToolbarPosition.ref}
+          style={canvasToolbarPosition.style}
           draggable={false}
           onDragStart={event => event.preventDefault()}
         >
-          <button type="button" onClick={() => setActiveTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동" aria-label="선택 / 이동">
+          <button type="button" className="gc-tool gc-toolbar-grip" aria-label="캔버스 도구 모음 이동" title="드래그 또는 방향키로 캔버스 도구 모음 이동 · Shift: 크게 이동 · Home: 원래 위치" {...canvasToolbarPosition.gripProps}>
+            <GripHorizontal className="gc-icon" />
+          </button>
+          <button type="button" onClick={() => chooseTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동" aria-label="선택 / 이동">
             <MousePointer className="gc-icon" />
           </button>
-          <button type="button" onClick={() => setActiveTool('hand')} className={toolButtonClass('hand')} title="손 도구 / 화면 이동 (H)">
+          <button type="button" onClick={() => chooseTool('hand')} className={toolButtonClass('hand')} title="손 도구 / 화면 이동 (H)">
             <Hand className="gc-icon" />
           </button>
           <button type="button" onClick={() => setShowDiagramComposer(true)} className="gc-tool gc-tool-diagram" title="Mermaid 다이어그램 만들기">
@@ -375,7 +394,7 @@ export const GuestCanvasPage: React.FC = () => {
                     <button
                       key={t}
                       type="button"
-                      onClick={() => { setActiveTool(t); setShowShapesMenu(false); }}
+                      onClick={() => chooseTool(t)}
                       title={SHAPE_LABEL[t]}
                       className={`gc-tool${activeTool === t ? ' is-active' : ''}`}
                     >
@@ -387,19 +406,19 @@ export const GuestCanvasPage: React.FC = () => {
             )}
           </div>
 
-          <button type="button" onClick={() => setActiveTool('frame')} className={toolButtonClass('frame')} title="프레임 (F) — 드래그해서 그리기">
+          <button type="button" onClick={() => chooseTool('frame')} className={toolButtonClass('frame')} title="프레임 (F) — 드래그해서 그리기">
             <Frame className="gc-icon" />
           </button>
-          <button type="button" onClick={() => setActiveTool('text')} className={toolButtonClass('text')} title="텍스트 (T) — 캔버스를 클릭하면 입력">
+          <button type="button" onClick={() => chooseTool('text')} className={toolButtonClass('text')} title="텍스트 (T) — 캔버스를 클릭하면 입력">
             <Type className="gc-icon" />
           </button>
-          <button type="button" onClick={() => setActiveTool('arrow')} className={toolButtonClass('arrow')} title="연결선 / 화살표 (드래그해서 그리기)">
+          <button type="button" onClick={() => chooseTool('arrow')} className={toolButtonClass('arrow')} title="연결선 / 화살표 (드래그해서 그리기)">
             <GitCommit className="gc-icon" />
           </button>
-          <button type="button" onClick={() => setActiveTool('draw')} className={toolButtonClass('draw')} title="펜 (P)" aria-label="펜">
+          <button type="button" onClick={() => chooseTool('draw')} className={toolButtonClass('draw')} title="펜 (P)" aria-label="펜">
             <PenTool className="gc-icon" />
           </button>
-          <button type="button" onClick={() => setActiveTool('highlighter')} className={toolButtonClass('highlighter')} title="하이라이터" aria-label="하이라이터">
+          <button type="button" onClick={() => chooseTool('highlighter')} className={toolButtonClass('highlighter')} title="하이라이터" aria-label="하이라이터">
             <Highlighter className="gc-icon" />
           </button>
           <div className="gc-popover-anchor">
@@ -433,7 +452,7 @@ export const GuestCanvasPage: React.FC = () => {
               </div>
             )}
           </div>
-          <button type="button" onClick={() => setActiveTool('eraser')} className={toolButtonClass('eraser', true)} title="지우개 — 손글씨는 닿은 구간만, 도형은 전체 삭제">
+          <button type="button" onClick={() => chooseTool('eraser')} className={toolButtonClass('eraser', true)} title="지우개 — 손글씨는 닿은 구간만, 도형은 전체 삭제">
             <Eraser className="gc-icon" />
           </button>
 
@@ -445,15 +464,6 @@ export const GuestCanvasPage: React.FC = () => {
           <button type="button" onClick={() => canvasRef.current?.redo()} className="gc-tool" title="다시 실행 (Ctrl/⌘+Shift+Z 또는 Ctrl/⌘+Y)">
             <Redo2 className="gc-icon" />
           </button>
-          <button type="button" onClick={() => canvasRef.current?.duplicateSelected()} disabled={selection.count === 0} className="gc-tool" title="선택 항목 복제">
-            <Copy className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => canvasRef.current?.deleteSelected()} disabled={selection.count === 0} className="gc-tool gc-tool-danger" title="선택 항목 삭제 (Delete)">
-            <Trash2 className="gc-icon" />
-          </button>
-
-          <div className="gc-toolbar-divider" />
-
           <button type="button" onClick={() => canvasRef.current?.group()} disabled={!selection.canGroup} className="gc-tool" title="그룹 (Ctrl+G) — 2개 이상 선택 필요">
             <Group className="gc-icon" />
           </button>

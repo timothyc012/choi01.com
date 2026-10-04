@@ -30,6 +30,13 @@ export function sanitizeCanvasHtml(input: string): string {
 export function validateCanvasAssetUrl(value: string): string {
   const candidate = value.trim();
   if (!candidate) throw new CanvasValidationError('Canvas asset URLs cannot be empty.');
+  if (candidate.startsWith('data:')) {
+    const comma = candidate.indexOf(',');
+    const header = candidate.slice(0, comma);
+    const payload = candidate.slice(comma + 1);
+    if (candidate.length <= 32 * 1024 * 1024 && ['data:image/png;base64', 'data:image/jpeg;base64', 'data:image/webp;base64'].includes(header) && payload.length > 0 && payload.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(payload)) return candidate;
+    throw new CanvasValidationError('Canvas embedded assets must be bounded base64 PNG, JPEG, or WebP images.');
+  }
   if (candidate.startsWith('/') || candidate.startsWith('./') || candidate.startsWith('../')) {
     throw new CanvasValidationError('Canvas asset URLs must use an explicit HTTP(S) or blob origin.');
   }

@@ -55,7 +55,7 @@ export function applyCanvasCommand(document: CanvasDocument, command: CanvasComm
     case 'createShapes':
       return { ...document, shapes: [...document.shapes, ...command.shapes] };
     case 'moveShapes': {
-      const ids = new Set(command.ids);
+      const ids = new Set<string>(command.ids);
       return {
         ...document,
         shapes: document.shapes.map(shape =>
@@ -64,11 +64,11 @@ export function applyCanvasCommand(document: CanvasDocument, command: CanvasComm
       };
     }
     case 'deleteShapes': {
-      const ids = new Set(command.ids);
+      const ids = new Set<string>(command.ids);
       return {
         ...document,
         shapes: document.shapes.filter(shape => {
-          if (ids.has(shape.id)) return false;
+          if (ids.has(shape.id) || (shape.parentId && ids.has(shape.parentId))) return false;
           if (shape.type !== 'arrow') return true;
           return !(shape.fromId && ids.has(shape.fromId)) && !(shape.toId && ids.has(shape.toId));
         }),
@@ -209,6 +209,7 @@ function parseCommonShape(
     h,
     rotation: readOptionalFiniteNumber(input, 'rotation'),
     groupId: readOptionalString(input, 'groupId'),
+    parentId: readOptionalString(input, 'parentId'),
     html: readOptionalHtml(input, 'html'),
     text: readOptionalString(input, 'text'),
     color: readOptionalColor(input, 'color'),
@@ -229,7 +230,8 @@ function parseCommonShape(
 }
 
 function readOptionalAssetUrl(input: Record<string, unknown>, key: string): string | undefined {
-  const value = readOptionalString(input, key);
+  const raw = input[key];
+  const value = typeof raw === 'string' && raw.startsWith('data:') ? raw : readOptionalString(input, key);
   return value === undefined ? undefined : validateCanvasAssetUrl(value);
 }
 

@@ -10,6 +10,7 @@ import {
   centreOf,
   effectiveBorder,
   effectiveFill,
+  effectiveText,
   escapeHtml,
   htmlToLines,
   polygonPoints,
@@ -19,6 +20,7 @@ import {
   shapePlainText,
 } from './canvasGeometry';
 import { orthogonalEndAngle, pathMidpoint, segmentAngle, toPath } from './canvasRouting';
+import { shapeOutlinePath } from './canvasShapeStyle';
 import { fontStackForShape } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
 import { effectiveStroke, shapeStrokeRendering } from './canvasShapeStyle';
@@ -103,7 +105,7 @@ function buildCanvasSvgForShapes(
     const c = centreOf(s);
     const rot = s.rotation ? ` transform="rotate(${(s.rotation * 180) / Math.PI} ${c.x} ${c.y})"` : '';
 
-    const ink = s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink;
+    const ink = s.strokeColor ?? (s.color ? CANVAS_COLORS[s.color].border : CANVAS_UI_COLORS.ink);
     if (s.type === 'draw' && s.points) {
       const rendering = shapeStrokeRendering(s);
       const color = escapeHtml(effectiveStroke(s));
@@ -169,9 +171,9 @@ function buildCanvasSvgForShapes(
         + `<text x="${b.minX}" y="${b.minY - 8}" font-family="Inter, system-ui, sans-serif" font-size="13" fill="${CANVAS_UI_COLORS.muted}">${escapeHtml(s.text ?? '프레임')}</text></g>`;
     }
     if (s.type === 'note') {
-      return `<g${rot}><rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}" fill="${palette.bg}"/>`
+      return `<g${rot}><rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="${b.maxY - b.minY}" fill="${effectiveFill(s)}"/>`
         + `<rect x="${b.minX}" y="${b.minY}" width="${b.maxX - b.minX}" height="6" fill="${palette.border}"/>`
-        + textBlock(s, palette.text, 14, '600', 'start') + `</g>`;
+        + textBlock(s, effectiveText(s), 14, '600', 'start') + `</g>`;
     }
     if (s.type === 'card') {
       const isGlass = s.cardStyle === 'glass';
