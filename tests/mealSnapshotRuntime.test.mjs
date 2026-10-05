@@ -570,8 +570,18 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭 가슴살"]'),null);
   const persistedChoice=runtime.shoppingState.list.find((item)=>item.key==='NeueMarkt:닭가슴살');
   persistedChoice.product='Persisted chosen fillet';persistedChoice.source='https://example.com/persisted-choice';
+  dom.window.document.getElementById('openBuyList').click();
+  assert.equal(dom.window.document.getElementById('buyListDialog').open,true);
+  assert.equal(dom.window.document.getElementById('buyListCount').textContent,'('+runtime.shoppingState.list.filter((item)=>!item.completed).length+')');
+  assert.match(dom.window.document.getElementById('buyListItems').textContent,/닭가슴살.*Persisted chosen fillet/s);
+  assert.match(dom.window.document.getElementById('buyListItems').textContent,/식용유/);
+  dom.window.document.getElementById('closeBuyList').click();
+  assert.equal(dom.window.document.getElementById('buyListDialog').open,false);
+  dom.window.document.querySelector('#groceryPending [data-grocery-group="shared"]').open=true;
   const persistedCheckbox=dom.window.document.querySelector('[data-grocery-key="NeueMarkt:닭가슴살"]');
   persistedCheckbox.checked=true;persistedCheckbox.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
+  assert.equal(dom.window.document.querySelector('#groceryPending [data-grocery-group="shared"]').open,true);
+  assert.equal(dom.window.document.querySelector('#groceryPending [data-grocery-group="menu:neuemarkt-recipe-8000001"]').open,false);
   assert.match(dom.window.document.getElementById('groceryCompleted').textContent,/Persisted chosen fillet.*가격 근거 연결됨/s);
   dom.window.document.querySelectorAll('[data-grocery-remove]').forEach((button)=>button.click());
   dom.window.document.getElementById('acceptToday').click();

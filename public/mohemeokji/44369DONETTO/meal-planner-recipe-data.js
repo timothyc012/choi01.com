@@ -931,13 +931,21 @@
         };
         const orderedMenus=[...weeklyPlanMeals(),...libraryMeals];
         const groups=shopping.groupListByMenu(shoppingState.list.filter((item)=>!item.completed),orderedMenus);
+        const openGroups=new Set([...byId('groceryPending').querySelectorAll('details.grocery-group[open]')].map((group)=>group.dataset.groceryGroup));
         byId('groceryPending').innerHTML=groups.map((group)=>{
           const groupProgress=shopping.listProgress(group.items);
-          return '<details class="grocery-group" data-grocery-group="'+escapeHtml(group.key)+'"><summary><span><strong>'+escapeHtml(group.title)+'</strong><small>'+group.items.length+'종 · '+escapeHtml(shopping.summary(groupProgress))+'</small></span><span class="grocery-group-action" aria-hidden="true">펼치기</span></summary><ul class="grocery-list" aria-label="'+escapeHtml(group.title)+' 구매하지 않은 재료">'+group.items.map(row).join('')+'</ul></details>';
+          return '<details class="grocery-group" data-grocery-group="'+escapeHtml(group.key)+'"'+(openGroups.has(group.key)?' open':'')+'><summary><span><strong>'+escapeHtml(group.title)+'</strong><small>'+group.items.length+'종 · '+escapeHtml(shopping.summary(groupProgress))+'</small></span><span class="grocery-group-action" aria-hidden="true">펼치기</span></summary><ul class="grocery-list" aria-label="'+escapeHtml(group.title)+' 구매하지 않은 재료">'+group.items.map(row).join('')+'</ul></details>';
         }).join('');
         byId('groceryCompleted').innerHTML=shoppingState.list.filter((item)=>item.completed).map(row).join('');
+        const toBuy=shoppingState.list.filter((item)=>!item.completed);
+        byId('buyListCount').textContent='('+toBuy.length+')';
+        byId('buyListSummary').textContent=toBuy.length?'아직 안 산 재료 '+toBuy.length+'종 · 남은 구매금액 '+shopping.summary(progress):'아직 담긴 재료가 없습니다. ‘이번 주 재료 확인하고 추가’로 재료를 담아주세요.';
+        byId('buyListItems').innerHTML=toBuy.map((item)=>{
+          const product=item.product||catalog[item.store]?.[item.name]?.product||'독어 상품명 미확인';
+          return '<li><span><strong>'+escapeHtml(item.name)+'</strong><small lang="de">'+escapeHtml(product)+'</small><small>'+escapeHtml(item.store+' · '+item.pack+(item.quantityNeedsCheck?' · 구매 수량 확인':' × '+item.quantity))+'</small></span><span class="buy-list-cost">'+(item.priceCents===null||item.quantityNeedsCheck?'가격 미확인':shopping.euro(item.priceCents*item.quantity))+'</span></li>';
+        }).join('');
         byId('groceryCompletedSection').hidden=progress.completedCount===0;
-        byId('groceryCompletedLabel').textContent='구매 완료 '+progress.completedCount+'종';
+        byId('groceryCompletedLabel').textContent='구매 완료 '+progress.completedCount+'종 · 체크를 풀면 살 재료 목록으로 돌아갑니다';
       }
 
       function hydrateMeal(meal,detail) {
@@ -1283,6 +1291,17 @@
         item.completed=input.checked;
         saveShopping();renderGroceries();
       });
+      byId('openBuyList').addEventListener('click',()=>{
+        renderGroceries();
+        const dialog=byId('buyListDialog');
+        if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
+        byId('closeBuyList').focus();
+      });
+      byId('closeBuyList').addEventListener('click',()=>{
+        const dialog=byId('buyListDialog');
+        if(typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open');
+        byId('openBuyList').focus();
+      });
       byId('groceries').addEventListener('click',(event)=>{
         const button=event.target.closest('[data-grocery-remove]');
         if(!button)return;
@@ -1302,7 +1321,7 @@
       byId('menuList').innerHTML='<p class="panel-copy" role="alert">선택한 지점의 메뉴를 표시할 수 없습니다.</p>';
       byId('weekGrid').innerHTML='<p class="panel-copy" role="alert" style="padding:16px">식단은 불러오지 못한 자료로 자동 채우지 않습니다.</p>';
       byId('pantryList').innerHTML='<li class="panel-copy" style="padding:14px">할인 재료를 확인할 수 없습니다.</li>';
-      for(const selector of ['#autoPlan','#clearPlan','#savePlan','#acceptToday','#nextRecommendation','#todayShopping','#prepareShopping','#targetServings','input[name="recommendationMode"]','#manualPick','#shoppingList','#markEaten','#eatFromDetail','#addFromDetail','#addShoppingItems','#menuSearch','.filter','[data-moment]','#postcodeSelect','#storeSelect','#branchSelect'])document.querySelectorAll(selector).forEach((control)=>{control.disabled=true;});
+      for(const selector of ['#autoPlan','#clearPlan','#savePlan','#acceptToday','#nextRecommendation','#todayShopping','#prepareShopping','#openBuyList','#targetServings','input[name="recommendationMode"]','#manualPick','#shoppingList','#markEaten','#eatFromDetail','#addFromDetail','#addShoppingItems','#menuSearch','.filter','[data-moment]','#postcodeSelect','#storeSelect','#branchSelect'])document.querySelectorAll(selector).forEach((control)=>{control.disabled=true;});
       byId('snapshotRecovery').hidden=false;
       const safeParams=new URLSearchParams(window.location.search);
       safeParams.delete('snapshot');
