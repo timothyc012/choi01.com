@@ -298,6 +298,60 @@ test('basket exposes complete, partial, and unknown cost facts without calling g
   assert.equal(unknown.knownSubtotalCents,0);
 });
 
+const compilerMeal={id:'rice',store:'Netto',title:'밥',sale:['쌀'],missing:[],detailIngredients:['쌀 200g']};
+const compilerContext={postcode:'44369',store:'Netto',branchId:'branch-a',date:'2026-10-05',targetServings:2};
+function compilerFacts(overrides={}) {
+  return {sourceCoverage:'complete',sourceRecipeId:'recipe-a',...compilerContext,items:[{
+    key:'food-rice|v1|raw|g',name:'쌀',pantryKeys:['Netto:쌀'],product:'Langkornreis',identity:{ingredientId:'쌀',processingState:'raw',form:'grain'},
+    pack:{amount:500,unit:'g'},requiredAmount:{amount:200,unit:'g'},priceCents:199,
+    quantity:1,subtotalCents:199,quantityComplete:true,sourceURL:'https://example.test/ordinary-rice',
+    sourceSha256:'a'.repeat(64),validFrom:'2026-10-05',validThrough:'2026-10-11'
+  }],...overrides};
+}
+
+test('compiler whole-pack baskets share packs across recipes and keep ordinary price evidence',()=>{
+  vm.runInContext(fs.readFileSync(new URL('meal-recommendations.js',root),'utf8'),context);
+  const facts=compilerFacts();
+  const cart=shopping.compilerBasket([facts,{...facts,sourceRecipeId:'recipe-b'}],{context:compilerContext,recipeIds:['recipe-a','recipe-b'],meals:[compilerMeal,compilerMeal]});
+  assert.equal(cart.knownSubtotalCents,199);
+  assert.equal(cart.items.length,1);
+  assert.equal(cart.items[0].quantity,1);
+  assert.equal(cart.items[0].requiredAmount.amount,400);
+  assert.equal(cart.items[0].key,'Netto:쌀');
+  assert.equal(cart.items[0].source,'https://example.test/ordinary-rice');
+  const list=shopping.addToList([],cart);
+  assert.equal(list[0].quantity,1);
+  assert.equal(list[0].quantityNeedsCheck,false);
+  assert.deepEqual(Object.keys(list[0].contributions),['recipe-a','recipe-b']);
+  const stocked=shopping.compilerBasket([facts],{context:compilerContext,pantry:new Set(['Netto:쌀']),meals:[compilerMeal]});
+  assert.equal(stocked.purchaseCount,0);
+  assert.equal(stocked.knownSubtotalCents,0);
+});
+
+test('compiler costs require an exact context and every reviewed pantry alias in a group',()=>{
+  const facts=compilerFacts();
+  for(const [key,value] of Object.entries({postcode:'40474',store:'EDEKA',branchId:'other',date:'2026-10-06',targetServings:4})) {
+    assert.equal(shopping.marginalBasketFacts(facts,new Set(),{...compilerContext,[key]:value}).costStatus,'unknown',key);
+  }
+  assert.equal(shopping.marginalBasketFacts(facts,new Set()).costStatus,'unknown');
+  const grouped=compilerFacts({items:[{...facts.items[0],name:'쌀 · 밥',pantryKeys:['Netto:쌀','Netto:밥']} ]});
+  assert.equal(shopping.marginalBasketFacts(grouped,new Set(['Netto:쌀']),compilerContext,compilerMeal).knownSubtotalCents,199);
+  assert.equal(shopping.marginalBasketFacts(grouped,new Set(['Netto:쌀','Netto:밥']),compilerContext,compilerMeal).knownSubtotalCents,0);
+  const ambiguous=compilerFacts({items:[{...facts.items[0],priceCents:299,subtotalCents:299}]});
+  assert.equal(shopping.compilerBasket([facts,ambiguous],{context:compilerContext}),null);
+  const incomplete=compilerFacts({items:[{...facts.items[0],requiredAmount:null}]});
+  assert.equal(shopping.compilerBasket([incomplete],{context:compilerContext}),null);
+});
+
+test('ordinary nutrition menus do not borrow sale prices from an unreviewed ingredient connection',()=>{
+  const meal={store:'Netto',disableOfferPricing:true,sale:[],missing:['닭고기'],requiredAmounts:{닭고기:{amount:300,unit:'g'}}};
+  const cart=shopping.basket([meal],{catalog:fixtureCatalog});
+  assert.equal(cart.items[0].priceCents,null);assert.equal(cart.costStatus,'unknown');
+  const entered=shopping.basket([meal],{catalog:fixtureCatalog,prices:{'Netto:닭고기':799}});
+  assert.equal(entered.items[0].priceCents,799);assert.equal(entered.items[0].customPrice,true);
+  assert.equal(entered.items[0].quantityNeedsCheck,true);
+});
+
 test('source-quantity-unknown ingredients remain visible and cannot produce a definitive total',()=>{
   const label='우유 (원문 수량 미표기)';
   assert.equal(shopping.ingredientName(label),'우유');

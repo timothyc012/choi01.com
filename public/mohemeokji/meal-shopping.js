@@ -148,8 +148,10 @@
   }
 
   function metricAmount(value) {
-    const text = String(value || "").trim().replace(",", ".");
-    if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
+    const text = String(value || "").trim().replace(",", ".").replace(/(\d)-(?=(?:kg|g|ml|l)\b)/gi,"$1 ");
+    // A quoted weight rate is not the weight of a purchasable package.
+    if(/\b(?:je|pro|per)\s*(?:\d+(?:\.\d+)?\s*)?(?:kg|g|ml|l)\b|(?:kg|g|ml|l)\s*당|구매\s*중량\s*확인/i.test(text))return null;
+    if (/\d\s*(?:kg|g|ml|l)?\s*[-–/]\s*\d|\/\s*(?:kg|g|ml|l)\b|für|ab\s/i.test(text)) return null;
     const bundle = text.match(/(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     const match = bundle || text.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l)\b/i);
     if (!match) return null;
@@ -170,6 +172,30 @@
     return String(Number(amount.toFixed(2))) + " " + unit + " 필요";
   }
 
+  function offerView(offer, name) {
+    return {...offer,identity:{...(offer?.identity||{ingredientId:name})},product:offer?.product||offer?.productDe||'',source:offer?.source||offer?.evidenceUrl||offer?.sourceURL||''};
+  }
+
+  function compatibleOffer(offer, meal, name) {
+    const view=offerView(offer,name),policy=window.MealRecommendations;
+    if(normalize(view.identity.ingredientId)!==normalize(name))return false;
+    if(!view.product.trim())return !meal.strictPriceEvidence;
+    if(!policy?.safeOffer||!policy?.offerMatchesRecipe)return !meal.strictPriceEvidence;
+    return policy.safeOffer(view)&&policy.offerMatchesRecipe(view,meal);
+  }
+
+  function offerKey(offer) {
+    const view=offerView(offer,offer?.identity?.ingredientId||'');
+    return JSON.stringify([view.offerId||'',view.identity.ingredientId,view.identity.form||'',view.product,view.pack,view.priceCents,view.source]);
+  }
+
+  function candidatesFor(meal, originalName, name, catalog) {
+    if(meal.disableOfferPricing)return [];
+    const own=meal.offerCatalog||{},store=meal.offerCatalogOnly?{}:catalog[meal.store]||{};
+    return [own[originalName],own[name],...(own.offersByIngredient?.[originalName]||[]),...(own.offersByIngredient?.[name]||[]),
+      store[originalName],store[name],...(store.offersByIngredient?.[originalName]||[]),...(store.offersByIngredient?.[name]||[])].filter(Boolean).map(offer=>offerView(offer,name));
+  }
+
   function basket(meals, options = {}) {
     const { catalog = {}, pantry = new Set(), prices = {}, quantities = {} } = options;
     const ingredients = new Map();
@@ -181,9 +207,11 @@
         const key = keyFor(meal.store, name);
         const alreadySeen=seenInMeal.has(key);
         seenInMeal.add(key);
-        const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name];
+        const compact=value=>String(value).normalize('NFKC').replace(/\s+/g,'');
+        const aliases=Object.entries(meal.requiredAmounts||{}).filter(([label])=>compact(label)===compact(originalName)||compact(label)===compact(name));
+        const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name] || (aliases.length===1?aliases[0][1]:null);
         const required = candidate && Number.isFinite(candidate.amount) && candidate.amount > 0 && ['g', 'ml'].includes(candidate.unit) ? candidate : null;
-        const offer = meal.offerCatalog?.[originalName] || catalog[meal.store]?.[originalName] || meal.offerCatalog?.[name] || catalog[meal.store]?.[name];
+        const candidates=candidatesFor(meal,originalName,name,catalog);
         const existing = ingredients.get(key);
         if (existing) {
           if(!alreadySeen)existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
@@ -199,29 +227,34 @@
               ? {amount:(prior?.unit===required.unit?prior.amount:0)+required.amount,unit:required.unit}
               : null;
           }
-          if(!existing.product&&offer) {
-            existing.pack=offer.pack||existing.pack;existing.product=offer.product||'';existing.source=offer.source||'';
-            existing.priceCents=Number.isSafeInteger(offer.priceCents)&&offer.priceCents>=0?offer.priceCents:existing.priceCents;
-            existing.normalPriceCents=Number.isSafeInteger(offer.normalPriceCents)&&offer.normalPriceCents>=existing.priceCents?offer.normalPriceCents:null;
+          if(!alreadySeen) {
+            existing.dependentMeals.push(meal);
           }
+          for(const offer of candidates)existing.offerChoices.set(offerKey(offer),offer);
           continue;
         }
         if(alreadySeen)continue;
-        const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
-        const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
-        const normalPrice = offer?.normalPriceCents;
         ingredients.set(key, {
-          key, name, store: meal.store, pack: offer?.pack || "구매 단위 직접 확인",
-          product: offer?.product || "", source: offer?.source || "",
-          customPrice: Object.hasOwn(prices, key),
-          priceCents, normalPriceCents: Number.isSafeInteger(normalPrice) && normalPrice >= priceCents ? normalPrice : null,
+          key, name, store: meal.store,dependentMeals:[meal],offerChoices:new Map(candidates.map(offer=>[offerKey(offer),offer])),
           owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
           requirementComplete: Boolean(required),contributions:contributionKey?{[contributionKey]:required?{...required}:null}:{}
         });
       }
     }
-    const items = [...ingredients.values()].map((item) => {
-      const manualQuantity = Number.isSafeInteger(quantities[item.key]) && quantities[item.key] > 0 && quantities[item.key] <= 999
+    const items = [...ingredients.values()].map(({dependentMeals,offerChoices,...item}) => {
+      const compatible=[...offerChoices].filter(([,offer])=>dependentMeals.every(meal=>compatibleOffer(offer,meal,item.name)));
+      const chosen=compatible[0],offer=chosen?.[1];
+      const semanticHeld=offerChoices.size>0&&!offer;
+      const price=semanticHeld?null:(Object.hasOwn(prices,item.key)?prices[item.key]:offer?.priceCents);
+      item.priceCents=Number.isSafeInteger(price)&&price>=0?price:null;
+      item.pack=offer?.pack||'구매 단위 직접 확인';item.product=offer?.product||'';item.source=offer?.source||'';
+      item.identity=offer?.identity?{...offer.identity}:undefined;item.offerId=offer?.offerId;item.detail=offer?.detail;
+      item.validFrom=offer?.validFrom;item.validThrough=offer?.validThrough;
+      item.category=offer?.category;item.productInfo=offer?.productInfo;
+      item.offerKey=chosen?.[0]||null;item.compatibleOfferKeys=compatible.map(([key])=>key);item.semanticHeld=semanticHeld;
+      item.customPrice=!semanticHeld&&Object.hasOwn(prices,item.key);
+      item.normalPriceCents=Number.isSafeInteger(offer?.normalPriceCents)&&offer.normalPriceCents>=item.priceCents?offer.normalPriceCents:null;
+      const manualQuantity = !semanticHeld&&Number.isSafeInteger(quantities[item.key]) && quantities[item.key] > 0 && quantities[item.key] <= 999
         ? quantities[item.key] : null;
       const packAmount = metricAmount(item.pack);
       const canCalculate = item.requirementComplete && packAmount && item.requiredAmount.unit === packAmount.unit;
@@ -234,6 +267,7 @@
         requiredLabel: formatRequired(item.requiredAmount),
         quantityCalculated: manualQuantity === null && Boolean(canCalculate),
         quantityNeedsCheck: manualQuantity === null && !canCalculate,
+        quantityComplete:manualQuantity!==null||Boolean(canCalculate),
         subtotalCents: item.priceCents === null ? null : item.priceCents * quantity
       };
     });
@@ -271,15 +305,85 @@
     return {recipeId:null,origin:'manual',dismissedRecipeIds:[]};
   }
 
-  function marginalBasketFacts(facts, pantry = new Set()) {
-    if(facts?.sourceCoverage!=='complete'||!Number.isInteger(facts.targetServings)||facts.targetServings<1||!Array.isArray(facts.items)||!facts.items.length) {
-      return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+  function matchesBasketContext(facts, context) {
+    return Boolean(context && facts?.sourceCoverage==='complete'
+      && ['postcode','store','branchId','date','targetServings'].every((key)=>context[key]!==undefined&&facts[key]===context[key])
+      && /^\d{5}$/.test(context.postcode) && /^\d{4}-\d{2}-\d{2}$/.test(context.date)
+      && typeof context.store==='string'&&context.store&&typeof context.branchId==='string'&&context.branchId
+      && Number.isSafeInteger(context.targetServings)&&context.targetServings>0);
+  }
+
+  function pantryOwns(item, pantry) {
+    const keys=Array.isArray(item.pantryKeys)&&item.pantryKeys.length?item.pantryKeys:[item.key];
+    return keys.every((key)=>pantry.has(key));
+  }
+
+  // Compiler prices include ordinary ingredients as well as offers. Combine
+  // measured requirements before buying packs, rather than adding recipe totals.
+  function compilerBasket(factsList, {context, pantry=new Set(), recipeIds=[],meals=[]}={}) {
+    if(!Array.isArray(factsList)||!factsList.length)return null;
+    const groups=new Map(),aliasGroups=new Map();
+    const money=(value)=>Number.isSafeInteger(value)&&value>=0;
+    for(let index=0;index<factsList.length;index+=1) {
+      const facts=factsList[index];
+      if(!matchesBasketContext(facts,context)||!Array.isArray(facts.items)||!facts.items.length)return null;
+      for(const item of facts.items) {
+        const required=item.requiredAmount,pack=item.pack,keys=item.pantryKeys;
+        if(typeof item.product!=='string'||!item.product.trim()||!item.identity||!meals[index]
+          ||!compatibleOffer({...item,pack:String(pack?.amount)+' '+pack?.unit},{...meals[index],strictPriceEvidence:true},item.identity.ingredientId)
+          ||typeof item.key!=='string'||!item.key||!Array.isArray(keys)||!keys.length
+          ||keys.some((key)=>typeof key!=='string'||!key.startsWith(context.store+':')||key===context.store+':')
+          ||keys.some(key=>normalize(key.slice(context.store.length+1))!==normalize(item.identity.ingredientId))
+          ||!required||!Number.isFinite(required.amount)||required.amount<=0||!['g','ml'].includes(required.unit)
+          ||!pack||!Number.isFinite(pack.amount)||pack.amount<=0||pack.unit!==required.unit
+          ||!money(item.priceCents)||!Number.isSafeInteger(item.quantity)||item.quantity<1||item.quantityComplete!==true
+          ||item.subtotalCents!==item.priceCents*item.quantity||!money(item.subtotalCents)
+          ||typeof item.sourceURL!=='string'||!/^https:\/\//.test(item.sourceURL)||!/^([a-f0-9]{64})$/.test(item.sourceSha256||'')
+          ||!item.validFrom||!item.validThrough||item.validFrom>context.date||item.validThrough<context.date)return null;
+        for(const key of keys) {
+          if(aliasGroups.has(key)&&aliasGroups.get(key)!==item.key)return null;
+          aliasGroups.set(key,item.key);
+        }
+        let group=groups.get(item.key);
+        if(group&&offerKey({...group,pack:String(group.pack.amount)+' '+group.pack.unit})!==offerKey({...item,pack:String(pack.amount)+' '+pack.unit}))return null;
+        if(group&&(group.pack.amount!==pack.amount||group.pack.unit!==pack.unit||group.priceCents!==item.priceCents
+          ||group.sourceURL!==item.sourceURL||group.sourceSha256!==item.sourceSha256))return null;
+        if(!group) {
+          group={...item,pack:{...pack},requiredAmount:{amount:0,unit:required.unit},pantryKeys:[],contributions:{}};
+          groups.set(item.key,group);
+        }
+        group.requiredAmount.amount+=required.amount;
+        group.pantryKeys=[...new Set([...group.pantryKeys,...keys])];
+        const recipeId=recipeIds[index]||facts.sourceRecipeId;
+        if(recipeId) {
+          const previous=group.contributions[recipeId];
+          group.contributions[recipeId]={amount:(previous?.amount||0)+required.amount,unit:required.unit};
+        }
+      }
     }
-    const valid=facts.items.every((item)=>typeof item?.key==='string'&&item.key&&Number.isSafeInteger(item.priceCents)&&item.priceCents>=0&&Number.isSafeInteger(item.quantity)&&item.quantity>0&&item.quantityComplete===true&&item.subtotalCents===item.priceCents*item.quantity);
-    if(!valid)return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
-    const purchases=facts.items.filter((item)=>!pantry.has(item.key));
-    const comparable=purchases.length>0&&purchases.every((item)=>Number.isSafeInteger(item.normalPriceCents)&&item.normalPriceCents>=item.priceCents);
-    return {sourceCoverage:'complete',targetServings:facts.targetServings,costStatus:'complete',knownSubtotalCents:purchases.reduce((sum,item)=>sum+item.subtotalCents,0),unknownItemKeys:[],quantityCheckKeys:[],savingsStatus:comparable?'complete':'unavailable',savingsCents:comparable?purchases.reduce((sum,item)=>sum+(item.normalPriceCents-item.priceCents)*item.quantity,0):null};
+    const items=[];
+    for(const group of groups.values()) {
+      const ratio=group.requiredAmount.amount/group.pack.amount;
+      const quantity=Math.max(1,Math.ceil(ratio-Number.EPSILON*Math.max(1,Math.abs(ratio))*8));
+      if(!Number.isSafeInteger(quantity)||!money(quantity*group.priceCents))return null;
+      const key=group.pantryKeys[0],name=key.slice(context.store.length+1);
+      items.push({...group,key,name,label:group.name,store:context.store,
+        pack:String(group.pack.amount)+' '+group.pack.unit,source:group.sourceURL,product:group.product,identity:{...group.identity},
+        owned:pantryOwns(group,pantry),quantity,quantityCalculated:true,quantityNeedsCheck:false,
+        quantityComplete:true,offerKey:offerKey({...group,pack:String(group.pack.amount)+' '+group.pack.unit}),
+        compatibleOfferKeys:[offerKey({...group,pack:String(group.pack.amount)+' '+group.pack.unit})],
+        requiredLabel:formatRequired(group.requiredAmount),subtotalCents:quantity*group.priceCents});
+    }
+    const purchases=items.filter((item)=>!item.owned),knownSubtotalCents=purchases.reduce((sum,item)=>sum+item.subtotalCents,0);
+    if(!money(knownSubtotalCents))return null;
+    return {...context,sourceCoverage:'complete',items,totalCents:knownSubtotalCents,knownSubtotalCents,
+      unknownItemKeys:[],quantityCheckKeys:[],costStatus:'complete',savingsStatus:'unavailable',savingsCents:null,
+      unknownCount:0,quantityCheckCount:0,purchaseCount:purchases.length};
+  }
+
+  function marginalBasketFacts(facts, pantry = new Set(), context,meal) {
+    const cart=compilerBasket([facts],{context,pantry,meals:[meal]});
+    return cart||{sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
   }
 
   function amount(cart) {
@@ -326,16 +430,29 @@
       const contributionValues=Object.values(contributions);
       const contributionUnit=contributionValues.find((value)=>value)?.unit;
       const contributionsComplete=contributionValues.length>0&&contributionValues.every((value)=>value&&value.unit===contributionUnit&&Number.isFinite(value.amount)&&value.amount>0);
-      const packAmount=metricAmount(previous?.product?previous.pack:item.pack);
+      const previousAllowed=!previous?.product||!Array.isArray(item.compatibleOfferKeys)||item.compatibleOfferKeys.some(key=>{
+        if(previous.offerKey)return key===previous.offerKey;
+        try {const value=JSON.parse(key);return value[3]===previous.product&&value[4]===previous.pack&&value[5]===previous.priceCents&&value[6]===previous.source;}catch{return false;}
+      });
+      const semanticHeld=Boolean(previous?.semanticHeld||item.semanticHeld||!previousAllowed);
+      const pack=semanticHeld?'상품 연결 재확인':previous?.product?previous.pack:item.pack;
+      const packAmount=metricAmount(pack);
       const contributionQuantity=contributionsComplete&&packAmount&&packAmount.unit===contributionUnit
         ? Math.max(1,Math.ceil(contributionValues.reduce((sum,value)=>sum+value.amount,0)/packAmount.amount))
         : null;
       const quantity=contributionQuantity??Math.max(previous?.quantity || 1,item.quantity);
-      const quantityNeedsCheck=contributionValues.length?contributionQuantity===null:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck);
+      const quantityNeedsCheck=semanticHeld||(contributionValues.length?contributionQuantity===null:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck));
+      const retained=previous?.product?previous:item;
       merged.set(item.key, {
-        key: item.key, name: item.name, store: item.store, pack: previous?.product?previous.pack:item.pack,
-        product:previous?.product||item.product||'',source:previous?.source||item.source||'',
-        quantity, priceCents: previous?.product?previous.priceCents:item.priceCents, quantityNeedsCheck,contributions,
+        key: item.key, name: item.name, store: item.store, pack,
+        pantryKeys:[...new Set([...(previous?.pantryKeys||[item.key]),...(item.pantryKeys||[item.key])])],
+        product:semanticHeld?'':retained.product||'',source:semanticHeld?'':retained.source||'',
+        identity:semanticHeld?undefined:retained.identity,offerId:semanticHeld?undefined:retained.offerId,
+        offerKey:semanticHeld?null:retained.offerKey||null,compatibleOfferKeys:semanticHeld?[]:previous?.compatibleOfferKeys?.length
+          ?previous.compatibleOfferKeys.filter(key=>item.compatibleOfferKeys?.includes(key)):item.compatibleOfferKeys||[],
+        validFrom:semanticHeld?undefined:retained.validFrom,validThrough:semanticHeld?undefined:retained.validThrough,
+        detail:semanticHeld?undefined:retained.detail,category:semanticHeld?undefined:retained.category,productInfo:semanticHeld?undefined:retained.productInfo,
+        semanticHeld,quantity, priceCents:semanticHeld?null:retained.priceCents, quantityNeedsCheck,contributions,
         completed: Boolean(previous?.completed && quantity === previous.quantity)
       });
     }
@@ -352,7 +469,7 @@
       completedCount: list.length - remaining.length,
       purchaseCount: remaining.length,
       totalCents: knownSubtotalCents,knownSubtotalCents,unknownCount,quantityCheckCount,
-      costStatus:unknownCount||quantityCheckCount?'partial':'complete'
+      costStatus:remaining.length>0&&unknownCount===remaining.length?'unknown':unknownCount||quantityCheckCount?'partial':'complete'
     };
   }
 
@@ -417,10 +534,20 @@
             || !validQuantity(item.quantity) || !validPrice(item.priceCents)
             || (item.product!==undefined&&typeof item.product!=="string") || (item.source!==undefined&&typeof item.source!=="string")
             || (item.contributions!==undefined&&!validContributions(item.contributions))
-            || typeof item.completed !== "boolean" || state.pantry.has(item.key) || seen.has(item.key)) return false;
+            || (item.pantryKeys!==undefined&&(!Array.isArray(item.pantryKeys)||!item.pantryKeys.length||item.pantryKeys.some((key)=>!validKey(key))))
+            || typeof item.completed !== "boolean" || pantryOwns(item,state.pantry) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{} }));
+        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions, pantryKeys,identity,offerId,offerKey,compatibleOfferKeys,validFrom,validThrough,semanticHeld,detail,category,productInfo }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{},pantryKeys:(pantryKeys||[key]).map(canonicalKey),identity:record(identity)?{...identity}:undefined,offerId:typeof offerId==='string'?offerId:undefined,offerKey:typeof offerKey==='string'?offerKey:null,compatibleOfferKeys:Array.isArray(compatibleOfferKeys)?compatibleOfferKeys.filter(value=>typeof value==='string'):[],validFrom,validThrough,semanticHeld:semanticHeld===true,detail,category,productInfo }));
+        state.list=state.list.map(item=>{
+          const view=offerView(item,item.name),policy=window.MealRecommendations;
+          const dependencies=Object.keys(item.contributions||{}).map(id=>options.recipeFor?.(id)).filter(Boolean);
+          const invalid=item.semanticHeld||(item.product&&policy?.safeOffer&&(!policy.safeOffer(view)||normalize(view.identity.ingredientId)!==normalize(item.name)
+            ||dependencies.some(meal=>!policy.offerMatchesRecipe(view,meal))));
+          if(!invalid)return item;
+          delete state.prices[item.key];for(const values of Object.values(state.quantities))delete values[item.key];
+          return {...item,semanticHeld:true,product:'',source:'',pack:'상품 연결 재확인',priceCents:null,quantityNeedsCheck:true,identity:undefined,offerId:undefined,offerKey:null,compatibleOfferKeys:[]};
+        });
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
@@ -440,5 +567,5 @@
     return JSON.stringify({ ...state, version: 1, snapshot, pantry: [...state.pantry] });
   }
 
-  window.MealShopping = { basket, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, groupListByMenu, listProgress, restoreState, serializeState };
+  window.MealShopping = { basket, compilerBasket, matchesBasketContext, pantryOwns, euro, parsePrice, keyFor, ingredientName, classifyIngredients, currentCatalog, restorePlans, normalizePlanSlot, restorePlansV2, refreshAutoPlans, replaceAutoSlot, clearPlanSlot, marginalBasketFacts, serializePlansV2, amount, summary, addToList, groupListByMenu, listProgress, restoreState, serializeState };
 }());

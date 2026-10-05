@@ -107,7 +107,7 @@ test('current flyer whole foods map to exact identities without broad aliases',(
   assert.ok(catalog['돼지목살']);
 });
 
-test('latest weekly source keeps the user priority postcode and store coverage non-empty',()=>{
+test('latest weekly source retains priority branches and does not promote unreviewed prices',()=>{
   const latest=fs.readdirSync(new URL('../public/offers/',import.meta.url)).map((name)=>{
     const match=name.match(/^supermarket_food_offers_(\d{4}-\d{2}-\d{2})(?:-reviewed(?:-v(\d+))?)?\.csv$/);
     return match?{name,date:match[1],version:Number(match[2]||1)}:null;
@@ -118,7 +118,11 @@ test('latest weekly source keeps the user priority postcode and store coverage n
   for(const [postcode,store] of [
     ['44369','Netto Marken-Discount'],['40474','EDEKA'],['40489','Lidl'],
   ]) {
-    assert.ok(Object.keys(catalog[postcode]?.[store]||{}).length>0,`${postcode} ${store} lost all reviewed recipe-compatible offers`);
+    const source=rows.filter(row=>row['우편번호']===postcode&&row['체인']===store);
+    assert.ok(source.length>0,`${postcode} ${store} source coverage is missing`);
+    assert.ok(catalog[postcode]&&Object.hasOwn(catalog[postcode],store));
+    if(source.every(row=>row['검토상태']==='미검토'))assert.equal(Object.keys(catalog[postcode][store]).length,0,'Unreviewed source cannot become a verified offer');
+    else assert.ok(Object.keys(catalog[postcode][store]).length>0,`${postcode} ${store} lost reviewed offers`);
   }
 });
 

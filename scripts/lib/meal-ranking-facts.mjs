@@ -28,13 +28,15 @@ export function nutritionReadiness(recipe = {}) {
   const facts = recipe.nutritionFacts;
   const perServing = facts?.perServing;
   const required = ['kcal', 'proteinGrams', 'fiberGrams', 'sodiumMg'];
-  const complete = facts?.status === 'complete'
+  const estimated=facts?.status==='estimated'&&facts.assumptionsComplete===true&&facts.uncertaintyKind==='reviewed-scenario-interval'&&Array.isArray(facts.assumptions)&&facts.assumptions.length>0
+    &&required.every(field=>Number.isFinite(facts.perServingRange?.[field]?.min)&&facts.perServingRange[field].min>=0&&Number.isFinite(facts.perServingRange[field].max)&&facts.perServingRange[field].max>=facts.perServingRange[field].min&&perServing?.[field]>=facts.perServingRange[field].min&&perServing[field]<=facts.perServingRange[field].max);
+  const complete = (facts?.status === 'complete'||estimated)
     && typeof facts.source === 'string' && facts.source.trim().length > 0
     && Number.isFinite(facts.sourceServings) && facts.sourceServings > 0
     && perServing && required.every((field) => Number.isFinite(perServing[field]) && perServing[field] >= 0);
   return {
     ready: Boolean(complete),
-    status: complete ? 'complete' : 'unknown',
+    status: complete ? facts.status : 'unknown',
     sourceServings: complete ? facts.sourceServings : null,
     perServing: complete ? Object.fromEntries(required.map((field) => [field, perServing[field]])) : null,
     source: complete ? facts.source : null

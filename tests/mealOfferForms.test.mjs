@@ -29,14 +29,26 @@ for(const [name,detail,key] of [
   ['ESCAL Regenbogen-Forellen','1 kg','송어'],
   ['Käsebrötchen','Stück','빵'],
   ['K-CLASSIC Toastbrötchen','335 g','토스트'],
+  ['TILLMAN’S Toasty, verschiedene Sorten, tiefgefroren','280 g','토스트'],
+  ['CHEF SELECT Chili-Cheese Nuggets/Mozzarella Sticks XXL','750 g','모짜렐라치즈'],
+  ['Mozzarella Sticks','paniert, tiefgefroren; 250 g','모짜렐라치즈'],
+  ['BARILLA Pastasauce','400 g','파스타'],
+  ['BARILLA Pasta Pesto','500 g','파스타'],
 ]) test(`${name} cannot price a different ingredient form (${key})`,()=>{
   assert.equal(catalog(name,detail)[key],undefined);
 });
 
 test('verified plain produce and dairy remain eligible without changing original names',()=>{
-  for(const [name,key] of [['Frisches Hähnchen Brustfilet','닭가슴살'],['3 Glocken Genuss Pur Pasta','파스타'],['Ecuador - Bananen','바나나'],['Span. Bio-Miniromatomaten','토마토'],['Zwiebeln rot','양파'],['Lauchzwiebeln','대파'],['Deutsche Markenbutter','버터'],['Naturjoghurt','요거트']]){
+  for(const [name,key] of [['ARLA Kaergarden Butter','버터'],['Mozzarella','모짜렐라치즈'],['Toastbrot','토스트'],['Frisches Hähnchen Brustfilet','닭가슴살'],['3 Glocken Genuss Pur Pasta','파스타'],['Ecuador - Bananen','바나나'],['Span. Bio-Miniromatomaten','토마토'],['Zwiebeln rot','양파'],['Lauchzwiebeln','대파'],['Deutsche Markenbutter','버터'],['Naturjoghurt','요거트']]){
     assert.equal(catalog(name)[key]?.productDe,name);
   }
+});
+
+for(const [name,detail,key] of [
+  ['Bananen, lose','je kg','바나나'],
+  ['BARILLA Pasta','1 kg','파스타'],
+]) test(`${name} keeps a verified plain ingredient match`,()=>{
+  assert.equal(catalog(name,detail)[key]?.productDe,name);
 });
 
 test('a store with no eligible offers keeps a stable branch reference',()=>{

@@ -6,6 +6,8 @@ import {validRecipeSourceUrl} from './lib/meal-snapshot-schema.mjs';
 import {pathToFileURL} from 'node:url';
 
 import {validateMealSnapshotDirectory} from './lib/validate-meal-snapshot.mjs';
+import {nutritionReadiness} from './lib/meal-ranking-facts.mjs';
+import {mealPolicy} from './lib/meal-policy.mjs';
 
 const DIGEST=/^[a-f0-9]{64}$/;
 export const DEFAULT_ASSET_BUDGETS=Object.freeze({
@@ -71,24 +73,21 @@ function completeCost(recipe) {
 }
 
 function completeNutrition(recipe) {
-  const facts=recipe?.nutritionFacts;
-  const per=facts?.perServing;
-  return facts?.status==='complete'&&Number.isFinite(facts.sourceServings)&&facts.sourceServings>0
-    &&['kcal','proteinGrams','fiberGrams','sodiumMg'].every((field)=>Number.isFinite(per?.[field])&&per[field]>=0);
+  return nutritionReadiness(recipe).ready&&mealPolicy.mealKind(recipe)==='main'&&mealPolicy.recipeAllowed(recipe);
 }
 
-function readiness(recipes) {
+function readiness(recipes,general=[]) {
   const balanced=recipes.length;
   const value=recipes.filter(completeCost).length;
-  const nutrition=recipes.filter(completeNutrition).length;
+  const nutrition=[...new Map([...recipes,...general].map(recipe=>[recipe.sourceRecipeId,recipe])).values()].filter(completeNutrition).length;
   const entry=(eligible,total,reason)=>eligible
     ? {eligible,status:'available',reason:null}
     : {eligible:0,status:'unavailable',reason};
   return {
     balanced:{eligible:balanced,status:balanced?'available':'unavailable',reason:balanced?null:'no approved exact-offer recipes'},
     value:entry(value,recipes.length,'complete basket price evidence absent'),
-    nutrition:entry(nutrition,recipes.length,'complete measured nutrient evidence absent'),
-    diet:entry(nutrition,recipes.length,'complete measured nutrient evidence absent'),
+    nutrition:entry(nutrition,recipes.length,'source-backed calculation or reviewed estimate absent'),
+    diet:entry(nutrition,recipes.length,'source-backed calculation or reviewed estimate absent'),
   };
 }
 
@@ -125,6 +124,7 @@ function verifyOne(snapshotDir,assetBudgets) {
   if(manifestBytes>budgets.manifestBytes) errors.push(`asset budget exceeded: manifest ${manifestBytes} > ${budgets.manifestBytes}`);
   const coverage=readJson(root,manifest.coveragePath,'coverage',errors);
   const recipeIndex=readJson(root,manifest.recipeIndexPath,'recipe index',errors);
+  const nutritionGeneral=manifest.nutritionCatalogPath?(readJson(root,manifest.nutritionCatalogPath,'nutrition catalog',errors)?.recipes||[]):[];
   const indexedRecipes=new Map();
   for(const entry of recipeIndex?.recipes||[]) {
     const detail=readJson(root,entry.path,'recipe detail',errors);
@@ -164,7 +164,7 @@ function verifyOne(snapshotDir,assetBudgets) {
     if(initialBytes>budgets.selectedInitialBytes) errors.push(`asset budget exceeded: selected initial ${reference.id} ${initialBytes} > ${budgets.selectedInitialBytes}`);
     if(browserInitialAssets.some((relative)=>relative.endsWith('.csv')||relative.includes('review-queue'))) errors.push(`browser initial assets include private publication input: ${reference.id}`);
     if(browserInitialAssets.filter((relative)=>relative.includes('/locations/')).length!==1) errors.push(`browser initial assets include unrelated locations: ${reference.id}`);
-    const modeReadiness=readiness(location.recipes||[]);
+    const modeReadiness=readiness(location.recipes||[],nutritionGeneral);
     if(modeReadiness.value.status==='unavailable'||modeReadiness.nutrition.status==='unavailable') warnings.push(`${reference.id}: evidence-limited recommendation modes are unavailable`);
     locations.push({id:reference.id,postcode:reference.postcode,store:reference.store,branchId:reference.branchId,offerCount:(location.offers||[]).length,recipeCount:(location.recipes||[]).length,zeroCandidateOfferCount:(coverageEntry?.zeroCandidateOfferIds||[]).length,sparse:coverageEntry?.sparse===true,assetBytes:{location:locationSize,selectedInitial:initialBytes,largestDetail:Math.max(0,...(location.recipes||[]).map((recipe)=>byteSize(root,recipe.detailPath)||0))},modeReadiness,browserInitialAssets});
   }
