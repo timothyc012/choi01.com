@@ -48,7 +48,8 @@
   }
 
   function fromSnapshotLocation(location) {
-    const offersById=Object.fromEntries((location?.offers||[]).map((offer)=>[offer.offerId,offer]));
+    const policy=window.MealRecommendations;
+    const offersById=Object.fromEntries((location?.offers||[]).filter(offer=>!policy||policy.safeOffer(offer)).map((offer)=>[offer.offerId,offer]));
     return (location?.recipes || []).filter((recipe)=>!window.MealRecommendations||window.MealRecommendations.recipeAllowed(recipe)).map((recipe) => {
       const matchedOffers=(recipe.offerIds||[]).map((offerId)=>offersById[offerId]).filter((offer)=>offer&&(!window.MealRecommendations||window.MealRecommendations.offerMatchesRecipe(offer,recipe)));
       const grouped=new Map();
@@ -64,6 +65,7 @@
         const offer=offers.find((entry)=>entry.offerId===recipe.preferredPricingOfferId)||offers.slice().sort((a,b)=>a.offerId.localeCompare(b.offerId))[0];
         return [ingredientId,{
           offerId:offer.offerId,product:offer.productDe,pack:offer.pack,priceCents:offer.priceCents,
+          identity:{...offer.identity},detail:offer.detail,category:offer.category,productInfo:offer.productInfo,
           normalPriceCents:Number.isSafeInteger(offer.normalPriceCents)?offer.normalPriceCents:null,
           validFrom:offer.validFrom,validThrough:offer.validThrough,source:offer.evidenceUrl||''
         }];
@@ -139,6 +141,7 @@
   function offerCatalogFromSnapshot(location) {
     const grouped = new Map();
     for (const offer of location?.offers || []) {
+      if(window.MealRecommendations&&!window.MealRecommendations.safeOffer(offer))continue;
       const ingredientId = offer?.identity?.ingredientId;
       if (typeof ingredientId !== 'string' || !ingredientId) continue;
       if (!grouped.has(ingredientId)) grouped.set(ingredientId,[]);
@@ -146,6 +149,7 @@
     }
     const normalizeOffer=(offer)=>({
       offerId:offer.offerId,
+      identity:{...offer.identity},detail:offer.detail,category:offer.category,productInfo:offer.productInfo,
       product:offer.productDe,
       pack:offer.pack,
       priceCents:offer.priceCents,
@@ -158,9 +162,20 @@
       const offer=offers.slice().sort((a,b)=>a.offerId.localeCompare(b.offerId))[0];
       return [ingredientId,normalizeOffer(offer)];
     }));
-    catalog.offersById=Object.fromEntries((location?.offers||[]).map((offer)=>[offer.offerId,normalizeOffer(offer)]));
+    catalog.offersById=Object.fromEntries([...grouped.values()].flat().map((offer)=>[offer.offerId,normalizeOffer(offer)]));
     catalog.offersByIngredient=Object.fromEntries([...grouped].map(([ingredientId,offers])=>[ingredientId,offers.map(normalizeOffer)]));
     return catalog;
+  }
+
+  function catalogForRecipe(meal,location) {
+    const policy=window.MealRecommendations;
+    const offers=(location.offers||[]).filter(offer=>policy.safeOffer(offer)&&policy.offerMatchesRecipe(offer,meal));
+    const scoped=offerCatalogFromSnapshot({offers});
+    for(const [name,preferred] of Object.entries(meal.offerCatalog||{})) {
+      const offer=offers.find(value=>value.offerId===preferred?.offerId);
+      if(offer&&scoped.offersById[offer.offerId])scoped[name]=scoped.offersById[offer.offerId];
+    }
+    return scoped;
   }
 
   function escapeHtml(value) {
@@ -434,7 +449,7 @@
       const oldShopping=storage.get(oldShoppingStorageKey);
       const acceptedOldShopping=acceptLegacyScopedPayload(oldShopping,{area:activeArea,store:activeStore,branchId:activeBranch.branchId,branchCount:branches.length,keyScoped:true});
       const savedShopping=safeJson(branchShopping)?branchShopping:acceptedOldShopping;
-      const shoppingState=shopping.restoreState(savedShopping,manifest.snapshotId,{stores:[activeStore]});
+      const shoppingState=shopping.restoreState(savedShopping,manifest.snapshotId,{stores:[activeStore],recipeFor:id=>libraryById.get(id)||libraryMeals.find(meal=>meal.sourceRecipeId===id)});
       const preferences=recommendations.restorePreferences(storage.get(preferenceStorageKey));
       const nutritionModes=new Set(['nutrition','diet']);
       let nutritionCatalogState=manifest.nutritionCatalogPath===undefined?'absent':'idle',nutritionCatalogPromise=null;
@@ -467,10 +482,10 @@
       const basketContext=()=>({postcode:location.postcode,store:activeStore,branchId:activeBranch.branchId,date:berlinDate,targetServings:preferences.targetServings});
       const modeBasket=(meal)=>{
         const facts=meal.basketFacts;
-        if(shopping.matchesBasketContext(facts,basketContext()))return shopping.marginalBasketFacts(facts,shoppingState.pantry,basketContext());
+        if(shopping.matchesBasketContext(facts,basketContext()))return shopping.marginalBasketFacts(facts,shoppingState.pantry,basketContext(),meal);
         return {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['recipe:'+meal.id+':full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable'};
       };
-      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,postcode:location.postcode,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,historyDate:actualDate,date:berlinDate,dietary,excludeIngredients});
+      const recommendationContext=()=>({catalog:catalog[activeStore],requireMainOffer:true,requireCompilerBasketFacts:true,localBasketEvidence:true,postcode:location.postcode,store:activeStore,branchId:activeBranch.branchId,mealOnly:true,offerIds,targetServings:preferences.targetServings,basketFor:modeBasket,history:mealHistory,historyDate:actualDate,date:berlinDate,dietary,excludeIngredients});
       const contextForMode=(mode)=>{
         const context=recommendationContext();
         if(nutritionModes.has(mode)){context.requireMainOffer=false;delete context.offerIds;}
@@ -556,9 +571,9 @@
         return useArchived?archivedMealCache.get(slot.recipeId)||null:meal;
       }).filter(Boolean);
       const basketFor=(items)=>{
-        const compiled=shopping.compilerBasket(items.map(meal=>meal.basketFacts),{context:basketContext(),pantry:shoppingState.pantry,recipeIds:items.map(meal=>meal.id)});
+        const compiled=shopping.compilerBasket(items.map(meal=>meal.basketFacts),{context:basketContext(),pantry:shoppingState.pantry,recipeIds:items.map(meal=>meal.id),meals:items});
         if(compiled)return compiled;
-        const cart=shopping.basket(items.map(meal=>({...scaledMeal(meal),disableOfferPricing:Boolean(meal.nutritionGeneral)})),{catalog,pantry:shoppingState.pantry,prices:shoppingState.prices,quantities:shoppingState.quantities.week||{}});
+        const cart=shopping.basket(items.map(meal=>({...scaledMeal(meal),offerCatalog:catalogForRecipe(meal,location),offerCatalogOnly:true,strictPriceEvidence:true,disableOfferPricing:Boolean(meal.nutritionGeneral)})),{catalog,pantry:shoppingState.pantry,prices:shoppingState.prices,quantities:shoppingState.quantities.week||{}});
         if(items.some(meal=>meal.basketFacts)&&cart.purchaseCount) {
           cart.sourceCoverage='unknown';
           cart.costStatus=cart.costStatus==='complete'?'partial':cart.costStatus;
@@ -908,7 +923,7 @@
         byId('groceryCost').textContent=shoppingState.list.length?'남은 구매금액 · '+shopping.summary(progress):'';
         byId('groceryEmpty').hidden=shoppingState.list.length>0;
         const row=(item)=>{
-          const offer=catalog[item.store]?.[item.name];
+          const offer=item.semanticHeld?null:catalog[item.store]?.[item.name];
           const product=item.product||offer?.product||'독어 상품명 미확인';
           const source=item.source||offer?.source;
           const usage=item.menuCount>1?'<small class="grocery-usage">'+item.menuCount+'개 메뉴에 사용</small>':'';
@@ -929,6 +944,8 @@
         const compact=(value)=>String(value).replace(/\s+/g,'');
         const ingredientNames=(detail.detailIngredients||[]).map(shopping.ingredientName).filter(Boolean).map((name)=>meal.sale.find((primary)=>compact(primary)===compact(name))||name);
         Object.assign(meal,detail,{title:detail.title||meal.title});
+        meal.matchedOffers=(meal.matchedOffers||[]).filter(offer=>recommendations.safeOffer(offer)&&recommendations.offerMatchesRecipe(offer,meal));
+        meal.offerIds=meal.matchedOffers.map(offer=>offer.offerId);
         meal.time=sourceMinutes(meal.sourceTimeText);
         meal.timeBasis=meal.time===null?'unknown':'source-upper-bound';
         const amounts=recommendations.recipeQuantities(meal);meal.sourceServings=amounts.sourceServings;meal.requiredAmounts=amounts.requiredAmounts;
