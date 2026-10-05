@@ -4,10 +4,10 @@ import fs from 'node:fs';
 
 import {buildDiscoveryCatalog} from '../scripts/build-meal-discovery-catalog.mjs';
 
-const identity=(ingredientId,species='plant')=>({ingredientId,species,cut:ingredientId,processingState:'fresh',form:'whole',composition:ingredientId});
+const identity=(ingredientId,species=ingredientId==='버섯'?'fungus':'plant')=>({ingredientId,species,cut:ingredientId,processingState:'fresh',form:'whole',composition:ingredientId});
 const offer=(offerId,ingredientId,postcode='44369',store='ALDI Nord')=>({
   offerId,postcode,chain:store,branchId:'branch-a',identity:identity(ingredientId),
-  productDe:ingredientId,pack:'500 g',priceCents:199,
+  productDe:{버섯:'Champignons',파프리카:'Paprika',연어:'Lachsfilet'}[ingredientId]||ingredientId,pack:'500 g',priceCents:199,
 });
 
 function candidate(id,{title='두부 버섯 덮밥',ingredient='버섯',reviewCount=0,extraIngredients=[]}={}) {

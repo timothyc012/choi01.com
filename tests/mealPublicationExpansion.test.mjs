@@ -147,7 +147,7 @@ test('publication profile excludes an incidental exact offer from defining prima
     {offerId:'offer-a',relation:'exact-ingredient',ingredientId:'닭가슴살',ingredientLabel:'닭가슴살',titleEvidence:true},
     {offerId:'offer-garlic',relation:'exact-ingredient',ingredientId:'마늘',ingredientLabel:'마늘',titleEvidence:false},
   ];
-  const locations=[{postcode:'52064',store:'EDEKA',branchId:'branch-52064-EDEKA',offers:[offer('offer-a'),offer('offer-garlic')].map((item,index)=>index?{...item,identity:garlicIdentity}:item)}];
+  const locations=[{postcode:'52064',store:'EDEKA',branchId:'branch-52064-EDEKA',offers:[offer('offer-a'),offer('offer-garlic')].map((item,index)=>index?{...item,identity:garlicIdentity,productDe:'Bio Knoblauch'}:item)}];
   const selected=selectPublicationExpansion({candidateReport:report([source],locations),registry:{recipes:{}},target:1}).selected[0];
   assert.deepEqual(selected.recommendationProfile.primaryIngredients,['닭가슴살']);
 });
@@ -447,7 +447,7 @@ test('method classification uses dish title semantics instead of incidental subs
 
 test('publication shortlist excludes raw and smoked salmon without compatible offer evidence',()=>{
   const salmonIdentity={ingredientId:'연어',species:'salmon',cut:'fillet',processingState:'raw',form:'fillet',composition:'salmon'};
-  const salmonOffer={...offer('offer-salmon'),identity:salmonIdentity};
+  const salmonOffer={...offer('offer-salmon'),identity:salmonIdentity,productDe:'Lachsfilet'};
   const raw=candidate('raw-salmon',{title:'생연어 초밥',offerIds:['offer-salmon']});
   raw.ingredients=[{ordinal:1,label:'연어 300g',ingredient:'연어',quantity:'300g'},{ordinal:2,label:'밥 2공기',ingredient:'밥',quantity:'2공기'}];
   raw.matches=[{offerId:'offer-salmon',relation:'exact-ingredient',ingredientId:'연어',ingredientLabel:'연어',titleEvidence:true}];

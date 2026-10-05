@@ -12,7 +12,12 @@ const chickenIdentity={ingredientId:'닭가슴살',species:'chicken',cut:'breast
 const beefIdentity={ingredientId:'소고기등심',species:'beef',cut:'ribeye',processingState:'raw',form:'steak',composition:'beef'};
 
 function offer(offerId,identity,postcode='52064',chain='EDEKA',branchId='branch-a') {
-  return {offerId,postcode,chain,branchId,identity,productDe:offerId,pack:'500 g',priceCents:599};
+  const productDe={
+    '닭가슴살':'Hähnchenbrustfilet','소고기등심':'Rib-Eye-Steak','감자':'Kartoffeln','사과':'Äpfel',
+    '연어':'Lachsfilet','돼지목살':'Schweine-Nackensteaks','달걀':'Eier','블루베리':'Heidelbeeren',
+    '레몬':'Zitronen','소고기':'Rindergulasch',
+  }[identity.ingredientId]||offerId;
+  return {offerId,postcode,chain,branchId,identity,productDe,pack:'500 g',priceCents:599};
 }
 
 function candidate(recipeId,{identity=chickenIdentity,offerId='offer-chicken',rating=4.9,reviews=100,kind='main',family='family-'+recipeId,method='method-'+recipeId,author='author-'+recipeId}={}) {
