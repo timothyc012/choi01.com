@@ -19,7 +19,7 @@ const SCHEMAS={
   coverageLocation:['locationId','postcode','store','branchId','target','published','eligible','heldForReviewCount','heldReasonCounts','uncoveredOfferIds','sparse','relaxations','zeroCandidateOfferIds','warnings'],
   recipeIndex:['schemaVersion','snapshotId','recipes'],indexEntry:['sourceRecipeId','path','sha256','sourceContentHash'],
   location:['schemaVersion','snapshotId','weekStart','id','postcode','store','branch','branchId','sourceCoverage','offers','recipes','coverage','warnings'],
-  offer:['offerId','postcode','chain','branchId','evidenceUrl','validFrom','validThrough','productDe','pack','priceCents','normalPriceCents','conditions','autoPriceEligible','identity'],
+  offer:['offerId','postcode','chain','branchId','evidenceUrl','validFrom','validThrough','productDe','pack','priceCents','normalPriceCents','conditions','autoPriceEligible','identity','productInfo'],
   identity:['ingredientId','species','cut','processingState','form','composition'],
   recipeRef:['sourceTimeText','sourceServings','requiredAmounts','detailIngredients','nutritionFacts','basketFacts','sourceRecipeId','title','offerIds','offerIdentityKeys','primaryIngredientIds','recommendationProfile','qualityScore','qualityFacts','detailPath','detailSha256'],
   profile:['primaryIngredients','family','method','kind','filters'],quality:['adjustedRating','popularity','completeness','priorStrength','globalMean'],
@@ -327,6 +327,9 @@ export function validateMealSnapshotDirectory(outputDir,options={}) {
       allowOnly(offer,SCHEMAS.offer,`${prefix}.offers[${offerIndex}]`,errors);
       allowOnly(offer.identity,SCHEMAS.identity,`${prefix}.offers[${offerIndex}].identity`,errors);
       if(offer.postcode!==location.postcode||offer.chain!==location.store||offer.branchId!==location.branchId) errors.push(`${prefix}.offers[${offerIndex}] offer boundary does not match owning location`);
+      if(offer.productInfo!==undefined&&(
+        typeof offer.productInfo!=='string'||!offer.productInfo.trim()||offer.productInfo.length>500||/[<>\u0000]/.test(offer.productInfo)
+      )) errors.push(`${prefix}.offers[${offerIndex}] has invalid public product information`);
     }
     const offersById=new Map((locationArtifact.offers||[]).map((offer)=>[offer.offerId,offer]));
     for(const [recipeIndexInLocation,recipeRef] of locationArtifact.recipes.entries()) {

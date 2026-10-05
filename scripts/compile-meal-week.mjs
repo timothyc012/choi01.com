@@ -30,13 +30,74 @@ function locationId(location) {
 }
 
 function publicOffer(offer) {
+  const productInfo=publicProductInfo(offer);
   return {
     offerId:offer.offerId,postcode:offer.postcode,chain:offer.chain,branchId:offer.branchId,
     evidenceUrl:offer.evidenceUrl??null,validFrom:offer.validFrom,validThrough:offer.validThrough,
     productDe:offer.productDe,pack:offer.pack,priceCents:offer.priceCents,
     normalPriceCents:offer.normalPriceCents??null,conditions:offer.conditions??'',
     autoPriceEligible:offer.autoPriceEligible===true,identity:offer.identity,
+    ...(productInfo?{productInfo}:{}),
   };
+}
+
+function publicProductInfo(offer) {
+  const value=typeof offer?.productInfo==='string' ? offer.productInfo : offer?.detail;
+  if(typeof value!=='string') return null;
+  const compact=value.replace(/\s+/g,' ').trim();
+  // Product copy is only supporting purchase/preparation evidence. Keep it a
+  // bounded plain-text projection, never a raw flyer fragment or private record.
+  if(!compact||compact.length>500||/[<>\u0000]/.test(compact)) return null;
+  return compact;
+}
+
+function canonicalCandidateOffer(offer) {
+  if(!offer||typeof offer!=='object'||Array.isArray(offer)) return offer;
+  const {recipeCandidateIds,...canonical}=offer;
+  return canonical;
+}
+
+function canonicalCandidateLocations(generated) {
+  const locations=[];
+  for(const [postcode,stores] of Object.entries(generated.meta.stores||{})) {
+    for(const store of stores||[]) {
+      const profile=generated.meta.profiles?.[postcode]?.[store];
+      if(!profile) throw new Error(`Canonical offer catalog is missing profile ${postcode}/${store}`);
+      const offers=generated.offersByIdentity
+        .filter((offer)=>offer.postcode===postcode&&offer.chain===store)
+        .map(canonicalCandidateOffer)
+        .sort((left,right)=>String(left.offerId).localeCompare(String(right.offerId)));
+      locations.push({postcode,store,branch:profile.branch,branchId:profile.branchId,offers});
+    }
+  }
+  return locations.sort((left,right)=>[left.postcode,left.store,left.branchId].join('|').localeCompare([right.postcode,right.store,right.branchId].join('|')));
+}
+
+function canonicalCandidateMappingGuard(candidateReport,generated) {
+  if(!candidateReport||typeof candidateReport!=='object'||!Array.isArray(candidateReport.locations)) {
+    throw new Error('Candidate report canonical offer mapping is missing locations');
+  }
+  const expected=canonicalCandidateLocations(generated);
+  const locationKey=(location)=>[location?.postcode,location?.store,location?.branchId].join('|');
+  const reportedByKey=new Map();
+  for(const location of candidateReport.locations) {
+    const key=locationKey(location);
+    if(reportedByKey.has(key)) throw new Error(`Candidate report canonical offer mapping has duplicate location ${key}`);
+    reportedByKey.set(key,location);
+  }
+  for(const expectedLocation of expected) {
+    const key=locationKey(expectedLocation);
+    const reported=reportedByKey.get(key);
+    if(!reported) throw new Error(`Candidate report canonical offer mapping is missing location ${key}`);
+    if(reported.branch!==expectedLocation.branch) throw new Error(`Candidate report canonical offer mapping has foreign branch ${key}`);
+    if(!Array.isArray(reported.offers)) throw new Error(`Candidate report canonical offer mapping has invalid offers for ${key}`);
+    const offers=reported.offers.map(canonicalCandidateOffer).sort((left,right)=>String(left?.offerId).localeCompare(String(right?.offerId)));
+    if(canonicalJson(offers)!==canonicalJson(expectedLocation.offers)) {
+      throw new Error(`Candidate report canonical offer mapping differs from CSV for ${key}`);
+    }
+    reportedByKey.delete(key);
+  }
+  if(reportedByKey.size) throw new Error(`Candidate report canonical offer mapping has foreign location ${[...reportedByKey.keys()].sort().join(', ')}`);
 }
 
 function recipeCalculationFacts(recipe,context) {
@@ -297,10 +358,15 @@ export async function compileMealWeek(options) {
   let candidateReport=options.candidateReport;
   let collectionTimestamp=options.collectionTimestamp;
   let weekStart=options.weekStart;
+  let rows=null;
+  let generated=null;
+  if(options.csvPath) {
+    rows=parseCsv(fs.readFileSync(options.csvPath,'utf8'));
+    generated=generateCatalog(rows,'/offers/'+path.basename(options.csvPath));
+    if(candidateReport) canonicalCandidateMappingGuard(candidateReport,generated);
+  }
   if(!candidateReport) {
-    if(!options.csvPath) throw new Error('csvPath or candidateReport is required');
-    const rows=parseCsv(fs.readFileSync(options.csvPath,'utf8'));
-    const generated=generateCatalog(rows,'/offers/'+path.basename(options.csvPath));
+    if(!generated) throw new Error('csvPath or candidateReport is required');
     const discovery=await discoverStoreRecipeCandidates({offers:generated.offersByIdentity,db,tenant,perIdentityLimit:500,totalLimit:5000});
     candidateReport=buildStoreCandidateReport({packageCatalog:generated.packageCatalog,offersByIdentity:generated.offersByIdentity,meta:generated.meta,candidates:discovery.candidates,input:options.csvPath,database:typeof db==='string'?db:'injected',tenant,discovery});
     collectionTimestamp=collectionTimestamp||generated.meta.collectedAt;
