@@ -350,7 +350,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   const slowFailExpected=JSON.stringify({schemaVersion:1,sourceRecipeId:'9000004',title:'느리게 실패할 메뉴'});
   const locationPath='snapshots/2026-09-07/snapshot-new/locations/99999-neuemarkt-branch-b.json';
   const offer={offerId:'offer-new',chain:'NeueMarkt',branchId:'branch-b',identity:{ingredientId:'닭가슴살'},productDe:'Hähnchenbrustfilet',pack:'500 g',priceCents:599,validFrom:'2026-09-07',validThrough:'2026-09-13',evidenceUrl:'https://example.com/offer-new'};
-  const sameIdentityAlternative={...offer,offerId:'offer-other',productDe:'Hähnchenbrust Innenfilet',priceCents:799};
+  const sameIdentityAlternative={...offer,offerId:'offer-other',productDe:'Frisches Hähnchen Brustfilet',priceCents:799};
   const compilerBasket=(key,priceCents)=>({sourceCoverage:'complete',postcode:'99999',store:'NeueMarkt',branchId:'branch-b',date:'2026-09-13',targetServings:2,items:[{key:'food-'+key,name:key.split(':')[1],pantryKeys:[key],pack:{amount:500,unit:'g'},requiredAmount:{amount:300,unit:'g'},priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true,sourceURL:'https://example.com/reviewed-price',sourceSha256:'a'.repeat(64),validFrom:'2026-09-07',validThrough:'2026-09-13'}],savingsStatus:'unavailable'});
   const reference={sourceRecipeId:'9000001',detailPath,detailSha256:sha256(detail),offerIds:['offer-new','offer-other'],preferredPricingOfferId:'offer-new',primaryIngredientIds:['닭가슴살'],recommendationProfile:{primaryIngredients:['닭가슴살'],family:'chicken',method:'stirfry',kind:'main'},qualityScore:0.9,basketFacts:compilerBasket('NeueMarkt:닭가슴살',150)};
   const badReference={...reference,sourceRecipeId:'9000002',detailPath:badCurrentPath,detailSha256:sha256(badCurrent),basketFacts:compilerBasket('NeueMarkt:후추',100)};
@@ -428,7 +428,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(modeRadios.every((input)=>input.type==='radio'),true);
   assert.deepEqual([...dom.window.document.querySelectorAll('[data-mode-label]')].map((label)=>label.dataset.modeLabel),['balanced','value','nutrition','diet']);
   assert.match(dom.window.document.querySelector('[data-mode-status="balanced"]').textContent,/사용 가능.*후보 4개/);
-  assert.match(dom.window.document.querySelector('[data-mode-status="value"]').textContent,/사용 가능.*검증 2\/4/);
+  assert.match(dom.window.document.querySelector('[data-mode-status="value"]').textContent,/준비 중.*검증 0\/4/);
   assert.match(dom.window.document.querySelector('[data-mode-status="nutrition"]').textContent,/준비 중.*검증 0\/4/);
   assert.match(dom.window.document.querySelector('[data-mode-status="diet"]').textContent,/준비 중.*검증 0\/4/);
   assert.equal(modeRadios.find((input)=>input.value==='value').disabled,false);
@@ -455,12 +455,12 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   const balancedAutoIds=Object.values(runtime.plans).flatMap((plan)=>Object.values(plan)).filter((slot)=>slot.origin==='auto'&&slot.recipeId).map((slot)=>slot.recipeId);
   assert.equal(new Set(balancedAutoIds).size,balancedAutoIds.length);
   modeRadios.find((input)=>input.value==='value').click();
-  assert.match(dom.window.document.getElementById('todayReason').textContent,/구매 합계 100센트/);
+  assert.match(dom.window.document.getElementById('todayReason').textContent,/검증 자료가 부족합니다/);
   const pantryInput=dom.window.document.createElement('input');
   pantryInput.type='checkbox';pantryInput.checked=true;pantryInput.dataset.shoppingKey='NeueMarkt:닭가슴살';pantryInput.dataset.shoppingField='owned';
   dom.window.document.getElementById('detailIngredients').append(pantryInput);
   pantryInput.dispatchEvent(new dom.window.Event('change',{bubbles:true}));
-  assert.match(dom.window.document.getElementById('todayReason').textContent,/구매 합계 0센트/);
+  assert.match(dom.window.document.getElementById('todayReason').textContent,/검증 자료가 부족합니다/);
   assert.equal(runtime.plans.저녁.mon.recipeId,'neuemarkt-recipe-8000001');
   runtime.shoppingState.pantry.delete('NeueMarkt:닭가슴살');
   modeRadios.find((input)=>input.value==='balanced').click();
@@ -502,7 +502,7 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.equal(dom.window.document.getElementById('branchSelect').value,'branch-b');
   assert.equal(dom.window.document.getElementById('menuCount').textContent,'4');
   assert.match(dom.window.document.getElementById('menuList').textContent,/닭가슴살/);
-  assert.match(dom.window.document.getElementById('menuList').textContent,/Hähnchenbrustfilet.*Hähnchenbrust Innenfilet/);
+  assert.match(dom.window.document.getElementById('menuList').textContent,/Hähnchenbrustfilet.*Frisches Hähnchen Brustfilet/);
   assert.match(dom.window.document.getElementById('menuList').textContent,/500 g.*5,99€.*Second branch.*2026-09-07.*할인 근거/s);
   assert.ok(dom.window.document.querySelector('[data-add-menu]'));
   assert.deepEqual([...dom.window.document.querySelectorAll('.filter')].map((button)=>button.textContent.trim()),['전체','한식','중식·아시아','양식','20분 안 · 시간 미확인','채식 (달걀·유제품 허용)']);
@@ -587,10 +587,10 @@ test('non-legacy bootstrap uses snapshot-only location and branch, rerenders sum
   assert.doesNotMatch(dom.window.document.getElementById('recipeMeta').textContent,/1,234|평점/);
   assert.equal(dom.window.document.getElementById('recipeSource').href,'https://www.10000recipe.com/recipe/9000001');
   assert.equal(dom.window.document.getElementById('recipeSource').hidden,false);
-  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*필요 300g.*500 g/);
-  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*1,50€/s);
-  assert.match(dom.window.document.getElementById('shoppingSource').textContent,/닭가슴살 가격 근거/);
-  assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'1,50€');
+  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*필요 300g.*Hähnchenbrustfilet.*500 g/);
+  assert.match(dom.window.document.getElementById('detailIngredients').textContent,/닭가슴살.*5,99€/s);
+  assert.match(dom.window.document.getElementById('shoppingSource').textContent,/할인 근거/);
+  assert.equal(dom.window.document.getElementById('shoppingTotal').textContent,'확인된 금액 5,99€ · 수량 확인');
   assert.equal(calls.filter((url)=>url===('/mohemeokji/data/'+detailPath)).length,1);
   assert.equal(dom.window.document.activeElement,dom.window.document.getElementById('closeDetail'));
   dom.window.document.getElementById('detailDrawer').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));

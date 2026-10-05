@@ -172,6 +172,30 @@
     return String(Number(amount.toFixed(2))) + " " + unit + " 필요";
   }
 
+  function offerView(offer, name) {
+    return {...offer,identity:{...(offer?.identity||{ingredientId:name})},product:offer?.product||offer?.productDe||'',source:offer?.source||offer?.evidenceUrl||offer?.sourceURL||''};
+  }
+
+  function compatibleOffer(offer, meal, name) {
+    const view=offerView(offer,name),policy=window.MealRecommendations;
+    if(normalize(view.identity.ingredientId)!==normalize(name))return false;
+    if(!view.product.trim())return !meal.strictPriceEvidence;
+    if(!policy?.safeOffer||!policy?.offerMatchesRecipe)return !meal.strictPriceEvidence;
+    return policy.safeOffer(view)&&policy.offerMatchesRecipe(view,meal);
+  }
+
+  function offerKey(offer) {
+    const view=offerView(offer,offer?.identity?.ingredientId||'');
+    return JSON.stringify([view.offerId||'',view.identity.ingredientId,view.identity.form||'',view.product,view.pack,view.priceCents,view.source]);
+  }
+
+  function candidatesFor(meal, originalName, name, catalog) {
+    if(meal.disableOfferPricing)return [];
+    const own=meal.offerCatalog||{},store=meal.offerCatalogOnly?{}:catalog[meal.store]||{};
+    return [own[originalName],own[name],...(own.offersByIngredient?.[originalName]||[]),...(own.offersByIngredient?.[name]||[]),
+      store[originalName],store[name],...(store.offersByIngredient?.[originalName]||[]),...(store.offersByIngredient?.[name]||[])].filter(Boolean).map(offer=>offerView(offer,name));
+  }
+
   function basket(meals, options = {}) {
     const { catalog = {}, pantry = new Set(), prices = {}, quantities = {} } = options;
     const ingredients = new Map();
@@ -183,9 +207,11 @@
         const key = keyFor(meal.store, name);
         const alreadySeen=seenInMeal.has(key);
         seenInMeal.add(key);
-        const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name];
+        const compact=value=>String(value).normalize('NFKC').replace(/\s+/g,'');
+        const aliases=Object.entries(meal.requiredAmounts||{}).filter(([label])=>compact(label)===compact(originalName)||compact(label)===compact(name));
+        const candidate = meal.requiredAmounts?.[originalName] || meal.requiredAmounts?.[name] || (aliases.length===1?aliases[0][1]:null);
         const required = candidate && Number.isFinite(candidate.amount) && candidate.amount > 0 && ['g', 'ml'].includes(candidate.unit) ? candidate : null;
-        const offer = meal.disableOfferPricing?null:(meal.offerCatalog?.[originalName] || catalog[meal.store]?.[originalName] || meal.offerCatalog?.[name] || catalog[meal.store]?.[name]);
+        const candidates=candidatesFor(meal,originalName,name,catalog);
         const existing = ingredients.get(key);
         if (existing) {
           if(!alreadySeen)existing.requirementComplete = existing.requirementComplete && Boolean(required) && existing.requiredAmount?.unit === required?.unit;
@@ -201,29 +227,34 @@
               ? {amount:(prior?.unit===required.unit?prior.amount:0)+required.amount,unit:required.unit}
               : null;
           }
-          if(!existing.product&&offer) {
-            existing.pack=offer.pack||existing.pack;existing.product=offer.product||'';existing.source=offer.source||'';
-            existing.priceCents=Number.isSafeInteger(offer.priceCents)&&offer.priceCents>=0?offer.priceCents:existing.priceCents;
-            existing.normalPriceCents=Number.isSafeInteger(offer.normalPriceCents)&&offer.normalPriceCents>=existing.priceCents?offer.normalPriceCents:null;
+          if(!alreadySeen) {
+            existing.dependentMeals.push(meal);
           }
+          for(const offer of candidates)existing.offerChoices.set(offerKey(offer),offer);
           continue;
         }
         if(alreadySeen)continue;
-        const price = Object.hasOwn(prices, key) ? prices[key] : offer?.priceCents;
-        const priceCents = Number.isSafeInteger(price) && price >= 0 ? price : null;
-        const normalPrice = offer?.normalPriceCents;
         ingredients.set(key, {
-          key, name, store: meal.store, pack: offer?.pack || "구매 단위 직접 확인",
-          product: offer?.product || "", source: offer?.source || "",
-          customPrice: Object.hasOwn(prices, key),
-          priceCents, normalPriceCents: Number.isSafeInteger(normalPrice) && normalPrice >= priceCents ? normalPrice : null,
+          key, name, store: meal.store,dependentMeals:[meal],offerChoices:new Map(candidates.map(offer=>[offerKey(offer),offer])),
           owned: pantry.has(key), requiredAmount: required ? { ...required } : null,
           requirementComplete: Boolean(required),contributions:contributionKey?{[contributionKey]:required?{...required}:null}:{}
         });
       }
     }
-    const items = [...ingredients.values()].map((item) => {
-      const manualQuantity = Number.isSafeInteger(quantities[item.key]) && quantities[item.key] > 0 && quantities[item.key] <= 999
+    const items = [...ingredients.values()].map(({dependentMeals,offerChoices,...item}) => {
+      const compatible=[...offerChoices].filter(([,offer])=>dependentMeals.every(meal=>compatibleOffer(offer,meal,item.name)));
+      const chosen=compatible[0],offer=chosen?.[1];
+      const semanticHeld=offerChoices.size>0&&!offer;
+      const price=semanticHeld?null:(Object.hasOwn(prices,item.key)?prices[item.key]:offer?.priceCents);
+      item.priceCents=Number.isSafeInteger(price)&&price>=0?price:null;
+      item.pack=offer?.pack||'구매 단위 직접 확인';item.product=offer?.product||'';item.source=offer?.source||'';
+      item.identity=offer?.identity?{...offer.identity}:undefined;item.offerId=offer?.offerId;item.detail=offer?.detail;
+      item.validFrom=offer?.validFrom;item.validThrough=offer?.validThrough;
+      item.category=offer?.category;item.productInfo=offer?.productInfo;
+      item.offerKey=chosen?.[0]||null;item.compatibleOfferKeys=compatible.map(([key])=>key);item.semanticHeld=semanticHeld;
+      item.customPrice=!semanticHeld&&Object.hasOwn(prices,item.key);
+      item.normalPriceCents=Number.isSafeInteger(offer?.normalPriceCents)&&offer.normalPriceCents>=item.priceCents?offer.normalPriceCents:null;
+      const manualQuantity = !semanticHeld&&Number.isSafeInteger(quantities[item.key]) && quantities[item.key] > 0 && quantities[item.key] <= 999
         ? quantities[item.key] : null;
       const packAmount = metricAmount(item.pack);
       const canCalculate = item.requirementComplete && packAmount && item.requiredAmount.unit === packAmount.unit;
@@ -236,6 +267,7 @@
         requiredLabel: formatRequired(item.requiredAmount),
         quantityCalculated: manualQuantity === null && Boolean(canCalculate),
         quantityNeedsCheck: manualQuantity === null && !canCalculate,
+        quantityComplete:manualQuantity!==null||Boolean(canCalculate),
         subtotalCents: item.priceCents === null ? null : item.priceCents * quantity
       };
     });
@@ -288,7 +320,7 @@
 
   // Compiler prices include ordinary ingredients as well as offers. Combine
   // measured requirements before buying packs, rather than adding recipe totals.
-  function compilerBasket(factsList, {context, pantry=new Set(), recipeIds=[]}={}) {
+  function compilerBasket(factsList, {context, pantry=new Set(), recipeIds=[],meals=[]}={}) {
     if(!Array.isArray(factsList)||!factsList.length)return null;
     const groups=new Map(),aliasGroups=new Map();
     const money=(value)=>Number.isSafeInteger(value)&&value>=0;
@@ -297,8 +329,11 @@
       if(!matchesBasketContext(facts,context)||!Array.isArray(facts.items)||!facts.items.length)return null;
       for(const item of facts.items) {
         const required=item.requiredAmount,pack=item.pack,keys=item.pantryKeys;
-        if(typeof item.key!=='string'||!item.key||!Array.isArray(keys)||!keys.length
+        if(typeof item.product!=='string'||!item.product.trim()||!item.identity||!meals[index]
+          ||!compatibleOffer({...item,pack:String(pack?.amount)+' '+pack?.unit},{...meals[index],strictPriceEvidence:true},item.identity.ingredientId)
+          ||typeof item.key!=='string'||!item.key||!Array.isArray(keys)||!keys.length
           ||keys.some((key)=>typeof key!=='string'||!key.startsWith(context.store+':')||key===context.store+':')
+          ||keys.some(key=>normalize(key.slice(context.store.length+1))!==normalize(item.identity.ingredientId))
           ||!required||!Number.isFinite(required.amount)||required.amount<=0||!['g','ml'].includes(required.unit)
           ||!pack||!Number.isFinite(pack.amount)||pack.amount<=0||pack.unit!==required.unit
           ||!money(item.priceCents)||!Number.isSafeInteger(item.quantity)||item.quantity<1||item.quantityComplete!==true
@@ -310,6 +345,7 @@
           aliasGroups.set(key,item.key);
         }
         let group=groups.get(item.key);
+        if(group&&offerKey({...group,pack:String(group.pack.amount)+' '+group.pack.unit})!==offerKey({...item,pack:String(pack.amount)+' '+pack.unit}))return null;
         if(group&&(group.pack.amount!==pack.amount||group.pack.unit!==pack.unit||group.priceCents!==item.priceCents
           ||group.sourceURL!==item.sourceURL||group.sourceSha256!==item.sourceSha256))return null;
         if(!group) {
@@ -332,8 +368,10 @@
       if(!Number.isSafeInteger(quantity)||!money(quantity*group.priceCents))return null;
       const key=group.pantryKeys[0],name=key.slice(context.store.length+1);
       items.push({...group,key,name,label:group.name,store:context.store,
-        pack:String(group.pack.amount)+' '+group.pack.unit,source:group.sourceURL,product:'',
+        pack:String(group.pack.amount)+' '+group.pack.unit,source:group.sourceURL,product:group.product,identity:{...group.identity},
         owned:pantryOwns(group,pantry),quantity,quantityCalculated:true,quantityNeedsCheck:false,
+        quantityComplete:true,offerKey:offerKey({...group,pack:String(group.pack.amount)+' '+group.pack.unit}),
+        compatibleOfferKeys:[offerKey({...group,pack:String(group.pack.amount)+' '+group.pack.unit})],
         requiredLabel:formatRequired(group.requiredAmount),subtotalCents:quantity*group.priceCents});
     }
     const purchases=items.filter((item)=>!item.owned),knownSubtotalCents=purchases.reduce((sum,item)=>sum+item.subtotalCents,0);
@@ -343,9 +381,9 @@
       unknownCount:0,quantityCheckCount:0,purchaseCount:purchases.length};
   }
 
-  function marginalBasketFacts(facts, pantry = new Set(), context) {
-    return compilerBasket([facts],{context,pantry})
-      || {sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
+  function marginalBasketFacts(facts, pantry = new Set(), context,meal) {
+    const cart=compilerBasket([facts],{context,pantry,meals:[meal]});
+    return cart||{sourceCoverage:'unknown',costStatus:'unknown',knownSubtotalCents:null,unknownItemKeys:['full-basket'],quantityCheckKeys:[],savingsStatus:'unavailable',savingsCents:null};
   }
 
   function amount(cart) {
@@ -392,17 +430,29 @@
       const contributionValues=Object.values(contributions);
       const contributionUnit=contributionValues.find((value)=>value)?.unit;
       const contributionsComplete=contributionValues.length>0&&contributionValues.every((value)=>value&&value.unit===contributionUnit&&Number.isFinite(value.amount)&&value.amount>0);
-      const packAmount=metricAmount(previous?.product?previous.pack:item.pack);
+      const previousAllowed=!previous?.product||!Array.isArray(item.compatibleOfferKeys)||item.compatibleOfferKeys.some(key=>{
+        if(previous.offerKey)return key===previous.offerKey;
+        try {const value=JSON.parse(key);return value[3]===previous.product&&value[4]===previous.pack&&value[5]===previous.priceCents&&value[6]===previous.source;}catch{return false;}
+      });
+      const semanticHeld=Boolean(previous?.semanticHeld||item.semanticHeld||!previousAllowed);
+      const pack=semanticHeld?'상품 연결 재확인':previous?.product?previous.pack:item.pack;
+      const packAmount=metricAmount(pack);
       const contributionQuantity=contributionsComplete&&packAmount&&packAmount.unit===contributionUnit
         ? Math.max(1,Math.ceil(contributionValues.reduce((sum,value)=>sum+value.amount,0)/packAmount.amount))
         : null;
       const quantity=contributionQuantity??Math.max(previous?.quantity || 1,item.quantity);
-      const quantityNeedsCheck=contributionValues.length?contributionQuantity===null:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck);
+      const quantityNeedsCheck=semanticHeld||(contributionValues.length?contributionQuantity===null:Boolean(previous?.quantityNeedsCheck||item.quantityNeedsCheck));
+      const retained=previous?.product?previous:item;
       merged.set(item.key, {
-        key: item.key, name: item.name, store: item.store, pack: previous?.product?previous.pack:item.pack,
+        key: item.key, name: item.name, store: item.store, pack,
         pantryKeys:[...new Set([...(previous?.pantryKeys||[item.key]),...(item.pantryKeys||[item.key])])],
-        product:previous?.product||item.product||'',source:previous?.source||item.source||'',
-        quantity, priceCents: previous?.product?previous.priceCents:item.priceCents, quantityNeedsCheck,contributions,
+        product:semanticHeld?'':retained.product||'',source:semanticHeld?'':retained.source||'',
+        identity:semanticHeld?undefined:retained.identity,offerId:semanticHeld?undefined:retained.offerId,
+        offerKey:semanticHeld?null:retained.offerKey||null,compatibleOfferKeys:semanticHeld?[]:previous?.compatibleOfferKeys?.length
+          ?previous.compatibleOfferKeys.filter(key=>item.compatibleOfferKeys?.includes(key)):item.compatibleOfferKeys||[],
+        validFrom:semanticHeld?undefined:retained.validFrom,validThrough:semanticHeld?undefined:retained.validThrough,
+        detail:semanticHeld?undefined:retained.detail,category:semanticHeld?undefined:retained.category,productInfo:semanticHeld?undefined:retained.productInfo,
+        semanticHeld,quantity, priceCents:semanticHeld?null:retained.priceCents, quantityNeedsCheck,contributions,
         completed: Boolean(previous?.completed && quantity === previous.quantity)
       });
     }
@@ -419,7 +469,7 @@
       completedCount: list.length - remaining.length,
       purchaseCount: remaining.length,
       totalCents: knownSubtotalCents,knownSubtotalCents,unknownCount,quantityCheckCount,
-      costStatus:unknownCount||quantityCheckCount?'partial':'complete'
+      costStatus:remaining.length>0&&unknownCount===remaining.length?'unknown':unknownCount||quantityCheckCount?'partial':'complete'
     };
   }
 
@@ -488,7 +538,16 @@
             || typeof item.completed !== "boolean" || pantryOwns(item,state.pantry) || seen.has(item.key)) return false;
           seen.add(item.key);
           return true;
-        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions, pantryKeys }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{},pantryKeys:(pantryKeys||[key]).map(canonicalKey) }));
+        }).map(({ key, name, store, pack, product, source, quantity, priceCents, completed, quantityNeedsCheck, contributions, pantryKeys,identity,offerId,offerKey,compatibleOfferKeys,validFrom,validThrough,semanticHeld,detail,category,productInfo }) => ({ key, name, store, pack, product:product||'', source:source||'', quantity, priceCents, completed, quantityNeedsCheck:quantityNeedsCheck===true,contributions:contributions||{},pantryKeys:(pantryKeys||[key]).map(canonicalKey),identity:record(identity)?{...identity}:undefined,offerId:typeof offerId==='string'?offerId:undefined,offerKey:typeof offerKey==='string'?offerKey:null,compatibleOfferKeys:Array.isArray(compatibleOfferKeys)?compatibleOfferKeys.filter(value=>typeof value==='string'):[],validFrom,validThrough,semanticHeld:semanticHeld===true,detail,category,productInfo }));
+        state.list=state.list.map(item=>{
+          const view=offerView(item,item.name),policy=window.MealRecommendations;
+          const dependencies=Object.keys(item.contributions||{}).map(id=>options.recipeFor?.(id)).filter(Boolean);
+          const invalid=item.semanticHeld||(item.product&&policy?.safeOffer&&(!policy.safeOffer(view)||normalize(view.identity.ingredientId)!==normalize(item.name)
+            ||dependencies.some(meal=>!policy.offerMatchesRecipe(view,meal))));
+          if(!invalid)return item;
+          delete state.prices[item.key];for(const values of Object.values(state.quantities))delete values[item.key];
+          return {...item,semanticHeld:true,product:'',source:'',pack:'상품 연결 재확인',priceCents:null,quantityNeedsCheck:true,identity:undefined,offerId:undefined,offerKey:null,compatibleOfferKeys:[]};
+        });
       }
     } catch { /* Unavailable or corrupt saved data starts an empty list. */ }
     if (snapshot && serialized) {
