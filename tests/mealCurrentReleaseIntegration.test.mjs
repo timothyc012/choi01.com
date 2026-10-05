@@ -10,22 +10,34 @@ const sha256=(bytes)=>crypto.createHash('sha256').update(bytes).digest('hex');
 const current=JSON.parse(bytesAt('data/current.json'));
 const manifestBytes=bytesAt('data/'+current.manifestPath);
 const manifest=JSON.parse(manifestBytes);
+const retainedSeptemberPointer={
+ schemaVersion:1,
+ snapshotId:'c043c33550924d384453e89586fc3ee4112cec89c871e0074b16a5ddf8d68f43',
+ weekStart:'2026-09-21',
+ manifestPath:'snapshots/2026-09-21/c043c33550924d384453e89586fc3ee4112cec89c871e0074b16a5ddf8d68f43/manifest.json',
+ manifestSha256:'8b351f6e64573d66feabb8025af571da4155e47bcda339aa37d478c0b2a716b7'
+};
 
-async function openCurrentLocation(t,postcode,store) {
- const reference=manifest.locations.find(location=>location.postcode===postcode&&location.store===store);
- assert.ok(reference,'current release retains '+postcode+' '+store);
- const params=new URLSearchParams({postcode,store,branch:reference.branchId,date:current.weekStart});
+async function openSnapshotLocation(t,postcode,store,pointer=current) {
+ const selectedManifestBytes=bytesAt('data/'+pointer.manifestPath);
+ assert.equal(sha256(selectedManifestBytes),pointer.manifestSha256);
+ const selectedManifest=JSON.parse(selectedManifestBytes);
+ const reference=selectedManifest.locations.find(location=>location.postcode===postcode&&location.store===store);
+ assert.ok(reference,'selected release retains '+postcode+' '+store);
+ const params=new URLSearchParams({postcode,store,branch:reference.branchId,date:pointer.weekStart});
  const dom=new JSDOM(bytesAt('index.html').toString(),{url:'http://localhost/mohemeokji/?'+params,runScripts:'outside-only',pretendToBeVisual:true});
  t.after(()=>dom.window.close());
  const w=dom.window,requests=[];
  w.TextDecoder=TextDecoder;w.TextEncoder=TextEncoder;
  Object.defineProperty(w,'crypto',{value:crypto.webcrypto});
  w.HTMLElement.prototype.scrollIntoView=()=>{};
- // No pointer or source overrides: the shipped loader checks the actual current bytes.
+ // Current-week checks use the actual pointer. Only the historical quantity case
+ // supplies an in-memory pointer pinned to the original immutable manifest hash.
  w.fetch=async url=>{
   assert.ok(url.startsWith('/mohemeokji/data/'),url);
   requests.push(url);
-  const bytes=bytesAt(url.slice('/mohemeokji/'.length));
+  const bytes=url==='/mohemeokji/data/current.json'&&pointer!==current
+   ?Buffer.from(JSON.stringify(pointer)):bytesAt(url.slice('/mohemeokji/'.length));
   return {ok:true,arrayBuffer:async()=>new Uint8Array(bytes).buffer};
  };
  for(const file of ['meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js','meal-verified-evidence.js','meal-data-loader.js','meal-planner-recipe-data.js'])w.eval(bytesAt(file).toString());
@@ -34,13 +46,15 @@ async function openCurrentLocation(t,postcode,store) {
  return {w,runtime,requests,reference};
 }
 
-test('current release uses its hash-pinned week and retains the three requested store branches',async t=>{
+test('current release retains requested branches with truthful active or unavailable collection coverage',async t=>{
  assert.equal(sha256(manifestBytes),current.manifestSha256);
  assert.equal(manifest.snapshotId,current.snapshotId);
  assert.equal(manifest.weekStart,current.weekStart);
  t.diagnostic('actual current release: '+current.weekStart+' / '+current.snapshotId);
- for(const [postcode,store] of [['44369','Netto Marken-Discount'],['40474','EDEKA'],['40489','Lidl']])await t.test(postcode+' '+store,async t=>{
-  const {w,runtime,requests,reference}=await openCurrentLocation(t,postcode,store);
+ // ALDI SÜD is also retained: it has real offers in September and is explicitly
+ // uncollected in the October candidate, so the zero-coverage path is exercised.
+ for(const [postcode,store] of [['44369','Netto Marken-Discount'],['40474','EDEKA'],['40489','Lidl'],['40474','ALDI SÜD']])await t.test(postcode+' '+store,async t=>{
+  const {w,runtime,requests,reference}=await openSnapshotLocation(t,postcode,store);
   assert.equal(runtime.manifest.snapshotId,current.snapshotId);
   assert.equal(runtime.manifest.weekStart,current.weekStart);
   assert.equal(runtime.location.postcode,postcode);
@@ -56,27 +70,51 @@ test('current release uses its hash-pinned week and retains the three requested 
   assert.equal(sha256(locationBytes),manifest.fileHashes[reference.path]);
   const sourceLocation=JSON.parse(locationBytes);
   const sourceOffers=new Map(sourceLocation.offers.map(offer=>[offer.offerId,offer]));
-  assert.ok(runtime.location.offers.length>0,'current date has verified branch offers');
+  const activeSourceOffers=sourceLocation.offers.filter(offer=>offer.validFrom<=current.weekStart&&current.weekStart<=offer.validThrough);
+  if(activeSourceOffers.length)assert.ok(runtime.location.offers.length>0,'source coverage supports active branch offers');
+  else {
+   assert.equal(runtime.location.offers.length,0,'no current source offers means no reused prices');
+   assert.equal(w.document.querySelector('#offerDirectoryList').children.length,0);
+   assert.match(w.document.querySelector('#pantryList').textContent,/확인된 할인 재료가 없습니다/);
+   assert.equal(runtime.weeklyPlanMeals().length,0,'no prior-week automatic discount plan is substituted');
+   assert.equal(w.document.querySelector('#todayCost').textContent,'—');
+   if(!sourceLocation.offers.length) {
+    const collection=sourceLocation.sourceCoverage;
+    assert.ok(typeof collection?.status==='string'&&collection.status.trim(),'zero collection exposes its status');
+    assert.ok(typeof collection?.note==='string'&&collection.note.trim(),'zero collection records its explicit reason');
+    assert.equal(runtime.location.sourceCoverage.note,collection.note);
+    assert.ok(w.document.querySelector('#sourceCheck').textContent.includes(collection.status),'collection status is visible to the user');
+   }
+  }
   for(const offer of runtime.location.offers) {
    assert.ok(sourceOffers.has(offer.offerId),'offer belongs to this selected branch');
    assert.equal(offer.postcode,postcode);assert.equal(offer.chain,store);assert.equal(offer.branchId,reference.branchId);
    assert.ok(offer.validFrom<=current.weekStart&&current.weekStart<=offer.validThrough,'offer is active on the selected shopping date');
   }
   const activeIds=new Set(runtime.location.offers.map(offer=>offer.offerId));
-  assert.ok(runtime.recipes.length>0,'current release supplies real recipe choices');
-  assert.ok(Number(w.document.querySelector('#menuCount').textContent)>0);
+  assert.equal(sourceLocation.coverage.published,sourceLocation.recipes.length,'published coverage describes this week only');
+  if(sourceLocation.coverage.published>0) {
+   assert.ok(runtime.recipes.length>0,'published source coverage supplies recipe choices');
+   assert.ok(Number(w.document.querySelector('#menuCount').textContent)>0);
+  } else assert.equal(runtime.recipes.length,0,'no recipes published for this branch are borrowed from an earlier week');
+  const currentArtifactRoot='/mohemeokji/data/snapshots/'+current.weekStart+'/'+current.snapshotId+'/';
+  assert.ok(requests.filter(url=>url!=='/mohemeokji/data/current.json').every(url=>url.startsWith(currentArtifactRoot)),'current-week loading never fetches prior-week artifacts');
+  const sourceRecipeIds=new Set(sourceLocation.recipes.map(recipe=>recipe.sourceRecipeId));
   for(const recipe of runtime.recipes) {
+   assert.ok(sourceRecipeIds.has(recipe.sourceRecipeId),'published recipe belongs to this current branch artifact');
    assert.equal(recipe.store,store);assert.equal(recipe.branchId,reference.branchId);
    for(const offer of recipe.matchedOffers)assert.ok(activeIds.has(offer.offerId),'recipe must not borrow an inactive or foreign offer');
   }
  });
 });
 
-test('current EDEKA source quantities scale to six people and pantry ownership removes salmon from shopping',async t=>{
- const {w,runtime,requests}=await openCurrentLocation(t,'40474','EDEKA');
+test('retained September EDEKA quantities scale to six people and pantry ownership removes salmon from shopping',async t=>{
+ const {w,runtime,requests}=await openSnapshotLocation(t,'40474','EDEKA',retainedSeptemberPointer);
+ assert.equal(runtime.manifest.snapshotId,retainedSeptemberPointer.snapshotId);
+ assert.equal(runtime.manifest.weekStart,retainedSeptemberPointer.weekStart);
  const sourceRecipeId='6831097';
  const reference=runtime.location.recipes.find(recipe=>recipe.sourceRecipeId===sourceRecipeId);
- assert.ok(reference,'the actual current release contains the reviewed salmon recipe');
+ assert.ok(reference,'the retained immutable release contains the reviewed salmon recipe');
  const detailBytes=bytesAt('data/'+reference.detailPath);
  assert.equal(sha256(detailBytes),reference.detailSha256);
  const sourceDetail=JSON.parse(detailBytes);
