@@ -32,6 +32,8 @@ contains `data/`, a private twin under `private/twin-data/`, two private review
 queues, `preflight.json`, the untouched CSV, and `release-receipt.json`. Keep the
 entire staging directory outside `public/` and out of git.
 
+Keep the pending approval record, release receipt, every evidence file referenced by that receipt, and the execution result in a durable private artifact root resolved from the canonical checkout. The root must be outside `public/`, outside any scratch worktree or `/tmp` directory, and covered by an explicit `.gitignore` rule; verify the rule with `git check-ignore` before writing. Record the exact path and SHA-256 of each referenced artifact. `/tmp` and `/private/tmp` are for throwaway previews and tests only. Never repoint a sealed receipt or plan to a newly generated file, or silently replace missing evidence after approval.
+
 Review the preflight warnings, store coverage, private queues, registry changes,
 and source evidence before requesting publication approval. The receipt's
 `approvalDigest` seals the offer CSV and coverage CSV hashes, complete public
