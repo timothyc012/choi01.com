@@ -43,13 +43,105 @@
     if(context.maxMinutes&&(!Number.isFinite(meal.time)||meal.time>context.maxMinutes))return false;
     return true;
   }
+  const offerNounEvidence={
+    '닭가슴살':/hähnchen[- ]?brustfilets?/i,
+    '닭안심':/hähnchen[- ]?innenfilets?/i,
+    '닭날개':/hähnchen(?:flügel|fluegel)/i,
+    '돼지안심':/schweinefilet(?:\b|$)/i,
+    '돼지목살':/(?:schweine[- ]?)?(?:nacken(?:braten)?|nackensteaks?)(?:\b|$)/i,
+    '돼지등심':/schweine[- ]?rücken(?:\b|$)/i,
+    '돼지뒷다리살':/schweine[- ]?schnitzel(?:\b|$)/i,
+    '소·돼지 50/50 다짐육':/hackfleisch\s+gemischt(?:\b|$)/i,
+    '돼지다짐육':/schweine[- ]?hackfleisch(?:\b|$)/i,
+    '소고기':/(?:rind(?:er)?gulasch|gulasch\s+vom\s+rind)(?:\b|$)/i,
+    '소고기등심':/(?:rib[- ]?eye|entrecôte|entrecote)(?:\b|$)/i,
+    '칠면조가슴살':/putenbrust(?:filet)?(?:\b|$)/i,
+    '연어':/lachsfilets?(?:\b|$)/i,
+    '훈제연어':/(?:räucherlachs|raeucherlachs)(?:\b|$)/i,
+    '송어':/(?:forellen?(?:[- ]?filet)?|lachsforellen[- ]?filetseite)(?:\b|$)/i,
+    '새우':/(?:garnelen?|shrimps?)(?:\b|$)/i,
+    '참치':/(?:thunfisch|tuna)(?:\b|$)/i,
+    '토마토':/tomaten?(?:\b|$)/i,
+    '파프리카':/paprika(?:\b|$)/i,
+    '양파':/zwiebeln?(?:\b|$)/i,
+    '버섯':/(?:champignons?|pilze)(?:\b|$)/i,
+    '감자':/(?:speisekartoffeln|kartoffeln)(?:\b|$)/i,
+    '고구마':/(?:süßkartoffeln|suesskartoffeln)(?:\b|$)/i,
+    '당근':/(?:möhren|karotten)(?:\b|$)/i,
+    '주키니':/zucchini(?:\b|$)/i,
+    '오이':/(?:salatgurke|gurken?)(?:\b|$)/i,
+    '양상추':/(?:kopfsalat|eisbergsalat|blattsalat)(?:\b|$)/i,
+    '레몬':/zitronen?(?:\b|$)/i,
+    '아보카도':/avocados?(?:\b|$)/i,
+    '바나나':/bananen?(?:\b|$)/i,
+    '블루베리':/(?:heidelbeeren?|blaubeeren?)(?:\b|$)/i,
+    '딸기':/erdbeeren?(?:\b|$)/i,
+    '복숭아':/pfirsiche?(?:\b|$)/i,
+    '사과':/(?:äpfel|apfel)(?:\b|$)/i,
+    '포도':/trauben?(?:\b|$)/i,
+    '요거트':/(?:naturjoghurt|joghurt|skyr|speisequark|quark)(?:\b|$)/i,
+    '치즈':/gouda(?:\b|$)/i,
+    '슬라이스 가공치즈':/schmelzkäse(?:scheiben)?(?:\b|$)/i,
+    '버터':/(?:^|[\s-])(?:marken)?butter(?:\b|$)/i,
+    '허브 쿼크':/(?:kräuterquark|kraeuterquark)(?:\b|$)/i,
+    '파스타':/(?:pasta|spaghetti|teigwaren)(?:\b|$)/i,
+    '토스트':/(?:^|[\s-])toast(?:brot)?(?:\b|$)/i,
+    '식빵':/toastbrot(?:\b|$)/i,
+    '빵':/(?:brot|brötchen|broetchen)(?:\b|$)/i,
+    '모짜렐라치즈':/mozzarella(?:\b|$)/i,
+    '체다치즈':/cheddar(?:\b|$)/i,
+    '파마산치즈':/parmesan(?:\b|$)/i,
+    '달걀':/(?:eier|ei)(?:\b|$)/i,
+    '쌀':/(?:langkorn[- ]?reis|basmati[- ]?reis|risotto[- ]?reis|reis)(?:\b|$)/i,
+    '호밀빵':/roggenmischbrot(?:\b|$)/i,
+    '또띠아':/(?:wraps?|tortillas?)(?:\b|$)/i,
+    '올리브유':/(?:olivenöl|olivenoel)(?:\b|$)/i,
+    '마늘':/knoblauch(?:\b|$)/i,
+    '대파':/(?:lauchzwiebeln|frühlingszwiebeln|fruehlingszwiebeln)(?:\b|$)/i,
+  };
+  const offerContradictions={
+    '닭가슴살':/bacon|speck|aspik|paniert|gegart|gewürzt|mariniert|schnitzel/i,
+    '새우':/mariniert|knoblauch|chili|kräuter|gewürzt/i,
+    '토마토':/dose|konserve|geschält|getrocknet|passiert|tomatenmark|sauce|ketchup|brötchen|broetchen|brot|gnocchi|pizza/i,
+    '양파':/wurst|schinken|sauerfleisch|aspik|fleisch/i,
+    '당근':/saft|püree|pueree|suppe/i,
+    '오이':/glas(?:\b|\s*\/)|abtropf|gewürz|gewuerz|eingelegt|essig|cornichon/i,
+    '복숭아':/dose|konserve|abtropf|gezuckert|sirup|joghurt|nektar|saft/i,
+    '버터':/butternut|kürbis|kuerbis|buttermilch|butterkäse|butterkaese|butterstollen|butterschinken|buttercroissant|kräuterbutter|kraeuterbutter|mischstreich|rama\s+mit\s+butter|kuchen|gebäck|gebaeck|konfekt/i,
+    '토스트':/schinken|toasty|brötchen|broetchen/i,
+    '모짜렐라치즈':/piccolini|pizza|tomate-mozzarella|sticks?|nuggets?|paniert|burrata|stracciatella/i,
+    '쌀':/reisnudeln|milchreis|pudding|express|vorgegart|gekocht/i,
+    '치즈':/schmelzkäse|schmelzkaese|käsezubereitung|kaesezubereitung/i,
+  };
+  function offerProductIdentityEligible(offer) {
+    const ingredient=offer?.identity?.ingredientId||offer?.ingredient||'';
+    const product=String(offer?.productDe||offer?.product||'');
+    const text=[product,offer?.detail,offer?.pack,offer?.category,offer?.productInfo].filter(Boolean).join(' ');
+    const noun=offerNounEvidence[ingredient];
+    if(noun&&!noun.test(product))return false;
+    const preparationText=text.replace(/\b(?:un|nicht\s+)(?:mariniert|gewürzt|gewuerzt|gegart|gekocht|geräuchert|geraeuchert)\b/gi,'');
+    if(offerContradictions[ingredient]?.test(preparationText))return false;
+    if(offer?.identity?.processingState==='raw'&&/mariniert|gewürzt|gewuerzt|paniert|gegart|gekocht|geräuchert|geraeuchert|verzehrfertig/i.test(preparationText))return false;
+    if(ingredient==='새우'&&offer?.identity?.processingState==='raw'&&!/(?:^|\W)(?:roh|natur|unmariniert|ungewürzt|ungewuerzt|tiefgefroren|ungegart)(?:\W|$)/i.test(text))return false;
+    if(offer?.identity?.processingState==='fresh'&&offer?.identity?.species==='plant'&&/marmelade|konfitüre|konfituere|saft|nektar|sauce|suppe|püree|pueree|chips|brot|brötchen|broetchen|joghurt|dose|konserve|abtropf|getrocknet|eingelegt|garnelen|shrimp|wurst|schinken|fleisch|käse|kaese/i.test(text))return false;
+    return true;
+  }
   function safeOffer(offer) {
-    return !(offer.identity?.ingredientId==='버터'&&/butternut|kürbis|kuerbis/i.test(offer.productDe||offer.product||''));
+    return offerProductIdentityEligible(offer);
   }
   function offerMatchesRecipe(offer, meal) {
     if(!safeOffer(offer))return false;
     const labels=[meal.title,...ingredientLabels(meal)].join(' ');
     if(/champignon/i.test(offer.productDe||offer.product||'') && /새송이|느타리|표고|팽이|목이/.test(labels) && !/양송이|버섯\s*종류\s*무관/.test(labels))return false;
+    const recipeText=[labels,...(meal.steps||[]).map((step)=>typeof step==='string'?step:step?.instruction||'')].join(' ');
+    if(offer.identity?.ingredientId==='빵'&&/빵\s*케이크|빵케이크|큰\s*빵|천연효모빵|빵\s*속을?\s*파|속을\s*파낸|윗면.{0,12}칼집/u.test(recipeText)&&offer.identity?.form!=='whole-loaf')return false;
+    if(offer.identity?.ingredientId==='모짜렐라치즈') {
+      const form=offer.identity?.form;
+      const mini=/미니\s*모짜렐라|보코치니|작은\s*모짜렐라\s*볼/u.test(recipeText);
+      if(mini&&form!=='mini-balls')return false;
+      if(!mini&&/모짜렐라(?:치즈)?\s*(?:\d+(?:\.\d+)?\s*개|한\s*개)/u.test(recipeText)&&form!=='ball')return false;
+      if(!mini&&/모짜렐라(?:치즈)?\s*(?:블록|덩어리)/u.test(recipeText)&&form!=='block')return false;
+    }
     return true;
   }
   function sourceMinutes(value) {
@@ -132,7 +224,7 @@
   function explain(meal, catalog = {}) {
     const mainIngredients = profile(meal).primaryIngredients;
     const names = [...new Set([...meal.sale,...meal.missing])];
-    const mainOffers = mainIngredients.filter((name)=>Object.hasOwn(catalog,name)&&offerMatchesRecipe({...catalog[name],identity:{ingredientId:name}},meal)).map((name)=>({name,product:catalog[name].product || name,pack:catalog[name].pack || '',priceCents:catalog[name].priceCents}));
+    const mainOffers = mainIngredients.filter((name)=>Object.hasOwn(catalog,name)&&offerMatchesRecipe({...catalog[name],identity:{...catalog[name].identity,ingredientId:name}},meal)).map((name)=>({name,product:catalog[name].product || name,pack:catalog[name].pack || '',priceCents:catalog[name].priceCents}));
     const secondaryOffers = names.filter((name)=>!mainIngredients.includes(name) && Object.hasOwn(catalog,name));
     const substitutionNotes = [];
     if (mainIngredients.includes('닭가슴살') && meal.detailIngredients?.some((label)=>label.includes('닭가슴살')) && !catalog['닭가슴살'] && catalog['닭안심']) {
@@ -141,7 +233,14 @@
     return {mainIngredients,mainOffers,secondaryOffers,substitutionNotes};
   }
 
-  function score(meal, {catalog = {}, history = [], date, historyDate, moment = '저녁', offerFrequency = {}}) {
+  function contextCatalog(context,meal) {
+    const selected=typeof context?.catalogFor==='function'?context.catalogFor(meal):context?.catalog;
+    return selected&&typeof selected==='object'?selected:{};
+  }
+
+  function score(meal, options={}) {
+    const {history = [], date, historyDate, moment = '저녁', offerFrequency = {}}=options;
+    const catalog=contextCatalog(options,meal);
     const info = explain(meal,catalog), meta = profile(meal);
     const recent = restoreHistory(JSON.stringify(history),historyDate||date);
     const sameDish = recent.some((row)=>row.sourceRecipeId === identity(meal));
@@ -164,8 +263,8 @@
     return eligible.slice().sort((a,b)=>score(b,options)-score(a,options) || identity(a).localeCompare(identity(b)));
   }
 
-  function available(meals, {catalog = {}}) {
-    return meals.filter((meal)=>recipeAllowed(meal)&&explain(meal,catalog).mainOffers.length>0);
+  function available(meals, options={}) {
+    return meals.filter((meal)=>recipeAllowed(meal)&&explain(meal,contextCatalog(options,meal)).mainOffers.length>0);
   }
 
   function nutritionReadiness(meal) {
@@ -187,6 +286,27 @@
     return {ready,status:subtotalValid&&['complete','partial','unknown'].includes(cart?.costStatus)?cart.costStatus:'unknown',knownSubtotalCents:subtotalValid?cart.knownSubtotalCents:null,savingsStatus:cart?.savingsStatus==='complete'?'complete':'unavailable'};
   }
 
+  function localBasketEvidenceReady(cart,context,meal) {
+    if(context?.localBasketEvidence!==true||!Array.isArray(cart?.items)||!cart.items.length)return false;
+    if(['postcode','store','branchId','date','targetServings'].some((key)=>context[key]!==undefined&&cart?.[key]!==context[key]))return false;
+    const primary=new Set(profile(meal||{}).primaryIngredients||[]);
+    let subtotal=0;
+    for(const item of cart.items) {
+      const identityValue=item?.identity;
+      const product=item?.product||item?.productDe;
+      const source=item?.sourceURL||item?.source;
+      if(!identityValue||typeof identityValue.ingredientId!=='string'||typeof product!=='string'||!product.trim())return false;
+      if(typeof source!=='string'||!/^https:\/\/[^\s@]+$/i.test(source))return false;
+      if(!/^[a-f0-9]{64}$/.test(item.sourceSha256||''))return false;
+      if(context.date&&(!(typeof item.validFrom==='string'&&typeof item.validThrough==='string')||item.validFrom>context.date||item.validThrough<context.date))return false;
+      if(!Number.isSafeInteger(item.priceCents)||item.priceCents<0||!Number.isSafeInteger(item.quantity)||item.quantity<1||!Number.isSafeInteger(item.subtotalCents)||item.subtotalCents!==item.priceCents*item.quantity||item.quantityComplete!==true)return false;
+      if(!offerMatchesRecipe({identity:identityValue,productDe:product,detail:item.detail,pack:item.pack},meal))return false;
+      if(primary.has(identityValue.ingredientId)&&typeof context.offerIds?.has==='function'&&(!item.offerId||!context.offerIds.has(item.offerId)))return false;
+      if(item.owned!==true)subtotal+=item.subtotalCents;
+    }
+    return Number.isSafeInteger(cart.knownSubtotalCents)&&cart.knownSubtotalCents===subtotal;
+  }
+
   function evaluateRecipeForMode(meal, context={}, mode='balanced') {
     const selectedMode=modes.has(mode)?mode:'balanced';
     const reasons=[];
@@ -196,14 +316,16 @@
     if(context.store&&meal?.store!==context.store) { eligible=false; reasons.push('선택한 마트의 메뉴가 아닙니다.'); }
     if(context.branchId&&meal?.branchId!==context.branchId) { eligible=false; reasons.push('선택한 지점의 메뉴가 아닙니다.'); }
     if(context.mealOnly&&['side','breakfast'].includes(mealKind(meal))) { eligible=false; reasons.push('점심·저녁 자동 추천용 주식 메뉴가 아닙니다.'); }
-    if(context.requireMainOffer&&explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length===0) { eligible=false; reasons.push('현재 지점의 정확한 주재료 할인과 연결되지 않습니다.'); }
+    if(context.requireMainOffer&&explain(meal||{sale:[],missing:[]},contextCatalog(context,meal)).mainOffers.length===0) { eligible=false; reasons.push('현재 지점의 정확한 주재료 할인과 연결되지 않습니다.'); }
     if(typeof context.offerIds?.has==='function'&&!((meal?.offerIds||[]).some((offerId)=>context.offerIds.has(offerId)))) { eligible=false; reasons.push('현재 지점의 할인상품 ID와 일치하지 않습니다.'); }
     const readiness={cost:'unknown',savings:'unavailable',nutrition:'unknown'};
     const scoreComponents={qualityScore:Number.isFinite(meal?.qualityScore)?meal.qualityScore:null};
     if(selectedMode==='value') {
       if(context.requireCompilerBasketFacts&&(meal?.basketFacts?.sourceCoverage!=='complete'||meal.basketFacts.targetServings!==context.targetServings)) { eligible=false; reasons.push('선택한 인분 수의 전체 재료 범위가 검증된 구매 바구니 자료가 없습니다.'); }
       if(context.requireCompilerBasketFacts&&context.date&&['date','postcode','store','branchId'].some(key=>context[key]&&meal?.basketFacts?.[key]!==context[key])) { eligible=false; reasons.push('구매비용 근거의 날짜 또는 지점이 현재 선택과 다릅니다.'); }
-      const cost=costReadiness(typeof context.basketFor==='function'?context.basketFor(meal,context.targetServings||2):meal?.basketFacts);
+      const cart=typeof context.basketFor==='function'?context.basketFor(meal,context.targetServings||2):meal?.basketFacts;
+      if(context.requireCompilerBasketFacts&&!localBasketEvidenceReady(cart,context,meal)) { eligible=false; reasons.push('상품별 식별정보·가격 출처·계산 근거가 확인되지 않아 구매 합계를 사용할 수 없습니다.'); }
+      const cost=costReadiness(cart);
       readiness.cost=cost.status;readiness.savings=cost.savingsStatus;scoreComponents.knownSubtotalCents=cost.knownSubtotalCents;
       if(!cost.ready) { eligible=false; reasons.push('가격 또는 필요한 포장 수량이 모두 확인되지 않았습니다.'); }
       else reasons.push('확인된 구매 합계 '+cost.knownSubtotalCents+'센트 기준입니다.');
@@ -216,7 +338,7 @@
         if(!policy) { eligible=false; reasons.push('추천 정책 자료를 불러오지 못했습니다.'); }
         else reasons.push((nutrient.status==='estimated'?'환산 가정에 따른 추정 1인분: ':'재료 투입량 기준 1인분: ')+Math.round(nutrient.facts.kcal)+' kcal · 단백질 '+nutrient.facts.proteinGrams.toFixed(1)+' g · 식이섬유 '+nutrient.facts.fiberGrams.toFixed(1)+' g · 나트륨 '+Math.round(nutrient.facts.sodiumMg)+' mg · 정책 가중치 열량 '+policy.weights.kcal+'%·단백질 '+policy.weights.proteinGrams+'%·식이섬유 '+policy.weights.fiberGrams+'%·나트륨 '+policy.weights.sodiumMg+'%');
       }
-    } else if(explain(meal||{sale:[],missing:[]},context.catalog||{}).mainOffers.length) reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
+    } else if(explain(meal||{sale:[],missing:[]},contextCatalog(context,meal)).mainOffers.length) reasons.push('현재 할인상품과 메뉴 다양성을 기준으로 추천합니다.');
     else reasons.push('전체 레시피의 주재료와 메뉴 다양성을 기준으로 추천합니다.');
     return {eligible,readiness,scoreComponents,reasons};
   }
@@ -333,5 +455,5 @@
     return meals.find((meal)=>meal.id===selectedId) || sequence(meals,{...options,mealOnly:true},1)[0] || null;
   }
 
-  window.MealRecommendations = {sourceMinutes,recipeAllowed,mealKind,matchesConditions,safeOffer,offerMatchesRecipe,recipeQuantities,available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
+  window.MealRecommendations = {sourceMinutes,recipeAllowed,mealKind,matchesConditions,offerProductIdentityEligible,safeOffer,offerMatchesRecipe,recipeQuantities,available,rank,sequence,browse,current,explain,restoreHistory,recordMeal,restorePreferences,serializePreferences,evaluateRecipeForMode,rankForMode,nextCandidate,planAutoSlots};
 }());

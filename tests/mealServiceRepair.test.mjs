@@ -185,7 +185,7 @@ test('local gram calculation requires reviewed full nutrient components and scop
  assert.equal(api.nutritionEditStorageKey({...meal,sourceContentHash:'unknown'}),null);
 });
 
-test('detail, pantry and shopping use the same scoped full basket including ordinary prices',async t=>{
+test('opaque basket claims stay unavailable while compatible offer quotes and pantry remain usable',async t=>{
  const root=new URL('../public/mohemeokji/',import.meta.url),store='Netto',branchId='branch-a',sourceRecipeId='9999001';
  const scope={postcode:'44369',store,branchId,date:'2026-10-05',targetServings:2};
  const priceItem=(name,amount,priceCents)=>({key:'food-'+name,name,pantryKeys:[store+':'+name],pack:{amount:500,unit:'g'},requiredAmount:{amount,unit:'g'},priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true,sourceURL:'https://example.test/'+encodeURIComponent(name),sourceSha256:'a'.repeat(64),validFrom:scope.date,validThrough:'2026-10-11'});
@@ -200,7 +200,7 @@ test('detail, pantry and shopping use the same scoped full basket including ordi
  assert.equal(w.document.querySelector('[data-filter="quick"]').disabled,false);
  w.document.querySelector('[data-filter="quick"]').click();assert.equal(w.document.querySelector('#menuCount').textContent,'1');
  const valueMode=w.document.querySelector('[name="recommendationMode"][value="value"]');valueMode.click();
- assert.equal(w.document.querySelector('#todayCost').textContent,'2,98€');
+ assert.equal(w.document.querySelector('#todayCost').textContent,'—');
  await runtime.openDetail('netto-recipe-'+sourceRecipeId);
  assert.match(w.document.querySelector('#detailNutrition').textContent,/1인분 추정 영양.*약 200 kcal/s);
  assert.match(w.document.querySelector('#recipeMeta').textContent,/15분 이내/);
@@ -218,19 +218,19 @@ test('detail, pantry and shopping use the same scoped full basket including ordi
  w.document.querySelector('[data-reset-nutrition-grams]').click();assert.equal(w.localStorage.getItem(editKey),null);
  assert.match(w.document.querySelector('#detailNutrition').textContent,/1인분 추정 영양.*약 200 kcal/s);
  assert.equal(w.document.querySelector('[data-nutrition-ordinal="1"]').value,'100');
- assert.equal(w.document.querySelector('#shoppingTotal').textContent,'2,98€');
- assert.match(w.document.querySelector('#detailIngredients').textContent,/소금.*0,99€/);
- assert.equal(w.document.querySelector('#shoppingSource').querySelectorAll('a').length,2);
+ assert.match(w.document.querySelector('#shoppingTotal').textContent,/1,99€/);
+ assert.match(w.document.querySelector('#detailIngredients').textContent,/소금.*가격 미확인/);
+ assert.equal(w.document.querySelector('#shoppingSource').querySelectorAll('a').length,1);
  w.document.querySelector('#addShoppingItems').click();assert.equal(runtime.shoppingState.list.length,2);
  const owned=w.document.querySelector('[data-shopping-key="Netto:소금"]');owned.checked=true;owned.dispatchEvent(new w.Event('change',{bubbles:true}));
- assert.equal(w.document.querySelector('#shoppingTotal').textContent,'1,99€');
- assert.equal(w.document.querySelector('#todayCost').textContent,'1,99€');
+ assert.match(w.document.querySelector('#shoppingTotal').textContent,/1,99€/);
+ assert.equal(w.document.querySelector('#todayCost').textContent,'—');
  assert.equal(runtime.shoppingState.list.some(item=>item.key==='Netto:소금'),false);
  assert.equal(runtime.shoppingState.list[0].key,'Netto:파스타면');
  w.document.querySelector('#clearPlan').click();
  runtime.plans.저녁.mon=w.MealShopping.normalizePlanSlot('netto-recipe-'+sourceRecipeId,'manual');
  runtime.plans.저녁.tue=w.MealShopping.normalizePlanSlot('netto-recipe-'+sourceRecipeId,'manual');
- const week=runtime.weekBasket();assert.equal(week.costStatus,'complete');assert.equal(week.knownSubtotalCents,199);assert.equal(week.items[0].requiredAmount.amount,200);assert.equal(week.items[0].quantity,1);
+ const week=runtime.weekBasket();assert.equal(week.costStatus,'partial');assert.equal(week.knownSubtotalCents,199);assert.equal(week.items[0].requiredAmount.amount,200);assert.equal(week.items[0].quantity,1);
  const servings=w.document.querySelector('#targetServings');servings.value='6';servings.dispatchEvent(new w.Event('change'));
  await runtime.openDetail('netto-recipe-'+sourceRecipeId);
  assert.equal(w.document.querySelector('[data-nutrition-ordinal="1"]').value,'300');

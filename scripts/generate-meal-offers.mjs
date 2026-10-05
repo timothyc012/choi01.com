@@ -10,6 +10,7 @@ import { pathToFileURL } from 'node:url';
 import { createHash } from 'node:crypto';
 import ingredientIdentities from './data/ingredient-identities.json' with { type: 'json' };
 import { canonicalJson } from './lib/meal-snapshot-schema.mjs';
+import { mealPolicy } from './lib/meal-policy.mjs';
 
 export function parseCsvTable(text,requiredColumns=[]) {
   text = text.replace(/^\uFEFF/, '');
@@ -189,6 +190,19 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
   if (!identity || priceCents === null || !period) return null;
   if (ingredient === '돼지목살' && /Nacken(?:braten)?$/i.test(row['상품명'])) identity.form = 'whole-cut';
   const detail = compact(row['상품정보']);
+  const product = compact(row['상품명']);
+  const productEvidence = product + ' ' + detail;
+  if (ingredient === '모짜렐라치즈') {
+    if (/stange|schnittfest|am\s+stück/i.test(productEvidence)) identity.form = 'block';
+    else if (/mini.{0,12}mozzarella|mozzarella.{0,12}mini|kleine\s+kugeln|perlen|ciliegine/i.test(productEvidence)) identity.form = 'mini-balls';
+  }
+  if (ingredient === '빵') {
+    if (/brötchen|broetchen/i.test(product)) identity.form = 'roll';
+    else if (/toast/i.test(product)) identity.form = 'sliced';
+    else if (/tortilla|wrap/i.test(product)) identity.form = 'flatbread';
+    else if (/brot(?:\b|$)/i.test(product)) identity.form = 'whole-loaf';
+  }
+  if (!mealPolicy.offerProductIdentityEligible({ identity, productDe: product, detail, category: row['카테고리'] })) return null;
   const conditions = compact(row['할인조건']);
   const normalPriceCents = cents(row['정상가격']) ?? cents(row['정상가']) ?? null;
   const rowWithSource = { ...row, __sourceRow: sourceRow };
@@ -204,7 +218,7 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
     evidenceUrl: /^https:\/\//.test(row['출처']) ? row['출처'] : null,
     validFrom: period.validFrom,
     validThrough: period.validThrough,
-    productDe: compact(row['상품명']),
+    productDe: product,
     pack,
     priceCents,
     normalPriceCents,
@@ -212,7 +226,7 @@ function serializeOffer(row, ingredient, sourceRow, sourcePublicPath, sourceSha)
     autoPriceEligible: !conditions || /^(없음|none|unconditional)$/i.test(conditions),
     identity,
     ingredient,
-    product: compact(row['상품명']),
+    product,
     appPriceCents: cents(row['앱가격']),
     detail,
     category: compact(row['카테고리']),
