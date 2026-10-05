@@ -2,6 +2,14 @@
 
 Read this when enriching nutrition, explaining an unavailable mode, or handling an explicit source-disposal request. Ordinary weekly publication does not install a schema, promote nutrition data to the ontology DB, or delete source records.
 
+## Durable private evidence
+
+Pending approval records, release receipts, source evidence, cleanup replacement plans, apply/finalize journals, rollback copies and execution results are part of one hash-linked evidence graph. Store them under a durable private artifact root resolved from the canonical checkout, outside `public/`, any scratch worktree and `/tmp`; the root must be covered by `.gitignore`. Before use, verify both the resolved path and its ignore rule with `git check-ignore`, and record each referenced file's exact path and SHA-256 in the receipt or journal.
+
+`/tmp` and `/private/tmp` are suitable only for throwaway previews and tests. Do not repoint a sealed artifact path to a replacement file or silently substitute fresh proof after an approval digest has been issued. Recover the exact sealed bytes first. If they cannot be recovered, stop every destructive step, collect fresh current evidence, prepare a new reviewed sealed plan with the new hashes, and use the existing exact digest approval gate for that plan. This is evidence recovery, not an additional approval layer.
+
+Keep the hash graph closed until all database, mirror, file and cache checks have passed. A cleanup `apply` remains provisional while its rollback copies exist; only the approved and verified `finalize` may remove that batch's rollback copies. Do not report disposal complete while any in-scope rollback copy or referenced evidence is missing. Unlisted backups, remote copies, processed dumps and Git history remain outside a bounded cleanup scope unless separately inventoried and approved.
+
 ## Reviewed calculations
 
 Use the website repo's `docs/mohemeokji-calculations.md` and actual CLI. The enrichment command reads reviewed local JSON inputs and creates a new private output; it never fetches, approves, publishes or writes a DB:
