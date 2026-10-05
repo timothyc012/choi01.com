@@ -3,7 +3,12 @@
 BEGIN READ ONLY;
 SET LOCAL statement_timeout = '30s';
 
-WITH recipes AS (
+WITH active_recipe_facts AS NOT MATERIALIZED (
+  SELECT subject_id, relation, object_id
+  FROM fact
+  WHERE tenant_id = 'recipe-full'
+    AND superseded_by IS NULL
+), recipes AS (
   SELECT r.*
   FROM individuals r
   WHERE r.tenant_id = 'recipe-full'
@@ -43,14 +48,14 @@ LEFT JOIN LATERAL (
   SELECT
     jsonb_object_agg(p.key, p.value) AS profile,
     max(p.value) FILTER (WHERE p.key = 'servingsText') AS servings_text
-  FROM triples t
+  FROM active_recipe_facts t
   JOIN properties p ON p.individual_id = t.object_id
   WHERE t.subject_id = r.id
     AND t.relation = 'https://01ontology.org/pack/recipe#hasServingProfile'
 ) serving ON true
 LEFT JOIN LATERAL (
   SELECT p.value AS source_url
-  FROM triples t
+  FROM active_recipe_facts t
   JOIN properties p ON p.individual_id = t.object_id AND p.key = 'sourceUrl'
   WHERE t.subject_id = r.id
     AND t.relation = 'https://01ontology.org/pack/recipe#supportedByPage'
@@ -58,7 +63,7 @@ LEFT JOIN LATERAL (
 ) source_page ON true
 LEFT JOIN LATERAL (
   SELECT a.label
-  FROM triples t
+  FROM active_recipe_facts t
   JOIN individuals a ON a.id = t.object_id
   WHERE t.subject_id = r.id
     AND t.relation = 'https://01ontology.org/pack/recipe#authoredBy'
@@ -79,10 +84,10 @@ LEFT JOIN LATERAL (
       q.label,
       named_ingredient.label AS ingredient,
       quantity.value AS quantity
-    FROM triples t
+    FROM active_recipe_facts t
     JOIN individuals q ON q.id = t.object_id
     LEFT JOIN properties quantity ON quantity.individual_id = q.id AND quantity.key = 'quantityText'
-    LEFT JOIN triples quantity_ingredient
+    LEFT JOIN active_recipe_facts quantity_ingredient
       ON quantity_ingredient.subject_id = q.id
      AND quantity_ingredient.relation = 'https://01ontology.org/pack/recipe#quantityOfIngredient'
     LEFT JOIN individuals named_ingredient ON named_ingredient.id = quantity_ingredient.object_id
@@ -103,7 +108,7 @@ LEFT JOIN LATERAL (
       COALESCE(step_number.value_integer::int, (regexp_match(s.name, '([0-9]+)$'))[1]::int) AS ordinal,
       s.name,
       instruction.value AS instruction
-    FROM triples t
+    FROM active_recipe_facts t
     JOIN individuals s ON s.id = t.object_id
     LEFT JOIN properties step_number ON step_number.individual_id = s.id AND step_number.key = 'stepNumber'
     LEFT JOIN properties instruction ON instruction.individual_id = s.id AND instruction.key = 'instructionText'

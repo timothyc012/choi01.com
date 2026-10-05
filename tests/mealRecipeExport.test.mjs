@@ -74,6 +74,7 @@ test('candidate export preserves source metadata, serving text, quantities, and 
     ingredientCount: 1,
     measuredIngredientCount: 1,
     sourceServingText: '2인분',
+    sourceTimeText: null,
     ingredients: [{ ordinal: 1, label: '닭가슴살 300g', ingredient: '닭가슴살', quantity: '300g' }],
     steps: [{ ordinal: 1, name: 'step-1', instruction: '손질한다.' }],
     matches: [],

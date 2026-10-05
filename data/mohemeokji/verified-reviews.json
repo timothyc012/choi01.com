@@ -1,477 +1,519 @@
 {
   "schemaVersion": 1,
-  "snapshotId": "c043c33550924d384453e89586fc3ee4112cec89c871e0074b16a5ddf8d68f43",
-  "csvSha256": "79cb92f153dc17b150eda2c29c9f16df5de8f0f552a011e8a6006aecb20c48cf",
+  "snapshotId": "5bfbd2ab61787befc71eb965cde28f75b1d40e4187cdda9e21773a832fb1bca2",
+  "csvSha256": "5bf5d12a7a102b7888b7c7c4a37677c143757b4e46616d4d2f5b1337f1ad18d7",
   "recipes": {
-    "830985": {
-      "sourceRecipeId": "830985",
-      "sourceUrl": "https://www.10000recipe.com/recipe/830985",
-      "checkedAt": "2026-09-21T09:16:27.795Z",
-      "htmlSha256": "0929822532ef0261add42b3cf262f45f080f560a013b6e82db68cf8413337faa",
-      "status": "verified",
-      "reviewCount": 8,
-      "ratingValue": 5,
-      "commentCount": 21,
+    "786265": {
+      "sourceRecipeId": "786265",
+      "sourceUrl": "https://www.10000recipe.com/recipe/786265",
+      "checkedAt": "2026-10-05T01:38:56.930Z",
+      "htmlSha256": "031f8a98e1bbae25537733fcd82ec950228679e294e6b191e0f8064cf709e749",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 29,
       "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "1cba3331213dbde89cb5f44846c64a9a66e5df71b5f2bada99314b911b1764db"
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "6a145651d851d84cc10fee3c9bc5e2ec5782f5b7f49c8d0abaa4409bc2a52460"
+    },
+    "1041323": {
+      "sourceRecipeId": "1041323",
+      "sourceUrl": "https://www.10000recipe.com/recipe/1041323",
+      "checkedAt": "2026-10-05T01:38:49.866Z",
+      "htmlSha256": "0e67f04c22a2da9af341bf0581d684f9919a3d143a18763b530575ae343de786",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 24,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "635aa43547627b12d0006ef436bfd782f492b731fefb8a42fea92a99f339b2b2"
     },
     "1407202": {
       "sourceRecipeId": "1407202",
       "sourceUrl": "https://www.10000recipe.com/recipe/1407202",
-      "detailSha256": "90cb6da8e8815d916b2fbbdacfe8f118f0a19f97c6fb31eb178a02158bbd847b",
-      "checkedAt": "2026-09-21T09:16:16.383Z",
+      "checkedAt": "2026-10-05T01:38:49.793Z",
+      "htmlSha256": "7c3ec48b339d3848bd67c5cf5ed5e68bae701e78bfb70e39632ebbf47ec11bd4",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
-      "commentCount": null,
-      "method": "recipe-feedback-v1",
-      "reason": "source-unavailable"
-    },
-    "1643325": {
-      "sourceRecipeId": "1643325",
-      "sourceUrl": "https://www.10000recipe.com/recipe/1643325",
-      "checkedAt": "2026-09-21T09:15:52.445Z",
-      "htmlSha256": "3680978adfb29655ef4367942c0155d14ff68515b30319d94577daf35ea7ab1d",
-      "status": "verified",
-      "reviewCount": 11,
-      "ratingValue": 5,
-      "commentCount": 6,
-      "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "1e25a9a43e5cb53638b400a332e091512cb12b697efc4cdb548cb35fccab5025"
-    },
-    "1662934": {
-      "sourceRecipeId": "1662934",
-      "sourceUrl": "https://www.10000recipe.com/recipe/1662934",
-      "checkedAt": "2026-09-21T09:15:52.223Z",
-      "htmlSha256": "6cde33da90e905585dba02559ffeb8d2693c36ea900514d6fa40a5f76c50a334",
-      "status": "verified",
-      "reviewCount": 1,
-      "ratingValue": 5,
       "commentCount": 13,
       "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "6abf75bccb5c1f1ef60c9d59ae01b87c21ae51e894ebcdd932c37f4f7a111252"
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "729e120b1b9411f0a8114ec1b805e76cee6ac02f43e500eab39d9b449867b395"
     },
     "2006110": {
       "sourceRecipeId": "2006110",
       "sourceUrl": "https://www.10000recipe.com/recipe/2006110",
-      "checkedAt": "2026-09-21T09:15:53.953Z",
-      "htmlSha256": "4fbcce3c06f5f2909153757a02ab469d4673bf33732156fe77d848681702e431",
+      "checkedAt": "2026-10-05T01:38:49.214Z",
+      "htmlSha256": "b90566b66eaa269c878bc8fb0fa672c6da91600df59d1b28442f4792f36068bd",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "4c9577e1f9f68b4fb06262156064cdd2f3a50b915d6c46155375f6e46f184fe1"
+      "detailSha256": "fdc15559f54d25ec53e095ecbad9461aa5f140bfe262d6cc504133a4838afc4b"
+    },
+    "2376493": {
+      "sourceRecipeId": "2376493",
+      "sourceUrl": "https://www.10000recipe.com/recipe/2376493",
+      "checkedAt": "2026-10-05T01:38:50.149Z",
+      "htmlSha256": "86c3ec64ebdfdec71f75d26f3e7a0fbf2e51f3f81ff901f1f99c9abb4f3b8d94",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 3,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "90defcd7a2be5b9af77ca392e7919973bafe25c6d953581f3d01b30839805868"
     },
     "5346518": {
       "sourceRecipeId": "5346518",
       "sourceUrl": "https://www.10000recipe.com/recipe/5346518",
-      "checkedAt": "2026-09-21T09:15:54.262Z",
-      "htmlSha256": "9f2296b866f55511693f49e5a680863323d1df663dbbe69ff2ccad919a5357f0",
+      "checkedAt": "2026-10-05T01:38:50.520Z",
+      "htmlSha256": "13f357de2af89241fbf4d10eebec8b594b2b320c13ac4eb41cf8b7be02214a0a",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
       "commentCount": 4,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "5396297f83fad39e79a3c9545d1a7e10dc13aed2e397048b754fd1622c74f8d7"
+      "detailSha256": "c8065569790846a9c2f98c6ab886afb5d506946a97d37b240d210b0575958aa8"
+    },
+    "5529835": {
+      "sourceRecipeId": "5529835",
+      "sourceUrl": "https://www.10000recipe.com/recipe/5529835",
+      "checkedAt": "2026-10-05T01:38:50.676Z",
+      "htmlSha256": "3ed88d46d3549a540770afe37ff346ef83fb8e986e4c38710b775daaa26ea759",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 4,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "18bebda7d43353ea8f2e247d3daa3d1d0021411dfa320f19dcc57dd80aa265a0"
+    },
+    "6769969": {
+      "sourceRecipeId": "6769969",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6769969",
+      "checkedAt": "2026-10-05T01:38:50.832Z",
+      "htmlSha256": "e917e14dd800ea13bafebde70cdcda950841fdf105a16b06ae62bdd157757bfd",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 1,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "6560031801a6570ac59734223328bdc3fefaae6133b6f44a0b40d1575072c415"
     },
     "6830500": {
       "sourceRecipeId": "6830500",
       "sourceUrl": "https://www.10000recipe.com/recipe/6830500",
-      "checkedAt": "2026-09-21T09:15:55.689Z",
-      "htmlSha256": "ad36fd5083811616e23f15b30e3281122ca7b2a2bdb0c6786d2df9a70e21cbf8",
+      "checkedAt": "2026-10-05T01:38:51.384Z",
+      "htmlSha256": "ec759fad38b03e3a232326821449e36617e322c0bf6fa892b9ca39fa4de71fbb",
       "status": "verified",
       "reviewCount": 466,
       "ratingValue": 5,
       "commentCount": 51,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "c15c758314e4066e2be15635d97a63dbf29377201d05a0868bdd3c8cb3610087"
+      "detailSha256": "a03f676fde774ea1b7a431299d1230a8c16689e38ad2cef0eda201f2c7a7e398"
     },
     "6831097": {
       "sourceRecipeId": "6831097",
       "sourceUrl": "https://www.10000recipe.com/recipe/6831097",
-      "checkedAt": "2026-09-21T09:15:54.939Z",
-      "htmlSha256": "7170a4ee80bb4ae24a0ad6aa8742f37d161b422c7cbc41712f13d47c1548fd4c",
+      "checkedAt": "2026-10-05T01:38:51.845Z",
+      "htmlSha256": "19d0fe10af90396118826dd7c9f6347fdfdc5444c815e08f021e151c19f19f7c",
       "status": "verified",
       "reviewCount": 72,
       "ratingValue": 5,
       "commentCount": 11,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "fd59a2a75ad2f6d149c1ee3bb519bc8b11412d3adf4ae1a0a16907a63a05f46c"
+      "detailSha256": "d3665ab5ab4d5fcf4994df9671afbc63ebab8bf8893c4dfab961d13c25f31d87"
     },
-    "6831160": {
-      "sourceRecipeId": "6831160",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6831160",
-      "checkedAt": "2026-09-21T09:15:55.861Z",
-      "htmlSha256": "03027b5067561802487c67214e7beed78df116f04b2bc1218471d68e9a91c5ce",
-      "status": "verified",
-      "reviewCount": 1,
-      "ratingValue": 3,
-      "commentCount": 2,
-      "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "7690ad5b971bccc389fd5dfc73e4bea7182835b60211faa6cfa3cca10f293b44"
-    },
-    "6844289": {
-      "sourceRecipeId": "6844289",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6844289",
-      "checkedAt": "2026-09-21T09:15:56.686Z",
-      "htmlSha256": "c93144009b7774ae45e3c8e1014fc93dcff59f777c53deb8c5586589663f421c",
-      "status": "verified",
-      "reviewCount": 5,
-      "ratingValue": 5,
+    "6837129": {
+      "sourceRecipeId": "6837129",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6837129",
+      "checkedAt": "2026-10-05T01:38:51.920Z",
+      "htmlSha256": "d0eb990e22ac831610c96db4e0119e4b7c7c668c0812d65f7b32314756234014",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "a3cac14d72ba93cc192f45c16e8cab189d1e68e17571ce52ca8f0b453db5376b"
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "47cee1e451c0ea931e07ec404542c65efc723d25207bb102c892eda840c20bb2"
+    },
+    "6842384": {
+      "sourceRecipeId": "6842384",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6842384",
+      "checkedAt": "2026-10-05T01:38:52.145Z",
+      "htmlSha256": "37d2a756a3ce42843867b5db3476e9f7f9b6b49704f5edbafc75e953f7398075",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 3,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "0c7914e32d0b5ea69925ab2da0db732c7e49f4da252796a28167a727b6bb714b"
     },
     "6853815": {
       "sourceRecipeId": "6853815",
       "sourceUrl": "https://www.10000recipe.com/recipe/6853815",
-      "checkedAt": "2026-09-21T09:15:57.413Z",
-      "htmlSha256": "a03c0f26b8b0ebc2b14e40119671c36ef2d630ee9a5bd3d3e1616ec79c6ded12",
+      "checkedAt": "2026-10-05T01:38:52.920Z",
+      "htmlSha256": "fcd73e229a4cb412bf612b0847798f305e6a559937334e64a6bfbf1dad511b95",
       "status": "verified",
       "reviewCount": 237,
       "ratingValue": 5,
       "commentCount": 50,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "6c465de49615cac0145e27a99d57aa9ebe3e79cf6c2aa0aec2824b78dd455092"
+      "detailSha256": "a060b2b61a05f0438f8da0f71335b06e583a0c20a9c35768b4b9547dd4dd014c"
     },
-    "6857273": {
-      "sourceRecipeId": "6857273",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6857273",
-      "checkedAt": "2026-09-21T09:15:57.654Z",
-      "htmlSha256": "06ee6c135d531ac169cd9a96f315ec94d5cf9b4cb1b5fd4ef13b13801dbde306",
+    "6861652": {
+      "sourceRecipeId": "6861652",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6861652",
+      "checkedAt": "2026-10-05T01:38:52.526Z",
+      "htmlSha256": "2c28dec4414d226402ee2745e88e909a2f0e585af8eccb91f4398764c44baeea",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "fbff35e74db59d3632dc654b33586a40dab8c501085e96360c24edeb7bd9c874"
-    },
-    "6860486": {
-      "sourceRecipeId": "6860486",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6860486",
-      "detailSha256": "d61efc9d34829bfedf6aa75d707d8952dd6d0c9076186fb261e7e55476a79638",
-      "checkedAt": "2026-09-21T09:16:22.540Z",
-      "status": "unverified",
-      "reviewCount": null,
-      "ratingValue": null,
-      "commentCount": null,
-      "method": "recipe-feedback-v1",
-      "reason": "source-unavailable"
+      "detailSha256": "6e5f42d2b5eb1c49960305624187f3f4b95632e38d4df6112113a851078bef25"
     },
     "6868117": {
       "sourceRecipeId": "6868117",
       "sourceUrl": "https://www.10000recipe.com/recipe/6868117",
-      "checkedAt": "2026-09-21T09:15:58.858Z",
-      "htmlSha256": "704d87e78824a4ac8c543b5522fe5541e9ae7c8502253e18d2e7162234cd05d9",
+      "checkedAt": "2026-10-05T01:38:52.774Z",
+      "htmlSha256": "d190b5bff2ce275ce710bf7454acebf97ee4bbcffd35ef50e340d7e5feaff968",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "869c2aec3105693a982e4ea6a3e0b787d71df9f3e39179b796d2d2811e6ef153"
+      "detailSha256": "8b4399bb5d07c2d854c14b987157102b738f89264d29624003d3a77ef90b8b7b"
     },
     "6869220": {
       "sourceRecipeId": "6869220",
       "sourceUrl": "https://www.10000recipe.com/recipe/6869220",
-      "checkedAt": "2026-09-21T09:16:00.115Z",
-      "htmlSha256": "a4520946f2c6aa2c35b3aa935cb52f5866b64592d607433351f5a7f820784699",
+      "checkedAt": "2026-10-05T01:38:53.213Z",
+      "htmlSha256": "0ab93edf74b52a5cddcdf3cd63c562209182e124d41e1a20a57575aadcdb9804",
       "status": "verified",
       "reviewCount": 265,
       "ratingValue": 5,
       "commentCount": 41,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "f011f3282e8c286ea52882f45dcb3d378131a8b10310965968e9d3673c38915d"
+      "detailSha256": "d56714b718149ab12fac55fa24a66147fcfa73feedfc72eaf01899cc5ba81f6e"
     },
-    "6872321": {
-      "sourceRecipeId": "6872321",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6872321",
-      "checkedAt": "2026-09-21T09:16:01.348Z",
-      "htmlSha256": "3d6300a66c7e523d746e6dd0c04083067aeb96c94d054f2264b89cc666f21d87",
-      "status": "verified",
-      "reviewCount": 6,
-      "ratingValue": 5,
-      "commentCount": 4,
-      "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "2165907072fd9f7caac301b8a2dd206c9d35912381c9510fdc30bcfd77f31b09"
-    },
-    "6875439": {
-      "sourceRecipeId": "6875439",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6875439",
-      "checkedAt": "2026-09-21T09:16:02.640Z",
-      "htmlSha256": "1f485fce6e6d211ca84d3e71f7a2aa56ab83b95bdb429ace10620cfbb7c7d312",
-      "status": "verified",
-      "reviewCount": 2,
-      "ratingValue": 5,
-      "commentCount": 0,
-      "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "da4570011c4c3a28bde5dce612dad33af24029872a8edc235dcf077e1f924fb8"
-    },
-    "6875456": {
-      "sourceRecipeId": "6875456",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6875456",
-      "checkedAt": "2026-09-21T09:16:03.484Z",
-      "htmlSha256": "92fa2146a7f381f49f2fca1dc112eeb9ecc7718d12f763c9687cc4370db3ccdc",
+    "6870448": {
+      "sourceRecipeId": "6870448",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6870448",
+      "checkedAt": "2026-10-05T01:38:53.384Z",
+      "htmlSha256": "e990ec0a23f3d90b98eee1ace280b8791a7fae57e14ae05299f8ede48022aabe",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
-      "commentCount": 2,
+      "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "3510b6dd135ea5832434af8d4bbbb610852c8147736b4caabc72ce7e1b09a2d2"
+      "detailSha256": "e37302b440cc70ccff56fd86f3db2d98a229e32ac13ca5f8a577cb299fbf00b5"
     },
     "6875875": {
       "sourceRecipeId": "6875875",
       "sourceUrl": "https://www.10000recipe.com/recipe/6875875",
-      "checkedAt": "2026-09-21T09:16:04.535Z",
-      "htmlSha256": "038c370e36fa90397c10c76d373a317555c5616535583e17e8bde116164ad9d6",
+      "checkedAt": "2026-10-05T01:38:53.718Z",
+      "htmlSha256": "0ce993c7ab8206f878586058bc61e4277f81ef80e5005b52b9bfc1c814be61b2",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "5924a9d5531f0c8974345943c27645251904797536f38455a97611e4acaf4713"
+      "detailSha256": "e7f38f1f99040ebb82b7fcbec38037df5d0de5cdf88b80e6f6f395fdd12b4fb0"
     },
     "6879897": {
       "sourceRecipeId": "6879897",
       "sourceUrl": "https://www.10000recipe.com/recipe/6879897",
-      "checkedAt": "2026-09-21T09:16:06.515Z",
-      "htmlSha256": "53a2e512d34a3930e69a7c6000db034d94db08704332d2cac50a3881bf4430a9",
+      "checkedAt": "2026-10-05T01:38:53.969Z",
+      "htmlSha256": "b270e105843e4512b67808f7b4ab748c5f83f665118414d57556a4ae12e69410",
       "status": "verified",
       "reviewCount": 10,
       "ratingValue": 5,
       "commentCount": 3,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "de27a4dd67e6f117745effcb23f8b476d1ab076655ff815263d311b13f9637be"
+      "detailSha256": "b0aeb077dc54b3dd9bf0e35c5132013e0d3157098cd4f3e4a3fcec1165aa101e"
     },
-    "6894323": {
-      "sourceRecipeId": "6894323",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6894323",
-      "checkedAt": "2026-09-21T09:16:08.815Z",
-      "htmlSha256": "20a9816a36ae78f3c0e4c03ebb06cb56b943271956e0b5c7dab26f7a3c84430c",
+    "6912196": {
+      "sourceRecipeId": "6912196",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6912196",
+      "checkedAt": "2026-10-05T01:38:54.258Z",
+      "htmlSha256": "6c28ae5581e63c817d20950e8d21ae7804beb054a026ad24dfe2982bca12da0c",
       "status": "verified",
-      "reviewCount": 641,
+      "reviewCount": 1,
       "ratingValue": 5,
-      "commentCount": 55,
+      "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "df2387c52aa09da5eeef41ba8cd8208068582d3aa313a6dc8754f454af004227"
-    },
-    "6913737": {
-      "sourceRecipeId": "6913737",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6913737",
-      "checkedAt": "2026-09-21T09:16:10.044Z",
-      "htmlSha256": "93be8ae610d318f9cdb47a679f603bd38f7cf4edb55f2ec84d1dce51d3941bb7",
-      "status": "verified",
-      "reviewCount": 56,
-      "ratingValue": 5,
-      "commentCount": 7,
-      "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "4455bb4073d1c98958ae2b350ec49445030922f64c7b94df48aea383724c02b5"
+      "detailSha256": "30bb8e694593054c9516e6f245920645e464dd1c05b0ea861b8464c6ce744621"
     },
     "6920179": {
       "sourceRecipeId": "6920179",
       "sourceUrl": "https://www.10000recipe.com/recipe/6920179",
-      "checkedAt": "2026-09-21T09:16:27.549Z",
-      "htmlSha256": "cb2450109ab6a8ed85ca3ef59db513762879176db57668a36061e1d7f1172da7",
+      "checkedAt": "2026-10-05T01:38:54.494Z",
+      "htmlSha256": "6254249cfa308a6181ab0d44ed6e3df2ab989d51d1592ac117d5ba93fd86ce76",
       "status": "verified",
       "reviewCount": 2,
       "ratingValue": 5,
       "commentCount": 1,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "857e2ae7cc51e90f41bdaa515e8880007cd56ff8316b5896c5a837bfd74f7bbd"
+      "detailSha256": "9f4b2eccc1112ea4591af84eadb87427e4aa89f32eb6065797fad4771ea8b15f"
     },
-    "6936631": {
-      "sourceRecipeId": "6936631",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6936631",
-      "checkedAt": "2026-09-21T09:16:17.915Z",
-      "htmlSha256": "2360a90e4f22c6b322b628a1e95af768494a379881906b420c77c3649934d1f0",
-      "status": "verified",
-      "reviewCount": 3,
-      "ratingValue": 5,
-      "commentCount": 3,
-      "method": "recipe-feedback-v1",
-      "reason": null,
-      "detailSha256": "0b3fa1879f6cd009a8d8f19c2e95b0d3073b3e235bd2f92eaa20e46acd88f067"
-    },
-    "6960046": {
-      "sourceRecipeId": "6960046",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6960046",
-      "detailSha256": "e889258be51c655d5fc628d93e4777110ed72d8995f57c0294b469a92a49a012",
-      "checkedAt": "2026-09-21T09:16:43.016Z",
+    "6960613": {
+      "sourceRecipeId": "6960613",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6960613",
+      "checkedAt": "2026-10-05T01:38:54.710Z",
+      "htmlSha256": "90f9c813d1f300999ec2e6c0b03d55b503bf67b694de57344cb4b1eeab419d7a",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
-      "commentCount": null,
+      "commentCount": 1,
       "method": "recipe-feedback-v1",
-      "reason": "source-unavailable"
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "bcc43e53b07962f084e9dff01db3c133d2bd58f4e2e393680b3951013efd7d29"
     },
     "6966445": {
       "sourceRecipeId": "6966445",
       "sourceUrl": "https://www.10000recipe.com/recipe/6966445",
-      "checkedAt": "2026-09-21T09:16:24.245Z",
-      "htmlSha256": "6559408a45fe53596f87278e361d553a101d2ef944f5a422d9c8ab5e10c7a9b6",
+      "checkedAt": "2026-10-05T01:38:55.023Z",
+      "htmlSha256": "f7c6e0f7796387a5667134a8aaea49bc81a41dfa7a2f4daf518a171ebd21e41a",
       "status": "verified",
       "reviewCount": 7,
       "ratingValue": 5,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": null,
-      "detailSha256": "a44c74079a7e01617111c4e01273436909d460af5e13ce317d29a3826f54540f"
+      "detailSha256": "2869ddc172eda0e8873389e6fc0d1e52a00f726910e9803327dae3272d2cc33a"
     },
-    "6982749": {
-      "sourceRecipeId": "6982749",
-      "sourceUrl": "https://www.10000recipe.com/recipe/6982749",
-      "checkedAt": "2026-09-21T09:16:25.174Z",
-      "htmlSha256": "6d7139108dac1523aa53552cb7f1ffff65b48d0e627f719622a2acb5c5f23a9f",
+    "6973302": {
+      "sourceRecipeId": "6973302",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6973302",
+      "checkedAt": "2026-10-05T01:38:55.103Z",
+      "htmlSha256": "e3f72b430d0aa180b1d821367eedf70823b5994a44568e6feadccef5edcda092",
       "status": "unverified",
       "reviewCount": null,
       "ratingValue": null,
       "commentCount": 0,
       "method": "recipe-feedback-v1",
       "reason": "recipe-review-count-not-published",
-      "detailSha256": "89b2e6e738ae45cf4a5a863d56d1409c738787bb9b78733e1a1e86a9af27a06a"
+      "detailSha256": "05aae5240b7e89f0a2f262ee2030a9e41c12e65a9ccb145828683d0e16d66118"
+    },
+    "6982749": {
+      "sourceRecipeId": "6982749",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6982749",
+      "checkedAt": "2026-10-05T01:38:55.759Z",
+      "htmlSha256": "d2d7b69967aab318f7f7865074e9ddf255c0e2d23b5c0c8db5c1b9c5af354514",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "ba915febade7dda5cde02fd7e226e4c181d2aace4445395e5f6f7094fa6135d4"
+    },
+    "6984918": {
+      "sourceRecipeId": "6984918",
+      "sourceUrl": "https://www.10000recipe.com/recipe/6984918",
+      "checkedAt": "2026-10-05T01:38:55.699Z",
+      "htmlSha256": "bdac6af59bf4094e520e3d0868a6518c01db4c661d0c4cedc3c8f3168428c0bd",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "2a105132e3226f381284b6c2fda4096df1cb187c56b606318041037cb28af6d8"
+    },
+    "7007996": {
+      "sourceRecipeId": "7007996",
+      "sourceUrl": "https://www.10000recipe.com/recipe/7007996",
+      "checkedAt": "2026-10-05T01:38:55.816Z",
+      "htmlSha256": "c8492f79821c59276290d62bed9b8e4881af75ef30d23d56e808cfcf6fd08ca0",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "fdee58e264eb0fc870015e123dd9d09693c3bc90647b56fdd1cc5f8932ca748f"
+    },
+    "7036949": {
+      "sourceRecipeId": "7036949",
+      "sourceUrl": "https://www.10000recipe.com/recipe/7036949",
+      "checkedAt": "2026-10-05T01:38:56.364Z",
+      "htmlSha256": "55328a34b7e5d4490d0e9b9d9d5959b2827258fe7294ace72a397b1971adfb1d",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "88b62f2c8f9fb2ca30a956eb3947ac27bd38c2fb1eb8ba0a9d48c4b043bcdf38"
+    },
+    "7061954": {
+      "sourceRecipeId": "7061954",
+      "sourceUrl": "https://www.10000recipe.com/recipe/7061954",
+      "checkedAt": "2026-10-05T01:38:56.540Z",
+      "htmlSha256": "12f2e306b226e13ff551a315ce708b7e4a841e43883f9977c6bd12870fb0f1e3",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "bc77ae6793573aece90dec6289a20d552a0fa3d9307dfc2359d50e039d7c2be9"
+    },
+    "7063193": {
+      "sourceRecipeId": "7063193",
+      "sourceUrl": "https://www.10000recipe.com/recipe/7063193",
+      "checkedAt": "2026-10-05T01:38:56.582Z",
+      "htmlSha256": "3ed0e71eec3763875ff6beb836eba1321cf8a659b85ba8bd07d3d2ad6d6807c1",
+      "status": "unverified",
+      "reviewCount": null,
+      "ratingValue": null,
+      "commentCount": 0,
+      "method": "recipe-feedback-v1",
+      "reason": "recipe-review-count-not-published",
+      "detailSha256": "cb987197caa6732f06f5e9346f72c76f53c5b87cea259522e92f1d53b4ed4b62"
     }
   },
   "locations": {
     "40235-metro-f4ae14f9a7b73c67": {
-      "collectedRows": 16,
-      "linkedProducts": 1,
-      "unmatchedRows": 15
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     },
     "40468-aldi-sud-cc56b9aa0eb3a417": {
-      "collectedRows": 69,
-      "linkedProducts": 7,
-      "unmatchedRows": 62
+      "collectedRows": 50,
+      "linkedProducts": 4,
+      "unmatchedRows": 46
     },
     "40468-netto-marken-discount-613c5ce38f8dd583": {
-      "collectedRows": 24,
-      "linkedProducts": 9,
-      "unmatchedRows": 15
+      "collectedRows": 62,
+      "linkedProducts": 15,
+      "unmatchedRows": 47
     },
     "40468-rewe-1a0e6a76513eb541": {
-      "collectedRows": 269,
-      "linkedProducts": 22,
-      "unmatchedRows": 247
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     },
     "40472-edeka-911d83538a4f3750": {
-      "collectedRows": 203,
-      "linkedProducts": 26,
-      "unmatchedRows": 177
+      "collectedRows": 73,
+      "linkedProducts": 11,
+      "unmatchedRows": 62
     },
     "40472-lidl-44b4058e4950f572": {
-      "collectedRows": 8,
-      "linkedProducts": 1,
-      "unmatchedRows": 7
+      "collectedRows": 159,
+      "linkedProducts": 14,
+      "unmatchedRows": 145
     },
     "40474-aldi-sud-c8e407f1e1d00751": {
-      "collectedRows": 69,
-      "linkedProducts": 7,
-      "unmatchedRows": 62
+      "collectedRows": 64,
+      "linkedProducts": 4,
+      "unmatchedRows": 60
     },
     "40474-edeka-269dad5325a916e4": {
-      "collectedRows": 203,
-      "linkedProducts": 26,
-      "unmatchedRows": 177
+      "collectedRows": 210,
+      "linkedProducts": 16,
+      "unmatchedRows": 194
     },
     "40476-kaufland-8e68da4e892fcc94": {
-      "collectedRows": 26,
-      "linkedProducts": 8,
-      "unmatchedRows": 18
+      "collectedRows": 78,
+      "linkedProducts": 4,
+      "unmatchedRows": 74
     },
     "40489-lidl-4df8d4d6a016f0e2": {
-      "collectedRows": 8,
-      "linkedProducts": 1,
-      "unmatchedRows": 7
+      "collectedRows": 159,
+      "linkedProducts": 14,
+      "unmatchedRows": 145
     },
     "44145-kaufland-12337aeffb60f385": {
-      "collectedRows": 26,
-      "linkedProducts": 8,
-      "unmatchedRows": 18
+      "collectedRows": 64,
+      "linkedProducts": 4,
+      "unmatchedRows": 60
     },
     "44149-metro-7891418f74c36dd6": {
-      "collectedRows": 16,
-      "linkedProducts": 1,
-      "unmatchedRows": 15
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     },
     "44369-aldi-nord-b2f3aa9df2119878": {
-      "collectedRows": 101,
-      "linkedProducts": 12,
-      "unmatchedRows": 89
+      "collectedRows": 175,
+      "linkedProducts": 13,
+      "unmatchedRows": 162
     },
     "44369-edeka-e1a817c9bd5facfb": {
-      "collectedRows": 203,
-      "linkedProducts": 26,
-      "unmatchedRows": 177
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     },
     "44369-lidl-1761acf372fc09ab": {
-      "collectedRows": 8,
-      "linkedProducts": 1,
-      "unmatchedRows": 7
+      "collectedRows": 159,
+      "linkedProducts": 14,
+      "unmatchedRows": 145
     },
     "44369-netto-marken-discount-8c5c0587fc6bdf8f": {
-      "collectedRows": 24,
-      "linkedProducts": 9,
-      "unmatchedRows": 15
+      "collectedRows": 227,
+      "linkedProducts": 20,
+      "unmatchedRows": 207
     },
     "44369-rewe-6359fe716b366aa1": {
-      "collectedRows": 288,
-      "linkedProducts": 22,
-      "unmatchedRows": 266
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     },
     "52062-netto-marken-discount-691b4572970ffff9": {
-      "collectedRows": 24,
-      "linkedProducts": 9,
-      "unmatchedRows": 15
+      "collectedRows": 58,
+      "linkedProducts": 17,
+      "unmatchedRows": 41
     },
     "52062-rewe-13ba205518dcfc81": {
-      "collectedRows": 249,
-      "linkedProducts": 20,
-      "unmatchedRows": 229
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     },
     "52064-aldi-sud-eb38dcb81b3c922e": {
-      "collectedRows": 69,
-      "linkedProducts": 7,
-      "unmatchedRows": 62
+      "collectedRows": 65,
+      "linkedProducts": 4,
+      "unmatchedRows": 61
     },
     "52064-edeka-9172ffdafcbccfe6": {
-      "collectedRows": 203,
-      "linkedProducts": 26,
-      "unmatchedRows": 177
+      "collectedRows": 97,
+      "linkedProducts": 12,
+      "unmatchedRows": 85
     },
     "52064-lidl-5dc202f687d1204d": {
-      "collectedRows": 8,
-      "linkedProducts": 1,
-      "unmatchedRows": 7
+      "collectedRows": 159,
+      "linkedProducts": 14,
+      "unmatchedRows": 145
     },
     "52068-kaufland-b22804bdc5b04718": {
-      "collectedRows": 26,
-      "linkedProducts": 8,
-      "unmatchedRows": 18
+      "collectedRows": 60,
+      "linkedProducts": 4,
+      "unmatchedRows": 56
     },
     "52146-metro-574e555d02a65bfc": {
-      "collectedRows": 16,
-      "linkedProducts": 1,
-      "unmatchedRows": 15
+      "collectedRows": 0,
+      "linkedProducts": 0,
+      "unmatchedRows": 0
     }
   }
 }

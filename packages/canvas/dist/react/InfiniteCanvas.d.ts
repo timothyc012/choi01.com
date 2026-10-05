@@ -62,6 +62,12 @@ export interface InfiniteCanvasHandle {
     addText: () => void;
     addShape: (type: 'rect' | 'ellipse', color: CanvasColorKey, text?: string) => void;
     addArrow: () => void;
+    addImages: (images: readonly {
+        readonly src: string;
+        readonly fileName: string;
+        readonly w: number;
+        readonly h: number;
+    }[]) => void;
     addImage: (src: string, fileName: string, w: number, h: number) => void;
     addFileCard: (fileName: string, src: string, label: string) => void;
     updateShapeText: (id: string, text: string) => void;
@@ -71,10 +77,14 @@ export interface InfiniteCanvasHandle {
     setTool: (tool: CoreCanvasTool) => void;
     undo: () => void;
     redo: () => void;
+    copySelected: () => void;
+    pasteClipboard: () => Promise<void>;
     deleteSelected: () => void;
     duplicateSelected: () => void;
+    rotateSelected: (deltaRadians: number) => void;
     group: () => void;
     ungroup: () => void;
+    reorderSelected: (direction: 'forward' | 'backward' | 'front' | 'back') => void;
     zoomBy: (factor: number) => void;
     zoomTo: (zoom: number) => void;
     resetZoom: () => void;

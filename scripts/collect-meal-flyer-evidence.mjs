@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import crypto from 'node:crypto';
+import {pdfPageEvidence} from './lib/pdf-page-evidence.mjs';
 import {execFileSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -75,7 +76,7 @@ export function buildFlyerEvidence({weekStart,collectedAt,netto,lidl}) {
     sourceUrl:netto.sourceUrl||NETTO_URL,
     sourceSha256:sha256(netto.pdfBytes),
     pageCount:netto.pdfPageCount,
-    checkedPageCount:pageDigests(netto.pdfText).length,
+    ...pdfPageEvidence(netto.pdfText,netto.pdfPageCount,netto.pageReviews||[]),
     extraction:{tool:'pdftotext -layout',textSha256:sha256(netto.pdfText),pages:pageDigests(netto.pdfText)},
   },{
     chain:'Lidl',
@@ -87,9 +88,9 @@ export function buildFlyerEvidence({weekStart,collectedAt,netto,lidl}) {
     apiSha256:sha256(lidl.apiBytes),
     sourceSha256:sha256(lidl.pdfBytes),
     pageCount:lidl.pdfPageCount,
-    checkedPageCount:pageDigests(lidl.pdfText).length,
+    ...pdfPageEvidence(lidl.pdfText,lidl.pdfPageCount,lidl.pageReviews||[]),
     viewerPageCount:lidl.viewerPageCount,
-    viewerBoundary:{page:lidl.viewerPageCount,checked:true,kind:'next-flyer-preview-boundary'},
+    viewerBoundary:{page:lidl.viewerPageCount,checked:false,kind:'next-flyer-preview-boundary'},
     extraction:{tool:'pdftotext -layout',textSha256:sha256(lidl.pdfText),pages:pageDigests(lidl.pdfText)},
     pages:flyer.pages.map(summarizeLidlPage),
   }];

@@ -102,25 +102,15 @@ export async function preparePipeline(options) {
   const rows=parseCsv(csvBytes.toString('utf8'));
   if(!rows.length) throw new Error('CSV contains no offer rows');
   const runId=sha256(Buffer.concat([csvBytes,coverageBytes,Buffer.from(options.weekStart+'|'+createdAt)]));
-  fs.mkdirSync(path.join(stagingDir,'private'),{recursive:true});
-  fs.mkdirSync(path.join(stagingDir,'input'),{recursive:true});
-  fs.copyFileSync(options.csvPath,path.join(stagingDir,'input',path.basename(options.csvPath)));
-  fs.copyFileSync(options.coveragePath,path.join(stagingDir,'input',path.basename(options.coveragePath)));
-  const candidateReport=options.candidateReportPath?JSON.parse(fs.readFileSync(options.candidateReportPath,'utf8')):null;
+  const candidateReport=options.candidateReport|| (options.candidateReportPath?JSON.parse(fs.readFileSync(options.candidateReportPath,'utf8')):null);
+  const prepared=await prepareWeeklyRelease({
+    csvPath:options.csvPath,coveragePath:options.coveragePath,weekStart:options.weekStart,stagingDir,
+    db:options.database||'01ontology',tenant:options.tenant||'recipe-full',registry:options.registry,
+    registryPath:options.registryPath||'data/mohemeokji/recipe-publication-registry.json',
+    releaseMode:options.releaseMode,previousManifestPath:options.previousManifestPath,candidateReport,
+  });
   const dbPath=path.join(stagingDir,'private','release-staging.sqlite');
   createTempDatabase(dbPath,{runId,createdAt,expireAt,rows,candidateReport});
-  const prepared=await prepareWeeklyRelease({
-    csvPath:path.join(stagingDir,'input',path.basename(options.csvPath)),
-    coveragePath:path.join(stagingDir,'input',path.basename(options.coveragePath)),
-    weekStart:options.weekStart,
-    stagingDir,
-    db:options.database||'01ontology',
-    tenant:options.tenant||'recipe-full',
-    registryPath:options.registryPath||'data/mohemeokji/recipe-publication-registry.json',
-    releaseMode:options.releaseMode,
-    previousManifestPath:options.previousManifestPath,
-    candidateReport,
-  });
   const receipt=prepared.receipt;
   const manifest={
     schemaVersion:PIPELINE_SCHEMA,
@@ -160,7 +150,8 @@ export function publishPipeline(stagingDir,approvalDigest) {
   const manifest=readPipelineManifest(root);
   assertFresh(manifest);
   if(manifest.status!=='approved'&&manifest.status!=='awaiting-ontology-review') throw new Error(`pipeline status ${manifest.status} cannot publish`);
-  const result=publishWeeklyRelease({stagingDir:root,approvalDigest:approvalDigest||manifest.approvalDigest});
+  if(!/^[a-f0-9]{64}$/.test(approvalDigest||'')||approvalDigest!==manifest.approvalDigest) throw new Error('Explicit owner-approved digest is required');
+  const result=publishWeeklyRelease({stagingDir:root,approvalDigest});
   manifest.status='published';
   manifest.publishedAt=nowIso();
   writePipelineManifest(root,manifest);

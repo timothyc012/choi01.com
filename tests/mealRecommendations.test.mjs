@@ -12,6 +12,11 @@ for(const f of ['ontology-recipe-details.js','ontology-recipe-popular.js','meal-
 const engine=context.window.MealRecommendations;
 const meal=(id, primary, family, extra={})=>({id,sourceRecipeId:id,title:id,time:20,tags:[],sale:primary,missing:[],recommendationProfile:{primaryIngredients:primary,family,method:'stirfry'},...extra});
 const price={priceCents:100,pack:'500 g'};
+const exactPrice=(ingredient)=>({
+  ...price,
+  product:{당근:'Möhren',마늘:'Bio Knoblauch',쌀:'Langkorn-Reis',감자:'Kartoffeln',닭가슴살:'Hähnchenbrustfilet',소고기등심:'Rib-Eye-Steak',연어:'Lachsfilet',소고기:'Rindergulasch'}[ingredient],
+  identity:{ingredientId:ingredient},
+});
 const fixtureCatalog=generateCatalog(parseCsv(fs.readFileSync(new URL('../public/offers/supermarket_food_offers_2026-09-07.csv',import.meta.url),'utf8')),'/offers/supermarket_food_offers_2026-09-07.csv').packageCatalog;
 const rankingPolicy=JSON.parse(fs.readFileSync(new URL('../scripts/data/nutrition-policy.json',import.meta.url),'utf8'));
 
@@ -36,7 +41,7 @@ test('each source recipe has explicit editorial main-ingredient and variety meta
 test('discounted named main ingredient beats incidental vegetable and seasoning matches',()=>{
   const curry=meal('curry',['닭가슴살캔'],'chicken',{sale:['당근','마늘','쌀'],missing:['닭가슴살캔']});
   const potato=meal('potato',['감자'],'potato');
-  const result=engine.rank([curry,potato],{catalog:{당근:price,마늘:price,쌀:price,감자:price},history:[],date:'2026-09-08'});
+  const result=engine.rank([curry,potato],{catalog:{당근:exactPrice('당근'),마늘:exactPrice('마늘'),쌀:exactPrice('쌀'),감자:exactPrice('감자')},history:[],date:'2026-09-08'});
   assert.equal(result[0].id,'potato');
   assert.equal(engine.explain(curry,{당근:price,마늘:price}).mainOffers.length,0);
 });
@@ -44,7 +49,7 @@ test('discounted named main ingredient beats incidental vegetable and seasoning 
 test('the lead recommendation favors an offer that is distinctive to the selected store',()=>{
   const common=meal('common',['닭가슴살'],'chicken');
   const distinctive=meal('distinctive',['소고기등심'],'beef');
-  const catalog={닭가슴살:price,소고기등심:price};
+  const catalog={닭가슴살:exactPrice('닭가슴살'),소고기등심:exactPrice('소고기등심')};
   const ranked=engine.rank([common,distinctive],{catalog,date:'2026-09-08',offerFrequency:{닭가슴살:3,소고기등심:1}});
   assert.equal(ranked[0].id,'distinctive');
 });
@@ -72,6 +77,10 @@ test('eaten source IDs are demoted across stores for 14 days, future/expired/cor
   const one=meal('one',['감자'],'potato'),two=meal('two',['감자'],'potato');
   const recent=[{sourceRecipeId:'one',family:'potato',method:'stirfry',date:'2026-09-07',moment:'저녁'}];
   assert.equal(engine.rank([one,two],{catalog:{감자:price},history:recent,date:'2026-09-08'})[0].id,'two');
+  for(const date of ['2026-09-01','2026-10-08']) {
+    assert.equal(engine.rank([one,two],{catalog:{감자:price},history:recent,date,historyDate:'2026-09-08'})[0].id,'two');
+    assert.equal(engine.rank([one,two],{catalog:{감자:price},history:recent,date})[0].id,'one');
+  }
   assert.equal(engine.restoreHistory(JSON.stringify([{...recent[0],date:'2026-08-01'}, {...recent[0],date:'2026-09-10'},{}]),'2026-09-08').length,0);
   const next=engine.recordMeal(recent,two,'2026-09-07','저녁');
   assert.equal(next.length,1);
@@ -94,7 +103,7 @@ test('store menu membership requires a current main-ingredient offer, not incide
   const chicken=meal('chicken',['닭고기'],'chicken',{sale:['닭고기','마늘'],missing:[]});
   const salmon=meal('salmon',['연어'],'salmon');
   const noodles=meal('noodles',['파스타'],'pasta');
-  assert.deepEqual([...engine.available([chicken,salmon,noodles],{catalog:{연어:price,마늘:price}})].map(m=>m.id),['salmon']);
+  assert.deepEqual([...engine.available([chicken,salmon,noodles],{catalog:{연어:exactPrice('연어'),마늘:exactPrice('마늘')}})].map(m=>m.id),['salmon']);
   assert.equal(engine.sequence([chicken],{catalog:{마늘:price},date:'2026-09-08',requireMainOffer:true},7).length,0);
   assert.equal(engine.current([chicken],{catalog:{마늘:price},date:'2026-09-08',requireMainOffer:true}),null);
 });
@@ -115,7 +124,7 @@ test('weekly fixture generates genuinely different store sets and keeps side-onl
   // This archived yogurt offer does not establish the plain form.
   assert.equal(aldi.length,0);
   assert.equal(engine.current(context.window.createMealRecipes('ALDI Nord'),options('ALDI Nord')),null);
-  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,7);
+  assert.equal(engine.sequence(context.window.createMealRecipes('REWE'),{...options('REWE'),mealOnly:true},7).length,4);
   for(const store of ['Netto','Lidl','REWE','ALDI Nord']) {
     assert.ok(menus(store).every(r=>engine.explain(r,options(store).catalog).mainOffers.length>0));
   }
@@ -199,20 +208,21 @@ test('snapshot value mode requires compiler-proven full basket coverage, not pri
   const context={catalog:{닭고기:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:()=>calculatedPrimary};
   assert.equal(engine.evaluateRecipeForMode(primaryOnly,context,'value').eligible,false);
   const proven={...primaryOnly,basketFacts:{...calculatedPrimary,sourceCoverage:'complete',targetServings:2}};
-  assert.equal(engine.evaluateRecipeForMode(proven,context,'value').eligible,true);
+  assert.equal(engine.evaluateRecipeForMode(proven,context,'value').eligible,false);
   assert.equal(engine.evaluateRecipeForMode({...proven,basketFacts:{...proven.basketFacts,targetServings:4}},context,'value').eligible,false);
 });
 
 test('value ranking applies pantry ownership only through compiler-proven per-item basket facts',()=>{
   const shopping=context.window.MealShopping;
-  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',targetServings:2,items:[{key,priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true}],savingsStatus:'unavailable'});
-  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',basketFacts:basketFacts('Netto:닭고기',150)});
-  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',basketFacts:basketFacts('Netto:당근',100)});
+  const basketContext={postcode:'44369',store:'Netto',branchId:'branch-a',date:'2026-09-08',targetServings:2};
+  const basketFacts=(key,priceCents)=>({sourceCoverage:'complete',...basketContext,items:[{key:'food-'+key,name:key.split(':')[1],pantryKeys:[key],product:key.endsWith('닭고기')?'Hähnchenbrustfilet':'Möhren',identity:{ingredientId:key.split(':')[1]},pack:{amount:500,unit:'g'},requiredAmount:{amount:300,unit:'g'},priceCents,quantity:1,subtotalCents:priceCents,quantityComplete:true,sourceURL:'https://example.com/reviewed-price',sourceSha256:'a'.repeat(64),validFrom:'2026-09-07',validThrough:'2026-09-13'}],savingsStatus:'unavailable'});
+  const chicken=meal('chicken-value',['닭고기'],'chicken',{store:'Netto',branchId:'branch-a',basketFacts:basketFacts('Netto:닭고기',150)});
+  const vegetable=meal('vegetable-value',['당근'],'vegetable',{store:'Netto',branchId:'branch-a',basketFacts:basketFacts('Netto:당근',100)});
   const pantry=new Set(['Netto:닭고기']);
-  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,targetServings:2,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)};
+  const options={catalog:{닭고기:price,당근:price},requireMainOffer:true,requireCompilerBasketFacts:true,localBasketEvidence:true,...basketContext,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry,basketContext,candidate)};
   assert.equal(engine.rankForMode([vegetable,chicken],options,'value')[0].id,'chicken-value');
   const aggregateOnly={...chicken,basketFacts:{sourceCoverage:'complete',targetServings:2,costStatus:'complete',knownSubtotalCents:150,unknownItemKeys:[],quantityCheckKeys:[]}};
-  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry)},'value').eligible,false);
+  assert.equal(engine.evaluateRecipeForMode(aggregateOnly,{...options,basketFor:(candidate)=>shopping.marginalBasketFacts(candidate.basketFacts,pantry,basketContext,candidate)},'value').eligible,false);
 });
 
 test('nutrition and diet reject recipes without complete sourced serving nutrients',()=>{
@@ -330,7 +340,7 @@ test('auto slot planning is day-major, includes manual diversity, and reports li
   const days=['mon','tue','wed','thu','fri','sat','sun'];
   const emptyPlans={점심:Object.fromEntries(days.map((day)=>[day,slot()])),저녁:Object.fromEntries(days.map((day)=>[day,slot()]))};
   const candidates=[meal('chicken-a',['닭고기'],'chicken',{store:'Netto'}),meal('chicken-b',['닭고기'],'chicken',{store:'Netto'}),meal('beef-a',['소고기'],'beef',{store:'Netto'}),meal('fish-a',['연어'],'fish',{store:'Netto'})];
-  const context={catalog:{닭고기:price,소고기:price,연어:price},requireMainOffer:true,store:'Netto',mealOnly:true};
+  const context={catalog:{닭고기:price,소고기:exactPrice('소고기'),연어:exactPrice('연어')},requireMainOffer:true,store:'Netto',mealOnly:true};
   const chronological=engine.planAutoSlots(candidates,{plans:emptyPlans,days,moments:['점심','저녁'],mode:'balanced',context});
   const mondayLunch=chronological.plans.점심.mon.recipeId,mondayDinner=chronological.plans.저녁.mon.recipeId;
   assert.notEqual(candidates.find((candidate)=>candidate.id===mondayLunch).recommendationProfile.family,candidates.find((candidate)=>candidate.id===mondayDinner).recommendationProfile.family);

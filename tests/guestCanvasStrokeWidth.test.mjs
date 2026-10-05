@@ -68,9 +68,12 @@ before(async () => {
 });
 
 after(async () => {
-  await act(async () => { root.unmount(); });
-  container.remove();
-  await server.close();
+  try {
+    if (root) await act(async () => { root.unmount(); });
+    container?.remove();
+  } finally {
+    await server?.close();
+  }
 });
 
 it('applies a toolbar width to the selected stroke and the next stroke', async () => {
