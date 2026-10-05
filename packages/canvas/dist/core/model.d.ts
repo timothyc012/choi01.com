@@ -44,6 +44,7 @@ export interface CanvasShapeBase {
     readonly h: number;
     readonly rotation?: number;
     readonly groupId?: string;
+    readonly parentId?: string;
     readonly html?: string;
     readonly text?: string;
     readonly color?: CanvasColorKey;

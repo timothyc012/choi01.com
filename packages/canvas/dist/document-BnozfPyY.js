@@ -12,7 +12,7 @@ const r = {
   maxHtmlDepth: 256,
   maxTextLength: 1e5,
   maxShortStringLength: 512
-}, me = [
+}, pe = [
   "rect",
   "ellipse",
   "triangle",
@@ -28,7 +28,7 @@ const r = {
   chosunmyjo: { label: "조선일보명조", stack: '"조선일보명조", "AppleMyungjo", "Noto Serif KR", "Noto Serif", "NanumMyeongjo", ui-serif, serif' },
   hdhyundai: { label: "HD현대체", stack: '"HD현대체", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", ui-sans-serif, sans-serif' },
   custom: { label: "직접입력", stack: "sans-serif" }
-}, $ = {
+}, M = {
   yellow: { bg: "#fef08a", border: "#facc15", text: "#854d0e", label: "노랑" },
   pink: { bg: "#fbcfe8", border: "#f472b6", text: "#9d174d", label: "분홍" },
   purple: { bg: "#e9d5ff", border: "#c084fc", text: "#6b21a8", label: "보라" },
@@ -39,7 +39,7 @@ const r = {
   brand: { bg: "#e6f0ff", border: "#003087", text: "#003087", label: "브랜드" },
   red: { bg: "#fecaca", border: "#ef4444", text: "#991b1b", label: "빨강" },
   ink: { bg: "#1e293b", border: "#0f172a", text: "#f8fafc", label: "먹" }
-}, ve = Object.keys($);
+}, ve = Object.keys(M);
 function A(e) {
   var t, o;
   const a = e ?? ((o = (t = globalThis.crypto) == null ? void 0 : t.randomUUID) == null ? void 0 : o.call(t));
@@ -54,16 +54,21 @@ class n extends Error {
     super(a), this.code = "CANVAS_VALIDATION_ERROR", this.name = "CanvasValidationError";
   }
 }
-const N = /* @__PURE__ */ new Set(["b", "strong", "i", "em", "u", "br", "div", "p", "ul", "ol", "li"]), E = /* @__PURE__ */ new Set(["http:", "https:", "blob:"]), T = /^(?:#[0-9a-f]{3,8}|(?:rgb|hsl)a?\([0-9.%\s,/+\-]+\)|[a-z][a-z0-9-]{0,31})$/i, P = 8;
-function R(e) {
+const N = /* @__PURE__ */ new Set(["b", "strong", "i", "em", "u", "br", "div", "p", "ul", "ol", "li"]), E = /* @__PURE__ */ new Set(["http:", "https:", "blob:"]), I = /^(?:#[0-9a-f]{3,8}|(?:rgb|hsl)a?\([0-9.%\s,/+\-]+\)|[a-z][a-z0-9-]{0,31})$/i, P = 8;
+function T(e) {
   if (!e) return "";
   if (e.length > r.maxHtmlLength)
     throw new n("Canvas rich text is too long.");
-  return typeof document < "u" ? F(e) : H(e);
+  return typeof document < "u" ? F(e) : j(e);
 }
-function I(e) {
+function R(e) {
   const a = e.trim();
   if (!a) throw new n("Canvas asset URLs cannot be empty.");
+  if (a.startsWith("data:")) {
+    const s = a.indexOf(","), l = a.slice(0, s), i = a.slice(s + 1);
+    if (a.length <= 32 * 1024 * 1024 && ["data:image/png;base64", "data:image/jpeg;base64", "data:image/webp;base64"].includes(l) && i.length > 0 && i.length % 4 === 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(i)) return a;
+    throw new n("Canvas embedded assets must be bounded base64 PNG, JPEG, or WebP images.");
+  }
   if (a.startsWith("/") || a.startsWith("./") || a.startsWith("../"))
     throw new n("Canvas asset URLs must use an explicit HTTP(S) or blob origin.");
   let t;
@@ -74,12 +79,12 @@ function I(e) {
   }
   if (!E.has(t.protocol))
     throw new n(`Canvas asset URL protocol is not supported: ${t.protocol}`);
-  const o = z(_(t.pathname));
+  const o = z(W(t.pathname));
   if ((t.protocol === "http:" || t.protocol === "https:") && (o === "/api" || o.startsWith("/api/")))
     throw new n("Canvas asset URLs cannot target application API routes.");
   return t.toString();
 }
-function _(e) {
+function W(e) {
   let a = e;
   for (let t = 0; t < P; t += 1) {
     let o;
@@ -105,13 +110,13 @@ function z(e) {
     }
   return `/${t.join("/")}`.toLowerCase();
 }
-function U(e) {
+function _(e) {
   const a = e.trim();
-  if (!a || a.length > 64 || !T.test(a))
+  if (!a || a.length > 64 || !I.test(a))
     throw new n("Canvas colors must be simple CSS color values.");
   return a;
 }
-function W(e) {
+function U(e) {
   if (/[{};<>\\]/.test(e))
     throw new n("Canvas font families must contain font names only.");
   const a = e.replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 120);
@@ -149,7 +154,7 @@ function b(e, a, t = 0) {
     o += `<${i}${d}>${b(l, i, t + 1)}</${i}>`, c && (o += "</li>");
   }), o;
 }
-function H(e) {
+function j(e) {
   var l;
   const a = /<!--[\s\S]*?-->|<\/?[a-z][^>]*>|[^<]+/gi;
   let t = "", o;
@@ -180,8 +185,8 @@ function H(e) {
       throw new n("Canvas rich text nesting is too deep.");
     const y = (C === "ul" || C === "ol") && (d === "ul" || d === "ol");
     y && (t += "<li>");
-    const M = d === "ul" && /data-list-style\s*=\s*["']dash["']/i.test(i) ? ' data-list-style="dash"' : "";
-    t += `<${d}${M}>`, s.push({ tag: d, wrapsNestedList: y });
+    const D = d === "ul" && /data-list-style\s*=\s*["']dash["']/i.test(i) ? ' data-list-style="dash"' : "";
+    t += `<${d}${D}>`, s.push({ tag: d, wrapsNestedList: y });
   }
   return t;
 }
@@ -212,11 +217,11 @@ function be(e, a) {
       const t = new Set(a.ids);
       return {
         ...e,
-        shapes: e.shapes.filter((o) => t.has(o.id) ? !1 : o.type !== "arrow" ? !0 : !(o.fromId && t.has(o.fromId)) && !(o.toId && t.has(o.toId)))
+        shapes: e.shapes.filter((o) => t.has(o.id) || o.parentId && t.has(o.parentId) ? !1 : o.type !== "arrow" ? !0 : !(o.fromId && t.has(o.fromId)) && !(o.toId && t.has(o.toId)))
       };
     }
     default:
-      return pe(a);
+      return me(a);
   }
 }
 function Se(e, a) {
@@ -227,11 +232,11 @@ function Se(e, a) {
   };
 }
 function Ce(e) {
-  if (!p(e)) throw new n("Canvas shape must be an object.");
-  return D(e);
+  if (!m(e)) throw new n("Canvas shape must be an object.");
+  return $(e);
 }
 function ye(e) {
-  if (!p(e))
+  if (!m(e))
     throw new n("Canvas snapshot must be an object.");
   if (e.version !== "canvas-v1")
     throw new n(`Unsupported canvas snapshot version: ${String(e.version)}.`);
@@ -239,23 +244,23 @@ function ye(e) {
     throw new n("Canvas snapshot shapes must be an array.");
   if (e.shapes.length > r.maxShapes)
     throw new n(`Canvas snapshots cannot contain more than ${r.maxShapes} shapes.`);
-  if (!p(e.camera))
+  if (!m(e.camera))
     throw new n("Canvas snapshot camera must be an object.");
-  const a = j(e.camera);
+  const a = H(e.camera);
   return {
     version: "canvas-v1",
-    shapes: e.shapes.map(D),
+    shapes: e.shapes.map($),
     camera: a
   };
 }
-function j(e) {
-  const a = h(e, "x", "camera", r.coordinate), t = h(e, "y", "camera", r.coordinate), o = h(e, "z", "camera", r.cameraZoomMax);
+function H(e) {
+  const a = f(e, "x", "camera", r.coordinate), t = f(e, "y", "camera", r.coordinate), o = f(e, "z", "camera", r.cameraZoomMax);
   if (o < r.cameraZoomMin)
     throw new n("Canvas camera zoom is below the supported minimum.");
   return { x: a, y: t, z: o };
 }
-function D(e) {
-  if (!p(e)) throw new n("Canvas shape must be an object.");
+function $(e) {
+  if (!m(e)) throw new n("Canvas shape must be an object.");
   const a = e.id, t = e.type;
   if (typeof a != "string" || a.trim().length === 0)
     throw new n("Canvas shape ID must be a non-empty string.");
@@ -263,10 +268,10 @@ function D(e) {
     throw new n("Canvas shape ID is too long.");
   if (typeof t != "string" || !ie.has(t))
     throw new n(`Unsupported canvas shape type: ${String(t)}.`);
-  const o = h(e, "x", "shape", r.coordinate), s = h(e, "y", "shape", r.coordinate), l = h(e, "w", "shape", r.coordinate), i = h(e, "h", "shape", r.coordinate), c = k(e, a, o, s, l, i);
+  const o = f(e, "x", "shape", r.coordinate), s = f(e, "y", "shape", r.coordinate), l = f(e, "w", "shape", r.coordinate), i = f(e, "h", "shape", r.coordinate), c = k(e, a, o, s, l, i);
   if (t !== "draw" && u(e, "inkStyle", t), t === "draw") {
     if (!Array.isArray(e.points)) throw new n("Draw shapes require points.");
-    return m(e), {
+    return p(e), {
       ...c,
       type: "draw",
       points: K(e.points),
@@ -276,7 +281,7 @@ function D(e) {
     };
   }
   if (t === "arrow")
-    return u(e, "drawMode", t), m(e), {
+    return u(e, "drawMode", t), p(e), {
       ...c,
       type: "arrow",
       strokeWidth: g(e),
@@ -290,10 +295,10 @@ function D(e) {
       arrowEnd: O(e, "arrowEnd")
     };
   if (t === "image")
-    return u(e, "strokeWidth", t), u(e, "drawMode", t), m(e), { ...c, type: "image" };
+    return u(e, "strokeWidth", t), u(e, "drawMode", t), p(e), { ...c, type: "image" };
   if (!he(t))
     throw new n(`Unsupported canvas shape type: ${t}.`);
-  return u(e, "drawMode", t), m(e), fe(t) ? { ...c, type: t, strokeWidth: g(e) } : (u(e, "strokeWidth", t), { ...c, type: t });
+  return u(e, "drawMode", t), p(e), fe(t) ? { ...c, type: t, strokeWidth: g(e) } : (u(e, "strokeWidth", t), { ...c, type: t });
 }
 function k(e, a, t, o, s, l) {
   return {
@@ -303,17 +308,18 @@ function k(e, a, t, o, s, l) {
     w: s,
     h: l,
     rotation: B(e, "rotation"),
-    groupId: f(e, "groupId"),
+    groupId: h(e, "groupId"),
+    parentId: h(e, "parentId"),
     html: V(e, "html"),
-    text: f(e, "text"),
-    color: X(e, "color"),
+    text: h(e, "text"),
+    color: J(e, "color"),
     src: G(e, "src"),
-    fileName: f(e, "fileName"),
-    category: f(e, "category"),
+    fileName: h(e, "fileName"),
+    category: h(e, "category"),
     cardStyle: ee(e, "cardStyle"),
-    fontSize: Y(e, "fontSize"),
-    fontFamily: J(e, "fontFamily"),
-    customFontFamily: Z(e, "customFontFamily"),
+    fontSize: Z(e, "fontSize"),
+    fontFamily: X(e, "fontFamily"),
+    customFontFamily: Y(e, "customFontFamily"),
     textAlign: Q(e, "textAlign"),
     manualSize: q(e, "manualSize"),
     fillColor: v(e, "fillColor"),
@@ -323,12 +329,12 @@ function k(e, a, t, o, s, l) {
   };
 }
 function G(e, a) {
-  const t = f(e, a);
-  return t === void 0 ? void 0 : I(t);
+  const t = e[a], o = typeof t == "string" && t.startsWith("data:") ? t : h(e, a);
+  return o === void 0 ? void 0 : R(o);
 }
 function V(e, a) {
-  const t = f(e, a);
-  return t === void 0 ? void 0 : R(t);
+  const t = h(e, a);
+  return t === void 0 ? void 0 : T(t);
 }
 function K(e) {
   if (e.length > r.maxDrawPoints)
@@ -342,7 +348,7 @@ function K(e) {
     return [t, o];
   });
 }
-function h(e, a, t, o) {
+function f(e, a, t, o) {
   const s = e[a];
   if (typeof s != "number" || !Number.isFinite(s) || Math.abs(s) > o)
     throw new n(`Canvas ${t} ${a} must be a finite number within supported limits.`);
@@ -359,7 +365,7 @@ function S(e, a, t) {
     return o;
   }
 }
-function f(e, a) {
+function h(e, a) {
   const t = e[a];
   if (t === void 0) return;
   if (typeof t != "string") throw new n(`Canvas shape ${a} must be a string.`);
@@ -367,19 +373,19 @@ function f(e, a) {
   if (t.length > o) throw new n(`Canvas shape ${a} is too long.`);
   return t;
 }
-function Y(e, a) {
+function Z(e, a) {
   const t = S(e, a, r.fontSizeMax);
   if (t !== void 0 && t < r.fontSizeMin)
     throw new n(`Canvas shape ${a} is below the supported minimum.`);
   return t;
 }
 function v(e, a) {
-  const t = f(e, a);
-  return t === void 0 ? void 0 : U(t);
+  const t = h(e, a);
+  return t === void 0 ? void 0 : _(t);
 }
-function Z(e, a) {
-  const t = f(e, a);
-  return t === void 0 ? void 0 : W(t);
+function Y(e, a) {
+  const t = h(e, a);
+  return t === void 0 ? void 0 : U(t);
 }
 function q(e, a) {
   const t = e[a];
@@ -389,10 +395,10 @@ function q(e, a) {
   }
 }
 function x(e, a) {
-  const t = f(e, a);
+  const t = h(e, a);
   return t === void 0 ? void 0 : A(t);
 }
-function X(e, a) {
+function J(e, a) {
   const t = e[a];
   if (t !== void 0) {
     if (typeof t != "string" || !ue(t))
@@ -400,7 +406,7 @@ function X(e, a) {
     return t;
   }
 }
-function J(e, a) {
+function X(e, a) {
   const t = e[a];
   if (t !== void 0) {
     if (t !== "sans" && t !== "serif" && t !== "mono" && t !== "gothic" && t !== "korean" && t !== "chosunmyjo" && t !== "hdhyundai" && t !== "custom")
@@ -459,7 +465,7 @@ function u(e, a, t) {
   if (Object.prototype.hasOwnProperty.call(e, a))
     throw new n(`Canvas shape ${a} is not supported on ${t}.`);
 }
-function m(e) {
+function p(e) {
   if (Object.prototype.hasOwnProperty.call(e, "pressure"))
     throw new n("Canvas shapes do not support pressure data.");
 }
@@ -485,8 +491,8 @@ function se(e, a) {
     if (!Array.isArray(t) || t.length > 100)
       throw new n(`Canvas shape ${a} must be an array of at most 100 points.`);
     return t.map((o) => {
-      if (!p(o)) throw new n(`Canvas shape ${a} points must be objects.`);
-      const s = h(o, "x", a, r.coordinate), l = h(o, "y", a, r.coordinate);
+      if (!m(o)) throw new n(`Canvas shape ${a} points must be objects.`);
+      const s = f(o, "x", a, r.coordinate), l = f(o, "y", a, r.coordinate);
       return { x: s, y: l };
     });
   }
@@ -499,7 +505,7 @@ function O(e, a) {
     return t;
   }
 }
-function p(e) {
+function m(e) {
   return typeof e == "object" && e !== null;
 }
 const ie = /* @__PURE__ */ new Set([
@@ -545,13 +551,13 @@ function fe(e) {
 function ue(e) {
   return de.has(e);
 }
-function pe(e) {
+function me(e) {
   throw new n(`Unhandled canvas command: ${String(e)}.`);
 }
 export {
   n as C,
-  me as S,
-  $ as a,
+  pe as S,
+  M as a,
   ve as b,
   we as c,
   r as d,
@@ -559,10 +565,10 @@ export {
   ge as f,
   A as g,
   ye as h,
-  R as i,
+  T as i,
   Se as j,
-  U as k,
+  _ as k,
   Ce as p,
-  W as s,
-  I as v
+  U as s,
+  R as v
 };

@@ -1,6 +1,7 @@
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import type { CanvasShapeType, CanvasTool } from '../core/index.js';
 import type { CanvasShape } from './InfiniteCanvas';
+import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
 interface KeyboardInteractionOptions {
     containerRef: RefObject<HTMLDivElement | null>;
@@ -22,8 +23,9 @@ interface KeyboardInteractionOptions {
     onDirty: () => void;
     onToolChange: (tool: CanvasTool) => void;
     createId: (prefix?: string) => string;
+    selectionActions: CanvasSelectionActions;
 }
 /** Installs keyboard shortcuts and canvas-level editing/navigation semantics. */
-export declare function useCanvasKeyboardInteractions({ containerRef, editorRef, shapesRef, selectedRef, editingIdRef, toolRef, past, future, textualTypes, setIsSpaceDown, setEditingId, setShapes, setAnnouncement, commit, deleteSelection, selectNow, onDirty, onToolChange, createId, }: KeyboardInteractionOptions): void;
+export declare function useCanvasKeyboardInteractions({ containerRef, editorRef, shapesRef, selectedRef, editingIdRef, toolRef, past, future, textualTypes, setIsSpaceDown, setEditingId, setShapes, setAnnouncement, commit, deleteSelection, selectNow, onDirty, onToolChange, createId, selectionActions, }: KeyboardInteractionOptions): void;
 export {};
 //# sourceMappingURL=useCanvasKeyboardInteractions.d.ts.map

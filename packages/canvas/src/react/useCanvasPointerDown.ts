@@ -124,7 +124,9 @@ export function useCanvasPointerDown({
   const uid = createId;
   const lastClickRef = useRef<{ id: string; time: number } | null>(null);
   const placeTextualShape = (clientX: number, clientY: number) => {
-    const activeTool = toolRef.current;
+    const activeTool = containerRef.current?.dataset.canvasActiveTool === 'text'
+      ? 'text'
+      : toolRef.current;
     if (activeTool !== 'note' && activeTool !== 'text') return;
     const p = toPage(clientX, clientY);
     if (activeTool === 'text') {
@@ -144,7 +146,7 @@ export function useCanvasPointerDown({
       : { id: uid(), type: 'text', x: p.x, y: p.y - 22, w: 220, h: 44, text: '' };
     commit(prev => [...prev, created]);
     selectNow(new Set([created.id]));
-    setEditingId(activeTool === 'text' ? created.id : null);
+    setEditingId(created.id);
     toolRef.current = 'select';
     onToolChange('select');
   };
@@ -185,7 +187,7 @@ export function useCanvasPointerDown({
   };
 
   const onPointerDown = (e: ReactPointerEvent) => {
-    const activeTool = toolRef.current;
+    let activeTool = toolRef.current;
     const target = e.target instanceof Element ? e.target : e.currentTarget;
     const hadImplicitCaptureBeforeExplicitCapture = e.currentTarget.hasPointerCapture(e.pointerId)
       || target.hasPointerCapture(e.pointerId);
@@ -201,6 +203,11 @@ export function useCanvasPointerDown({
         window.devicePixelRatio || 1,
       );
       applyInteraction({ kind: 'none' });
+      if (activeTool !== 'draw' && activeTool !== 'highlighter' && activeTool !== 'eraser') {
+        activeTool = 'draw';
+        toolRef.current = 'draw';
+        onToolChange('draw');
+      }
       setIsPenMode(true);
     }
     if (penModeRef.current && e.pointerType === 'touch') {
