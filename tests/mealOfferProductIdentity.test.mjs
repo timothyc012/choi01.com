@@ -80,6 +80,23 @@ test('typed raw, fresh, dried and aged identities reject prepared lookalikes sys
   assert.equal(eligible('감자','Produkt 1','500 g',{species:'plant',processingState:'fresh',form:'whole'}),false);
 });
 
+test('raw salmon and fresh produce reject cured species and prepared-product vocabulary',()=>{
+  const eligible=(ingredientId,productDe,detail='',identity={})=>policy.offerProductIdentityEligible({identity:{ingredientId,...identity},productDe,detail});
+  const rawSalmon={species:'salmon',processingState:'raw',form:'fillet'};
+  for(const [product,detail] of [
+    ['K-CLASSIC Stremellachs','125-g-Packung'],['Stremellachsfilet','125 g'],['Gravad Lachsfilet','150 g'],
+    ['Gravlax Lachsfilet','150 g'],['Räucherlachsfilet','150 g'],['Lachsfilet','heißgeräuchert'],
+    ['Lachsfilet','kaltgeräuchert'],['Smoked Lachsfilet','150 g'],['Lachsfilet','gebeizt'],['Seelachsfilet','je 100 g'],
+  ]) assert.equal(eligible('연어',product,detail,rawSalmon),false,product+' '+detail);
+  assert.equal(eligible('연어','Norwegische Lachsfilet-Portionen','tiefgefroren',rawSalmon),true);
+  assert.equal(eligible('연어','Bio Lachsfilets','natur',rawSalmon),true);
+  const freshPlant={species:'plant',processingState:'fresh',form:'whole'};
+  assert.equal(eligible('양파','Geschnetzeltes Gyros Art vom Schwein mit Zwiebeln','500 g',freshPlant),false);
+  assert.equal(eligible('양파','Deutsche Rote Zwiebeln','1 kg',freshPlant),true);
+  assert.equal(eligible('오이','Kühne Gurken','670 g',freshPlant),false);
+  assert.equal(eligible('오이','Gurken','1 Stück | fresh cucumber',freshPlant),true);
+});
+
 test('a hollowable large loaf recipe cannot use rolls, toast or tortillas',()=>{
   const meal={id:'hollow-loaf-recipe',title:'과일 가득 리코타 빵케이크',sale:['빵'],missing:[],recommendationProfile:{primaryIngredients:['빵']},detailIngredients:['빵 1개','리코타치즈 500g'],steps:['큰 빵 윗면에 칼집을 낸다.','빵 속을 파낸다.']};
   const offer=(productDe,form='whole')=>({identity:{ingredientId:'빵',form},productDe,detail:'300 g'});

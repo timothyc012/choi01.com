@@ -56,7 +56,7 @@
     '소고기':/(?:rind(?:er)?gulasch|gulasch\s+vom\s+rind)(?:\b|$)/i,
     '소고기등심':/(?:rib[- ]?eye|entrecôte|entrecote)(?:\b|$)/i,
     '칠면조가슴살':/putenbrust(?:filet)?(?:\b|$)/i,
-    '연어':/lachsfilets?(?:\b|$)/i,
+    '연어':/(?:^|[\s-])lachsfilets?(?:\b|$)/i,
     '훈제연어':/(?:räucherlachs|raeucherlachs)(?:\b|$)/i,
     '송어':/(?:forellen?(?:[- ]?filet)?|lachsforellen[- ]?filetseite)(?:\b|$)/i,
     '새우':/(?:garnelen?|shrimps?)(?:\b|$)/i,
@@ -103,7 +103,7 @@
     '닭가슴살':/bacon|speck|aspik|paniert|gegart|gewürzt|mariniert|schnitzel/i,
     '새우':/mariniert|knoblauch|chili|kräuter|gewürzt/i,
     '토마토':/dose|konserve|geschält|getrocknet|passiert|tomatenmark|sauce|ketchup|brötchen|broetchen|brot|gnocchi|pizza/i,
-    '양파':/wurst|schinken|sauerfleisch|aspik|fleisch/i,
+    '양파':/wurst|schinken|sauerfleisch|aspik|fleisch|geschnetzeltes|gyros|schwein/i,
     '당근':/saft|püree|pueree|suppe/i,
     '오이':/glas(?:\b|\s*\/)|abtropf|gewürz|gewuerz|eingelegt|essig|cornichon/i,
     '복숭아':/dose|konserve|abtropf|gezuckert|sirup|joghurt|nektar|saft/i,
@@ -121,8 +121,9 @@
     if(noun&&!noun.test(product))return false;
     const preparationText=text.replace(/\b(?:un|nicht\s+)(?:mariniert|gewürzt|gewuerzt|gegart|gekocht|geräuchert|geraeuchert)\b/gi,'');
     if(offerContradictions[ingredient]?.test(preparationText))return false;
-    if(offer?.identity?.processingState==='raw'&&/mariniert|gewürzt|gewuerzt|paniert|gegart|gekocht|geräuchert|geraeuchert|verzehrfertig/i.test(preparationText))return false;
+    if(offer?.identity?.processingState==='raw'&&/mariniert|gewürzt|gewuerzt|paniert|gegart|gekocht|geräuchert|geraeuchert|verzehrfertig|stremel|gravad|gravlax|graved|räucher|raeucher|smoked|gebeizt|heißgeräuchert|heissgeraeuchert|kaltgeräuchert|kaltgeraeuchert/i.test(preparationText))return false;
     if(ingredient==='새우'&&offer?.identity?.processingState==='raw'&&!/(?:^|\W)(?:roh|natur|unmariniert|ungewürzt|ungewuerzt|tiefgefroren|ungegart)(?:\W|$)/i.test(text))return false;
+    if(ingredient==='오이'&&!/salatgurke/i.test(product)&&!/(?:^|\W)(?:stück|stueck|frisch|fresh|klasse|bio)(?:\W|$)/i.test(text))return false;
     if(offer?.identity?.processingState==='fresh'&&offer?.identity?.species==='plant'&&/marmelade|konfitüre|konfituere|saft|nektar|sauce|suppe|püree|pueree|chips|brot|brötchen|broetchen|joghurt|dose|konserve|abtropf|getrocknet|eingelegt|garnelen|shrimp|wurst|schinken|fleisch|käse|kaese/i.test(text))return false;
     return true;
   }
