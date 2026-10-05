@@ -39,13 +39,23 @@ test('an explicit mushroom species cannot match another species offer',()=>{
  assert.equal(engine.offerMatchesRecipe(o,{title:'양송이 구이',detailIngredients:['양송이버섯 200g']}),true);
 });
 
-test('real snapshot UI applies shared conditions, scales amounts and adds only missing ingredients',async t=>{
+test('retained 2026-09-21 snapshot UI applies shared conditions, scales amounts and adds only missing ingredients',async t=>{
  const root=new URL('../public/mohemeokji/',import.meta.url);
+ // These regressions describe the retained release, not whichever week current.json selects.
+ const snapshotId='c043c33550924d384453e89586fc3ee4112cec89c871e0074b16a5ddf8d68f43';
+ const manifestPath='snapshots/2026-09-21/'+snapshotId+'/manifest.json';
+ const manifestSha256='8b351f6e64573d66feabb8025af571da4155e47bcda339aa37d478c0b2a716b7';
+ const manifestBytes=fs.readFileSync(new URL('data/'+manifestPath,root));
+ assert.equal(crypto.createHash('sha256').update(manifestBytes).digest('hex'),manifestSha256);
+ const manifest=JSON.parse(manifestBytes);
+ assert.equal(manifest.snapshotId,snapshotId);assert.equal(manifest.weekStart,'2026-09-21');
+ const currentBytes=Buffer.from(JSON.stringify({schemaVersion:1,snapshotId,weekStart:manifest.weekStart,collectionTimestamp:manifest.collectionTimestamp,manifestPath,manifestSha256}));
  const dom=new JSDOM(fs.readFileSync(new URL('index.html',root),'utf8'),{url:'http://localhost/mohemeokji/?postcode=44369&store=Netto%20Marken-Discount&date=2026-09-21',runScripts:'outside-only',pretendToBeVisual:true});t.after(()=>dom.window.close());
  const w=dom.window;w.TextDecoder=TextDecoder;w.TextEncoder=TextEncoder;Object.defineProperty(w,'crypto',{value:crypto.webcrypto});w.HTMLElement.prototype.scrollIntoView=()=>{};
- w.fetch=async url=>{const bytes=fs.readFileSync(new URL(url.replace('/mohemeokji/',''),root));return {ok:true,arrayBuffer:async()=>new Uint8Array(bytes).buffer};};
+ w.fetch=async url=>{const bytes=url==='/mohemeokji/data/current.json'?currentBytes:fs.readFileSync(new URL(url.replace('/mohemeokji/',''),root));return {ok:true,arrayBuffer:async()=>new Uint8Array(bytes).buffer};};
  for(const file of ['meal-shopping.js','meal-nutrition-policy.js','meal-recommendations.js','meal-verified-evidence.js','meal-data-loader.js','meal-planner-recipe-data.js']) w.eval(fs.readFileSync(new URL(file,root),'utf8'));
  const runtime=await w.MealRecipeData.startSnapshotApp();assert.notEqual(runtime.status,'unavailable',runtime.error?.stack);
+ assert.equal(runtime.manifest.snapshotId,snapshotId);assert.equal(runtime.manifest.weekStart,'2026-09-21');
  assert.equal(runtime.location.offers.some(o=>/Butternut/.test(o.productDe)),false);
  assert.equal(w.document.querySelector('#menuList').textContent.includes('냉이 목살'),false);
  assert.equal(w.document.querySelector('[data-filter="quick"]').disabled,true);
