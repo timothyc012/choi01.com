@@ -1127,6 +1127,48 @@
         "kind": "main"
       }
     },
+    "6833242|07fb9e07c6f301dc92cc7563f85713e51acbda82bdba0915db23275d62312e29|ko-paraphrase-v1": {
+      "sourceRecipeId": "6833242",
+      "sourceContentHash": "07fb9e07c6f301dc92cc7563f85713e51acbda82bdba0915db23275d62312e29",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 달걀 볶음밥",
+      "detailIngredients": [
+        "토마토 1개",
+        "달걀 1개",
+        "밥 1공기",
+        "피망 1개",
+        "양파 1/2개",
+        "생크림 (원문 수량 미표기)",
+        "집간장 (원문 수량 미표기)",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "토마토는 숟가락으로 속과 씨를 긁어낸다. 씨 부분은 물러서 물이 생기고 볶음밥이 지저분해진다.",
+        "붉은 겉살 부분만 사용한다.",
+        "속을 뺀 토마토는 색감과 식감이 살도록 큼직하게 썬다.",
+        "피망은 씨를 빼고 먹기 좋게 썬다.",
+        "양파도 알맞게 썬다. 토마토와 달걀만으로도 만들 수 있으니 다른 채소는 생략해도 된다.",
+        "달걀에 생크림을 넣고 섞는다.",
+        "팬에 기름을 두르고 피망과 양파를 볶는다.",
+        "토마토는 수분이 나와 다른 채소의 색을 바꾸므로 이때 함께 볶지 않는다.",
+        "생크림을 섞은 달걀을 팬에 붓고 저어 스크램블을 만든다.",
+        "손질한 재료를 팬에 모두 모은다.",
+        "밥과 재료를 섞어 토마토가 뭉개지지 않게 살살 볶고, 맛을 보아 싱거우면 집간장으로 간한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "stirfry",
+        "kind": "main"
+      }
+    },
     "6833420|2b13f55ddd33c517451205925e0f3db9428ff311b332462d7bb3fff20ae7f183|ko-paraphrase-v1": {
       "sourceRecipeId": "6833420",
       "sourceContentHash": "2b13f55ddd33c517451205925e0f3db9428ff311b332462d7bb3fff20ae7f183",
@@ -1292,6 +1334,43 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6837737|b0dd07c9534e475a527f9255340643ca09ee5a12171d2a106f15a4241ecf4834|ko-paraphrase-v1": {
+      "sourceRecipeId": "6837737",
+      "sourceContentHash": "b0dd07c9534e475a527f9255340643ca09ee5a12171d2a106f15a4241ecf4834",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "알리오 올리오",
+      "detailIngredients": [
+        "올리브유 2/3컵",
+        "스파게티면 2인분",
+        "통마늘 4~5개",
+        "다진마늘 1~2TS",
+        "페페론치니 3~4개",
+        "소금 (원문 수량 미표기)",
+        "물 2/3 냄비",
+        "소금 1Ts",
+        "볶음용 올리브오일 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "마늘을 얇게 저미고, 고추는 손으로 2~3조각으로 부숴 씨째 준비한다. 매운맛이 강하니 양은 입맛에 맞게 조절한다.",
+        "물을 세게 끓인 뒤 소금 1TS를 넣고 파스타면을 넣어 중불에서 7~8분 삶은 다음 체에 건진다.",
+        "면이 삶아지는 동안 팬에 올리브유, 다진마늘, 저민 마늘, 고추를 모두 넣고 중불에서 볶는다.",
+        "마늘이 어느 정도 익으면 약불로 낮춰 계속 볶고, 타지 않게 잘 익으면 잠시 불을 꺼 둔다.",
+        "삶은 면을 곧바로 마늘이 든 팬에 옮기고 면 삶은 물을 2국자 붓는다. 중불에서 한 번 더 볶은 뒤 입맛에 맞게 소금으로 간을 맞춘다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "올리브유"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "side"
+      }
     },
     "6838369|862e66ae532b0002de6619e0afa42824257ee5a157d207053d36d94b641cb4b3|ko-paraphrase-v1": {
       "sourceRecipeId": "6838369",
@@ -1522,6 +1601,43 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6847969|c27e5b25a8d636451cce01a0205ddb4d3e72145aa2a4da0ab37d858f1b5f5721|ko-paraphrase-v1": {
+      "sourceRecipeId": "6847969",
+      "sourceContentHash": "c27e5b25a8d636451cce01a0205ddb4d3e72145aa2a4da0ab37d858f1b5f5721",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 라면",
+      "detailIngredients": [
+        "라면 1봉지",
+        "토마토 취향껏",
+        "양파 1/2개",
+        "청양고추 1개",
+        "식초 1T",
+        "다진마늘 0.5T",
+        "물 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "필요한 재료를 갖춰 둔다.",
+        "토마토에서 물이 나오므로 냄비에 평소보다 물을 적게 붓고, 반으로 자른 토마토와 양파를 넣어 끓인다.",
+        "물이 끓으면 면과 수프를 넣는다.",
+        "청양고추와 다진마늘도 넣는다.",
+        "마지막에 식초 한 스푼을 넣는다.",
+        "바로 그릇에 담는다.",
+        "의외의 조합이지만 토마토의 산미가 라면과 잘 어울린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "other",
+        "kind": "main"
+      }
     },
     "6849218|6e8ea2ae36ebd35a4e2398128d41e622142c9829176d5bfaf2d3e215f2a40993|ko-paraphrase-v1": {
       "sourceRecipeId": "6849218",
@@ -2242,6 +2358,42 @@
         "kind": "main"
       }
     },
+    "6871280|5983d065847e5135c91a3820fb1905d0c1ed9934f814c09584ee617783a9cd7c|ko-paraphrase-v1": {
+      "sourceRecipeId": "6871280",
+      "sourceContentHash": "5983d065847e5135c91a3820fb1905d0c1ed9934f814c09584ee617783a9cd7c",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "당근 수프",
+      "detailIngredients": [
+        "당근 2개 (총 420g)",
+        "양파 1개",
+        "식물성 버터 2T",
+        "소금 1/4T",
+        "후추 약간",
+        "샤워크림 (원문 수량 미표기)",
+        "물 600cc"
+      ],
+      "steps": [
+        "당근과 양파를 알맞은 크기로 가늘게 썬다.",
+        "달군 냄비에 버터와 양파를 넣고 중불에서 타지 않도록 살피며 양파가 투명해질 때까지 볶는다.",
+        "양파가 투명하게 익으면 썰어 둔 당근을 더해 1분쯤 더 볶으며 버터가 재료에 고루 묻게 한다.",
+        "소금, 후추와 물 600cc를 넣고 중불에서 5분, 약불로 줄여 15분쯤 은근히 끓인다. 물 양은 원하는 농도에 맞춰 조절한다.",
+        "끓인 재료를 식힌 뒤 믹서에 옮겨 곱게 간다.",
+        "간 수프를 체에 걸러 부드럽게 만들고, 먹기 직전에 샤워크림을 올린다. 따뜻하게 먹으려면 거른 수프를 냄비에서 한 번 데운 뒤 샤워크림을 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "당근"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
     "6872166|ad5432c904a76b4103c897e67277af98232d3258f134c08a92b5e2e0a47f71bf|ko-paraphrase-v1": {
       "sourceRecipeId": "6872166",
       "sourceContentHash": "ad5432c904a76b4103c897e67277af98232d3258f134c08a92b5e2e0a47f71bf",
@@ -2718,6 +2870,47 @@
         "kind": "main"
       }
     },
+    "6880778|1156cf691caeff8442c11b306086bfbf637ffb9450bac4b4963f0e0198771c00|ko-paraphrase-v1": {
+      "sourceRecipeId": "6880778",
+      "sourceContentHash": "1156cf691caeff8442c11b306086bfbf637ffb9450bac4b4963f0e0198771c00",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "무수분 토마토 카레",
+      "detailIngredients": [
+        "카레고기(돼지고기) 400g",
+        "토마토 6개",
+        "양파 1개",
+        "감자 1개",
+        "당근 1개",
+        "오일 (원문 수량 미표기)",
+        "카레가루 2/3봉",
+        "잡곡밥 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "양파, 토마토, 감자, 당근은 깍둑썰기로 썬다.",
+        "팬에 기름을 두른다.",
+        "양파부터 넣어 색이 바뀔 때까지 충분히 볶는다.",
+        "양파 색이 변하면 돼지고기를 넣어 볶고, 어느 정도 익으면 한쪽으로 밀어 토마토 넣을 자리를 만든다.",
+        "냄비 바닥에 수분이 많은 토마토를 깔고, 밀어 둔 고기와 양파를 그 위에 올린다.",
+        "그 위에 감자와 당근을 얹는다.",
+        "바닥이 타지 않게 중간 세기 불에서 뚜껑을 덮어 김이 새지 않게 두면 토마토와 채소에서 나온 수분으로 푹 익는다.",
+        "카레가루 2/3봉을 고루 뿌리고 조금 더 끓여 마무리한다.",
+        "잡곡밥 위에 카레를 얹어 낸다.",
+        "채소와 토마토, 카레가 어울려 상큼함·고소함·달콤함 3가지 맛이 함께 난다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "other",
+        "kind": "main"
+      }
+    },
     "6880921|4501e11086d77da12d202cac6688e53be4062b67ce7012c8e34030a3508aeb57|ko-paraphrase-v1": {
       "sourceRecipeId": "6880921",
       "sourceContentHash": "4501e11086d77da12d202cac6688e53be4062b67ce7012c8e34030a3508aeb57",
@@ -2791,6 +2984,47 @@
         ],
         "family": "chicken",
         "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6881286|eb57e47a4b372345cc79bd666256f12a4463b30be06f2b2e30c71b87f01c768e|ko-paraphrase-v1": {
+      "sourceRecipeId": "6881286",
+      "sourceContentHash": "eb57e47a4b372345cc79bd666256f12a4463b30be06f2b2e30c71b87f01c768e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "애호박 덮밥",
+      "detailIngredients": [
+        "애호박 1개",
+        "양파 1/2개",
+        "굴소스 1큰술",
+        "고춧가루 1큰술",
+        "다진마늘 1t",
+        "참기름 (원문 수량 미표기)",
+        "식용유 (원문 수량 미표기)",
+        "달걀 (원문 수량 미표기)",
+        "대파 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "덮밥용 애호박은 흐물거리지 않고 씹는 맛이 살도록 굵게 채 썬다.",
+        "굵게 썬 애호박과 양파를 한데 준비한다.",
+        "팬에 참기름 1 큰술과 식용유 약간을 두른다.",
+        "애호박과 양파를 넣고 볶는다.",
+        "애호박이 절반쯤 익으면 양념을 넣고 채소와 고루 버무린다.",
+        "양념은 굴소스, 고춧가루, 다진마늘을 섞어 만든 뒤 넣는다.",
+        "뚜껑을 덮고 약한 불에서 익혀 간이 배게 한다. 뚜껑을 열어 두면 수분이 날아가 자주 뒤적이게 되고 호박이 부서지기 쉽다.",
+        "끝으로 대파와 참기름을 더해 한 번 더 빠르게 볶아 수분을 날린다.",
+        "밥 위에 올리고 달걀 프라이를 곁들인다. 애호박과 양파만 있으면 10분 안에 완성된다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "주키니"
+        ],
+        "family": "other",
+        "method": "rice",
         "kind": "main"
       }
     },
@@ -2925,6 +3159,46 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6891578|6982a56f2e0dc6a9ad09407bc30cf69e0c7492358374b80252482fef8ad94581|ko-paraphrase-v1": {
+      "sourceRecipeId": "6891578",
+      "sourceContentHash": "6982a56f2e0dc6a9ad09407bc30cf69e0c7492358374b80252482fef8ad94581",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "새우젓 호박찌개",
+      "detailIngredients": [
+        "애호박 2/3개",
+        "양파 1/3개",
+        "새우젓 1스푼",
+        "다진마늘 1/2스푼",
+        "고춧가루 1/2스푼",
+        "들기름 1스푼",
+        "대파 1대",
+        "물 (원문 수량 미표기)",
+        "멸치액젓 (선택, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "양파와 애호박은 같은 크기로 먹기 좋게 썬다. 새우젓은 큰 숟가락으로 깎아 1스푼을 준비한다.",
+        "달군 뚝배기에 들기름 1스푼을 두르고 애호박과 양파를 넣어 중불에서 양파가 투명해질 때까지 볶는다. 들기름 대신 식용유나 카놀라유를 써도 된다.",
+        "양파가 투명해지면 채소가 잠기지 않을 만큼, 200ml 정도의 물을 붓고 강한 불로 올린다.",
+        "물을 부은 직후 다진마늘 반 스푼을 넣는다.",
+        "고춧가루 반 스푼도 더한다.",
+        "새우젓 1스푼을 넣고 보글보글 끓인다. 싱거우면 새우젓 국물이나 멸치액젓으로 간을 보탠다.",
+        "끝으로 대파를 넣고 1분 정도 더 끓인다.",
+        "그릇에 담아 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "주키니"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
     },
     "6891679|8dc2af22f3263f7d4b20c7d80ef61cada397e893b451024dd91103ab7a22cd63|ko-paraphrase-v1": {
       "sourceRecipeId": "6891679",
@@ -3603,6 +3877,49 @@
         "kind": "main"
       }
     },
+    "6921823|1fd472e32c25e03b70c4ccdc25034b2d73f1c3c2f6d1b334a6bdd4f5ebe99d72|ko-paraphrase-v1": {
+      "sourceRecipeId": "6921823",
+      "sourceContentHash": "1fd472e32c25e03b70c4ccdc25034b2d73f1c3c2f6d1b334a6bdd4f5ebe99d72",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "감바스 알 아히요",
+      "detailIngredients": [
+        "올리브유 1/3컵",
+        "흰 다리 새우 10마리",
+        "마늘 10알",
+        "방울 토마토 8알",
+        "페페로치노 5알",
+        "후추 약간",
+        "소금 약간",
+        "파슬리 약간",
+        "빵 적당량",
+        "로즈메리 약간",
+        "양송이버섯 (선택, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "마늘을 얇게 저며 둔다. 새우는 종류에 상관없이 쓴다.",
+        "방울토마토를 반으로 자른다.",
+        "새우의 내장을 빼고 반으로 가른 뒤 소금과 후추로 가볍게 밑간한다.",
+        "팬을 중간 불로 달궈 올리브유를 두르고 저민 마늘을 살짝 노릇하게 익힌다. 빵에 찍어 먹으려면 올리브유를 넉넉히 넣어도 된다.",
+        "마늘이 노릇해지면 방울토마토를 넣는다. 양송이버섯이 있으면 이때 함께 넣는다.",
+        "방울토마토가 살짝 익으면 손질한 새우를 넣는다.",
+        "페페로치노를 손으로 굵게 부숴 넣고 소금과 후추로 간해 가볍게 볶는다. 로즈메리를 넣으면 향이 좋다.",
+        "그릇에 옮겨 담고 파슬리를 조금 뿌린 뒤 로즈메리로 장식한다.",
+        "구운 바게트나 식빵을 곁들여 먹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "올리브유"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "side"
+      }
+    },
     "6922338|a79eb50eb05343551acb2be82db41cf76c67457673bc6928a348d45be0ae0727|ko-paraphrase-v1": {
       "sourceRecipeId": "6922338",
       "sourceContentHash": "a79eb50eb05343551acb2be82db41cf76c67457673bc6928a348d45be0ae0727",
@@ -3847,6 +4164,45 @@
         "family": "cheese",
         "method": "other",
         "kind": "breakfast"
+      }
+    },
+    "6948377|dc5f2a47ec36760f44e6b7a6c293b3b518788afb1d8bca922658342947d1651f|ko-paraphrase-v1": {
+      "sourceRecipeId": "6948377",
+      "sourceContentHash": "dc5f2a47ec36760f44e6b7a6c293b3b518788afb1d8bca922658342947d1651f",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "애호박 새우젓 찌개",
+      "detailIngredients": [
+        "애호박 350g",
+        "두부 180g",
+        "양파 1/2개",
+        "대파 1대",
+        "새우젓 1큰술",
+        "고춧가루 1큰술",
+        "다진마늘 1큰술",
+        "들기름 1큰술",
+        "생수 600ml"
+      ],
+      "steps": [
+        "애호박을 반 갈라 얇은 반달 모양으로 썰고, 양파는 가늘게 채 썬다.",
+        "대파는 잘게 송송 썰고, 두부는 한입 크기의 네모로 자른다.",
+        "다진마늘 1큰술과 들기름 1큰술을 냄비에 넣고 볶다가 애호박을 더해 함께 볶는다.",
+        "고춧가루 1큰술을 넣는다.",
+        "생수 600ml를 붓고 끓이다가 크게 끓어오르면 양파를 넣는다.",
+        "새우젓 1큰술로 간을 맞추고 뚜껑을 덮어 중약불에서 15분쯤 끓인다.",
+        "끝으로 두부와 대파를 넣고 3분쯤 더 끓이면 완성이다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "주키니"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
       }
     },
     "6954339|76291cc5fb7e22c555cc82dc6bb7c45d596cd2c3f6aa87b192463bfcccb9dfee|ko-paraphrase-v1": {
@@ -4133,6 +4489,87 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6962887|87212f03d2c8d5fe74f32c50c668b1ddeb78b1b654bf2b730ae5a0753a91e724|ko-paraphrase-v1": {
+      "sourceRecipeId": "6962887",
+      "sourceContentHash": "87212f03d2c8d5fe74f32c50c668b1ddeb78b1b654bf2b730ae5a0753a91e724",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "닭가슴살 토마토 계란볶음",
+      "detailIngredients": [
+        "토마토 2개",
+        "계란 4개",
+        "허브솔트 약간",
+        "닭가슴살 1개",
+        "청양고추 2개",
+        "마늘 4톨",
+        "기 버터 1큰술",
+        "소금 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "토마토 2개를 씻어 물기를 닦고 꼭지를 떼어 낸 뒤 큼직하게 다진다.",
+        "계란 4개에 허브솔트를 조금 넣고 알끈이 남지 않게 고루 푼다.",
+        "닭가슴살 한 덩이를 얇게 저민다.",
+        "가능한 한 얇게 5조각으로 나누어 저민다.",
+        "저민 닭가슴살을 잘게 다지고 허브솔트를 조금 뿌려 밑간한다.",
+        "팬을 달군 뒤 다진 마늘 4톨과 기 버터를 넣고 고루 볶는다.",
+        "다진 닭가슴살을 넣고 마늘 버터에 함께 볶는다.",
+        "닭가슴살이 완전히 익을 때까지 볶는다.",
+        "다진 토마토를 넣고 청양고추 2개를 잘게 썰어 함께 넣는다.",
+        "닭가슴살과 고루 섞어 볶은 뒤 소금을 아주 조금만 넣는다. 간은 싱겁게 맞춘다.",
+        "풀어 둔 계란을 붓는다.",
+        "스크램블처럼 저어 가며 계란을 익히면 완성이다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "stirfry",
+        "kind": "main"
+      }
+    },
+    "6963204|d50828875149843c636e5f05995c1a7885b9757024248ccd116d816f1bfcd97e|ko-paraphrase-v1": {
+      "sourceRecipeId": "6963204",
+      "sourceContentHash": "d50828875149843c636e5f05995c1a7885b9757024248ccd116d816f1bfcd97e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "애호박 두부탕",
+      "detailIngredients": [
+        "애호박 1개",
+        "두부 1모",
+        "물 500ml",
+        "쪽파 1대",
+        "청양고추 1개",
+        "홍고추 약간",
+        "간마늘 1큰술",
+        "새우젓 2큰술"
+      ],
+      "steps": [
+        "새우젓 2큰술과 간마늘 1큰술, 물 500ml, 애호박 1개와 두부 1모, 청양고추 1개·쪽파 1대·홍고추 약간을 준비한다. 수미네반찬 방식에서는 청양고추를 빼기도 한다.",
+        "애호박과 두부를 한입 크기로 썬다(애호박 1개, 두부 1모).",
+        "냄비에 물 500ml를 붓고 애호박 1개를 넣어 강중불에서 4~5분가량 끓인다.",
+        "두부 1모를 넣고 중불로 1분쯤 더 끓인다.",
+        "간마늘 1큰술과 새우젓 2큰술을 넣어 중불에서 2~3분가량 끓인다. 간이 싱거우면 새우젓을, 짜면 물을 조금 더한다.",
+        "청양고추 1개, 쪽파 1대, 홍고추 약간을 넣고 중약불에서 30초쯤 끓여 마무리한다.",
+        "그릇에 담아 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "주키니"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
     "6964474|f797b9c939593e5d5a1abd93df86dd95a3b211d2b71c975a5626fcd585053396|ko-paraphrase-v1": {
       "sourceRecipeId": "6964474",
       "sourceContentHash": "f797b9c939593e5d5a1abd93df86dd95a3b211d2b71c975a5626fcd585053396",
@@ -4333,6 +4770,41 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6983615|a3f22e93933d52fa6b4bd3c33d253279de9b56f090b83098a5dd7b731cc4640b|ko-paraphrase-v1": {
+      "sourceRecipeId": "6983615",
+      "sourceContentHash": "a3f22e93933d52fa6b4bd3c33d253279de9b56f090b83098a5dd7b731cc4640b",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "애호박 명란 파스타",
+      "detailIngredients": [
+        "애호박 1/2개",
+        "명란 1덩이",
+        "파스타면 100g",
+        "올리브유 적당량",
+        "김가루 약간",
+        "면 삶은 물 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "애호박을 0.5cm 두께로 가늘게 썬다.",
+        "명란을 반으로 가르고 칼등으로 훑어 막을 벗겨낸다.",
+        "파스타면을 끓는 물에 넣어 8분 동안 삶고, 삶은 물을 한 국자쯤 따로 덜어 둔다.",
+        "팬에 올리브유를 충분히 두른 뒤 애호박을 볶는다.",
+        "삶아 둔 면을 팬에 더해 같이 볶다가 명란과 덜어 둔 면수를 부어 섞으며 볶는다.",
+        "접시에 옮겨 담고 김가루를 뿌려 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "주키니"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "main"
+      }
     },
     "6984918|318c0e1069119a5702211f0247b3f6e4b919babadec42131f97133653a4e05ba|ko-paraphrase-v1": {
       "sourceRecipeId": "6984918",
