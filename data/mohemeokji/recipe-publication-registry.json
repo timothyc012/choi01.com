@@ -161,6 +161,45 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "1643325|e8e7b04ee38352a61458841e3d052a996100ff758429104437b8fec6f89349f5|ko-paraphrase-v1": {
+      "sourceRecipeId": "1643325",
+      "sourceContentHash": "e8e7b04ee38352a61458841e3d052a996100ff758429104437b8fec6f89349f5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "닭날개 윙 오븐구이",
+      "detailIngredients": [
+        "닭날개 350g (13개)",
+        "다진 마늘 1스푼",
+        "간장 1스푼",
+        "꿀 1스푼 (이나 아가베시럽)",
+        "올리브오일 1스푼 (이나 포도씨오일)",
+        "청주 1스푼",
+        "생강즙 0.3스푼 (이나 가루)",
+        "소금 0.3스푼",
+        "후춧가루 적당량",
+        "파마산 치즈가루 1스푼 (생략가능)"
+      ],
+      "steps": [
+        "닭날개를 씻은 뒤 양념이 잘 배도록 곳곳에 칼집을 낸다.",
+        "다진 마늘, 간장, 꿀 또는 아가베시럽, 올리브오일 또는 포도씨오일, 청주, 생강즙 또는 가루, 소금, 후춧가루와 선택 재료인 파마산 치즈가루를 섞는다.",
+        "닭날개에 양념을 고루 버무려 약 1시간 재운다.",
+        "쿠킹포일을 깐 팬에 석쇠를 놓고 닭날개 사이를 띄워 올린다.",
+        "오븐을 220도로 예열하고 컨벡션으로 20분 굽는다.",
+        "중간에 닭날개를 한 번 뒤집어 220도에서 10-15분 더 익힌다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭날개"
+        ],
+        "family": "chicken",
+        "method": "grill",
+        "kind": "main"
+      }
+    },
     "1656710|b8cebc3da6e3757ec662b098f1d9d9612b0a6147e961a4d31d1953fce52e532c|ko-paraphrase-v1": {
       "sourceRecipeId": "1656710",
       "sourceContentHash": "b8cebc3da6e3757ec662b098f1d9d9612b0a6147e961a4d31d1953fce52e532c",
@@ -197,6 +236,37 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "1662934|eb9d211002048953d8c5ba52ec4378509e4ebf752c70603d3861897991d796c2|ko-paraphrase-v1": {
+      "sourceRecipeId": "1662934",
+      "sourceContentHash": "eb9d211002048953d8c5ba52ec4378509e4ebf752c70603d3861897991d796c2",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "간단한 고구마 스프",
+      "detailIngredients": [
+        "고구마 2~3개",
+        "우유 500ml",
+        "양파 1/2개",
+        "소금 약간"
+      ],
+      "steps": [
+        "고구마를 씻어 찐 뒤 껍질을 벗겨 잘라 믹서기에 담고 우유와 곱게 간다.",
+        "간 혼합물을 냄비에 붓고 약불에서 눌지 않게 저으며 끓인다.",
+        "양파를 잘게 다져 팬에서 노릇해질 때까지 볶는다.",
+        "볶은 양파를 끓는 수프에 넣고 함께 끓인 뒤 소금으로 간한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "고구마"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
     },
     "1783024|d2ac23d46eafe48a75648877e7528656af4a0a2ed129c3acf1ba0ce72a346ebe|ko-paraphrase-v1": {
       "sourceRecipeId": "1783024",
@@ -450,6 +520,86 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "2470429|622174f9927004b1d02d32ef57df9b8648ca8e4564832d2c2cbecbcc7b6e6504|ko-paraphrase-v1": {
+      "sourceRecipeId": "2470429",
+      "sourceContentHash": "622174f9927004b1d02d32ef57df9b8648ca8e4564832d2c2cbecbcc7b6e6504",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "양상추 간장 비빔국수",
+      "detailIngredients": [
+        "소면 160g (한줌 하고 조금 더)",
+        "양상추 3장",
+        "달걀 2개",
+        "설탕 2큰술",
+        "다진파 1큰술",
+        "다진양파 1큰술",
+        "식초 2.5큰술",
+        "간장 2큰술",
+        "통깨 약간",
+        "다진마늘 1/2작은술",
+        "참기름 약간"
+      ],
+      "steps": [
+        "물을 끓여 소면을 삶는다.",
+        "양념에 쓸 파와 양파를 곱게 다진다.",
+        "정해진 양념 재료를 한 그릇에 모두 섞어 간장 양념장을 만든다.",
+        "달걀을 풀어 얇게 지단을 부치고, 양상추는 씻어 물기를 충분히 털어 낸 뒤 가늘게 채 썬다.",
+        "삶은 면에 간장 양념장을 넣고 손으로 고루 버무려 그릇에 담은 다음 양상추와 지단을 얹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "main"
+      }
+    },
+    "4083232|56091a6ab1655a67d5077b137e36b346dfd819cb6e0e3416538c14fcc07e32a9|ko-paraphrase-v1": {
+      "sourceRecipeId": "4083232",
+      "sourceContentHash": "56091a6ab1655a67d5077b137e36b346dfd819cb6e0e3416538c14fcc07e32a9",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 소고기 볶음",
+      "detailIngredients": [
+        "채끝살 170g",
+        "토마토 1개",
+        "노랑파프리카 1/2개",
+        "브로콜리 20g",
+        "포도씨유 1큰술",
+        "다진마늘 1큰술",
+        "발사믹식초 1큰술",
+        "허브솔트 1작은술",
+        "맛술 1큰술"
+      ],
+      "steps": [
+        "채끝살을 2×2 크기로 잘라 허브솔트를 뿌린다.",
+        "노랑파프리카와 토마토를 깍둑 모양으로 썬다.",
+        "브로콜리를 먹기 좋게 잘라 둔다.",
+        "팬에 기름을 두르고 다진마늘을 넣어 향이 올라올 때까지 볶는다.",
+        "손질한 채끝살을 넣어 볶는다.",
+        "맛술 1큰술을 넣고 채끝살이 2/3쯤 익을 때까지 볶는다.",
+        "파프리카와 토마토, 발사믹식초를 넣어 함께 볶는다.",
+        "데친 브로콜리를 마지막에 넣고 재빨리 섞는다.",
+        "그릇에 담아 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "stirfry",
+        "kind": "main"
+      }
     },
     "4756817|a798b3467ae30bc88918d4cc8f914f48eda4ff21520c347f0bd80d0b7db9de92|ko-paraphrase-v1": {
       "sourceRecipeId": "4756817",
@@ -778,6 +928,132 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6829589|16d8a0ed6a5be1b61ecb92ee45b4597ed284d459b91da6b24a600072f43afe40|ko-paraphrase-v1": {
+      "sourceRecipeId": "6829589",
+      "sourceContentHash": "16d8a0ed6a5be1b61ecb92ee45b4597ed284d459b91da6b24a600072f43afe40",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "소고기 등심 양념구이",
+      "detailIngredients": [
+        "소고기등심 6장 (1kg)",
+        "간장 10큰술",
+        "설탕 5큰술",
+        "배즙 1팩",
+        "양파 간 것 1/2개",
+        "탄산수 5큰술",
+        "올리고당 2큰술",
+        "소금 1큰술",
+        "후추 약간",
+        "마늘 (원문 수량 미표기)",
+        "파 (원문 수량 미표기)",
+        "참기름 약간",
+        "무순 (선택, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "등심을 미리 꺼내 해동한다.",
+        "양념 재료를 정해진 양대로 모두 섞는다.",
+        "고기에 양념을 고루 묻혀 용기에 담고 2시간가량 숙성한다.",
+        "팬을 달군 뒤 등심을 앞면과 뒷면 모두 굽는다.",
+        "구운 고기를 먹기 좋게 잘라 담고 무순이나 파채, 깻잎채를 얹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "소고기등심"
+        ],
+        "family": "beef",
+        "method": "grill",
+        "kind": "main"
+      }
+    },
+    "6830500|b053a6f78a0de162dd0774b882f5a7c44a70da30b9bf8ddf91167989f78a01d5|ko-paraphrase-v1": {
+      "sourceRecipeId": "6830500",
+      "sourceContentHash": "b053a6f78a0de162dd0774b882f5a7c44a70da30b9bf8ddf91167989f78a01d5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "생생 정보통 황금레시피 6146, 오이미역냉국 만들기!!",
+      "detailIngredients": [
+        "미역 1줌",
+        "오이 1개",
+        "양파 1/4개",
+        "청양고추",
+        "물 600ml",
+        "소금 1큰술",
+        "설탕 4큰술",
+        "식초 6큰술",
+        "통깨"
+      ],
+      "steps": [
+        "미역을 물에 잠시 불린 뒤 충분히 주물러 씻는다.",
+        "불린 미역을 먹기 편한 길이로 잘라 둔다.",
+        "오이를 깨끗이 씻고 돌기를 긁어낸 다음 채 썬다.",
+        "양파를 가늘게 썰어 물에 담가 매운맛을 덜어낸다.",
+        "물 600ml를 준비한다.",
+        "소금 1큰술을 넣는다.",
+        "설탕 4큰술을 더한다.",
+        "식초 6큰술을 넣고 녹을 때까지 젓는다.",
+        "채 썬 오이와 양파를 국물에 넣는다.",
+        "얼음과 미역은 먹기 직전에 넣어 식감을 살린다.",
+        "마지막에 국물과 통깨, 청양고추를 더한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "오이"
+        ],
+        "family": "other",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
+    "6831097|bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437|ko-paraphrase-v1": {
+      "sourceRecipeId": "6831097",
+      "sourceContentHash": "bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "연어 간장조림",
+      "detailIngredients": [
+        "연어 200g",
+        "정종 (원문 수량 미표기)",
+        "소금 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)",
+        "간장 1.5T",
+        "올리고당 1T",
+        "물 100ml",
+        "참기름 (원문 수량 미표기)",
+        "마늘 (원문 수량 미표기)",
+        "양파 1/2개",
+        "쪽파 (원문 수량 미표기)",
+        "카놀라유 (조리 4단계, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "연어를 먹기 좋은 크기로 나눈다.",
+        "소금과 후추, 정종 1/2스푼으로 연어에 밑간한다.",
+        "간장 1.5T, 올리고당 1T, 물 100ml에 참기름·다진 마늘·다진 양파를 섞어 조림장을 만든다.",
+        "팬에 카놀라유를 두르고 편으로 썬 마늘을 볶아 향을 낸다.",
+        "연어를 중불에서 굽는다.",
+        "한 면이 익으면 뒤집고 양념장 절반과 채 썬 양파 1/4개를 넣는다. 끓기 시작한 지 1분 후 다시 뒤집어 남은 장을 넣고 익힌다.",
+        "접시에 옮긴 뒤 얇게 썬 양파와 쪽파로 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "연어"
+        ],
+        "family": "salmon",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
     "6831160|c98f196e28066d348a0b59b1a6471fbecb701c3a9fa82dc50c617ae8a58a5b45|ko-paraphrase-v1": {
       "sourceRecipeId": "6831160",
       "sourceContentHash": "c98f196e28066d348a0b59b1a6471fbecb701c3a9fa82dc50c617ae8a58a5b45",
@@ -813,6 +1089,92 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6832918|fee183e9298e3f989957600a6e1012a3d42032fe992ea13696df20cae61a8fce|ko-paraphrase-v1": {
+      "sourceRecipeId": "6832918",
+      "sourceContentHash": "fee183e9298e3f989957600a6e1012a3d42032fe992ea13696df20cae61a8fce",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 달걀 볶음밥",
+      "detailIngredients": [
+        "토마토 2개",
+        "대파 1/3개",
+        "식용유 적당량",
+        "계란 3개",
+        "양파 1/2개",
+        "밥 2공기",
+        "다진마늘 1큰술",
+        "후추 약간",
+        "소금 약간"
+      ],
+      "steps": [
+        "양파와 대파를 잘게 다진다.",
+        "토마토는 꼭지를 잘라 내고 숟가락으로 즙이 많은 속을 긁어낸 뒤 겉살을 잘게 다진다. 긁어낸 속은 갈아서 주스로 마셔도 된다.",
+        "기름 두른 팬에 계란 3개를 깨 넣고 젓가락으로 저어 스크램블을 만든 뒤 따로 덜어 둔다.",
+        "다시 팬에 기름을 두르고 양파와 다진마늘 1큰술을 볶다가 양파가 투명해지면 밥 두 공기, 스크램블, 다진 토마토, 다진 파를 넣고 소금과 후추로 간한다.",
+        "토마토가 으깨지지 않도록 살살 볶아 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "stirfry",
+        "kind": "main"
+      }
+    },
+    "6833420|2b13f55ddd33c517451205925e0f3db9428ff311b332462d7bb3fff20ae7f183|ko-paraphrase-v1": {
+      "sourceRecipeId": "6833420",
+      "sourceContentHash": "2b13f55ddd33c517451205925e0f3db9428ff311b332462d7bb3fff20ae7f183",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "연어 스테이크와 연어 타르타르",
+      "detailIngredients": [
+        "연어(타르타르용) 100g",
+        "방울토마토 4개",
+        "양배추(타르타르용) 1/4개",
+        "허브채소 1컵",
+        "연어(스테이크용) 400g",
+        "마늘 3개",
+        "양배추(가니쉬용) 1/4개",
+        "바질가루 조금",
+        "마요네즈 3큰술",
+        "소금 조금",
+        "후춧가루 조금",
+        "레몬쥬스 조금",
+        "화이트와인 2t",
+        "소금(스테이크용) 조금",
+        "후추(스테이크용) 조금",
+        "바질가루(스테이크용) 조금",
+        "올리브유 2큰술"
+      ],
+      "steps": [
+        "토마토와 타르타르용 연어를 작은 주사위 모양으로 썰고, 양배추와 깻잎 같은 향채도 썰어 한데 모은 뒤 바질가루, 소금, 후추로 간한다.",
+        "레몬즙을 뿌리고 마요네즈를 더해 고루 버무린다.",
+        "버무린 것을 그릇에 담아 연어 타르타르를 마무리한다.",
+        "곁들임을 만들기 위해 팬에 올리브유와 얇게 썬 마늘을 넣고 볶아 마늘 향을 낸다.",
+        "가니쉬용 양배추를 넣어 함께 볶다가 소금과 후추로 간하고 레몬즙으로 마무리한다.",
+        "볶은 양배추와 마늘을 따로 덜어 둔다.",
+        "스테이크용 생연어에 화이트와인, 바질가루, 소금, 후추를 뿌려 맛이 배게 둔다.",
+        "팬에 올리브유를 두르고 완전히 뜨거워질 때까지 달군 다음 연어를 올려 굽는다.",
+        "겉이 바삭해지면 접시에 가니쉬를 깔고 구운 연어를 얹어 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "연어"
+        ],
+        "family": "salmon",
+        "method": "grill",
+        "kind": "main"
+      }
     },
     "6833593|27f91ef0e7c8ac534153367bd07e3b2d694fca8a26c318d8fe041a6a39f10374|ko-paraphrase-v1": {
       "sourceRecipeId": "6833593",
@@ -856,6 +1218,47 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6835531|5d0e38e5dec6b57c5b7cb57a8ec34cade94ad405c840da6f7d39f833dfd927be|ko-paraphrase-v1": {
+      "sourceRecipeId": "6835531",
+      "sourceContentHash": "5d0e38e5dec6b57c5b7cb57a8ec34cade94ad405c840da6f7d39f833dfd927be",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "사과 수프",
+      "detailIngredients": [
+        "사과 1개",
+        "양파 2/3개",
+        "우유 1컵",
+        "생크림 1컵",
+        "계피가루 1티스푼",
+        "파슬리 약간",
+        "소금 1티스푼",
+        "버터 1조각 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "사과와 양파를 깨끗이 씻어 준비한다.",
+        "둘 다 가능한 한 얇게 썬다.",
+        "종이컵으로 우유 1컵과 생크림 1컵을 계량한다.",
+        "버터 1조각을 준비한다.",
+        "냄비에 버터를 녹여 양파를 먼저 오래 볶고, 양파가 흐물흐물해지면 사과를 넣어 부서질 때까지 함께 볶는다.",
+        "우유와 생크림을 1컵씩 붓고 약불에서 5분쯤 끓인 뒤 핸드블렌더로 곱게 간다. 믹서를 쓸 때는 한김 식힌 다음 간다.",
+        "알갱이가 남지 않을 만큼 매끈하게 간다.",
+        "계피가루를 넣고 뭉치지 않게 다시 갈아 준 뒤 소금 1티스푼으로 마무리한다. 통계피를 쓰면 5분 정도 끓였다가 건져 낸다.",
+        "완성된 수프를 그릇에 담는다.",
+        "파슬리를 뿌려 낸다. 계피 양은 취향에 맞게 늘려도 된다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "사과"
+        ],
+        "family": "fruit",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
     "6837129|d4f97707ef453a046210a8658ffcae8f98b01ca83b77ef199448779c4b474e4b|ko-paraphrase-v1": {
       "sourceRecipeId": "6837129",
       "sourceContentHash": "d4f97707ef453a046210a8658ffcae8f98b01ca83b77ef199448779c4b474e4b",
@@ -889,6 +1292,90 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6838369|862e66ae532b0002de6619e0afa42824257ee5a157d207053d36d94b641cb4b3|ko-paraphrase-v1": {
+      "sourceRecipeId": "6838369",
+      "sourceContentHash": "862e66ae532b0002de6619e0afa42824257ee5a157d207053d36d94b641cb4b3",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "매콤한 참치 감자조림",
+      "detailIngredients": [
+        "감자 3개",
+        "양파 1개",
+        "청양고추 3개",
+        "대파 약간",
+        "물 1.5컵",
+        "참치1캔 100g",
+        "고추장 1스푼",
+        "고춧가루 2스푼",
+        "다진마늘 1스푼",
+        "간장 2스푼",
+        "설탕 1스푼",
+        "참기름 1/2스푼"
+      ],
+      "steps": [
+        "감자 껍질을 벗기고 알맞은 크기로 자른다.",
+        "양파는 감자와 비슷한 두께로 썰고, 청양고추와 대파는 잘게 다진다.",
+        "손질한 감자, 양파, 대파, 청양고추를 모두 냄비에 담는다.",
+        "기름을 따라낸 참치 1캔을 그릇에 담고 분량의 양념을 넣어 고루 버무린다.",
+        "버무린 양념을 냄비에 넣고 물 1컵 반을 함께 붓는다.",
+        "불을 켜 양념을 고루 섞은 다음 뚜껑을 덮고 중불에서 은근히 끓인다.",
+        "10분쯤 지나면 한 번 저어 주고 약불로 줄여 계속 끓인다.",
+        "감자가 부드럽게 다 익으면 완성한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6838708|3ff573293721d450a69d796b60d225262e35e4ea89367e54c7f8bc175a53a964|ko-paraphrase-v1": {
+      "sourceRecipeId": "6838708",
+      "sourceContentHash": "3ff573293721d450a69d796b60d225262e35e4ea89367e54c7f8bc175a53a964",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "아기 찜닭",
+      "detailIngredients": [
+        "닭가슴살 1덩이",
+        "감자 1/2개",
+        "간장 1/2큰술",
+        "올리고당 1/2큰술",
+        "통깨 (원문 수량 미표기)",
+        "후추 (원문 수량 미표기)",
+        "청주 조금",
+        "우유 (원문 수량 미표기)",
+        "물 (원문 수량 미표기)",
+        "식용유 (원문 수량 미표기)",
+        "깨소금 (원문 수량 미표기)",
+        "당면 (선택, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "닭가슴살을 우유에 10분쯤 담가 잡내를 뺀 뒤 아이가 먹기 좋게 썰어 후추와 청주로 밑간한다.",
+        "감자를 한입 크기로 썰어 물에 담가 전분을 빼고 기름 두른 팬에서 볶는다.",
+        "감자가 투명해지면 재료가 잠길 만큼만 물을 붓고 졸여 더 익힌다.",
+        "물이 어느 정도 줄면 닭가슴살을 넣어 함께 볶는다.",
+        "간장 반 큰술에 물 3분의 1컵을 섞어 붓고 올리고당 반 큰술을 더해 졸이며, 불린 당면을 쓸 경우 이때 함께 넣는다.",
+        "국물이 자작하게 남으면 깨소금을 뿌려 버무린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살"
+        ],
+        "family": "chicken",
+        "method": "steam",
+        "kind": "main"
+      }
     },
     "6842384|d6ce15c3fc44ba235327d2fa473219ed228ac53443224031f4c1aeb438b03efe|ko-paraphrase-v1": {
       "sourceRecipeId": "6842384",
@@ -1073,6 +1560,40 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6853815|afd644a6f082f67e852bc23729121e9fbaf87cfcf7c7b81c0f18adda6e967328|ko-paraphrase-v1": {
+      "sourceRecipeId": "6853815",
+      "sourceContentHash": "afd644a6f082f67e852bc23729121e9fbaf87cfcf7c7b81c0f18adda6e967328",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-15",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-15",
+      "title": "6.1.4.6.의 맞춤의 맛있고 시원한 오이냉국~~",
+      "detailIngredients": [
+        "오이 1개",
+        "물 600ml",
+        "소금 1스푼",
+        "설탕 4스푼",
+        "식초 6스푼",
+        "깨소금 약간"
+      ],
+      "steps": [
+        "소금·설탕·식초는 원문의 6.1, 이어지는 4.6 수치로 맞춰 냉국을 만들고 냉장 보관한다.",
+        "도깨비방망이나 믹서기로 재료를 고루 섞은 다음 차갑게 식힌다.",
+        "오이를 채 썰어 소금에 절였다가 물기를 꼭 짜거나 생으로 준비한다.",
+        "차갑게 둔 국물을 식사 직전에 오이 위에 끼얹는다.",
+        "마지막으로 깨소금을 조금 더하고 선택적으로 미역을 곁들인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "오이"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "main"
+      }
     },
     "6855815|3b9ff622b32fb26ef26af19402bdacc1c5da743f9c6dca1e76ba7128a37f2040|ko-paraphrase-v1": {
       "sourceRecipeId": "6855815",
@@ -1275,6 +1796,85 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6859075|8665d8bd72ebe1adf33eb0b460033edd487be76e2f893f60476b6a858ca89c7c|ko-paraphrase-v1": {
+      "sourceRecipeId": "6859075",
+      "sourceContentHash": "8665d8bd72ebe1adf33eb0b460033edd487be76e2f893f60476b6a858ca89c7c",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "햄치즈 하트 토스트",
+      "detailIngredients": [
+        "비엔나소시지 4개",
+        "식빵 2장",
+        "치즈 2장",
+        "연유 적당량",
+        "잼 적당량",
+        "마요네즈 적당량",
+        "케찹 적당량"
+      ],
+      "steps": [
+        "소시지의 양 끝부분을 가위로 잘라낸다.",
+        "끝을 다듬은 소시지를 비스듬한 방향으로 자른다.",
+        "비스듬히 자른 소시지를 다시 절반으로 가른다.",
+        "가른 소시지 두 조각의 단면이 마주 보도록 놓는다.",
+        "두 조각을 맞붙여 하트 모양을 만든다.",
+        "식빵 테두리를 가위로 다듬고 1장을 4등분한다.",
+        "치즈 역시 4등분해 둔다.",
+        "식빵 조각에 연유를 펴 바르고, 없으면 잼이나 케찹, 마요네즈 같은 재료로 대신한다.",
+        "바른 면 위에 치즈 조각을 하나씩 얹는다.",
+        "하트 소시지를 올린 뒤 오븐 170도에서 치즈가 살짝 녹을 만큼만 데우며, 전자레인지로 데워도 된다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "치즈"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "breakfast"
+      }
+    },
+    "6860486|edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b|ko-paraphrase-v1": {
+      "sourceRecipeId": "6860486",
+      "sourceContentHash": "edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "전자레인지 달걀밥",
+      "detailIngredients": [
+        "밥 1/2공기",
+        "달걀 2개",
+        "물 100ml",
+        "햄 or 스팸 1/4개 (30g)",
+        "다진 대파 1T",
+        "피자치즈 1/2컵",
+        "슬라이스 치즈 1/2장",
+        "간장 1/2T",
+        "소금 약간",
+        "후추 약간"
+      ],
+      "steps": [
+        "햄 또는 스팸 1/4개(30g)와 대파 1T를 잘게 썬다.",
+        "전자레인지용 그릇에 달걀 2개를 풀고 물 100ml, 소금·후추를 섞는다.",
+        "밥 1/2공기와 햄, 다진 대파 1T, 간장 1/2T을 달걀물에 고루 섞는다.",
+        "랩을 씌워 증기가 빠질 구멍을 내고 전자레인지에서 약 3분 가열한다.",
+        "꺼내어 내용물이 고르게 익도록 다시 섞는다.",
+        "피자치즈 1/2컵과 슬라이스치즈 1/2장을 올려 약 3분 더 가열한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "달걀"
+        ],
+        "family": "egg",
+        "method": "rice",
+        "kind": "main"
+      }
+    },
     "6861652|3a4d8208e48974cd8bb01cc386493e18223aab805513fd50f639974ddc14cdab|ko-paraphrase-v1": {
       "sourceRecipeId": "6861652",
       "sourceContentHash": "3a4d8208e48974cd8bb01cc386493e18223aab805513fd50f639974ddc14cdab",
@@ -1307,6 +1907,137 @@
         "kind": "side"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6864727|e8288597f1913103a4cc85e3e0b35e7fe12cf1d47f5d15366a19699f35625431|ko-paraphrase-v1": {
+      "sourceRecipeId": "6864727",
+      "sourceContentHash": "e8288597f1913103a4cc85e3e0b35e7fe12cf1d47f5d15366a19699f35625431",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "데리야키 소고기 스테이크 덮밥",
+      "detailIngredients": [
+        "소고기 등심 200g",
+        "숙주 1줌",
+        "통마늘 5개",
+        "버터 1T",
+        "후추 약간",
+        "소금 약간",
+        "올리브유 2T",
+        "팬에 두를 올리브유 (원문 수량 미표기)",
+        "밥 1공기",
+        "간장 3T",
+        "맛술 3T",
+        "설탕 1T",
+        "로즈마리 1줄기",
+        "송송썬 쪽파 1T"
+      ],
+      "steps": [
+        "등심 200g을 큼직하게 썰어 소금 약간, 후추 약간, 올리브유 2T를 더해 잠시 재운다.",
+        "달군 팬에 올리브유를 두르고 통마늘 5개를 얇게 저며 볶는다.",
+        "마늘이 투명해지면 재워 둔 고기, 버터 1T, 로즈마리 1줄기를 넣어 볶는다.",
+        "고기 표면이 노릇해지면 간장 3T, 맛술 3T, 설탕 1T를 섞은 소스를 부어 졸인다.",
+        "고기를 졸였던 팬에 숙주 1줌을 넣고 숨이 살짝 죽을 정도로만 볶는다.",
+        "밥 1공기를 그릇에 담고 고기와 숙주를 얹은 뒤 쪽파 1T를 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "소고기등심"
+        ],
+        "family": "beef",
+        "method": "grill",
+        "kind": "main"
+      }
+    },
+    "6865417|eec1cd375d7cbd6efbe45a99189766321344a7183fb841fb87184ab0433b016d|ko-paraphrase-v1": {
+      "sourceRecipeId": "6865417",
+      "sourceContentHash": "eec1cd375d7cbd6efbe45a99189766321344a7183fb841fb87184ab0433b016d",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "참치 감자조림",
+      "detailIngredients": [
+        "감자 2개",
+        "양파 1/4개",
+        "참치캔 1개",
+        "대파 조금",
+        "청양고추 1개",
+        "고추장 1T",
+        "고춧가루 1.5T",
+        "설탕 1.5T",
+        "간장 2T",
+        "다진마늘 1T"
+      ],
+      "steps": [
+        "참치캔 하나를 준비하고 감자 2개는 씻어 껍질을 벗기며 양파와 대파도 꺼내 둔다.",
+        "감자를 가늘게 채 썰어 냄비 바닥에 깐다.",
+        "양파도 채 썰어 감자 위에 올리되 너무 얇지 않게 썬다.",
+        "청양고추를 썰어 넣는데 매운 정도는 취향대로 조절한다.",
+        "참치캔 기름을 조금만 따라 내고 참치를 모두 위에 붓는다.",
+        "다진 마늘을 올린다.",
+        "빈 참치캔에 고추장 크게 한 술, 고춧가루 1.5, 설탕 1.5, 간장 2, 다진마늘 1을 넣고 섞어 양념장을 만든다.",
+        "만든 양념장을 재료 위에 얹는다.",
+        "빈 참치캔으로 물을 2캔에서 3캔 정도 붓는다.",
+        "모든 재료를 넣은 상태로 불에 올려 끓인다.",
+        "감자는 익는 데 시간이 걸리므로 국물이 넉넉해도 충분히 끓인다.",
+        "대파를 넣는데 넉넉히 넣을수록 좋다.",
+        "국물이 줄며 감자가 드러나면 거의 다 된 것이다. 물을 3캔 넣으면 국물이 자작하게 남는다.",
+        "국물이 자작하게 남은 상태로 반찬이나 덮밥으로 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6866942|87e52bd7a0bbddddde9a2caef86bc1cce24c1872764ab03fdca94650ee98a9d5|ko-paraphrase-v1": {
+      "sourceRecipeId": "6866942",
+      "sourceContentHash": "87e52bd7a0bbddddde9a2caef86bc1cce24c1872764ab03fdca94650ee98a9d5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 볶음밥",
+      "detailIngredients": [
+        "토마토 2개",
+        "양파 1/2개",
+        "베이컨 4~5줄",
+        "밥 2공기",
+        "올리브오일 적당량",
+        "파프리카 가루 1작은술",
+        "후추 약간",
+        "케첩 1숟가락",
+        "파마산치즈가루 1숟가락",
+        "바질가루 약간"
+      ],
+      "steps": [
+        "양파를 잘게 다진다.",
+        "토마토에 칼집을 넣어 뜨거운 물에 잠깐 담가 껍질이 쉽게 벗겨지게 한다.",
+        "베이컨을 잘게 썬다.",
+        "껍질을 벗긴 토마토를 잘게 다진다.",
+        "팬에 올리브오일을 두르고 양파와 베이컨을 볶는다.",
+        "케첩 1수저와 밥 두 공기를 넣어 함께 볶는다.",
+        "바질가루 약간과 파마산 치즈가루를 뿌려 마무리하며, 바질가루는 생략해도 된다.",
+        "손질부터 볶기까지 15분 정도면 완성된다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "stirfry",
+        "kind": "main"
+      }
     },
     "6867478|7d53ec89dbd046b850f1c6fba75caba1296e9958728de739232a9aa5408ceefc|ko-paraphrase-v1": {
       "sourceRecipeId": "6867478",
@@ -1394,6 +2125,51 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6869220|423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2|ko-paraphrase-v1": {
+      "sourceRecipeId": "6869220",
+      "sourceContentHash": "423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "감자 양파 간장조림",
+      "detailIngredients": [
+        "감자 2개",
+        "양파 1/2개",
+        "청양고추 1개",
+        "간장 5스푼",
+        "설탕 2스푼",
+        "다진파 1.5스푼",
+        "다진마늘 1스푼",
+        "참기름 0.8스푼",
+        "깨소금 1/2스푼",
+        "후추 약간",
+        "식용유 (조리 4단계, 원문 수량 미표기)",
+        "물 1컵 (조리 5단계)"
+      ],
+      "steps": [
+        "감자를 껍질 벗겨 깍둑썰기하고 잠시 찬물에 담근다.",
+        "양파와 고추를 먹기 좋게 썬다. 덜 맵게 먹으려면 청양고추 대신 풋고추를 쓸 수 있다.",
+        "간장 5스푼, 설탕 2스푼, 다진 파 1.5스푼, 다진 마늘 1스푼, 참기름 0.8스푼, 깨소금 반 스푼과 후추를 섞는다.",
+        "냄비에 식용유를 두르고 감자 겉면이 투명해질 때까지 볶는다.",
+        "물 1컵과 양념장을 넣고 뚜껑을 덮어 중간불에서 감자를 익힌다.",
+        "양파를 넣고 양념을 끼얹으며 국물이 거의 없어질 때까지 졸인다.",
+        "고추를 넣어 조금 더 익힌 뒤 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "side",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
     "6870448|d7bd18b826af4fb42446dc47b186236c89985fd72e05662b2054c2cbe001cf03|ko-paraphrase-v1": {
       "sourceRecipeId": "6870448",
       "sourceContentHash": "d7bd18b826af4fb42446dc47b186236c89985fd72e05662b2054c2cbe001cf03",
@@ -1425,6 +2201,46 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6871272|99aa22e7f96a9a1f8b14369f456a76f5220e680b36861df1d6f95f93a8e21b04|ko-paraphrase-v1": {
+      "sourceRecipeId": "6871272",
+      "sourceContentHash": "99aa22e7f96a9a1f8b14369f456a76f5220e680b36861df1d6f95f93a8e21b04",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "감자 두부조림",
+      "detailIngredients": [
+        "두부 1모",
+        "감자 6개 (소 650g)",
+        "양파 1개 (중 150g)",
+        "잔파(쪽파) 6줄기",
+        "진간장 3T",
+        "국간장 3T",
+        "물 1컵",
+        "매실청 1T",
+        "아가베/물엿/올리고당 2T",
+        "간마늘 1T",
+        "고추장 2T",
+        "고추가루 2T"
+      ],
+      "steps": [
+        "감자 껍질을 벗겨 큼직하게 자르고 씻어서 조릴 냄비에 곧바로 담는다.",
+        "섞어 둔 조림 양념을 감자 위에 전부 붓는다.",
+        "가늘게 썬 양파와 비슷한 길이로 썬 파를 흩어 올리고 썬 두부를 맨 위에 얹는다.",
+        "숟가락으로 가볍게 뒤섞은 다음 강불에 올려 끓인다.",
+        "감자가 익고 국물이 자작하게 줄어들면 불에서 내린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "main"
+      }
     },
     "6872166|ad5432c904a76b4103c897e67277af98232d3258f134c08a92b5e2e0a47f71bf|ko-paraphrase-v1": {
       "sourceRecipeId": "6872166",
@@ -1529,6 +2345,45 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6874217|f0657c29adabee6f799fd6555db9775bbaea3565ba3d8307785182e668721d66|ko-paraphrase-v1": {
+      "sourceRecipeId": "6874217",
+      "sourceContentHash": "f0657c29adabee6f799fd6555db9775bbaea3565ba3d8307785182e668721d66",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "포도주스와 포도잼",
+      "detailIngredients": [
+        "포도주스용 포도 3송이",
+        "설탕 4~5큰술",
+        "물 5컵",
+        "배 1/5조각",
+        "포도잼용 포도 3송이",
+        "물 1컵",
+        "설탕 2컵",
+        "베이킹소다 또는 식초 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "주스용 포도는 알을 떼어 베이킹소다나 식초로 씻은 뒤 물기를 제거하고, 배는 얇게 저민다.",
+        "냄비에 포도, 설탕, 배, 물을 담고 뚜껑을 덮어 12분쯤 끓이되 넘치지 않게 살피고, 알과 껍질이 물러지면 식혀 체에 거른 뒤 남은 건더기를 거즈로 한 번 더 짠다.",
+        "끓는 물로 소독한 유리병에 주스를 담아 냉장고에서 차갑게 두었다가 얼음을 띄워 마신다.",
+        "잼용 포도도 알을 떼어 같은 방법으로 씻은 뒤 물기를 제거한다.",
+        "포도를 냄비에 담고 물 1컵을 부어 뚜껑을 닫은 채 10분 남짓 끓이며 넘치지 않게 한다.",
+        "알과 껍질이 말랑해지면 불에서 내려 체에 밭쳐 즙을 거르고, 체에 남은 포도도 한 번 더 짠다.",
+        "거른 즙을 냄비에 붓고 설탕을 넣어 약한 불에서 12~15분 끓이다가 걸쭉해지면 내려 식힌 뒤 끓는 물로 소독한 병에 담으며, 설탕 양은 포도 크기에 맞춰 조절한다.",
+        "완성된 잼은 식빵이나 건빵 등에 곁들여 먹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "포도"
+        ],
+        "family": "other",
+        "method": "other",
+        "kind": "breakfast"
+      }
     },
     "6875439|9938c41f9cb8ab54199f8052e4804a321f53c3838040079c3381c3cf6d70956e|ko-paraphrase-v1": {
       "sourceRecipeId": "6875439",
@@ -1691,6 +2546,178 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6879897|385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59|ko-paraphrase-v1": {
+      "sourceRecipeId": "6879897",
+      "sourceContentHash": "385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "파프리카 달걀찜",
+      "detailIngredients": [
+        "파프리카 1개",
+        "계란 2개",
+        "소금 (원문 수량 미표기)",
+        "후추 약간",
+        "양파 (원문 수량 미표기)",
+        "애호박 (원문 수량 미표기)",
+        "당근 약간"
+      ],
+      "steps": [
+        "안정적으로 세울 수 있는 파프리카를 골라 씻는다.",
+        "윗부분을 뚜껑처럼 잘라내고 씨와 속을 정리한다.",
+        "냉장고의 양파·애호박·당근을 잘게 썰어 달걀과 섞는다. 원문에 양파와 애호박의 수량은 없다.",
+        "소금과 후추로 간하여 달걀물을 만든다.",
+        "파프리카를 전자레인지용 그릇에 세우고 속의 약 80%까지만 달걀물을 채운다.",
+        "원문 기준 파프리카 1개는 약 2분 30초, 2개는 약 5분 가열한다. 기기에 따라 달걀이 익는 상태를 확인하며 조절한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "other",
+        "method": "steam",
+        "kind": "side",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6880331|cf86f1d450e28bb7ab9cce489c74dcf40675b5dc6c75805a25da6e5acb69228d|ko-paraphrase-v1": {
+      "sourceRecipeId": "6880331",
+      "sourceContentHash": "cf86f1d450e28bb7ab9cce489c74dcf40675b5dc6c75805a25da6e5acb69228d",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "버섯 채소 덮밥",
+      "detailIngredients": [
+        "팽이버섯 1봉지",
+        "양송이 5-6개",
+        "표고버섯 4-5개",
+        "당근 1/2개",
+        "양파 1/2개",
+        "대파 1/2대",
+        "간마늘 1숟가락",
+        "달걀흰자 (원문 수량 미표기)",
+        "녹말물 3숟가락",
+        "식용유 (원문 수량 미표기)",
+        "물 또는 육수 (원문 수량 미표기)",
+        "간장 (원문 수량 미표기)",
+        "굴소스 (원문 수량 미표기)",
+        "소금 (원문 수량 미표기)",
+        "후춧가루 (원문 수량 미표기)",
+        "참기름 (원문 수량 미표기)",
+        "밥 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "채소와 버섯을 가늘게 채 썰고, 팽이버섯은 밑동을 잘라낸 뒤 결을 따라 찢는다.",
+        "팬에 기름을 두르고 다진 마늘과 대파를 볶아 기름에 향을 낸다.",
+        "향이 오르면 당근과 양파를 넣어 볶는다.",
+        "양파가 반쯤 투명해지면 센불로 올려 양송이와 표고버섯을 재빨리 볶는다.",
+        "끝으로 팽이버섯을 넣어 볶는다.",
+        "볶은 버섯에 육수나 물을 재료가 잠길 정도로만 붓고, 끓어오르면 간장과 굴소스로 간한다.",
+        "다시 끓기 시작하면 달걀흰자를 조금씩 넣고 저으며 익히되 오래 끓이지 않는다.",
+        "약불로 줄인 뒤 녹말물을 뭉치지 않게 저으며 넣어 국물을 걸쭉하게 만든다.",
+        "소금과 후춧가루로 간을 맞추고 참기름 한 숟가락을 둘러 고소함을 더한다.",
+        "따뜻한 밥 위에 얹어 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "버섯"
+        ],
+        "family": "other",
+        "method": "rice",
+        "kind": "main"
+      }
+    },
+    "6880341|a3671932405a5977c304310d31c2ebb05d85ecd2db21ba8bfb5f2fb68632a643|ko-paraphrase-v1": {
+      "sourceRecipeId": "6880341",
+      "sourceContentHash": "a3671932405a5977c304310d31c2ebb05d85ecd2db21ba8bfb5f2fb68632a643",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "참치 감자조림",
+      "detailIngredients": [
+        "감자 1개",
+        "참치캔 1개",
+        "양파 1개",
+        "대파 1대",
+        "청양고추 2개",
+        "다시육수 2컵",
+        "고추장 1큰술",
+        "간장 2큰술",
+        "고춧가루 1큰술",
+        "다진마늘 1큰술",
+        "자일로스설탕 0.5큰술",
+        "후추 톡톡 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "감자는 한입에 먹기 좋게 자르고, 양파는 가늘게 썰며, 대파와 고추는 비스듬히 썬다.",
+        "자른 감자를 냄비 바닥에 깐다.",
+        "그 위에 양파와 참치를 올리고, 참치 국물은 취향에 따라 함께 넣는다.",
+        "대파와 고추를 위에 올린다.",
+        "양념 재료를 전부 볼에 모으고 물을 조금 붓는다.",
+        "양념이 고르게 섞이도록 젓는다.",
+        "물이나 육수를 종이컵으로 2.5 컵쯤 붓고 만든 양념을 재료 위에 고루 얹는다.",
+        "센불에 올려 끓어오르게 한다.",
+        "끓으면 약불로 낮춰 국물이 자작해질 때까지 졸인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6880443|a1f504c296b91201b5770e14608a380b5088d863edaba4a704b05a07c774b404|ko-paraphrase-v1": {
+      "sourceRecipeId": "6880443",
+      "sourceContentHash": "a1f504c296b91201b5770e14608a380b5088d863edaba4a704b05a07c774b404",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "꽈리고추 소고기조림",
+      "detailIngredients": [
+        "소고기 등심 200g (또는 안심)",
+        "마늘 2-3개",
+        "꽈리고추 20개",
+        "참기름 조금",
+        "통깨 조금",
+        "간장 1.5TS",
+        "설탕 1TS",
+        "물 6TS",
+        "후춧가루 조금",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "간장, 설탕, 물, 후춧가루로 양념장을 미리 섞어 둔다.",
+        "소고기는 한입 크기로 썰고, 마늘은 얇게 저미며, 꽈리고추는 꼭지를 따서 2-3조각으로 자른다.",
+        "팬을 달궈 식용유를 두르고 저민 마늘을 볶아 향을 낸다.",
+        "소고기를 넣어 표면을 익히고 양념장을 부은 뒤 센불로 보글보글 끓인다.",
+        "국물이 조금 졸면 꽈리고추를 넣어 볶고 참기름을 둘러 섞어 마친다.",
+        "그릇에 옮겨 담고 통깨를 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "소고기등심"
+        ],
+        "family": "beef",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
     "6880921|4501e11086d77da12d202cac6688e53be4062b67ce7012c8e34030a3508aeb57|ko-paraphrase-v1": {
       "sourceRecipeId": "6880921",
       "sourceContentHash": "4501e11086d77da12d202cac6688e53be4062b67ce7012c8e34030a3508aeb57",
@@ -1812,6 +2839,48 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6886747|f91774ce230c50a9b0ceb67e5d73060b9ec2a821f864a94ce93b5edfd1035a69|ko-paraphrase-v1": {
+      "sourceRecipeId": "6886747",
+      "sourceContentHash": "f91774ce230c50a9b0ceb67e5d73060b9ec2a821f864a94ce93b5edfd1035a69",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "감자 스팸 짜글이",
+      "detailIngredients": [
+        "스팸 200g",
+        "감자 2개",
+        "양파 1개",
+        "홍고추 1개",
+        "청양고추 2개",
+        "대파 1/2개",
+        "고춧가루 2큰술",
+        "고추장 1큰술",
+        "된장 1/3큰술",
+        "간장 2큰술",
+        "설탕 1큰술",
+        "마늘 1큰술",
+        "물 2컵"
+      ],
+      "steps": [
+        "채소를 먹기 좋은 크기로 썬다.",
+        "스팸을 비닐봉지에 넣고 손으로 주물러 잘게 으깬다.",
+        "분량의 양념 재료를 섞어 양념장을 만든다.",
+        "냄비에 모든 재료와 양념장을 담고 물 두 컵을 부어 끓인다.",
+        "세게 끓이며 감자가 익을 때까지 둔다. 간장은 두 큰술이 알맞다.",
+        "국물이 졸아 짜지면 물을 조금 더하고 간장으로 간을 맞춘다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
     "6888739|6d1d29f76b326f79ef1a8edeabd260fb676a2894de9a27f6aa47efff6f9fab1a|ko-paraphrase-v1": {
       "sourceRecipeId": "6888739",
       "sourceContentHash": "6d1d29f76b326f79ef1a8edeabd260fb676a2894de9a27f6aa47efff6f9fab1a",
@@ -1890,6 +2959,332 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6892112|e5aa75cdbff035abefb43c7df614acf243224d09207ebdd02c69c740f14ed991|ko-paraphrase-v1": {
+      "sourceRecipeId": "6892112",
+      "sourceContentHash": "e5aa75cdbff035abefb43c7df614acf243224d09207ebdd02c69c740f14ed991",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "두부 감자조림",
+      "detailIngredients": [
+        "두부 1모",
+        "감자 3개 (작)",
+        "양파 1/2개 (작)",
+        "대파 1/3뿌리",
+        "진간장 4숟가락",
+        "물 1컵",
+        "마늘 1숟가락",
+        "고춧가루 2숟가락",
+        "참기름 약간",
+        "식용유 1숟가락"
+      ],
+      "steps": [
+        "두부를 썰어 키친타월 위에 올려 물기가 빠지도록 둔다.",
+        "감자는 두부와 비슷한 두께로 자른다.",
+        "자른 감자를 물에 담가 둔다.",
+        "양파는 가늘게 썰고 대파는 비스듬히 썬다.",
+        "양념장을 미리 섞어 준비한다.",
+        "손질이 끝나면 팬에 기름을 조금 두른다.",
+        "두부를 앞뒤로 살짝 노릇하게 지진다. 너무 바삭하게 지지면 조린 뒤 식감이 단단해지니 취향에 맞춘다.",
+        "냄비에 식용유 1수저를 두르고 썰어 둔 감자를 깐다.",
+        "손질한 채소의 절반을 올린다.",
+        "양념장도 절반만 붓는다.",
+        "지져 둔 두부를 그 위에 얹는다.",
+        "남은 채소를 모두 올린다.",
+        "남은 양념장도 전부 붓는다.",
+        "뚜껑을 덮고 센 불에서 끓이다가 끓어오르면 다음 단계로 넘어간다.",
+        "약불로 낮춰 감자가 푹 익고 국물이 자작하게 남을 때까지 조린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6892335|007c24baaa569dd5791cd8cdd05e76f750faa0ce1fc81831203ee8918577f460|ko-paraphrase-v1": {
+      "sourceRecipeId": "6892335",
+      "sourceContentHash": "007c24baaa569dd5791cd8cdd05e76f750faa0ce1fc81831203ee8918577f460",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 가지 덮밥",
+      "detailIngredients": [
+        "토마토 1~2개",
+        "가지 1개",
+        "양파 1/2개",
+        "식용유 1/2큰술",
+        "소금 조금",
+        "양조간장 1큰술",
+        "고춧가루 1작은술",
+        "다진파 1큰술",
+        "참기름+들기름 1큰술",
+        "통깨 (원문 수량 미표기)",
+        "깻잎 (원문 수량 미표기)",
+        "밥 2/3공기",
+        "다진마늘 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "토마토, 가지, 양파를 먹기 좋은 크기로 자른다.",
+        "팬에 식용유를 살짝 두르고 다진마늘과 양파를 볶는다.",
+        "토마토와 소금 약간을 넣어 볶다가 뚜껑을 덮어 토마토가 푹 익도록 두며, 껍질은 원하면 건져내도 된다.",
+        "가지, 양조간장, 고춧가루를 넣고 볶으며 기호에 따라 고추장이나 고추를 더해도 된다.",
+        "뚜껑을 덮고 가지가 충분히 무를 때까지 익힌다.",
+        "간을 본 뒤 다진 파를 넣고 불을 끈다.",
+        "참기름과 들기름을 넉넉히 둘러 통깨를 뿌리며, 이 상태로 반찬으로 먹어도 된다.",
+        "그릇에 밥을 담아 볶은 토마토 가지를 올리고 깻잎을 곁들인다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "rice",
+        "kind": "main"
+      }
+    },
+    "6894323|d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a|ko-paraphrase-v1": {
+      "sourceRecipeId": "6894323",
+      "sourceContentHash": "d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "새송이버섯 간장버터구이",
+      "detailIngredients": [
+        "새송이버섯 3송이",
+        "청양고추 1개",
+        "대파 1/2대",
+        "버터 1T",
+        "간장 5T",
+        "올리고당 2T",
+        "다진마늘 1T",
+        "참기름 1T",
+        "물 2T"
+      ],
+      "steps": [
+        "새송이버섯 3송이의 밑동을 다듬고 일정한 두께로 썬다. 대파와 청양고추는 잘게 썬다.",
+        "간장 5T, 올리고당 2T, 물 2T, 다진 마늘 1T, 참기름 1T를 섞고 대파와 고추를 더한다. 원문의 T는 성인용 숟가락 기준이다.",
+        "팬에 버터 1스푼을 녹이고 중약불로 버섯 양면을 굽는다.",
+        "버섯이 쫄깃하게 익으면 양념을 붓는다.",
+        "약불로 낮추고 양념이 타지 않게 졸여 완성한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "버섯"
+        ],
+        "family": "other",
+        "method": "grill",
+        "kind": "side",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6901019|5351c53d79515d97007ab72f56fdb0c28fb3582180cf2e241513ee1a8663e4e1|ko-paraphrase-v1": {
+      "sourceRecipeId": "6901019",
+      "sourceContentHash": "5351c53d79515d97007ab72f56fdb0c28fb3582180cf2e241513ee1a8663e4e1",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "전자레인지 치즈 어묵 과자",
+      "detailIngredients": [
+        "치즈 1장 (체다치즈)",
+        "어묵 1장",
+        "종이호일 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "어묵 1장과 체다치즈 1장을 준비한다.",
+        "어묵 위에 치즈를 얹고 어묵 밖으로 삐져나온 치즈는 잘라 낸다.",
+        "하트나 별 모양 쿠키틀을 준비한다.",
+        "틀로 원하는 모양을 찍어 낸다.",
+        "접시에 종이호일을 깔고 찍어 낸 조각을 올린다.",
+        "전자레인지에서 1분 돌리고 조각을 뒤집어 다시 1분 돌린 뒤, 덜 익었으면 30초 더 돌린다.",
+        "치즈 면과 어묵 면이 함께 바삭하게 구워졌는지 확인한다.",
+        "식기 전에 바로 먹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "치즈"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "breakfast"
+      }
+    },
+    "6901095|cc4f010ec765482a7fc8ade66850c1b6cec9dca81ba4d3148a8ff1689de97648|ko-paraphrase-v1": {
+      "sourceRecipeId": "6901095",
+      "sourceContentHash": "cc4f010ec765482a7fc8ade66850c1b6cec9dca81ba4d3148a8ff1689de97648",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "에어프라이어 연어 스테이크",
+      "detailIngredients": [
+        "연어 500g",
+        "올리브유 (원문 수량 미표기)",
+        "허브솔트 (원문 수량 미표기)",
+        "레몬즙 2큰술",
+        "로즈마리 (선택, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "에어프라이어로 연어 스테이크를 간단히 굽는 방법이다.",
+        "연어 앞뒤에 올리브유를 고르게 바른다.",
+        "레몬즙 2큰술(생략 가능)과 허브솔트를 고루 뿌리고, 있으면 로즈마리도 조금 더한다.",
+        "에어프라이어에 넣어 180도에서 10분 굽고, 뒤집어 180도에서 10분 더 구운 다음 취향에 따라 180도에서 5분에서 10분 추가로 굽는다.",
+        "10분씩 구운 뒤 가위로 열십자 모양 칼집을 내고 5분 더 굽는다. 부서지기 쉬우니 종이호일째 꺼내서 뒤집는다.",
+        "완성된 연어구이를 그릇에 담는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "연어"
+        ],
+        "family": "salmon",
+        "method": "grill",
+        "kind": "main"
+      }
+    },
+    "6902615|e1bbc18983b3f1a52da9ad210b047a92a3fc12f1e8f7ff72f61ab395188f615f|ko-paraphrase-v1": {
+      "sourceRecipeId": "6902615",
+      "sourceContentHash": "e1bbc18983b3f1a52da9ad210b047a92a3fc12f1e8f7ff72f61ab395188f615f",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "소고기 찹스테이크",
+      "detailIngredients": [
+        "소고기(등심) 400g",
+        "양파(소) 1개",
+        "파프리카 청색 1개",
+        "파프리카 홍색 1개",
+        "굴소스 2큰술",
+        "케챱 3큰술",
+        "설탕 1큰술",
+        "레드와인 3큰술 (없으면 생수)",
+        "다진마늘 1스푼",
+        "버터 약간",
+        "올리브유 약간",
+        "소금 약간",
+        "후추 약간",
+        "파슬리가루 약간",
+        "마늘 (다진마늘용, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "등심 양면에 올리브유를 바르고 소금과 후추로 밑간한 뒤 냉장고에서 30분쯤 재워 둔다.",
+        "숙성된 고기를 먹기 편한 크기로 자른다.",
+        "채소는 고기와 비슷한 크기로 깍둑 썬다.",
+        "굴소스 2, 케챱 3, 설탕 1, 레드와인 3에 다진마늘 1스푼을 더해 소스를 만들고, 와인이 없으면 생수로 대신한다.",
+        "달군 팬에 올리브유를 두르고 밑간한 고기를 센불에서 육즙이 빠지지 않게 짧게 볶는다.",
+        "고기 겉면이 익으면 중불로 낮추고 버터를 넣는다.",
+        "버터가 녹으면 손질한 채소를 넣는다.",
+        "소스를 붓고 센불에서 재빨리 볶아 채소의 아삭함과 고기 육즙을 살린다.",
+        "센불에서 짧게 익혀 마무리하고 그릇에 담는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "소고기등심"
+        ],
+        "family": "beef",
+        "method": "grill",
+        "kind": "main"
+      }
+    },
+    "6904655|284e6dca908486f18203fc045ca84a11c6e5a25fdc81d36f395db530b0c9b94e|ko-paraphrase-v1": {
+      "sourceRecipeId": "6904655",
+      "sourceContentHash": "284e6dca908486f18203fc045ca84a11c6e5a25fdc81d36f395db530b0c9b94e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 양파 수프",
+      "detailIngredients": [
+        "토마토 2개",
+        "양파 1/2개",
+        "다진마늘 1/2T",
+        "허브가루 약간",
+        "올리브오일 적당량",
+        "소금 약간",
+        "후추 약간",
+        "치킨스톡 작은거 1개",
+        "물 400ml"
+      ],
+      "steps": [
+        "재료를 준비한다. 일반 토마토는 2개를 쓰며, 방울토마토라면 6개 정도로 대신할 수 있다.",
+        "토마토는 적당한 크기로 자르고 양파는 납작하게 썬다.",
+        "팬에 올리브오일을 두르고 다진 마늘과 양파를 넣어 양파가 투명해질 때까지 볶는다.",
+        "양파가 투명해지면 자른 토마토를 넣고 가볍게 볶는다.",
+        "물과 치킨스톡을 넣고 끓인다.",
+        "끓어오르면 불을 줄여 약불에 가깝게 맞추고 12분쯤 더 끓인 뒤 소금과 후추로 간을 맞추고, 그릇에 담아 올리브오일을 조금 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
+    "6906563|d7ef9e002ba1346c84f692d0200e15a4f2164976d2729c6436913314d94028f6|ko-paraphrase-v1": {
+      "sourceRecipeId": "6906563",
+      "sourceContentHash": "d7ef9e002ba1346c84f692d0200e15a4f2164976d2729c6436913314d94028f6",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "구운 달걀 유자청 샐러드",
+      "detailIngredients": [
+        "양상추 약간",
+        "양배추 약간",
+        "케일 2장",
+        "쌈배추 1장",
+        "어린잎채소 약간",
+        "치커리 2장",
+        "구운 달걀 2개 (또는 삶은계란)",
+        "유자청 4큰술 (시판용)",
+        "식초 2큰술",
+        "레몬즙 1큰술",
+        "간장 1/2큰술",
+        "올리브오일 2큰술"
+      ],
+      "steps": [
+        "채소를 흐르는 물에 몇 번 헹궈 깨끗이 씻고 손으로 한 입 크기로 뜯는다.",
+        "구운 달걀을 4조각으로 자른다.",
+        "드레싱용으로 유자청 4큰술, 식초 2큰술, 간장 1/2큰술, 레몬즙 1큰술, 올리브오일 2큰술을 한데 섞는다.",
+        "채소의 물기를 닦은 뒤 그릇에 담는다.",
+        "달걀 조각을 채소 둘레에 돌려 얹는다.",
+        "마지막으로 유자청 드레싱을 고루 끼얹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "other",
+        "method": "salad",
+        "kind": "breakfast"
+      }
+    },
     "6909547|49eec49571f01fdf7bf9793fdd2a24e052a51468e57a984665f87c0995e2ecfd|ko-paraphrase-v1": {
       "sourceRecipeId": "6909547",
       "sourceContentHash": "49eec49571f01fdf7bf9793fdd2a24e052a51468e57a984665f87c0995e2ecfd",
@@ -1924,6 +3319,45 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6912103|1b92b7c57beeb5568800a7f276bf0a48b39cb63f0765f80857dd989176b1d10a|ko-paraphrase-v1": {
+      "sourceRecipeId": "6912103",
+      "sourceContentHash": "1b92b7c57beeb5568800a7f276bf0a48b39cb63f0765f80857dd989176b1d10a",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "소고기 마늘쫑 채소볶음",
+      "detailIngredients": [
+        "소고기등심 600g (또는 목심)",
+        "양파 1개",
+        "빨강파프리카 1/2개",
+        "노랑파프리카 1/2개",
+        "마늘쫑 50g",
+        "올리브유 2큰술",
+        "허브솔트 2.5큰술 (없으면 소금과 후추, 원문 수량 미표기)",
+        "샐러리가루 조금"
+      ],
+      "steps": [
+        "양파와 노랑·빨강 파프리카를 한입 크기로 썰고 마늘쫑은 1~2센티씩 자른다.",
+        "등심이나 목심을 한입 크기로 썬다.",
+        "팬을 미리 데워 올리브유 2큰술을 두른다.",
+        "양파와 마늘쫑만 먼저 1분 동안 볶는다.",
+        "1분 뒤 소고기를 넣고 허브솔트 2큰술을 뿌려 센불에서 뒤적이며 빠르게 볶고, 허브솔트가 없으면 소금과 후추로 대신한다.",
+        "고기가 반 정도 익으면 파프리카를 넣고 허브솔트 1/2큰술을 더 뿌린다.",
+        "고기 겉에 붉은 기가 사라질 만큼만 재빨리 볶는다.",
+        "양념이 세지 않은 담백한 볶음으로 그릇에 담아 낸다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "소고기등심"
+        ],
+        "family": "beef",
+        "method": "stirfry",
+        "kind": "main"
+      }
     },
     "6912132|57dfd28f61b4255ff04604a5563f66dcfe9919b602594758f8137615dce4ad08|ko-paraphrase-v1": {
       "sourceRecipeId": "6912132",
@@ -1986,6 +3420,120 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6913737|0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77|ko-paraphrase-v1": {
+      "sourceRecipeId": "6913737",
+      "sourceContentHash": "0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "아보카도 달걀비빔밥",
+      "detailIngredients": [
+        "아보카도 1/2개",
+        "달걀 1개",
+        "밥 1공기",
+        "김가루 적당량",
+        "통깨 약간",
+        "물 4",
+        "간장 2",
+        "맛술 2",
+        "올리고당 1",
+        "생강가루 약간"
+      ],
+      "steps": [
+        "간장 2와 맛술 2, 물 4 및 올리고당 1을 팬에 담고 생강가루를 더해 짧게 끓인다. 원문은 이 네 수량의 단위를 명시하지 않으므로 단위를 확인하고 조절한다. 소스가 남을 수 있다.",
+        "아보카도를 반으로 갈라 씨와 껍질을 제거하고 먹기 좋게 썬다.",
+        "달걀을 프라이한다. 원문은 노른자를 살린 반숙으로 조리한다.",
+        "그릇에 밥을 담고 달걀 프라이, 아보카도, 김가루를 얹는다.",
+        "준비한 소스를 먹을 만큼 끼얹고 통깨로 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "아보카도"
+        ],
+        "family": "other",
+        "method": "rice",
+        "kind": "main",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
+    "6915177|0e8208e628dd7ea9e24e859dcfeabcc0e00ff6e86c3fa129f131454883c992a0|ko-paraphrase-v1": {
+      "sourceRecipeId": "6915177",
+      "sourceContentHash": "0e8208e628dd7ea9e24e859dcfeabcc0e00ff6e86c3fa129f131454883c992a0",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "치즈 감자 그라탕",
+      "detailIngredients": [
+        "감자 3~4개",
+        "토마토 2개",
+        "치즈 150g",
+        "양파 (원문 수량 미표기, 필요한 만큼)",
+        "후추 약간",
+        "소금 약간",
+        "스테비아 2T (또는 설탕)",
+        "레몬즙 1T",
+        "물 (원문 수량 미표기)",
+        "설탕 (스테비아 대신 사용 가능, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "감자를 알맞게 썰어 소금과 후추를 뿌리고 랩을 씌워 전자레인지에서 대강 익힌다.",
+        "토마토와 양파를 굵게 다진 뒤 물을 조금 붓고 눌러 으깨며 볶아 퓨레를 만들고, 소금·후추·레몬즙과 스테비아나 설탕을 더한다.",
+        "익힌 감자에 퓨레를 섞으면서 치즈를 사이사이 조금씩 넣는다.",
+        "오븐을 180도로 맞춰 30분가량 굽는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "치즈"
+        ],
+        "family": "cheese",
+        "method": "soup",
+        "kind": "main"
+      }
+    },
+    "6920141|497238f86241176bd87d5be093b704f72f7feff5225c8fa9591d65040dcaf84e|ko-paraphrase-v1": {
+      "sourceRecipeId": "6920141",
+      "sourceContentHash": "497238f86241176bd87d5be093b704f72f7feff5225c8fa9591d65040dcaf84e",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "햄치즈 계란 토스트",
+      "detailIngredients": [
+        "식빵 2장",
+        "햄 (식빵에 올릴 정도, 원문 수량 미표기)",
+        "치즈 1장",
+        "콘 샐러드 1T",
+        "계란 1개",
+        "마요네즈 1T",
+        "허브가루 (선택, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "식빵 한 장의 한쪽 면에 마요네즈를 바른다.",
+        "마요네즈 위에 햄과 치즈를 올린다.",
+        "다른 식빵 한 장은 가운데를 컵으로 눌러 오목하게 만든다.",
+        "계란이 들어갈 수 있도록 손으로 한 번 더 꾹 눌러 자리를 만든다.",
+        "햄치즈 식빵 위에 오목한 식빵을 겹치고 패인 곳에 계란을 깨 넣은 뒤, 있으면 허브가루를 뿌려 에어프라이어에서 160도 4분, 이어서 170도 3분 굽는다. 5분쯤 지났을 때 익은 정도를 보고 콘 샐러드를 올린다.",
+        "이대로면 노른자가 반숙이니 더 익히려면 꺼내서 전자레인지로 마저 익힌다. 에어프라이어에서 계속 돌리면 빵이 말라 버린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "치즈"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "breakfast"
+      }
+    },
     "6920179|05ad0cc29dc74540d357feff76e93fc4308b2ef69d87221da40bd73dcf79540f|ko-paraphrase-v1": {
       "sourceRecipeId": "6920179",
       "sourceContentHash": "05ad0cc29dc74540d357feff76e93fc4308b2ef69d87221da40bd73dcf79540f",
@@ -2016,6 +3564,164 @@
         "kind": "breakfast"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6920226|01a262680a55159b6387da54fab451499b767d26093795b2655ddf06f1413166|ko-paraphrase-v1": {
+      "sourceRecipeId": "6920226",
+      "sourceContentHash": "01a262680a55159b6387da54fab451499b767d26093795b2655ddf06f1413166",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "양상추 볶음밥",
+      "detailIngredients": [
+        "양상추 100g",
+        "대파 1대",
+        "계란 2개",
+        "쌀밥 120g",
+        "식용유 1Ts",
+        "버터 1Ts",
+        "소금 1꼬집",
+        "후춧가루 1꼬집"
+      ],
+      "steps": [
+        "양상추를 물에 헹군 뒤 손으로 먹기 좋게 찢는다.",
+        "대파를 잘게 송송 썬다.",
+        "달걀을 그릇에 깨서 고루 푼다.",
+        "푼 달걀에 밥을 넣어 골고루 섞는다.",
+        "팬에 식용유와 버터를 두르고 대파를 넣어 볶는다.",
+        "파 향이 나면 달걀 섞은 밥을 넣고 소금과 후춧가루로 간을 맞추며 볶는다.",
+        "밥이 고슬하게 볶이면 양상추를 넣어 함께 볶는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "양상추"
+        ],
+        "family": "other",
+        "method": "stirfry",
+        "kind": "main"
+      }
+    },
+    "6922338|a79eb50eb05343551acb2be82db41cf76c67457673bc6928a348d45be0ae0727|ko-paraphrase-v1": {
+      "sourceRecipeId": "6922338",
+      "sourceContentHash": "a79eb50eb05343551acb2be82db41cf76c67457673bc6928a348d45be0ae0727",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "연어조림",
+      "detailIngredients": [
+        "연어 2토막",
+        "양파 1/2개",
+        "마늘 2개",
+        "소금 약간",
+        "후추 약간",
+        "쪽파 약간",
+        "참치액 2숟가락",
+        "간장 2숟가락",
+        "청주 2숟가락",
+        "설탕 1.5숟가락",
+        "올리고당 2숟가락",
+        "물 2숟가락",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "양파는 가늘게 채 치고, 마늘은 얇게 저미고, 쪽파는 잘게 썬다.",
+        "연어를 먹기 좋게 자른 뒤 소금과 후추로 간한다.",
+        "양념 재료를 모두 그릇에 섞어 양념장을 만든다.",
+        "팬을 달궈 기름을 두르고 연어를 노릇하게 굽는다.",
+        "구운 연어를 팬 한쪽으로 밀어 두고 양파와 마늘, 양념장을 넣어 자작하게 졸인다.",
+        "연어조림을 그릇에 옮겨 담고 쪽파를 올린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "연어"
+        ],
+        "family": "salmon",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
+    "6924974|c7324f1ac3ac464edb9b00baaf32e6874ea277ec3b74a61b83c3e29f80f23856|ko-paraphrase-v1": {
+      "sourceRecipeId": "6924974",
+      "sourceContentHash": "c7324f1ac3ac464edb9b00baaf32e6874ea277ec3b74a61b83c3e29f80f23856",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "애호박 국수",
+      "detailIngredients": [
+        "국수 100g",
+        "애호박 1개",
+        "대파 1/2대",
+        "소금 (원문 수량 미표기)",
+        "참기름 (원문 수량 미표기)",
+        "깨소금 (원문 수량 미표기)",
+        "고춧가루 (원문 수량 미표기)",
+        "콩기름 약간",
+        "마늘 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "애호박은 가늘게 채 치고 대파는 잘게 썰어 양념과 함께 둔다.",
+        "팬을 달궈 콩기름을 두른 뒤 애호박과 대파, 마늘을 넣고 소금과 고춧가루로 양념해 볶는다.",
+        "호박이 익으면 참기름과 깨소금을 더해 마무리한다.",
+        "끓는 물에 국수를 삶아 찬물에 헹궈 전분기를 뺀다.",
+        "그릇에 국수를 담고 볶은 호박을 얹은 뒤 깨소금을 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "주키니"
+        ],
+        "family": "other",
+        "method": "rice",
+        "kind": "main"
+      }
+    },
+    "6932198|d8a87d8b42bf8113fb1fa9064836cd4bf00b1192ddda5d5688ff20164aeddfde|ko-paraphrase-v1": {
+      "sourceRecipeId": "6932198",
+      "sourceContentHash": "d8a87d8b42bf8113fb1fa9064836cd4bf00b1192ddda5d5688ff20164aeddfde",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "토마토 계란국",
+      "detailIngredients": [
+        "토마토 2개",
+        "계란 1개",
+        "대파 1개",
+        "소금 조금",
+        "후추가루 1/2스푼",
+        "식용유 (원문 수량 미표기)",
+        "물 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "토마토를 숟가락으로 떠먹기 좋은 크기로 자른다.",
+        "대파는 반으로 나눠 흰 부분 쪽을 새끼손가락 길이로 가늘게 채 썬다. 이 파는 볶을 때 쓴다.",
+        "남은 대파는 잘게 썰어 마지막에 넣을 용도로 둔다.",
+        "계란을 작은 그릇에 풀어 둔다.",
+        "팬에 기름을 두르고 채 썬 파를 볶는다.",
+        "파 향이 나기 시작하면 토마토를 넣는다.",
+        "토마토가 물러지면 물을 대접 한 그릇쯤 부어 끓인다.",
+        "끓어오르면 푼 계란을 붓고 가볍게만 젓는다. 많이 저으면 계란이 부서진다.",
+        "맛을 보며 소금으로 간하고 후추는 반 숟가락쯤 넉넉히 넣는다.",
+        "30초 정도 더 끓인 뒤 썰어 둔 파를 넣고 불을 끄고 마무리한다.",
+        "그릇에 담아 그대로 먹거나 밥을 말아 먹는다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "토마토"
+        ],
+        "family": "vegetable",
+        "method": "soup",
+        "kind": "main"
+      }
     },
     "6933103|93a64db89e29868ba0b2364ca79bcaf2a651981d1667c9f5c3ac3e30651debd2|ko-paraphrase-v1": {
       "sourceRecipeId": "6933103",
@@ -2098,6 +3804,50 @@
         "kind": "side"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "6945122|36ef3da62fd839944a683b7e926320e87dc098051d48cecb6021045e873a6ca8|ko-paraphrase-v1": {
+      "sourceRecipeId": "6945122",
+      "sourceContentHash": "36ef3da62fd839944a683b7e926320e87dc098051d48cecb6021045e873a6ca8",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "햄치즈 에그마요 샌드위치",
+      "detailIngredients": [
+        "식빵 4장",
+        "스팸 취향껏",
+        "치즈 2장",
+        "계란 4개",
+        "마요네즈 4T",
+        "머스타드 1T",
+        "설탕 1T",
+        "후추 톡톡",
+        "양파 1/4개",
+        "스위트칠리소스 (원문 수량 미표기)",
+        "소금 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "끓는 물에 소금을 조금 넣고 강불에서 계란을 12분 삶아 완숙으로 만든다.",
+        "양파 1/4개를 얇게 썰어 7~8분간 물에 담가 매운맛을 뺀다.",
+        "스팸을 너무 두껍지 않게 썰어 굽는다.",
+        "양파를 건져 물기를 뺀다.",
+        "삶은 계란은 노른자와 흰자를 나누고 노른자를 고운 가루처럼 으깬다.",
+        "흰자는 식감이 남도록 다진다.",
+        "으깬 노른자에 마요네즈, 머스타드, 설탕을 넣어 섞는다.",
+        "다진 흰자를 넣어 섞은 뒤 후추를 뿌리고 한 번 더 섞는다.",
+        "빵 위에 햄, 치즈, 양파, 에그마요, 칠리소스 순으로 쌓는다. 평평한 재료부터 올리면 흘러내리지 않는다.",
+        "종이호일을 반쯤 깔고 샌드위치를 감싸면 먹기 편하다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "치즈"
+        ],
+        "family": "cheese",
+        "method": "other",
+        "kind": "breakfast"
+      }
     },
     "6954339|76291cc5fb7e22c555cc82dc6bb7c45d596cd2c3f6aa87b192463bfcccb9dfee|ko-paraphrase-v1": {
       "sourceRecipeId": "6954339",
@@ -2415,6 +4165,46 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "6966445|78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5|ko-paraphrase-v1": {
+      "sourceRecipeId": "6966445",
+      "sourceContentHash": "78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-09-13",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-09-13",
+      "title": "파프리카 달걀볶음",
+      "detailIngredients": [
+        "파프리카 1개",
+        "달걀 3개",
+        "양파 (원문 수량 미표기)",
+        "현미유 조금",
+        "소금 조금",
+        "후추 조금",
+        "파슬리가루 (원문 수량 미표기)",
+        "우유 (선택, 조리 2단계, 원문 수량 미표기)"
+      ],
+      "steps": [
+        "파프리카와 양파를 한입 크기로 썬다.",
+        "달걀 3개를 푼다. 이 게시 조리안은 원문의 선택 재료인 육수를 사용하지 않는다.",
+        "팬에 현미유를 두르고 약불에서 달걀물을 익히며 소금과 후추로 간한다.",
+        "달걀이 약 80% 익으면 덜어두고 파프리카와 양파를 볶는다.",
+        "달걀을 팬에 다시 넣고 채소와 함께 마저 익힌다.",
+        "파슬리가루를 뿌려 완성한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "파프리카"
+        ],
+        "family": "other",
+        "method": "stirfry",
+        "kind": "side",
+        "filters": [
+          "vegetarian"
+        ]
+      }
+    },
     "6973302|bbbb285dbd05d91dd664024acc6e78a8b762abbff9d9a219bd3351e9b63f5141|ko-paraphrase-v1": {
       "sourceRecipeId": "6973302",
       "sourceContentHash": "bbbb285dbd05d91dd664024acc6e78a8b762abbff9d9a219bd3351e9b63f5141",
@@ -2710,6 +4500,49 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "7002427|b0bc2443b9d894cd99e948b425095412dddd7aef8bdd4b7d0657873f328bee5c|ko-paraphrase-v1": {
+      "sourceRecipeId": "7002427",
+      "sourceContentHash": "b0bc2443b9d894cd99e948b425095412dddd7aef8bdd4b7d0657873f328bee5c",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "돼지고기 감자조림",
+      "detailIngredients": [
+        "감자 3개",
+        "돼지고기 앞다리살 250g",
+        "양파 1/2개",
+        "청양고추 3개",
+        "대파 1/2대",
+        "다진마늘 1큰술",
+        "참치액젓 1큰술",
+        "진간장 1.5큰술",
+        "설탕 1.5큰술",
+        "맛술 2큰술",
+        "고춧가루 1큰술",
+        "고추장 1큰술",
+        "물 200ml",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "감자는 알맞은 크기로 자르고, 청양고추 3개와 대파 1/2대는 비스듬히 썰며, 양파 1/2개는 가늘게 썬다.",
+        "달군 팬에 기름을 조금 두르고 센불에서 양파를 볶다가 참치액젓 1큰술을 넣고, 이어서 설탕 1.5큰술을 더한다.",
+        "설탕이 녹기 시작하면 센불을 유지한 채 고기를 넣어 볶는다.",
+        "고기가 완전히 익으면 양념으로 고추장 1큰술, 진간장 1.5큰술, 고춧가루 1큰술, 맛술 2큰술을 넣고 센불에서 살짝 졸이며 고루 볶는다.",
+        "물 200ml를 붓고 끓어오르면 감자를 넣은 뒤 뚜껑을 덮어 중불에서 5~7분 익힌다.",
+        "청양고추, 대파, 다진마늘 1큰술을 넣고 약불에서 조금 더 익혀 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "감자"
+        ],
+        "family": "vegetable",
+        "method": "braise",
+        "kind": "main"
+      }
+    },
     "7005148|6a8cadab0706a20e1f4d4e0fadcd01cd03533424c42f33384323d133bb78f019|ko-paraphrase-v1": {
       "sourceRecipeId": "7005148",
       "sourceContentHash": "6a8cadab0706a20e1f4d4e0fadcd01cd03533424c42f33384323d133bb78f019",
@@ -2995,6 +4828,71 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
+    },
+    "7041117|654917568e1566a459dc1626339fcff16b0e753f1d26b873c88a3fe1700ba956|ko-paraphrase-v1": {
+      "sourceRecipeId": "7041117",
+      "sourceContentHash": "654917568e1566a459dc1626339fcff16b0e753f1d26b873c88a3fe1700ba956",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "눈사람 감자샐러드 함박스테이크",
+      "detailIngredients": [
+        "돼지고기 다짐육 200g",
+        "소고기 다짐육 200g",
+        "양파 2T ( 볶은 다진 양파)",
+        "빵가루 2T",
+        "간장 1T",
+        "케첩 1T",
+        "달걀 1개",
+        "소금 조금",
+        "후추 조금",
+        "물 1/3컵",
+        "양송이버섯 1줌",
+        "양파 1/2개",
+        "버터 20g",
+        "소스용 간장 1T",
+        "설탕 2.5T",
+        "케첩 3T",
+        "물 120g",
+        "감자 150g (삶은 감자)",
+        "마요네즈 적당량",
+        "파마산치즈가루 적당량",
+        "체다치즈 4장",
+        "김 조금",
+        "당근 조금",
+        "검은깨 조금",
+        "식용유 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "볼에 돼지고기 다짐육 200g, 소고기 다짐육 200g을 넣고 빵가루 2T, 볶아 둔 다진 양파 2T, 케첩 1T, 간장 1T, 달걀 1개와 소금·후추를 함께 더한다.",
+        "끈기가 생길 때까지 손으로 오래 치대 섞는다.",
+        "반죽을 4덩이로 나눠 둥글넓적한 패티 모양으로 빚는다.",
+        "팬을 데워 식용유를 두르고 패티를 굽는다.",
+        "겉이 노릇하면 약불로 줄이고 물 1/3컵을 부은 뒤 뚜껑을 덮어 김으로 속까지 익힌다.",
+        "젓가락으로 찔러 붉은 육즙이 나오지 않으면 다 익은 것이다.",
+        "소스용 양파와 양송이버섯을 알맞은 크기로 썬다.",
+        "패티를 구운 팬에 버터 20g을 넣어 녹인다.",
+        "양파를 먼저 볶다가 버섯을 넣고 함께 볶는다.",
+        "케첩 3T(60g), 간장 1T(20g), 물 120g, 설탕 2.5T(40g)을 붓고 센불에서 저으며 끓인다.",
+        "원하는 농도가 되면 불을 끄며, 식으면서 조금 더 걸쭉해진다.",
+        "삶은 감자를 곱게 으깬다.",
+        "으깬 감자에 마요네즈를 알맞게 넣어 섞는다.",
+        "감자 반죽을 눈사람 모양으로 동그랗게 빚고 파마산 치즈가루를 묻힌다.",
+        "김, 당근, 검은깨로 얼굴을 꾸미고 체다치즈를 눈이 녹아내린 모양으로 자른다.",
+        "접시에 소스를 깔고 함박스테이크를 올린다.",
+        "체다치즈와 눈사람 감자샐러드를 얹어 마무리한다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "돼지다짐육"
+        ],
+        "family": "pork",
+        "method": "grill",
+        "kind": "main"
+      }
     },
     "7045560|2e865521eeca8041240dd620dbf1fd13bae19116addd1942ea49d9e3bbff3c5f|ko-paraphrase-v1": {
       "sourceRecipeId": "7045560",
@@ -3285,6 +5183,55 @@
       },
       "validationVersion": "source-facts-v2"
     },
+    "786272|a039de71d7f876d1c886f91a642ddc535ee0babc84f6c8787d3991168a34cd2d|ko-paraphrase-v1": {
+      "sourceRecipeId": "786272",
+      "sourceContentHash": "a039de71d7f876d1c886f91a642ddc535ee0babc84f6c8787d3991168a34cd2d",
+      "transformVersion": "ko-paraphrase-v1",
+      "approved": true,
+      "approvedAt": "2026-10-06",
+      "approvalMethod": "owner-authorized-editorial-transform",
+      "validationVersion": "source-facts-v2",
+      "sourceDate": "2026-10-05",
+      "title": "달콤한 닭강정",
+      "detailIngredients": [
+        "닭가슴살 3쪽",
+        "우유 1컵",
+        "달걀 노른자 1개",
+        "땅콩가루 약간",
+        "포도씨유 2큰술",
+        "전분가루 6큰술",
+        "다진마늘 1큰술",
+        "소금 약간",
+        "후춧가루 약간",
+        "고추장 1.5큰술",
+        "케첩 3큰술",
+        "꿀 4큰술",
+        "간장 0.3큰술",
+        "식초 1큰술",
+        "물 1/2컵",
+        "튀김용 기름 (원문 수량 미표기)"
+      ],
+      "steps": [
+        "닭가슴살 3쪽을 한입 크기로 썰며, 약 2줌 정도 분량이면 되고 더 부드럽게 하려면 안심이나 다릿살을 써도 된다.",
+        "썬 닭고기를 우유 1컵에 30분가량 담가 잡내를 뺀다.",
+        "우유를 버리고 소금과 후춧가루로 밑간한다.",
+        "달걀 노른자 1개를 넣어 고루 버무린다.",
+        "전분가루 6을 넣어 닭고기 전체에 튀김옷을 입히고, 끈적하면 가루를 조금 더 넣어 보송하게 만든다.",
+        "기름을 160°C로 데워 한 조각씩 튀긴 다음 180°C로 올려 한 번 더 바삭하게 튀기고 키친타올에 기름을 뺀다.",
+        "케첩 3, 고추장 1.5, 꿀 4, 식초 1, 간장 0.5, 물 1/2컵을 섞어 양념장을 만들며 꿀은 물엿이나 올리고당으로 바꿔도 된다.",
+        "팬을 달궈 포도씨유 2를 두르고 다진마늘 1을 볶는다.",
+        "양념장을 붓고 센불에서 2~3분 끓이며, 더 걸쭉하게 원하면 2분쯤 더 졸인다.",
+        "튀긴 닭을 넣어 버무리고 그릇에 담아 땅콩가루를 뿌린다."
+      ],
+      "recommendationProfile": {
+        "primaryIngredients": [
+          "닭가슴살"
+        ],
+        "family": "chicken",
+        "method": "fry",
+        "kind": "main"
+      }
+    },
     "830985|12ee9c46616dcc960ad2ab960e3b28ad3922e1253431ccd08c2549d70f7871d2|ko-paraphrase-v1": {
       "sourceRecipeId": "830985",
       "sourceContentHash": "12ee9c46616dcc960ad2ab960e3b28ad3922e1253431ccd08c2549d70f7871d2",
@@ -3392,439 +5339,6 @@
         "kind": "main"
       },
       "validationVersion": "source-facts-v2"
-    },
-    "6831097|bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437|ko-paraphrase-v1": {
-      "sourceRecipeId": "6831097",
-      "sourceContentHash": "bd29e33ef14424944fb7066e846b9b1b4db6bc90d92b04fe7fc5d9c45d9df437",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "연어 간장조림",
-      "detailIngredients": [
-        "연어 200g",
-        "정종 (원문 수량 미표기)",
-        "소금 (원문 수량 미표기)",
-        "후추 (원문 수량 미표기)",
-        "간장 1.5T",
-        "올리고당 1T",
-        "물 100ml",
-        "참기름 (원문 수량 미표기)",
-        "마늘 (원문 수량 미표기)",
-        "양파 1/2개",
-        "쪽파 (원문 수량 미표기)",
-        "카놀라유 (조리 4단계, 원문 수량 미표기)"
-      ],
-      "steps": [
-        "연어를 먹기 좋은 크기로 나눈다.",
-        "소금과 후추, 정종 1/2스푼으로 연어에 밑간한다.",
-        "간장 1.5T, 올리고당 1T, 물 100ml에 참기름·다진 마늘·다진 양파를 섞어 조림장을 만든다.",
-        "팬에 카놀라유를 두르고 편으로 썬 마늘을 볶아 향을 낸다.",
-        "연어를 중불에서 굽는다.",
-        "한 면이 익으면 뒤집고 양념장 절반과 채 썬 양파 1/4개를 넣는다. 끓기 시작한 지 1분 후 다시 뒤집어 남은 장을 넣고 익힌다.",
-        "접시에 옮긴 뒤 얇게 썬 양파와 쪽파로 마무리한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "연어"
-        ],
-        "family": "salmon",
-        "method": "braise",
-        "kind": "main"
-      }
-    },
-    "6860486|edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b|ko-paraphrase-v1": {
-      "sourceRecipeId": "6860486",
-      "sourceContentHash": "edfb1415adeda93744b8539f5e88c2381c261e5996494079fb908c8d9d23d39b",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "전자레인지 달걀밥",
-      "detailIngredients": [
-        "밥 1/2공기",
-        "달걀 2개",
-        "물 100ml",
-        "햄 or 스팸 1/4개 (30g)",
-        "다진 대파 1T",
-        "피자치즈 1/2컵",
-        "슬라이스 치즈 1/2장",
-        "간장 1/2T",
-        "소금 약간",
-        "후추 약간"
-      ],
-      "steps": [
-        "햄 또는 스팸 1/4개(30g)와 대파 1T를 잘게 썬다.",
-        "전자레인지용 그릇에 달걀 2개를 풀고 물 100ml, 소금·후추를 섞는다.",
-        "밥 1/2공기와 햄, 다진 대파 1T, 간장 1/2T을 달걀물에 고루 섞는다.",
-        "랩을 씌워 증기가 빠질 구멍을 내고 전자레인지에서 약 3분 가열한다.",
-        "꺼내어 내용물이 고르게 익도록 다시 섞는다.",
-        "피자치즈 1/2컵과 슬라이스치즈 1/2장을 올려 약 3분 더 가열한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "달걀"
-        ],
-        "family": "egg",
-        "method": "rice",
-        "kind": "main"
-      }
-    },
-    "6894323|d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a|ko-paraphrase-v1": {
-      "sourceRecipeId": "6894323",
-      "sourceContentHash": "d4b6b84a89af23afc4dcfb14cdb164775ede0e40778dbed23c9a895c34c0e24a",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "새송이버섯 간장버터구이",
-      "detailIngredients": [
-        "새송이버섯 3송이",
-        "청양고추 1개",
-        "대파 1/2대",
-        "버터 1T",
-        "간장 5T",
-        "올리고당 2T",
-        "다진마늘 1T",
-        "참기름 1T",
-        "물 2T"
-      ],
-      "steps": [
-        "새송이버섯 3송이의 밑동을 다듬고 일정한 두께로 썬다. 대파와 청양고추는 잘게 썬다.",
-        "간장 5T, 올리고당 2T, 물 2T, 다진 마늘 1T, 참기름 1T를 섞고 대파와 고추를 더한다. 원문의 T는 성인용 숟가락 기준이다.",
-        "팬에 버터 1스푼을 녹이고 중약불로 버섯 양면을 굽는다.",
-        "버섯이 쫄깃하게 익으면 양념을 붓는다.",
-        "약불로 낮추고 양념이 타지 않게 졸여 완성한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "버섯"
-        ],
-        "family": "other",
-        "method": "grill",
-        "kind": "side",
-        "filters": [
-          "vegetarian"
-        ]
-      }
-    },
-    "6966445|78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5|ko-paraphrase-v1": {
-      "sourceRecipeId": "6966445",
-      "sourceContentHash": "78a9524e28a84694c0005c34ea987863c5386bb71b0447e4bfe384196ad4e4b5",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "파프리카 달걀볶음",
-      "detailIngredients": [
-        "파프리카 1개",
-        "달걀 3개",
-        "양파 (원문 수량 미표기)",
-        "현미유 조금",
-        "소금 조금",
-        "후추 조금",
-        "파슬리가루 (원문 수량 미표기)",
-        "우유 (선택, 조리 2단계, 원문 수량 미표기)"
-      ],
-      "steps": [
-        "파프리카와 양파를 한입 크기로 썬다.",
-        "달걀 3개를 푼다. 이 게시 조리안은 원문의 선택 재료인 육수를 사용하지 않는다.",
-        "팬에 현미유를 두르고 약불에서 달걀물을 익히며 소금과 후추로 간한다.",
-        "달걀이 약 80% 익으면 덜어두고 파프리카와 양파를 볶는다.",
-        "달걀을 팬에 다시 넣고 채소와 함께 마저 익힌다.",
-        "파슬리가루를 뿌려 완성한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "파프리카"
-        ],
-        "family": "other",
-        "method": "stirfry",
-        "kind": "side",
-        "filters": [
-          "vegetarian"
-        ]
-      }
-    },
-    "6869220|423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2|ko-paraphrase-v1": {
-      "sourceRecipeId": "6869220",
-      "sourceContentHash": "423070e51f41d10dc07b41744e21f96ed9af286c005793771d2989cef105d0e2",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "감자 양파 간장조림",
-      "detailIngredients": [
-        "감자 2개",
-        "양파 1/2개",
-        "청양고추 1개",
-        "간장 5스푼",
-        "설탕 2스푼",
-        "다진파 1.5스푼",
-        "다진마늘 1스푼",
-        "참기름 0.8스푼",
-        "깨소금 1/2스푼",
-        "후추 약간",
-        "식용유 (조리 4단계, 원문 수량 미표기)",
-        "물 1컵 (조리 5단계)"
-      ],
-      "steps": [
-        "감자를 껍질 벗겨 깍둑썰기하고 잠시 찬물에 담근다.",
-        "양파와 고추를 먹기 좋게 썬다. 덜 맵게 먹으려면 청양고추 대신 풋고추를 쓸 수 있다.",
-        "간장 5스푼, 설탕 2스푼, 다진 파 1.5스푼, 다진 마늘 1스푼, 참기름 0.8스푼, 깨소금 반 스푼과 후추를 섞는다.",
-        "냄비에 식용유를 두르고 감자 겉면이 투명해질 때까지 볶는다.",
-        "물 1컵과 양념장을 넣고 뚜껑을 덮어 중간불에서 감자를 익힌다.",
-        "양파를 넣고 양념을 끼얹으며 국물이 거의 없어질 때까지 졸인다.",
-        "고추를 넣어 조금 더 익힌 뒤 마무리한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "감자"
-        ],
-        "family": "vegetable",
-        "method": "braise",
-        "kind": "side",
-        "filters": [
-          "vegetarian"
-        ]
-      }
-    },
-    "6879897|385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59|ko-paraphrase-v1": {
-      "sourceRecipeId": "6879897",
-      "sourceContentHash": "385dd0b7d237986dba4e29a6f5167690b911ce40e01aa6cff0c77279ad39aa59",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "파프리카 달걀찜",
-      "detailIngredients": [
-        "파프리카 1개",
-        "계란 2개",
-        "소금 (원문 수량 미표기)",
-        "후추 약간",
-        "양파 (원문 수량 미표기)",
-        "애호박 (원문 수량 미표기)",
-        "당근 약간"
-      ],
-      "steps": [
-        "안정적으로 세울 수 있는 파프리카를 골라 씻는다.",
-        "윗부분을 뚜껑처럼 잘라내고 씨와 속을 정리한다.",
-        "냉장고의 양파·애호박·당근을 잘게 썰어 달걀과 섞는다. 원문에 양파와 애호박의 수량은 없다.",
-        "소금과 후추로 간하여 달걀물을 만든다.",
-        "파프리카를 전자레인지용 그릇에 세우고 속의 약 80%까지만 달걀물을 채운다.",
-        "원문 기준 파프리카 1개는 약 2분 30초, 2개는 약 5분 가열한다. 기기에 따라 달걀이 익는 상태를 확인하며 조절한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "파프리카"
-        ],
-        "family": "other",
-        "method": "steam",
-        "kind": "side",
-        "filters": [
-          "vegetarian"
-        ]
-      }
-    },
-    "6913737|0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77|ko-paraphrase-v1": {
-      "sourceRecipeId": "6913737",
-      "sourceContentHash": "0b392de1251473b413168eb3f58a916a8d6f600557b4d0a4870391a2150dea77",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-13",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-13",
-      "title": "아보카도 달걀비빔밥",
-      "detailIngredients": [
-        "아보카도 1/2개",
-        "달걀 1개",
-        "밥 1공기",
-        "김가루 적당량",
-        "통깨 약간",
-        "물 4",
-        "간장 2",
-        "맛술 2",
-        "올리고당 1",
-        "생강가루 약간"
-      ],
-      "steps": [
-        "간장 2와 맛술 2, 물 4 및 올리고당 1을 팬에 담고 생강가루를 더해 짧게 끓인다. 원문은 이 네 수량의 단위를 명시하지 않으므로 단위를 확인하고 조절한다. 소스가 남을 수 있다.",
-        "아보카도를 반으로 갈라 씨와 껍질을 제거하고 먹기 좋게 썬다.",
-        "달걀을 프라이한다. 원문은 노른자를 살린 반숙으로 조리한다.",
-        "그릇에 밥을 담고 달걀 프라이, 아보카도, 김가루를 얹는다.",
-        "준비한 소스를 먹을 만큼 끼얹고 통깨로 마무리한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "아보카도"
-        ],
-        "family": "other",
-        "method": "rice",
-        "kind": "main",
-        "filters": [
-          "vegetarian"
-        ]
-      }
-    },
-    "1643325|e8e7b04ee38352a61458841e3d052a996100ff758429104437b8fec6f89349f5|ko-paraphrase-v1": {
-      "sourceRecipeId": "1643325",
-      "sourceContentHash": "e8e7b04ee38352a61458841e3d052a996100ff758429104437b8fec6f89349f5",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-15",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-15",
-      "title": "닭날개 윙 오븐구이",
-      "detailIngredients": [
-        "닭날개 350g (13개)",
-        "다진 마늘 1스푼",
-        "간장 1스푼",
-        "꿀 1스푼 (이나 아가베시럽)",
-        "올리브오일 1스푼 (이나 포도씨오일)",
-        "청주 1스푼",
-        "생강즙 0.3스푼 (이나 가루)",
-        "소금 0.3스푼",
-        "후춧가루 적당량",
-        "파마산 치즈가루 1스푼 (생략가능)"
-      ],
-      "steps": [
-        "닭날개를 씻은 뒤 양념이 잘 배도록 곳곳에 칼집을 낸다.",
-        "다진 마늘, 간장, 꿀 또는 아가베시럽, 올리브오일 또는 포도씨오일, 청주, 생강즙 또는 가루, 소금, 후춧가루와 선택 재료인 파마산 치즈가루를 섞는다.",
-        "닭날개에 양념을 고루 버무려 약 1시간 재운다.",
-        "쿠킹포일을 깐 팬에 석쇠를 놓고 닭날개 사이를 띄워 올린다.",
-        "오븐을 220도로 예열하고 컨벡션으로 20분 굽는다.",
-        "중간에 닭날개를 한 번 뒤집어 220도에서 10-15분 더 익힌다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "닭날개"
-        ],
-        "family": "chicken",
-        "method": "grill",
-        "kind": "main"
-      }
-    },
-    "1662934|eb9d211002048953d8c5ba52ec4378509e4ebf752c70603d3861897991d796c2|ko-paraphrase-v1": {
-      "sourceRecipeId": "1662934",
-      "sourceContentHash": "eb9d211002048953d8c5ba52ec4378509e4ebf752c70603d3861897991d796c2",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-15",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-15",
-      "title": "간단한 고구마 스프",
-      "detailIngredients": [
-        "고구마 2~3개",
-        "우유 500ml",
-        "양파 1/2개",
-        "소금 약간"
-      ],
-      "steps": [
-        "고구마를 씻어 찐 뒤 껍질을 벗겨 잘라 믹서기에 담고 우유와 곱게 간다.",
-        "간 혼합물을 냄비에 붓고 약불에서 눌지 않게 저으며 끓인다.",
-        "양파를 잘게 다져 팬에서 노릇해질 때까지 볶는다.",
-        "볶은 양파를 끓는 수프에 넣고 함께 끓인 뒤 소금으로 간한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "고구마"
-        ],
-        "family": "other",
-        "method": "soup",
-        "kind": "main"
-      }
-    },
-    "6830500|b053a6f78a0de162dd0774b882f5a7c44a70da30b9bf8ddf91167989f78a01d5|ko-paraphrase-v1": {
-      "sourceRecipeId": "6830500",
-      "sourceContentHash": "b053a6f78a0de162dd0774b882f5a7c44a70da30b9bf8ddf91167989f78a01d5",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-15",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-15",
-      "title": "생생 정보통 황금레시피 6146, 오이미역냉국 만들기!!",
-      "detailIngredients": [
-        "미역 1줌",
-        "오이 1개",
-        "양파 1/4개",
-        "청양고추",
-        "물 600ml",
-        "소금 1큰술",
-        "설탕 4큰술",
-        "식초 6큰술",
-        "통깨"
-      ],
-      "steps": [
-        "미역을 물에 잠시 불린 뒤 충분히 주물러 씻는다.",
-        "불린 미역을 먹기 편한 길이로 잘라 둔다.",
-        "오이를 깨끗이 씻고 돌기를 긁어낸 다음 채 썬다.",
-        "양파를 가늘게 썰어 물에 담가 매운맛을 덜어낸다.",
-        "물 600ml를 준비한다.",
-        "소금 1큰술을 넣는다.",
-        "설탕 4큰술을 더한다.",
-        "식초 6큰술을 넣고 녹을 때까지 젓는다.",
-        "채 썬 오이와 양파를 국물에 넣는다.",
-        "얼음과 미역은 먹기 직전에 넣어 식감을 살린다.",
-        "마지막에 국물과 통깨, 청양고추를 더한다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "오이"
-        ],
-        "family": "other",
-        "method": "soup",
-        "kind": "main"
-      }
-    },
-    "6853815|afd644a6f082f67e852bc23729121e9fbaf87cfcf7c7b81c0f18adda6e967328|ko-paraphrase-v1": {
-      "sourceRecipeId": "6853815",
-      "sourceContentHash": "afd644a6f082f67e852bc23729121e9fbaf87cfcf7c7b81c0f18adda6e967328",
-      "transformVersion": "ko-paraphrase-v1",
-      "approved": true,
-      "approvedAt": "2026-09-15",
-      "approvalMethod": "owner-authorized-editorial-transform",
-      "validationVersion": "source-facts-v2",
-      "sourceDate": "2026-09-15",
-      "title": "6.1.4.6.의 맞춤의 맛있고 시원한 오이냉국~~",
-      "detailIngredients": [
-        "오이 1개",
-        "물 600ml",
-        "소금 1스푼",
-        "설탕 4스푼",
-        "식초 6스푼",
-        "깨소금 약간"
-      ],
-      "steps": [
-        "소금·설탕·식초는 원문의 6.1, 이어지는 4.6 수치로 맞춰 냉국을 만들고 냉장 보관한다.",
-        "도깨비방망이나 믹서기로 재료를 고루 섞은 다음 차갑게 식힌다.",
-        "오이를 채 썰어 소금에 절였다가 물기를 꼭 짜거나 생으로 준비한다.",
-        "차갑게 둔 국물을 식사 직전에 오이 위에 끼얹는다.",
-        "마지막으로 깨소금을 조금 더하고 선택적으로 미역을 곁들인다."
-      ],
-      "recommendationProfile": {
-        "primaryIngredients": [
-          "오이"
-        ],
-        "family": "other",
-        "method": "other",
-        "kind": "main"
-      }
     }
   }
 }
