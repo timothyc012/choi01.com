@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-store-source-evidence",
+  "weekStart": "2026-10-05",
+  "collectedAt": "2026-10-04T09:07:17+02:00",
+  "sources": [
+    {
+      "id": "lidl-kw41",
+      "chain": "Lidl",
+      "postcodes": [
+        "40472",
+        "40489",
+        "44369",
+        "52064"
+      ],
+      "url": "https://www.lidl.de/l/prospekte/aktionsprospekt-05-10-2026-10-10-2026-3005f7/ar/0?_ab=1&lf=HHZ",
+      "type": "pdf",
+      "evidence": {
+        "sourceSha256": "cfb396a95aa8cf2bcbc92d54ab02d5cbea3e3e87aa45381584994f062d708c06",
+        "pageCount": 69,
+        "checkedPageCount": 69,
+        "extraction": {
+          "tool": "pdftotext -layout",
+          "textSha256": "6969d451074c26e71ca22207bff8a755f04aeb4daad4c1af2d2b6569f7c04031",
+          "pages": [
+            {
+              "page": 1,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 2,
+              "textSha256": "bf49008e30f347dbd989b989aa2b2a0219387c4c7ff18170b43896bd3b507264",
+              "charCount": 4006
+            },
+            {
+              "page": 3,
+              "textSha256": "1d22c5ec0d42070e99f9ed81f174b2ee7e0a3e03926e6e4cfd1f27206a0d57a9",
+              "charCount": 9969
+            },
+            {
+              "page": 4,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 5,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 6,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 7,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 8,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 9,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 10,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 11,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 12,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 13,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 14,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 15,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 16,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 17,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 18,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 19,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 20,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 21,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 22,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 23,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 24,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 25,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 26,
+              "textSha256": "0ab8bf0437951f79acc533048c2be25c1cd2cbb21b2d7908aebc37dc769498c7",
+              "charCount": 3237
+            },
+            {
+              "page": 27,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 28,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 29,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 30,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 31,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 32,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 33,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 34,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 35,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 36,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 37,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 38,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 39,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 40,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 41,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 42,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 43,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 44,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 45,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 46,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 47,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 48,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 49,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 50,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 51,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 52,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 53,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 54,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 55,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 56,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 57,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 58,
+              "textSha256": "40c0283fa7d93829ac7da97757278b53ff30753bc25d1f59e9ffa0af188b5333",
+              "charCount": 4386
+            },
+            {
+              "page": 59,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 60,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 61,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 62,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 63,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 64,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 65,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 66,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 67,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 68,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            },
+            {
+              "page": 69,
+              "textSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "charCount": 0
+            }
+          ]
+        },
+        "status": "수집완료"
+      }
+    }
+  ],
+  "summary": {
+    "sourceCount": 1,
+    "complete": 1,
+    "partial": 0,
+    "accessFailed": 0,
+    "checkedPdfPages": 69
+  }
+}

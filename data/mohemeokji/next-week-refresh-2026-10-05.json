@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "kind": "mohemeokji-next-week-refresh",
+  "weekStart": "2026-10-05",
+  "targetWeekEnd": "2026-10-11",
+  "status": "partial-source-check",
+  "automationId": "automation",
+  "sourceEvidence": {
+    "path": "data/mohemeokji/store-source-evidence-2026-10-05.json",
+    "sha256": "1e610241f4c753d198f609817474030d8dd53c646013b0c3f87a752ec2d6615c",
+    "lidl": {"contentPages": 69, "checkedPages": 69, "pdfSha256": "cfb396a95aa8cf2bcbc92d54ab02d5cbea3e3e87aa45381584994f062d708c06"},
+    "metro": {"contentPages": 47, "checkedPages": 1}
+  },
+  "availableSources": ["Lidl", "ALDI Nord", "METRO"],
+  "notYetPublished": ["ALDI SÜD", "EDEKA", "Kaufland", "Netto Marken-Discount", "REWE"],
+  "releasePrepared": false,
+  "policy": "Do not copy 2026-09-28 rows. Full source evidence exists for Lidl pages; METRO and ALDI Nord remain partial. No web/MCP publication before exact approvalDigest owner approval."
+}
