@@ -567,6 +567,71 @@ code {
   color: var(--color-text);
 }
 
+/* Plain footer links, same look as the original single "Back to top" link. */
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* Legal pages (privacy policy): readable single column, existing tokens only. */
+.legal-page {
+  width: min(760px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: var(--space-16) 0 var(--space-12);
+}
+
+.legal-page section + section {
+  margin-top: var(--space-16);
+  padding-top: var(--space-12);
+  border-top: 1px solid var(--color-border);
+}
+
+.legal-page h1 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 620;
+  line-height: 1.12;
+}
+
+.legal-page h2 {
+  margin: var(--space-8) 0 var(--space-3);
+  font-size: 18px;
+  font-weight: 620;
+  line-height: 1.35;
+}
+
+.legal-page p,
+.legal-page li {
+  color: var(--color-muted);
+  font-size: 16px;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.legal-page p {
+  margin: 0 0 var(--space-3);
+}
+
+.legal-page ul {
+  margin: 0;
+  padding-left: var(--space-6);
+}
+
+.legal-page li + li {
+  margin-top: var(--space-2);
+}
+
+.legal-page code {
+  overflow-wrap: anywhere;
+}
+
+.legal-page .legal-meta {
+  margin-top: var(--space-3);
+  color: var(--color-faint);
+  font-size: 14px;
+}
+
 @media (max-width: 920px) {
   .nav-links {
     display: none;
