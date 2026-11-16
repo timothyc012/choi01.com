@@ -23,6 +23,7 @@ import {
 import {
   fontSizeForShape,
   fontStackForShape,
+  noteFontSizeForShape,
   textAlignForShape,
 } from './canvasText';
 import { CANVAS_UI_COLORS } from './theme';
@@ -165,6 +166,7 @@ export function createCanvasShapeRenderer({
           style={{ border: `${strokeWidth / camera.z}px solid ${isDarkMode ? CANVAS_UI_COLORS.slate600 : CANVAS_UI_COLORS.slate400}` }}
         >
           <div
+            data-canvas-frame-label={s.id}
             className="absolute font-semibold"
             style={{
               top: -22 / camera.z,
@@ -182,16 +184,24 @@ export function createCanvasShapeRenderer({
     }
 
     if (s.type === 'note') {
+      // Paper card: flat fill, soft drop shadow toward the desk, 2px corners,
+      // text centred and shrunk to fit the box.
+      const noteFontSize = noteFontSizeForShape(s);
       return (
         <div
-          className="w-full h-full flex p-3 shadow-md"
-          style={{ background: effectiveFill(s), borderTop: `6px solid ${palette.border}`, color: palette.text }}
+          className="w-full h-full flex items-center p-3"
+          style={{
+            background: effectiveFill(s),
+            color: palette.text,
+            borderRadius: 2,
+            boxShadow: `0 ${3 / camera.z}px ${10 / camera.z}px rgba(15,23,42,0.18)`,
+          }}
         >
           {isEditing
             ? renderEditor('font-medium', { color: effectiveText(s), fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) })
             : html
-              ? <div data-canvas-text-view key="canvas-view" className="canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ color: effectiveText(s), fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }} dangerouslySetInnerHTML={{ __html: html }} />
-              : <div data-canvas-text-view key="canvas-view" className="canvas-rich-text w-full h-full font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ color: effectiveText(s), fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }}><span className="opacity-40">메모 입력...</span></div>}
+              ? <div data-canvas-text-view key="canvas-view" className="canvas-rich-text w-full font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ maxHeight: '100%', color: effectiveText(s), fontSize: noteFontSize, fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }} dangerouslySetInnerHTML={{ __html: html }} />
+              : <div data-canvas-text-view key="canvas-view" className="canvas-rich-text w-full font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ color: effectiveText(s), fontSize: noteFontSize, fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }}><span className="opacity-40">메모 입력...</span></div>}
         </div>
       );
     }

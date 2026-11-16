@@ -230,7 +230,11 @@
 .invoicex-canvas .w-4 { width: 1rem; }
 .invoicex-canvas .h-4 { height: 1rem; }
 .invoicex-canvas .w-8 { width: 2rem; }
+.invoicex-canvas .w-10 { width: 2.5rem; }
+.invoicex-canvas .min-w-10 { min-width: 2.5rem; }
+.invoicex-canvas .shrink-0 { flex-shrink: 0; }
 .invoicex-canvas .h-8 { height: 2rem; }
+.invoicex-canvas .h-10 { height: 2.5rem; }
 .invoicex-canvas .w-44 { width: 11rem; }
 .invoicex-canvas .min-w-20 { min-width: 5rem; }
 .invoicex-canvas .max-w-\[calc\(100vw-2rem\)\] { max-width: calc(100vw - 2rem); }

@@ -15,7 +15,7 @@ export function rotateShapes(
 ): CanvasShape[] {
   const selected = withNoteChildren(shapes, ids);
   return shapes.map(shape => {
-    if (!selected.has(shape.id)) return shape;
+    if (!selected.has(shape.id) || shape.locked) return shape;
     if (deltaRadians === 0) return { ...shape, rotation: undefined };
     return { ...shape, rotation: (shape.rotation ?? 0) + deltaRadians };
   });

@@ -40,6 +40,15 @@ export {
 } from './document.ts';
 export type { CanvasCommand } from './document.ts';
 export {
+  findCanvasShapes,
+  minimapLayout,
+  nextCanvasShape,
+  smartZoomTarget,
+} from './navigation.ts';
+export type { CanvasMinimapLayout, CanvasMinimapRect, CanvasSmartZoomTarget } from './navigation.ts';
+export { choisToZero1, zero1ToChois } from './zero1.ts';
+export type { Zero1File, Zero1Import } from './zero1.ts';
+export {
   sanitizeCanvasHtml,
   sanitizeCanvasFontFamily,
   validateCanvasAssetUrl,

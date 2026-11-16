@@ -37,6 +37,11 @@ export type CanvasCommand =
   | {
       readonly type: 'deleteShapes';
       readonly ids: readonly CanvasShapeId[];
+    }
+  | {
+      readonly type: 'lockShapes';
+      readonly ids: readonly CanvasShapeId[];
+      readonly locked: boolean;
     };
 
 export function createCanvasDocument(input: {
@@ -56,15 +61,24 @@ export function applyCanvasCommand(document: CanvasDocument, command: CanvasComm
       return { ...document, shapes: [...document.shapes, ...command.shapes] };
     case 'moveShapes': {
       const ids = new Set<string>(command.ids);
+      const movable = new Set(document.shapes.filter(shape => !shape.locked).map(shape => shape.id as string));
       return {
         ...document,
         shapes: document.shapes.map(shape =>
-          ids.has(shape.id) ? { ...shape, x: shape.x + command.dx, y: shape.y + command.dy } : shape,
+          !shape.locked
+          && (ids.has(shape.id)
+            || (shape.parentId !== undefined && ids.has(shape.parentId) && movable.has(shape.parentId)))
+            ? { ...shape, x: shape.x + command.dx, y: shape.y + command.dy }
+            : shape,
         ),
       };
     }
     case 'deleteShapes': {
-      const ids = new Set<string>(command.ids);
+      // Locked shapes opt out of the command; children and connectors that
+      // reference them stay too, since the endpoint survives.
+      const ids = new Set<string>(document.shapes
+        .filter(shape => !shape.locked && command.ids.includes(shape.id))
+        .map(shape => shape.id));
       return {
         ...document,
         shapes: document.shapes.filter(shape => {
@@ -72,6 +86,15 @@ export function applyCanvasCommand(document: CanvasDocument, command: CanvasComm
           if (shape.type !== 'arrow') return true;
           return !(shape.fromId && ids.has(shape.fromId)) && !(shape.toId && ids.has(shape.toId));
         }),
+      };
+    }
+    case 'lockShapes': {
+      const ids = new Set<string>(command.ids);
+      return {
+        ...document,
+        shapes: document.shapes.map(shape =>
+          ids.has(shape.id) ? { ...shape, locked: command.locked || undefined } : shape,
+        ),
       };
     }
     default:
@@ -207,6 +230,8 @@ function parseCommonShape(
     y,
     w,
     h,
+    // false is the default; it parses but is never written back out.
+    locked: readOptionalBoolean(input, 'locked') || undefined,
     rotation: readOptionalFiniteNumber(input, 'rotation'),
     groupId: readOptionalString(input, 'groupId'),
     parentId: readOptionalString(input, 'parentId'),
@@ -447,7 +472,7 @@ function readOptionalArrowCap(input: Record<string, unknown>, key: string): 'non
   return value;
 }
 
-function isRecord(input: unknown): input is Record<string, unknown> {
+export function isRecord(input: unknown): input is Record<string, unknown> {
   return typeof input === 'object' && input !== null;
 }
 

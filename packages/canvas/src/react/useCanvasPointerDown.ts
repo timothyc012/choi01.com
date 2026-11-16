@@ -154,8 +154,8 @@ export function useCanvasPointerDown({
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (penModeRef.current) return;
+      if (e.target instanceof Element && e.target.closest('[role="textbox"], [data-canvas-inspector], [data-canvas-find], [data-canvas-minimap], [data-canvas-floating-bar]')) return;
       if (!containerRef.current?.contains(e.target as Node)) return;
-      if (e.target instanceof Element && e.target.closest('[role="textbox"], [data-canvas-inspector]')) return;
       placeTextualShape(e.clientX, e.clientY);
     };
     const preventNativeSelection = (event: Event) => {
@@ -373,30 +373,38 @@ export function useCanvasPointerDown({
       // drifts a few pixels between clicks. At pointer-down we cannot tell a
       // double-click apart from a grab-and-drag, so always start the move
       // gesture and tag it with the shape; the pointer-up handler opens the
-      // editor only when the press released where it started.
-      const editOnReleaseId = isRepeatClick ? hit.id : undefined;
+      const editOnReleaseId = isRepeatClick && !hit.locked ? hit.id : undefined;
       lastClickRef.current = isRepeatClick ? null : { id: hit.id, time: now };
 
       const base = e.shiftKey ? new Set(currentSelected).add(hit.id) : (currentSelected.has(hit.id) ? currentSelected : new Set([hit.id]));
       const nextSelected = expandToGroups(base);
       selectNow(nextSelected);
 
+      // Locked shapes stay selectable but never join a drag; a stroke whose
+      // parent note is locked sits still too.
       const origin = new Map<string, CanvasShape>();
+      const movable = new Set(shapes.filter(s => !s.locked).map(s => s.id));
       for (const s of shapes) {
-        if (nextSelected.has(s.id) || (s.parentId && nextSelected.has(s.parentId))) origin.set(s.id, s);
+        if (s.locked) continue;
+        const parentDrags = s.parentId !== undefined && nextSelected.has(s.parentId) && movable.has(s.parentId);
+        if (nextSelected.has(s.id) || parentDrags) origin.set(s.id, s);
       }
 
       // Dragging a frame carries whatever sits inside it, decided once at
       // gesture start so shapes don't join or leave mid-drag.
       for (const s of shapes) {
-        if (s.type !== 'frame' || !nextSelected.has(s.id)) continue;
+        if (s.type !== 'frame' || s.locked || !nextSelected.has(s.id)) continue;
         const fb = bounds(s);
         for (const inner of shapes) {
-          if (inner.id === s.id || origin.has(inner.id)) continue;
+          if (inner.id === s.id || inner.locked || origin.has(inner.id)) continue;
           const c = centreOf(inner);
           if (c.x >= fb.minX && c.x <= fb.maxX && c.y >= fb.minY && c.y <= fb.maxY) origin.set(inner.id, inner);
         }
       }
+
+      // A click on a locked shape (or a locked-only selection) selects and
+      // stops; no move gesture begins.
+      if (origin.size === 0) return;
 
       beginHistory();
       applyInteraction({ kind: 'move', startX: p.x, startY: p.y, origin, editOnReleaseId });
@@ -416,6 +424,7 @@ export function useCanvasPointerDown({
   };
 
   const onResizeHandleDown = (e: ReactPointerEvent, shape: CanvasShape, handle: string) => {
+    if (shape.locked) return;
     e.stopPropagation();
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     beginHistory();
@@ -424,6 +433,7 @@ export function useCanvasPointerDown({
 
   const onRotateHandleDown = (e: ReactPointerEvent, shape: CanvasShape) => {
     e.stopPropagation();
+    if (shape.locked) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     const p = toPage(e.clientX, e.clientY);
     const c = centreOf(shape);
@@ -446,6 +456,7 @@ export function useCanvasPointerDown({
 
   const onBendHandleDown = (e: ReactPointerEvent, shape: CanvasShape) => {
     e.stopPropagation();
+    if (shape.locked) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     beginHistory();
     applyInteraction({ kind: 'bend', id: shape.id });
@@ -454,6 +465,7 @@ export function useCanvasPointerDown({
   const onOrthogonalSegmentHandleDown = (e: ReactPointerEvent, shape: CanvasShape, segmentIndex: number) => {
     e.stopPropagation();
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (shape.locked) return;
     beginHistory();
     applyInteraction({ kind: 'orthogonal-segment', id: shape.id, segmentIndex });
   };
@@ -461,6 +473,7 @@ export function useCanvasPointerDown({
   /** Drag an arrow endpoint to move it, or drop it on a node to (re)attach. */
   const onArrowEndpointDown = (e: ReactPointerEvent, shape: CanvasShape, endpoint: 'start' | 'end') => {
     e.stopPropagation();
+    if (shape.locked) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     beginHistory();
     applyInteraction({ kind: 'arrow-endpoint', id: shape.id, endpoint, hoverId: null });

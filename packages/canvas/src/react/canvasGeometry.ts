@@ -446,6 +446,10 @@ export function eraseAlongPath(
   const byId = new Map(shapes.map(shape => [shape.id, shape]));
 
   for (const s of shapes) {
+    if (s.locked) {
+      out.push(s);
+      continue;
+    }
     if (s.type !== 'draw' || !s.points) {
       if (pathHitsShape(s, from, to, pageRadius, safeZoom, byId, shapes)) continue;
       out.push(s);

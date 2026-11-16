@@ -1,6 +1,7 @@
 import { CANVAS_FONTS, sanitizeCanvasFontFamily, sanitizeCanvasHtml } from '../core/index.ts';
 import type { CanvasFontKey, CanvasShapeType, CanvasTextAlign } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
+import { escapeHtml } from './canvasShapeStyle.ts';
 
 export const CANVAS_FONT_KEYS: readonly CanvasFontKey[] = ['sans', 'serif', 'mono', 'gothic', 'korean', 'chosunmyjo', 'hdhyundai', 'custom'];
 const GENERIC_FONT_FAMILIES = new Set([
@@ -146,7 +147,8 @@ export function fontStackForShape(s: CanvasShape) {
 
 export function textAlignForShape(s: CanvasShape): CanvasTextAlign {
   if (s.textAlign) return s.textAlign;
-  return ['rect', 'ellipse', 'triangle', 'diamond', 'hexagon', 'star'].includes(s.type) ? 'center' : 'left';
+  // Notes are paper cards: centred text reads as a sticky, shapes as labels.
+  return ['note', 'rect', 'ellipse', 'triangle', 'diamond', 'hexagon', 'star'].includes(s.type) ? 'center' : 'left';
 }
 
 export function canvasFontFromValue(value: string): CanvasFontKey {
@@ -225,4 +227,109 @@ export function measureTextBoxContent(el: HTMLElement, shape: CanvasShape) {
   const rect = probe.getBoundingClientRect();
   probe.remove();
   return fittedTextBoxSizeFromMeasurement(rect.width, rect.height);
+}
+
+/** Smallest font a note shrinks to before it clips instead of shrinking further. */
+export const NOTE_FONT_MIN = 11;
+
+export interface TextBoxSize { width: number; height: number }
+
+/**
+ * Largest font size at which `text` fits `box`. `max` is the note's nominal
+ * size (a user-set `fontSize` caps the result too); `measure` is injected so
+ * the fit rule stays unit-testable without a layout engine.
+ */
+export function fitNoteFontSize(
+  text: string,
+  box: TextBoxSize,
+  max: number,
+  min: number,
+  measure: (text: string, width: number, size: number) => TextBoxSize,
+): number {
+  const floor = Math.max(1, min);
+  if (box.width <= 0 || box.height <= 0 || text.trim() === '') return max;
+  const fits = (size: number) => {
+    const measured = measure(text, box.width, size);
+    return measured.width <= box.width && measured.height <= box.height;
+  };
+  if (fits(max)) return max;
+  if (!fits(floor)) return floor;
+  // Fit-at-size is monotonic: binary search keeps DOM probes logarithmic.
+  let lo = floor;
+  let hi = max;
+  while (hi - lo > 0.5) {
+    const mid = (lo + hi) / 2;
+    if (fits(mid)) lo = mid;
+    else hi = mid;
+  }
+  return Math.floor(lo * 10) / 10;
+}
+
+const NOTE_MEASURE_CACHE_LIMIT = 200;
+const noteMeasureCache = new Map<string, number>();
+
+/**
+ * Probe-based note measurement: renders the rich text off-screen at the
+ * requested size and reports the laid-out box. happy-dom and other
+ * layout-less environments report zero height, which simply means "fits".
+ */
+function measureNoteTextDom(html: string, fontFamily: string, width: number, size: number): TextBoxSize {
+  if (typeof document === 'undefined') return { width: 0, height: 0 };
+  const probe = document.createElement('div');
+  probe.className = 'canvas-rich-text';
+  Object.assign(probe.style, {
+    position: 'absolute',
+    left: '-10000px',
+    top: '-10000px',
+    width: `${width}px`,
+    height: 'auto',
+    margin: '0',
+    padding: '0',
+    border: '0',
+    boxSizing: 'content-box',
+    visibility: 'hidden',
+    pointerEvents: 'none',
+    whiteSpace: 'pre-wrap',
+    overflowWrap: 'break-word',
+    fontSize: `${size}px`,
+    fontFamily,
+    lineHeight: '1.35',
+  });
+  try {
+    probe.innerHTML = html ? sanitizeCanvasHtml(html) : '&nbsp;';
+  } catch {
+    probe.innerHTML = '&nbsp;';
+  }
+  document.body.appendChild(probe);
+  const rect = probe.getBoundingClientRect();
+  probe.remove();
+  return { width: rect.width, height: rect.height };
+}
+
+/**
+ * The size a note's text view renders at: its nominal size unless the
+ * content overflows the box, in which case it shrinks toward NOTE_FONT_MIN.
+ * `manualSize`/`fontSize` stay authoritative — they only raise the cap.
+ * Results cache per (html, box, cap) so per-frame re-renders stay cheap.
+ */
+export function noteFontSizeForShape(s: CanvasShape): number {
+  const max = fontSizeForShape(s);
+  if (s.type !== 'note') return max;
+  const boxWidth = Math.max(0, s.w - 24);
+  const boxHeight = Math.max(0, s.h - 24);
+  const key = `${s.fontFamily ?? 'sans'}|${s.customFontFamily ?? ''}|${s.textAlign ?? ''}|${s.html ?? ''}|${s.text ?? ''}|${s.w}x${s.h}|${max}`;
+  const cached = noteMeasureCache.get(key);
+  if (cached !== undefined) return cached;
+  const family = fontStackForShape(s);
+  const content = s.html ? s.html : escapeHtml(s.text ?? '').replace(/\n/g, '<br>');
+  const fitted = fitNoteFontSize(
+    content,
+    { width: boxWidth, height: boxHeight },
+    max,
+    NOTE_FONT_MIN,
+    (text, width, size) => measureNoteTextDom(text, family, width, size),
+  );
+  if (noteMeasureCache.size >= NOTE_MEASURE_CACHE_LIMIT) noteMeasureCache.clear();
+  noteMeasureCache.set(key, fitted);
+  return fitted;
 }

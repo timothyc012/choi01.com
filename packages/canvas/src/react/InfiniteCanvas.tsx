@@ -21,6 +21,7 @@ import {
   sanitizeCanvasFontFamily,
   validateCanvasAssetUrl,
   validateCanvasCssColor,
+  smartZoomTarget,
 } from '../core/index.ts';
 import type {
   CanvasColorKey,
@@ -43,6 +44,7 @@ import { CANVAS_UI_COLORS } from './theme';
 import { CanvasVectorLayer } from './CanvasVectorLayer';
 import { CanvasObjectLayer } from './CanvasObjectLayer';
 import { CanvasInspector } from './CanvasInspector';
+import { CanvasFloatingBar } from './CanvasFloatingBar';
 import { CanvasPenPalette } from './CanvasPenPalette';
 import { CanvasPenModeExit } from './CanvasPenModeExit';
 import { createCanvasShapeRenderer } from './CanvasShapeRenderer';
@@ -56,6 +58,17 @@ import { useCanvasSelectionActions } from './useCanvasSelectionActions';
 import { useCanvasRuntimeInteractions } from './useCanvasRuntimeInteractions';
 import { getCanvasRenderConfig } from './canvasRenderConfig';
 import { paintLiveStrokes, prepareLiveStrokeCanvas } from './liveStrokeCanvas';
+import { CanvasMinimap } from './CanvasMinimap';
+import {
+  boundsVisible,
+  cameraCentering,
+  cameraFitting,
+  findShapeIds,
+  nextShapeId,
+  shapesBounds,
+} from './canvasView';
+import type { CanvasViewActions } from './useCanvasKeyboardInteractions';
+import { bounds } from './canvasGeometry';
 
 /**
  * Self-contained infinite canvas engine.
@@ -124,7 +137,7 @@ export function applySelectedStrokeWidth(
   strokeWidth: CanvasStrokeWidth,
 ): CanvasShape[] {
   return shapes.map(shape => {
-    if (!targetIds.has(shape.id)) return shape;
+    if (!targetIds.has(shape.id) || shape.locked) return shape;
     switch (shape.type) {
       case 'arrow':
       case 'frame':
@@ -159,7 +172,7 @@ export function applySelectedDrawStyle(
   style: SelectedDrawStyle,
 ): CanvasShape[] {
   return shapes.map(shape => (
-    targetIds.has(shape.id) && shape.type === 'draw'
+    targetIds.has(shape.id) && shape.type === 'draw' && !shape.locked
       ? { ...shape, ...style }
       : shape
   ));
@@ -193,6 +206,10 @@ export interface InfiniteCanvasHandle {
   zoomTo: (zoom: number) => void;
   resetZoom: () => void;
   zoomToFit: () => void;
+  /** Frames in document order: `{ id, name }` for a host frame list. */
+  listFrames: () => readonly { id: string; name: string }[];
+  /** Fit the camera to a shape (frames included), zoom capped at 100%. */
+  focusShape: (id: string) => void;
   autoLayout: () => void;
   exportSvg: () => string | null;
   exportPng: () => Promise<Blob | null>;
@@ -238,12 +255,13 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
   { boardIdentity = 'standalone', isDarkMode, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, drawStrokeWidth: propDrawStrokeWidth = 4, onToolChange, onDirty, onZoomChange, onSelectionChange,
     shapes: controlledShapes, onShapesChange, peerCursors, onLocalCursor, renderDiagram,
     drawInkStyle: propDrawInkStyle, onDrawInkStyleChange, objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange,
-    showGrid: propShowGrid, onShowGridChange }, ref
+    showGrid: propShowGrid, onShowGridChange, showMinimap: propShowMinimap, onShowMinimapChange }, ref
 ) {
-  const { drawInkStyle, objectSnapEnabled, showGrid, selectInkStyle, selectObjectSnap } = useCanvasPreferences({
+  const { drawInkStyle, objectSnapEnabled, showGrid, minimapEnabled, selectInkStyle, selectObjectSnap, selectMinimap } = useCanvasPreferences({
     drawInkStyle: propDrawInkStyle, onDrawInkStyleChange,
     objectSnapEnabled: propObjectSnapEnabled, onObjectSnapEnabledChange,
     showGrid: propShowGrid, onShowGridChange,
+    showMinimap: propShowMinimap, onShowMinimapChange,
   });
   const [drawStrokeWidth, setDrawStrokeWidth] = React.useState<CanvasStrokeWidth>(propDrawStrokeWidth);
   React.useEffect(() => setDrawStrokeWidth(propDrawStrokeWidth), [propDrawStrokeWidth]);
@@ -309,6 +327,120 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
   } = useCanvasEditorState({ boardIdentity, tool, activeColor: propActiveColor, defaultActiveColor, onActiveColorChange, controlledShapes, onShapesChange, onDirty });
   const clipboardRef = React.useRef<CanvasShape[] | null>(null);
 
+  // --- Find bar, tab navigation, view keys, minimap ------------------------
+  const [findOpen, setFindOpen] = React.useState(false);
+  const [findQuery, setFindQuery] = React.useState('');
+  /** No match highlighted yet: the first Enter lands on result 0 (Zero1 step). */
+  const [findIndex, setFindIndex] = React.useState(-1);
+  const findInputRef = React.useRef<HTMLInputElement | null>(null);
+  const findResults = React.useMemo(() => findShapeIds(shapes, findQuery), [shapes, findQuery]);
+
+  React.useEffect(() => {
+    if (findOpen) findInputRef.current?.focus();
+  }, [findOpen]);
+
+  const viewSize = () => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    return { width: rect?.width ?? 0, height: rect?.height ?? 0 };
+  };
+
+  const focusFindResult = React.useCallback((index: number, results: readonly string[]) => {
+    if (results.length === 0) return;
+    const wrapped = ((index % results.length) + results.length) % results.length;
+    setFindIndex(wrapped);
+    const id = results[wrapped];
+    selectNow(new Set([id]));
+    const shape = shapesRef.current.find(s => s.id === id);
+    if (!shape) return;
+    const { width, height } = viewSize();
+    if (width <= 0 || height <= 0) return;
+    const b = bounds(shape);
+    // Zero1 find focus: keep zoom at ≤100%, but fit when the shape is larger
+    // than the viewport, and always centre on the hit.
+    const z = Math.min(1, cameraRef.current.z,
+      Math.max(MIN_ZOOM, Math.min(width / (b.maxX - b.minX + 160), height / (b.maxY - b.minY + 160))));
+    setCamera(cameraCentering(
+      { x: (b.minX + b.maxX) / 2, y: (b.minY + b.maxY) / 2 },
+      width, height, z,
+    ));
+    setAnnouncement(`${id}로 이동`);
+  }, [cameraRef, selectNow, setAnnouncement, setCamera, shapesRef]);
+
+  const stepFind = React.useCallback((direction: number) => {
+    focusFindResult(findIndex + direction, findResults);
+  }, [findIndex, findResults, focusFindResult]);
+
+  const closeFind = React.useCallback(() => {
+    setFindOpen(false);
+    containerRef.current?.focus();
+  }, [containerRef]);
+
+  const fitAllShapes = React.useCallback(() => {
+    const b = shapesBounds(shapesRef.current);
+    const { width, height } = viewSize();
+    if (!b || width <= 0 || height <= 0) return;
+    setCamera(cameraFitting(b, width, height, MIN_ZOOM, MAX_ZOOM));
+  }, [setCamera, shapesRef]);
+
+  const fitSelection = React.useCallback(() => {
+    const sel = selectedRef.current;
+    const b = shapesBounds(shapesRef.current.filter(s => sel.has(s.id)));
+    const { width, height } = viewSize();
+    if (!b || width <= 0 || height <= 0) return;
+    setCamera(cameraFitting(b, width, height, MIN_ZOOM, MAX_ZOOM));
+  }, [selectedRef, setCamera, shapesRef]);
+
+  const zoomToMax = React.useCallback(() => {
+    const { width, height } = viewSize();
+    const cam = cameraRef.current;
+    const cx = cam.x + width / 2 / cam.z;
+    const cy = cam.y + height / 2 / cam.z;
+    setCamera({ x: cx - width / 2 / MAX_ZOOM, y: cy - height / 2 / MAX_ZOOM, z: MAX_ZOOM });
+  }, [cameraRef, setCamera]);
+
+  const smartZoom = React.useCallback((direction: number) => {
+    const sel = selectedRef.current;
+    const all = shapesRef.current;
+    const { width, height } = viewSize();
+    if (all.length === 0 || width <= 0 || height <= 0) return;
+    const allFit = cameraFitting(shapesBounds(all)!, width, height, MIN_ZOOM, MAX_ZOOM).z;
+    const selectionBounds = shapesBounds(all.filter(s => sel.has(s.id)));
+    const selectionFit = selectionBounds ? cameraFitting(selectionBounds, width, height, MIN_ZOOM, MAX_ZOOM).z : null;
+    const target = smartZoomTarget(cameraRef.current.z, allFit, selectionFit, direction);
+    if (!target) return;
+    if (target === 'all') fitAllShapes();
+    else if (target === 'selection') fitSelection();
+    else zoomToMax();
+  }, [cameraRef, fitAllShapes, fitSelection, selectedRef, shapesRef, zoomToMax]);
+
+  const revealShape = React.useCallback((id: string) => {
+    const shape = shapesRef.current.find(s => s.id === id);
+    const { width, height } = viewSize();
+    if (!shape || width <= 0 || height <= 0) return;
+    const b = bounds(shape);
+    if (boundsVisible(b, cameraRef.current, width, height)) return;
+    setCamera(cameraCentering(
+      { x: (b.minX + b.maxX) / 2, y: (b.minY + b.maxY) / 2 },
+      width, height, cameraRef.current.z,
+    ));
+  }, [cameraRef, setCamera, shapesRef]);
+
+  const centerOnPoint = React.useCallback((point: { x: number; y: number }) => {
+    const { width, height } = viewSize();
+    if (width <= 0 || height <= 0) return;
+    setCamera(cameraCentering(point, width, height, cameraRef.current.z));
+  }, [cameraRef, setCamera]);
+
+  const viewActionsRef = React.useRef<CanvasViewActions | undefined>(undefined);
+  viewActionsRef.current = {
+    openFind: () => { setFindIndex(-1); setFindOpen(true); },
+    fitAll: fitAllShapes,
+    fitSelection,
+    zoomMax: zoomToMax,
+    smartZoom,
+    revealShape,
+  };
+
   useLayoutEffect(() => {
     const canvas = liveStrokeCanvasRef.current;
     const container = containerRef.current;
@@ -344,16 +476,20 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     setAnnouncement,
     createId: uid,
   });
-
   const {
     selectionInfo,
     inspectorSelection,
     inspectorShape,
+    hoveredShapeId,
     onContainerPointerMove,
     onContainerPointerLeave,
   } = useCanvasViewInteractions({
     containerRef,
     camera,
+    interactionRef,
+    toolRef,
+    pointers,
+    shapesRef,
     setCamera,
     minZoom: MIN_ZOOM,
     maxZoom: MAX_ZOOM,
@@ -367,6 +503,13 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
     toPage,
   });
 
+  // The compact selection bar is the primary surface; the detailed inspector
+  // opens on demand (⋯) and always during text editing, where it carries the
+  // formatting controls. It closes itself when the selection empties.
+  const [inspectorOpen, setInspectorOpen] = React.useState(false);
+  React.useEffect(() => {
+    if (!inspectorShape) setInspectorOpen(false);
+  }, [inspectorShape]);
   const setSelectedStrokeWidth = React.useCallback((strokeWidth: CanvasStrokeWidth) => {
     const targetIds = new Set(selectedRef.current);
     if (targetIds.size === 0) return;
@@ -399,6 +542,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
   } = useCanvasRuntimeInteractions({
     ref,
     containerRef,
+    viewActionsRef,
     editorRef,
     pointers,
     interactionRef,
@@ -493,8 +637,9 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         return;
       }
     }
+    // Locked shapes keep their style and text; only their lock flag itself moves.
     commit(prev => prev.map(s => {
-      if (!targetIds.has(s.id)) return s;
+      if (!targetIds.has(s.id) || s.locked) return s;
       if (!includesStrokeWidth) return { ...s, ...patch };
       switch (s.type) {
         case 'arrow':
@@ -649,6 +794,8 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         shapeById={shapeById}
         allShapes={shapesRef.current}
         peerCursors={peerCursors}
+        hoveredShapeId={hoveredShapeId}
+        dotsEnabled={tool === 'select' && interaction.kind === 'none'}
         isDarkMode={isDarkMode}
         renderEditor={renderEditor}
         renderShapeBody={renderShapeBody}
@@ -667,7 +814,7 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         text inputs (HEX colour, card TYPE, custom font). Keep these inactive
         while drawing instead of exposing nearby native handwriting targets.
       */}
-      {inspectorShape && tool !== 'draw' && tool !== 'highlighter' && tool !== 'eraser' && (
+      {inspectorShape && (inspectorOpen || Boolean(editingId)) && tool !== 'draw' && tool !== 'highlighter' && tool !== 'eraser' && (
         <CanvasInspector
           shape={inspectorShape}
           selection={inspectorSelection}
@@ -685,6 +832,21 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
           applyFormat={applyFormat}
           applyList={applyList}
           applyCustomFontFamily={applyCustomFontFamily}
+          onClose={() => setInspectorOpen(false)}
+        />
+      )}
+
+      {inspectorShape && !inspectorOpen && !editingId && interaction.kind === 'none'
+        && tool !== 'draw' && tool !== 'highlighter' && tool !== 'eraser' && (
+        <CanvasFloatingBar
+          selection={inspectorSelection}
+          selectionActions={selectionActions}
+          camera={camera}
+          canvasSize={{ width: containerRef.current?.clientWidth ?? 380, height: containerRef.current?.clientHeight ?? 190 }}
+          isDarkMode={isDarkMode}
+          setActiveColor={setActiveColor}
+          patchSelected={patchSelected}
+          onOpenInspector={() => setInspectorOpen(true)}
         />
       )}
 
@@ -700,10 +862,69 @@ export const InfiniteCanvas = forwardRef<InfiniteCanvasHandle, InfiniteCanvasPro
         objectSnapEnabled={objectSnapEnabled}
         onSelectInkStyle={selectInkStyle}
         onSelectObjectSnap={selectObjectSnap}
+
         isDarkMode={isDarkMode}
         onSelectColor={selectPenColor}
         onSelectStrokeWidth={selectPenStrokeWidth}
       />
+
+      {findOpen && (
+        <div
+          data-canvas-find="true"
+          className={`absolute z-40 top-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-xl border shadow-lg backdrop-blur-sm ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-300 text-slate-800'}`}
+          onPointerDown={event => event.stopPropagation()}
+          onClick={event => event.stopPropagation()}
+        >
+          <input
+            ref={findInputRef}
+            data-canvas-find-input="true"
+            type="text"
+            value={findQuery}
+            onChange={event => { setFindQuery(event.target.value); setFindIndex(-1); }}
+            onKeyDown={event => {
+              if (event.key === 'Enter') {
+                event.preventDefault();
+                stepFind(event.shiftKey ? -1 : 1);
+              } else if (event.key === 'Escape') {
+                event.preventDefault();
+                closeFind();
+              }
+            }}
+            placeholder="찾기"
+            aria-label="캔버스에서 찾기"
+            className={`w-56 bg-transparent outline-none text-sm ${isDarkMode ? 'placeholder-slate-500' : 'placeholder-slate-400'}`}
+          />
+          <span data-canvas-find-count="true" className="text-xs opacity-60 tabular-nums min-w-8 text-center">
+            {findResults.length === 0 ? '0/0' : `${Math.min(findIndex + 1, findResults.length)}/${findResults.length}`}
+          </span>
+          <button
+            type="button"
+            onClick={closeFind}
+            aria-label="찾기 닫기"
+            className="w-6 h-6 rounded text-sm opacity-60 hover:opacity-100"
+          >×</button>
+        </div>
+      )}
+
+      <div className="absolute z-30 right-3 bottom-3 flex flex-col items-end gap-1.5">
+        {minimapEnabled && shapes.length > 0 && (
+          <CanvasMinimap
+            shapes={shapes}
+            camera={camera}
+            isDarkMode={isDarkMode}
+            onCenter={centerOnPoint}
+            viewSize={viewSize()}
+          />
+        )}
+        <button
+          type="button"
+          data-canvas-minimap-toggle="true"
+          onClick={() => selectMinimap(!minimapEnabled)}
+          aria-pressed={minimapEnabled}
+          title="미니맵 켜기/끄기"
+          className={`h-6 px-2 rounded-md text-[10px] font-semibold border shadow-sm ${isDarkMode ? 'bg-slate-900/90 border-slate-700 text-slate-300 hover:bg-slate-800' : 'bg-white/90 border-slate-300 text-slate-600 hover:bg-slate-50'} ${minimapEnabled ? '' : 'opacity-60'}`}
+        >미니맵</button>
+      </div>
     </div>
   );
 });

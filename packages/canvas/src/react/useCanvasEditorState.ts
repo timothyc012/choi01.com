@@ -297,21 +297,25 @@ export function useCanvasEditorState({
   }, [onDirty, setShapes]);
 
   const deleteSelection = useCallback((sel: Set<string>) => {
-    if (sel.size === 0) return false;
+    // Locked shapes opt out of Delete; children and connectors pointing at a
+    // surviving locked shape stay too, mirroring the core command.
+    const ids = new Set(shapesRef.current
+      .filter(shape => !shape.locked && sel.has(shape.id))
+      .map(shape => shape.id));
+    if (ids.size === 0) return false;
     // A connector is a relationship between its endpoints. Removing one
     // endpoint must remove the connector too; clearing only fromId/toId
     // leaves a visually orphaned line that falls back to its stale 0,0
     // geometry on the next render.
     commit(prev => prev.filter(s => {
-      if (sel.has(s.id) || (s.parentId && sel.has(s.parentId))) return false;
+      if (ids.has(s.id) || (s.parentId && ids.has(s.parentId))) return false;
       if (s.type !== 'arrow') return true;
-      return !(s.fromId && sel.has(s.fromId)) && !(s.toId && sel.has(s.toId));
+      return !(s.fromId && ids.has(s.fromId)) && !(s.toId && ids.has(s.toId));
     }));
     selectNow(new Set());
-    setAnnouncement(`${sel.size}개 삭제됨`);
+    setAnnouncement(`${ids.size}개 삭제됨`);
     return true;
   }, [commit, selectNow]);
-
   const beginHistory = useCallback(() => {
     historyBase.current = shapesRef.current;
   }, []);
