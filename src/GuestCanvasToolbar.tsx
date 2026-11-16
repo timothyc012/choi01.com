@@ -60,17 +60,19 @@ export function GuestCanvasToolbar({canvasRef, activeTool, setActiveTool, drawSt
           draggable={false}
           onDragStart={event => event.preventDefault()}
         >
-          <button type="button" className="gc-tool gc-toolbar-grip" aria-label="도구 모음 이동" title="드래그 또는 방향키로 이동 · Shift: 크게 이동 · Home: 원래 위치" {...position.gripProps}><GripHorizontal className="gc-icon" /></button>
+          <button type="button" className="gc-tool gc-toolbar-grip" aria-label="캔버스 도구 모음 이동" title="드래그 또는 방향키로 캔버스 도구 모음 이동 · Shift: 크게 이동 · Home: 원래 위치" {...position.gripProps}><GripHorizontal className="gc-icon" /></button>
+
+          {/* 선택·이동 */}
           <button type="button" onClick={() => setActiveTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동" aria-label="선택 / 이동">
             <MousePointer className="gc-icon" />
           </button>
           <button type="button" onClick={() => setActiveTool('hand')} className={toolButtonClass('hand')} title="손 도구 / 화면 이동 (H)">
             <Hand className="gc-icon" />
           </button>
-          <button type="button" onClick={() => onDiagram()} className="gc-tool gc-tool-diagram" title="Mermaid 다이어그램 만들기">
-            <FileCode className="gc-icon" />
-          </button>
 
+          <div className="gc-toolbar-divider" />
+
+          {/* 메모지 + 색 견본 */}
           <div className="gc-popover-anchor">
             <button
               type="button"
@@ -102,6 +104,16 @@ export function GuestCanvasToolbar({canvasRef, activeTool, setActiveTool, drawSt
             )}
           </div>
 
+          <div className="gc-toolbar-divider" />
+
+          {/* 텍스트 */}
+          <button type="button" onClick={() => setActiveTool('text')} className={toolButtonClass('text')} title="텍스트 (T) — 캔버스를 클릭하면 입력">
+            <Type className="gc-icon" />
+          </button>
+
+          <div className="gc-toolbar-divider" />
+
+          {/* 도형 모음 */}
           <div className="gc-popover-anchor">
             <button
               type="button"
@@ -138,15 +150,16 @@ export function GuestCanvasToolbar({canvasRef, activeTool, setActiveTool, drawSt
             )}
           </div>
 
-          <button type="button" onClick={() => setActiveTool('frame')} className={toolButtonClass('frame')} title="프레임 (F) — 드래그해서 그리기">
-            <Frame className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => setActiveTool('text')} className={toolButtonClass('text')} title="텍스트 (T) — 캔버스를 클릭하면 입력">
-            <Type className="gc-icon" />
-          </button>
+          <div className="gc-toolbar-divider" />
+
+          {/* 연결선 */}
           <button type="button" onClick={() => setActiveTool('arrow')} className={toolButtonClass('arrow')} title="연결선 / 화살표 (드래그해서 그리기)">
             <GitCommit className="gc-icon" />
           </button>
+
+          <div className="gc-toolbar-divider" />
+
+          {/* 펜·형광펜·지우개 + 선 굵기 */}
           <button type="button" onClick={() => setActiveTool('draw')} className={toolButtonClass('draw')} title="펜 (P)" aria-label="펜">
             <PenTool className="gc-icon" />
           </button>
@@ -190,17 +203,36 @@ export function GuestCanvasToolbar({canvasRef, activeTool, setActiveTool, drawSt
 
           <div className="gc-toolbar-divider" />
 
+          {/* 프레임 */}
+          <button type="button" onClick={() => setActiveTool('frame')} className={toolButtonClass('frame')} title="프레임 (F) — 드래그해서 그리기">
+            <Frame className="gc-icon" />
+          </button>
+
+          <div className="gc-toolbar-divider" />
+
+          {/* 실행 취소 / 다시 실행 */}
           <button type="button" onClick={() => canvasRef.current?.undo()} className="gc-tool" title="실행 취소 (Ctrl/⌘+Z)">
             <Undo2 className="gc-icon" />
           </button>
           <button type="button" onClick={() => canvasRef.current?.redo()} className="gc-tool" title="다시 실행 (Ctrl/⌘+Shift+Z 또는 Ctrl/⌘+Y)">
             <Redo2 className="gc-icon" />
           </button>
+
+          <div className="gc-toolbar-divider" />
+
+          {/* 그룹 / 그룹 해제 */}
           <button type="button" onClick={() => canvasRef.current?.group()} disabled={!selection.canGroup} className="gc-tool" title="그룹 (Ctrl+G) — 2개 이상 선택 필요">
             <Group className="gc-icon" />
           </button>
           <button type="button" onClick={() => canvasRef.current?.ungroup()} disabled={!selection.canUngroup} className="gc-tool" title="그룹 해제 (Ctrl+Shift+G)">
             <Ungroup className="gc-icon" />
+          </button>
+
+          <div className="gc-toolbar-divider" />
+
+          {/* 다이어그램 */}
+          <button type="button" onClick={() => onDiagram()} className="gc-tool gc-tool-diagram" title="Mermaid 다이어그램 만들기">
+            <FileCode className="gc-icon" />
           </button>
         </div>
 

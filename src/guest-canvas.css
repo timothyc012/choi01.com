@@ -73,52 +73,49 @@ body {
 
 .gc-hidden-input { display: none; }
 
-/* ---------- Header ---------- */
+/* ---------- Floating chrome (top pills) ---------- */
 
-.gc-header {
-  position: relative;
-  height: 52px;
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 0 16px;
-  background: var(--gc-surface);
-  border-bottom: 1px solid var(--gc-border);
-  z-index: 20;
-}
-
-.gc-header-left,
-.gc-header-right {
+.gc-chrome {
+  position: absolute;
+  top: 16px;
+  z-index: 30;
   display: flex;
   align-items: center;
   gap: 8px;
   min-width: 0;
+  padding: 6px;
+  border-radius: 16px;
+  border: 1px solid var(--gc-border);
+  background: var(--gc-surface);
+  box-shadow: var(--gc-shadow);
 }
 
-.gc-header-right {
-  position: absolute;
-  top: 9px;
+.gc-chrome-left { left: 16px; }
+
+.gc-chrome-right {
   right: 16px;
+  gap: 6px;
   touch-action: none;
 }
 
-.gc-header-grip {
+.gc-chrome-grip {
   flex: none;
+  width: 40px;
+  padding: 0;
+  justify-content: center;
   cursor: grab;
   touch-action: none;
 }
 
-.gc-header-grip:active { cursor: grabbing; }
+.gc-chrome-grip:active { cursor: grabbing; }
 
 .gc-home-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   color: var(--gc-muted);
   transition: background 160ms ease, color 160ms ease;
 }
@@ -132,6 +129,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 40px;
   font-weight: 650;
   font-size: 15px;
   white-space: nowrap;
@@ -143,8 +141,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 8px;
   background: var(--gc-ink);
   color: var(--gc-bg);
@@ -175,7 +173,7 @@ body {
   background: rgba(217, 179, 106, 0.08);
 }
 
-/* Login + save status (header right). */
+/* Login controls (right pill) + save status (left pill). */
 .gc-auth {
   display: flex;
   align-items: center;
@@ -204,7 +202,7 @@ body {
 .gc-auth-notice {
   position: fixed;
   z-index: 60;
-  top: 64px;
+  top: 76px;
   left: 50%;
   width: max-content;
   max-width: calc(100vw - 32px);
@@ -221,8 +219,8 @@ body {
 }
 
 .gc-avatar {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 999px;
   border: 1px solid var(--gc-border);
   object-fit: cover;
@@ -239,11 +237,80 @@ body {
   font-weight: 700;
 }
 
-.gc-header-divider {
+.gc-chrome-divider {
   width: 1px;
   height: 22px;
   background: var(--gc-border);
   margin: 0 2px;
+}
+
+.gc-icon-small {
+  width: 12px;
+  height: 12px;
+}
+
+.gc-frames-count {
+  min-width: 18px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  border: 1px solid var(--gc-border);
+  background: var(--gc-surface-soft);
+  color: var(--gc-muted);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- Dropdown menus (frames / export) ---------- */
+
+.gc-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 190px;
+  max-width: min(280px, calc(100vw - 32px));
+  max-height: 50vh;
+  overflow-y: auto;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--gc-border);
+  background: var(--gc-surface);
+  box-shadow: var(--gc-shadow);
+}
+
+.gc-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 40px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--gc-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.gc-menu-item:hover { background: var(--gc-surface-soft); }
+.gc-root.dark .gc-menu-item:hover { background: var(--gc-border-soft); }
+
+.gc-menu-empty {
+  padding: 10px;
+  color: var(--gc-faint);
+  font-size: 12px;
+  text-align: center;
+  white-space: normal;
 }
 
 /* ---------- Buttons ---------- */
@@ -252,7 +319,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 34px;
+  min-width: 40px;
+  height: 40px;
   padding: 0 12px;
   border-radius: 10px;
   border: 1px solid var(--gc-border);
@@ -297,6 +365,8 @@ body {
 .gc-button:focus-visible,
 .gc-tool:focus-visible,
 .gc-home-link:focus-visible,
+.gc-menu-item:focus-visible,
+.gc-sticky-swatch:focus-visible,
 .gc-zoom-select:focus-visible {
   outline: 2px solid var(--gc-accent);
   outline-offset: 2px;
@@ -313,12 +383,12 @@ body {
 .gc-toolbar {
   position: absolute;
   left: 16px;
-  top: 16px;
+  top: 76px;
   z-index: 30;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 0;
   padding: 6px;
   border-radius: 16px;
   border: 1px solid var(--gc-border);
@@ -341,22 +411,22 @@ body {
 .gc-toolbar-grip:active { cursor: grabbing; }
 
 /*
- * The full tool column needs ~800px of viewport height. Below that the last
- * buttons (group / ungroup) used to fall below the fold with no way to reach
+ * The full tool column needs ~800px of viewport height under the top chrome.
+ * Below that the last buttons used to fall below the fold with no way to reach
  * them, so on shorter screens the tools lay out in two columns instead.
  * A grid — rather than a scroll container — keeps the fly-out popovers of the
  * sticky / shape / stroke tools visible instead of clipping them.
  */
-@media (max-height: 820px) {
+@media (max-height: 880px) {
   .gc-toolbar {
     display: grid;
-    grid-template-columns: repeat(2, 36px);
+    grid-template-columns: repeat(2, 40px);
+    row-gap: 0;
     justify-items: center;
   }
 
   .gc-toolbar .gc-toolbar-divider {
-    grid-column: 1 / -1;
-    width: 100%;
+    display: none;
   }
 }
 
@@ -364,8 +434,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
   border: none;
   background: transparent;
@@ -421,7 +491,7 @@ body {
   width: 24px;
   height: 1px;
   background: var(--gc-border);
-  margin: 4px 0;
+  margin: 5px 0;
 }
 
 .gc-toolbar-divider-v {
@@ -434,7 +504,7 @@ body {
 
 .gc-popover {
   position: absolute;
-  left: 48px;
+  left: 54px;
   top: 0;
   z-index: 40;
   padding: 8px;
@@ -450,8 +520,8 @@ body {
 }
 
 .gc-sticky-swatch {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 8px;
   border: 1px solid;
   cursor: pointer;
@@ -465,7 +535,7 @@ body {
 
 .gc-shapes-menu {
   display: grid;
-  grid-template-columns: repeat(3, 36px);
+  grid-template-columns: repeat(3, 40px);
   gap: 4px;
 }
 
@@ -473,7 +543,7 @@ body {
 
 .gc-zoombar {
   position: absolute;
-  left: 16px;
+  right: 16px;
   bottom: 16px;
   z-index: 30;
   display: flex;
@@ -487,7 +557,7 @@ body {
 }
 
 .gc-zoom-select {
-  height: 36px;
+  height: 40px;
   border: none;
   border-radius: 12px;
   padding: 0 6px;
@@ -500,25 +570,45 @@ body {
   cursor: pointer;
 }
 
-/* ---------- Hint & notice ---------- */
+/* ---------- Shortcut help & notice ---------- */
+
+.gc-help { position: relative; }
 
 .gc-hint {
   position: absolute;
-  right: 16px;
-  bottom: 16px;
-  z-index: 30;
-  padding: 6px 12px;
-  border-radius: 10px;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 40;
+  width: max-content;
+  max-width: min(460px, calc(100vw - 32px));
+  padding: 10px 14px;
+  border-radius: 12px;
   border: 1px solid var(--gc-border);
-  background: color-mix(in srgb, var(--gc-surface) 92%, transparent);
-  color: var(--gc-faint);
-  font-size: 11px;
+  background: var(--gc-surface);
+  box-shadow: var(--gc-shadow);
+  color: var(--gc-muted);
+  font-size: 12px;
   font-weight: 500;
+  line-height: 1.6;
+  white-space: normal;
+}
+
+/* The canvas package pins its minimap + toggle to the bottom-right corner at
+   12px. The zoom bar now owns that corner, so the vendored stack is lifted
+   above it: zoom bar (16–70px) → toggle badge → minimap. */
+.gc-stage div:has(> [data-canvas-minimap-toggle]) {
+  right: 16px;
+  bottom: 78px;
+}
+
+.gc-stage [data-canvas-minimap] {
+  right: 0;
+  bottom: calc(100% + 8px) !important;
 }
 
 .gc-notice {
   position: absolute;
-  top: 16px;
+  top: 76px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
@@ -568,23 +658,29 @@ body {
 
 /* ---------- Small screens ---------- */
 
-@media (max-width: 720px) {
+/* Icon-only chrome once both pills can no longer share the top row. */
+@media (max-width: 900px) {
   .gc-ephemeral-badge { display: none; }
   .gc-save-status { display: none; }
-  .gc-button span { display: none; }
-  .gc-button { padding: 0 9px; }
-  .gc-hint { display: none; }
+  .gc-brand-label { display: none; }
+  .gc-button span:not(.gc-frames-count) { display: none; }
+  .gc-button { padding: 0 12px; }
 }
 
 @media (max-width: 480px) {
-  .gc-header { padding: 0 8px; gap: 4px; }
-  .gc-header-left { max-width: 72px; gap: 4px; overflow: hidden; }
-  .gc-brand { width: 26px; min-width: 26px; gap: 0; overflow: hidden; }
-  .gc-brand-label { display: none; }
-  .gc-header-right { right: 8px; gap: 2px; }
-  .gc-header-grip,
-  .gc-header-right .gc-button { padding: 0 7px; }
-  .gc-header-right .gc-header-divider { display: none; }
+  /* Phones: the right pill wraps inside a reduced width instead of
+     overlapping the left pill; the tool rail moves out of the top area. */
+  .gc-chrome { top: 8px; }
+  .gc-chrome-left { left: 8px; max-width: 96px; }
+  .gc-chrome-right {
+    right: 8px;
+    max-width: calc(100vw - 128px);
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 4px;
+  }
+  .gc-chrome-grip { display: none; }
+  .gc-toolbar { top: auto; bottom: 76px; }
 }
 
 .gc-tool-diagram { color: var(--gc-accent); }
@@ -676,7 +772,7 @@ body {
 .gc-diagram-composer-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 .gc-diagram-drawer {
   position: absolute;
-  top: 16px;
+  top: 76px;
   right: 16px;
   bottom: 16px;
   z-index: 45;
