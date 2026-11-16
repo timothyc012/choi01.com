@@ -23,6 +23,7 @@ export interface CanvasSelectionActions {
     group: () => void;
     ungroup: () => void;
     reorderSelected: (direction: LayerDirection) => void;
+    toggleLocked: () => void;
 }
 /**
  * Owns delete/duplicate/group/ungroup for the current selection. The toolbar

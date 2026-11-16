@@ -5,6 +5,19 @@ import { historyShortcutFromKeyboardEvent, toolShortcutFromKeyboardEvent } from 
 import type { CanvasShape } from './InfiniteCanvas';
 import type { CanvasSelectionActions } from './useCanvasSelectionActions';
 import { shapePlainText } from './canvasGeometry';
+import type { Interaction } from './canvasPointerTypes';
+import { nextShapeId } from './canvasView';
+
+/** View actions the parent supplies; every entry is optional so the hook stays usable standalone. */
+export interface CanvasViewActions {
+  openFind?: () => void;
+  fitAll?: () => void;
+  fitSelection?: () => void;
+  zoomMax?: () => void;
+  smartZoom?: (direction: number) => void;
+  /** Select a shape and centre the camera on it when it is off screen. */
+  revealShape?: (id: string) => void;
+}
 
 type ShapeUpdater = CanvasShape[] | ((prev: CanvasShape[]) => CanvasShape[]);
 
@@ -14,6 +27,8 @@ interface KeyboardInteractionOptions {
   shapesRef: RefObject<CanvasShape[]>;
   selectedRef: RefObject<Set<string>>;
   editingIdRef: RefObject<string | null>;
+  interactionRef: RefObject<Interaction>;
+  applyInteraction: (next: Interaction) => void;
   toolRef: RefObject<CanvasTool>;
   past: RefObject<CanvasShape[][]>;
   future: RefObject<CanvasShape[][]>;
@@ -29,6 +44,8 @@ interface KeyboardInteractionOptions {
   onToolChange: (tool: CanvasTool) => void;
   createId: (prefix?: string) => string;
   selectionActions: CanvasSelectionActions;
+  /** Camera/find actions wired by the parent component. */
+  viewActionsRef?: RefObject<CanvasViewActions | undefined>;
 }
 
 /** Installs keyboard shortcuts and canvas-level editing/navigation semantics. */
@@ -38,6 +55,8 @@ export function useCanvasKeyboardInteractions({
   shapesRef,
   selectedRef,
   editingIdRef,
+  interactionRef,
+  applyInteraction,
   toolRef,
   past,
   future,
@@ -51,13 +70,14 @@ export function useCanvasKeyboardInteractions({
   selectNow,
   onDirty,
   onToolChange,
+  viewActionsRef,
   createId,
   selectionActions,
 }: KeyboardInteractionOptions): void {
   const nudge = useCallback((dx: number, dy: number) => {
     const sel = selectedRef.current;
     if (sel.size === 0) return;
-    commit(prev => prev.map(s => (sel.has(s.id) ? {
+    commit(prev => prev.map(s => (sel.has(s.id) && !s.locked ? {
       ...s,
       x: s.x + dx,
       y: s.y + dy,
@@ -162,6 +182,13 @@ export function useCanvasKeyboardInteractions({
         return;
       }
 
+      // ⇧⌘L toggles the lock on the selection; it must work on locked shapes.
+      if (mod && e.shiftKey && e.code === 'KeyL') {
+        e.preventDefault();
+        if (sel.size > 0) selectionActions.toggleLocked();
+        return;
+      }
+
       if (mod && e.key.toLowerCase() === 'a') {
         e.preventDefault();
         selectNow(new Set(shapesRef.current.map(s => s.id)));
@@ -184,23 +211,54 @@ export function useCanvasKeyboardInteractions({
         return;
       }
 
-      // Tab walks the shape list so the canvas is reachable without a mouse.
-      if (e.key === 'Tab' && shapesRef.current.length > 0) {
+      // Tab walks shapes in Zero1 reading order (rows by centre-y, then
+      // left→right) so the canvas is reachable without a mouse. Skipped while
+      // text is being edited or the find input is focused (typing targets).
+      if (e.key === 'Tab' && !editingIdRef.current && shapesRef.current.length > 0) {
         e.preventDefault();
-        const all = shapesRef.current;
-        const currentIndex = all.findIndex(s => sel.has(s.id));
-        const nextIndex = e.shiftKey
-          ? (currentIndex <= 0 ? all.length - 1 : currentIndex - 1)
-          : (currentIndex === -1 || currentIndex === all.length - 1 ? 0 : currentIndex + 1);
-        const target = all[nextIndex];
-        selectNow(new Set([target.id]));
-        setAnnouncement(`${target.type} 선택됨: ${shapePlainText(target) || '내용 없음'}`);
+        const current = shapesRef.current.find(s => sel.has(s.id))?.id ?? null;
+        const next = nextShapeId(shapesRef.current, current, e.shiftKey ? -1 : 1);
+        if (!next) return;
+        selectNow(new Set([next]));
+        viewActionsRef?.current?.revealShape?.(next);
+        const target = shapesRef.current.find(s => s.id === next);
+        if (target) setAnnouncement(`${target.type} 선택됨: ${shapePlainText(target) || '내용 없음'}`);
+        return;
+      }
+
+      // Find bar: ⌘F/Ctrl+F, physical key so non-Latin layouts still open it.
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && e.code === 'KeyF') {
+        e.preventDefault();
+        viewActionsRef?.current?.openFind?.();
+        return;
+      }
+
+      // View keys (physical keys): ⌥1 all, ⌥2 selection, ⌥3 max, ]/[ smart.
+      if (e.altKey && !e.metaKey && !e.ctrlKey && e.code === 'Digit1') {
+        e.preventDefault();
+        viewActionsRef?.current?.fitAll?.();
+        return;
+      }
+      if (e.altKey && !e.metaKey && !e.ctrlKey && e.code === 'Digit2') {
+        e.preventDefault();
+        viewActionsRef?.current?.fitSelection?.();
+        return;
+      }
+      if (e.altKey && !e.metaKey && !e.ctrlKey && e.code === 'Digit3') {
+        e.preventDefault();
+        viewActionsRef?.current?.zoomMax?.();
+        return;
+      }
+      if (!editingIdRef.current && (e.code === 'BracketRight' || e.code === 'BracketLeft')
+          && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        viewActionsRef?.current?.smartZoom?.(e.code === 'BracketRight' ? 1 : -1);
         return;
       }
 
       if (e.key === 'Enter' && sel.size === 1) {
         const target = shapesRef.current.find(s => sel.has(s.id));
-        if (target && textualTypes.includes(target.type)) {
+        if (target && !target.locked && textualTypes.includes(target.type)) {
           e.preventDefault();
           setEditingId(target.id);
         }
@@ -208,6 +266,13 @@ export function useCanvasKeyboardInteractions({
       }
 
       if (e.key === 'Escape') {
+        // A connect drag in flight is cancelled whole: no history was opened,
+        // so dropping the interaction is the entire cleanup.
+        if (interactionRef.current.kind === 'connect') {
+          e.preventDefault();
+          applyInteraction({ kind: 'none' });
+          return;
+        }
         if (editingIdRef.current) {
           e.preventDefault();
           setEditingId(null);

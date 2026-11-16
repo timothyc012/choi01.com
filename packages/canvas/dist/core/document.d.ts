@@ -10,6 +10,10 @@ export type CanvasCommand = {
 } | {
     readonly type: 'deleteShapes';
     readonly ids: readonly CanvasShapeId[];
+} | {
+    readonly type: 'lockShapes';
+    readonly ids: readonly CanvasShapeId[];
+    readonly locked: boolean;
 };
 export declare function createCanvasDocument(input?: {
     readonly id?: string;
@@ -20,4 +24,5 @@ export declare function serializeCanvasSnapshot(document: CanvasDocument, camera
 /** Parse one untrusted shape at collaboration/render boundaries. */
 export declare function parseCanvasShape(input: unknown): CanvasShape;
 export declare function parseCanvasSnapshot(input: unknown): CanvasSnapshot;
+export declare function isRecord(input: unknown): input is Record<string, unknown>;
 //# sourceMappingURL=document.d.ts.map

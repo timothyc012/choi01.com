@@ -32,6 +32,6 @@ export const MAX_ZOOM = 4;
 export const ERASER_RADIUS = 14;
 /** Screen-space drift tolerated between the two presses of a double-click. */
 export const DOUBLE_CLICK_DRIFT_PX = 4;
-export const CONNECTABLE: CanvasShapeType[] = ['note', 'card', 'rect', 'ellipse', 'text', 'image'];
+export const CONNECTABLE: CanvasShapeType[] = ['note', 'card', 'rect', 'ellipse', 'text', 'image', 'triangle', 'diamond', 'hexagon', 'star', 'frame'];
 
 export type InteractionRef = RefObject<Interaction>;

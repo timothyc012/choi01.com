@@ -213,6 +213,7 @@ export function useCanvasPointerMove({
         });
         const picked = shapesRef.current
           .filter(s => {
+            if (s.locked) return false;
             const rendered = renderedBounds.get(s.id);
             if (rendered) {
               return rendered.right >= screenMinX && rendered.left <= screenMaxX

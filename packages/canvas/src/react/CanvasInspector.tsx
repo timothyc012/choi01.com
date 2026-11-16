@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { ArrowUp, ArrowDown, ChevronsUp, ChevronsDown, Clipboard, ClipboardPaste, Copy, Group, RotateCcw, RotateCw, Trash2, Undo2, Ungroup } from 'lucide-react';
+import { ArrowUp, ArrowDown, ChevronsUp, ChevronsDown, Clipboard, ClipboardPaste, Copy, Group, Lock, RotateCcw, RotateCw, Trash2, Undo2, Ungroup } from 'lucide-react';
 import { CANVAS_COLORS, CANVAS_COLOR_KEYS } from '../core/index.ts';
 import type { CanvasColorKey, CanvasStrokeWidth } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
@@ -30,6 +30,8 @@ interface CanvasInspectorProps {
   applyFormat: (command: 'bold' | 'italic' | 'underline') => void;
   applyList: (kind: 'bullet' | 'dash' | 'number') => void;
   applyCustomFontFamily: (value: string) => void;
+  /** Provided when the inspector is a ⋯-opened detail panel: offers a way back. */
+  onClose?: () => void;
 }
 
 const STROKE_WIDTHS = [2, 4, 6, 8] as const satisfies readonly CanvasStrokeWidth[];
@@ -98,7 +100,7 @@ function supportsStrokeColor(shape: CanvasShape): boolean {
 export function CanvasInspector({
   shape: s, selection, selectionActions, shapes, camera, canvasSize, isDarkMode, editing, showPalette,
   installedFontFamilies, setShowPalette, setActiveColor, patchSelected,
-  applyFormat, applyList, applyCustomFontFamily,
+  applyFormat, applyList, applyCustomFontFamily, onClose,
 }: CanvasInspectorProps) {
   const btn = isDarkMode ? 'text-slate-200 hover:bg-slate-800' : 'text-slate-700 hover:bg-slate-100';
   // A multi-selection has no single set of text/arrow properties to show, so
@@ -171,10 +173,17 @@ export function CanvasInspector({
   return (
     <div ref={inspectorRef} data-canvas-inspector={isDraw ? 'draw' : 'text'} className={`absolute z-40 pointer-events-auto flex flex-col gap-1.5 p-2 rounded-xl border shadow-xl backdrop-blur-sm max-w-[calc(100vw-2rem)] ${isDarkMode ? 'bg-slate-900/95 border-slate-700 text-slate-200' : 'bg-white/95 border-slate-200 text-slate-700'}`} style={{ left: position.left, top: position.top }} onPointerDown={event => { event.stopPropagation(); const target = event.target instanceof Element ? event.target : null; if (!target?.closest('input, select, textarea')) event.preventDefault(); }} onClick={event => event.stopPropagation()}>
       {multi
-        ? <div className="flex items-center gap-1 px-1 text-[11px] font-semibold opacity-70">{selection.length}개 선택됨</div>
-        : <div className="flex flex-wrap items-center gap-1 pointer-events-auto" role="tablist" aria-label="선택 개체 도구 그룹">
+        ? <div className="flex items-center gap-1 px-1 text-[11px] font-semibold opacity-70"><span className="flex-1">{selection.length}개 선택됨</span>{onClose && (
+          <button type="button" title="설정 닫기" aria-label="설정 닫기" onClick={onClose} className={`w-10 h-10 rounded-lg flex items-center justify-center ${btn}`}>×</button>
+        )}</div>
+        : <div className="flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1 pointer-events-auto flex-1" role="tablist" aria-label="선택 개체 도구 그룹">
             {groups.map(group => <button key={group} type="button" role="tab" aria-selected={openGroup === group} onClick={() => setOpenGroup(group)} className={`h-7 px-2.5 rounded-lg text-[11px] font-semibold transition-colors ${openGroup === group ? 'bg-blue-600 text-white' : btn}`}>{groupNames[group]}</button>)}
-          </div>}
+          </div>
+          {onClose && (
+            <button type="button" title="설정 닫기" aria-label="설정 닫기" onClick={onClose} className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${btn}`}>×</button>
+          )}
+        </div>}
       <div className="relative flex items-center gap-1.5 pointer-events-none" style={{ display: multi || openGroup === 'color' ? undefined : 'none' }}>
         <span className="pointer-events-none px-1 text-[10px] font-semibold tracking-wide opacity-60">{isDraw ? '그리기' : '색상'}</span>
         <button type="button" title={isDraw ? '그리기 무지개 컬러휠' : '무지개 컬러휠'} aria-label={isDraw ? '그리기 무지개 컬러휠' : '무지개 컬러휠'} onClick={() => setShowPalette(value => !value)} className={`pointer-events-auto w-8 h-8 rounded-lg border flex items-center justify-center transition-colors ${isDarkMode ? 'border-slate-700 hover:bg-slate-800' : 'border-slate-200 hover:bg-slate-50'}`}>
@@ -241,6 +250,7 @@ export function CanvasInspector({
           {action(Clipboard, '복사 (Ctrl+C)', selectionActions.copySelected, true)}
           {action(ClipboardPaste, '붙여넣기 (Ctrl+V)', () => { void selectionActions.pasteClipboard(); }, true)}
           {action(Copy, '복제', selectionActions.duplicateSelected, true)}
+          {action(Lock, '잠금/잠금 해제 (⇧⌘L)', selectionActions.toggleLocked, true)}
           {action(RotateCcw, '왼쪽으로 15도 회전', () => selectionActions.rotateSelected(-ROTATION_STEP), true)}
           {action(RotateCw, '오른쪽으로 15도 회전', () => selectionActions.rotateSelected(ROTATION_STEP), true)}
           {action(Undo2, '회전 초기화', () => selectionActions.rotateSelected(0), true)}

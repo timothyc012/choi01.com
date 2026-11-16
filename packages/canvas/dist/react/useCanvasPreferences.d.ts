@@ -9,14 +9,19 @@ export interface CanvasPreferenceOptions {
     /** View-only dot grid; exports deliberately remain background-stable. */
     showGrid?: boolean;
     onShowGridChange?: (enabled: boolean) => void;
+    /** Bottom-right minimap; enabled by default. */
+    showMinimap?: boolean;
+    onShowMinimapChange?: (enabled: boolean) => void;
 }
 /** Preferences never mutate the document or the stroke already under the pen. */
 export declare function useCanvasPreferences(options: CanvasPreferenceOptions): {
     drawInkStyle: CanvasInkStyle;
     objectSnapEnabled: boolean;
     showGrid: boolean;
+    minimapEnabled: boolean;
     selectInkStyle: (style: CanvasInkStyle) => void;
     selectObjectSnap: (enabled: boolean) => void;
     selectShowGrid: (enabled: boolean) => void;
+    selectMinimap: (enabled: boolean) => void;
 };
 //# sourceMappingURL=useCanvasPreferences.d.ts.map

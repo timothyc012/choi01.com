@@ -19,6 +19,10 @@ interface CanvasObjectLayerProps {
         x: number;
         y: number;
     }>;
+    /** Select-tool hover target; connect dots show on it even unselected. */
+    hoveredShapeId?: string | null;
+    /** Connect dots are select-tool chrome; hidden while a gesture is active. */
+    dotsEnabled?: boolean;
     isDarkMode: boolean;
     renderEditor: (extra: string, style?: React.CSSProperties) => React.ReactNode;
     renderShapeBody: (shape: CanvasShape) => React.ReactNode;
@@ -31,6 +35,6 @@ interface CanvasObjectLayerProps {
     onConnectHandleDown: (event: React.PointerEvent, shape: CanvasShape) => void;
 }
 /** DOM layer for editable shapes and remote cursors; vectors stay in SVG. */
-export declare function CanvasObjectLayer({ visiblePaintOrder, selected, editingId, camera, shapeById, allShapes, peerCursors, isDarkMode, renderEditor, renderShapeBody, setEditingId, onBendHandleDown, onOrthogonalSegmentHandleDown, onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onArrowEndpointDown, }: CanvasObjectLayerProps): React.JSX.Element;
+export declare function CanvasObjectLayer({ visiblePaintOrder, selected, editingId, camera, shapeById, allShapes, peerCursors, hoveredShapeId, dotsEnabled, isDarkMode, renderEditor, renderShapeBody, setEditingId, onBendHandleDown, onOrthogonalSegmentHandleDown, onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onArrowEndpointDown, }: CanvasObjectLayerProps): React.JSX.Element;
 export {};
 //# sourceMappingURL=CanvasObjectLayer.d.ts.map

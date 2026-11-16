@@ -28,6 +28,7 @@ export interface CanvasSelectionActions {
   group: () => void;
   ungroup: () => void;
   reorderSelected: (direction: LayerDirection) => void;
+  toggleLocked: () => void;
 }
 
 /** Offset applied to duplicated shapes so the copy is visibly distinct. */
@@ -108,6 +109,7 @@ export function useCanvasSelectionActions({
           x: shape.x + DUPLICATE_OFFSET,
           y: shape.y + DUPLICATE_OFFSET,
           groupId,
+          locked: undefined,
           points: shape.points?.map(([x, y]) => [x + DUPLICATE_OFFSET, y + DUPLICATE_OFFSET] as [number, number]),
           orthogonalWaypoints: shape.type === 'arrow' && shape.orthogonalWaypoints
             ? shape.orthogonalWaypoints.map(point => ({ x: point.x + DUPLICATE_OFFSET, y: point.y + DUPLICATE_OFFSET }))
@@ -133,6 +135,16 @@ export function useCanvasSelectionActions({
     deleteSelected: () => {
       deleteSelection(selectedRef.current);
     },
+    toggleLocked: () => {
+      const sel = selectedRef.current;
+      if (sel.size === 0) return;
+      const allLocked = shapesRef.current
+        .filter(shape => sel.has(shape.id))
+        .every(shape => shape.locked);
+      commit(prev => prev.map(shape =>
+        sel.has(shape.id) ? { ...shape, locked: !allLocked || undefined } : shape));
+      setAnnouncement(allLocked ? '잠금 해제됨' : '잠김');
+    },
     duplicateSelected: () => {
       const sel = withNoteChildren(shapesRef.current, selectedRef.current);
       if (sel.size === 0) return;
@@ -153,6 +165,7 @@ export function useCanvasSelectionActions({
           id: idRemap.get(s.id) ?? createId(),
           parentId: s.parentId ? idRemap.get(s.parentId) ?? s.parentId : undefined,
           fromId: s.fromId ? idRemap.get(s.fromId) ?? s.fromId : undefined,
+          locked: undefined,
           toId: s.toId ? idRemap.get(s.toId) ?? s.toId : undefined,
           x: s.x + DUPLICATE_OFFSET,
           y: s.y + DUPLICATE_OFFSET,

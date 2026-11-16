@@ -43,6 +43,25 @@ The React editor is available as an additive subpath export and keeps the existi
 import { InfiniteCanvas } from 'chois-canvas/react';
 ```
 
+### Editing and navigation
+
+- Shapes carry an optional `locked` flag. Locked shapes stay selectable but cannot be moved, resized, edited, or deleted; `applyCanvasCommand` ignores them in `moveShapes`/`deleteShapes`, and `setShapesLocked` toggles the flag.
+- `Cmd/Ctrl+F` opens a find bar that searches shape text in reading order; `Enter`/`Shift+Enter` cycles matches and centres the camera on each hit, `Esc` closes it. `Tab`/`Shift+Tab` walks shapes in the same reading order, and `Alt+1`/`Alt+2`/`Alt+3` fit all shapes, the selection, and the maximum zoom; `[`/`]` step smart zoom.
+- A minimap (`data-canvas-minimap`) renders in the bottom-right corner; click or drag to re-centre the camera, and the `미니맵` toggle button (or the `showMinimap` prop) turns it off.
+- A floating toolbar (`data-canvas-floating-bar`) appears above the current selection with colour, text style, list, and selection actions; it stays screen-sized, clamps inside the viewport, and hides during drags and text editing.
+- Hovering or selecting a shape with the select tool shows blue edge dots (`data-canvas-connect-dot`) at the four edge midpoints. Dragging a dot previews a connector; dropping on a shape binds a `fromId`/`toId` orthogonal arrow, and dropping on empty space clones the source shape, links it, and opens its text editor. `Esc` cancels the drag; locked shapes may start or receive connections without being modified.
+- Frames draw their name in a screen-sized label above the top-left edge (`data-canvas-frame-label`); double-clicking the label renames the frame.
+- `InfiniteCanvasHandle.listFrames()` returns `{ id, name }` for every frame in document order, and `focusShape(id)` fits the camera on a shape with zoom capped at 100%, so a host can build a frame navigation list.
+
+### Zero1 file conversion
+
+`zero1ToChois` converts a Zero1 Office `.pdfcanvas.json` file (version 6) into a `canvas-v1` snapshot — pass `{ sheet: id }` to pick a specific sheet; unrepresentable items land in `dropped`. `choisToZero1` exports a document back to the Zero1 format with fresh UUIDs. Both are exported from `chois-canvas` core.
+
+```ts
+import { choisToZero1, zero1ToChois } from 'chois-canvas';
+const { snapshot, dropped } = zero1ToChois(fileJson);
+```
+
 Storage, collaboration, and asset adapters must remain provider-neutral contracts; they must not leak an application's service client into the core package.
 
 ## Integration policy

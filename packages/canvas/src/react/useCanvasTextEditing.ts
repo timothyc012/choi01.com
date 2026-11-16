@@ -5,8 +5,10 @@ import { sanitizeCanvasHtml } from '../core/index.ts';
 import { shapePlainText } from './canvasGeometry';
 import { isDiagramShape } from './canvasDiagram';
 import {
+  NOTE_FONT_MIN,
   measureTextBoxContent,
   normalizeCustomFontFamily,
+  noteFontSizeForShape,
 } from './canvasText';
 
 interface CanvasTextEditingOptions {
@@ -68,6 +70,9 @@ export function useCanvasTextEditing({
         s.type === 'card' ? 96 : // category header + type footer
         s.type === 'frame' ? 24 : // title bar
         24; // rect / ellipse / polygons default
+      // A paper note keeps its shape: the text shrinks to fit first, and the
+      // note only grows once the text is already at its smallest size.
+      if (s.type === 'note' && noteFontSizeForShape(next) > NOTE_FONT_MIN) return next;
       const nextH = Math.max(s.h, scrollH + chromePad);
       return { ...next, h: nextH };
     }));

@@ -72,7 +72,7 @@ export function useCanvasPointerFinish({
             ? [...interaction.points, release]
             : interaction.points;
           const enclosed = points.length >= 3
-            ? shapesRef.current.filter(shape => pointInPolygon(centreOf(shape), points)).map(shape => shape.id)
+            ? shapesRef.current.filter(shape => !shape.locked && pointInPolygon(centreOf(shape), points)).map(shape => shape.id)
             : [];
           const base = interaction.additive ? interaction.baseSelection : [];
           selectNow(expandToGroups(new Set([...base, ...enclosed])));
@@ -107,33 +107,36 @@ export function useCanvasPointerFinish({
 
         const dropped = { x: interaction.toX, y: interaction.toY };
         const sc = centreOf(source);
-        // A tap on the handle without a drag shouldn't silently do nothing.
+        // A tap on the dot without a drag shouldn't silently do nothing.
         if (!interaction.hoverId && Math.hypot(dropped.x - sc.x, dropped.y - sc.y) < 30) return;
 
         const additions: CanvasShape[] = [];
         let targetId = interaction.hoverId;
+        let createdNode: CanvasShape | null = null;
 
         if (!targetId) {
-          // Dropped on empty canvas: make a sibling node there and connect it.
-          const w = source.type === 'note' ? 180 : 200;
-          const h = source.type === 'note' ? 180 : 120;
+          // Dropped on empty canvas: clone the source — same kind, same
+          // colour — and connect to it, Miro's quick-create.
           const created: CanvasShape = {
             ...source,
             id: uid(),
-            x: dropped.x - w / 2,
-            y: dropped.y - h / 2,
-            w,
-            h,
+            x: dropped.x - Math.abs(source.w) / 2,
+            y: dropped.y - Math.abs(source.h) / 2,
+            w: source.w,
+            h: source.h,
+            locked: undefined,
             html: undefined,
             text: '',
             rotation: 0,
             groupId: undefined,
+            parentId: undefined,
             points: undefined,
             fromId: undefined,
             toId: undefined,
             bend: undefined,
           };
           additions.push(created);
+          createdNode = created;
           targetId = created.id;
         }
 
@@ -143,19 +146,31 @@ export function useCanvasPointerFinish({
           x: 0, y: 0, w: 0, h: 0,
           fromId: source.id,
           toId: targetId,
+          routing: 'orthogonal',
+          arrowEnd: 'arrow',
           text: '',
         };
         additions.push(arrow);
         commit(prev => [...prev, ...additions]);
-        selectNow(new Set([arrow.id]));
-        // Drop straight into the relation label so it can be named right away.
-        // Controlled/Yjs hosts publish the new shapes on the next render. Delay
-        // the editor request until that render has a real arrow to anchor to;
-        // otherwise the transient `editingId` can be cleared before the label
-        // editor mounts and the newly-created connector looks non-editable.
-        if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setEditingId(arrow.id));
-        else setEditingId(arrow.id);
-        setAnnouncement('연결 생성됨');
+
+        if (createdNode) {
+          // Quick-create: the new node owns the selection and goes straight
+          // into text editing; images have no editor, so the arrow takes it.
+          selectNow(new Set([createdNode.id]));
+          const raf = typeof requestAnimationFrame === 'function' ? requestAnimationFrame : (fn: () => void) => { fn(); };
+          raf(() => setEditingId(createdNode.type === 'image' ? null : createdNode.id));
+          setAnnouncement('개체 생성 및 연결됨');
+        } else {
+          selectNow(new Set([arrow.id]));
+          // Drop straight into the relation label so it can be named right away.
+          // Controlled/Yjs hosts publish the new shapes on the next render. Delay
+          // the editor request until that render has a real arrow to anchor to;
+          // otherwise the transient `editingId` can be cleared before the label
+          // editor mounts and the newly-created connector looks non-editable.
+          if (typeof requestAnimationFrame === 'function') requestAnimationFrame(() => setEditingId(arrow.id));
+          else setEditingId(arrow.id);
+          setAnnouncement('연결 생성됨');
+        }
         return;
       }
 

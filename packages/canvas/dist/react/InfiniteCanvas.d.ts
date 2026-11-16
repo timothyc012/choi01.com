@@ -89,6 +89,13 @@ export interface InfiniteCanvasHandle {
     zoomTo: (zoom: number) => void;
     resetZoom: () => void;
     zoomToFit: () => void;
+    /** Frames in document order: `{ id, name }` for a host frame list. */
+    listFrames: () => readonly {
+        id: string;
+        name: string;
+    }[];
+    /** Fit the camera to a shape (frames included), zoom capped at 100%. */
+    focusShape: (id: string) => void;
     autoLayout: () => void;
     exportSvg: () => string | null;
     exportPng: () => Promise<Blob | null>;

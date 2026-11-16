@@ -1,6 +1,7 @@
 import React from 'react';
-import { bezierAt, arrowGeometry, effectiveFill, effectiveText, rawBounds, shapeHtml, shapePlainText } from './canvasGeometry';
+import { bezierAt, arrowGeometry, bounds, effectiveFill, effectiveText, rawBounds, shapeHtml, shapePlainText } from './canvasGeometry';
 import { pathMidpoint } from './canvasRouting';
+import { CONNECTABLE } from './canvasPointerTypes';
 import { CANVAS_COLORS } from '../core/index.ts';
 import type { CanvasShape } from './InfiniteCanvas';
 import { CANVAS_UI_COLORS } from './theme';
@@ -8,7 +9,6 @@ import { listKindForShape, fontSizeForShape, fontStackForShape, textAlignForShap
 
 interface Camera { x: number; y: number; z: number }
 const TEXTUAL = new Set(['note', 'card', 'text', 'rect', 'ellipse', 'triangle', 'diamond', 'hexagon', 'star', 'frame', 'arrow']);
-const CONNECTABLE = new Set(['note', 'card', 'rect', 'ellipse', 'text', 'image']);
 
 interface CanvasObjectLayerProps {
   visiblePaintOrder: CanvasShape[];
@@ -18,6 +18,10 @@ interface CanvasObjectLayerProps {
   shapeById: Map<string, CanvasShape>;
   allShapes: CanvasShape[];
   peerCursors?: Array<{ id: number; name: string; color: string; x: number; y: number }>;
+  /** Select-tool hover target; connect dots show on it even unselected. */
+  hoveredShapeId?: string | null;
+  /** Connect dots are select-tool chrome; hidden while a gesture is active. */
+  dotsEnabled?: boolean;
   isDarkMode: boolean;
   renderEditor: (extra: string, style?: React.CSSProperties) => React.ReactNode;
   renderShapeBody: (shape: CanvasShape) => React.ReactNode;
@@ -33,6 +37,7 @@ interface CanvasObjectLayerProps {
 /** DOM layer for editable shapes and remote cursors; vectors stay in SVG. */
 export function CanvasObjectLayer({
   visiblePaintOrder, selected, editingId, camera, shapeById, allShapes, peerCursors,
+  hoveredShapeId, dotsEnabled,
   isDarkMode, renderEditor, renderShapeBody, setEditingId, onBendHandleDown, onOrthogonalSegmentHandleDown,
   onResizeHandleDown, onRotateHandleDown, onConnectHandleDown, onArrowEndpointDown,
 }: CanvasObjectLayerProps) {
@@ -82,6 +87,7 @@ export function CanvasObjectLayer({
           return (
             <div key={s.id} data-canvas-paint-id={s.id} className="absolute top-0 left-0 origin-top-left" style={layerStyle}>
             <div
+              data-canvas-locked={s.locked ? 'true' : undefined}
               data-canvas-shape-id={s.id}
               data-canvas-shape-type={s.type}
               data-canvas-selected={isSelected ? 'true' : undefined}
@@ -92,33 +98,93 @@ export function CanvasObjectLayer({
               data-canvas-manual-size={s.manualSize ? 'true' : undefined}
               data-canvas-group-id={s.groupId}
               data-canvas-list-kind={listKindForShape(s)}
+              onDoubleClick={event => { event.stopPropagation(); if (!s.locked && TEXTUAL.has(s.type)) setEditingId(s.id); }}
               data-canvas-x={s.x}
               data-canvas-y={s.y}
               data-canvas-width={s.w}
               data-canvas-height={s.h}
               className="absolute"
               style={{ left: box.minX, top: box.minY, width: box.maxX - box.minX, height: box.maxY - box.minY, transform: s.rotation ? `rotate(${s.rotation}rad)` : undefined, transformOrigin: 'center' }}
-              onDoubleClick={event => { event.stopPropagation(); if (TEXTUAL.has(s.type)) setEditingId(s.id); }}
             >
               {renderShapeBody(s)}
             </div>
             </div>
           );
         })}
-      {visiblePaintOrder.filter(s => s.type !== 'draw' && s.type !== 'arrow' && selected.has(s.id)).map(s => {
+      {/* Single selection: per-shape outline with resize/rotate/connect
+          handles. Multi selection: one shared bounding box instead of
+          per-shape outlines. */}
+      {selected.size === 1 && visiblePaintOrder.filter(s => s.type !== 'draw' && s.type !== 'arrow' && !s.locked && selected.has(s.id)).map(s => {
         const box = rawBounds(s);
         return <div key={`selection-${s.id}`} data-canvas-selection-id={s.id} className="absolute top-0 left-0 origin-top-left pointer-events-none" style={{ zIndex: visiblePaintOrder.length + 3, transform: `scale(${camera.z}) translate(${-camera.x}px, ${-camera.y}px)` }}>
           <div className="absolute" style={{ left: box.minX, top: box.minY, width: box.maxX - box.minX, height: box.maxY - box.minY, transform: s.rotation ? `rotate(${s.rotation}rad)` : undefined, transformOrigin: 'center' }}>
                 <div data-canvas-selection-box="true" className="absolute -inset-0.5 pointer-events-none" style={{ outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
-                {selected.size === 1 && <>
+                <>
                   {(['nw', 'ne', 'sw', 'se'] as const).map(handle => <div key={handle} data-canvas-resize-handle={handle} onPointerDown={event => onResizeHandleDown(event, s, handle)} className="absolute pointer-events-auto z-20 bg-white border-2 border-blue-600 rounded-sm" style={{ width: 10 / camera.z, height: 10 / camera.z, cursor: `${handle}-resize`, left: handle.includes('w') ? -5 / camera.z : undefined, right: handle.includes('e') ? -5 / camera.z : undefined, top: handle.includes('n') ? -5 / camera.z : undefined, bottom: handle.includes('s') ? -5 / camera.z : undefined }} />)}
                   <div onPointerDown={event => onRotateHandleDown(event, s)} title="회전 (Shift로 15도 단위)" className="absolute pointer-events-auto z-20 bg-blue-600 rounded-full" style={{ width: 12 / camera.z, height: 12 / camera.z, left: '50%', marginLeft: -6 / camera.z, top: -28 / camera.z, cursor: 'grab' }} />
-                  {CONNECTABLE.has(s.type) && (['n', 's', 'w', 'e'] as const).map(key => <div key={`plus-${key}`} onPointerDown={event => onConnectHandleDown(event, s)} title="드래그해서 연결 (관계 생성)" className="absolute pointer-events-auto z-20 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-500" style={{ ...(key === 'n' ? { left: '50%', top: -30 / camera.z, marginLeft: -9 / camera.z } : key === 's' ? { left: '50%', bottom: -30 / camera.z, marginLeft: -9 / camera.z } : key === 'w' ? { top: '50%', left: -30 / camera.z, marginTop: -9 / camera.z } : { top: '50%', right: -30 / camera.z, marginTop: -9 / camera.z }), width: 18 / camera.z, height: 18 / camera.z, fontSize: 13 / camera.z, lineHeight: 1, cursor: 'crosshair' }}>+</div>)}
-                </>}
+                </>
           </div>
         </div>;
       })}
-      {selected.size === 1 && allShapes.filter(shape => shape.type === 'arrow' && selected.has(shape.id)).map(shape => {
+      {selected.size > 1 && (() => {
+        const picked = allShapes.filter(shape => selected.has(shape.id));
+        if (picked.length === 0) return null;
+        const union = picked.reduce((acc, shape) => {
+          const b = bounds(shape);
+          return {
+            minX: Math.min(acc.minX, b.minX),
+            minY: Math.min(acc.minY, b.minY),
+            maxX: Math.max(acc.maxX, b.maxX),
+            maxY: Math.max(acc.maxY, b.maxY),
+          };
+        }, bounds(picked[0]));
+        return (
+          <div data-canvas-selection-group="true" className="absolute top-0 left-0 origin-top-left pointer-events-none" style={{ zIndex: visiblePaintOrder.length + 3, transform: `scale(${camera.z}) translate(${-camera.x}px, ${-camera.y}px)` }}>
+            <div className="absolute" style={{ left: union.minX, top: union.minY, width: union.maxX - union.minX, height: union.maxY - union.minY, outline: `${2 / camera.z}px solid ${CANVAS_UI_COLORS.blue}` }} />
+          </div>
+        );
+      })()}
+      {/* Blue edge dots start connector drags: on the selected shape, the
+          hovered shape, and locked shapes (locking blocks edits, not links). */}
+      {dotsEnabled !== false && visiblePaintOrder
+        .filter(s => CONNECTABLE.includes(s.type) && (selected.has(s.id) || s.id === hoveredShapeId || s.locked))
+        .map(s => {
+          const box = rawBounds(s);
+          const w = box.maxX - box.minX;
+          const h = box.maxY - box.minY;
+          // Touch needs a 40px press target; smaller shapes cap it so the
+          // shape centre stays clickable.
+          const dotHit = Math.min(40 / camera.z, Math.max(16 / camera.z, Math.min(w, h) * 0.6));
+          const dotSize = 10 / camera.z;
+          return (
+            <div key={`connect-${s.id}`} className="absolute top-0 left-0 origin-top-left pointer-events-none" style={{ zIndex: visiblePaintOrder.length + 3, transform: `scale(${camera.z}) translate(${-camera.x}px, ${-camera.y}px)` }}>
+              <div className="absolute" style={{ left: box.minX, top: box.minY, width: w, height: h, transform: s.rotation ? `rotate(${s.rotation}rad)` : undefined, transformOrigin: 'center' }}>
+                {(['n', 's', 'w', 'e'] as const).map(side => {
+                  const sideStyle: React.CSSProperties = side === 'n'
+                    ? { left: '50%', top: -dotHit / 2, marginLeft: -dotHit / 2 }
+                    : side === 's'
+                      ? { left: '50%', bottom: -dotHit / 2, marginLeft: -dotHit / 2 }
+                      : side === 'w'
+                        ? { top: '50%', left: -dotHit / 2, marginTop: -dotHit / 2 }
+                        : { top: '50%', right: -dotHit / 2, marginTop: -dotHit / 2 };
+                  return (
+                    <div
+                      key={`dot-${side}`}
+                      data-canvas-connect-dot={side}
+                      onPointerDown={event => onConnectHandleDown(event, s)}
+                      title="드래그해서 연결 (관계 생성)"
+                      className="absolute pointer-events-auto z-20 flex items-center justify-center"
+                      style={{ ...sideStyle, width: dotHit, height: dotHit, cursor: 'crosshair' }}
+                    >
+                      <div className="rounded-full bg-blue-600 border-2 border-white shadow-sm" style={{ width: dotSize, height: dotSize }} />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      {selected.size === 1 && allShapes.filter(shape => shape.type === 'arrow' && !shape.locked && selected.has(shape.id)).map(shape => {
         const geometry = arrowGeometry(shape, shapeById, allShapes);
         const screenPoint = (point: { x: number; y: number }, size: number) => ({
           left: (point.x - camera.x) * camera.z - size / 2,
@@ -140,6 +206,12 @@ export function CanvasObjectLayer({
             })}
           </React.Fragment>
         );
+      })}
+      {allShapes.filter(shape => shape.locked).map(shape => {
+        const box = rawBounds(shape);
+        return <div key={`lock-badge-${shape.id}`} data-canvas-lock-badge={shape.id} title="잠김" aria-label="잠긴 개체" className="absolute pointer-events-none z-40" style={{ zIndex: visiblePaintOrder.length + 4, left: (box.maxX - camera.x) * camera.z - 18, top: (box.minY - camera.y) * camera.z + 2 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isDarkMode ? '#cbd5e1' : '#475569'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill={isDarkMode ? '#1e293b' : '#fff'} /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+        </div>;
       })}
       {peerCursors?.map(peer => <div key={peer.id} className="absolute pointer-events-none z-40" style={{ zIndex: visiblePaintOrder.length + 4, left: (peer.x - camera.x) * camera.z, top: (peer.y - camera.y) * camera.z, transform: 'translate(-2px, -2px)' }}>
         <svg width="20" height="24" viewBox="0 0 20 24"><path d="M 1 1 L 1 18 L 6 13 L 9 20 L 12 19 L 9 12 L 15 12 Z" fill={peer.color} stroke={CANVAS_UI_COLORS.white} strokeWidth="1.5" strokeLinejoin="round" /></svg>

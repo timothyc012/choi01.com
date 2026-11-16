@@ -173,6 +173,15 @@ export function edgePoint(shape: CanvasShape, towardX: number, towardY: number):
   return { x: cx + dx * scaleV, y: cy + dy * scaleV, side: dy >= 0 ? 's' : 'n' };
 }
 
+function sideMidpoint(shape: CanvasShape, side: EdgeSide | undefined): { x: number; y: number; side: EdgeSide } {
+  const b = rawBounds(shape);
+  const cx = (b.minX + b.maxX) / 2, cy = (b.minY + b.maxY) / 2;
+  if (side === 'w') return { x: b.minX, y: cy, side };
+  if (side === 'n') return { x: cx, y: b.minY, side };
+  if (side === 's') return { x: cx, y: b.maxY, side };
+  return { x: b.maxX, y: cy, side: 'e' };
+}
+
 export function collectObstaclesForArrow(allShapes: CanvasShape[], arrow: CanvasShape, fromId?: string, toId?: string): BoundingBox[] {
   const skip = new Set([arrow.id, fromId, toId]);
   return allShapes.filter(shape => !skip.has(shape.id)).map(shape => {
@@ -202,6 +211,11 @@ export function arrowGeometry(arrow: CanvasShape, byId: Map<string, CanvasShape>
   const bound = !!(from || to);
   const routing: 'straight' | 'curved' | 'orthogonal' = arrow.routing ?? (bound ? 'orthogonal' : bend !== 0 ? 'curved' : 'straight');
   if (routing !== 'orthogonal') return { start, end, control, bend, routing };
+  // An elbow connector leaves from the middle of a side. Aiming at the other
+  // centre lands anywhere along the edge, and the first segment then runs
+  // along the shape's own border.
+  if (from) start = sideMidpoint(from, start.side);
+  if (to) end = sideMidpoint(to, end.side);
   const obstacles = collectObstaclesForArrow(allShapes, arrow, from?.id, to?.id);
   return {
     start,
@@ -446,6 +460,10 @@ export function eraseAlongPath(
   const byId = new Map(shapes.map(shape => [shape.id, shape]));
 
   for (const s of shapes) {
+    if (s.locked) {
+      out.push(s);
+      continue;
+    }
     if (s.type !== 'draw' || !s.points) {
       if (pathHitsShape(s, from, to, pageRadius, safeZoom, byId, shapes)) continue;
       out.push(s);

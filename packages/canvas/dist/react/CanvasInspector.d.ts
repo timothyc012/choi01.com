@@ -28,8 +28,10 @@ interface CanvasInspectorProps {
     applyFormat: (command: 'bold' | 'italic' | 'underline') => void;
     applyList: (kind: 'bullet' | 'dash' | 'number') => void;
     applyCustomFontFamily: (value: string) => void;
+    /** Provided when the inspector is a ⋯-opened detail panel: offers a way back. */
+    onClose?: () => void;
 }
 /** Selection inspector kept separate from the canvas scene for package reuse. */
-export declare function CanvasInspector({ shape: s, selection, selectionActions, shapes, camera, canvasSize, isDarkMode, editing, showPalette, installedFontFamilies, setShowPalette, setActiveColor, patchSelected, applyFormat, applyList, applyCustomFontFamily, }: CanvasInspectorProps): React.JSX.Element;
+export declare function CanvasInspector({ shape: s, selection, selectionActions, shapes, camera, canvasSize, isDarkMode, editing, showPalette, installedFontFamilies, setShowPalette, setActiveColor, patchSelected, applyFormat, applyList, applyCustomFontFamily, onClose, }: CanvasInspectorProps): React.JSX.Element;
 export {};
 //# sourceMappingURL=CanvasInspector.d.ts.map

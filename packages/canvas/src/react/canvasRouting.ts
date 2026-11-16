@@ -240,10 +240,17 @@ export function orthogonalPathPoints(
   const candidateXs = candidateDetourCoordinates(start.x, end.x, obstacles, 'x');
   const candidateYs = candidateDetourCoordinates(start.y, end.y, obstacles, 'y');
   const paths: OrthogonalPoint[][] = [];
+  // Between two facing sides the elbow turns halfway. Listed first so it wins
+  // the length tie against turning at either end, which would run the line
+  // along a shape's own edge.
   if (horizFirst && horizLast) {
+    const midX = (start.x + end.x) / 2;
+    if (start.y !== end.y) paths.push([start, { x: midX, y: start.y }, { x: midX, y: end.y }, end]);
     for (const x of candidateXs) paths.push([start, { x, y: start.y }, { x, y: end.y }, end]);
     for (const y of candidateYs) paths.push([start, { x: start.x, y }, { x: end.x, y }, end]);
   } else if (!horizFirst && !horizLast) {
+    const midY = (start.y + end.y) / 2;
+    if (start.x !== end.x) paths.push([start, { x: start.x, y: midY }, { x: end.x, y: midY }, end]);
     for (const y of candidateYs) paths.push([start, { x: start.x, y }, { x: end.x, y }, end]);
     for (const x of candidateXs) paths.push([start, { x, y: start.y }, { x, y: end.y }, end]);
   } else if (horizFirst) {

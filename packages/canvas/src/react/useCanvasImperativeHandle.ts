@@ -2,7 +2,8 @@ import { useCallback, useImperativeHandle } from 'react';
 import type { Dispatch, ForwardedRef, RefObject, SetStateAction } from 'react';
 import type { CanvasColorKey, CanvasStrokeWidth, CanvasTool } from '../core/index.ts';
 import type { CanvasShape, CanvasSnapshot, InfiniteCanvasHandle } from './InfiniteCanvas';
-import { bounds, sanitizeShapeForCanvas } from './canvasGeometry';
+import { bounds, sanitizeShapeForCanvas, shapePlainText } from './canvasGeometry';
+import { cameraFitting } from './canvasView';
 import { buildCanvasSvg, buildSelectionCanvasSvg, exportCanvasPng } from './canvasExport';
 import { autoLayoutCanvas } from './canvasAutoLayout';
 import { loadCanvasSnapshot } from './canvasSnapshot';
@@ -157,7 +158,7 @@ export function useCanvasImperativeHandle({
       addAtCentre({ type: 'rect', w: 260, h: 120, color: 'purple', text: label, src, fileName });
     },
     updateShapeText: (id, text) => {
-      commit(prev => prev.map(shape => shape.id === id ? { ...shape, text, html: undefined } : shape));
+      commit(prev => prev.map(shape => shape.id === id && !shape.locked ? { ...shape, text, html: undefined } : shape));
     },
     setSelectedStrokeWidth,
     // While a pen tool is active the "active colour" is the pen colour, so
@@ -245,6 +246,19 @@ export function useCanvasImperativeHandle({
         y: (minY + maxY) / 2 - rect.height / 2 / z,
         z,
       });
+    },
+    listFrames: () => shapesRef.current
+      .filter(shape => shape.type === 'frame')
+      .map(shape => ({ id: shape.id, name: shapePlainText(shape) })),
+    focusShape: id => {
+      const shape = shapesRef.current.find(s => s.id === id);
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!shape || !rect) return;
+      const b = bounds(shape);
+      // Reuse the zoomToFit rule but cap at 100%: frame targets should never
+      // be blown up beyond real size to fill the screen.
+      const fit = cameraFitting(b, rect.width, rect.height, minZoom, maxZoom);
+      setCamera({ ...fit, z: Math.min(fit.z, 1) });
     },
     autoLayout: () => autoLayoutCanvas(shapesRef.current, commit, () => setAnnouncement('자동 배치 완료')),
     exportSvg: buildSvg,

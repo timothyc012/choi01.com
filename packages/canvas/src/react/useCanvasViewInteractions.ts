@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
-import type { CanvasShapeType } from '../core/index.ts';
+import type { CanvasShapeType, CanvasTool } from '../core/index.ts';
 import type { CanvasSelectionInfo, CanvasShape } from './InfiniteCanvas';
+import type { Interaction, PointerPosition } from './canvasPointerTypes';
+import { CONNECTABLE } from './canvasPointerTypes';
+import { hitTest } from './canvasGeometry';
 
 interface Camera {
   x: number;
@@ -12,6 +15,10 @@ interface Camera {
 interface ViewInteractionsOptions {
   containerRef: RefObject<HTMLDivElement | null>;
   camera: Camera;
+  interactionRef: RefObject<Interaction>;
+  toolRef: RefObject<CanvasTool | 'highlighter'>;
+  pointers: RefObject<Map<number, PointerPosition>>;
+  shapesRef: RefObject<CanvasShape[]>;
   setCamera: Dispatch<SetStateAction<Camera>>;
   minZoom: number;
   maxZoom: number;
@@ -29,7 +36,8 @@ interface ViewInteractionsResult {
   selectionInfo: CanvasSelectionInfo;
   /** Every shape the inspector acts on. Empty when no panel should render. */
   inspectorSelection: readonly CanvasShape[];
-  /** Representative shape whose values the per-shape controls display. */
+  /** Shape under the pointer (select tool only); drives edge connect dots. */
+  hoveredShapeId: string | null;
   inspectorShape: CanvasShape | null;
   onContainerPointerMove?: (event: React.PointerEvent) => void;
   onContainerPointerLeave?: () => void;
@@ -39,6 +47,10 @@ interface ViewInteractionsResult {
 export function useCanvasViewInteractions({
   containerRef,
   camera,
+  interactionRef,
+  toolRef,
+  pointers,
+  shapesRef,
   setCamera,
   minZoom,
   maxZoom,
@@ -108,15 +120,38 @@ export function useCanvasViewInteractions({
   }, [inspectorSelection]);
 
   const cursorReportTimer = useRef<number>(0);
-  const onContainerPointerMove = onLocalCursor
-    ? (e: React.PointerEvent) => {
-        const now = performance.now();
-        if (now - cursorReportTimer.current < 60) return;
-        cursorReportTimer.current = now;
-        onLocalCursor(toPage(e.clientX, e.clientY));
-      }
-    : undefined;
-  const onContainerPointerLeave = onLocalCursor ? () => onLocalCursor(null) : undefined;
+  const [hoveredShapeId, setHoveredShapeId] = useState<string | null>(null);
+  const onContainerPointerMove = (e: React.PointerEvent) => {
+    // Edge connect dots follow the pointer while the select tool is idle:
+    // hover needs no pressed buttons and no gesture in flight. Touch never
+    // hovers, so dots on touch devices appear on selection only.
+    if (
+      toolRef.current === 'select'
+      && interactionRef.current.kind === 'none'
+      && pointers.current.size === 0
+      && e.pointerType !== 'touch'
+    ) {
+      const point = toPage(e.clientX, e.clientY);
+      const all = shapesRef.current;
+      const byId = new Map(all.map(shape => [shape.id, shape]));
+      const hit = [...all].reverse().find(shape =>
+        CONNECTABLE.includes(shape.type) && hitTest(shape, point.x, point.y, camera.z, byId, all));
+      const next = hit?.id ?? null;
+      if (next !== hoveredShapeId) setHoveredShapeId(next);
+    } else if (hoveredShapeId !== null) {
+      setHoveredShapeId(null);
+    }
+    if (onLocalCursor) {
+      const now = performance.now();
+      if (now - cursorReportTimer.current < 60) return;
+      cursorReportTimer.current = now;
+      onLocalCursor(toPage(e.clientX, e.clientY));
+    }
+  };
+  const onContainerPointerLeave = () => {
+    if (hoveredShapeId !== null) setHoveredShapeId(null);
+    onLocalCursor?.(null);
+  };
 
-  return { selectionInfo, inspectorSelection, inspectorShape, onContainerPointerMove, onContainerPointerLeave };
+  return { selectionInfo, inspectorSelection, inspectorShape, hoveredShapeId, onContainerPointerMove, onContainerPointerLeave };
 }

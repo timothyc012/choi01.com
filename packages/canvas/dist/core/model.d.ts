@@ -43,6 +43,7 @@ export interface CanvasShapeBase {
     readonly w: number;
     readonly h: number;
     readonly rotation?: number;
+    readonly locked?: boolean;
     readonly groupId?: string;
     readonly parentId?: string;
     readonly html?: string;
