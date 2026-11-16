@@ -3,7 +3,7 @@ import {
   GripHorizontal,
   ZoomIn, ZoomOut, Maximize2, Locate, Sparkles,
   Sun, Moon, Download, FolderOpen, ArrowLeft, Image as ImageIcon, FileCode,
-  Layers, ChevronDown, Save, CircleHelp,
+  Layers, ChevronDown, Save, CircleHelp, Search,
 } from 'lucide-react';
 import {
   InfiniteCanvas,
@@ -89,9 +89,6 @@ export const GuestCanvasPage: React.FC = () => {
   const [drawStrokeWidth, setDrawStrokeWidth] = useState<CanvasStrokeWidth>(4);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [selection, setSelection] = useState<CanvasSelectionInfo>({
-    count: 0, canGroup: false, canUngroup: false, isTextual: false, selectedIds: [],
-  });
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showNotice, setShowNotice] = useState(true);
   const [toolMenu, setToolMenu] = useState<string | null>(null);
@@ -142,17 +139,20 @@ export const GuestCanvasPage: React.FC = () => {
   // Pick up the initial frame list once the canvas handle mounts.
   useEffect(() => { refreshFrames(); }, [refreshFrames]);
 
-  // Close the top-right dropdowns / the help card on outside click or Escape.
+  // Close the top-right dropdowns, the tool flyouts, or the help card on
+  // outside click or Escape.
   useEffect(() => {
-    if (!chromeMenu && !showHelp) return;
+    if (!chromeMenu && !toolMenu && !showHelp) return;
     const onPointerDown = (event: PointerEvent) => {
       if (!(event.target instanceof Element)) return;
       if (!event.target.closest('.gc-chrome-right')) setChromeMenu(null);
+      if (!event.target.closest('.gc-toolbar')) setToolMenu(null);
       if (!event.target.closest('.gc-help')) setShowHelp(false);
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
       setChromeMenu(null);
+      setToolMenu(null);
       setShowHelp(false);
     };
     document.addEventListener('pointerdown', onPointerDown);
@@ -161,13 +161,22 @@ export const GuestCanvasPage: React.FC = () => {
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [chromeMenu, showHelp]);
+  }, [chromeMenu, toolMenu, showHelp]);
 
   const handleSelectionChange = useCallback((info: CanvasSelectionInfo) => {
-    setSelection(info);
     const selectedId = info.selectedIds.length === 1 ? info.selectedIds[0] : null;
     const shape = selectedId ? canvasRef.current?.getSnapshot().shapes.find(candidate => candidate.id === selectedId) : undefined;
     setOpenDiagramId(shape?.type === 'card' && shape.category?.toLowerCase() === 'diagram' ? shape.id : null);
+  }, []);
+
+  // The vendored canvas opens its find bar only through the Ctrl/⌘+F
+  // keybinding (viewActions.openFind); the imperative handle does not expose
+  // it. Dispatch the same physical-key event on the canvas container so this
+  // button and the keyboard path stay identical.
+  const openFind = useCallback(() => {
+    document.querySelector('[data-canvas-board-id]')?.dispatchEvent(
+      new KeyboardEvent('keydown', { code: 'KeyF', key: 'f', ctrlKey: true, bubbles: true, cancelable: true }),
+    );
   }, []);
 
   const handleCreateDiagram = useCallback((source: string) => {
@@ -325,6 +334,15 @@ export const GuestCanvasPage: React.FC = () => {
           </button>
           <AuthControls auth={auth} persistence={persistence} />
           {auth.configured && !auth.loading && <div className="gc-chrome-divider" />}
+          <button
+            type="button"
+            className="gc-button gc-button-quiet"
+            onClick={openFind}
+            title="캔버스에서 찾기 (Ctrl/⌘+F)"
+            aria-label="찾기"
+          >
+            <Search className="gc-icon" />
+          </button>
           <div className="gc-popover-anchor">
             <button
               type="button"
@@ -419,7 +437,7 @@ export const GuestCanvasPage: React.FC = () => {
             </button>
             {showHelp && (
               <div className="gc-hint" role="note">
-                더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl/⌘+Z 되돌리기 · Ctrl/⌘+Shift+Z 다시 실행 · Ctrl+S 파일 저장
+                더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl/⌘+F 찾기 · Ctrl/⌘+Z 되돌리기 · Ctrl/⌘+Shift+Z 다시 실행 · Ctrl+S 파일 저장
               </div>
             )}
           </div>
@@ -432,7 +450,6 @@ export const GuestCanvasPage: React.FC = () => {
           setActiveTool={chooseTool}
           drawStrokeWidth={drawStrokeWidth}
           setDrawStrokeWidth={setDrawStrokeWidth}
-          selection={selection}
           menu={toolMenu}
           setMenu={setToolMenuFromToolbar}
           onDiagram={() => setShowDiagramComposer(true)}
