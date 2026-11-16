@@ -417,7 +417,7 @@ body {
  * A grid — rather than a scroll container — keeps the fly-out popovers of the
  * sticky / shape / stroke tools visible instead of clipping them.
  */
-@media (max-height: 880px) {
+@media (max-height: 640px) {
   .gc-toolbar {
     display: grid;
     grid-template-columns: repeat(2, 40px);
