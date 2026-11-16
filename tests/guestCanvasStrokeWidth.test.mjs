@@ -79,13 +79,12 @@ after(async () => {
 it('applies a toolbar width to the selected stroke and the next stroke', async () => {
   await click(button('알겠어요'));
   await click(toolbarButton('펜'));
-  await click(toolbarButton('선 굵기'));
   await click(toolbarButton('굵기 2'));
   await drag({ x: 200, y: 200 }, { x: 440, y: 200 });
 
   await click(toolbarButton('선택 / 이동'));
   await drag({ x: 160, y: 160 }, { x: 480, y: 240 });
-  await click(toolbarButton('선 굵기'));
+  await click(toolbarButton('펜'));
   await click(toolbarButton('굵기 8'));
 
   const firstStroke = container.querySelector('[data-canvas-vector-shape-type="draw"]');

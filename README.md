@@ -23,10 +23,9 @@ against silent overwrite from another device. See [the deployment guide](docs/ca
 All imported and server-stored snapshots are validated through
 `parseCanvasSnapshot`, the package's required boundary for external snapshots.
 
-Image attachments are intentionally not offered: the package's asset policy
-allows only `http(s):`/`blob:` URLs, so self-contained JSON round-trips can't
-carry embedded `data:` images. If that's ever wanted, extend `chois-canvas`
-upstream first (see its README integration policy).
+The **올리기** tool in the rail attaches PDF pages and PNG/JPEG/WebP images as
+canvas cards (≤25 MB, ≤30 PDF pages, rasterized to bounded `data:` PNGs that
+the snapshot round-trip carries — see `src/canvasAttachments.ts`).
 
 ## Vendored chois-canvas
 

@@ -1,15 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  MousePointer, Hand, StickyNote, RectangleHorizontal, Circle, Triangle, Diamond, Hexagon, Star,
-  Frame, Type, GitCommit, PenTool, Eraser,
-  Highlighter, Minus,
-  Undo2, Redo2, Group, Ungroup, GripHorizontal,
+  GripHorizontal,
   ZoomIn, ZoomOut, Maximize2, Locate, Sparkles,
   Sun, Moon, Download, FolderOpen, ArrowLeft, Image as ImageIcon, FileCode,
+  Layers, ChevronDown, Save, CircleHelp, Search,
 } from 'lucide-react';
 import {
-  InfiniteCanvas, CANVAS_COLORS,
-  type InfiniteCanvasHandle, type CanvasTool, type CanvasColorKey, type CanvasSelectionInfo, type CanvasShape,
+  InfiniteCanvas,
+  type InfiniteCanvasHandle, type CanvasSelectionInfo, type CanvasShape,
 } from 'chois-canvas/react';
 import { parseCanvasSnapshot } from 'chois-canvas/core';
 import { PenDebugOverlay } from './PenDebugOverlay';
@@ -19,12 +17,11 @@ import { DiagramSourceDrawer } from './diagram/DiagramSourceDrawer';
 import { MermaidDiagram } from './diagram/MermaidDiagram';
 import { AuthControls } from './canvas/AuthControls';
 import { createCloudflareBoardClient } from './canvas/cloudflareBoardClient';
-import { useBoardPersistence } from './canvas/useBoardPersistence';
+import { useBoardPersistence, type BoardPersistence } from './canvas/useBoardPersistence';
 import { useCanvasAuth } from './canvas/useCanvasAuth';
 import { useToolbarPosition } from './useToolbarPosition';
+import { GuestCanvasToolbar, type CanvasStrokeWidth, type GuestCanvasTool } from './GuestCanvasToolbar';
 
-type CanvasStrokeWidth = 2 | 4 | 6 | 8;
-type GuestCanvasTool = CanvasTool | 'highlighter';
 type StrokeCanvasProps = Omit<React.ComponentProps<typeof InfiniteCanvas>, 'tool' | 'onToolChange'> & {
   readonly tool: GuestCanvasTool;
   readonly drawStrokeWidth: CanvasStrokeWidth;
@@ -39,27 +36,9 @@ function withStrokeStyleProps(Component: React.ElementType) {
 
 const StrokeCanvas = withStrokeStyleProps(InfiniteCanvas);
 
-const STICKY_COLORS: CanvasColorKey[] = ['yellow', 'pink', 'purple', 'blue', 'green', 'peach'];
 const ZOOM_PRESETS = [25, 50, 75, 100, 150, 200, 400];
-const DRAW_STROKE_WIDTHS = [2, 4, 6, 8] as const satisfies readonly CanvasStrokeWidth[];
 
-const SHAPE_MENU_TOOLS = ['rect', 'ellipse', 'triangle', 'diamond', 'hexagon', 'star'] as const;
-const SHAPE_ICON: Record<(typeof SHAPE_MENU_TOOLS)[number], typeof RectangleHorizontal> = {
-  rect: RectangleHorizontal,
-  ellipse: Circle,
-  triangle: Triangle,
-  diamond: Diamond,
-  hexagon: Hexagon,
-  star: Star,
-};
-const SHAPE_LABEL: Record<(typeof SHAPE_MENU_TOOLS)[number], string> = {
-  rect: '사각형',
-  ellipse: '원 / 타원',
-  triangle: '삼각형',
-  diamond: '마름모',
-  hexagon: '육각형',
-  star: '별',
-};
+type ChromeMenu = 'frames' | 'export';
 
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -74,6 +53,22 @@ function exportStamp(): string {
   const d = new Date();
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}`;
+}
+
+/** Save-state badge text for the signed-in board (guests see the ephemeral badge instead). */
+function saveStatusLabel(persistence: BoardPersistence): { text: string; tone: 'ok' | 'busy' | 'warn' } {
+  const time = persistence.savedAt
+    ? persistence.savedAt.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
+    : null;
+  switch (persistence.status) {
+    case 'loading': return { text: '불러오는 중…', tone: 'busy' };
+    case 'saving': return { text: '저장 중…', tone: 'busy' };
+    case 'dirty': return { text: '변경됨 · 곧 저장', tone: 'busy' };
+    case 'conflict': return { text: '다른 기기에서 저장됨', tone: 'warn' };
+    case 'error': return { text: '저장 실패 · 다시 시도합니다', tone: 'warn' };
+    case 'saved': return { text: time ? `저장됨 · ${time}` : '저장됨', tone: 'ok' };
+    default: return { text: '', tone: 'ok' };
+  }
 }
 
 /**
@@ -94,26 +89,35 @@ export const GuestCanvasPage: React.FC = () => {
   const [drawStrokeWidth, setDrawStrokeWidth] = useState<CanvasStrokeWidth>(4);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [zoom, setZoom] = useState(1);
-  const [selection, setSelection] = useState<CanvasSelectionInfo>({
-    count: 0, canGroup: false, canUngroup: false, isTextual: false, selectedIds: [],
-  });
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showNotice, setShowNotice] = useState(true);
-  const [showStickyPalette, setShowStickyPalette] = useState(false);
-  const [showShapesMenu, setShowShapesMenu] = useState(false);
-  const [showStrokeWidths, setShowStrokeWidths] = useState(false);
-  const headerToolbarPosition = useToolbarPosition(null);
-  const canvasToolbarMenu = showStickyPalette ? 'sticky' : showShapesMenu ? 'shapes' : showStrokeWidths ? 'width' : null;
-  const canvasToolbarPosition = useToolbarPosition(canvasToolbarMenu);
+  const [toolMenu, setToolMenu] = useState<string | null>(null);
+  const [chromeMenu, setChromeMenu] = useState<ChromeMenu | null>(null);
+  const [showHelp, setShowHelp] = useState(false);
+  const [frames, setFrames] = useState<readonly { id: string; name: string }[]>([]);
+  const chromeToolbarPosition = useToolbarPosition(null);
   const [showDiagramComposer, setShowDiagramComposer] = useState(false);
   const [openDiagramId, setOpenDiagramId] = useState<string | null>(null);
 
+  const refreshFrames = useCallback(() => {
+    setFrames(canvasRef.current?.listFrames() ?? []);
+  }, []);
+
   const chooseTool = useCallback((tool: GuestCanvasTool) => {
     setActiveTool(tool);
-    setShowStickyPalette(false);
-    setShowShapesMenu(false);
-    setShowStrokeWidths(false);
+    setToolMenu(null);
   }, []);
+
+  const setToolMenuFromToolbar = useCallback((menu: string | null) => {
+    setToolMenu(menu);
+    if (menu) setChromeMenu(null);
+  }, []);
+
+  const toggleChromeMenu = useCallback((menu: ChromeMenu) => {
+    setToolMenu(null);
+    setChromeMenu(prev => (prev === menu ? null : menu));
+    if (menu === 'frames') refreshFrames();
+  }, [refreshFrames]);
 
   // Signed-in visitors get a server-backed board; everyone else keeps the
   // ephemeral guest canvas described above. Without the /api functions (plain
@@ -128,13 +132,51 @@ export const GuestCanvasPage: React.FC = () => {
   const markDirty = useCallback(() => {
     setHasUnsavedChanges(true);
     markBoardDirty();
-  }, [markBoardDirty]);
+    // Frame count/names change through edits (draw, rename, delete, undo).
+    refreshFrames();
+  }, [markBoardDirty, refreshFrames]);
+
+  // Pick up the initial frame list once the canvas handle mounts.
+  useEffect(() => { refreshFrames(); }, [refreshFrames]);
+
+  // Close the top-right dropdowns, the tool flyouts, or the help card on
+  // outside click or Escape.
+  useEffect(() => {
+    if (!chromeMenu && !toolMenu && !showHelp) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!(event.target instanceof Element)) return;
+      if (!event.target.closest('.gc-chrome-right')) setChromeMenu(null);
+      if (!event.target.closest('.gc-toolbar')) setToolMenu(null);
+      if (!event.target.closest('.gc-help')) setShowHelp(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setChromeMenu(null);
+      setToolMenu(null);
+      setShowHelp(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [chromeMenu, toolMenu, showHelp]);
 
   const handleSelectionChange = useCallback((info: CanvasSelectionInfo) => {
-    setSelection(info);
     const selectedId = info.selectedIds.length === 1 ? info.selectedIds[0] : null;
     const shape = selectedId ? canvasRef.current?.getSnapshot().shapes.find(candidate => candidate.id === selectedId) : undefined;
     setOpenDiagramId(shape?.type === 'card' && shape.category?.toLowerCase() === 'diagram' ? shape.id : null);
+  }, []);
+
+  // The vendored canvas opens its find bar only through the Ctrl/⌘+F
+  // keybinding (viewActions.openFind); the imperative handle does not expose
+  // it. Dispatch the same physical-key event on the canvas container so this
+  // button and the keyboard path stay identical.
+  const openFind = useCallback(() => {
+    document.querySelector('[data-canvas-board-id]')?.dispatchEvent(
+      new KeyboardEvent('keydown', { code: 'KeyF', key: 'f', ctrlKey: true, bubbles: true, cancelable: true }),
+    );
   }, []);
 
   const handleCreateDiagram = useCallback((source: string) => {
@@ -181,6 +223,7 @@ export const GuestCanvasPage: React.FC = () => {
       canvasRef.current?.loadSnapshot(parsed);
       setHasUnsavedChanges(false);
       setShowNotice(false);
+      refreshFrames();
     } catch (err) {
       window.alert(`파일을 불러오지 못했습니다.\n${err instanceof Error ? err.message : String(err)}`);
     }
@@ -240,68 +283,10 @@ export const GuestCanvasPage: React.FC = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [pendingSave]);
 
-  const toolButtonClass = (tool: GuestCanvasTool, danger = false) =>
-    `gc-tool${activeTool === tool ? (danger ? ' is-active-danger' : ' is-active') : ''}`;
+  const saveStatus = isPersisted ? saveStatusLabel(persistence) : null;
 
   return (
     <div className={`gc-root${isDarkMode ? ' dark' : ''}`}>
-      <header className="gc-header">
-        <div className="gc-header-left">
-          <a className="gc-home-link" href="/" title="Choi01 Lab 홈으로">
-            <ArrowLeft className="gc-icon" />
-          </a>
-          <a className="gc-brand" href="/" title="Choi01 Lab 홈으로">
-            <span className="gc-brand-mark">01</span>
-            <span className="gc-brand-label">캔버스 메모보드</span>
-          </a>
-          {!isPersisted && (
-            <span className="gc-ephemeral-badge" title="이 페이지는 서버에 아무것도 저장하지 않습니다">
-              저장되지 않음 · 파일로 보관
-            </span>
-          )}
-        </div>
-
-        <div className="gc-header-right gc-header-toolbar" ref={headerToolbarPosition.ref} style={headerToolbarPosition.style}>
-          <button type="button" className="gc-button gc-header-grip" aria-label="상단 도구 모음 이동" title="드래그 또는 방향키로 상단 도구 모음 이동 · Home: 원래 위치" {...headerToolbarPosition.gripProps}>
-            <GripHorizontal className="gc-icon" />
-          </button>
-          <AuthControls auth={auth} persistence={persistence} />
-          {auth.configured && !auth.loading && <div className="gc-header-divider" />}
-          <button type="button" className="gc-button" onClick={() => importInputRef.current?.click()} title="내려받았던 .json 작업 파일 불러오기 (Ctrl+O)">
-            <FolderOpen className="gc-icon" />
-            <span>파일 열기</span>
-          </button>
-          <input
-            ref={importInputRef}
-            type="file"
-            accept=".json,application/json"
-            onChange={handleOpenFile}
-            className="gc-hidden-input"
-          />
-          <button type="button" className="gc-button gc-button-primary" onClick={handleSaveToFile} title="작업을 .json 파일로 컴퓨터에 내려받기 (Ctrl+S)">
-            <Download className="gc-icon" />
-            <span>파일로 저장</span>
-          </button>
-          <div className="gc-header-divider" />
-          <button type="button" className="gc-button gc-button-quiet" onClick={handleExportPng} title="PNG 이미지로 내보내기">
-            <ImageIcon className="gc-icon" />
-            <span>PNG</span>
-          </button>
-          <button type="button" className="gc-button gc-button-quiet" onClick={handleExportSvg} title="SVG 벡터로 내보내기">
-            <FileCode className="gc-icon" />
-            <span>SVG</span>
-          </button>
-          <button
-            type="button"
-            className="gc-button gc-button-quiet"
-            onClick={() => setIsDarkMode(prev => !prev)}
-            title="다크 / 라이트 모드 전환"
-          >
-            {isDarkMode ? <Sun className="gc-icon" /> : <Moon className="gc-icon" />}
-          </button>
-        </div>
-      </header>
-
       {auth.notice && <div className="gc-auth-notice" role="alert">{auth.notice}</div>}
 
       <div className="gc-stage">
@@ -319,160 +304,158 @@ export const GuestCanvasPage: React.FC = () => {
           renderDiagram={renderDiagram}
         />
 
-        {/* Floating toolbar */}
-        <div
-          className="gc-toolbar"
-          ref={canvasToolbarPosition.ref}
-          style={canvasToolbarPosition.style}
-          draggable={false}
-          onDragStart={event => event.preventDefault()}
-        >
-          <button type="button" className="gc-tool gc-toolbar-grip" aria-label="캔버스 도구 모음 이동" title="드래그 또는 방향키로 캔버스 도구 모음 이동 · Shift: 크게 이동 · Home: 원래 위치" {...canvasToolbarPosition.gripProps}>
-            <GripHorizontal className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => chooseTool('select')} className={toolButtonClass('select')} title="선택 / 이동 (V) · Space 또는 Alt+드래그로 화면 이동" aria-label="선택 / 이동">
-            <MousePointer className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => chooseTool('hand')} className={toolButtonClass('hand')} title="손 도구 / 화면 이동 (H)">
-            <Hand className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => setShowDiagramComposer(true)} className="gc-tool gc-tool-diagram" title="Mermaid 다이어그램 만들기">
-            <FileCode className="gc-icon" />
-          </button>
-
-          <div className="gc-popover-anchor">
-            <button
-              type="button"
-              onClick={() => { setShowStickyPalette(prev => !prev); setShowShapesMenu(false); setShowStrokeWidths(false); }}
-              className={`gc-tool gc-tool-sticky${showStickyPalette || activeTool === 'note' ? ' is-active-sticky' : ''}`}
-              title="스티커 메모지 추가"
-            >
-              <StickyNote className="gc-icon" />
-            </button>
-            {showStickyPalette && (
-              <div className="gc-popover gc-sticky-palette">
-                {STICKY_COLORS.map(key => (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => {
-                      canvasRef.current?.addNote(key);
-                      setShowStickyPalette(false);
-                    }}
-                    style={{ backgroundColor: CANVAS_COLORS[key].bg, borderColor: CANVAS_COLORS[key].border }}
-                    className="gc-sticky-swatch"
-                    title={`${CANVAS_COLORS[key].label} 메모 추가`}
-                  >
-                    +
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="gc-popover-anchor">
-            <button
-              type="button"
-              onClick={() => { setShowShapesMenu(prev => !prev); setShowStickyPalette(false); setShowStrokeWidths(false); }}
-              className={toolButtonClass((SHAPE_MENU_TOOLS as readonly GuestCanvasTool[]).includes(activeTool) ? activeTool : 'rect')}
-              title="도형 (사각형·원·삼각형·마름모·육각형·별)"
-            >
-              {(() => {
-                const Icon = SHAPE_ICON[
-                  (SHAPE_MENU_TOOLS as readonly GuestCanvasTool[]).includes(activeTool)
-                    ? (activeTool as (typeof SHAPE_MENU_TOOLS)[number])
-                    : 'rect'
-                ];
-                return <Icon className="gc-icon" />;
-              })()}
-            </button>
-            {showShapesMenu && (
-              <div className="gc-popover gc-shapes-menu">
-                {SHAPE_MENU_TOOLS.map(t => {
-                  const Icon = SHAPE_ICON[t];
-                  return (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => chooseTool(t)}
-                      title={SHAPE_LABEL[t]}
-                      className={`gc-tool${activeTool === t ? ' is-active' : ''}`}
-                    >
-                      <Icon className="gc-icon" />
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          <button type="button" onClick={() => chooseTool('frame')} className={toolButtonClass('frame')} title="프레임 (F) — 드래그해서 그리기">
-            <Frame className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => chooseTool('text')} className={toolButtonClass('text')} title="텍스트 (T) — 캔버스를 클릭하면 입력">
-            <Type className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => chooseTool('arrow')} className={toolButtonClass('arrow')} title="연결선 / 화살표 (드래그해서 그리기)">
-            <GitCommit className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => chooseTool('draw')} className={toolButtonClass('draw')} title="펜 (P)" aria-label="펜">
-            <PenTool className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => chooseTool('highlighter')} className={toolButtonClass('highlighter')} title="하이라이터" aria-label="하이라이터">
-            <Highlighter className="gc-icon" />
-          </button>
-          <div className="gc-popover-anchor">
-            <button
-              type="button"
-              onClick={() => { setShowStrokeWidths(prev => !prev); setShowStickyPalette(false); setShowShapesMenu(false); }}
-              className="gc-tool"
-              title="선 굵기"
-              aria-label="선 굵기"
-            >
-              <Minus className="gc-icon" />
-            </button>
-            {showStrokeWidths && (
-              <div className="gc-popover gc-shapes-menu">
-                {DRAW_STROKE_WIDTHS.map(width => (
-                  <button
-                    key={width}
-                    type="button"
-                    onClick={() => {
-                      setDrawStrokeWidth(width);
-                      canvasRef.current?.setSelectedStrokeWidth(width);
-                      setShowStrokeWidths(false);
-                    }}
-                    className={`gc-tool${drawStrokeWidth === width ? ' is-active' : ''}`}
-                    title={`굵기 ${width}`}
-                    aria-label={`굵기 ${width}`}
-                  >
-                    {width}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-          <button type="button" onClick={() => chooseTool('eraser')} className={toolButtonClass('eraser', true)} title="지우개 — 손글씨는 닿은 구간만, 도형은 전체 삭제">
-            <Eraser className="gc-icon" />
-          </button>
-
-          <div className="gc-toolbar-divider" />
-
-          <button type="button" onClick={() => canvasRef.current?.undo()} className="gc-tool" title="실행 취소 (Ctrl/⌘+Z)">
-            <Undo2 className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => canvasRef.current?.redo()} className="gc-tool" title="다시 실행 (Ctrl/⌘+Shift+Z 또는 Ctrl/⌘+Y)">
-            <Redo2 className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => canvasRef.current?.group()} disabled={!selection.canGroup} className="gc-tool" title="그룹 (Ctrl+G) — 2개 이상 선택 필요">
-            <Group className="gc-icon" />
-          </button>
-          <button type="button" onClick={() => canvasRef.current?.ungroup()} disabled={!selection.canUngroup} className="gc-tool" title="그룹 해제 (Ctrl+Shift+G)">
-            <Ungroup className="gc-icon" />
-          </button>
+        {/* Floating chrome: board identity (top-left) */}
+        <div className="gc-chrome gc-chrome-left">
+          <a className="gc-home-link" href="/" title="Choi01 Lab 홈으로">
+            <ArrowLeft className="gc-icon" />
+          </a>
+          <a className="gc-brand" href="/" title="Choi01 Lab 홈으로">
+            <span className="gc-brand-mark">01</span>
+            <span className="gc-brand-label">캔버스 메모보드</span>
+          </a>
+          {!isPersisted && (
+            <span className="gc-ephemeral-badge" title="이 페이지는 서버에 아무것도 저장하지 않습니다">
+              저장되지 않음 · 파일로 보관
+            </span>
+          )}
+          {saveStatus?.text ? (
+            <span className={`gc-save-status is-${saveStatus.tone}`} role="status">{saveStatus.text}</span>
+          ) : null}
         </div>
 
-        {/* Zoom controls */}
+        {/* Floating chrome: board actions (top-right) */}
+        <div
+          className="gc-chrome gc-chrome-right"
+          ref={chromeToolbarPosition.ref}
+          style={chromeToolbarPosition.style}
+        >
+          <button type="button" className="gc-button gc-chrome-grip" aria-label="상단 도구 모음 이동" title="드래그 또는 방향키로 상단 도구 모음 이동 · Home: 원래 위치" {...chromeToolbarPosition.gripProps}>
+            <GripHorizontal className="gc-icon" />
+          </button>
+          <AuthControls auth={auth} persistence={persistence} />
+          {auth.configured && !auth.loading && <div className="gc-chrome-divider" />}
+          <button
+            type="button"
+            className="gc-button gc-button-quiet"
+            onClick={openFind}
+            title="캔버스에서 찾기 (Ctrl/⌘+F)"
+            aria-label="찾기"
+          >
+            <Search className="gc-icon" />
+          </button>
+          <div className="gc-popover-anchor">
+            <button
+              type="button"
+              className="gc-button"
+              aria-haspopup="menu"
+              aria-expanded={chromeMenu === 'frames'}
+              onClick={() => toggleChromeMenu('frames')}
+              title="프레임 목록 — 누르면 해당 프레임으로 이동"
+            >
+              <Layers className="gc-icon" />
+              <span>프레임</span>
+              <span className="gc-frames-count" aria-hidden="true">{frames.length}</span>
+            </button>
+            {chromeMenu === 'frames' && (
+              <div className="gc-menu" role="menu" aria-label="프레임 목록">
+                {frames.length === 0 && <div className="gc-menu-empty">캔버스에 프레임이 없습니다</div>}
+                {frames.map(frame => (
+                  <button
+                    key={frame.id}
+                    type="button"
+                    role="menuitem"
+                    className="gc-menu-item"
+                    onClick={() => {
+                      canvasRef.current?.focusShape(frame.id);
+                      setChromeMenu(null);
+                    }}
+                    title={frame.name ? `「${frame.name}」 프레임으로 이동` : '프레임으로 이동'}
+                  >
+                    {frame.name || '이름 없는 프레임'}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button type="button" className="gc-button" onClick={() => importInputRef.current?.click()} title="내려받았던 .json 작업 파일 불러오기 (Ctrl+O)">
+            <FolderOpen className="gc-icon" />
+            <span>파일 열기</span>
+          </button>
+          <input
+            ref={importInputRef}
+            type="file"
+            accept=".json,application/json"
+            onChange={handleOpenFile}
+            className="gc-hidden-input"
+          />
+          <button type="button" className="gc-button gc-button-primary" onClick={handleSaveToFile} title="작업을 .json 파일로 컴퓨터에 내려받기 (Ctrl+S)">
+            <Save className="gc-icon" />
+            <span>파일로 저장</span>
+          </button>
+          <div className="gc-popover-anchor">
+            <button
+              type="button"
+              className="gc-button gc-button-quiet"
+              aria-haspopup="menu"
+              aria-expanded={chromeMenu === 'export'}
+              onClick={() => toggleChromeMenu('export')}
+              title="이미지로 내보내기"
+            >
+              <Download className="gc-icon" />
+              <span>내보내기</span>
+              <ChevronDown className="gc-icon gc-icon-small" />
+            </button>
+            {chromeMenu === 'export' && (
+              <div className="gc-menu" role="menu" aria-label="내보내기">
+                <button type="button" role="menuitem" className="gc-menu-item" onClick={() => { void handleExportPng(); setChromeMenu(null); }}>
+                  <ImageIcon className="gc-icon" /> PNG 이미지
+                </button>
+                <button type="button" role="menuitem" className="gc-menu-item" onClick={() => { handleExportSvg(); setChromeMenu(null); }}>
+                  <FileCode className="gc-icon" /> SVG 벡터
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            type="button"
+            className="gc-button gc-button-quiet"
+            onClick={() => setIsDarkMode(prev => !prev)}
+            title="다크 / 라이트 모드 전환"
+          >
+            {isDarkMode ? <Sun className="gc-icon" /> : <Moon className="gc-icon" />}
+          </button>
+          <div className="gc-help">
+            <button
+              type="button"
+              className="gc-button gc-button-quiet"
+              aria-expanded={showHelp}
+              onClick={() => setShowHelp(prev => !prev)}
+              title="단축키 안내"
+              aria-label="단축키 안내"
+            >
+              <CircleHelp className="gc-icon" />
+            </button>
+            {showHelp && (
+              <div className="gc-hint" role="note">
+                더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl/⌘+F 찾기 · Ctrl/⌘+Z 되돌리기 · Ctrl/⌘+Shift+Z 다시 실행 · Ctrl+S 파일 저장
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Floating toolbar */}
+        <GuestCanvasToolbar
+          canvasRef={canvasRef}
+          activeTool={activeTool}
+          setActiveTool={chooseTool}
+          drawStrokeWidth={drawStrokeWidth}
+          setDrawStrokeWidth={setDrawStrokeWidth}
+          menu={toolMenu}
+          setMenu={setToolMenuFromToolbar}
+          onDiagram={() => setShowDiagramComposer(true)}
+        />
+
+        {/* Zoom controls (minimap sits directly above, inside the canvas) */}
         <div className="gc-zoombar">
           <button type="button" onClick={() => canvasRef.current?.zoomBy(1 / 1.2)} className="gc-tool" title="축소 (Ctrl + 휠 아래)">
             <ZoomOut className="gc-icon" />
@@ -509,9 +492,6 @@ export const GuestCanvasPage: React.FC = () => {
           </button>
         </div>
 
-        <div className="gc-hint">
-          더블클릭 편집 · Space/두 손가락 드래그로 이동 · Ctrl/⌘+Z 되돌리기 · Ctrl/⌘+Shift+Z 다시 실행 · Ctrl+S 파일 저장
-        </div>
 
         {openDiagramId && (() => {
           const shape = canvasRef.current?.getSnapshot().shapes.find(candidate => candidate.id === openDiagramId);
