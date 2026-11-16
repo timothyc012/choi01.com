@@ -198,7 +198,7 @@ export function createCanvasShapeRenderer({
           }}
         >
           {isEditing
-            ? renderEditor('font-medium', { color: effectiveText(s), fontSize: fontSizeForShape(s), fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) })
+            ? renderEditor('font-medium', { color: effectiveText(s), fontSize: noteFontSize, fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) })
             : html
               ? <div data-canvas-text-view key="canvas-view" className="canvas-rich-text w-full font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ maxHeight: '100%', color: effectiveText(s), fontSize: noteFontSize, fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }} dangerouslySetInnerHTML={{ __html: html }} />
               : <div data-canvas-text-view key="canvas-view" className="canvas-rich-text w-full font-medium whitespace-pre-wrap break-words overflow-hidden" style={{ color: effectiveText(s), fontSize: noteFontSize, fontFamily: fontStackForShape(s), textAlign: textAlignForShape(s) }}><span className="opacity-40">메모 입력...</span></div>}
